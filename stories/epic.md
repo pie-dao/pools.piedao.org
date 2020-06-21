@@ -21,7 +21,7 @@ Define what is a must-have for launch and in-scope.
 
 - [ ] Balance of individual tokens is available
 - [ ] Pool balance is available
-- [ ] If mining rewards are available, they are displayed
+- [ ] If farming rewards are available, they are displayed
 - [ ] There are information links (media, audits, etherscan) for each liquidity pool
 - [ ] Users can always see the current allocation
 - [ ] There is a list of places where the pool can be bought and sold
