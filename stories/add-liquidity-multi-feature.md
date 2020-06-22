@@ -29,7 +29,7 @@ be willing to defend your choice to exclude a user story.
 - Describe the problem and why this task is needed.
 -->
 
-The first box on the right column will be a box allowing the user to add or withdraw liquidity. For the purpose of this story, we will be focusing on adding liquidity from multiple assets. The top line of the the box will contain the words `Add Liquidity` in extra large bold text. The second line will contain a radio button with the words `Single Asset` on the left and `Multi Asset` on the right. This radio button will be set to `Single Asset` by default. This story deals exclusively with the scenario where `Multi Asset` has been selected. The third line will contain the text `Multi Asset entry enables you to mint [lowercase-sybmol] according to it's allocation`.
+The first box on the right column will be a box allowing the user to add or withdraw liquidity. For the purpose of this story, we will be focusing on adding liquidity from multiple assets. The top line of the the box will contain the words `Add Liquidity` in extra large bold text. The second line will contain a toggle button with the words `Single Asset` on the left and `Multi Asset` on the right. This toggle button will be set to `Single Asset` by default. This story deals exclusively with the scenario where `Multi Asset` has been selected. The third line will contain the text `Multi Asset entry enables you to mint [lowercase-sybmol] according to it's allocation`.
 
 Directly below the third line will be a button-tab style select with `Add Liquidity` on the left and `Withdraw` on the right. This story deals exclusively with the scenario where `Add Liquidity` is selected.
 
@@ -46,7 +46,7 @@ Directly below will be a button titled `Add Liquidity` which generates the trans
 -->
 
 - [ ] `Add Liquidity` title
-- [ ] `Single Asset` `Multi Asset` radio with `Single Asset` selected
+- [ ] `Single Asset` `Multi Asset` toggle with `Single Asset` selected
 - [ ] `Single Asset entry enables you to mint [lowercase-asset] with only one token`
 - [ ] `Add Liquidity` `Withdraw` button tabs, `Add Liquidity` selected
 - [ ] Input box with free input, as well as 25% 50% 75% and 100% buttons and token select button
