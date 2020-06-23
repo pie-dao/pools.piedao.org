@@ -42,4 +42,4 @@ Directly under the info section in the left hand column should be a section titl
 
 #### Attach files or screenshots if it's helpful for this issue.
 
-!(simple page)[https://piedao-productpage-improvements.netlify.app/img/page08.png]
+![simple page](https://piedao-productpage-improvements.netlify.app/img/page08.png)

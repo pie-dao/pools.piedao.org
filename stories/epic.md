@@ -46,8 +46,8 @@ The target timeline for creation of this interface is prior to the release of th
 
 ## Visuals
 
-!(add-liquidity-single)[https://piedao-productpage-improvements.netlify.app/img/page08.png]
-!(add-liquidity-multi)[https://piedao-productpage-improvements.netlify.app/img/page09.png]
-!(withdraw-liquidity-single)[https://piedao-productpage-improvements.netlify.app/img/page10.png]
-!(withdraw-liquidity-advanced)[https://piedao-productpage-improvements.netlify.app/img/page11.png]
-!(select-a-token)[https://piedao-productpage-improvements.netlify.app/img/modal.png]
+![add-liquidity-single](https://piedao-productpage-improvements.netlify.app/img/page08.png)
+![add-liquidity-multi](https://piedao-productpage-improvements.netlify.app/img/page09.png)
+![withdraw-liquidity-single](https://piedao-productpage-improvements.netlify.app/img/page10.png)
+![withdraw-liquidity-advanced](https://piedao-productpage-improvements.netlify.app/img/page11.png)
+![select-a-token](https://piedao-productpage-improvements.netlify.app/img/modal.png)

@@ -42,4 +42,4 @@ At the top of the left column, there should be a grey box with two internal colu
 ß
 #### Attach files or screenshots if it's helpful for this issue.
 
-!(simple page)[https://piedao-productpage-improvements.netlify.app/img/page08.png]
+![simple page](https://piedao-productpage-improvements.netlify.app/img/page08.png)

@@ -56,4 +56,4 @@ Directly below will be a button titled `Add Liquidity` which generates the trans
 
 #### Attach files or screenshots if it's helpful for this issue.
 
-!(simple page)[https://piedao-productpage-improvements.netlify.app/img/page08.png]
+![simple page](https://piedao-productpage-improvements.netlify.app/img/page08.png)
