@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "start": "snowpack dev",
+    "build": "snowpack build",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@pie-dao/tailwind": "^1.1.2",
+    "defi18n": "^0.0.12",
+    "svelte": "^3.21.0",
+    "svelte-i18n": "^3.0.4"
+  },
+  "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.3.0",
+    "@snowpack/app-scripts-svelte": "^1.2.0",
+    "@testing-library/jest-dom": "^5.5.0",
+    "@testing-library/svelte": "^3.0.0",
+    "jest": "^25.4.0",
+    "postcss-cli": "^7.1.1",
+    "snowpack": "^2.5.0"
+  }
+}
