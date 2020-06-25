@@ -1394,6 +1394,11 @@
   dependencies:
     mkdirp "^1.0.4"
 
+"@pie-dao/abis@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@pie-dao/abis/-/abis-1.0.0.tgz#94eef3dc0459df79ff62734c0a60e0b83d23ea82"
+  integrity sha512-1dNnCHcClxwwWo8U/f3Yt508vFK1THECFRgDRjRo9CEjph/equk52skLlliJmIXCTUfs4OtYGWENX/6j+LXePA==
+
 "@pie-dao/eth-tailwind@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@pie-dao/eth-tailwind/-/eth-tailwind-1.0.0.tgz#a5be18dd45424f53e17fc40f43cfc6d5030f57b8"
