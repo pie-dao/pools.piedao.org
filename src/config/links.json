@@ -1,5 +1,12 @@
 {
+  "dao": "https://aragon.in/piedao",
+  "discord": "https://discord.gg/eJTYNUF",
   "docs": "https://docs.piedao.org",
+  "forum": "https://forum.piedao.org",
+  "github": "https://github.com/pie-dao",
+  "medium": "https://medium.com/piedao",
+  "piedao": "https://piedao.org",
   "root": "/",
+  "twitter": "https://twitter.com/PieDAO_DeFi?s=20",
   "whitepaper": "https://pie283460.typeform.com/to/uy9NZt"
 }

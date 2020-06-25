@@ -1,7 +1,17 @@
 {
+  "brands": {
+    "aragon": "Aragon",
+    "discord": "Discord",
+    "github": "Github",
+    "medium": "Medium",
+    "piedao": "PieDAO",
+    "twitter": "Twitter"
+  },
   "general": {
     "close": "Close",
     "docs": "Docs",
+    "documentation": "Documentation",
+    "forum": "Forum",
     "home": "Home",
     "logo": "Logo",
     "whitepaper": "Whitepaper"

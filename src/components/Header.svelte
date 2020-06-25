@@ -17,7 +17,7 @@
 <div class="header-container">
   <div class="left">
     <a href={links.root}>
-      <img src={images.logo} alt={$_('general.logo')} />
+      <img src={images.logos.piedao} alt={$_('general.logo')} />
     </a>
   </div>
   <div class="right">

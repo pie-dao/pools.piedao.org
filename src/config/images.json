@@ -2,5 +2,8 @@
   "icons": {
     "hamburger": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/hamburger.svg"
   },
-  "logo": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Icon%20Clean.png"
+  "logos": {
+    "aragon": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/aragon.svg",
+    "piedao": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Icon%20Clean.png"
+  }
 }

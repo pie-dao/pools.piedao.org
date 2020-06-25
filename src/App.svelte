@@ -1,6 +1,7 @@
 <script>
   import './styles.css';
 
+  import Footer from './components/Footer.svelte';
   import Header from './components/Header.svelte';
 
   const message = 'Learn Svelte';
@@ -26,4 +27,5 @@
       </header>
     </div>
   </div>
+  <Footer />
 </section>
