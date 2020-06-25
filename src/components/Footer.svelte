@@ -1,7 +1,10 @@
 <script>
   import { _ } from 'svelte-i18n';
+
   import images from '../config/images.json';
   import links from '../config/links.json';
+
+  import { eth } from '../stores/eth.js';
 
   const year = (new Date()).getFullYear();
 </script>
@@ -13,6 +16,16 @@
       &nbsp;
       {year}
     </a>
+    {#if $eth.currentBlockNumber > 0}
+      <a
+        class="footer-link"
+        target="_blank"
+        rel="noopener noreferrer"
+        href={`https://etherscan.io/block/${$eth.currentBlockNumber}`}
+      >
+        Block: {$eth.currentBlockNumber}
+      </a>
+    {/if}
   </div>
   <div class="right">
     <a

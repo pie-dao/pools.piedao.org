@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,500,700&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Rubik:100,300,500,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Roboto+Mono:100,300,500,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Rubik:100,300,500,700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -19,7 +19,8 @@
   @apply border-none no-underline p-0 ml-20px;
 }
 
-.header-container .hamburger:hover, .header-container .hamburger:focus {
+.header-container .hamburger:hover,
+.header-container .hamburger:focus {
   outline: none;
 }
 
@@ -89,6 +90,10 @@
   .header-container .right .mobile-placeholder {
     @apply block;
   }
+
+  .header-container .connect-button-container {
+    @apply ml-8;
+  }
 }
 
 /* Footer */
@@ -147,7 +152,6 @@
   .footer-container .right {
     flex-direction: column;
   }
-
 }
 
 /* purgecss end ignore */

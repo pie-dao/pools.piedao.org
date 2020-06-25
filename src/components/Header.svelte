@@ -4,8 +4,11 @@
 
 <script>
   import { _ } from 'svelte-i18n';
+
   import images from '../config/images.json';
   import links from '../config/links.json';
+
+  import Web3Button from './Web3Button.svelte';
 
   let mobileMenuVisible = false;
 
@@ -30,6 +33,7 @@
     <a class="link" href={links.whitepaper} target="_blank" rel="noopener noreferrer">
       {$_('general.whitepaper')}
     </a>
+    <Web3Button />
     <div class="mobile-placeholder" />
 
     <button class="hamburger" type="button" on:click={toggleMobileMenu}>
