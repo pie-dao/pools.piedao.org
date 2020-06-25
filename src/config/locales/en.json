@@ -15,5 +15,8 @@
     "home": "Home",
     "logo": "Logo",
     "whitepaper": "Whitepaper"
+  },
+  "piedao": {
+    "aragonLink": "piedao.aragon"
   }
 }

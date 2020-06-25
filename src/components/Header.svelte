@@ -21,6 +21,9 @@
     </a>
   </div>
   <div class="right">
+    <a class="link" href={links.dao} target="_blank" rel="noopener noreferrer">
+      {$_('piedao.aragonLink')}
+    </a>
     <a class="link" href={links.docs} target="_blank" rel="noopener noreferrer">
       {$_('general.docs')}
     </a>
