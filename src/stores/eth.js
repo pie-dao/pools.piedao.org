@@ -27,13 +27,48 @@ const web3Modal = new Web3Modal({
   providerOptions, // required
 });
 
-export const resetWeb3 = async () => {
+const updateCurrentBlock = (currentBlockNumber) => {
+  eth.set({ ...get(eth), currentBlockNumber });
+};
+
+export const resetWeb3Listeners = () => {
+  const { provider, web3 } = get(eth);
+
+  if (provider) {
+    provider.off("block", updateCurrentBlock);
+  }
+
+  if (web3) {
+    web3.off("accountsChanged", connectWeb3);
+    web3.off("chainChanged", resetWeb3);
+    web3.off("disconnect", resetWeb3);
+  }
+};
+
+export const resetWeb3 = () => {
+  resetWeb3Listeners();
   eth.set(defaultEth);
+};
+
+export const setWeb3Listeners = () => {
+  const { provider, web3 } = get(eth);
+
+  if (provider) {
+    provider.on("block", updateCurrentBlock);
+  }
+
+  if (web3) {
+    web3.on("accountsChanged", connectWeb3);
+    web3.on("chainChanged", resetWeb3);
+    web3.on("disconnect", resetWeb3);
+  }
 };
 
 export const connectWeb3 = async () => {
   console.log("fired");
   try {
+    resetWeb3Listeners();
+
     const web3 = await web3Modal.connect();
 
     if (!web3) {
@@ -43,15 +78,6 @@ export const connectWeb3 = async () => {
     }
 
     console.log("CONNECTED", web3);
-
-    // Subscribe to accounts change
-    web3.on("accountsChanged", () => connectWeb3());
-
-    // Subscribe to chainId change
-    web3.on("chainChanged", () => resetWeb3());
-
-    // Subscribe to web3 disconnection
-    web3.on("disconnect", () => resetWeb3());
 
     const provider = new ethers.providers.Web3Provider(web3);
     const currentBlockNumber = await provider.getBlockNumber();
@@ -70,11 +96,10 @@ export const connectWeb3 = async () => {
       provider,
       shortAddress,
       signer,
+      web3,
     });
 
-    provider.on("block", (currentBlockNumber) => {
-      eth.set({ ...get(eth), currentBlockNumber });
-    });
+    setWeb3Listeners();
   } catch (e) {
     console.error("ERROR CONNECTION TO WEB3", e);
     resetWeb3();
