@@ -25,7 +25,7 @@
   $: if ($balances[key]) {
     balance = $balances[key].dp(9).toString();
   } else {
-    balance = 'loading...';
+    balance = `${$_('general.loading')}...`;
   };
 </script>
 
@@ -35,7 +35,7 @@
     <h1>{symbol}</h1>
   </div>
   <div class="right">
-    <span>Your Balance</span>
+    <span>{$_('your')} {$_('balance')}</span>
     <h5>{balance} {symbol}</h5>
   </div>
 </div>

@@ -29,11 +29,60 @@
 }
 
 .balance-container .right span {
-  @apply text-sm font-thin text-grey-115;
+  @apply text-sm font-thin text-grey-115 capitalize;
 }
 
 .balance-container .right h5 {
   @apply text-lg;
+}
+
+/* Etherscan & Quantstamp */
+
+.etherscan-container,
+.quantstamp-container {
+  @apply bg-grey-243 rounded-4px mt-4 pt-2 pb-4 px-4;
+}
+
+.etherscan-container span,
+.quantstamp-container span {
+  @apply text-xs font-thin text-grey-115;
+}
+
+.etherscan-container img,
+.quantstamp-container img {
+  @apply h-54px;
+}
+
+/* Farming */
+
+.farming-container {
+  @apply flex rounded-4px mt-4 text-grey-243 overflow-hidden antialiased;
+}
+
+.farming-container .left {
+  @apply flex-auto p-4;
+  background-color: #4e3a64;
+}
+
+.farming-container .left img {
+  @apply h-70px inline;
+}
+
+.farming-container .left h2 {
+  @apply inline-block align-middle leading-none text-m-lg pl-2;
+}
+
+.farming-container .right {
+  @apply flex-auto bg-green text-center leading-none px-4 py-3;
+  background-color: #61497f;
+}
+
+.farming-container .right h1 {
+  font-size: 2.8rem;
+}
+
+.farming-container .right span {
+  @apply text-xs;
 }
 
 /* Header */

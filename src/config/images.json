@@ -4,8 +4,11 @@
   },
   "logos": {
     "aragon": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/aragon.svg",
+    "balancerWhite": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/balancerWhite.svg",
     "BTC++": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/BTC%2B%2B.png",
+    "etherscan": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/etherscan.svg",
     "piedao": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Icon%20Clean.png",
+    "quantstamp": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/quantstamp.svg",
     "USD++": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/Cash%2B%2B.png"
   }
 }

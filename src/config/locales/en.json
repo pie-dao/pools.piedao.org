@@ -1,22 +1,41 @@
 {
   "brands": {
     "aragon": "Aragon",
+    "balancer": "Balancer Labs",
     "discord": "Discord",
+    "etherscan": "Etherscan",
     "github": "Github",
     "medium": "Medium",
     "piedao": "PieDAO",
+    "quantstamp": "Quantstamp",
     "twitter": "Twitter"
   },
+  "defi": {
+    "liquidity": {
+      "mining": "Liquidity Mining"
+    }
+  },
   "general": {
+    "balance": "Balance",
     "close": "Close",
     "docs": "Docs",
     "documentation": "Documentation",
+    "duration": {
+      "annualized": "Annualized"
+    },
     "forum": "Forum",
     "home": "Home",
+    "loading": "Loading",
     "logo": "Logo",
-    "whitepaper": "Whitepaper"
+    "program": "Program",
+    "returns": "Returns",
+    "tokens": "Tokens",
+    "whitepaper": "Whitepaper",
+    "your": "Your"
   },
   "piedao": {
-    "aragonLink": "piedao.aragon"
+    "aragonLink": "piedao.aragon",
+    "audit.result": "Audit result",
+    "check.contract.on": "Check the contract on"
   }
 }
