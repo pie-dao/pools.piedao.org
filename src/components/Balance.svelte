@@ -3,6 +3,7 @@
   import { isAddress } from '@pie-dao/utils';
 
   import images from '../config/images.json';
+  import pools from '../config/pools.json';
 
   import { balances, eth } from '../stores/eth.js';
   import { currentRoute } from '../stores/routes.js';
@@ -13,19 +14,28 @@
   let balance = 'loading...';
   let key;
 
+  $: symbol = (pools[token] || {}).symbol;
+  $: tokenLogo = images.logos[symbol];
+
   $: if (isAddress(token) && isAddress($eth.address)) {
     key = balanceKey(token, $eth.address);
     subscribeToBalance(token, $eth.address);
   }
 
   $: if ($balances[key]) {
-    balance = $balances[key].toString();
+    balance = $balances[key].dp(9).toString();
   } else {
-    balance = 'loading...'
+    balance = 'loading...';
   };
 </script>
 
 <div class="balance-container">
-  <div>Pool: {token}</div>
-  <div>Balance: {balance}</div>  
+  <div class="left">
+    <img src={tokenLogo} alt={symbol} />
+    <h1>{symbol}</h1>
+  </div>
+  <div class="right">
+    <span>Your Balance</span>
+    <h5>{balance} {symbol}</h5>
+  </div>
 </div>

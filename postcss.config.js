@@ -6,8 +6,8 @@ module.exports = {
     require("postcss-import"),
     tailwindcss("./tailwind.config.js"),
     require("autoprefixer"),
-    purgecss({
-      content: ["./**/*.html", "./**/*.js", "./**/*.svelte"],
-    }),
+    // purgecss({
+    //   content: ["./**/*.html", "./**/*.js", "./**/*.svelte"],
+    // }),
   ],
 };

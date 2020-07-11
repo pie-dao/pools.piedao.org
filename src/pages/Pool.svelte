@@ -5,11 +5,13 @@
 </script>
 
 <div class="content">
-  <div class="left">
-    <Balance token={$currentRoute.params.address} />
-  </div>
-  
-  <div class="right">
-  
+  <div class="flex w-100pc">
+    <div class="left flex-1 mr-2">
+      <Balance token={$currentRoute.params.address} />
+    </div>
+    
+    <div class="right flex-1 ml-2">
+      &nbsp;
+    </div>
   </div>
 </div>

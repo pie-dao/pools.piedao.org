@@ -9,6 +9,33 @@
 /* Custom css */
 /* purgecss start ignore */
 
+/* Balance */
+
+.balance-container {
+  @apply flex bg-grey-243 w-100pc rounded-4px p-6;
+}
+
+.balance-container .left,
+.balance-container .right {
+  @apply flex-1;
+}
+
+.balance-container .left img {
+  @apply h-60px inline;
+}
+
+.balance-container .left h1 {
+  @apply inline text-xl align-middle pl-2;
+}
+
+.balance-container .right span {
+  @apply text-sm font-thin text-grey-115;
+}
+
+.balance-container .right h5 {
+  @apply text-lg;
+}
+
 /* Header */
 
 .header-container {
