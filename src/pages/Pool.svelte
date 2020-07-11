@@ -2,6 +2,7 @@
   import Balance from '../components/Balance.svelte';
   import Etherscan from '../components/Etherscan.svelte';
   import Farming from '../components/Farming.svelte';
+  import Info from '../components/Info.svelte';
   import Quantstamp from '../components/Quantstamp.svelte';
 
   import { currentRoute } from '../stores/routes.js';
@@ -20,6 +21,7 @@
           <Quantstamp token={$currentRoute.params.address} />
         </div>
       </div>
+      <Info token={$currentRoute.params.address} />
     </div>
     
     <div class="right flex-1 ml-2">

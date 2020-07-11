@@ -85,6 +85,64 @@
   @apply text-xs;
 }
 
+/* Footer */
+
+.footer-container {
+  @apply content font-secondary;
+}
+
+.footer-container .left {
+  @apply flex flex-row flex-grow items-center;
+}
+
+.footer-container .right {
+  @apply flex flex-row flex-grow items-center justify-end;
+}
+
+.footer-container .footer-link {
+  @apply text-grey-10 no-underline mt-14px text-xxs;
+}
+
+.footer-container .footer-link:hover {
+  @apply opacity-60;
+}
+
+.footer-container .aragon {
+  @apply h-30px mt-10px;
+}
+
+@screen lg {
+  .footer-container .right {
+    @apply ml-8;
+  }
+
+  .footer-container .footer-link {
+    @apply ml-8;
+  }
+
+  .footer-container .footer-link:first-child {
+    @apply block ml-0;
+  }
+
+  .footer-container .aragon {
+    @apply ml-20px;
+  }
+}
+
+@media (max-width: 800px) {
+  .footer-container {
+    flex-direction: column;
+  }
+
+  .footer-container .left {
+    flex-direction: column;
+  }
+
+  .footer-container .right {
+    flex-direction: column;
+  }
+}
+
 /* Header */
 
 .header-container {
@@ -172,62 +230,22 @@
   }
 }
 
-/* Footer */
+/* Info */
 
-.footer-container {
-  @apply content font-secondary;
+.info-container {
+  @apply my-12 mx-6;
 }
 
-.footer-container .left {
-  @apply flex flex-row flex-grow items-center;
+.info-container h1 {
+  @apply text-xl;
 }
 
-.footer-container .right {
-  @apply flex flex-row flex-grow items-center justify-end;
+.info-container ul {
+  @apply my-4;
 }
 
-.footer-container .footer-link {
-  @apply text-grey-10 no-underline mt-14px text-xxs;
-}
-
-.footer-container .footer-link:hover {
-  @apply opacity-60;
-}
-
-.footer-container .aragon {
-  @apply h-30px mt-10px;
-}
-
-@screen lg {
-  .footer-container .right {
-    @apply ml-8;
-  }
-
-  .footer-container .footer-link {
-    @apply ml-8;
-  }
-
-  .footer-container .footer-link:first-child {
-    @apply block ml-0;
-  }
-
-  .footer-container .aragon {
-    @apply ml-20px;
-  }
-}
-
-@media (max-width: 800px) {
-  .footer-container {
-    flex-direction: column;
-  }
-
-  .footer-container .left {
-    flex-direction: column;
-  }
-
-  .footer-container .right {
-    flex-direction: column;
-  }
+.info-container ul li {
+  @apply text-sm text-grey-115 underline font-thin leading-8;
 }
 
 /* purgecss end ignore */
