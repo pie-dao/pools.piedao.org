@@ -13,11 +13,15 @@
 
   let balance = 'loading...';
   let key;
+  let balanceClass = 'blur-heavy';
+  let yourBalanceClass = 'blur-light';
 
   $: symbol = (pools[token] || {}).symbol;
   $: tokenLogo = images.logos[symbol];
 
   $: if (isAddress(token) && isAddress($eth.address)) {
+    balanceClass = '';
+    yourBalanceClass = '';
     key = balanceKey(token, $eth.address);
     subscribeToBalance(token, $eth.address);
   }
@@ -35,7 +39,7 @@
     <h1>{symbol}</h1>
   </div>
   <div class="right">
-    <span>{$_('your')} {$_('balance')}</span>
-    <h5>{balance} {symbol}</h5>
+    <span class={yourBalanceClass}>{$_('your')} {$_('balance')}</span>
+    <h5 class={balanceClass}>{balance} {symbol}</h5>
   </div>
 </div>

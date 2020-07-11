@@ -9,6 +9,23 @@
 /* Custom css */
 /* purgecss start ignore */
 
+.blur-heavy {
+  filter: blur(2px);
+  -o-filter: blur(2px);
+  -ms-filter: blur(2px);
+  -moz-filter: blur(2px);
+  -webkit-filter: blur(2px);
+  color: #a2a2a2;
+}
+
+.blur-light {
+  filter: blur(1.5px);
+  -o-filter: blur(1.5px);
+  -ms-filter: blur(1.5px);
+  -moz-filter: blur(1.5px);
+  -webkit-filter: blur(1.5px);
+}
+
 /* Balance */
 
 .balance-container {
