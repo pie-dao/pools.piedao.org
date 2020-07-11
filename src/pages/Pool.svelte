@@ -1,11 +1,15 @@
 <script>
+  import Balance from '../components/Balance.svelte';
+
   import { currentRoute } from '../stores/routes.js';
-  import { balances, eth, trackToken } from '../stores/eth.js';
-
-  $: balanceKey = `${$eth.address}.${$currentRoute.params.address}`.toLowerCase();
-
-  trackToken($currentRoute.params.address);
 </script>
 
-<div>Pool: {$currentRoute.params.address}</div>
-<div>Balance: {($balances[balanceKey] || 'fetching...').toString()}</div>
+<div class="content">
+  <div class="left">
+    <Balance token={$currentRoute.params.address} />
+  </div>
+  
+  <div class="right">
+  
+  </div>
+</div>
