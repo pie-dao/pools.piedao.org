@@ -5,7 +5,33 @@
   ],
   "default": "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
-    "symbol": "BTC++"
+    "symbol": "BTC++",
+    "composition": [
+      {
+        "address": "0x3212b29e33587a00fb1c83346f5dbfa69a458923",
+        "color": "#58a4fc",
+        "percentage": 25,
+        "symbol": "imBTC"
+      },
+      {
+        "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+        "color": "#fd6761",
+        "percentage": 25,
+        "symbol": "wBTC"
+      },
+      {
+        "address": "0x5228a22e72ccc52d415ecfd199f99d0665e7733b",
+        "color": "#6beab1",
+        "percentage": 25,
+        "symbol": "pBTC"
+      },
+      {
+        "address": "0xfe18be6b3bd88a2d2a7f928d00292e7a9963cfc6",
+        "color": "#c4ccce",
+        "percentage": 25,
+        "symbol": "sBTC"
+      }
+    ]
   },
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
     "symbol": "USD++"

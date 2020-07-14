@@ -1,4 +1,5 @@
 <script>
+  import AllocationBreakdown from '../components/AllocationBreakdown.svelte';
   import Balance from '../components/Balance.svelte';
   import Etherscan from '../components/Etherscan.svelte';
   import Farming from '../components/Farming.svelte';
@@ -22,6 +23,7 @@
         </div>
       </div>
       <Info token={$currentRoute.params.address} />
+      <AllocationBreakdown token={$currentRoute.params.address} />
     </div>
     
     <div class="right flex-1 ml-2">

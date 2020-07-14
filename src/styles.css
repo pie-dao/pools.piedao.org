@@ -26,6 +26,20 @@
   -webkit-filter: blur(1.5px);
 }
 
+.label {
+  @apply text-white rounded-2px bg-grey;
+}
+
+/* Allocation Breakdown */
+
+.allocation-breakdown-container {
+  @apply my-12 mx-6;
+}
+
+.allocation-breakdown-container h1 {
+  @apply text-xl;
+}
+
 /* Balance */
 
 .balance-container {
