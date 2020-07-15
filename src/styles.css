@@ -27,7 +27,8 @@
 }
 
 .label {
-  @apply text-white rounded-2px bg-grey;
+  @apply text-white rounded-4px bg-grey text-xs px-6px py-1px my-6px;
+  width: max-content;
 }
 
 /* Allocation Breakdown */
@@ -38,6 +39,18 @@
 
 .allocation-breakdown-container h1 {
   @apply text-xl;
+}
+
+.allocation-breakdown-container .row {
+  @apply flex w-100pc;
+}
+
+.allocation-breakdown-container .left {
+  @apply flex-1 mr-8;
+}
+
+.allocation-breakdown-container .right {
+  @apply flex-1;
 }
 
 /* Balance */

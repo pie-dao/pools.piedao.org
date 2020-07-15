@@ -7,6 +7,12 @@
   import { eth } from '../stores/eth.js';
 
   const year = (new Date()).getFullYear();
+
+  const hardReset = (e) => {
+    e.preventDefault();
+    window.localStorage.clear();
+    window.location.reload();
+  }
 </script>
 
 <div class="footer-container">
@@ -26,6 +32,10 @@
         Block: {$eth.currentBlockNumber}
       </a>
     {/if}
+    <a class="footer-link" href="/#" on:click={hardReset}>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </a>
+
   </div>
   <div class="right">
     <a
