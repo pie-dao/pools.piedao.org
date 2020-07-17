@@ -11,3 +11,4 @@ export const defaultEth = {
 
 export const balances = writable({});
 export const eth = writable({ ...defaultEth, currentBlockNumber: 0 });
+export const pools = writable({});

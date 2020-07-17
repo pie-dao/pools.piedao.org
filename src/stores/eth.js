@@ -1,7 +1,7 @@
 import { observableContract } from "./eth/contracts.js";
 import { subject } from "./eth/observables.js";
 import { registerConnection, resetConnection } from "./eth/connection.js";
-export { balances, eth } from "./eth/writables.js";
+export { balances, eth, pools } from "./eth/writables.js";
 
 const Web3Modal = window.Web3Modal.default;
 const providerOptions = {
