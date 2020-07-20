@@ -1,4 +1,6 @@
 <script>
+  import { _ } from 'svelte-i18n';
+
   import { onMount } from 'svelte';
 
   import AllocationChart from './AllocationChart.svelte';
@@ -21,13 +23,11 @@
   $: valuesMarginTop = (rightHeight - labelsHeight) / 2;
   $: valuesStyle = `margin-top: ${valuesMarginTop}px`;
 
-  $: console.log('values', values);
-
   const bgColor = ({ color }) => `background-color: ${color};`;
 </script>
 
 <div class="allocation-breakdown-container">
-  <h1>Allocation Breakdown</h1>
+  <h1>{$_('general.allocation')} {$_('general.breakdown')}</h1>
   <div class="row">
     <div class="left" bind:offsetWidth={leftWidth}>
       <AllocationChart height={leftHeight} width={leftWidth} margin={20} values={values} />

@@ -9,7 +9,7 @@ import { subject } from "./observables.js";
 import { updateCurrentBlock } from "./lifecycle.js";
 import { resetContractCache } from "./contracts.js";
 
-export const defaultProvider = new ethers.getDefaultProvider();
+export const defaultProvider = new ethers.providers.InfuraProvider();
 defaultProvider.on("block", updateCurrentBlock);
 
 eth.set({ ...get(eth), provider: defaultProvider });
@@ -17,10 +17,12 @@ eth.set({ ...get(eth), provider: defaultProvider });
 const resetWeb3Listeners = () => {
   const { provider, web3 } = get(eth);
 
+  /*
   if (provider) {
     provider.off("block", updateCurrentBlock);
     defaultProvider.on("block", updateCurrentBlock);
   }
+  */
 
   if (web3) {
     web3.off("accountsChanged", connectWeb3);
@@ -32,10 +34,12 @@ const resetWeb3Listeners = () => {
 const setWeb3Listeners = () => {
   const { provider, web3 } = get(eth);
 
+  /*
   if (provider) {
     defaultProvider.off("block", updateCurrentBlock);
     provider.on("block", updateCurrentBlock);
   }
+  */
 
   if (web3) {
     web3.on("accountsChanged", () => registerConnection());
@@ -70,10 +74,11 @@ export const registerConnection = async (newWeb3) => {
     currentBlockNumber,
     icon,
     network,
-    provider,
     shortAddress,
     signer,
     web3,
+
+    provider: defaultProvider,
   });
 
   setWeb3Listeners();

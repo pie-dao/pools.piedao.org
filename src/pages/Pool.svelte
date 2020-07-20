@@ -4,6 +4,7 @@
   import Etherscan from '../components/Etherscan.svelte';
   import Farming from '../components/Farming.svelte';
   import Info from '../components/Info.svelte';
+  import Liquidity from '../components/Liquidity.svelte';
   import Quantstamp from '../components/Quantstamp.svelte';
 
   import { currentRoute } from '../stores/routes.js';
@@ -27,7 +28,7 @@
     </div>
     
     <div class="right flex-1 ml-2">
-      &nbsp;
+      <Liquidity token={$currentRoute.params.address} />
     </div>
   </div>
 </div>

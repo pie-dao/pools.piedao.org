@@ -5,9 +5,9 @@
   import images from '../config/images.json';
   import pools from '../config/pools.json';
 
-  import { balances, eth } from '../stores/eth.js';
+  import { balanceKey, balances, eth } from '../stores/eth.js';
   import { currentRoute } from '../stores/routes.js';
-  import { balanceKey, subscribeToBalance } from './helpers.js';
+  import { subscribeToBalance } from './helpers.js';
 
   export let token;
 
@@ -27,8 +27,10 @@
   }
 
   $: if ($balances[key]) {
+    console.log('balance', key, $balances[key]);
     balance = $balances[key].dp(9).toString();
   } else {
+    console.log('no balance', key)
     balance = `${$_('general.loading')}...`;
   };
 </script>

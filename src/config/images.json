@@ -1,14 +1,23 @@
 {
   "icons": {
+    "downArrow": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/downArrow.svg",
     "hamburger": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/hamburger.svg"
   },
   "logos": {
     "aragon": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/aragon.svg",
     "balancerWhite": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/balancerWhite.svg",
     "BTC++": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/BTC%2B%2B.png",
+    "DAI": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/dai.svg",
     "etherscan": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/etherscan.svg",
+    "imBTC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/imbtc.png",
+    "pBTC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/pBTC.svg",
     "piedao": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Icon%20Clean.png",
     "quantstamp": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/quantstamp.svg",
-    "USD++": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/Cash%2B%2B.png"
+    "sBTC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sBTC.png",
+    "sUSD": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sUSD.png",
+    "TUSD": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/tusd.svg",
+    "USD++": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/Cash%2B%2B.png",
+    "USDC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/usdc.svg",
+    "wBTC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/wbtc.png"
   }
 }

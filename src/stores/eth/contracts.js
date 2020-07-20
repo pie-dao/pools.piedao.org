@@ -3,32 +3,93 @@ import { ethers } from "ethers";
 import { get } from "svelte/store";
 import { isAddress, validateIsAddress } from "@pie-dao/utils";
 
-import { balanceKey } from "../../components/helpers.js";
+import { balanceKey, functionKey } from "./keys";
 import { eth } from "./writables";
 import { findAbi } from "./abi";
 import { subject } from "./observables";
 
 let contracts = {};
+
 const trackedBalances = new Set();
+const trackedFunctions = {};
+
+let blockNumberPid = [0];
+
+const updateOnBlock = () => {
+  trackedBalances.forEach(async (key) => {
+    const { provider } = get(eth);
+    const [token, account] = key.split(".");
+    if (isAddress(token) && isAddress(account)) {
+      const contract = (await observableContract({ address: token })).raw;
+      const balance = (await contract.balanceOf(account)).toString();
+      console.log("got balance", key, balance);
+      subject(key).next(balance);
+    } else {
+      console.warn("Invalid key found in trackedBalances", key);
+      console.warn("key should be formatted '[token address].[wallet address]'");
+    }
+  });
+
+  Object.keys(trackedFunctions).forEach(async (key) => {
+    const { contractAddress, rawFunction, args, overrides } = trackedFunctions[key];
+    const contract = (await observableContract({ address: contractAddress })).raw;
+
+    rawFunction
+      .bind(contract)(...args, overrides)
+      .then((...results) => {
+        subject(key).next(...results);
+      });
+  });
+};
 
 subject("blockNumber").subscribe({
-  next: () => {
-    trackedBalances.forEach(async (key) => {
-      const { provider } = get(eth);
-      const [token, account] = key.split(".");
-      if (isAddress(token) && isAddress(account)) {
-        const contract = await observableContract({ address: token });
-        subject(key).next((await contract.balanceOf(account)).toString());
-      } else {
-        console.warn("Invalid key found in trackedBalances", key);
-        console.warn("key should be formatted '[token address].[wallet address]'");
-      }
-    });
+  next: (blockNumber) => {
+    if (blockNumber > blockNumberPid[0]) {
+      clearTimeout(blockNumberPid[1]);
+      blockNumberPid = [blockNumber, setTimeout(updateOnBlock, 500)];
+    }
   },
 });
 
+const generateTrackBalanceFunction = (contractAddress) => {
+  return async (account) => {
+    validateIsAddress(account);
+    const key = balanceKey(contractAddress, account);
+    trackedBalances.add(key);
+    const contract = await observableContract({ address: contractAddress });
+    contract.balanceOf(account).then((balance) => {
+      subject(key).next(balance.toString());
+    });
+    return subject(key);
+  };
+};
+
+const generateTrackableFunction = (contractAddress, functionName, rawFunction) => {
+  return (...args) => {
+    const contract = contracts[contractAddress].raw;
+    const trackable = rawFunction.bind(contract)(...args);
+
+    trackable.track = async (overrides = {}) => {
+      const key = functionKey(contractAddress, functionName, args, overrides);
+      trackedFunctions[key] = {
+        contractAddress,
+        rawFunction,
+        args,
+        overrides,
+      };
+      rawFunction
+        .bind(contract)(...args, overrides)
+        .then((...results) => {
+          subject(key).next(...results);
+        });
+      return subject(key);
+    };
+
+    return trackable;
+  };
+};
+
 export const observableContract = async ({ abi, address }) => {
-  console.log("address is", address);
   validateIsAddress(address);
 
   if (contracts[address]) {
@@ -47,23 +108,43 @@ export const observableContract = async ({ abi, address }) => {
   }
 
   const { provider, signer } = get(eth);
+  let contract = new ethers.Contract(address, contractAbi, provider);
 
+  /*
   if (signer) {
-    contracts[address] = new ethers.Contract(address, contractAbi, signer);
+    contract = new ethers.Contract(address, contractAbi, signer);
   } else {
-    contracts[address] = new ethers.Contract(address, contractAbi, provider);
+    contract = new ethers.Contract(address, contractAbi, provider);
   }
+  */
 
-  contracts[address].trackBalance = async (account) => {
-    validateIsAddress(account);
-    const key = balanceKey(address, account);
-    trackedBalances.add(key);
-    const contract = await observableContract({ address });
-    contract.balanceOf(account).then((balance) => {
-      subject(key).next(balance.toString());
-    });
-    return subject(key);
+  const addons = {};
+
+  addons.raw = contract;
+  addons.trackBalance = generateTrackBalanceFunction(address);
+  addons.functions = {};
+
+  Object.keys(contract.functions).map((functionName) => {
+    addons.functions[functionName] = generateTrackableFunction(
+      address,
+      functionName,
+      contract.functions[functionName]
+    );
+  });
+
+  const handler = {
+    get: (obj, prop) => {
+      if (Object.keys(addons).includes(prop)) {
+        return addons[prop];
+      } else if (contract[prop]) {
+        return contract[prop];
+      }
+
+      return obj[prop];
+    },
   };
+
+  contracts[address] = new Proxy({}, handler);
 
   return contracts[address];
 };

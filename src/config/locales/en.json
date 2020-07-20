@@ -16,7 +16,12 @@
     }
   },
   "general": {
+    "add": "Add",
+    "allocation": "Allocation",
+    "amount": "Amount",
+    "asset": "Asset",
     "balance": "Balance",
+    "breakdown": "Breakdown",
     "close": "Close",
     "docs": "Docs",
     "documentation": "Documentation",
@@ -26,17 +31,23 @@
     "forum": "Forum",
     "home": "Home",
     "info": "Info",
+    "liquidity": "Liquidity",
     "loading": "Loading",
     "logo": "Logo",
+    "multi": "Multi",
     "program": "Program",
     "returns": "Returns",
+    "single": "Single",
     "tokens": "Tokens",
     "whitepaper": "Whitepaper",
+    "withdraw": "Withdraw",
     "your": "Your"
   },
   "piedao": {
     "aragonLink": "piedao.aragon",
     "audit.result": "Audit result",
-    "check.contract.on": "Check the contract on"
+    "check.contract.on": "Check the contract on",
+    "multi.asset.according.to.allocation": "according to its allocation",
+    "multi.asset.enables.minting": "Multi Asset entry enables you to mint"
   }
 }

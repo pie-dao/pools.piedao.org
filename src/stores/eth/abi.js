@@ -16,7 +16,7 @@ const loadAbi = (address) => {
       return pieSmartPool;
     }
 
-    const abi = window.localStorage.get(`abis.${address}`);
+    const abi = window.localStorage.getItem(`abis.${address}`);
     if (abi) {
       return JSON.parse(abi);
     }
