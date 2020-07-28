@@ -199,6 +199,10 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
     let actionBtnClass = "hidden";
     let actionBtnLabel = "";
 
+    let buyLink =
+      pooledToken.buyLink ||
+      "https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0";
+
     if (ethData.address) {
       subscribeToAllowance(address, ethData.address, token);
       subscribeToBalance(address, ethData.address);
@@ -237,8 +241,6 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
         displayDecimals: 8,
         maxDigits: 10,
       }),
-      icon,
-
       amountVsBalance: amountFormatter({
         amount: amtVsBalance,
         approximatePrefix: "",
@@ -246,11 +248,13 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
         maxDigits: 10,
       }),
       amountVsBalanceClass: amtVsBalanceClass,
+      buyLink,
+      icon,
     };
   });
 };
 
-export const maxAmount = (token, current) => {
+export const maxAmount = (token, current, multiplier = 0.99) => {
   validateIsAddress(token);
 
   const balancesData = get(balances);
@@ -269,7 +273,7 @@ export const maxAmount = (token, current) => {
       const localMax = balance.dividedBy(amountPerUnit);
       return localMax.isLessThan(acc) ? localMax : acc;
     }, BigNumber(100000000000000))
-    .multipliedBy(0.99);
+    .multipliedBy(multiplier);
 };
 
 export const subscribeToAllowance = async (token, address, spender) => {

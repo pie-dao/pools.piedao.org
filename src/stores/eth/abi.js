@@ -8,7 +8,7 @@ import { eth } from "./writables.js";
 
 const etherscanApiKey = "67NWT4RN7W1TQ9NX4MIY1MCAIW52NK26SC";
 
-const isPie = (abi) => abi.filter(({ name }) => name === "getImplementation");
+const isPie = (abi) => abi.filter(({ name }) => name === "getImplementation").length > 0;
 
 const loadAbi = (address) => {
   try {

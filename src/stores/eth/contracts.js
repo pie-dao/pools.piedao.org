@@ -17,7 +17,6 @@ let blockNumberPid = [0];
 
 const updateOnBlock = () => {
   trackedBalances.forEach(async (key) => {
-    const { provider } = get(eth);
     const [token, account] = key.split(".");
     if (isAddress(token) && isAddress(account)) {
       const contract = (await observableContract({ address: token })).raw;
@@ -98,7 +97,7 @@ const generateTrackableFunction = (contractAddress, functionName, rawFunction) =
 export const observableContract = async ({ abi, address }) => {
   validateIsAddress(address);
 
-  if (contracts[address]) {
+  if (contracts[address] && !abi) {
     return contracts[address];
   }
 
@@ -108,6 +107,7 @@ export const observableContract = async ({ abi, address }) => {
     try {
       contractAbi = await findAbi(address);
     } catch (e) {
+      console.error(e);
       console.warn("Falling back on default erc20 abi for", address);
       contractAbi = erc20;
     }
@@ -148,9 +148,13 @@ export const observableContract = async ({ abi, address }) => {
     },
   };
 
-  contracts[address] = new Proxy({}, handler);
+  const proxy = new Proxy({}, handler);
 
-  return contracts[address];
+  if (!abi) {
+    contracts[address] = proxy;
+  }
+
+  return proxy;
 };
 
 export const resetContractCache = () => {

@@ -3,12 +3,24 @@
 
   import { _ } from "svelte-i18n";
   import { ethers } from "ethers";
+  import { pieSmartPool } from "@pie-dao/abis";
 
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
 
-  import { allowances, approveMax, balances, contract, eth, pools } from "../stores/eth.js";
+  import {
+    allowances,
+    approveMax,
+    balances,
+    connectWeb3,
+    contract,
+    eth,
+    pools,
+    bumpLifecycle,
+    subject,
+  } from "../stores/eth.js";
   import { amountFormatter, fetchPooledTokens, maxAmount } from "./helpers.js";
+  import { displayNotification } from "../notifications.js";
 
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
   let type = "multi";
@@ -37,15 +49,63 @@
 
   const mint = async () => {
     const requestedAmount = BigNumber(amount);
-    const max = maxAmount(token, pooledTokens);
+    const max = maxAmount(token, pooledTokens, 1);
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: "Please connect a wallet and try again.", type: "hint" });
+      connectWeb3();
+      return;
+    }
 
     if (requestedAmount.isGreaterThan(max)) {
+      const needMore = pooledTokens
+        .filter(({ actionBtnLabel }) => actionBtnLabel === "BUY")
+        .map(({ symbol }) => symbol)
+        .join(", ");
+
+      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
+
+      const message =
+        `At the moment you only have enough funds to mint ${maxFormatted} ${tokenSymbol}. ` +
+        `To proceed you will need more of these tokens: ${needMore}`;
+
+      displayNotification({ message, type: "error", autoDismiss: 30000 });
       return;
     }
 
     for (let i = 0; i < lockedPoolTokens.length; i += 1) {
-      await approveMax(lockedPoolTokens[i].address, token);
+      approveMax(lockedPoolTokens[i].address, token);
     }
+
+    const tokenContract = await contract({ abi: pieSmartPool, address: token });
+    const decimals = await tokenContract.decimals();
+    const arg = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
+    const { emitter } = displayNotification(await tokenContract.joinPool(arg));
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
   };
 
   const setValuePercentage = (percent) => {
@@ -221,7 +281,7 @@
       </div>
       <a
         class={pooledToken.actionBtnClass}
-        href="https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0"
+        href={pooledToken.buyLink}
         on:click={(evt) => action(evt, pooledToken)}
         target="_blank">
         {pooledToken.actionBtnLabel}
@@ -231,7 +291,7 @@
   {/each}
 
   <center>
-    <button class="btn m-0 mt-4 rounded-8px px-56px py-15px">
+    <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => mint()}>
       {$_('general.add')} {$_('general.liquidity')}
     </button>
   </center>

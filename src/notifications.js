@@ -34,7 +34,7 @@ export const displayNotification = ({
     type,
   };
 
-  const notificationResponse = {};
+  let notificationResponse = {};
 
   if (isString(message)) {
     notificationResponse = notify.notification(notificationObject);

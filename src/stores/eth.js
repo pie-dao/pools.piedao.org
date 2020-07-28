@@ -13,6 +13,7 @@ import { subject } from "./eth/observables.js";
 export { allowances, balances, eth, pools } from "./eth/writables.js";
 export { balanceKey, functionKey } from "./eth/keys.js";
 export { bumpLifecycle } from "./eth/lifecycle.js";
+export { subject } from "./eth/observables.js";
 
 const Web3Modal = window.Web3Modal.default;
 const providerOptions = {
@@ -61,9 +62,11 @@ export const approve = async (address, spender, amount) => {
   const { hash } = await erc20Contract.approve(spender, amount);
   const { emitter } = displayNotification({ hash });
   const symbol = await erc20Contract.symbol();
+  let currentBlockNumber;
 
   await new Promise((resolve) =>
-    emitter.on("txConfirmed", () => {
+    emitter.on("txConfirmed", ({ blockNumber }) => {
+      currentBlockNumber = blockNumber;
       resolve();
       return { message: `${symbol} unlocked`, type: "success" };
     })
@@ -77,6 +80,10 @@ export const approve = async (address, spender, amount) => {
   updates[key] = BigNumber(amount.toString()).dividedBy(10 ** decimals);
   console.log("update allowances", updates[key].toString(), { ...get(allowances), ...updates });
   allowances.set({ ...get(allowances), ...updates });
+  const lastBlock = get(eth).currentBlockNumber;
+  if (currentBlockNumber > lastBlock) {
+    eth.set({ ...get(eth), currentBlockNumber });
+  }
 };
 
 export const approveMax = async (address, spender) => {

@@ -9,6 +9,7 @@
     "composition": [
       {
         "address": "0x3212b29e33587a00fb1c83346f5dbfa69a458923",
+        "buyLink": "https://tokenlon.im",
         "color": "#58a4fc",
         "percentage": 25,
         "symbol": "imBTC"
