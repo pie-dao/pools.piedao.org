@@ -33,7 +33,6 @@ const formatRoute = (route) => {
     case "pools":
       const address = (route[1] || "").toLowerCase();
       if (pools.available.includes(address)) {
-        console.log(true);
         return { page: Pool, params: { address } };
       }
 
@@ -48,10 +47,8 @@ const formatRoute = (route) => {
 const route = deriveRoute();
 
 export const currentRoute = writable({ ...formatRoute(route) });
-console.log("initial currentRoute", currentRoute);
 
 window.addEventListener("hashchange", () => {
-  console.log("yo");
   const route = deriveRoute();
   currentRoute.set({ ...formatRoute(route) });
 });

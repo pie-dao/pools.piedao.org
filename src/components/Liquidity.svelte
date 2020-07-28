@@ -7,7 +7,7 @@
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
 
-  import { allowances, balances, contract, eth, pools } from "../stores/eth.js";
+  import { allowances, approveMax, balances, contract, eth, pools } from "../stores/eth.js";
   import { amountFormatter, fetchPooledTokens, maxAmount } from "./helpers.js";
 
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
@@ -21,34 +21,35 @@
   $: tokenSymbol = (poolsConfig[token] || {}).symbol;
   $: tokenLogo = images.logos[tokenSymbol];
 
-  $: pooledTokens = (() => {
-    console.log("generating pooledTokens", Date.now());
-    return fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
-  })();
+  $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
+  $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");
 
   const action = async (evt, pooledToken) => {
     const { address } = pooledToken;
 
     if (pooledToken.actionBtnLabel === "Unlock") {
       evt.preventDefault();
-      (await contract({ address })).approve(token, ethers.constants.MaxUint256);
+      await approveMax(address, token);
     } else if (pooledToken.actionBtnLabel === "ready") {
       evt.preventDefault();
     }
   };
 
-  const mint = () => {
+  const mint = async () => {
     const requestedAmount = BigNumber(amount);
     const max = maxAmount(token, pooledTokens);
 
     if (requestedAmount.isGreaterThan(max)) {
       return;
     }
+
+    for (let i = 0; i < lockedPoolTokens.length; i += 1) {
+      await approveMax(lockedPoolTokens[i].address, token);
+    }
   };
 
   const setValuePercentage = (percent) => {
     const max = maxAmount(token, pooledTokens);
-    console.log("max", max.toString());
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
   };

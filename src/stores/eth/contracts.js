@@ -22,7 +22,6 @@ const updateOnBlock = () => {
     if (isAddress(token) && isAddress(account)) {
       const contract = (await observableContract({ address: token })).raw;
       const balance = (await contract.balanceOf(account)).toString();
-      console.log("got balance", key, balance);
       subject(key).next(balance);
     } else {
       console.warn("Invalid key found in trackedBalances", key);

@@ -170,7 +170,7 @@ export const amountVsBalanceClass = (amt, pooledToken) => {
   return "neutral";
 };
 
-export const pooledTokenAmountRequired = (amt, { percentage, symbol }, raw = false) => {
+export const pooledTokenAmountRequired = (amt, { percentage }, raw = false) => {
   const amount = BigNumber(amt);
   let requiredAmount = BigNumber(0);
 
@@ -320,13 +320,11 @@ export const subscribeToBalance = async (token, address) => {
   const tokenContract = await contract({ address: token });
   const observable = await tokenContract.trackBalance(address);
   const decimals = await tokenContract.decimals();
-  console.log("subscribing to balance", key, decimals);
 
   observable.subscribe({
     next: async (updatedBalance) => {
       const updates = {};
       updates[key] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
-      console.log("Balance update", updates, updates[key].toString());
       balances.set({ ...get(balances), ...updates });
     },
   });

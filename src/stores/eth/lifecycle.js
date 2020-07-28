@@ -21,6 +21,5 @@ export const bumpLifecycle = () => {
 };
 
 export const updateCurrentBlock = (currentBlockNumber) => {
-  console.log("got blockNumber", currentBlockNumber);
   subject("blockNumber").next(currentBlockNumber);
 };

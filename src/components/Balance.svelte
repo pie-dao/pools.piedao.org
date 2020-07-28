@@ -1,38 +1,36 @@
 <script>
-  import { _ } from 'svelte-i18n';
-  import { isAddress } from '@pie-dao/utils';
+  import { _ } from "svelte-i18n";
+  import { isAddress } from "@pie-dao/utils";
 
-  import images from '../config/images.json';
-  import pools from '../config/pools.json';
+  import images from "../config/images.json";
+  import pools from "../config/pools.json";
 
-  import { balanceKey, balances, eth } from '../stores/eth.js';
-  import { currentRoute } from '../stores/routes.js';
-  import { subscribeToBalance } from './helpers.js';
+  import { balanceKey, balances, eth } from "../stores/eth.js";
+  import { currentRoute } from "../stores/routes.js";
+  import { subscribeToBalance } from "./helpers.js";
 
   export let token;
 
-  let balance = 'loading...';
+  let balance = "loading...";
   let key;
-  let balanceClass = 'blur-heavy';
-  let yourBalanceClass = 'blur-light';
+  let balanceClass = "blur-heavy";
+  let yourBalanceClass = "blur-light";
 
   $: symbol = (pools[token] || {}).symbol;
   $: tokenLogo = images.logos[symbol];
 
   $: if (isAddress(token) && isAddress($eth.address)) {
-    balanceClass = '';
-    yourBalanceClass = '';
+    balanceClass = "";
+    yourBalanceClass = "";
     key = balanceKey(token, $eth.address);
     subscribeToBalance(token, $eth.address);
   }
 
   $: if ($balances[key]) {
-    console.log('balance', key, $balances[key]);
     balance = $balances[key].dp(9).toString();
   } else {
-    console.log('no balance', key)
-    balance = `${$_('general.loading')}...`;
-  };
+    balance = `${$_("general.loading")}...`;
+  }
 </script>
 
 <div class="balance-container">

@@ -1,9 +1,18 @@
+import BigNumber from "bignumber.js";
+
+import { ethers } from "ethers";
+
+import { allowances, eth } from "./eth/writables.js";
+import { displayNotification } from "../notifications";
+import { functionKey } from "./eth/keys.js";
+import { get } from "svelte/store";
 import { observableContract } from "./eth/contracts.js";
-import { subject } from "./eth/observables.js";
 import { registerConnection, resetConnection } from "./eth/connection.js";
+import { subject } from "./eth/observables.js";
+
+export { allowances, balances, eth, pools } from "./eth/writables.js";
 export { balanceKey, functionKey } from "./eth/keys.js";
 export { bumpLifecycle } from "./eth/lifecycle.js";
-export { allowances, balances, eth, pools } from "./eth/writables.js";
 
 const Web3Modal = window.Web3Modal.default;
 const providerOptions = {
@@ -44,3 +53,32 @@ export const contract = async ({ abi, address }) => await observableContract({ a
 export const trackBlock = async () => subject("block");
 export const trackBlockNumber = async () => subject("blockNumber");
 export const trackGasPrice = async () => subject("gasPrice");
+
+// Shortcuts
+
+export const approve = async (address, spender, amount) => {
+  const erc20Contract = await contract({ address });
+  const { hash } = await erc20Contract.approve(spender, amount);
+  const { emitter } = displayNotification({ hash });
+  const symbol = await erc20Contract.symbol();
+
+  await new Promise((resolve) =>
+    emitter.on("txConfirmed", () => {
+      resolve();
+      return { message: `${symbol} unlocked`, type: "success" };
+    })
+  );
+
+  const decimals = await erc20Contract.decimals();
+  const updates = {};
+  const args = [get(eth).address, spender];
+  const key = functionKey(address, "allowance", args);
+
+  updates[key] = BigNumber(amount.toString()).dividedBy(10 ** decimals);
+  console.log("update allowances", updates[key].toString(), { ...get(allowances), ...updates });
+  allowances.set({ ...get(allowances), ...updates });
+};
+
+export const approveMax = async (address, spender) => {
+  await approve(address, spender, ethers.constants.MaxUint256);
+};
