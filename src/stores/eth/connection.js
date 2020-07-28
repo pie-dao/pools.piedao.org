@@ -5,8 +5,7 @@ import { get } from "svelte/store";
 import { shortenAddress } from "@pie-dao/utils";
 
 import { defaultEth, eth } from "./writables.js";
-import { subject } from "./observables.js";
-import { updateCurrentBlock } from "./lifecycle.js";
+import { bumpLifecycle, updateCurrentBlock } from "./lifecycle.js";
 import { resetContractCache } from "./contracts.js";
 
 export const defaultProvider = new ethers.providers.InfuraProvider();
@@ -17,12 +16,10 @@ eth.set({ ...get(eth), provider: defaultProvider });
 const resetWeb3Listeners = () => {
   const { provider, web3 } = get(eth);
 
-  /*
   if (provider) {
     provider.off("block", updateCurrentBlock);
     defaultProvider.on("block", updateCurrentBlock);
   }
-  */
 
   if (web3) {
     web3.off("accountsChanged", connectWeb3);
@@ -34,12 +31,10 @@ const resetWeb3Listeners = () => {
 const setWeb3Listeners = () => {
   const { provider, web3 } = get(eth);
 
-  /*
   if (provider) {
     defaultProvider.off("block", updateCurrentBlock);
     provider.on("block", updateCurrentBlock);
   }
-  */
 
   if (web3) {
     web3.on("accountsChanged", () => registerConnection());
@@ -64,8 +59,6 @@ export const registerConnection = async (newWeb3) => {
     signer.getAddress(),
   ]);
 
-  subject("blockNumber").next(currentBlockNumber);
-
   const shortAddress = shortenAddress(address);
   const icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
 
@@ -74,14 +67,14 @@ export const registerConnection = async (newWeb3) => {
     currentBlockNumber,
     icon,
     network,
+    provider,
     shortAddress,
     signer,
     web3,
-
-    provider: defaultProvider,
   });
 
   setWeb3Listeners();
+  bumpLifecycle();
 };
 
 export const resetConnection = () => {

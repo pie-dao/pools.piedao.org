@@ -2,6 +2,7 @@ import { observableContract } from "./eth/contracts.js";
 import { subject } from "./eth/observables.js";
 import { registerConnection, resetConnection } from "./eth/connection.js";
 export { balanceKey, functionKey } from "./eth/keys.js";
+export { bumpLifecycle } from "./eth/lifecycle.js";
 export { allowances, balances, eth, pools } from "./eth/writables.js";
 
 const Web3Modal = window.Web3Modal.default;

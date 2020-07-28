@@ -51,6 +51,13 @@ subject("blockNumber").subscribe({
   },
 });
 
+subject("blockNumberBump").subscribe({
+  next: (blockNumber) => {
+    clearTimeout(blockNumberPid[1]);
+    blockNumberPid = [blockNumber, setTimeout(updateOnBlock, 500)];
+  },
+});
+
 const generateTrackBalanceFunction = (contractAddress) => {
   return async (account) => {
     validateIsAddress(account);
@@ -110,13 +117,11 @@ export const observableContract = async ({ abi, address }) => {
   const { provider, signer } = get(eth);
   let contract = new ethers.Contract(address, contractAbi, provider);
 
-  /*
   if (signer) {
     contract = new ethers.Contract(address, contractAbi, signer);
   } else {
     contract = new ethers.Contract(address, contractAbi, provider);
   }
-  */
 
   const addons = {};
 

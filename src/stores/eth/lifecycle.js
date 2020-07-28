@@ -6,6 +6,7 @@ import { subject } from "./observables.js";
 // subject("block").subscribe({ next: (block) => console.log("block", block) });
 subject("blockNumber").subscribe({
   next: async (currentBlockNumber) => {
+    console.log("currentBlockNumber", currentBlockNumber, Date.now());
     const ethData = get(eth);
     eth.set({ ...ethData, currentBlockNumber });
     subject("block").next(await ethData.provider.getBlock(currentBlockNumber));
@@ -14,6 +15,10 @@ subject("blockNumber").subscribe({
     }
   },
 });
+
+export const bumpLifecycle = () => {
+  subject("blockNumberBump").next(get(eth).currentBlockNumber);
+};
 
 export const updateCurrentBlock = (currentBlockNumber) => {
   console.log("got blockNumber", currentBlockNumber);

@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 
 import { get } from "svelte/store";
-import { isBigNumber, validateIsAddress, validateIsBigNumber } from "@pie-dao/utils";
+import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from "@pie-dao/utils";
 
 import images from "../config/images.json";
 import poolsConfig from "../config/pools.json";
@@ -10,6 +10,7 @@ import {
   allowances,
   balanceKey,
   balances,
+  bumpLifecycle,
   contract,
   eth,
   functionKey,
@@ -33,7 +34,10 @@ const rawAmountVsBalance = (address, amount, pooledToken) => {
 
   if (address) {
     const key = balanceKey(pooledToken.address, address);
-    const balance = BigNumber(get(balances)[key]);
+    const rawBalance = get(balances)[key];
+    if (rawBalance) {
+      balance = BigNumber(rawBalance);
+    }
   }
 
   if (isBigNumber(balance)) {
@@ -84,29 +88,44 @@ export const amountFormatter = ({
   displayDecimals = 3,
   lessThanPrefix = "< ",
   rounding = BigNumber.ROUND_DOWN,
+  maxDigits,
 }) => {
   if (!amount) {
     return "";
   }
 
+  let decimals = displayDecimals;
   const prefix = "@pie-dao/utils - amountFormatter";
   const value = BigNumber(amount);
 
   validateIsBigNumber(value, { prefix });
 
+  if (isNumber(maxDigits)) {
+    let left = 0;
+    while (BigNumber(10 ** left).isLessThan(value)) {
+      left += 1;
+    }
+    const maxDecimals = maxDigits - left;
+    if (maxDecimals < 0) {
+      decimals = 0;
+    } else if (maxDecimals < decimals) {
+      decimals = maxDecimals;
+    }
+  }
+
   if (value.isZero()) {
-    return value.toFixed(displayDecimals);
+    return value.toFixed(decimals);
   }
 
   const smallest = BigNumber(1)
-    .dividedBy(10 ** displayDecimals)
+    .dividedBy(10 ** decimals)
     .toString();
 
   if (value.isLessThan(smallest)) {
     return `${lessThanPrefix}${smallest}`;
   }
 
-  const base = value.toFixed(displayDecimals, BigNumber.ROUND_DOWN);
+  const base = value.toFixed(decimals, rounding);
 
   if (value.isGreaterThan(base)) {
     return `${approximatePrefix}${base}`;
@@ -166,14 +185,91 @@ export const pooledTokenAmountRequired = (amt, { percentage, symbol }, raw = fal
   return amountFormatter({ amount: requiredAmount, displayDecimals: 8 });
 };
 
-export const fetchPooledTokens = (token, current) => {
+export const fetchPooledTokens = (token, amount, current, allowancesData, balancesData) => {
   const composition = current || poolsConfig[token];
 
   return composition.map((pooledToken) => {
+    const amountRequired = pooledTokenAmountRequired(amount, pooledToken, true);
+    const amtVsBalance = amountVsBalance(amount, pooledToken);
+    const amtVsBalanceClass = amountVsBalanceClass(amount, pooledToken);
+    const ethData = get(eth);
     const icon = images.logos[pooledToken.symbol];
+    const { address } = pooledToken;
 
-    return { ...pooledToken, icon };
+    let actionBtnClass = "hidden";
+    let actionBtnLabel = "";
+
+    if (ethData.address) {
+      subscribeToAllowance(address, ethData.address, token);
+      subscribeToBalance(address, ethData.address);
+
+      const allowanceKey = functionKey(address, "allowance", [ethData.address, token]);
+      const allowance = allowancesData[allowanceKey];
+      const balKey = balanceKey(address, ethData.address);
+
+      if (
+        balancesData[balKey] &&
+        balancesData[balKey].isGreaterThan(amountRequired) &&
+        (!isBigNumber(allowance) || allowance.isLessThan(amountRequired))
+      ) {
+        actionBtnClass =
+          "btn-unlock cursor rounded-20px h-26px bg-white border border-black w-60px m-auto text-center text-xs font-thin leading-26px";
+        actionBtnLabel = "Unlock";
+      } else if (balancesData[balKey] && balancesData[balKey].isLessThan(amountRequired)) {
+        actionBtnClass =
+          "btn-buy cursor rounded-20px h-26px bg-black text-white w-60px m-auto text-center text-xs font-thin leading-26px";
+        actionBtnLabel = "BUY";
+      } else {
+        actionBtnClass =
+          "btn-buy rounded-20px h-26px bg-white text-grey w-60px m-auto text-center text-xs font-thin leading-26px";
+        actionBtnLabel = "ready";
+      }
+    }
+
+    return {
+      ...pooledToken,
+
+      actionBtnClass,
+      actionBtnLabel,
+      amountRequired: amountFormatter({
+        amount: amountRequired,
+        approximatePrefix: "",
+        displayDecimals: 8,
+        maxDigits: 10,
+      }),
+      icon,
+
+      amountVsBalance: amountFormatter({
+        amount: amtVsBalance,
+        approximatePrefix: "",
+        displayDecimals: 8,
+        maxDigits: 10,
+      }),
+      amountVsBalanceClass: amtVsBalanceClass,
+    };
   });
+};
+
+export const maxAmount = (token, current) => {
+  validateIsAddress(token);
+
+  const balancesData = get(balances);
+  const composition = current || poolsConfig[token];
+  const ethData = get(eth);
+
+  if (!ethData.address) {
+    return BigNumber(0);
+  }
+
+  return composition
+    .reduce((acc, { address, percentage }) => {
+      const balKey = balanceKey(address, ethData.address);
+      const balance = balancesData[balKey];
+      const amountPerUnit = BigNumber(percentage).dividedBy(100);
+      const localMax = balance.dividedBy(amountPerUnit);
+      return localMax.isLessThan(acc) ? localMax : acc;
+    }, BigNumber(100000000000000))
+    .multipliedBy(0.99);
 };
 
 export const subscribeToAllowance = async (token, address, spender) => {
@@ -201,10 +297,12 @@ export const subscribeToAllowance = async (token, address, spender) => {
       updates[key] = BigNumber(updatedAllowance).dividedBy(10 ** decimals);
       const existingAllowance = get(allowances)[key];
       if (!updates[key].isEqualTo(existingAllowance)) {
-        balances.set({ ...get(allowances), ...updates });
+        allowances.set({ ...get(allowances), ...updates });
       }
     },
   });
+
+  bumpLifecycle();
 };
 
 export const subscribeToBalance = async (token, address) => {
@@ -228,10 +326,12 @@ export const subscribeToBalance = async (token, address) => {
     next: async (updatedBalance) => {
       const updates = {};
       updates[key] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
-      console.log("Balance update", updates);
+      console.log("Balance update", updates, updates[key].toString());
       balances.set({ ...get(balances), ...updates });
     },
   });
+
+  bumpLifecycle();
 };
 
 export const subscribeToPoolWeights = async (poolAddress) => {
@@ -262,4 +362,6 @@ export const subscribeToPoolWeights = async (poolAddress) => {
       },
     });
   });
+
+  bumpLifecycle();
 };

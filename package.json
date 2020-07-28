@@ -9,6 +9,7 @@
     "@pie-dao/eth-tailwind": "^1.0.0",
     "@pie-dao/tailwind": "^1.1.2",
     "@pie-dao/utils": "^1.0.0",
+    "animate.css": "^4.1.0",
     "bignumber.js": "^9.0.0",
     "d3": "^5.16.0",
     "defi18n": "^0.0.12",
