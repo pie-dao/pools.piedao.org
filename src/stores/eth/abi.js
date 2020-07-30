@@ -44,7 +44,7 @@ export const findAbi = async (address) => {
   }
 
   const response = await fetch(
-    `http://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apiKey=${etherscanApiKey}`
+    `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apiKey=${etherscanApiKey}`
   );
   const decoded = await response.json();
   const abi = JSON.parse(decoded.result);
@@ -56,7 +56,7 @@ export const findAbi = async (address) => {
     const proxy = await contract.getImplementation();
 
     const response = await fetch(
-      `http://api.etherscan.io/api?module=contract&action=getabi&address=${proxy}&apiKey=${etherscanApiKey}`
+      `https://api.etherscan.io/api?module=contract&action=getabi&address=${proxy}&apiKey=${etherscanApiKey}`
     );
     const decoded = await response.json();
     const proxyAbi = JSON.parse(decoded.result);

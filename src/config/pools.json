@@ -32,7 +32,8 @@
         "percentage": 25,
         "symbol": "sBTC"
       }
-    ]
+    ],
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
   },
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
     "symbol": "USD++"
