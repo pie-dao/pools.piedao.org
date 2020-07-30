@@ -197,7 +197,7 @@
   <h1 class="text-center text-xl">{$_('general.add')} {$_('general.liquidity')}</h1>
   <div class="row flex font-thin">
     <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
-    <div class="switch mx-4">
+    <div class="switch mx-4" on:click={() => alert('Single Asset entry coming soon!')}>
       <input type="checkbox" class="toggle-input" checked={type === 'multi'} />
       <span class="toggle active border-grey" />
     </div>
