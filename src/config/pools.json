@@ -1,7 +1,8 @@
 {
   "available": [
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+    "0xa25d24af7e67f8736d2e0794a1aa440b6d83a4fc"
   ],
   "default": "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
@@ -65,8 +66,8 @@
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
   },
-  "432423": {
-    "symbol": "DLT",
+  "0xa25d24af7e67f8736d2e0794a1aa440b6d83a4fc": {
+    "symbol": "TDEFI+L",
     "composition": [
       {
         "symbol": "COMP",
