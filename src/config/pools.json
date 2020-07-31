@@ -36,6 +36,105 @@
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
   },
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
-    "symbol": "USD++"
+    "symbol": "USD++",
+    "composition": [
+      {
+        "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+        "percentage": 47.22,
+        "color": "#58a4fc",
+        "symbol": "USDC"
+      },
+      {
+        "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+        "percentage": 20.42,
+        "color": "#fd6761",
+        "symbol": "DAI"
+      },
+      {
+        "address": "0x0000000000085d4780B73119b644AE5ecd22b376",
+        "percentage": 28.58,
+        "color": "#6beab1",
+        "symbol": "TUSD"
+      },
+      {
+        "address": "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
+        "percentage": 3.78,
+        "color": "#c4ccce",
+        "symbol": "sUSD"
+      }
+    ],
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
+  },
+  "432423": {
+    "symbol": "DLT",
+    "composition": [
+      {
+        "symbol": "COMP",
+        "color": "#58a4fc",
+        "address": "0xc8af1c1A8028788cF710D470021F02061aee823A",
+        "percentage": 13.39
+      },
+      {
+        "symbol": "KNC",
+        "color": "#fd6761",
+        "address": "0xa734fD2FbF439c062Fe1B652A5cee79fB0043a2F",
+        "percentage": 10.17
+      },
+      {
+        "symbol": "LEND",
+        "color": "#6beab1",
+        "address": "0x8Cf39A1caF0F5B9A431C0FAD5cDdD21A0Eb4854C",
+        "percentage": 16.49
+      },
+      {
+        "symbol": "LINK",
+        "color": "#c4ccce",
+        "address": "0x220d5e0Fb650929613825b09BA21a2AEaC849185",
+        "percentage": 25
+      },
+      {
+        "symbol": "MKR",
+        "address": "0x24AAaf144275633B513359137FFa5A6691D3E933",
+        "color": "#000000",
+        "percentage": 20.14
+      },
+      {
+        "symbol": "SNX",
+        "color": "#000000",
+        "address": "0xD43740443390C1C2De839E369B3857bd161C6887",
+        "percentage": 14.81
+      }
+    ],
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
+  },
+  "5425543": {
+    "symbol": "DST",
+    "composition": [
+      {
+        "symbol": "BAL",
+        "color": "#58a4fc",
+        "address": "0xFC1A1381B3f63f3BECc2990100e3c94FE4fDFfdc",
+        "percentage": 12.75
+      },
+      {
+        "symbol": "LRC",
+        "color": "#fd6761",
+        "address": "0x667E1dE7D51ab771D046ebc22Ccf971d8290CaF6",
+        "percentage": 27.25
+      },
+      {
+        "symbol": "REN",
+        "color": "#6beab1",
+        "address": "0x33656AcDb5Ef5DCce9fD6215e3dc5762ea2E767C",
+        "percentage": 30
+      },
+      {
+        "symbol": "UMA",
+        "color": "#c4ccce",
+        "address": "0x224F5c567CcC6aa4D73D62bc33F88D0f89Dd5E80",
+        "percentage": 30
+      }
+    ],
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
   }
 }

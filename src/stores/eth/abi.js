@@ -8,9 +8,22 @@ import { eth } from "./writables.js";
 
 const etherscanApiKey = "67NWT4RN7W1TQ9NX4MIY1MCAIW52NK26SC";
 
+const findProxyAddressFunc = (abi) => {
+  if (isPie(abi)) {
+    return "getImplementation";
+  } else if (hasImplementation(abi)) {
+    return "implementation";
+  }
+
+  return false;
+};
+
+const hasImplementation = (abi) => abi.filter(({ name }) => name === "implementation").length > 0;
+
 const isPie = (abi) => abi.filter(({ name }) => name === "getImplementation").length > 0;
 
-const loadAbi = (address) => {
+const loadAbi = (addy) => {
+  const address = addy.toLowerCase();
   try {
     if (pools.available.includes(address)) {
       return pieSmartPool;
@@ -28,9 +41,13 @@ const loadAbi = (address) => {
   return;
 };
 
-const storeAbi = (address, abi) => {
+const storeAbi = (addy, abi) => {
+  const address = addy.toLowerCase();
+  console.log("storing abi", address, abi);
   try {
-    window.localStorage.setItem(`abis.${address}`, JSON.stringify(abi));
+    const json = JSON.stringify(abi);
+    window.localStorage.setItem(`abis.${address}`, json);
+    console.log("stored abi", address, json);
   } catch (e) {
     console.warn("Unable to store abi for address", address, e);
   }
@@ -49,11 +66,14 @@ export const findAbi = async (address) => {
   const decoded = await response.json();
   const abi = JSON.parse(decoded.result);
 
-  if (isPie(abi)) {
-    // Pie Proxy
+  const proxyAddressFunc = findProxyAddressFunc(abi);
+
+  if (proxyAddressFunc) {
+    // Proxy
     const { provider } = get(eth);
     const contract = new ethers.Contract(address, abi, provider);
-    const proxy = await contract.getImplementation();
+    console.log("proxyAddressFunc", proxyAddressFunc);
+    const proxy = await contract[proxyAddressFunc]();
 
     const response = await fetch(
       `https://api.etherscan.io/api?module=contract&action=getabi&address=${proxy}&apiKey=${etherscanApiKey}`
