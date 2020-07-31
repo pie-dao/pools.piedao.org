@@ -9,26 +9,26 @@
     "symbol": "BTC++",
     "composition": [
       {
-        "address": "0x3212b29e33587a00fb1c83346f5dbfa69a458923",
+        "address": "0x3212b29E33587A00FB1C83346f5dBFA69A458923",
         "buyLink": "https://tokenlon.im",
         "color": "#58a4fc",
         "percentage": 25,
         "symbol": "imBTC"
       },
       {
-        "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+        "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
         "color": "#fd6761",
         "percentage": 25,
         "symbol": "wBTC"
       },
       {
-        "address": "0x5228a22e72ccc52d415ecfd199f99d0665e7733b",
+        "address": "0x5228a22e72ccC52d415EcFd199F99D0665E7733b",
         "color": "#6beab1",
         "percentage": 25,
         "symbol": "pBTC"
       },
       {
-        "address": "0xfe18be6b3bd88a2d2a7f928d00292e7a9963cfc6",
+        "address": "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6",
         "color": "#c4ccce",
         "percentage": 25,
         "symbol": "sBTC"

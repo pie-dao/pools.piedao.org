@@ -22,7 +22,7 @@ let poolUpdatePids = {};
 const allowanceSubscriptions = new Set();
 const balanceSubscriptions = new Set();
 
-export const getTokenImage = (tokenAddress) => `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
+export const getTokenImage = (tokenAddress) => images.logos[tokenAddress] ? images.logos[tokenAddress] : `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
 
 const enqueueWeightUpdate = (poolAddress) => {
   clearTimeout(poolUpdatePids[poolAddress]);
