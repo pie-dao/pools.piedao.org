@@ -19,7 +19,7 @@ const updateOnBlock = () => {
   trackedBalances.forEach(async (key) => {
     const [token, account] = key.split(".");
     if (isAddress(token) && isAddress(account)) {
-      const contract = (await observableContract({ address: token })).raw;
+      const contract = (await observableContract({ abi: erc20, address: token })).raw;
       const balance = (await contract.balanceOf(account)).toString();
       subject(key).next(balance);
     } else {
@@ -61,7 +61,7 @@ const generateTrackBalanceFunction = (contractAddress) => {
     validateIsAddress(account);
     const key = balanceKey(contractAddress, account);
     trackedBalances.add(key);
-    const contract = await observableContract({ address: contractAddress });
+    const contract = await observableContract({ abi: erc20, address: contractAddress });
     contract.balanceOf(account).then((balance) => {
       subject(key).next(balance.toString());
     });
