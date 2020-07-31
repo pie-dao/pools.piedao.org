@@ -22,6 +22,8 @@ let poolUpdatePids = {};
 const allowanceSubscriptions = new Set();
 const balanceSubscriptions = new Set();
 
+export const getTokenImage = (tokenAddress) => `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
+
 const enqueueWeightUpdate = (poolAddress) => {
   clearTimeout(poolUpdatePids[poolAddress]);
   setTimeout(() => {
@@ -193,7 +195,7 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
     const amtVsBalance = amountVsBalance(amount, pooledToken);
     const amtVsBalanceClass = amountVsBalanceClass(amount, pooledToken);
     const ethData = get(eth);
-    const icon = images.logos[pooledToken.symbol];
+    const icon = getTokenImage(pooledToken.address); // images.logos[pooledToken.symbol];
     const { address } = pooledToken;
 
     let actionBtnClass = "hidden";

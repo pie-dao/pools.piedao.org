@@ -19,7 +19,7 @@
     bumpLifecycle,
     subject
   } from "../stores/eth.js";
-  import { amountFormatter, fetchPooledTokens, maxAmount } from "./helpers.js";
+  import { amountFormatter, fetchPooledTokens, maxAmount, getTokenImage } from "./helpers.js";
   import { displayNotification } from "../notifications.js";
 
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
@@ -268,7 +268,7 @@
       </div>
       <img
         class="token-icon my-8px w-26px h-26px"
-        src={pooledToken.icon}
+        src={getTokenImage(pooledToken.address)}
         alt={pooledToken.symbol} />
       <div
         class="token-symbol px-6px py-12px text-sm font-thin border-r-2 border-r-solid
