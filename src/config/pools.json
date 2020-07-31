@@ -72,67 +72,67 @@
       {
         "symbol": "COMP",
         "color": "#58a4fc",
-        "address": "0xc8af1c1A8028788cF710D470021F02061aee823A",
+        "address": "0xc00e94cb662c3520282e6f5717214004a7f26888",
         "percentage": 13.39
       },
       {
         "symbol": "KNC",
         "color": "#fd6761",
-        "address": "0xa734fD2FbF439c062Fe1B652A5cee79fB0043a2F",
+        "address": "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
         "percentage": 10.17
       },
       {
         "symbol": "LEND",
         "color": "#6beab1",
-        "address": "0x8Cf39A1caF0F5B9A431C0FAD5cDdD21A0Eb4854C",
+        "address": "0x80fB784B7eD66730e8b1DBd9820aFD29931aab03",
         "percentage": 16.49
       },
       {
         "symbol": "LINK",
         "color": "#c4ccce",
-        "address": "0x220d5e0Fb650929613825b09BA21a2AEaC849185",
+        "address": "0x514910771af9ca656af840dff83e8264ecf986ca",
         "percentage": 25
       },
       {
         "symbol": "MKR",
-        "address": "0x24AAaf144275633B513359137FFa5A6691D3E933",
+        "address": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
         "color": "#000000",
         "percentage": 20.14
       },
       {
         "symbol": "SNX",
         "color": "#000000",
-        "address": "0xD43740443390C1C2De839E369B3857bd161C6887",
+        "address": "0xc011a73ee8576fb46f5e1c5751ca3b9fe0af2a6f",
         "percentage": 14.81
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
   },
   "5425543": {
-    "symbol": "DST",
+    "symbol": "TDEFI+S",
     "composition": [
       {
         "symbol": "BAL",
         "color": "#58a4fc",
-        "address": "0xFC1A1381B3f63f3BECc2990100e3c94FE4fDFfdc",
+        "address": "0xba100000625a3754423978a60c9317c58a424e3d",
         "percentage": 12.75
       },
       {
         "symbol": "LRC",
         "color": "#fd6761",
-        "address": "0x667E1dE7D51ab771D046ebc22Ccf971d8290CaF6",
+        "address": "0xbbbbca6a901c926f240b89eacb641d8aec7aeafd",
         "percentage": 27.25
       },
       {
         "symbol": "REN",
         "color": "#6beab1",
-        "address": "0x33656AcDb5Ef5DCce9fD6215e3dc5762ea2E767C",
+        "address": "0x408e41876cccdc0f92210600ef50372656052a38",
         "percentage": 30
       },
       {
         "symbol": "UMA",
         "color": "#c4ccce",
-        "address": "0x224F5c567CcC6aa4D73D62bc33F88D0f89Dd5E80",
+        "address": "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828",
         "percentage": 30
       }
     ],
