@@ -2,7 +2,8 @@
   "available": [
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0xa25d24af7e67f8736d2e0794a1aa440b6d83a4fc"
+    "0xa25d24af7e67f8736d2e0794a1aa440b6d83a4fc",
+    "0xb167f67353f71ca8b47d713878d69e8264a15ac0"
   ],
   "default": "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
@@ -108,25 +109,25 @@
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
   },
-  "5425543": {
+  "0xb167f67353f71ca8b47d713878d69e8264a15ac0": {
     "symbol": "TDEFI+S",
     "composition": [
       {
         "symbol": "BAL",
         "color": "#58a4fc",
-        "address": "0xba100000625a3754423978a60c9317c58a424e3d",
+        "address": "0xba100000625a3754423978a60c9317c58a424e3D",
         "percentage": 12.75
       },
       {
         "symbol": "LRC",
         "color": "#fd6761",
-        "address": "0xbbbbca6a901c926f240b89eacb641d8aec7aeafd",
+        "address": "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
         "percentage": 27.25
       },
       {
         "symbol": "REN",
         "color": "#6beab1",
-        "address": "0x408e41876cccdc0f92210600ef50372656052a38",
+        "address": "0x408e41876cCCDC0F92210600ef50372656052a38",
         "percentage": 30
       },
       {
