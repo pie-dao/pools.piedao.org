@@ -3,5 +3,10 @@ module.exports = {
   scripts: {
     "build:css": "postcss",
   },
+  installOptions: {
+    rollup: {
+      plugins: [require("rollup-plugin-node-polyfills")()]
+    }
+  },
   plugins: [],
 };
