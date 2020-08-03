@@ -2,17 +2,23 @@
   import { _ } from "svelte-i18n";
   import { currentRoute } from "../stores/routes.js";
   import TradingViewWidget from "../components/TradingViewWidget.svelte";
+  import Etherscan from "../components/Etherscan.svelte";
+  import Farming from "../components/Farming.svelte";
+  import Quantstamp from "../components/Quantstamp.svelte";
+
   import images from "../config/images.json";
-  import pools from "../config/pools.json";
+  import poolsConfig from "../config/pools.json";
+
+  import { amountFormatter, getTokenImage } from "../components/helpers.js";
 
   let token = $currentRoute.params.address;
 
-  $: symbol = (pools[token] || {}).symbol;
+  $: symbol = (poolsConfig[token] || {}).symbol;
   $: tokenLogo = images.logos[symbol];
 
   let options = {
     symbol:
-      "1.0069862312601948*COINBASE:COMPUSD+70.6180873079698*COINBASE:KNCUSD+493.8217925005066*BINANCE:LENDUSD+33.61720214153774*COINBASE:LINKUSD+0.3545441741414431*COINBASE:MKRUSD+41.28487136484088*BINANCE:SNXUSD",
+      "(1.0069862312601948*COINBASE:COMPUSD+70.6180873079698*COINBASE:KNCUSD+493.8217925005066*BINANCE:LENDUSD+33.61720214153774*COINBASE:LINKUSD+0.3545441741414431*COINBASE:MKRUSD+41.28487136484088*BINANCE:SNXUSD)/1000",
     theme: "light",
     autosize: true,
     interval: "60",
@@ -66,35 +72,52 @@
     <TradingViewWidget {options} />
   </div>
 
-  <div class="w-full mt-8">
-    <table class="table-auto">
+  <div class="flex content-between flex-wrap w-full mt-8">
+    <div class="w-1/2 p-0">
+      <Etherscan token={$currentRoute.params.address} />
+    </div>
+
+    <div class="w-1/2 p-0">
+      <Quantstamp class="w-1/2" token={$currentRoute.params.address} />
+    </div>
+  </div>
+
+  <h1>Allocation breakdown</h1>
+
+  <div class="w-99pc m-4">
+    <table class="table-auto w-full">
       <thead>
         <tr>
-          <th class="px-4 py-2">Title</th>
-          <th class="px-4 py-2">Author</th>
-          <th class="px-4 py-2">Views</th>
+          <th class="font-thin border-b-2 px-4 py-2">Asset name</th>
+          <th class="font-thin border-b-2 px-4 py-2">Price</th>
+          <th class="font-thin border-b-2 px-4 py-2">Current Allocation</th>
+          <th class="font-thin border-b-2 px-4 py-2">Market Cap</th>
+          <th class="font-thin border-b-2 px-4 py-2">Change</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td class="border px-4 py-2">Intro to CSS</td>
-          <td class="border px-4 py-2">Adam</td>
-          <td class="border px-4 py-2">858</td>
-        </tr>
-        <tr class="bg-gray-100">
-          <td class="border px-4 py-2">
-            A Long and Winding Tour of the History of UI Frameworks and Tools and the Impact on
-            Design
-          </td>
-          <td class="border px-4 py-2">Adam</td>
-          <td class="border px-4 py-2">112</td>
-        </tr>
-        <tr>
-          <td class="border px-4 py-2">Intro to JavaScript</td>
-          <td class="border px-4 py-2">Chris</td>
-          <td class="border px-4 py-2">1,280</td>
-        </tr>
+        {#each poolsConfig[token].composition as pooledToken}
+          <tr>
+            <td class="border-l-2 border-gray-200 border-b-2 px-2 py-2 text-center">
+              <img
+                class="inline icon"
+                src={getTokenImage(pooledToken.address)}
+                alt={pooledToken.symbol} />
+              {pooledToken.symbol}
+            </td>
+            <td class="text-center border-b-2 px-4 py-2">$9,340</td>
+            <td class="text-center border-b-2 px-4 py-2">{pooledToken.percentage}%</td>
+            <td class="text-center border-b-2 px-4 py-2">$500M</td>
+            <td class="text-center border-b-2 border-r-2">
+              <img
+                class="w-30"
+                alt="Sparkline"
+                src="https://www.coingecko.com/coins/877/sparkline" />
+            </td>
+          </tr>
+        {/each}
       </tbody>
     </table>
   </div>
+
 </div>

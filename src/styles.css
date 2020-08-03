@@ -305,10 +305,24 @@
   width: 12rem;
 }
 
+.spl h1 {
+  @apply text-lg w-full mt-8;
+  width: 100;
+}
+
 .spl .btn.clear {
     background: white;
     border: 1px solid #fc02a7;
     color: #fc02a7;
+}
+
+.spl table td, .spl table th {
+  border-color: #edf2f7;
+} 
+
+.spl table td > img.icon {
+  max-width: 45px;
+  max-height: 45px;
 }
 
 /* purgecss end ignore */
