@@ -8960,6 +8960,11 @@ svelte-i18n@^3.0.4:
     intl-messageformat "^7.5.2"
     tiny-glob "^0.2.6"
 
+svelte-tradingview-widget@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/svelte-tradingview-widget/-/svelte-tradingview-widget-2.3.0.tgz#e0ee0cc074f78d5101874d75927633bb8b85d638"
+  integrity sha512-JKkvAmv/8FHKnrHflWmI0Pz+5SuqtWRIAz5rEvcdI6W0sgYwpqgwNdWXSC2yw/8u5hz880AkG9IwrXOFQIxcjQ==
+
 svelte@^3.21.0:
   version "3.23.2"
   resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.23.2.tgz#f3e500384261a2e77b29681ee744c3c790fbcdc3"

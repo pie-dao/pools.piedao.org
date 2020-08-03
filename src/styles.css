@@ -292,4 +292,23 @@
   @apply text-sm text-grey-115 underline font-thin leading-8;
 }
 
+/* Single Pie Landing */
+
+.spl-chart-container {
+  height: 500px;
+}
+
+.spl .btn {
+  border-radius: 6px;
+  font-size: 28px;
+  font-weight: 200;
+  width: 12rem;
+}
+
+.spl .btn.clear {
+    background: white;
+    border: 1px solid #fc02a7;
+    color: #fc02a7;
+}
+
 /* purgecss end ignore */
