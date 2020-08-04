@@ -310,6 +310,14 @@
   width: 100;
 }
 
+.green {
+  color: darkgreen;
+}
+
+.red {
+  color: red;
+}
+
 .spl .btn.clear {
     background: white;
     border: 1px solid #fc02a7;

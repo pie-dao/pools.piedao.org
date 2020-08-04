@@ -1,5 +1,8 @@
 <script>
   import { _ } from "svelte-i18n";
+  import get from "lodash/get";
+  import first from "lodash/first";
+  import { onMount } from "svelte";
   import { currentRoute } from "../stores/routes.js";
   import TradingViewWidget from "../components/TradingViewWidget.svelte";
   import Etherscan from "../components/Etherscan.svelte";
@@ -8,13 +11,24 @@
 
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
+  import { CoinGecko, piesMarketDataStore } from "../stores/coingecko.js";
 
-  import { amountFormatter, getTokenImage } from "../components/helpers.js";
+  import { amountFormatter, getTokenImage, formatFiat } from "../components/helpers.js";
 
   let token = $currentRoute.params.address;
 
   $: symbol = (poolsConfig[token] || {}).symbol;
-  $: tokenLogo = images.logos[symbol];
+  $: tokenLogo = images.logos[token];
+  $: change24H = get(
+    $piesMarketDataStore,
+    `${token}.market_data.price_change_percentage_24h`,
+    null
+  );
+  $: tokenPrice = get(
+    $piesMarketDataStore,
+    `${token.toLowerCase()}.market_data.current_price.usd`,
+    null
+  );
 
   let options = {
     symbol:
@@ -28,6 +42,10 @@
     hide_legend: true,
     allow_symbol_change: false
   };
+
+  onMount(async () => {
+    CoinGecko.sync();
+  });
 </script>
 
 <div class="content flex flex-col spl">
@@ -37,7 +55,17 @@
         <img class="h-100px inline" src={tokenLogo} alt={symbol} />
         <div class="m-3">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
-          <h5 class="text-xl leading-none font-thin">$ 9,2345.34</h5>
+          {#if change24H}
+            <h5
+              class:green={change24H > 0}
+              class:red={change24H < 0}
+              class="text-sm leading-none font-thin">
+              {change24H}%
+            </h5>
+          {/if}
+          {#if tokenPrice}
+            <h5 class="text-xl leading-none font-thin">{formatFiat(tokenPrice)}</h5>
+          {/if}
         </div>
       </div>
 
@@ -92,6 +120,7 @@
           <th class="font-thin border-b-2 px-4 py-2">Price</th>
           <th class="font-thin border-b-2 px-4 py-2">Current Allocation</th>
           <th class="font-thin border-b-2 px-4 py-2">Market Cap</th>
+          <th class="font-thin border-b-2 px-4 py-2">Volume</th>
           <th class="font-thin border-b-2 px-4 py-2">Change</th>
         </tr>
       </thead>
@@ -105,14 +134,21 @@
                 alt={pooledToken.symbol} />
               {pooledToken.symbol}
             </td>
-            <td class="text-center border-b-2 px-4 py-2">$9,340</td>
+            <td class="text-center border-b-2 px-4 py-2">
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.current_price.usd`, '-'))}
+            </td>
             <td class="text-center border-b-2 px-4 py-2">{pooledToken.percentage}%</td>
-            <td class="text-center border-b-2 px-4 py-2">$500M</td>
+            <td class="text-center border-b-2 px-4 py-2">
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.market_cap.usd`, '-'))}
+            </td>
+            <td class="text-center border-b-2 px-4 py-2">
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.total_volume.usd`, '-'))}
+            </td>
             <td class="text-center border-b-2 border-r-2">
               <img
                 class="w-30"
                 alt="Sparkline"
-                src="https://www.coingecko.com/coins/877/sparkline" />
+                src="https://www.coingecko.com/coins/{(first(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.image.small`, '').match(/\d+\//g)) || '').slice(0, -1)}/sparkline" />
             </td>
           </tr>
         {/each}

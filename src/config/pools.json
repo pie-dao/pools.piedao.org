@@ -11,61 +11,71 @@
   "default": "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
     "symbol": "BTC++",
+    "coingeckoId": "piedao-btc",
     "composition": [
       {
         "address": "0x3212b29E33587A00FB1C83346f5dBFA69A458923",
         "buyLink": "https://tokenlon.im",
         "color": "#58a4fc",
         "percentage": 25,
-        "symbol": "imBTC"
+        "symbol": "imBTC",
+        "coingeckoId": "the-tokenized-bitcoin"
       },
       {
         "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
         "color": "#fd6761",
         "percentage": 25,
-        "symbol": "wBTC"
+        "symbol": "wBTC",
+        "coingeckoId": "wrapped-bitcoin"
       },
       {
         "address": "0x5228a22e72ccC52d415EcFd199F99D0665E7733b",
         "color": "#6beab1",
         "percentage": 25,
-        "symbol": "pBTC"
+        "symbol": "pBTC",
+        "coingeckoId": "ptokens-btc"
       },
       {
         "address": "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6",
         "color": "#c4ccce",
         "percentage": 25,
-        "symbol": "sBTC"
+        "symbol": "sBTC",
+        "coingeckoId": "sbtc"
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
   },
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
     "symbol": "USD++",
+    "coingeckoId": "piedao-usd",
     "composition": [
       {
         "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
         "percentage": 47.22,
         "color": "#58a4fc",
-        "symbol": "USDC"
+        "symbol": "USDC",
+        "coingeckoId": "usd-coin"
       },
       {
         "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
         "percentage": 20.42,
         "color": "#fd6761",
-        "symbol": "DAI"
+        "symbol": "DAI",
+        "coingeckoId": "dai"
       },
       {
         "address": "0x0000000000085d4780B73119b644AE5ecd22b376",
         "percentage": 28.58,
         "color": "#6beab1",
-        "symbol": "TUSD"
+        "symbol": "TUSD",
+        "coingeckoId": "true-usd"
       },
       {
         "address": "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
         "percentage": 3.78,
         "color": "#c4ccce",
-        "symbol": "sUSD"
+        "symbol": "sUSD",
+        "coingeckoId": "nusd"
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
@@ -149,37 +159,43 @@
         "symbol": "COMP",
         "color": "#58a4fc",
         "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
-        "percentage": 13.39
+        "percentage": 13.39,
+        "coingeckoId": "compound-governance-token"
       },
       {
         "symbol": "KNC",
         "color": "#fd6761",
         "address": "0xdd974D5C2e2928deA5F71b9825b8b646686BD200",
-        "percentage": 10.17
+        "percentage": 10.17,
+        "coingeckoId": "kyber-network"
       },
       {
         "symbol": "LEND",
         "color": "#6beab1",
         "address": "0x80fB784B7eD66730e8b1DBd9820aFD29931aab03",
-        "percentage": 16.49
+        "percentage": 16.49,
+        "coingeckoId": "ethlend"
       },
       {
         "symbol": "LINK",
         "color": "#c4ccce",
         "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
-        "percentage": 25
+        "percentage": 25,
+        "coingeckoId": "chainlink"
       },
       {
         "symbol": "MKR",
         "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
         "color": "#000000",
-        "percentage": 20.14
+        "percentage": 20.14,
+        "coingeckoId": "maker"
       },
       {
         "symbol": "SNX",
         "color": "#000000",
         "address": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
-        "percentage": 14.81
+        "percentage": 14.81,
+        "coingeckoId": "havven"
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
@@ -191,43 +207,50 @@
         "symbol": "BAL",
         "color": "#58a4fc",
         "address": "0xba100000625a3754423978a60c9317c58a424e3D",
-        "percentage": 12.75
+        "percentage": 12.75,
+        "coingeckoId": "balancer"
       },
       {
         "symbol": "LRC",
         "color": "#fd6761",
         "address": "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
-        "percentage": 27.25
+        "percentage": 27.25,
+        "coingeckoId": "loopring"
       },
       {
         "symbol": "REN",
         "color": "#6beab1",
         "address": "0x408e41876cCCDC0F92210600ef50372656052a38",
-        "percentage": 30
+        "percentage": 30,
+        "coingeckoId": "republic-protocol"
       },
       {
         "symbol": "UMA",
         "color": "#c4ccce",
         "address": "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828",
-        "percentage": 30
+        "percentage": 30,
+        "coingeckoId": "uma"
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
   },
   "0x880873a96ce38c7fd39dc714592902b069bde048": {
     "symbol": "DEFI++",
+    "tradingViewFormula": "",
     "composition": [
       {
         "symbol": "DEFI+S",
         "address": "0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C",
         "color": "#58a4fc",
-        "percentage": 30
+        "percentage": 30,
+        "isPie": true
       },
       {
         "symbol": "DEFI+L",
         "address": "0x24D1917c1ae6C085e6b68B6c1A41B8f9dE5bd441",
         "color": "#6beab1",
-        "percentage": 70
+        "percentage": 70,
+        "isPie": true
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
