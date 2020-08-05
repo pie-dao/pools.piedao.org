@@ -3,23 +3,34 @@
   export let options = Object;
   const SCRIPT_ID = "tradingview-widget-script";
 
+  let widget = null;
+
   $: CONTAINER_ID =
     options && options.container_id ? options.container_id : "svelte-tradingview-widget;";
 
   onMount(() => {
-    appendScript(initWidget);
-    console.log("asfd");
+    appendScript(()=>{});
   });
 
-  const initWidget = (opts = {}) => {
+  export const initWidget = (opts = {}) => {
+    if(widget) {
+      widget.options.symbol = opts.symbol;
+      widget.reload();
+      return;
+    }
+    if (typeof TradingView == "undefined") {
+      console.log("dio cane", opts);
+      setTimeout(() => initWidget(opts), 50);
+    }
+    
     if (typeof TradingView !== "undefined") {
       const container_id = CONTAINER_ID;
-      new window.TradingView.widget({ container_id, ...opts });
-      console.log("asfd");
+      widget = new window.TradingView.widget({ container_id, ...opts });
+      console.log('widget', widget)
     }
   };
 
-  $: initWidget(options);
+  //$: initWidget(options);
 
   function appendScript(onload) {
     if (document.getElementById(SCRIPT_ID) === null) {

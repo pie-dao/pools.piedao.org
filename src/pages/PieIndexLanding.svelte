@@ -20,12 +20,10 @@
   export let params;
 
   $: token = params.address;
-  let pieOfPies = [];
-  let showChart = false;
-
+  
+  let pieOfPies = false;
   let tradingViewWidgetComponent;
 
-  $: console.log("token is", token);
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: swapFees = (poolsConfig[token] || {}).swapFees;
   $: tokenLogo = images.logos[token];
@@ -40,9 +38,14 @@
     null
   );
 
+  $: (() => {
+    pieOfPies = false;
+  })(token);
+
   $: composition = flattenDeep(
     poolsConfig[token].composition.map((component) => {
       if (component.isPie) {
+        if(!pieOfPies) pieOfPies = [];
         pieOfPies.push(component);
         return poolsConfig[component.address].composition.map((internal) => {
           return {
@@ -61,6 +64,7 @@
 
   $: options = {
     symbol: poolsConfig[token].tradingViewFormula,
+    container_id: `single-pie-chart-${token}`,
     theme: "light",
     autosize: true,
     interval: "60",
@@ -70,10 +74,8 @@
     hide_legend: true,
     allow_symbol_change: false,
   };
-  // console.log("hey", showChart);
-  // showChart = true;
-  // tradingViewWidgetComponent.initWidget();
-  // console.log("hey", showChart);
+
+  $: tradingViewWidgetComponent ? tradingViewWidgetComponent.initWidget(options) : null;
 
   onMount(async () => {
     CoinGecko.sync();
@@ -81,6 +83,7 @@
 </script>
 
 <div class="content flex flex-col spl">
+
   <div class="flex flex-wrap w-full">
     <div class="flex flex-row content-between flex-wrap w-full">
       <div class="flex flex-row sm:w-full md:w-1/2">
@@ -152,7 +155,7 @@
   </div>
 
   <h1>Allocation breakdown</h1>
-  {#if pieOfPies.length > 0}
+  {#if pieOfPies }
     <h4>*This allocation is composed of multiple pies, find below the exploded allocation.</h4>
     <ul>
       {#each pieOfPies as subPie}
@@ -202,10 +205,8 @@
                 src="https://www.coingecko.com/coins/{(first(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.image.small`, '').match(/\d+\//g)) || '').slice(0, -1)}/sparkline" />
             </td>
           </tr>
-          {#if pooledToken.isPie}{/if}
         {/each}
       </tbody>
     </table>
   </div>
-
 </div>
