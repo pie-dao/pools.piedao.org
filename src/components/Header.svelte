@@ -13,11 +13,11 @@
   };
 </script>
 
-<style>
+<!-- <style>
   a {
     text-transform: lowercase;
   }
-</style>
+</style> -->
 
 <div class="header-container">
   <div class="left">

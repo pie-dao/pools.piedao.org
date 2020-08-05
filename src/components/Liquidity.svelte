@@ -114,7 +114,7 @@
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
   };
 </script>
-
+<!-- 
 <style>
   .leading-26px {
     line-height: 26px;
@@ -191,7 +191,7 @@
   .positive {
     color: #27ba80;
   }
-</style>
+</style> -->
 
 <div class="liquidity-container bg-grey-243 w-100pc rounded-4px p-6">
   <h1 class="text-center text-xl">{$_('general.add')} {$_('general.liquidity')}</h1>

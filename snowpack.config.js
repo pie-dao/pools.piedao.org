@@ -1,12 +1,16 @@
 module.exports = {
   extends: "@snowpack/app-scripts-svelte",
   scripts: {
-    "build:css": "postcss",
+    "build:css": "postcss"
   },
   installOptions: {
     rollup: {
       plugins: [require("rollup-plugin-node-polyfills")()]
     }
   },
-  plugins: [],
+  plugins: [
+    [
+      "@snowpack/plugin-webpack"
+    ],
+  ],
 };
