@@ -8,11 +8,13 @@
     CONTAINER_ID =
       options && options.container_id ? options.container_id : "svelte-tradingview-widget;";
     appendScript(initWidget);
+    console.log('asfd');
   });
 
-  function initWidget() {
+  export function initWidget() {
     if (typeof TradingView !== "undefined") {
       new window.TradingView.widget(Object.assign({ container_id: CONTAINER_ID }, options));
+      console.log('asfd');
     }
   }
 

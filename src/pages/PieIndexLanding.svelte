@@ -19,6 +19,9 @@
 
   let token = $currentRoute.params.address;
   let pieOfPies = [];
+  let showChart = false;
+
+  let tradingViewWidgetComponent;
 
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: swapFees = (poolsConfig[token] || {}).swapFees;
@@ -39,11 +42,6 @@
       if (component.isPie) {
         pieOfPies.push(component);
         return poolsConfig[component.address].composition.map(internal => {
-          console.log("component:", component.symbol);
-          console.log("component:", internal.symbol);
-          console.log("component.percentage", component.percentage);
-          console.log("internal.percentage", internal.percentage);
-          console.log("-------------------------------------------");
           return {
             ...internal,
             percentage: ((component.percentage / 100) * (internal.percentage / 100) * 100).toFixed(
@@ -56,11 +54,11 @@
     })
   );
 
-  $: console.log("composition", composition);
+  $: console.log("composition", poolsConfig[token].tradingViewFormula);
+
 
   let options = {
-    symbol:
-      "(1.0069862312601948*COINBASE:COMPUSD+70.6180873079698*COINBASE:KNCUSD+493.8217925005066*BINANCE:LENDUSD+33.61720214153774*COINBASE:LINKUSD+0.3545441741414431*COINBASE:MKRUSD+41.28487136484088*BINANCE:SNXUSD)/1000",
+    symbol: poolsConfig[token].tradingViewFormula,
     theme: "light",
     autosize: true,
     interval: "60",
@@ -73,6 +71,10 @@
 
   onMount(async () => {
     CoinGecko.sync();
+    console.log('hey', showChart)
+    showChart=true;
+    //tradingViewWidgetComponent.initWidget();
+    console.log('hey', showChart)
   });
 </script>
 
@@ -98,8 +100,8 @@
       </div>
 
       <div class="sm:w-full md:w-1/2">
-        <button class="btn text-white font-bold py-2 px-4 rounded">Mint</button>
-        <button class="btn clear text-white font-bold py-2 px-4 rounded">Redeem</button>
+        <a href={`#/pools/${token}`}><button class="btn text-white font-bold py-2 px-4 rounded">Mint</button></a>
+        <a href={`#/pools/${token}`}><button class="btn clear text-white font-bold py-2 px-4 rounded">Redeem</button></a>
         <button class="btn clear font-bold py-2 px-4 rounded">Buy</button>
       </div>
 
@@ -128,9 +130,11 @@
     </div>
   </div>
 
+  {#if poolsConfig[token].tradingViewFormula}
   <div class="flex flex-row w-100pc mt-8 spl-chart-container">
-    <TradingViewWidget {options} />
+    <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
   </div>
+  {/if}
 
   <div class="flex content-between flex-wrap w-full mt-8">
     <div class="w-1/2 p-0">
@@ -188,7 +192,7 @@
             </td>
             <td class="text-center border-b-2 border-r-2">
               <img
-                class="w-30"
+                class="w-30 spark"
                 alt="Sparkline"
                 src="https://www.coingecko.com/coins/{(first(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.image.small`, '').match(/\d+\//g)) || '').slice(0, -1)}/sparkline" />
             </td>

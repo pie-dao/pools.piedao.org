@@ -50,6 +50,7 @@
     "symbol": "USD++",
     "swapFees": "0",
     "coingeckoId": "piedao-usd",
+    "tradingViewFormula": "(0.4722*KRAKEN:USDCUSD+0.2042*KRAKEN:DAIUSD+0.2858*BITTREX:TUSDUSD+0.0378*KUCOIN:SUSDUSDT)",
     "composition": [
       {
         "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -157,6 +158,7 @@
   "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": {
     "symbol": "DEFI+L",
     "swapFees": "10",
+    "tradingViewFormula": "(1.0069862312601948*COINBASE:COMPUSD+70.6180873079698*COINBASE:KNCUSD+493.8217925005066*BINANCE:LENDUSD+33.61720214153774*COINBASE:LINKUSD+0.3545441741414431*COINBASE:MKRUSD+41.28487136484088*BINANCE:SNXUSD)/1000",
     "composition": [
       {
         "symbol": "COMP",
@@ -206,6 +208,7 @@
   "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": {
     "symbol": "DEFI+S",
     "swapFees": "10",
+    "tradingViewFormula": "(13.13809671*FTX:BALUSD+2526.2683572*BINANCE:LRCUSD+1850.09841401*BINANCE:RENUSD+73.062425*POLONIEX:UMAUSDT)/1000",
     "composition": [
       {
         "symbol": "BAL",
@@ -241,7 +244,7 @@
   "0x880873a96ce38c7fd39dc714592902b069bde048": {
     "symbol": "DEFI++",
     "swapFees": "10",
-    "tradingViewFormula": "",
+    "tradingViewFormula": "(1.0069862312601948*COINBASE:COMPUSD+70.6180873079698*COINBASE:KNCUSD+493.8217925005066*BINANCE:LENDUSD+33.61720214153774*COINBASE:LINKUSD+0.3545441741414431*COINBASE:MKRUSD+41.28487136484088*BINANCE:SNXUSD)/1000",
     "composition": [
       {
         "symbol": "DEFI+S",

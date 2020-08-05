@@ -55,5 +55,6 @@ export const currentRoute = writable({ ...formatRoute(route) });
 
 window.addEventListener("hashchange", () => {
   const route = deriveRoute();
+  console.log('route', route)
   currentRoute.set({ ...formatRoute(route) });
 });

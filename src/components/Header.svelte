@@ -20,6 +20,19 @@
     </a>
   </div>
   <div class="right">
+    
+    <a class="link" href="#/pie/0x880873a96ce38c7fd39dc714592902b069bde048">
+      DEFI++
+    </a>
+    <a class="link" href="#/pie/0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e">
+      USD++
+    </a>
+    <a class="link" href="#/pie/0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd">
+      BTC++
+    </a>
+
+    <span class="link">🥧</span>
+
     <a class="link" href={links.dao} target="_blank" rel="noopener noreferrer">
       {$_('piedao.aragonLink')}
     </a>
