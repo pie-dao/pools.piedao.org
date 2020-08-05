@@ -7,8 +7,6 @@ const store = writable({
 
 export const piesMarketDataStore = store;
 
-console.log('piesMarketDataStore', piesMarketDataStore)
-
 async function request(url, params = {}, method = 'GET') {
 
   const options = {
@@ -32,6 +30,7 @@ async function request(url, params = {}, method = 'GET') {
   }
 
   const result = await response.json();
+  // console.log('piesMarketDataStore', result)
 
   return result;
 
@@ -74,8 +73,3 @@ export class CoinGecko {
     return request(`${CoinGecko.baseURL}/coins/${coingeckoID}`);
   }
 }
-
-
-export const defaultCoingecko = {
-  list: []
-};

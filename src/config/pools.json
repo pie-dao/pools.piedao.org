@@ -11,6 +11,7 @@
   "default": "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
     "symbol": "BTC++",
+    "swapFees": "0.2",
     "coingeckoId": "piedao-btc",
     "composition": [
       {
@@ -47,6 +48,7 @@
   },
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
     "symbol": "USD++",
+    "swapFees": "0",
     "coingeckoId": "piedao-usd",
     "composition": [
       {
@@ -154,6 +156,7 @@
   },
   "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": {
     "symbol": "DEFI+L",
+    "swapFees": "10",
     "composition": [
       {
         "symbol": "COMP",
@@ -202,6 +205,7 @@
   },
   "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": {
     "symbol": "DEFI+S",
+    "swapFees": "10",
     "composition": [
       {
         "symbol": "BAL",
@@ -236,20 +240,21 @@
   },
   "0x880873a96ce38c7fd39dc714592902b069bde048": {
     "symbol": "DEFI++",
+    "swapFees": "10",
     "tradingViewFormula": "",
     "composition": [
       {
         "symbol": "DEFI+S",
-        "address": "0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C",
+        "address": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
         "color": "#58a4fc",
-        "percentage": 30,
+        "percentage": 10,
         "isPie": true
       },
       {
         "symbol": "DEFI+L",
-        "address": "0x24D1917c1ae6C085e6b68B6c1A41B8f9dE5bd441",
+        "address": "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441",
         "color": "#6beab1",
-        "percentage": 70,
+        "percentage": 90,
         "isPie": true
       }
     ],

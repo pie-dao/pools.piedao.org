@@ -2,6 +2,8 @@
   import { _ } from "svelte-i18n";
   import get from "lodash/get";
   import first from "lodash/first";
+  import flattenDeep from "lodash/flattenDeep";
+
   import { onMount } from "svelte";
   import { currentRoute } from "../stores/routes.js";
   import TradingViewWidget from "../components/TradingViewWidget.svelte";
@@ -16,8 +18,10 @@
   import { amountFormatter, getTokenImage, formatFiat } from "../components/helpers.js";
 
   let token = $currentRoute.params.address;
+  let pieOfPies = [];
 
   $: symbol = (poolsConfig[token] || {}).symbol;
+  $: swapFees = (poolsConfig[token] || {}).swapFees;
   $: tokenLogo = images.logos[token];
   $: change24H = get(
     $piesMarketDataStore,
@@ -29,6 +33,30 @@
     `${token.toLowerCase()}.market_data.current_price.usd`,
     null
   );
+
+  $: composition = flattenDeep(
+    poolsConfig[token].composition.map(component => {
+      if (component.isPie) {
+        pieOfPies.push(component);
+        return poolsConfig[component.address].composition.map(internal => {
+          console.log("component:", component.symbol);
+          console.log("component:", internal.symbol);
+          console.log("component.percentage", component.percentage);
+          console.log("internal.percentage", internal.percentage);
+          console.log("-------------------------------------------");
+          return {
+            ...internal,
+            percentage: ((component.percentage / 100) * (internal.percentage / 100) * 100).toFixed(
+              2
+            )
+          };
+        });
+      }
+      return component;
+    })
+  );
+
+  $: console.log("composition", composition);
 
   let options = {
     symbol:
@@ -80,19 +108,23 @@
   <div class="flex content-between flex-wrap w-full mt-8">
     <div class="w-1/4 p-0 self-start">
       <div class="text-center font-thin">MarketCap</div>
-      <div class="text-center text-xl font-black">500K</div>
+      <div class="text-center text-xl font-black">
+        {formatFiat(get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap.usd`, '-'))}
+      </div>
     </div>
     <div class="w-1/4 p-0">
       <div class="text-center font-thin">Swap fee</div>
-      <div class="text-center text-xl font-black">10%</div>
+      <div class="text-center text-xl font-black">{swapFees}%</div>
     </div>
     <div class="w-1/4 p-0">
       <div class="text-center font-thin">Exit fee</div>
       <div class="text-center text-xl font-black">0%</div>
     </div>
     <div class="w-1/4 p-0">
-      <div class="text-center font-thin">Swap enabled</div>
-      <div class="text-center text-xl font-black">false</div>
+      <div class="text-center font-thin">7 Days Change</div>
+      <div class="text-center text-xl font-black">
+        {get($piesMarketDataStore, `${token.toLowerCase()}.market_data.price_change_percentage_7d_in_currency.usd`, '-')}
+      </div>
     </div>
   </div>
 
@@ -111,6 +143,16 @@
   </div>
 
   <h1>Allocation breakdown</h1>
+  {#if pieOfPies.length > 0}
+    <h4>*This allocation is composed of multiple pies, find below the exploded allocation.</h4>
+    <ul>
+      {#each pieOfPies as subPie}
+        <li>
+          <a href="#/pie/{subPie.address}">{subPie.symbol}</a>
+        </li>
+      {/each}
+    </ul>
+  {/if}
 
   <div class="w-99pc m-4">
     <table class="table-auto w-full">
@@ -125,7 +167,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each poolsConfig[token].composition as pooledToken}
+        {#each composition as pooledToken}
           <tr>
             <td class="border-l-2 border-gray-200 border-b-2 px-2 py-2 text-center">
               <img
@@ -151,6 +193,7 @@
                 src="https://www.coingecko.com/coins/{(first(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.image.small`, '').match(/\d+\//g)) || '').slice(0, -1)}/sparkline" />
             </td>
           </tr>
+          {#if pooledToken.isPie}{/if}
         {/each}
       </tbody>
     </table>

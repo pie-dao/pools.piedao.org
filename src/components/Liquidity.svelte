@@ -31,7 +31,7 @@
   let amount = "1.00000000";
 
   $: tokenSymbol = (poolsConfig[token] || {}).symbol;
-  $: tokenLogo = images.logos[tokenSymbol];
+  $: tokenLogo = images.logos[token];
 
   $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
   $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");

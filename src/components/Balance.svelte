@@ -17,7 +17,7 @@
   let yourBalanceClass = "blur-light";
 
   $: symbol = (pools[token] || {}).symbol;
-  $: tokenLogo = images.logos[symbol];
+  $: tokenLogo = images.logos[token];
 
   $: if (isAddress(token) && isAddress($eth.address)) {
     balanceClass = "";
