@@ -2,21 +2,24 @@
   import { onMount } from "svelte";
   export let options = Object;
   const SCRIPT_ID = "tradingview-widget-script";
-  let CONTAINER_ID = "";
+
+  $: CONTAINER_ID =
+    options && options.container_id ? options.container_id : "svelte-tradingview-widget;";
 
   onMount(() => {
-    CONTAINER_ID =
-      options && options.container_id ? options.container_id : "svelte-tradingview-widget;";
     appendScript(initWidget);
-    console.log('asfd');
+    console.log("asfd");
   });
 
-  export function initWidget() {
+  const initWidget = (opts = {}) => {
     if (typeof TradingView !== "undefined") {
-      new window.TradingView.widget(Object.assign({ container_id: CONTAINER_ID }, options));
-      console.log('asfd');
+      const container_id = CONTAINER_ID;
+      new window.TradingView.widget({ container_id, ...opts });
+      console.log("asfd");
     }
-  }
+  };
+
+  $: initWidget(options);
 
   function appendScript(onload) {
     if (document.getElementById(SCRIPT_ID) === null) {
@@ -25,7 +28,7 @@
       script.type = "text/javascript";
       script.async = true;
       script.src = "https://s3.tradingview.com/tv.js";
-      script.onload = onload;
+      script.onload = () => onload(options);
       document.getElementsByTagName("head")[0].appendChild(script);
     } else {
       const script = document.getElementById(SCRIPT_ID);

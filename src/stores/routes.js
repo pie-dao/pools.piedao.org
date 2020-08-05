@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 
 import pools from "../config/pools.json";
 
@@ -55,6 +55,7 @@ export const currentRoute = writable({ ...formatRoute(route) });
 
 window.addEventListener("hashchange", () => {
   const route = deriveRoute();
-  console.log('route', route)
+  console.log("route", route);
   currentRoute.set({ ...formatRoute(route) });
+  console.log("currentRoute", get(currentRoute));
 });

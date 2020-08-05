@@ -17,12 +17,15 @@
 
   import { amountFormatter, getTokenImage, formatFiat } from "../components/helpers.js";
 
-  let token = $currentRoute.params.address;
+  export let params;
+
+  $: token = params.address;
   let pieOfPies = [];
   let showChart = false;
 
   let tradingViewWidgetComponent;
 
+  $: console.log("token is", token);
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: swapFees = (poolsConfig[token] || {}).swapFees;
   $: tokenLogo = images.logos[token];
@@ -38,15 +41,15 @@
   );
 
   $: composition = flattenDeep(
-    poolsConfig[token].composition.map(component => {
+    poolsConfig[token].composition.map((component) => {
       if (component.isPie) {
         pieOfPies.push(component);
-        return poolsConfig[component.address].composition.map(internal => {
+        return poolsConfig[component.address].composition.map((internal) => {
           return {
             ...internal,
             percentage: ((component.percentage / 100) * (internal.percentage / 100) * 100).toFixed(
               2
-            )
+            ),
           };
         });
       }
@@ -56,8 +59,7 @@
 
   $: console.log("composition", poolsConfig[token].tradingViewFormula);
 
-
-  let options = {
+  $: options = {
     symbol: poolsConfig[token].tradingViewFormula,
     theme: "light",
     autosize: true,
@@ -66,15 +68,15 @@
     style: 3,
     hide_top_toolbar: true,
     hide_legend: true,
-    allow_symbol_change: false
+    allow_symbol_change: false,
   };
+  // console.log("hey", showChart);
+  // showChart = true;
+  // tradingViewWidgetComponent.initWidget();
+  // console.log("hey", showChart);
 
   onMount(async () => {
     CoinGecko.sync();
-    console.log('hey', showChart)
-    showChart=true;
-    //tradingViewWidgetComponent.initWidget();
-    console.log('hey', showChart)
   });
 </script>
 
@@ -100,8 +102,12 @@
       </div>
 
       <div class="sm:w-full md:w-1/2">
-        <a href={`#/pools/${token}`}><button class="btn text-white font-bold py-2 px-4 rounded">Mint</button></a>
-        <a href={`#/pools/${token}`}><button class="btn clear text-white font-bold py-2 px-4 rounded">Redeem</button></a>
+        <a href={`#/pools/${token}`}>
+          <button class="btn text-white font-bold py-2 px-4 rounded">Mint</button>
+        </a>
+        <a href={`#/pools/${token}`}>
+          <button class="btn clear text-white font-bold py-2 px-4 rounded">Redeem</button>
+        </a>
         <button class="btn clear font-bold py-2 px-4 rounded">Buy</button>
       </div>
 
@@ -130,11 +136,10 @@
     </div>
   </div>
 
-  {#if poolsConfig[token].tradingViewFormula}
-  <div class="flex flex-row w-100pc mt-8 spl-chart-container">
+  <div
+    class="flex flex-row w-100pc mt-8 spl-chart-container {poolsConfig[token].tradingViewFormula ? '' : 'hidden'}">
     <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
   </div>
-  {/if}
 
   <div class="flex content-between flex-wrap w-full mt-8">
     <div class="w-1/2 p-0">
