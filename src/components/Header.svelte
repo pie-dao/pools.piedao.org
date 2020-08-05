@@ -13,12 +13,6 @@
   };
 </script>
 
-<!-- <style>
-  a {
-    text-transform: lowercase;
-  }
-</style> -->
-
 <div class="header-container">
   <div class="left">
     <a href={links.root}>
