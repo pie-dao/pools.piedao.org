@@ -9,7 +9,7 @@
     options && options.container_id ? options.container_id : "svelte-tradingview-widget;";
 
   onMount(() => {
-    appendScript(()=>{});
+    appendScript(initWidget);
   });
 
   export const initWidget = (opts = {}) => {
@@ -18,10 +18,6 @@
       widget.reload();
       return;
     }
-    if (typeof TradingView == "undefined") {
-      console.log("dio cane", opts);
-      setTimeout(() => initWidget(opts), 50);
-    }
     
     if (typeof TradingView !== "undefined") {
       const container_id = CONTAINER_ID;
@@ -29,8 +25,6 @@
       console.log('widget', widget)
     }
   };
-
-  //$: initWidget(options);
 
   function appendScript(onload) {
     if (document.getElementById(SCRIPT_ID) === null) {
