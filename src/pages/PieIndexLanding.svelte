@@ -60,8 +60,6 @@
     })
   );
 
-  $: console.log("composition", poolsConfig[token].tradingViewFormula);
-
   $: options = {
     symbol: poolsConfig[token].tradingViewFormula,
     container_id: `single-pie-chart-${token}`,

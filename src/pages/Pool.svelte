@@ -10,9 +10,9 @@
   import { currentRoute } from '../stores/routes.js';
 </script>
 
-<div class="content">
-  <div class="flex w-100pc">
-    <div class="left flex-1 mr-2">
+<div class="content flex flex-col">
+  <div class="flex sm:flex-col md:flex-row w-100pc">
+    <div class="left w-full md:w-2/4 mr-2">
       <Balance token={$currentRoute.params.address} />
       <Farming token={$currentRoute.params.address} />
       <div class="flex">
@@ -24,10 +24,12 @@
         </div>
       </div>
       <Info token={$currentRoute.params.address} />
-      <AllocationBreakdown token={$currentRoute.params.address} />
+      <div class="hidden md:block">
+        <AllocationBreakdown token={$currentRoute.params.address} />
+      </div>
     </div>
     
-    <div class="right flex-1 ml-2">
+    <div class="right w-full md:w-2/4 flex-1 ml-2">
       <Liquidity token={$currentRoute.params.address} />
     </div>
   </div>

@@ -22,7 +22,6 @@
     if (typeof TradingView !== "undefined") {
       const container_id = CONTAINER_ID;
       widget = new window.TradingView.widget({ container_id, ...opts });
-      console.log('widget', widget)
     }
   };
 
