@@ -1,14 +1,10 @@
-<style>
-  a { text-transform: lowercase; }
-</style>
-
 <script>
-  import { _ } from 'svelte-i18n';
+  import { _ } from "svelte-i18n";
 
-  import images from '../config/images.json';
-  import links from '../config/links.json';
+  import images from "../config/images.json";
+  import links from "../config/links.json";
 
-  import Web3Button from './Web3Button.svelte';
+  import Web3Button from "./Web3Button.svelte";
 
   let mobileMenuVisible = false;
 
@@ -24,14 +20,24 @@
     </a>
   </div>
   <div class="right">
+    
+    <a class="link" href="#/pie/0x880873a96ce38c7fd39dc714592902b069bde048">
+      DEFI++
+    </a>
+    <a class="link" href="#/pie/0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e">
+      USD++
+    </a>
+    <a class="link" href="#/pie/0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd">
+      BTC++
+    </a>
+
+    <span class="link">🥧</span>
+
     <a class="link" href={links.dao} target="_blank" rel="noopener noreferrer">
       {$_('piedao.aragonLink')}
     </a>
     <a class="link" href={links.docs} target="_blank" rel="noopener noreferrer">
       {$_('general.docs')}
-    </a>
-    <a class="link" href={links.whitepaper} target="_blank" rel="noopener noreferrer">
-      {$_('general.whitepaper')}
     </a>
     <Web3Button />
     <div class="mobile-placeholder" />
@@ -39,7 +45,7 @@
     <button class="hamburger" type="button" on:click={toggleMobileMenu}>
       <img src={images.icons.hamburger} alt="hamburger icon" class="w-min-20px" />
     </button>
-    
+
     {#if mobileMenuVisible}
       <div class="overlay">
         <button type="button" class="close" on:click={toggleMobileMenu}>
@@ -48,9 +54,7 @@
         <nav>
           <ul>
             <li>
-              <a href={links.root} on:click={toggleMobileMenu}>
-                {$_('general.home')}
-              </a>
+              <a href={links.root} on:click={toggleMobileMenu}>{$_('general.home')}</a>
             </li>
             <li>
               <a
@@ -58,20 +62,8 @@
                 href={links.docs}
                 on:click={toggleMobileMenu}
                 rel="noopener noreferrer"
-                target="_blank"
-              >
+                target="_blank">
                 {$_('general.docs')}
-              </a>
-            </li>
-            <li>
-              <a
-                class="navbar-item"
-                href={links.whitepaper}
-                on:click={toggleMobileMenu}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {$_('general.whitepaper')}
               </a>
             </li>
           </ul>

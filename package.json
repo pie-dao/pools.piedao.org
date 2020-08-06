@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "NODE_ENV=production rm -rf build && rollup -c",
+    "build": "snowpack build",
     "start": "snowpack dev",
     "test": "jest"
   },
@@ -9,13 +9,16 @@
     "@pie-dao/eth-tailwind": "^1.0.0",
     "@pie-dao/tailwind": "^1.1.2",
     "@pie-dao/utils": "^1.0.0",
+    "@walletconnect/web3-provider": "^1.1.0",
     "animate.css": "^4.1.0",
+    "authereum": "^0.0.4-beta.164",
     "bignumber.js": "^9.0.0",
     "bnc-notify": "^1.2.4",
     "d3": "^5.16.0",
-    "defi18n": "^0.0.12",
     "ethers": "^5.0.2",
     "jazzicon": "^1.5.0",
+    "lodash": "^4.17.19",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "rxjs": "^6.6.0",
     "svelte": "^3.21.0",
     "svelte-i18n": "^3.0.4"
@@ -25,15 +28,20 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^8.1.0",
     "@snowpack/app-scripts-svelte": "^1.2.0",
+    "@snowpack/plugin-webpack": "^2.0.2",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/svelte": "^3.0.0",
     "jest": "^25.4.0",
+    "parcel-bundler": "^1.12.4",
     "postcss-cli": "^7.1.1",
     "postcss-import": "^12.0.1",
     "rollup": "^2.18.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^3.1.2",
     "rollup-plugin-svelte": "^5.2.3",
     "rollup-plugin-terser": "^6.1.0",
+    "serve": "^11.3.2",
     "snowpack": "^2.5.0"
   }
 }

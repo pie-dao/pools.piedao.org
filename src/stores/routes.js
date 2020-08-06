@@ -1,9 +1,10 @@
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
 
 import pools from "../config/pools.json";
 
 import NotFound from "../pages/NotFound.svelte";
 import Pool from "../pages/Pool.svelte";
+import PieLanding from "../pages/PieIndexLanding.svelte";
 
 const defaultRouteObj = {
   page: Pool,
@@ -29,9 +30,13 @@ const deriveRoute = () => {
 };
 
 const formatRoute = (route) => {
+  let address;
   switch (route[0] || "root") {
+    case "pie":
+      address = (route[1] || "").toLowerCase();
+      return { page: PieLanding, params: { address } };
     case "pools":
-      const address = (route[1] || "").toLowerCase();
+      address = (route[1] || "").toLowerCase();
       if (pools.available.includes(address)) {
         return { page: Pool, params: { address } };
       }
@@ -50,5 +55,7 @@ export const currentRoute = writable({ ...formatRoute(route) });
 
 window.addEventListener("hashchange", () => {
   const route = deriveRoute();
+  console.log("route", route);
   currentRoute.set({ ...formatRoute(route) });
+  console.log("currentRoute", get(currentRoute));
 });

@@ -6,18 +6,21 @@
   "logos": {
     "aragon": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/aragon.svg",
     "balancerWhite": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/balancerWhite.svg",
-    "BTC++": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/BTC%2B%2B.png",
-    "DAI": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/dai.svg",
+    "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/BTC%2B%2B.png",
+    "0x6B175474E89094C44Da98b954EedeAC495271d0F": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/dai.svg",
     "etherscan": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/etherscan.svg",
-    "imBTC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/imbtc.png",
-    "pBTC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/pBTC.svg",
+    "0x3212b29E33587A00FB1C83346f5dBFA69A458923": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/imbtc.png",
+    "0x5228a22e72ccC52d415EcFd199F99D0665E7733b": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/pBTC.svg",
     "piedao": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Icon%20Clean.png",
     "quantstamp": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/quantstamp.svg",
-    "sBTC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sBTC.png",
-    "sUSD": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sUSD.png",
-    "TUSD": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/tusd.svg",
-    "USD++": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/Cash%2B%2B.png",
-    "USDC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/usdc.svg",
-    "wBTC": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/wbtc.png"
+    "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sBTC.png",
+    "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sUSD.png",
+    "0x0000000000085d4780B73119b644AE5ecd22b376": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/tusd.svg",
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/Cash%2B%2B.png",
+    "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/usdc.svg",
+    "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/wbtc.png",
+    "0x880873a96ce38c7fd39dc714592902b069bde048": "https://i.imgur.com/pHmtKyX.png",
+    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": "https://i.imgur.com/pHmtKyX.png",
+    "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": "https://i.imgur.com/pHmtKyX.png"
   }
 }

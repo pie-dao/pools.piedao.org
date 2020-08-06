@@ -17,9 +17,9 @@
     eth,
     pools,
     bumpLifecycle,
-    subject,
+    subject
   } from "../stores/eth.js";
-  import { amountFormatter, fetchPooledTokens, maxAmount } from "./helpers.js";
+  import { amountFormatter, fetchPooledTokens, maxAmount, getTokenImage } from "./helpers.js";
   import { displayNotification } from "../notifications.js";
 
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
@@ -31,7 +31,7 @@
   let amount = "1.00000000";
 
   $: tokenSymbol = (poolsConfig[token] || {}).symbol;
-  $: tokenLogo = images.logos[tokenSymbol];
+  $: tokenLogo = images.logos[token];
 
   $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
   $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");
@@ -85,7 +85,7 @@
     emitter.on("txConfirmed", ({ hash }) => {
       const { dismiss } = displayNotification({
         message: "Confirming...",
-        type: "pending",
+        type: "pending"
       });
 
       const subscription = subject("blockNumber").subscribe({
@@ -93,105 +93,27 @@
           displayNotification({
             autoDismiss: 15000,
             message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
-            type: "success",
+            type: "success"
           });
           dismiss();
           subscription.unsubscribe();
-        },
+        }
       });
 
       return {
         autoDismiss: 1,
         message: "Mined",
-        type: "success",
+        type: "success"
       };
     });
   };
 
-  const setValuePercentage = (percent) => {
+  const setValuePercentage = percent => {
     const max = maxAmount(token, pooledTokens);
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
   };
 </script>
-
-<style>
-  .leading-26px {
-    line-height: 26px;
-  }
-
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 46px;
-    height: 24px;
-  }
-
-  /* Hide default HTML checkbox */
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  /* The slider */
-  .toggle {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-    border-radius: 24px;
-  }
-
-  .toggle:before {
-    position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: 4px;
-    bottom: 2px;
-    background-color: white;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-    border-radius: 50%;
-  }
-
-  .toggle-input:checked + .toggle {
-    background-color: #aefd72;
-  }
-
-  .toggle-input:focus + .toggle {
-    box-shadow: 0 0 1px #aefd72;
-  }
-
-  .toggle-input:checked + .toggle:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
-  }
-
-  input,
-  input:focus {
-    -webkit-appearance: none;
-    border: none;
-    border-width: 0;
-    box-shadow: none;
-    outline: none;
-  }
-
-  .negative {
-    color: #ed34a5;
-  }
-
-  .positive {
-    color: #27ba80;
-  }
-</style>
 
 <div class="liquidity-container bg-grey-243 w-100pc rounded-4px p-6">
   <h1 class="text-center text-xl">{$_('general.add')} {$_('general.liquidity')}</h1>
@@ -244,7 +166,7 @@
       </div>
     </div>
     <div class="bottom px-4 pb-2">
-      <input type="text" bind:value={amount} class="text-xl font-thin" />
+      <input type="number" bind:value={amount} class="text-xl font-thin" />
       <div
         class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
         align-middle justify-center items-center">
@@ -263,12 +185,12 @@
           amount: pooledToken.percentage,
           approximatePrefix: '',
           displayDecimals: 2,
-          rounding: 4,
+          rounding: 4
         })}%
       </div>
       <img
         class="token-icon my-8px w-26px h-26px"
-        src={pooledToken.icon}
+        src={getTokenImage(pooledToken.address)}
         alt={pooledToken.symbol} />
       <div
         class="token-symbol px-6px py-12px text-sm font-thin border-r-2 border-r-solid
@@ -282,7 +204,7 @@
       <a
         class={pooledToken.actionBtnClass}
         href={pooledToken.buyLink}
-        on:click={(evt) => action(evt, pooledToken)}
+        on:click={evt => action(evt, pooledToken)}
         target="_blank">
         {pooledToken.actionBtnLabel}
       </a>

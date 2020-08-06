@@ -22,6 +22,8 @@ let poolUpdatePids = {};
 const allowanceSubscriptions = new Set();
 const balanceSubscriptions = new Set();
 
+export const getTokenImage = (tokenAddress) => images.logos[tokenAddress] ? images.logos[tokenAddress] : `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
+
 const enqueueWeightUpdate = (poolAddress) => {
   clearTimeout(poolUpdatePids[poolAddress]);
   setTimeout(() => {
@@ -81,6 +83,20 @@ const updatePoolWeight = async (poolAddress) => {
 
   pools.set({ ...get(pools), ...updates });
 };
+
+export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') => {
+  if (!value) return 'n/a';
+  try {
+    const values = value.toString().replace(/^-/, '').split('.');
+    const dollars = values[0];
+    const cents = values[1];
+    const groups = /(\d)(?=(\d{3})+\b)/g;
+    return `${fiat} ${'#'.replace('#', `${dollars.replace(groups, '$1' + separator)}${cents ? decimal + cents : ''}`)}`;
+  } catch (e) {
+    console.error(e);
+    return value === undefined ? '-' : value;
+  }
+}
 
 export const amountFormatter = ({
   amount,
@@ -193,7 +209,7 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
     const amtVsBalance = amountVsBalance(amount, pooledToken);
     const amtVsBalanceClass = amountVsBalanceClass(amount, pooledToken);
     const ethData = get(eth);
-    const icon = images.logos[pooledToken.symbol];
+    const icon = getTokenImage(pooledToken.address); // images.logos[pooledToken.symbol];
     const { address } = pooledToken;
 
     let actionBtnClass = "hidden";
