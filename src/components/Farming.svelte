@@ -7,7 +7,7 @@
   export let token;
 
   let rewards = "00.0%"; // TODO: Get this from docs markdown
-  let brand = "balancer";
+  let brand = "piedao";
   let symbol = "$BAL";
 
   $: (async () => {
@@ -23,7 +23,7 @@
 
 <div class="farming-container">
   <div class="left">
-    <img src={images.logos.balancerWhite} alt="Balancer" />
+    <img src={images.logos.piedao} alt="PieDAO logo" />
     <h2>
       {$_(`brands.${brand}`)}
       <br />
@@ -31,11 +31,9 @@
     </h2>
   </div>
   <div class="right">
-    <h1 class="text-xl">{rewards}</h1>
+    <h1 class="text-xl">Soon™️</h1>
     <span class="text-xs">
-      {$_('general.duration.annualized')} {$_('general.returns')}
-      <br />
-      {symbol} {$_('general.tokens')}
+      Join us on Discord to learn more
     </span>
   </div>
 </div>
