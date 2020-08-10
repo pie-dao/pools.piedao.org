@@ -7,7 +7,7 @@ import Pool from "../pages/Pool.svelte";
 import PieLanding from "../pages/PieIndexLanding.svelte";
 
 const defaultRouteObj = {
-  page: Pool,
+  page: PieLanding,
   params: {
     address: pools.default,
   },

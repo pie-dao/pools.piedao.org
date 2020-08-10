@@ -84,9 +84,9 @@
 
   <div class="flex flex-wrap w-full">
     <div class="flex flex-row content-between flex-wrap w-full">
-      <div class="flex flex-row sm:w-full md:w-1/2">
-        <img class="h-100px inline" src={tokenLogo} alt={symbol} />
-        <div class="m-3">
+      <div class="flex flex-row sm:w-full md:w-2/3">
+        <img class="h-80px inline" src={tokenLogo} alt={symbol} />
+        <div class="mx-3">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
           {#if change24H}
             <h5
@@ -102,14 +102,16 @@
         </div>
       </div>
 
-      <div class="sm:w-full md:w-1/2">
+      <div class="sm:w-full md:w-1/3">
         <a href={`#/pools/${token}`}>
           <button class="btn text-white font-bold py-2 px-4 rounded">Mint</button>
         </a>
-        <a href={`#/pools/${token}`}>
-          <button class="btn clear text-white font-bold py-2 px-4 rounded">Redeem</button>
+        <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
+          <button class="btn clear font-bold py-2 px-4 rounded">Buy</button>
         </a>
-        <button class="btn clear font-bold py-2 px-4 rounded">Buy</button>
+        <!-- <a href={`#/pools/${token}`}></a>
+          <button class="btn clear text-white font-bold py-2 px-4 rounded">Redeem</button>
+        </a> -->
       </div>
 
     </div>
@@ -126,7 +128,7 @@
       <div class="text-center text-xl font-black">{swapFees}%</div>
     </div>
     <div class="w-1/4 p-0">
-      <div class="text-center font-thin">Exit fee</div>
+      <div class="text-center font-thin">Streaming fee</div>
       <div class="text-center text-xl font-black">0%</div>
     </div>
     <div class="w-1/4 p-0">

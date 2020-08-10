@@ -23,11 +23,11 @@
 
 <div class="farming-container">
   <div class="left">
-    <img src={images.logos.piedao} alt="PieDAO logo" />
+    <img src={images.logos.piedao_clean} alt="PieDAO logo" />
     <h2>
-      {$_(`brands.${brand}`)}
-      <br />
-      {$_('defi.liquidity.mining')} {$_('general.program')}
+      <!-- {$_(`brands.${brand}`)} -->
+      
+      {$_('defi.liquidity.mining')} 
     </h2>
   </div>
   <div class="right">

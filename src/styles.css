@@ -9,6 +9,11 @@
 /* Custom css */
 /* purgecss start ignore */
 
+#App {
+  max-width: 1200px!important;
+  margin: 0 auto;
+}
+
 .blur-heavy {
   filter: blur(2px);
   -o-filter: blur(2px);
@@ -259,7 +264,7 @@
   }
 
   .header-container .left img {
-    @apply h-50px;
+    @apply h-30px;
   }
 
   .header-container .right .link {
@@ -307,7 +312,7 @@
   border-radius: 6px;
   font-size: 28px;
   font-weight: 200;
-  width: 12rem;
+  width: 11rem;
 }
 
 .spl h1 {
@@ -334,8 +339,7 @@
 } 
 
 .spl table td > img.icon {
-  max-width: 45px;
-  max-height: 45px;
+  @apply h-30px;
 }
 
 .spark:hover {
