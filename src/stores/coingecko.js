@@ -42,7 +42,7 @@ function objectToQueryString(obj) {
 
 export class CoinGecko {
 
-  static baseURL = 'https://api.coingecko.com/api/v3';
+  
 
   static async sync() {
     await CoinGecko.fetchPiesDataAndUnderlying();
@@ -70,6 +70,7 @@ export class CoinGecko {
 
 
   static fetchCoinData(coingeckoID) {
-    return request(`${CoinGecko.baseURL}/coins/${coingeckoID}`);
+    const baseURL = 'https://api.coingecko.com/api/v3';
+    return request(`${baseURL}/coins/${coingeckoID}`);
   }
 }
