@@ -11,11 +11,13 @@
 </script>
 
 <div class="content flex flex-col">
-  <div class="flex sm:flex-col md:flex-row w-100pc">
+  <div class="flex flex-col flex-row-reverse md:flex-row w-100pc">
     <div class="left w-full md:w-2/4 mr-2">
       <Balance token={$currentRoute.params.address} />
-      <Farming token={$currentRoute.params.address} />
-      <div class="flex">
+      <div class="hidden md:block">
+        <Farming token={$currentRoute.params.address} />
+      </div>
+      <div class="flex hidden md:block">
         <div class="left flex-1 mr-2">
           <Etherscan token={$currentRoute.params.address} />
         </div>
@@ -23,7 +25,9 @@
           <Quantstamp token={$currentRoute.params.address} />
         </div>
       </div>
-      <Info token={$currentRoute.params.address} />
+      <div class="hidden md:block">
+        <Info token={$currentRoute.params.address} />
+      </div>
       <div class="hidden md:block">
         <AllocationBreakdown token={$currentRoute.params.address} />
       </div>
