@@ -23,6 +23,7 @@
   import { displayNotification } from "../notifications.js";
 
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
+  export let method;
   let type = "multi";
 
   // let balanceClass = 'blur-heavy';
@@ -45,6 +46,62 @@
     } else if (pooledToken.actionBtnLabel === "ready") {
       evt.preventDefault();
     }
+  };
+
+  const execMethod = async () => {
+    if( method === 'add') {
+      mint();
+    } else {
+      redeem();
+    }
+  };
+
+  const redeem = async () => {
+    console.log($balances)
+    return;
+    const requestedAmount = BigNumber(amount);
+    const max = maxAmount(token, pooledTokens, 1); //balance
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: "Please connect a wallet and try again.", type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    if (requestedAmount.isGreaterThan(max)) {
+      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
+      return;
+    }
+
+    const tokenContract = await contract({ abi: pieSmartPool, address: token });
+    const decimals = await tokenContract.decimals();
+    const arg = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
+    const { emitter } = displayNotification(await tokenContract.exitPool(arg));
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending"
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
+            type: "success"
+          });
+          dismiss();
+          subscription.unsubscribe();
+        }
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success"
+      };
+    });
   };
 
   const mint = async () => {
@@ -116,7 +173,7 @@
 </script>
 
 <div class="liquidity-container bg-grey-243 w-100pc rounded-4px p-6">
-  <h1 class="text-center text-xl">{$_('general.add')} {$_('general.liquidity')}</h1>
+  <h1 class="text-center text-xl">{$_(`general.${method}`)} {$_('general.liquidity')}</h1>
   <div class="row flex font-thin">
     <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
     <div class="switch mx-4" on:click={() => alert('Single Asset entry coming soon!')}>
@@ -213,8 +270,8 @@
   {/each}
 
   <center>
-    <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => mint()}>
-      {$_('general.add')} {$_('general.liquidity')}
+    <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => execMethod()}>
+      {$_(`general.${method}`)} {$_('general.liquidity')}
     </button>
   </center>
 </div>

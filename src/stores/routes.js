@@ -10,6 +10,7 @@ const defaultRouteObj = {
   page: Pool,
   params: {
     address: pools.default,
+    method: 'add'
   },
 };
 
@@ -37,8 +38,9 @@ const formatRoute = (route) => {
       return { page: PieLanding, params: { address } };
     case "pools":
       address = (route[1] || "").toLowerCase();
+      let method = (route[2] || "add").toLowerCase();
       if (pools.available.includes(address)) {
-        return { page: Pool, params: { address } };
+        return { page: Pool, params: { address, method } };
       }
 
       break;

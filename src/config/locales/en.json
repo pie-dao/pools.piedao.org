@@ -17,6 +17,7 @@
   },
   "general": {
     "add": "Add",
+    "remove": "Remove",
     "allocation": "Allocation",
     "amount": "Amount",
     "asset": "Asset",

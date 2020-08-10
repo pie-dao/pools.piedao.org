@@ -30,7 +30,7 @@
     </div>
     
     <div class="right w-full md:w-2/4 flex-1 ml-2">
-      <Liquidity token={$currentRoute.params.address} />
+      <Liquidity method={$currentRoute.params.method} token={$currentRoute.params.address} />
     </div>
   </div>
 </div>
