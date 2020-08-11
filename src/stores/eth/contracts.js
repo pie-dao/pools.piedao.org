@@ -1,7 +1,9 @@
 import { erc20 } from "@pie-dao/abis";
 import { ethers } from "ethers";
 import { get } from "svelte/store";
-import { isAddress, validateIsAddress } from "@pie-dao/utils";
+import { isAddress, isPOJO, validateIsAddress } from "@pie-dao/utils";
+
+import contractOverrides from "../../config/contractOverrides.json";
 
 import { balanceKey, functionKey } from "./keys";
 import { eth } from "./writables";
@@ -56,6 +58,18 @@ subject("blockNumberBump").subscribe({
   },
 });
 
+const expectedArgLength = (functionName, contract) => {
+  const { address } = contract;
+  const definition = contract.interface.fragments.find(({ name }) => name === functionName);
+  if (!definition) {
+    throw new Error(
+      `eth/contracts.js - function '${functionName}' not found in contract abi for ${address}`
+    );
+  }
+
+  return definition.inputs.length;
+};
+
 const generateTrackBalanceFunction = (contractAddress) => {
   return async (account) => {
     validateIsAddress(account);
@@ -74,8 +88,14 @@ const generateTrackableFunction = (contractAddress, functionName, rawFunction) =
     const contract = contracts[contractAddress].raw;
     const trackable = rawFunction.bind(contract)(...args);
 
-    trackable.track = async (overrides = {}) => {
+    trackable.track = async (callerOverrides = {}) => {
+      let overrides = callerOverrides;
       const key = functionKey(contractAddress, functionName, args, overrides);
+
+      if (hasOverrides(functionName, contract)) {
+        overrides = { ...getOverrides(functionName, contract), ...callerOverrides };
+      }
+
       trackedFunctions[key] = {
         contractAddress,
         rawFunction,
@@ -92,6 +112,36 @@ const generateTrackableFunction = (contractAddress, functionName, rawFunction) =
 
     return trackable;
   };
+};
+
+const getOverrides = (functionName, { address }) => {
+  const addy = address.toLowerCase();
+  return isPOJO(contractOverrides[addy]) ? contractOverrides[addy][functionName] : undefined;
+};
+
+const hasOverrides = (functionName, contract) => {
+  const overrides = getOverrides(functionName, contract);
+  return !!overrides;
+};
+
+const overrideWrapped = (prop, contract) => (...passedArgs) => {
+  const args = [...passedArgs];
+  const position = expectedArgLength(prop, contract);
+
+  if (position < args.length) {
+    throw new Error(
+      `eth/contracts.js - function '${prop}' for contract ${address} ` +
+        `called with too few arguments. Got ${args.length}. Expected ${position}.`
+    );
+  }
+
+  if (isPOJO(args[position])) {
+    args[position] = { ...getOverrides(prop, contract), ...args[position] };
+  } else {
+    args[position] = { ...getOverrides(prop, contract) };
+  }
+
+  return contract[prop](...args);
 };
 
 export const observableContract = async ({ abi, address }) => {
@@ -140,6 +190,8 @@ export const observableContract = async ({ abi, address }) => {
     get: (obj, prop) => {
       if (Object.keys(addons).includes(prop)) {
         return addons[prop];
+      } else if (contract[prop] && hasOverrides(prop, contract)) {
+        return overrideWrapped(prop, contract);
       } else if (contract[prop]) {
         return contract[prop];
       }
