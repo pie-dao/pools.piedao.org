@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "snowpack build",
+    "lint": "npx eslint src/*.js src/**/*.js",
     "start": "snowpack dev",
     "test": "jest"
   },
