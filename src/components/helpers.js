@@ -86,10 +86,10 @@ const updatePoolWeight = async (poolAddress) => {
   pools.set({ ...get(pools), ...updates });
 };
 
-export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') => {
-  if (!value) return 'n/a';
+export const formatFiat = (value, separator = ",", decimal = ".", fiat = "$") => {
+  if (!value) return "n/a";
   try {
-    const values = value.toString().replace(/^-/, '').split('.');
+    const values = value.toString().replace(/^-/, "").split(".");
     const dollars = values[0];
     const cents = values[1];
     const groups = /(\d)(?=(\d{3})+\b)/g;
@@ -99,7 +99,7 @@ export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') =>
     )}`;
   } catch (e) {
     console.error(e);
-    return value === undefined ? '-' : value;
+    return value === undefined ? "-" : value;
   }
 };
 
@@ -205,6 +205,34 @@ export const pooledTokenAmountRequired = (amt, { percentage }, raw = false) => {
 
   return amountFormatter({ amount: requiredAmount, displayDecimals: 8 });
 };
+
+export const fetchPieTokens = (balancesData) => poolsConfig.selectable.map((address) => {
+  const ethData = get(eth);
+  const icon = getTokenImage(address);
+  const { symbol } = poolsConfig[address];
+  let balance = BigNumber(0);
+
+  if (ethData.address) {
+    subscribeToBalance(address, ethData.address);
+
+    const balKey = balanceKey(address, ethData.address);
+    balance = balancesData[balKey];
+  }
+
+  balance = amountFormatter({
+    amount: balance,
+    approximatePrefix: '',
+    displayDecimals: 8,
+    maxDigits: 10,
+  });
+
+  return {
+    address,
+    balance,
+    icon,
+    symbol,
+  };
+});
 
 export const fetchPooledTokens = (token, amount, current, allowancesData, balancesData) => {
   const composition = current || poolsConfig[token];

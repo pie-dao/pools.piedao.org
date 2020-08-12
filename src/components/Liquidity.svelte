@@ -8,6 +8,9 @@
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
 
+  import displayNotification from "../notifications.js";
+  import TokenSelectModal from "./TokenSelectModal.svelte";
+
   import {
     allowances,
     approveMax,
@@ -18,19 +21,34 @@
     eth,
     pools,
     bumpLifecycle,
-    subject
+    subject,
   } from "../stores/eth.js";
-  import { amountFormatter, fetchPooledTokens, maxAmount, getTokenImage } from "./helpers.js";
-  import displayNotification from "../notifications.js";
+  import {
+    amountFormatter,
+    fetchPieTokens,
+    fetchPooledTokens,
+    maxAmount,
+    getTokenImage,
+  } from "./helpers.js";
 
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
   let type = "multi";
+
+  let tokenSelectModalOpen = true;
+  const tokenSelectCallback = (token) => {
+    tokenSelectModalOpen = false;
+    if (token) {
+      window.location.hash = `#/pools/${token.address}`;
+    }
+  };
 
   // let balanceClass = 'blur-heavy';
   // let yourBalanceClass = 'blur-light';
 
   let amount = "1.00000000";
   let approach = "add";
+
+  $: pieTokens = fetchPieTokens($balances);
 
   $: tokenSymbol = (poolsConfig[token] || {}).symbol;
   $: tokenLogo = images.logos[token];
@@ -86,27 +104,26 @@
 
     emitter.on("txConfirmed", ({ hash }) => {
       const { dismiss } = displayNotification({
-        message: $_("piedao.confirming"),
-        type: "pending"
+        message: "Confirming...",
+        type: "pending",
       });
 
       const subscription = subject("blockNumber").subscribe({
         next: () => {
           displayNotification({
             autoDismiss: 15000,
-            message: `${requestedAmount.toFixed()} ${tokenSymbol} `
-              + `${$_("general.successfully").toLowerCase()} ${$_("general.minted").toLowerCase()}`,
-            type: "success"
+            message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
+            type: "success",
           });
           dismiss();
           subscription.unsubscribe();
-        }
+        },
       });
 
       return {
         autoDismiss: 1,
-        message: $_("general.mined"),
-        type: "success"
+        message: "Mined",
+        type: "success",
       };
     });
   };
@@ -252,10 +269,15 @@
       <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
       <div
         class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
-        align-middle justify-center items-center">
+        align-middle justify-center items-center"
+        on:click={() => (tokenSelectModalOpen = true)}>
         <img class="token-icon w-26px h-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
         <span class="py-2px px-4px">{tokenSymbol}</span>
       </div>
+      <TokenSelectModal
+        tokens={pieTokens}
+        open={tokenSelectModalOpen}
+        callback={tokenSelectCallback} />
     </div>
   </div>
 
@@ -268,7 +290,7 @@
           amount: pooledToken.percentage,
           approximatePrefix: '',
           displayDecimals: 2,
-          rounding: 4
+          rounding: 4,
         })}%
       </div>
       <img
