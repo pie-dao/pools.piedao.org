@@ -1,22 +1,22 @@
-import Notify from "bnc-notify";
+import Notify from 'bnc-notify';
 
-import { isAddress, isTransactionHash } from "@pie-dao/utils";
+import { isAddress, isTransactionHash } from '@pie-dao/utils';
 
-import env from "./config/env.json";
-import { isString } from "@pie-dao/utils/src/utils/typeChecks";
+import { isString } from '@pie-dao/utils/src/utils/typeChecks';
+import env from './config/env.json';
 
 const notify = Notify(env.blocknative);
 
-export const displayNotification = ({
+const displayNotification = ({
   address,
   autoDismiss = 4000,
-  eventCode = "notice",
+  eventCode = 'notice',
   hash,
   message,
   onclick = () => {},
-  type = "success",
+  type = 'success',
 }) => {
-  console.log("displayNotification", {
+  console.log('displayNotification', {
     address,
     autoDismiss,
     eventCode,
@@ -52,3 +52,5 @@ export const displayNotification = ({
 
   return notificationResponse;
 };
+
+export default displayNotification;
