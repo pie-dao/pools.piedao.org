@@ -48,6 +48,9 @@
     "audit.result": "Audit result",
     "check.contract.on": "Check the contract on",
     "multi.asset.according.to.allocation": "according to its allocation",
-    "multi.asset.enables.minting": "Multi Asset entry enables you to mint"
+    "multi.asset.all.underlying": "to all underlying assets",
+    "multi.asset.enables.minting": "Multi Asset entry enables you to mint",
+    "multi.asset.enables.withdraw": "Multi Asset enables you to withdraw",
+    "single.asset.coming.soon": "Single Asset entry / exit coming soon!"
   }
 }

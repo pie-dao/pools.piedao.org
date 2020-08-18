@@ -11,6 +11,7 @@
   import {
     allowances,
     approveMax,
+    balanceKey,
     balances,
     connectWeb3,
     contract,
@@ -29,6 +30,7 @@
   // let yourBalanceClass = 'blur-light';
 
   let amount = "1.00000000";
+  let approach = "add";
 
   $: tokenSymbol = (poolsConfig[token] || {}).symbol;
   $: tokenLogo = images.logos[token];
@@ -108,18 +110,87 @@
     });
   };
 
+  const primaryAction = () => {
+    if (approach === "add") {
+      mint();
+    } else {
+      withdraw();
+    }
+  }
+
   const setValuePercentage = percent => {
-    const max = maxAmount(token, pooledTokens);
+    let max = maxAmount(token, pooledTokens);
+    if (approach === 'withdraw') {
+      const key = balanceKey(token, $eth.address);
+      max = $balances[key];
+    }
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
+  };
+
+  const withdraw = async () => {
+    const requestedAmount = BigNumber(amount);
+    const key = balanceKey(token, $eth.address);
+    const max = $balances[key];
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: "Please connect a wallet and try again.", type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    if (requestedAmount.isGreaterThan(max)) {
+      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
+
+      const message = `At the moment you only have enough funds to withdraw ${maxFormatted} ${tokenSymbol}.`;
+
+      displayNotification({ message, type: "error", autoDismiss: 30000 });
+      return;
+    }
+
+    const tokenContract = await contract({ abi: pieSmartPool, address: token });
+    const decimals = await tokenContract.decimals();
+    const arg = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
+    const { emitter } = displayNotification(await tokenContract.exitPool(arg));
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending"
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully withdrawn`,
+            type: "success"
+          });
+          dismiss();
+          subscription.unsubscribe();
+        }
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success"
+      };
+    });
   };
 </script>
 
 <div class="liquidity-container bg-grey-243 w-100pc rounded-4px p-6">
-  <h1 class="text-center text-xl">{$_('general.add')} {$_('general.liquidity')}</h1>
+  <h1 class="text-center text-xl">
+    {#if approach === 'add'}
+      {$_('general.add')} {$_('general.liquidity')}
+    {:else}
+      {$_('general.withdraw')}
+    {/if}
+  </h1>
   <div class="row flex font-thin">
     <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
-    <div class="switch mx-4" on:click={() => alert('Single Asset entry coming soon!')}>
+    <div class="switch mx-4" on:click={() => alert(_('piedao.single.asset.coming.soon'))}>
       <input type="checkbox" class="toggle-input" checked={type === 'multi'} />
       <span class="toggle active border-grey" />
     </div>
@@ -127,16 +198,25 @@
   </div>
 
   <p class="text-center m-4">
-    {$_('piedao.multi.asset.enables.minting')} {tokenSymbol}
-    {$_('piedao.multi.asset.according.to.allocation')}
+    {#if approach === 'add'}
+      {$_('piedao.multi.asset.enables.minting')} 
+    {:else}
+      {$_('piedao.multi.asset.enables.withdraw')} 
+    {/if}
+
+    {tokenSymbol}
+
+    {#if approach === 'add'}
+      {$_('piedao.multi.asset.according.to.allocation')}
+    {:else}
+      {$_('piedao.multi.asset.all.underlying')}
+    {/if}
   </p>
 
-  <!--
   <div class="row">
-    <div class="toggle-btn active">{$_('general.add')} {$_('general.liquidity')}</div>
-    <div class="toggle-btn">{$_('general.withdraw')}</div>
+    <div class="toggle-btn active" on:click={() => approach = "add"}>{$_('general.add')} {$_('general.liquidity')}</div>
+    <div class="toggle-btn" on:click={() => approach = "withdraw"}>{$_('general.withdraw')}</div>
   </div>
-  -->
 
   <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
     <div class="top h-32px text-sm font-thin px-4 py-2">
@@ -197,24 +277,32 @@
         border-grey-243 w-60px">
         {pooledToken.symbol}
       </div>
-      <div class="amount tex-sm px-20px py-12px w-150px">{pooledToken.amountRequired}</div>
-      <div class={`${pooledToken.amountVsBalanceClass} font-thin text-xs mt-14px w-150px`}>
-        Bal - {pooledToken.amountVsBalance}
-      </div>
-      <a
-        class={pooledToken.actionBtnClass}
-        href={pooledToken.buyLink}
-        on:click={evt => action(evt, pooledToken)}
-        target="_blank">
-        {pooledToken.actionBtnLabel}
-      </a>
+      {#if approach === "add"}
+        <div class="amount tex-sm px-20px py-12px w-150px">{pooledToken.amountRequired}</div>
+        <div class={`${pooledToken.amountVsBalanceClass} font-thin text-xs mt-14px w-150px`}>
+          Bal - {pooledToken.amountVsBalance}
+        </div>
+        <a
+          class={pooledToken.actionBtnClass}
+          href={pooledToken.buyLink}
+          on:click={evt => action(evt, pooledToken)}
+          target="_blank">
+          {pooledToken.actionBtnLabel}
+        </a>
+      {:else}
+        <div class="amount tex-sm px-20px py-12px w-150px">{pooledToken.amountRequired}</div>
+      {/if}
       <div class="hidden">{$eth.address}</div>
     </div>
   {/each}
 
   <center>
-    <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => mint()}>
-      {$_('general.add')} {$_('general.liquidity')}
+    <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+      {#if approach === 'add'}
+        {$_('general.add')} {$_('general.liquidity')}
+      {:else}
+        {$_('general.withdraw')}
+      {/if}
     </button>
   </center>
 </div>
