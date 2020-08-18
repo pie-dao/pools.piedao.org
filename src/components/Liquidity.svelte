@@ -20,7 +20,7 @@
     subject
   } from "../stores/eth.js";
   import { amountFormatter, fetchPooledTokens, maxAmount, getTokenImage } from "./helpers.js";
-  import { displayNotification } from "../notifications.js";
+  import displayNotification from "../notifications.js";
 
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
   let type = "multi";

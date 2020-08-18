@@ -1,10 +1,10 @@
-import BigNumber from "bignumber.js";
+import BigNumber from 'bignumber.js';
 
-import { get } from "svelte/store";
-import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from "@pie-dao/utils";
+import { get } from 'svelte/store';
+import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
 
-import images from "../config/images.json";
-import poolsConfig from "../config/pools.json";
+import images from '../config/images.json';
+import poolsConfig from '../config/pools.json';
 
 import {
   allowances,
@@ -15,14 +15,16 @@ import {
   eth,
   functionKey,
   pools,
-} from "../stores/eth.js";
+} from '../stores/eth.js';
 
-let poolUpdatePids = {};
+const poolUpdatePids = {};
 
 const allowanceSubscriptions = new Set();
 const balanceSubscriptions = new Set();
 
-export const getTokenImage = (tokenAddress) => images.logos[tokenAddress] ? images.logos[tokenAddress] : `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
+export const getTokenImage = (tokenAddress) => (images.logos[tokenAddress]
+  ? images.logos[tokenAddress]
+  : `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`);
 
 const enqueueWeightUpdate = (poolAddress) => {
   clearTimeout(poolUpdatePids[poolAddress]);
@@ -59,16 +61,16 @@ const updatePoolWeight = async (poolAddress) => {
   await Promise.all(composition.map(({ address }) => subscribeToBalance(address, bPoolAddress)));
 
   const allCurrentBalances = get(balances);
-  let poolCurrentBalances = {};
+  const poolCurrentBalances = {};
 
   composition.forEach(({ address }) => {
     const key = balanceKey(address, bPoolAddress);
     poolCurrentBalances[address] = allCurrentBalances[key];
   });
 
-  let total = Object.values(poolCurrentBalances).reduce(
+  const total = Object.values(poolCurrentBalances).reduce(
     (sum, value) => sum.plus(value),
-    BigNumber(0)
+    BigNumber(0),
   );
 
   const updates = {};
@@ -91,27 +93,30 @@ export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') =>
     const dollars = values[0];
     const cents = values[1];
     const groups = /(\d)(?=(\d{3})+\b)/g;
-    return `${fiat} ${'#'.replace('#', `${dollars.replace(groups, '$1' + separator)}${cents ? decimal + cents : ''}`)}`;
+    return `${fiat} ${'#'.replace(
+      '#',
+      `${dollars.replace(groups, `$1${separator}`)}${cents ? decimal + cents : ''}`,
+    )}`;
   } catch (e) {
     console.error(e);
     return value === undefined ? '-' : value;
   }
-}
+};
 
 export const amountFormatter = ({
   amount,
-  approximatePrefix = "~",
+  approximatePrefix = '~',
   displayDecimals = 3,
-  lessThanPrefix = "< ",
+  lessThanPrefix = '< ',
   rounding = BigNumber.ROUND_DOWN,
   maxDigits,
 }) => {
   if (!amount) {
-    return "";
+    return '';
   }
 
   let decimals = displayDecimals;
-  const prefix = "@pie-dao/utils - amountFormatter";
+  const prefix = '@pie-dao/utils - amountFormatter';
   const value = BigNumber(amount);
 
   validateIsBigNumber(value, { prefix });
@@ -176,14 +181,14 @@ export const amountVsBalanceClass = (amt, pooledToken) => {
   const amountDifference = amountVsBalance(amt, pooledToken, true);
 
   if (amountDifference.isLessThan(0)) {
-    return "negative";
+    return 'negative';
   }
 
   if (amountDifference.isGreaterThan(0)) {
-    return "positive";
+    return 'positive';
   }
 
-  return "neutral";
+  return 'neutral';
 };
 
 export const pooledTokenAmountRequired = (amt, { percentage }, raw = false) => {
@@ -212,37 +217,33 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
     const icon = getTokenImage(pooledToken.address); // images.logos[pooledToken.symbol];
     const { address } = pooledToken;
 
-    let actionBtnClass = "hidden";
-    let actionBtnLabel = "";
+    let actionBtnClass = 'hidden';
+    let actionBtnLabel = '';
 
-    let buyLink =
-      pooledToken.buyLink ||
-      "https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0";
+    const buyLink = pooledToken.buyLink
+      || 'https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0';
 
     if (ethData.address) {
       subscribeToAllowance(address, ethData.address, token);
       subscribeToBalance(address, ethData.address);
 
-      const allowanceKey = functionKey(address, "allowance", [ethData.address, token]);
+      const allowanceKey = functionKey(address, 'allowance', [ethData.address, token]);
       const allowance = allowancesData[allowanceKey];
       const balKey = balanceKey(address, ethData.address);
 
       if (
-        balancesData[balKey] &&
-        balancesData[balKey].isGreaterThan(amountRequired) &&
-        (!isBigNumber(allowance) || allowance.isLessThan(amountRequired))
+        balancesData[balKey]
+        && balancesData[balKey].isGreaterThan(amountRequired)
+        && (!isBigNumber(allowance) || allowance.isLessThan(amountRequired))
       ) {
-        actionBtnClass =
-          "btn-unlock cursor rounded-20px h-26px bg-white border border-black w-60px m-auto text-center text-xs font-thin leading-26px";
-        actionBtnLabel = "Unlock";
+        actionBtnClass = 'btn-unlock cursor rounded-20px h-26px bg-white border border-black w-60px m-auto text-center text-xs font-thin leading-26px';
+        actionBtnLabel = 'Unlock';
       } else if (balancesData[balKey] && balancesData[balKey].isLessThan(amountRequired)) {
-        actionBtnClass =
-          "btn-buy cursor rounded-20px h-26px bg-black text-white w-60px m-auto text-center text-xs font-thin leading-26px";
-        actionBtnLabel = "BUY";
+        actionBtnClass = 'btn-buy cursor rounded-20px h-26px bg-black text-white w-60px m-auto text-center text-xs font-thin leading-26px';
+        actionBtnLabel = 'BUY';
       } else {
-        actionBtnClass =
-          "btn-buy rounded-20px h-26px bg-white text-grey w-60px m-auto text-center text-xs font-thin leading-26px";
-        actionBtnLabel = "ready";
+        actionBtnClass = 'btn-buy rounded-20px h-26px bg-white text-grey w-60px m-auto text-center text-xs font-thin leading-26px';
+        actionBtnLabel = 'ready';
       }
     }
 
@@ -253,13 +254,13 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
       actionBtnLabel,
       amountRequired: amountFormatter({
         amount: amountRequired,
-        approximatePrefix: "",
+        approximatePrefix: '',
         displayDecimals: 8,
         maxDigits: 10,
       }),
       amountVsBalance: amountFormatter({
         amount: amtVsBalance,
-        approximatePrefix: "",
+        approximatePrefix: '',
         displayDecimals: 8,
         maxDigits: 10,
       }),
@@ -298,7 +299,7 @@ export const subscribeToAllowance = async (token, address, spender) => {
   validateIsAddress(spender);
 
   const args = [address, spender];
-  const key = functionKey(token, "allowance", args);
+  const key = functionKey(token, 'allowance', args);
 
   if (allowanceSubscriptions.has(key)) {
     return;
@@ -371,7 +372,6 @@ export const subscribeToPoolWeights = async (poolAddress) => {
   await Promise.all(composition.map(({ address }) => subscribeToBalance(address, bPoolAddress)));
 
   composition.forEach(async ({ address }) => {
-    const key = balanceKey(address, bPoolAddress);
     const tokenContract = await contract({ address });
     const observable = await tokenContract.trackBalance(bPoolAddress);
     observable.subscribe({
