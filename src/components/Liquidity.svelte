@@ -180,6 +180,13 @@
   };
 </script>
 
+<style>
+  .active {
+    background-color: white;
+    font-weight: bold;
+  }
+</style>
+
 <div class="liquidity-container bg-grey-243 w-100pc rounded-4px p-6">
   <h1 class="text-center text-xl">
     {#if approach === 'add'}
@@ -188,6 +195,7 @@
       {$_('general.withdraw')}
     {/if}
   </h1>
+
   <div class="row flex font-thin">
     <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
     <div class="switch mx-4" on:click={() => alert(_('piedao.single.asset.coming.soon'))}>
@@ -213,9 +221,9 @@
     {/if}
   </p>
 
-  <div class="row">
-    <div class="toggle-btn active" on:click={() => approach = "add"}>{$_('general.add')} {$_('general.liquidity')}</div>
-    <div class="toggle-btn" on:click={() => approach = "withdraw"}>{$_('general.withdraw')}</div>
+  <div class="row bg-white border border-solid rounded-8px border-grey-204 mx-4 flex mb-32px font-thin pointer">
+    <div class="toggle-btn bg-grey-243 p-20px w-50pc text-center {approach === 'add' ? 'active' : ''}" on:click={() => approach = "add"}>{$_('general.add')} {$_('general.liquidity')}</div>
+    <div class="toggle-btn bg-grey-243 text-center p-20px w-50pc {approach === 'withdraw' ? 'active' : ''}" on:click={() => approach = "withdraw"}>{$_('general.withdraw')}</div>
   </div>
 
   <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
@@ -246,7 +254,7 @@
       </div>
     </div>
     <div class="bottom px-4 pb-2">
-      <input type="number" bind:value={amount} class="text-xl font-thin" />
+      <input type="text" bind:value={amount} class="text-xl w-75pc font-thin" />
       <div
         class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
         align-middle justify-center items-center">
@@ -290,7 +298,7 @@
           {pooledToken.actionBtnLabel}
         </a>
       {:else}
-        <div class="amount tex-sm px-20px py-12px w-150px">{pooledToken.amountRequired}</div>
+        <div class="amount tex-sm px-20px py-12px m-auto">{pooledToken.amountRequired}</div>
       {/if}
       <div class="hidden">{$eth.address}</div>
     </div>
