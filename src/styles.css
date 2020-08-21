@@ -36,6 +36,11 @@
   width: max-content;
 }
 
+.toggle-btn .active {
+  background-color: white;
+  font-weight: bold;
+}
+
 /* Allocation Breakdown */
 
 .allocation-breakdown-container {

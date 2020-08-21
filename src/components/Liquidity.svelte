@@ -180,13 +180,6 @@
   };
 </script>
 
-<style>
-  .active {
-    background-color: white;
-    font-weight: bold;
-  }
-</style>
-
 <div class="liquidity-container bg-grey-243 w-100pc rounded-4px p-6">
   <h1 class="text-center text-xl">
     {#if approach === 'add'}
