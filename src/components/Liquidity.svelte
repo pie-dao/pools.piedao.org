@@ -54,7 +54,7 @@
     const max = maxAmount(token, pooledTokens, 1);
 
     if (!$eth.address || !$eth.signer) {
-      displayNotification({ message: "Please connect a wallet and try again.", type: "hint" });
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
       connectWeb3();
       return;
     }
@@ -68,8 +68,8 @@
       const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
 
       const message =
-        `At the moment you only have enough funds to mint ${maxFormatted} ${tokenSymbol}. ` +
-        `To proceed you will need more of these tokens: ${needMore}`;
+        `${$_("piedao.max.mint.notice")} ${maxFormatted} ${tokenSymbol}. ` +
+        `${$_("piedao.more.tokens.notice")}: ${needMore}`;
 
       displayNotification({ message, type: "error", autoDismiss: 30000 });
       return;
@@ -86,7 +86,7 @@
 
     emitter.on("txConfirmed", ({ hash }) => {
       const { dismiss } = displayNotification({
-        message: "Confirming...",
+        message: $_("piedao.confirming"),
         type: "pending"
       });
 
@@ -94,7 +94,8 @@
         next: () => {
           displayNotification({
             autoDismiss: 15000,
-            message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
+            message: `${requestedAmount.toFixed()} ${tokenSymbol} `
+              + `${$_("general.successfully").toLowerCase()} ${$_("general.minted").toLowerCase()}`,
             type: "success"
           });
           dismiss();
@@ -104,7 +105,7 @@
 
       return {
         autoDismiss: 1,
-        message: "Mined",
+        message: $_("general.mined"),
         type: "success"
       };
     });
@@ -134,7 +135,7 @@
     const max = $balances[key];
 
     if (!$eth.address || !$eth.signer) {
-      displayNotification({ message: "Please connect a wallet and try again.", type: "hint" });
+      displayNotification({ message: $_('piedao.please.connect.wallet'), type: "hint" });
       connectWeb3();
       return;
     }
@@ -142,7 +143,7 @@
     if (requestedAmount.isGreaterThan(max)) {
       const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
 
-      const message = `At the moment you only have enough funds to withdraw ${maxFormatted} ${tokenSymbol}.`;
+      const message = `${$_('piedao.max.withdraw.notice')} ${maxFormatted} ${tokenSymbol}.`;
 
       displayNotification({ message, type: "error", autoDismiss: 30000 });
       return;
@@ -155,7 +156,7 @@
 
     emitter.on("txConfirmed", ({ hash }) => {
       const { dismiss } = displayNotification({
-        message: "Confirming...",
+        message: $_("piedao.confirming"),
         type: "pending"
       });
 
@@ -163,7 +164,8 @@
         next: () => {
           displayNotification({
             autoDismiss: 15000,
-            message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully withdrawn`,
+            message: `${requestedAmount.toFixed()} ${tokenSymbol} `
+              + `${$_('general.successfully').toLowerCase()} ${$_('general.withdrawn').toLowerCase()}`,
             type: "success"
           });
           dismiss();
@@ -173,7 +175,7 @@
 
       return {
         autoDismiss: 1,
-        message: "Mined",
+        message: $_('general.mined'),
         type: "success"
       };
     });
@@ -247,7 +249,7 @@
       </div>
     </div>
     <div class="bottom px-4 pb-2">
-      <input type="text" bind:value={amount} class="text-xl w-75pc font-thin" />
+      <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
       <div
         class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
         align-middle justify-center items-center">
