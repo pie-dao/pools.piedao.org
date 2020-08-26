@@ -34,20 +34,31 @@
     "liquidity": "Liquidity",
     "loading": "Loading",
     "logo": "Logo",
+    "mined": "Mined",
     "multi": "Multi",
     "program": "Program",
     "returns": "Returns",
     "single": "Single",
+    "successfully": "Successfully",
     "tokens": "Tokens",
     "whitepaper": "Whitepaper",
     "withdraw": "Withdraw",
+    "withdrawn": "Withdrawn",
     "your": "Your"
   },
   "piedao": {
     "aragonLink": "piedao.aragon",
     "audit.result": "Audit result",
     "check.contract.on": "Check the contract on",
+    "confirming": "Confirming...",
+    "max.mint.notice": "At the moment you only have enough funds to mint",
+    "max.withdraw.notice": "At the moment you only have enough funds to withdraw",
+    "more.tokens.notice": "To proceed you will need more of these tokens",
     "multi.asset.according.to.allocation": "according to its allocation",
-    "multi.asset.enables.minting": "Multi Asset entry enables you to mint"
+    "multi.asset.all.underlying": "to all underlying assets",
+    "multi.asset.enables.minting": "Multi Asset entry enables you to mint",
+    "multi.asset.enables.withdraw": "Multi Asset enables you to withdraw",
+    "please.connect.wallet": "Please connect a wallet and try again.",
+    "single.asset.coming.soon": "Single Asset entry / exit coming soon!"
   }
 }
