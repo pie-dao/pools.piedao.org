@@ -34,7 +34,7 @@
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
   let type = "multi";
 
-  let tokenSelectModalOpen = true;
+  let tokenSelectModalOpen = false;
   const tokenSelectCallback = (token) => {
     tokenSelectModalOpen = false;
     if (token) {
