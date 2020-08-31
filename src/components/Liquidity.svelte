@@ -269,7 +269,7 @@
       <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
       <div
         class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
-        align-middle justify-center items-center"
+        align-middle justify-center items-center pointer"
         on:click={() => (tokenSelectModalOpen = true)}>
         <img class="token-icon w-26px h-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
         <span class="py-2px px-4px">{tokenSymbol}</span>
