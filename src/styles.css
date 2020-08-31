@@ -451,6 +451,7 @@
 .token-select-container {
   z-index: 100;
   left: 50%;
+  top: 10rem;
 }
 
 .token-select-container td:first-child,
