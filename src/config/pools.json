@@ -214,21 +214,21 @@
         "symbol": "BAL",
         "color": "#58a4fc",
         "address": "0xba100000625a3754423978a60c9317c58a424e3D",
-        "percentage": 12.75,
+        "percentage": 13.57,
         "coingeckoId": "balancer"
       },
       {
         "symbol": "LRC",
         "color": "#fd6761",
         "address": "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
-        "percentage": 27.25,
+        "percentage": 21.14,
         "coingeckoId": "loopring"
       },
       {
         "symbol": "REN",
         "color": "#6beab1",
         "address": "0x408e41876cCCDC0F92210600ef50372656052a38",
-        "percentage": 30,
+        "percentage": 27.80,
         "coingeckoId": "republic-protocol"
       },
       {
@@ -237,7 +237,22 @@
         "address": "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828",
         "percentage": 30,
         "coingeckoId": "uma"
+      },
+      {
+        "symbol": "PNT",
+        "color": "#c4ccce",
+        "address": "0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD",
+        "percentage": 4.34,
+        "coingeckoId": "pnetwork"
+      },
+      {
+        "symbol": "MLN",
+        "color": "#c4ccce",
+        "address": "0xec67005c4E498Ec7f55E092bd1d35cbC47C91892",
+        "percentage": 3.13,
+        "coingeckoId": "melon"
       }
+      
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
   },
