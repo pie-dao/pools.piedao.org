@@ -36,6 +36,10 @@
   width: max-content;
 }
 
+.leading-32px {
+  line-height: 32px;
+}
+
 .toggle-btn .active {
   background-color: white;
   font-weight: bold;
@@ -441,4 +445,28 @@
 .positive {
   color: #27ba80;
 }
+
+/* token select */
+
+.token-select-container {
+  z-index: 100;
+  left: 50%;
+  top: 10rem;
+}
+
+.token-select-container td:first-child,
+.token-select-container th:first-child {
+  @apply pl-20px;
+}
+
+.token-select-container td:nth-child(2),
+.token-select-container th:nth-child(2) {
+  @apply pr-20px;
+}
+
+.token-select-container tr {
+  border-bottom: 1px solid #f3f3f3;
+}
+
+
 /* purgecss end ignore */

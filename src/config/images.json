@@ -1,7 +1,8 @@
 {
   "icons": {
     "downArrow": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/downArrow.svg",
-    "hamburger": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/hamburger.svg"
+    "hamburger": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/hamburger.svg",
+    "timesLight": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/timesLight.svg"
   },
   "logos": {
     "aragon": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/aragon.svg",

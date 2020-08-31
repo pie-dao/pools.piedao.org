@@ -21,8 +21,8 @@
   </div>
   <div class="right">
     
-    <a class="link" href="#/pie/0x880873a96ce38c7fd39dc714592902b069bde048">
-      DEFI++
+    <a class="link" href="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">
+      DEFI+S
     </a>
     <a class="link" href="#/pie/0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e">
       USD++

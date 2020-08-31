@@ -1,10 +1,12 @@
 import BigNumber from 'bignumber.js';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { ethers } from 'ethers';
 
+import { ethers } from 'ethers';
 import { get } from 'svelte/store';
-import { allowances, eth } from './eth/writables.js';
+
 import displayNotification from '../notifications';
+
+import { allowances, eth } from './eth/writables.js';
 import { functionKey } from './eth/keys.js';
 import { observableContract } from './eth/contracts.js';
 import { registerConnection, resetConnection } from './eth/connection.js';
