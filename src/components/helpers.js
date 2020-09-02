@@ -236,6 +236,10 @@ export const fetchPieTokens = (balancesData) => poolsConfig.selectable.map((addr
   };
 });
 
+export const fetchEthBalance = (address) => {
+  subscribeToBalance(null, address);
+};
+
 export const fetchPooledTokens = (token, amount, current, allowancesData, balancesData) => {
   const composition = current || poolsConfig[token];
 

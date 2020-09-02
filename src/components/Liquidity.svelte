@@ -29,6 +29,7 @@
     fetchPooledTokens,
     maxAmount,
     getTokenImage,
+    fetchEthBalance,
   } from "./helpers.js";
 
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
@@ -47,6 +48,7 @@
 
   let amount = "1.00000000";
   let approach = "add";
+  let ethKey;
 
   $: pieTokens = fetchPieTokens($balances);
 
@@ -55,6 +57,15 @@
 
   $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
   $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");
+
+  $: if($eth.address) {
+    fetchEthBalance($eth.address);
+    ethKey = balanceKey(ethers.constants.AddressZero, $eth.address);
+  }
+
+  $: console.log('asdfads', BigNumber($balances[ethKey]).toString());
+
+  
 
   const action = async (evt, pooledToken) => {
     const { address } = pooledToken;
