@@ -11,6 +11,7 @@
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
 
+
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
   import { CoinGecko, piesMarketDataStore } from "../stores/coingecko.js";
@@ -144,12 +145,15 @@
     <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
   </div>
 
-  <div class="flex content-between flex-wrap w-full mt-8">
-    <div class="w-1/2 p-0">
+  <div class="flex justify-between flex-wrap w-full mt-8">
+    <div class="half p-0">
+      <Farming token={$currentRoute.params.address} />
+    </div>  
+    <div class="w-1/4 p-0">
       <Etherscan token={$currentRoute.params.address} />
     </div>
 
-    <div class="w-1/2 p-0">
+    <div class="w-1/4 p-0">
       <Quantstamp class="w-1/2" token={$currentRoute.params.address} />
     </div>
   </div>

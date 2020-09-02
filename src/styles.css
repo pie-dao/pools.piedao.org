@@ -9,6 +9,8 @@
 /* Custom css */
 /* purgecss start ignore */
 
+.half { width: 48%;}
+
 #App {
   max-width: 1200px!important;
   margin: 0 auto;
@@ -98,7 +100,8 @@
 
 .etherscan-container,
 .quantstamp-container {
-  @apply bg-grey-243 rounded-4px mt-4 pt-2 pb-4 px-4;
+  @apply bg-grey-243 pt-2 pb-4 px-4;
+  border-radius: 8px;
 }
 
 .etherscan-container span,
@@ -114,7 +117,9 @@
 /* Farming */
 
 .farming-container {
-  @apply flex rounded-4px mt-4 text-grey-243 overflow-hidden antialiased;
+  @apply flex text-grey-243 overflow-hidden antialiased;
+  border-radius: 8px;
+  max-height: 102px;
 }
 
 .farming-container .left {
@@ -131,12 +136,19 @@
 }
 
 .farming-container .right {
-  @apply flex-auto bg-green text-center leading-none px-4 py-3;
+  @apply text-center;
   background-color: #61497f;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  padding: 0 1.5rem;
 }
 
 .farming-container .right h1 {
   font-size: 2.8rem;
+  margin: 0;
 }
 
 .farming-container .right span {
