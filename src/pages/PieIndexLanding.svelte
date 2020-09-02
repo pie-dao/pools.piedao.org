@@ -84,7 +84,7 @@
 <div class="content flex flex-col spl">
 
   <div class="flex flex-wrap w-full">
-    <div class="flex flex-row content-between flex-wrap w-full">
+    <div class="flex flex-row content-between justify-between flex-wrap w-full">
       <div class="flex flex-row sm:w-full md:w-2/3">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
         <div class="mx-3 flex flex-col justify-center">
@@ -103,9 +103,9 @@
         </div>
       </div>
 
-      <div class="sm:w-full md:w-1/3">
+      <div class="sm:w-full md:w-1/3 flex justify-between">
         <a href={`#/pools/${token}`}>
-          <button class="btn text-white font-bold py-2 px-4 rounded">Mint</button>
+          <button class="btn text-white font-bold md:ml-4 py-2 px-4 rounded">Mint</button>
         </a>
         <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
           <button class="btn clear font-bold py-2 px-4 rounded">Buy</button>
