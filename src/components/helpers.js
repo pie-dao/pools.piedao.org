@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 
+import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
 
@@ -15,6 +16,7 @@ import {
   eth,
   functionKey,
   pools,
+  trackBalance,
 } from '../stores/eth.js';
 
 const poolUpdatePids = {};
@@ -86,10 +88,10 @@ const updatePoolWeight = async (poolAddress) => {
   pools.set({ ...get(pools), ...updates });
 };
 
-export const formatFiat = (value, separator = ",", decimal = ".", fiat = "$") => {
-  if (!value) return "n/a";
+export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') => {
+  if (!value) return 'n/a';
   try {
-    const values = value.toString().replace(/^-/, "").split(".");
+    const values = value.toString().replace(/^-/, '').split('.');
     const dollars = values[0];
     const cents = values[1];
     const groups = /(\d)(?=(\d{3})+\b)/g;
@@ -99,7 +101,7 @@ export const formatFiat = (value, separator = ",", decimal = ".", fiat = "$") =>
     )}`;
   } catch (e) {
     console.error(e);
-    return value === undefined ? "-" : value;
+    return value === undefined ? '-' : value;
   }
 };
 
@@ -354,7 +356,13 @@ export const subscribeToAllowance = async (token, address, spender) => {
   bumpLifecycle();
 };
 
-export const subscribeToBalance = async (token, address) => {
+export const subscribeToBalance = async (tokenAddress, address) => {
+  let token = tokenAddress;
+
+  if (!token) {
+    token = ethers.constants.AddressZero;
+  }
+
   validateIsAddress(token);
   validateIsAddress(address);
 
@@ -366,9 +374,13 @@ export const subscribeToBalance = async (token, address) => {
 
   balanceSubscriptions.add(key);
 
-  const tokenContract = await contract({ address: token });
-  const observable = await tokenContract.trackBalance(address);
-  const decimals = await tokenContract.decimals();
+  const observable = await trackBalance(address, tokenAddress);
+  let decimals = 18;
+
+  if (token !== ethers.constants.AddressZero) {
+    const tokenContract = await contract({ address: token });
+    decimals = await tokenContract.decimals();
+  }
 
   observable.subscribe({
     next: async (updatedBalance) => {
