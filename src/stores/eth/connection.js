@@ -53,14 +53,17 @@ export const registerConnection = async (newWeb3) => {
   const provider = new ethers.providers.Web3Provider(web3);
   const signer = provider.getSigner();
 
-  const [currentBlockNumber, network, address] = await Promise.all([
+  const [currentBlockNumber, network, address, balance] = await Promise.all([
     provider.getBlockNumber(),
     provider.getNetwork(),
     signer.getAddress(),
+    provider.getBalance(signer.getAddress())
   ]);
 
   const shortAddress = shortenAddress(address);
   const icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
+
+  console.log('balance', balance.toString());
 
   eth.set({
     address,
@@ -71,6 +74,7 @@ export const registerConnection = async (newWeb3) => {
     shortAddress,
     signer,
     web3,
+    balance,
   });
 
   setWeb3Listeners();

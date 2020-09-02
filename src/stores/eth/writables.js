@@ -7,6 +7,7 @@ export const defaultEth = {
   provider: undefined,
   shortAddress: "",
   signer: undefined,
+  balance: undefined,
 };
 
 export const allowances = writable({});

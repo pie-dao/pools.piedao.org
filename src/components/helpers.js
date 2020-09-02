@@ -354,6 +354,10 @@ export const subscribeToAllowance = async (token, address, spender) => {
   bumpLifecycle();
 };
 
+/** 
+ * TODO change interface to address, token=null
+ * if !token then track ETH
+*/
 export const subscribeToBalance = async (token, address) => {
   validateIsAddress(token);
   validateIsAddress(address);
