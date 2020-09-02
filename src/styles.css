@@ -9,7 +9,7 @@
 /* Custom css */
 /* purgecss start ignore */
 
-.half { width: 48%;}
+.half { width: 47%;}
 
 #App {
   max-width: 1200px!important;
@@ -149,6 +149,7 @@
 .farming-container .right h1 {
   font-size: 2.8rem;
   margin: 0;
+  line-height: 2.8rem;
 }
 
 .farming-container .right span {
@@ -337,7 +338,8 @@
 }
 
 .spl h1 {
-  @apply text-lg w-full mt-8;
+  @apply w-full;
+  font-size: 2rem;
   width: 100;
 }
 

@@ -87,7 +87,7 @@
     <div class="flex flex-row content-between flex-wrap w-full">
       <div class="flex flex-row sm:w-full md:w-2/3">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
-        <div class="mx-3">
+        <div class="mx-3 flex flex-col justify-center">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
           {#if change24H}
             <h5
