@@ -158,7 +158,7 @@
     </div>
   </div>
 
-  <h1>Allocation breakdown</h1>
+  <h1 class="mt-8 mb-4">Allocation breakdown</h1>
   {#if pieOfPies }
     <h4>*This allocation is composed of multiple pies, find below the exploded allocation.</h4>
     <ul>
@@ -174,7 +174,7 @@
     <table class="table-auto w-full">
       <thead>
         <tr>
-          <th class="font-thin border-b-2 px-4 py-2">Asset name</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2">Price</th>
           <th class="font-thin border-b-2 px-4 py-2">Current Allocation</th>
           <th class="font-thin border-b-2 px-4 py-2">Market Cap</th>
@@ -185,26 +185,26 @@
       <tbody>
         {#each composition as pooledToken}
           <tr>
-            <td class="border-l-2 border-gray-200 border-b-2 px-2 py-2 text-center">
+            <td class="border border-gray-800 px-2 py-2 text-left">
               <img
-                class="inline icon"
+                class="inline icon mr-2"
                 src={getTokenImage(pooledToken.address)}
                 alt={pooledToken.symbol} />
               {pooledToken.symbol}
             </td>
-            <td class="text-center border-b-2 px-4 py-2">
+            <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.current_price.usd`, '-'))}
             </td>
-            <td class="text-center border-b-2 px-4 py-2">{pooledToken.percentage}%</td>
-            <td class="text-center border-b-2 px-4 py-2">
+            <td class="border text-center px-4 py-2">{pooledToken.percentage}%</td>
+            <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.market_cap.usd`, '-'))}
             </td>
-            <td class="text-center border-b-2 px-4 py-2">
+            <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.total_volume.usd`, '-'))}
             </td>
-            <td class="text-center border-b-2 border-r-2">
+            <td class="border text-center py-2">
               <img
-                class="w-30 spark"
+                class="w-30 spark mx-0"
                 alt="Sparkline"
                 src="https://www.coingecko.com/coins/{(first(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.image.small`, '').match(/\d+\//g)) || '').slice(0, -1)}/sparkline" />
             </td>

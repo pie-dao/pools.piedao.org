@@ -11,6 +11,8 @@
 
 .half { width: 47%;}
 
+.border-half {border: 0.5px;}
+
 #App {
   max-width: 1200px!important;
   margin: 0 auto;
