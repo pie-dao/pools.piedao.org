@@ -416,9 +416,9 @@ export const subscribeToBalance = async (tokenAddress, address) => {
 export const subscribeToPoolWeights = async (poolAddress) => {
   validateIsAddress(poolAddress);
 
-  if (get(pools)[poolAddress]) {
-    return;
-  }
+  // if (get(pools)[poolAddress]) {
+  //   return;
+  // }
 
   const { composition } = poolsConfig[poolAddress];
   const updates = {};

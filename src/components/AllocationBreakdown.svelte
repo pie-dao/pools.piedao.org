@@ -17,7 +17,7 @@
 
   let balanceKeys = [];
 
-  $: subscribeToPoolWeights(token);
+  //$: subscribeToPoolWeights(token);
   $: values = $pools[token] || poolsConfig[token].composition;
   $: leftHeight = leftWidth;
   $: valuesMarginTop = (rightHeight - labelsHeight) / 2;

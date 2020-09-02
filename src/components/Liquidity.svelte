@@ -50,6 +50,7 @@
   let amount = "1.00000000";
   let approach = "add";
   let ethKey;
+  let ethBalance = 0;
 
   $: pieTokens = fetchPieTokens($balances);
 
@@ -64,9 +65,7 @@
     ethKey = balanceKey(ethers.constants.AddressZero, $eth.address);
   }
 
-  $: console.log('asdfads', BigNumber($balances[ethKey]).toString());
-
-  
+  $: ethBalance = BigNumber($balances[ethKey]).toString();
 
   const action = async (evt, pooledToken) => {
     const { address } = pooledToken;
@@ -144,6 +143,7 @@
     console.log('token.address', token)
     fetchCalcToPie(token, amount);
 
+    // TODO
     // if (approach === "add") {
     //   mint();
     // } else {
@@ -302,16 +302,7 @@
 
   {#if type === 'single'}
   <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
-    <div class="top px-4 pb-2">
-      <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
-      <div
-        class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
-        align-middle justify-center items-center pointer">
-        <img class="token-icon w-26px h-26px my-4px mx-2px" src={getTokenImage('eth')} alt="ETH" />
-        <span class="py-2px px-4px">ETH</span>
-      </div>
-    </div>
-    <div class="bottom h-32px text-sm font-thin px-4 py-2">
+    <div class="top h-32px text-sm font-thin px-4 py-2">
       <div class="left float-left">{$_('general.amount')}</div>
       <div
         class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
@@ -335,6 +326,15 @@
           on:click={() => setValuePercentage(100)}>
           100%
         </div>
+      </div>
+    </div>
+    <div class="bottom px-4 pb-2">
+      <input type="number" value={ethBalance} class="text-xl w-75pc font-thin" />
+      <div
+        class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
+        align-middle justify-center items-center pointer">
+        <img class="token-icon w-26px h-26px my-4px mx-2px" src={getTokenImage('eth')} alt="ETH" />
+        <span class="py-2px px-4px">ETH</span>
       </div>
     </div>
     
