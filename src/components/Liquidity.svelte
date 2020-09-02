@@ -30,6 +30,7 @@
     maxAmount,
     getTokenImage,
     fetchEthBalance,
+    fetchCalcToPie,
   } from "./helpers.js";
 
   export let token; // NOTE: This really should be named poolAddress. Token is too generic.
@@ -140,11 +141,14 @@
   };
 
   const primaryAction = () => {
-    if (approach === "add") {
-      mint();
-    } else {
-      withdraw();
-    }
+    console.log('token.address', token)
+    fetchCalcToPie(token, amount);
+
+    // if (approach === "add") {
+    //   mint();
+    // } else {
+    //   withdraw();
+    // }
   }
 
   const setValuePercentage = percent => {
@@ -298,7 +302,16 @@
 
   {#if type === 'single'}
   <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
-    <div class="top h-32px text-sm font-thin px-4 py-2">
+    <div class="top px-4 pb-2">
+      <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
+      <div
+        class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
+        align-middle justify-center items-center pointer">
+        <img class="token-icon w-26px h-26px my-4px mx-2px" src={getTokenImage('eth')} alt="ETH" />
+        <span class="py-2px px-4px">ETH</span>
+      </div>
+    </div>
+    <div class="bottom h-32px text-sm font-thin px-4 py-2">
       <div class="left float-left">{$_('general.amount')}</div>
       <div
         class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
@@ -324,15 +337,7 @@
         </div>
       </div>
     </div>
-    <div class="bottom px-4 pb-2">
-      <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
-      <div
-        class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
-        align-middle justify-center items-center pointer">
-        <img class="token-icon w-26px h-26px my-4px mx-2px" src={getTokenImage('eth')} alt="ETH" />
-        <span class="py-2px px-4px">ETH</span>
-      </div>
-    </div>
+    
   </div>
   {/if}
 
