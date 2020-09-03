@@ -1,5 +1,8 @@
 <script>
+  import { onMount } from "svelte";
   import BigNumber from "bignumber.js";
+
+  import debounce from "lodash/debounce";
 
   import { _ } from "svelte-i18n";
   import { ethers } from "ethers";
@@ -7,6 +10,7 @@
 
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
+  import recipeAbi from '../config/recipeABI.json';
 
   import displayNotification from "../notifications.js";
   import TokenSelectModal from "./TokenSelectModal.svelte";
@@ -29,32 +33,56 @@
     fetchPooledTokens,
     maxAmount,
     getTokenImage,
+    fetchEthBalance,
+    fetchCalcToPie,
   } from "./helpers.js";
 
-  export let token; // NOTE: This really should be named poolAddress. Token is too generic.
-  let type = "multi";
+  export let token; // NOTE: This really should be named poolAddress. Token is too generic.;
 
   let tokenSelectModalOpen = false;
   const tokenSelectCallback = (token) => {
     tokenSelectModalOpen = false;
     if (token) {
       window.location.hash = `#/pools/${token.address}`;
+      fetchQuote(null, token.address);
     }
   };
 
-  // let balanceClass = 'blur-heavy';
-  // let yourBalanceClass = 'blur-light';
-
   let amount = "1.00000000";
   let approach = "add";
+  let ethKey;
+  let ethBalance = 0;
+  let ethNeededSingleEntry = { val: 0, label:'-'};
+  let isLoading;
 
   $: pieTokens = fetchPieTokens($balances);
 
   $: tokenSymbol = (poolsConfig[token] || {}).symbol;
   $: tokenLogo = images.logos[token];
+  $: type = poolsConfig[token].useRecipe === true ? 'single' : 'multi';
 
   $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
   $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");
+
+  $: if($eth.address) {
+    fetchEthBalance($eth.address);
+    ethKey = balanceKey(ethers.constants.AddressZero, $eth.address);
+  }
+
+  $: ethBalance = BigNumber($balances[ethKey]).toString();
+
+  const fetchQuote = async (event, pieAddress=null) => {
+    ethNeededSingleEntry.label = '-';
+    try {
+      isLoading = true;  
+      const pieToMint = pieAddress || token;
+      ethNeededSingleEntry = (await fetchCalcToPie(pieToMint, amount));
+    } catch (e) { console.error(e)}
+  }
+
+  onMount(async () => {
+    fetchQuote()
+  });
 
   const action = async (evt, pooledToken) => {
     const { address } = pooledToken;
@@ -65,6 +93,65 @@
     } else if (pooledToken.actionBtnLabel === "ready") {
       evt.preventDefault();
     }
+  };
+
+  const mintFromRecipe = async () => {
+    const requestedAmount = BigNumber(amount);
+    const max = ethBalance;
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    if (BigNumber(ethNeededSingleEntry.val).isGreaterThan(max)) {
+      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
+      //TODO i18n
+      const message = `Not enough ETH`;
+      displayNotification({ message, type: "error", autoDismiss: 30000 });
+      return;
+    }
+
+    const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
+    const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
+
+    let overrides = {
+      value: ethNeededSingleEntry.val
+    }
+
+    console.log({
+      pie: token,
+      amountWei,
+      value: ethNeededSingleEntry.val
+    })
+
+    const { emitter } = displayNotification(await recipe.toPie(token, amountWei, overrides) );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
   };
 
   const mint = async () => {
@@ -129,6 +216,11 @@
   };
 
   const primaryAction = () => {
+    if(type === 'single') {
+      mintFromRecipe();
+      return;
+    }
+    
     if (approach === "add") {
       mint();
     } else {
@@ -210,7 +302,19 @@
 
   <div class="row flex font-thin">
     <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
-    <div class="switch mx-4" on:click={() => alert(_('piedao.single.asset.coming.soon'))}>
+    <div class="switch mx-4" on:click={() => {
+      if(!poolsConfig[token].useRecipe) {
+        alert($_('piedao.single.asset.coming.soon'));
+        return
+      }
+
+      if(type === 'single'){
+        type = 'multi';
+      } else {
+        type = 'single';
+        approach = 'add';
+      }
+    }}>
       <input type="checkbox" class="toggle-input" checked={type === 'multi'} />
       <span class="toggle active border-grey" />
     </div>
@@ -218,6 +322,15 @@
   </div>
 
   <p class="text-center m-4">
+
+  {#if type === 'single'}
+    <div class="text-left my-16px mx-20px">
+      Using Single asset Entry, you can use ETH to mint a Pie in one transaction.
+      <br> Single Asset Entry fetches the underlying assets for you from external markets like Uniswap, because of that slippage might apply.
+    </div>
+  {/if}
+
+  {#if type === 'multi'}
     {#if approach === 'add'}
       {$_('piedao.multi.asset.enables.minting')} 
     {:else}
@@ -231,95 +344,157 @@
     {:else}
       {$_('piedao.multi.asset.all.underlying')}
     {/if}
+  {/if}
+    
   </p>
 
-  <div class="row bg-white border border-solid rounded-8px border-grey-204 mx-4 flex mb-32px font-thin pointer">
-    <div class="toggle-btn bg-grey-243 p-20px w-50pc text-center {approach === 'add' ? 'active' : ''}" on:click={() => approach = "add"}>{$_('general.add')} {$_('general.liquidity')}</div>
-    <div class="toggle-btn bg-grey-243 text-center p-20px w-50pc {approach === 'withdraw' ? 'active' : ''}" on:click={() => approach = "withdraw"}>{$_('general.withdraw')}</div>
-  </div>
+  {#if type === 'multi'}
+    <div class="row bg-white border border-solid rounded-8px border-grey-204 mx-4 flex mb-32px font-thin pointer">
+      <div class="toggle-btn bg-grey-243 p-20px w-50pc text-center {approach === 'add' ? 'active' : ''}" on:click={() => approach = "add"}>{$_('general.add')} {$_('general.liquidity')}</div>
+      <div class="toggle-btn bg-grey-243 text-center p-20px w-50pc {approach === 'withdraw' ? 'active' : ''}" on:click={() => approach = "withdraw"}>{$_('general.withdraw')}</div>
+    </div>
+  {/if}
 
+  {#if type === 'multi'}
+    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
+      <div class="top h-32px text-sm font-thin px-4 py-2">
+        <div class="left float-left">{$_('general.amount')}</div>
+        <div
+          class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
+          <div
+            class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
+            on:click={() => setValuePercentage(25)}>
+            25%
+          </div>
+          <div
+            class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
+            on:click={() => setValuePercentage(50)}>
+            50%
+          </div>
+          <div
+            class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
+            on:click={() => setValuePercentage(75)}>
+            75%
+          </div>
+          <div
+            class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
+            on:click={() => setValuePercentage(100)}>
+            100%
+          </div>
+        </div>
+      </div>
+      <div class="bottom px-4 pb-2">
+        <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
+        <div
+          class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
+          align-middle justify-center items-center pointer"
+          on:click={() => (tokenSelectModalOpen = true)}>
+          <img class="token-icon w-26px h-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
+          <span class="py-2px px-4px">{tokenSymbol}</span>
+        </div>
+        <TokenSelectModal
+          tokens={pieTokens}
+          open={tokenSelectModalOpen}
+          callback={tokenSelectCallback} />
+      </div>
+    </div>
+  {/if}
+
+  {#if type === 'single'}
+    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
+      <div class="top h-32px text-sm font-thin px-4 py-2">
+        <div class="left float-left">{$_('general.amount')}</div>
+        <div class="right font-bold text-xs py-1px text-center align-right float-right rounded">
+          ⚠️ slippage might apply
+        </div>
+      </div>
+      <div class="bottom px-4 pb-2">
+        <input type="number" on:input="{ debounce(fetchQuote, 250)}" bind:value={amount} class="text-xl w-75pc font-thin" />
+        <div
+          class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
+          align-middle justify-center items-center pointer"
+          on:click={() => (tokenSelectModalOpen = true)}>
+          <img class="token-icon w-26px h-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
+          <span class="py-2px px-4px">{tokenSymbol}</span>
+        </div>
+        <TokenSelectModal
+          tokens={pieTokens}
+          open={tokenSelectModalOpen}
+          callback={tokenSelectCallback} />
+      </div>
+    </div>
+  {/if}
+  
+
+  {#if type === 'multi'}
+    <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
+  {/if}
+
+  {#if type === 'single'}
+    <div class="my-16px mx-20px">
+    Using this much ETH
+    </div>
+  {/if}
+
+
+  {#if type === 'single'}
   <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
     <div class="top h-32px text-sm font-thin px-4 py-2">
       <div class="left float-left">{$_('general.amount')}</div>
-      <div
-        class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-        <div
-          class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-          on:click={() => setValuePercentage(25)}>
-          25%
-        </div>
-        <div
-          class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-          on:click={() => setValuePercentage(50)}>
-          50%
-        </div>
-        <div
-          class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-          on:click={() => setValuePercentage(75)}>
-          75%
-        </div>
-        <div
-          class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-          on:click={() => setValuePercentage(100)}>
-          100%
-        </div>
-      </div>
     </div>
     <div class="bottom px-4 pb-2">
-      <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
+      <input type="text" disabled value={ethNeededSingleEntry.label} class="text-xl w-75pc font-thin" />
       <div
         class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
-        align-middle justify-center items-center pointer"
-        on:click={() => (tokenSelectModalOpen = true)}>
-        <img class="token-icon w-26px h-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
-        <span class="py-2px px-4px">{tokenSymbol}</span>
+        align-middle justify-center items-center pointer">
+        <img class="token-icon w-26px h-26px my-4px mx-2px" src={getTokenImage('eth')} alt="ETH" />
+        <span class="py-2px px-4px">ETH</span>
       </div>
-      <TokenSelectModal
-        tokens={pieTokens}
-        open={tokenSelectModalOpen}
-        callback={tokenSelectCallback} />
     </div>
+    
   </div>
+  {/if}
 
-  <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
-
-  {#each pooledTokens as pooledToken}
-    <div class="token-summary bg-white rounded-8px mx-4 my-4px flex">
-      <div class="p-12px text-sm w-75px" style={`color: ${pooledToken.color}`}>
-        {amountFormatter({
-          amount: pooledToken.percentage,
-          approximatePrefix: '',
-          displayDecimals: 2,
-          rounding: 4,
-        })}%
-      </div>
-      <img
-        class="token-icon my-8px w-26px h-26px"
-        src={getTokenImage(pooledToken.address)}
-        alt={pooledToken.symbol} />
-      <div
-        class="token-symbol px-6px py-12px text-sm font-thin border-r-2 border-r-solid
-        border-grey-243 w-60px">
-        {pooledToken.symbol}
-      </div>
-      {#if approach === "add"}
-        <div class="amount tex-sm px-20px py-12px w-150px">{pooledToken.amountRequired}</div>
-        <div class={`${pooledToken.amountVsBalanceClass} font-thin text-xs mt-14px w-150px`}>
-          Bal - {pooledToken.amountVsBalance}
+  {#if type === 'multi'}
+    {#each pooledTokens as pooledToken}
+      <div class="token-summary bg-white rounded-8px mx-4 my-4px flex">
+        <div class="p-12px text-sm w-75px" style={`color: ${pooledToken.color}`}>
+          {amountFormatter({
+            amount: pooledToken.percentage,
+            approximatePrefix: '',
+            displayDecimals: 2,
+            rounding: 4,
+          })}%
         </div>
-        <a
-          class={pooledToken.actionBtnClass}
-          href={pooledToken.buyLink}
-          on:click={evt => action(evt, pooledToken)}
-          target="_blank">
-          {pooledToken.actionBtnLabel}
-        </a>
-      {:else}
-        <div class="amount tex-sm px-20px py-12px m-auto">{pooledToken.amountRequired}</div>
-      {/if}
-      <div class="hidden">{$eth.address}</div>
-    </div>
-  {/each}
+        <img
+          class="token-icon my-8px w-26px h-26px"
+          src={getTokenImage(pooledToken.address)}
+          alt={pooledToken.symbol} />
+        <div
+          class="token-symbol px-6px py-12px text-sm font-thin border-r-2 border-r-solid
+          border-grey-243 w-60px">
+          {pooledToken.symbol}
+        </div>
+        {#if approach === "add"}
+          <div class="amount tex-sm px-20px py-12px w-150px">{pooledToken.amountRequired}</div>
+          <div class={`${pooledToken.amountVsBalanceClass} font-thin text-xs mt-14px w-150px`}>
+            Bal - {pooledToken.amountVsBalance}
+          </div>
+          <a
+            class={pooledToken.actionBtnClass}
+            href={pooledToken.buyLink}
+            on:click={evt => action(evt, pooledToken)}
+            target="_blank">
+            {pooledToken.actionBtnLabel}
+          </a>
+        {:else}
+          <div class="amount tex-sm px-20px py-12px m-auto">{pooledToken.amountRequired}</div>
+        {/if}
+        <div class="hidden">{$eth.address}</div>
+      </div>
+    {/each}
+  {/if}
+  
 
   <center>
     <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>

@@ -32,6 +32,7 @@ export const trackEthBalance = (walletAddress) => {
   trackedEthBalances.add(walletAddress);
   const subj = subject(`ethBalanceOf${walletAddress}`);
   get(eth).provider.getBalance(walletAddress).then((balance) => {
+    console.log('balance', balance.toString());
     subj.next(balance.toString());
   });
   return subj;

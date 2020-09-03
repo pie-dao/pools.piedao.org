@@ -6,6 +6,7 @@ import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@
 
 import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
+import recipeAbi from '../config/recipeABI.json';
 
 import {
   allowances,
@@ -18,6 +19,8 @@ import {
   pools,
   trackBalance,
 } from '../stores/eth.js';
+
+
 
 const poolUpdatePids = {};
 
@@ -236,6 +239,22 @@ export const fetchPieTokens = (balancesData) => poolsConfig.selectable.map((addr
   };
 });
 
+export const fetchEthBalance = (address) => {
+  subscribeToBalance(null, address);
+};
+
+export const fetchCalcToPie = async (pieAddress, poolAmount) => {
+  validateIsAddress(pieAddress);
+  const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
+
+  const amount = ethers.BigNumber.from(BigNumber(poolAmount).multipliedBy(10 ** 18).toFixed(0));
+  const amountEthNecessary = await recipe.calcToPie(pieAddress, amount);
+  return {
+    val: amountEthNecessary,
+    label: ethers.utils.formatEther(amountEthNecessary)
+  };
+}
+
 export const fetchPooledTokens = (token, amount, current, allowancesData, balancesData) => {
   const composition = current || poolsConfig[token];
 
@@ -396,15 +415,15 @@ export const subscribeToBalance = async (tokenAddress, address) => {
 export const subscribeToPoolWeights = async (poolAddress) => {
   validateIsAddress(poolAddress);
 
-  if (get(pools)[poolAddress]) {
-    return;
-  }
+  // if (get(pools)[poolAddress]) {
+  //   return;
+  // }
 
   const { composition } = poolsConfig[poolAddress];
   const updates = {};
   updates[poolAddress] = composition;
 
-  pools.set({ ...get(pools), ...updates });
+  // pools.set({ ...get(pools), ...updates });
 
   const poolContract = await contract({ address: poolAddress });
   const bPoolAddress = await poolContract.getBPool();
