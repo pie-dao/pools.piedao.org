@@ -1,13 +1,13 @@
 <script>
-  import { _ } from "svelte-i18n";
+  import { _ } from 'svelte-i18n';
 
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte';
 
-  import AllocationChart from "./AllocationChart.svelte";
-  import poolsConfig from "../config/pools.json";
+  import AllocationChart from './AllocationChart.svelte';
+  import poolsConfig from '../config/pools.json';
 
-  import { pools } from "../stores/eth.js";
-  import { amountFormatter, subscribeToPoolWeights } from "./helpers.js";
+  import { pools } from '../stores/eth.js';
+  import { amountFormatter, subscribeToPoolWeights } from './helpers.js';
 
   export let token;
   export let leftWidth;
@@ -16,9 +16,10 @@
   export let rightHeight;
 
   let balanceKeys = [];
+  let values = [];
 
-  $: subscribeToPoolWeights(token);
-  $: values = $pools[token] || poolsConfig[token].composition;
+  //$: subscribeToPoolWeights(token);
+  $: values = $pools[token];
   $: leftHeight = leftWidth;
   $: valuesMarginTop = (rightHeight - labelsHeight) / 2;
   $: valuesStyle = `margin-top: ${valuesMarginTop}px`;

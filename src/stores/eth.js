@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
+import { erc20 } from '@pie-dao/abis';
 import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 
@@ -11,6 +12,7 @@ import { functionKey } from './eth/keys.js';
 import { observableContract } from './eth/contracts.js';
 import { registerConnection, resetConnection } from './eth/connection.js';
 import { subject } from './eth/observables.js';
+import { trackEthBalance } from './eth/lifecycle.js';
 
 export { allowances, balances, eth, pools } from './eth/writables.js';
 export { balanceKey, functionKey } from './eth/keys.js';
@@ -58,6 +60,26 @@ export const connectWeb3 = async () => {
 // SUBSPACE(ISH)
 
 export const contract = ({ abi, address }) => observableContract({ abi, address }); // async
+export const trackBalance = async (address, tokenAddress) => {
+  const ethData = get(eth);
+  let walletAddress = address;
+
+  if (!walletAddress) {
+    if (!ethData.address) {
+      throw new Error(
+        'stores/eth#trackBalance - an wallet must be connected or a wallet address passed as the first argument',
+      );
+    }
+    walletAddress = ethData.address;
+  }
+
+  if (tokenAddress && tokenAddress !== ethers.constants.AddressZero) {
+    const tokenContract = await contract({ abi: erc20, address: tokenAddress });
+    return tokenContract.trackBalance(walletAddress);
+  }
+
+  return trackEthBalance(walletAddress);
+};
 export const trackBlock = async () => subject('block');
 export const trackBlockNumber = async () => subject('blockNumber');
 export const trackGasPrice = async () => subject('gasPrice');

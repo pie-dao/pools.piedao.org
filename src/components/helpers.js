@@ -1,10 +1,12 @@
 import BigNumber from 'bignumber.js';
 
+import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
 
 import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
+import recipeAbi from '../config/recipeABI.json';
 
 import {
   allowances,
@@ -15,7 +17,10 @@ import {
   eth,
   functionKey,
   pools,
+  trackBalance,
 } from '../stores/eth.js';
+
+
 
 const poolUpdatePids = {};
 
@@ -86,10 +91,10 @@ const updatePoolWeight = async (poolAddress) => {
   pools.set({ ...get(pools), ...updates });
 };
 
-export const formatFiat = (value, separator = ",", decimal = ".", fiat = "$") => {
-  if (!value) return "n/a";
+export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') => {
+  if (!value) return 'n/a';
   try {
-    const values = value.toString().replace(/^-/, "").split(".");
+    const values = value.toString().replace(/^-/, '').split('.');
     const dollars = values[0];
     const cents = values[1];
     const groups = /(\d)(?=(\d{3})+\b)/g;
@@ -99,7 +104,7 @@ export const formatFiat = (value, separator = ",", decimal = ".", fiat = "$") =>
     )}`;
   } catch (e) {
     console.error(e);
-    return value === undefined ? "-" : value;
+    return value === undefined ? '-' : value;
   }
 };
 
@@ -234,6 +239,22 @@ export const fetchPieTokens = (balancesData) => poolsConfig.selectable.map((addr
   };
 });
 
+export const fetchEthBalance = (address) => {
+  subscribeToBalance(null, address);
+};
+
+export const fetchCalcToPie = async (pieAddress, poolAmount) => {
+  validateIsAddress(pieAddress);
+  const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
+
+  const amount = ethers.BigNumber.from(BigNumber(poolAmount).multipliedBy(10 ** 18).toFixed(0));
+  const amountEthNecessary = await recipe.calcToPie(pieAddress, amount);
+  return {
+    val: amountEthNecessary,
+    label: ethers.utils.formatEther(amountEthNecessary)
+  };
+}
+
 export const fetchPooledTokens = (token, amount, current, allowancesData, balancesData) => {
   const composition = current || poolsConfig[token];
 
@@ -354,7 +375,13 @@ export const subscribeToAllowance = async (token, address, spender) => {
   bumpLifecycle();
 };
 
-export const subscribeToBalance = async (token, address) => {
+export const subscribeToBalance = async (tokenAddress, address) => {
+  let token = tokenAddress;
+
+  if (!token) {
+    token = ethers.constants.AddressZero;
+  }
+
   validateIsAddress(token);
   validateIsAddress(address);
 
@@ -366,9 +393,13 @@ export const subscribeToBalance = async (token, address) => {
 
   balanceSubscriptions.add(key);
 
-  const tokenContract = await contract({ address: token });
-  const observable = await tokenContract.trackBalance(address);
-  const decimals = await tokenContract.decimals();
+  const observable = await trackBalance(address, tokenAddress);
+  let decimals = 18;
+
+  if (token !== ethers.constants.AddressZero) {
+    const tokenContract = await contract({ address: token });
+    decimals = await tokenContract.decimals();
+  }
 
   observable.subscribe({
     next: async (updatedBalance) => {
@@ -384,15 +415,15 @@ export const subscribeToBalance = async (token, address) => {
 export const subscribeToPoolWeights = async (poolAddress) => {
   validateIsAddress(poolAddress);
 
-  if (get(pools)[poolAddress]) {
-    return;
-  }
+  // if (get(pools)[poolAddress]) {
+  //   return;
+  // }
 
   const { composition } = poolsConfig[poolAddress];
   const updates = {};
   updates[poolAddress] = composition;
 
-  pools.set({ ...get(pools), ...updates });
+  // pools.set({ ...get(pools), ...updates });
 
   const poolContract = await contract({ address: poolAddress });
   const bPoolAddress = await poolContract.getBPool();
