@@ -33,6 +33,11 @@
 
     <span class="link">🥧</span>
 
+
+    <a class="link" href={links.vision} target="_blank" rel="noopener noreferrer">
+      {$_('general.vision')}
+    </a>
+
     <a class="link" href={links.dao} target="_blank" rel="noopener noreferrer">
       {$_('piedao.aragonLink')}
     </a>
