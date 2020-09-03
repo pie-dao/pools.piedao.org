@@ -8,7 +8,7 @@ import { defaultEth, eth } from "./writables.js";
 import { bumpLifecycle, updateCurrentBlock } from "./lifecycle.js";
 import { resetContractCache } from "./contracts.js";
 
-export const defaultProvider = new ethers.providers.InfuraProvider('homestead', 'e106b2b27c0f4941be1f2c183a20b3ea');
+export const defaultProvider = new ethers.providers.InfuraProvider('homestead', '5d17ec573a5c49abbf11779b75137d99');
 defaultProvider.on("block", updateCurrentBlock);
 
 eth.set({ ...get(eth), provider: defaultProvider });

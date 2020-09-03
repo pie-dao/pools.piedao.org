@@ -2,22 +2,18 @@
   "available": [
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0xa25d24af7e67f8736d2e0794a1aa440b6d83a4fc",
-    "0xb167f67353f71ca8b47d713878d69e8264a15ac0",
-    "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-    "0x880873a96ce38c7fd39dc714592902b069bde048"
+    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
   ],
   "selectable": [
-    "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-    "0x880873a96ce38c7fd39dc714592902b069bde048"
+    "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
+    
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
     "symbol": "BTC++",
+    "useRecipe": false,
     "swapFees": "0.2",
     "coingeckoId": "piedao-btc",
     "composition": [
@@ -55,6 +51,7 @@
   },
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
     "symbol": "USD++",
+    "useRecipe": true,
     "swapFees": "0",
     "coingeckoId": "piedao-usd",
     "tradingViewFormula": "(0.4722*KRAKEN:USDCUSD+0.2042*KRAKEN:DAIUSD+0.2858*BITTREX:TUSDUSD+0.0378*KUCOIN:SUSDUSDT)",
@@ -214,6 +211,7 @@
   },
   "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": {
     "symbol": "DEFI+S",
+    "useRecipe": true,
     "swapFees": "10",
     "tradingViewFormula": "(14.7827362146986*FTX:BALUSD+3349.70280120496*BINANCE:LRCUSD+2159.83330981277*BINANCE:RENUSD+49.1589965397924*POLONIEX:UMAUSDT+169.84623785041*BINANCE:PNTUSD+1.90441144694534*KRAKEN:MLNUSD)/1000",
     "composition": [
@@ -265,6 +263,7 @@
   },
   "0x880873a96ce38c7fd39dc714592902b069bde048": {
     "symbol": "DEFI++",
+    "useRecipe": false,
     "swapFees": "10",
     "tradingViewFormula": "(1.0069862312601948*COINBASE:COMPUSD+70.6180873079698*COINBASE:KNCUSD+493.8217925005066*BINANCE:LENDUSD+33.61720214153774*COINBASE:LINKUSD+0.3545441741414431*COINBASE:MKRUSD+41.28487136484088*BINANCE:SNXUSD)/1000",
     "composition": [
