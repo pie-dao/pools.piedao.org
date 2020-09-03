@@ -1,6 +1,8 @@
 <script>
   import BigNumber from "bignumber.js";
 
+  import debounce from "lodash/debounce";
+
   import { _ } from "svelte-i18n";
   import { ethers } from "ethers";
   import { pieSmartPool } from "@pie-dao/abis";
@@ -310,12 +312,12 @@
         </div>
       </div>
       <div class="bottom px-4 pb-2">
-        <input type="number" on:change="{ async () => {
+        <input type="number" on:input="{ debounce(async () => {
           ethNeededSingleEntry = '-';
           ethNeededSingleEntry = (await fetchCalcToPie(token, amount)).label;
           console.log('ethNeededSingleEntry', ethNeededSingleEntry)
           
-        }}" bind:value={amount} class="text-xl w-75pc font-thin" />
+        }, 250)}" bind:value={amount} class="text-xl w-75pc font-thin" />
         <div
           class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
           align-middle justify-center items-center pointer"
