@@ -216,4 +216,10 @@
     </table>
   </div>
   <PoolDescription />
+  <div class="tags-container w-full flex justify-between my-8">
+    <a class="singleTag" href="https://medium.com/piedao">Read more on Medium</a>
+    <a class="singleTag" href="https://medium.com/piedao">DeFi++S on CoinGecko</a>
+    <a class="singleTag" href="https://medium.com/piedao">DeFi++S on CoinMarketCap</a>
+    <a class="singleTag" href="https://medium.com/piedao">DeFi++S is 4th Liquidity on Balancer Pools</a>
+  </div>
 </div>

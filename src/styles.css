@@ -492,5 +492,21 @@
   font-size: 1.2rem;
 }
 
+/* Tags container */
+
+.tags-container {
+  @apply flex justify-between;
+}
+
+.singleTag {
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  background-color: #eaeaea;
+  text-align: center;
+}
+
+.singleTag:hover {
+opacity: 0.6;
+}
 
 /* purgecss end ignore */
