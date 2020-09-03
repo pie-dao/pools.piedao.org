@@ -17,7 +17,11 @@
   import poolsConfig from "../config/pools.json";
   import { CoinGecko, piesMarketDataStore } from "../stores/coingecko.js";
 
+  import { fetchPooledTokens } from '../components/helpers.js';
+
   import { amountFormatter, getTokenImage, formatFiat } from "../components/helpers.js";
+
+  import { pools } from '../stores/eth.js';
 
   export let params;
 
@@ -42,7 +46,10 @@
 
   $: (() => {
     pieOfPies = false;
+    
   })(token);
+
+  $: console.log('pools', $pools);
 
   $: composition = flattenDeep(
     poolsConfig[token].composition.map((component) => {
