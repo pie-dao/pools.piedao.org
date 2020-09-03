@@ -44,6 +44,38 @@
         "coingeckoId": "sbtc"
       }
     ],
+    "buyToken": [
+      {
+        "logo": "https://app.uniswap.org/static/media/logo.5827780d.svg",
+        "name": "Uniswap",
+        "type": "Dex Exchange",
+        "link": "https://uniswap.org"
+      },
+      {
+        "logo": "https://1inch.exchange/assets/logo.svg",
+        "name": "1inch",
+        "type": "Aggregator",
+        "link": "https://1inch.exchange"
+      },
+      {
+        "logo": "https://app.uniswap.org/static/media/logo.5827780d.svg",
+        "name": "Balancer",
+        "type": "Dex Liquidity",
+        "link": "https://balancer.finance"
+      },
+      {
+        "logo": "https://1inch.exchange/assets/logo.svg",
+        "name": "Paraswap",
+        "type": "Dex Exchange",
+        "link": "https://paraswap.io"
+      },
+      {
+        "logo": "https://app.uniswap.org/static/media/logo.5827780d.svg",
+        "name": "Totle",
+        "type": "Aggregator",
+        "link": "https://swap.totle.com/"
+      }
+    ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
   },
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
@@ -79,6 +111,38 @@
         "color": "#c4ccce",
         "symbol": "sUSD",
         "coingeckoId": "nusd"
+      }
+    ],
+    "buyToken": [
+      {
+        "logo": "https://app.uniswap.org/static/media/logo.5827780d.svg",
+        "name": "Uniswap",
+        "type": "Dex Exchange",
+        "link": "https://uniswap.org"
+      },
+      {
+        "logo": "https://1inch.exchange/assets/logo.svg",
+        "name": "1inch",
+        "type": "Aggregator",
+        "link": "https://1inch.exchange"
+      },
+      {
+        "logo": "https://app.uniswap.org/static/media/logo.5827780d.svg",
+        "name": "Balancer",
+        "type": "Dex Liquidity",
+        "link": "https://balancer.finance"
+      },
+      {
+        "logo": "https://1inch.exchange/assets/logo.svg",
+        "name": "Paraswap",
+        "type": "Dex Exchange",
+        "link": "https://paraswap.io"
+      },
+      {
+        "logo": "https://app.uniswap.org/static/media/logo.5827780d.svg",
+        "name": "Totle",
+        "type": "Aggregator",
+        "link": "https://swap.totle.com/"
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
@@ -259,6 +323,38 @@
         "color": "#6beab1",
         "percentage": 90,
         "isPie": true
+      }
+    ],
+    "buyToken": [
+      {
+        "logo": "https://app.uniswap.org/static/media/logo.5827780d.svg",
+        "name": "Uniswap",
+        "type": "Dex Exchange",
+        "link": "https://uniswap.org"
+      },
+      {
+        "logo": "https://1inch.exchange/assets/logo.svg",
+        "name": "1inch",
+        "type": "Aggregator",
+        "link": "https://1inch.exchange"
+      },
+      {
+        "logo": "https://app.uniswap.org/static/media/logo.5827780d.svg",
+        "name": "Balancer",
+        "type": "Dex Liquidity",
+        "link": "https://balancer.finance"
+      },
+      {
+        "logo": "https://1inch.exchange/assets/logo.svg",
+        "name": "Paraswap",
+        "type": "Dex Exchange",
+        "link": "https://paraswap.io"
+      },
+      {
+        "logo": "https://app.uniswap.org/static/media/logo.5827780d.svg",
+        "name": "Totle",
+        "type": "Aggregator",
+        "link": "https://swap.totle.com/"
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"

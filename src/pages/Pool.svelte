@@ -5,6 +5,7 @@
   import Farming from '../components/Farming.svelte';
   import Info from '../components/Info.svelte';
   import Liquidity from '../components/Liquidity.svelte';
+  import BuyToken from '../components/BuyToken.svelte';
   import Quantstamp from '../components/Quantstamp.svelte';
 
   import { currentRoute } from '../stores/routes.js';
@@ -35,6 +36,8 @@
     
     <div class="right w-full md:w-2/4 flex-1 ml-2">
       <Liquidity token={$currentRoute.params.address} />
+      <br/>
+      <BuyToken token={$currentRoute.params.address} />
     </div>
   </div>
 </div>

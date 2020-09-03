@@ -22,6 +22,7 @@
     "asset": "Asset",
     "balance": "Balance",
     "breakdown": "Breakdown",
+    "buy": "Buy",
     "close": "Close",
     "docs": "Docs",
     "documentation": "Documentation",
