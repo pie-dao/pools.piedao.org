@@ -188,7 +188,7 @@
           <tr>
             <td class="border border-gray-800 px-2 py-2 text-left">
               <img
-                class="inline icon mr-2"
+                class="inline icon ml-2 mr-2"
                 src={getTokenImage(pooledToken.address)}
                 alt={pooledToken.symbol} />
               {pooledToken.symbol}
@@ -207,7 +207,8 @@
               <img
                 class="w-30 spark mx-0"
                 alt="Sparkline"
-                src="https://www.coingecko.com/coins/{(first(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.image.small`, '').match(/\d+\//g)) || '').slice(0, -1)}/sparkline" />
+                src="https://www.coingecko.com/coins/{(first(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.image.small`, '').match(/\d+\//g)) || '').slice(0, -1)}/sparkline" 
+                style="margin: auto;" />
             </td>
           </tr>
         {/each}
@@ -215,5 +216,4 @@
     </table>
   </div>
   <PoolDescription />
-
 </div>
