@@ -53,7 +53,7 @@
   let approach = "add";
   let ethKey;
   let ethBalance = 0;
-  let ethNeededSingleEntry = 0;
+  let ethNeededSingleEntry = { val: 0, label:'0'};
 
   $: pieTokens = fetchPieTokens($balances);
 
@@ -79,6 +79,67 @@
     } else if (pooledToken.actionBtnLabel === "ready") {
       evt.preventDefault();
     }
+  };
+
+  const mintFromRecipe = async () => {
+    const requestedAmount = BigNumber(amount);
+    const max = ethBalance;
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    if (requestedAmount.isGreaterThan(max)) {
+      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
+      //TODO i18n
+      const message = `Not enough ETH`;
+      displayNotification({ message, type: "error", autoDismiss: 30000 });
+      return;
+    }
+
+    
+
+    //const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
+    const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
+
+    let overrides = {
+      value: ethNeededSingleEntry.val
+    }
+
+    console.log({
+      pie: token,
+      amountWei,
+      value: ethNeededSingleEntry.val
+    })
+
+    // const { emitter } = displayNotification(await recipe.toPie(token, amountWei, overrides) );
+
+    // emitter.on("txConfirmed", ({ hash }) => {
+    //   const { dismiss } = displayNotification({
+    //     message: "Confirming...",
+    //     type: "pending",
+    //   });
+
+    //   const subscription = subject("blockNumber").subscribe({
+    //     next: () => {
+    //       displayNotification({
+    //         autoDismiss: 15000,
+    //         message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
+    //         type: "success",
+    //       });
+    //       dismiss();
+    //       subscription.unsubscribe();
+    //     },
+    //   });
+
+    //   return {
+    //     autoDismiss: 1,
+    //     message: "Mined",
+    //     type: "success",
+    //   };
+    // });
   };
 
   const mint = async () => {
@@ -144,6 +205,8 @@
 
   const primaryAction = () => {
     console.log('token.address', token)
+
+    mintFromRecipe();
     
 
     // TODO
@@ -314,7 +377,7 @@
       <div class="bottom px-4 pb-2">
         <input type="number" on:input="{ debounce(async () => {
           ethNeededSingleEntry = '-';
-          ethNeededSingleEntry = (await fetchCalcToPie(token, amount)).label;
+          ethNeededSingleEntry = (await fetchCalcToPie(token, amount));
           console.log('ethNeededSingleEntry', ethNeededSingleEntry)
           
         }, 250)}" bind:value={amount} class="text-xl w-75pc font-thin" />
@@ -342,7 +405,7 @@
       <div class="left float-left">{$_('general.amount')}</div>
     </div>
     <div class="bottom px-4 pb-2">
-      <input type="text" disabled value={ethNeededSingleEntry} class="text-xl w-75pc font-thin" />
+      <input type="text" disabled value={ethNeededSingleEntry.label} class="text-xl w-75pc font-thin" />
       <div
         class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
         align-middle justify-center items-center pointer">
