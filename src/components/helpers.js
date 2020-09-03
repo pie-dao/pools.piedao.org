@@ -20,7 +20,7 @@ import {
 } from '../stores/eth.js';
 
 
-const recipeAbi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnerChanged","type":"event"},{"inputs":[],"name":"WETH","outputs":[{"internalType":"contract IWETH","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_pie","type":"address"},{"internalType":"uint256","name":"_poolAmountOut","type":"uint256"}],"name":"calcToEth","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_pie","type":"address"},{"internalType":"uint256","name":"_poolAmount","type":"uint256"}],"name":"calcToPie","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"die","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"gasSponsor","outputs":[{"internalType":"address payable","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"oSlot","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"registry","outputs":[{"internalType":"contract ISmartPoolRegistry","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"saveEth","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_token","type":"address"}],"name":"saveToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_pie","type":"address"},{"internalType":"uint256","name":"_poolAmount","type":"uint256"},{"internalType":"uint256","name":"_minEthAmount","type":"uint256"}],"name":"toEth","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_pie","type":"address"},{"internalType":"uint256","name":"_poolAmount","type":"uint256"}],"name":"toPie","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[],"name":"togglePause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+const recipeAbi = [{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnerChanged", "type": "event" }, { "inputs": [], "name": "WETH", "outputs": [{ "internalType": "contract IWETH", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_pie", "type": "address" }, { "internalType": "uint256", "name": "_poolAmountOut", "type": "uint256" }], "name": "calcToEth", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_pie", "type": "address" }, { "internalType": "uint256", "name": "_poolAmount", "type": "uint256" }], "name": "calcToPie", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "die", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "gasSponsor", "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "oSlot", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "registry", "outputs": [{ "internalType": "contract ISmartPoolRegistry", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "saveEth", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_token", "type": "address" }], "name": "saveToken", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_pie", "type": "address" }, { "internalType": "uint256", "name": "_poolAmount", "type": "uint256" }, { "internalType": "uint256", "name": "_minEthAmount", "type": "uint256" }], "name": "toEth", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_pie", "type": "address" }, { "internalType": "uint256", "name": "_poolAmount", "type": "uint256" }], "name": "toPie", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [], "name": "togglePause", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }];
 const poolUpdatePids = {};
 
 const allowanceSubscriptions = new Set();
@@ -246,10 +246,10 @@ export const fetchCalcToPie = async (pieAddress, poolAmount) => {
   validateIsAddress(pieAddress);
   const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
 
-  const amount = ethers.BigNumber.from( BigNumber(poolAmount).multipliedBy(10 ** 18).toFixed(0) );
+  const amount = ethers.BigNumber.from(BigNumber(poolAmount).multipliedBy(10 ** 18).toFixed(0));
   console.log('amount', amount.toString());
 
-  const amountEthNecessary = await recipe.calcToPie(pieAddress, amount );
+  const amountEthNecessary = await recipe.calcToPie(pieAddress, amount);
   console.log('amountEthNecessary', amountEthNecessary.toString());
 
   return {
@@ -378,8 +378,6 @@ export const subscribeToAllowance = async (token, address, spender) => {
   bumpLifecycle();
 };
 
-
-
 export const subscribeToBalance = async (tokenAddress, address) => {
   let token = tokenAddress;
 
@@ -428,7 +426,7 @@ export const subscribeToPoolWeights = async (poolAddress) => {
   const updates = {};
   updates[poolAddress] = composition;
 
-  pools.set({ ...get(pools), ...updates });
+  // pools.set({ ...get(pools), ...updates });
 
   const poolContract = await contract({ address: poolAddress });
   const bPoolAddress = await poolContract.getBPool();
