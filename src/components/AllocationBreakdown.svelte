@@ -20,7 +20,6 @@
 
   //$: subscribeToPoolWeights(token);
   $: values = $pools[token];
-  $: console.log('values', values);
   $: leftHeight = leftWidth;
   $: valuesMarginTop = (rightHeight - labelsHeight) / 2;
   $: valuesStyle = `margin-top: ${valuesMarginTop}px`;

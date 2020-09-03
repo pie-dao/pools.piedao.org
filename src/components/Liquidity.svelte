@@ -54,6 +54,7 @@
   let ethKey;
   let ethBalance = 0;
   let ethNeededSingleEntry = { val: 0, label:'0'};
+  let isLoading;
 
   $: pieTokens = fetchPieTokens($balances);
 
@@ -204,17 +205,16 @@
   };
 
   const primaryAction = () => {
-    console.log('token.address', token)
-
-    mintFromRecipe();
+    if(type === 'single') {
+      mintFromRecipe();
+      return;
+    }
     
-
-    // TODO
-    // if (approach === "add") {
-    //   mint();
-    // } else {
-    //   withdraw();
-    // }
+    if (approach === "add") {
+      mint();
+    } else {
+      withdraw();
+    }
   }
 
   const setValuePercentage = percent => {
@@ -291,7 +291,14 @@
 
   <div class="row flex font-thin">
     <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
-    <div class="switch mx-4" on:click={() => alert(_('piedao.single.asset.coming.soon'))}>
+    <div class="switch mx-4" on:click={() => {
+      if(type === 'single'){
+        type = 'multi';
+      } else {
+        type = 'single';
+        approach = 'add';
+      }
+    }}>
       <input type="checkbox" class="toggle-input" checked={type === 'multi'} />
       <span class="toggle active border-grey" />
     </div>
@@ -299,6 +306,15 @@
   </div>
 
   <p class="text-center m-4">
+    {#if type === 'multi'}
+    <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
+  {/if}
+
+  {#if type === 'single'}
+    <div class="my-16px mx-20px">
+    Using this much ETH
+    </div>
+  {/if}
     {#if approach === 'add'}
       {$_('piedao.multi.asset.enables.minting')} 
     {:else}
@@ -376,10 +392,12 @@
       </div>
       <div class="bottom px-4 pb-2">
         <input type="number" on:input="{ debounce(async () => {
-          ethNeededSingleEntry = '-';
-          ethNeededSingleEntry = (await fetchCalcToPie(token, amount));
-          console.log('ethNeededSingleEntry', ethNeededSingleEntry)
-          
+          ethNeededSingleEntry.label = '-';
+          try {
+            isLoading = true;  
+            ethNeededSingleEntry = (await fetchCalcToPie(token, amount));
+            console.log('ethNeededSingleEntry', ethNeededSingleEntry)
+          } catch (e) {}
         }, 250)}" bind:value={amount} class="text-xl w-75pc font-thin" />
         <div
           class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
@@ -397,7 +415,16 @@
   {/if}
   
 
-  <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
+  {#if type === 'multi'}
+    <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
+  {/if}
+
+  {#if type === 'single'}
+    <div class="my-16px mx-20px">
+    Using this much ETH
+    </div>
+  {/if}
+
 
   {#if type === 'single'}
   <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
