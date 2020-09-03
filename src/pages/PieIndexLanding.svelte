@@ -10,6 +10,7 @@
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
+  import PoolDescription from "../components/PoolDescription.svelte";
 
 
   import images from "../config/images.json";
@@ -213,4 +214,6 @@
       </tbody>
     </table>
   </div>
+  <PoolDescription />
+
 </div>

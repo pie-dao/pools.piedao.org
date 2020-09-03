@@ -484,5 +484,13 @@
   border-bottom: 1px solid #f3f3f3;
 }
 
+/* Pool Description */
+
+.pooldescription-container {
+  font-weight: 300;
+  text-align: left;
+  font-size: 1.2rem;
+}
+
 
 /* purgecss end ignore */
