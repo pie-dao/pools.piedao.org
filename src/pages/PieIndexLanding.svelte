@@ -81,10 +81,6 @@
   };
 
   $: tradingViewWidgetComponent ? tradingViewWidgetComponent.initWidget(options) : null;
-
-  onMount(async () => {
-    CoinGecko.sync();
-  });
 </script>
 
 <div class="content flex flex-col spl">

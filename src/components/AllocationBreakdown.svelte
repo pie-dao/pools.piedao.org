@@ -9,6 +9,7 @@
   import { pools } from '../stores/eth.js';
   import { amountFormatter, subscribeToPoolWeights } from './helpers.js';
 
+  let defaultAllocation = true;
   export let token;
   export let leftWidth;
 
@@ -19,7 +20,12 @@
   let values = [];
 
   //$: subscribeToPoolWeights(token);
-  $: values = $pools[token];
+  $: values = ((useConfig) => {
+    if (useConfig) {
+      return poolsConfig[token].composition;
+    }
+    return $pools[token].composition;
+  })(defaultAllocation);
   $: leftHeight = leftWidth;
   $: valuesMarginTop = (rightHeight - labelsHeight) / 2;
   $: valuesStyle = `margin-top: ${valuesMarginTop}px`;
