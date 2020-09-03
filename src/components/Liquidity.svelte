@@ -51,6 +51,7 @@
   let approach = "add";
   let ethKey;
   let ethBalance = 0;
+  let ethNeededSingleEntry = 0;
 
   $: pieTokens = fetchPieTokens($balances);
 
@@ -141,7 +142,7 @@
 
   const primaryAction = () => {
     console.log('token.address', token)
-    fetchCalcToPie(token, amount);
+    
 
     // TODO
     // if (approach === "add") {
@@ -301,35 +302,45 @@
   {/if}
 
   {#if type === 'single'}
+    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
+      <div class="top h-32px text-sm font-thin px-4 py-2">
+        <div class="left float-left">{$_('general.amount')}</div>
+        <div class="right font-bold text-xs py-1px text-center align-right float-right rounded">
+          ⚠️ slippage might apply
+        </div>
+      </div>
+      <div class="bottom px-4 pb-2">
+        <input type="number" on:change="{ async () => {
+          ethNeededSingleEntry = '-';
+          ethNeededSingleEntry = (await fetchCalcToPie(token, amount)).label;
+          console.log('ethNeededSingleEntry', ethNeededSingleEntry)
+          
+        }}" bind:value={amount} class="text-xl w-75pc font-thin" />
+        <div
+          class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
+          align-middle justify-center items-center pointer"
+          on:click={() => (tokenSelectModalOpen = true)}>
+          <img class="token-icon w-26px h-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
+          <span class="py-2px px-4px">{tokenSymbol}</span>
+        </div>
+        <TokenSelectModal
+          tokens={pieTokens}
+          open={tokenSelectModalOpen}
+          callback={tokenSelectCallback} />
+      </div>
+    </div>
+  {/if}
+  
+
+  <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
+
+  {#if type === 'single'}
   <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
     <div class="top h-32px text-sm font-thin px-4 py-2">
       <div class="left float-left">{$_('general.amount')}</div>
-      <div
-        class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-        <div
-          class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-          on:click={() => setValuePercentage(25)}>
-          25%
-        </div>
-        <div
-          class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-          on:click={() => setValuePercentage(50)}>
-          50%
-        </div>
-        <div
-          class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-          on:click={() => setValuePercentage(75)}>
-          75%
-        </div>
-        <div
-          class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-          on:click={() => setValuePercentage(100)}>
-          100%
-        </div>
-      </div>
     </div>
     <div class="bottom px-4 pb-2">
-      <input type="number" value={ethBalance} class="text-xl w-75pc font-thin" />
+      <input type="text" disabled value={ethNeededSingleEntry} class="text-xl w-75pc font-thin" />
       <div
         class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
         align-middle justify-center items-center pointer">
@@ -340,8 +351,6 @@
     
   </div>
   {/if}
-
-  <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
 
   {#if type === 'multi'}
     {#each pooledTokens as pooledToken}
@@ -382,30 +391,7 @@
       </div>
     {/each}
   {/if}
-  {#if type === 'single'}
-    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
-      <div class="top h-32px text-sm font-thin px-4 py-2">
-        <div class="left float-left">{$_('general.amount')}</div>
-        <div class="right font-bold text-xs py-1px text-center align-right float-right rounded">
-          ⚠️ slippage might apply
-        </div>
-      </div>
-      <div class="bottom px-4 pb-2">
-        <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
-        <div
-          class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
-          align-middle justify-center items-center pointer"
-          on:click={() => (tokenSelectModalOpen = true)}>
-          <img class="token-icon w-26px h-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
-          <span class="py-2px px-4px">{tokenSymbol}</span>
-        </div>
-        <TokenSelectModal
-          tokens={pieTokens}
-          open={tokenSelectModalOpen}
-          callback={tokenSelectCallback} />
-      </div>
-    </div>
-  {/if}
+  
 
   <center>
     <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>

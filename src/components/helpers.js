@@ -251,7 +251,11 @@ export const fetchCalcToPie = async (pieAddress, poolAmount) => {
 
   const amountEthNecessary = await recipe.calcToPie(pieAddress, amount );
   console.log('amountEthNecessary', amountEthNecessary.toString());
-  return amountEthNecessary;
+
+  return {
+    val: amountEthNecessary,
+    label: ethers.utils.formatEther(amountEthNecessary)
+  };
 }
 
 export const fetchPooledTokens = (token, amount, current, allowancesData, balancesData) => {

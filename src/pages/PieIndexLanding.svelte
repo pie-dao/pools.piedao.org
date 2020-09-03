@@ -19,7 +19,7 @@
 
   import { amountFormatter, getTokenImage, formatFiat } from "../components/helpers.js";
 
-  import { pools } from '../stores/eth.js'
+  import { pools } from '../stores/eth.js';
 
   export let params;
 
@@ -48,7 +48,7 @@
   })(token);
 
   $: console.log('pools', $pools);
-  
+
   $: composition = flattenDeep(
     poolsConfig[token].composition.map((component) => {
       if (component.isPie) {
