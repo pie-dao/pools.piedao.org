@@ -1,6 +1,7 @@
 import './i18n.js';
 import App from './App.svelte';
 import { subscribeToPoolWeights } from './components/helpers.js';
+import { CoinGecko } from './stores/coingecko.js';
 import poolsConfig from './config/pools.json';
 import { pools } from './stores/eth.js';
 
@@ -14,6 +15,7 @@ for (let i = 0; i < poolsConfig.available.length; i++) {
 }
 
 pools.set(poolsDefault);
+CoinGecko.sync();
 
 var app = new App({
   target: document.body,

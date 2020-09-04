@@ -18,6 +18,7 @@ const trackedFunctions = {};
 let blockNumberPid = [0];
 
 const updateOnBlock = () => {
+  console.log('running balance update', Date.now());
   trackedBalances.forEach(async (key) => {
     const [token, account] = key.split(".");
     if (isAddress(token) && isAddress(account)) {
@@ -44,7 +45,8 @@ const updateOnBlock = () => {
 
 subject("blockNumber").subscribe({
   next: (blockNumber) => {
-    if (blockNumber > blockNumberPid[0]) {
+    console.log('blockNumber', blockNumber);
+    if (blockNumber > blockNumberPid[0] + 4) {
       clearTimeout(blockNumberPid[1]);
       blockNumberPid = [blockNumber, setTimeout(updateOnBlock, 500)];
     }
@@ -131,7 +133,7 @@ const overrideWrapped = (prop, contract) => (...passedArgs) => {
   if (position < args.length) {
     throw new Error(
       `eth/contracts.js - function '${prop}' for contract ${address} ` +
-        `called with too few arguments. Got ${args.length}. Expected ${position}.`
+      `called with too few arguments. Got ${args.length}. Expected ${position}.`
     );
   }
 
