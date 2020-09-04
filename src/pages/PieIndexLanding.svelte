@@ -149,11 +149,11 @@
   </div>
 
   <div
-    class="flex flex-row w-100pc mt-8 spl-chart-container {poolsConfig[token].tradingViewFormula ? '' : 'hidden'}">
+    class="flex flex-row w-100pc mt-2 spl-chart-container md:mt-8 {poolsConfig[token].tradingViewFormula ? '' : 'hidden'}">
     <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
   </div>
 
-  <div class="flex justify-between flex-wrap w-full mt-8">
+  <div class="flex justify-between flex-wrap w-full mt-2 md:mt-8">
     <div class="half p-0">
       <Farming token={$currentRoute.params.address} />
     </div>  
