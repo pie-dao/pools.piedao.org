@@ -18,7 +18,7 @@ import {
   pools,
   trackBalance,
 } from '../stores/eth.js';
-
+import { piesMarketDataStore } from '../stores/coingecko.js';
 
 const recipeAbi = [{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": true, "internalType": "address", "name": "previousOwner", "type": "address" }, { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }], "name": "OwnerChanged", "type": "event" }, { "inputs": [], "name": "WETH", "outputs": [{ "internalType": "contract IWETH", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_pie", "type": "address" }, { "internalType": "uint256", "name": "_poolAmountOut", "type": "uint256" }], "name": "calcToEth", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_pie", "type": "address" }, { "internalType": "uint256", "name": "_poolAmount", "type": "uint256" }], "name": "calcToPie", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "die", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "gasSponsor", "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "oSlot", "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "registry", "outputs": [{ "internalType": "contract ISmartPoolRegistry", "name": "", "type": "address" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "saveEth", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_token", "type": "address" }], "name": "saveToken", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_pie", "type": "address" }, { "internalType": "uint256", "name": "_poolAmount", "type": "uint256" }, { "internalType": "uint256", "name": "_minEthAmount", "type": "uint256" }], "name": "toEth", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_pie", "type": "address" }, { "internalType": "uint256", "name": "_poolAmount", "type": "uint256" }], "name": "toPie", "outputs": [], "stateMutability": "payable", "type": "function" }, { "inputs": [], "name": "togglePause", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "address", "name": "_newOwner", "type": "address" }], "name": "transferOwnership", "outputs": [], "stateMutability": "nonpayable", "type": "function" }];
 const poolUpdatePids = {};
@@ -66,6 +66,9 @@ const updatePoolWeight = async (poolAddress) => {
 
   const allCurrentBalances = get(balances);
   const poolCurrentBalances = {};
+  const poolCurrentUSD = {};
+
+  const marketData = get(piesMarketDataStore);
 
   composition.forEach(({ address }) => {
     const key = balanceKey(address, bPoolAddress);
@@ -77,14 +80,31 @@ const updatePoolWeight = async (poolAddress) => {
     BigNumber(0),
   );
 
+  const totalUSD = Object.keys(poolCurrentBalances).reduce(
+    (sum, token) => {
+      let price;
+      try {
+        price = marketData[`${token.toLowerCase()}`].market_data.current_price.usd;
+      } catch (e) { }
+      const balance = BigNumber(poolCurrentBalances[token]);
+      poolCurrentUSD[token] = balance.multipliedBy(price);
+      return sum.plus(poolCurrentUSD[token]);
+    },
+    BigNumber(0)
+  )
+
   const updates = {};
   updates[poolAddress] = composition.map((definition) => {
     const percentage = BigNumber(poolCurrentBalances[definition.address])
       .dividedBy(total)
       .multipliedBy(100)
       .toNumber();
+    const percentageUSD = BigNumber(poolCurrentUSD[definition.address])
+      .dividedBy(totalUSD)
+      .multipliedBy(100)
+      .toNumber();
 
-    return { ...definition, percentage };
+    return { ...definition, percentage, percentageUSD };
   });
 
   pools.set({ ...get(pools), ...updates });
