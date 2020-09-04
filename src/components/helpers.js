@@ -21,7 +21,6 @@ import {
 } from '../stores/eth.js';
 import { piesMarketDataStore } from '../stores/coingecko.js';
 
-
 const poolUpdatePids = {};
 
 const allowanceSubscriptions = new Set();
@@ -81,18 +80,17 @@ const updatePoolWeight = async (poolAddress) => {
     BigNumber(0),
   );
 
-  const totalUSD = Object.keys(poolCurrentBalances).reduce(
-    (sum, token) => {
-      let price;
-      try {
-        price = marketData[`${token.toLowerCase()}`].market_data.current_price.usd;
-      } catch (e) { }
-      const balance = BigNumber(poolCurrentBalances[token]);
-      poolCurrentUSD[token] = balance.multipliedBy(price);
-      return sum.plus(poolCurrentUSD[token]);
-    },
-    BigNumber(0)
-  )
+  const totalUSD = Object.keys(poolCurrentBalances).reduce((sum, token) => {
+    let price;
+    try {
+      price = marketData[`${token.toLowerCase()}`].market_data.current_price.usd;
+    } catch (e) {
+      console.error(e);
+    }
+    const balance = BigNumber(poolCurrentBalances[token]);
+    poolCurrentUSD[token] = balance.multipliedBy(price);
+    return sum.plus(poolCurrentUSD[token]);
+  }, BigNumber(0));
 
   const updates = {};
   updates[poolAddress] = composition.map((definition) => {
@@ -265,15 +263,22 @@ export const fetchEthBalance = (address) => {
 
 export const fetchCalcToPie = async (pieAddress, poolAmount) => {
   validateIsAddress(pieAddress);
-  const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
+  const recipe = await contract({
+    address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e',
+    abi: recipeAbi,
+  });
 
-  const amount = ethers.BigNumber.from(BigNumber(poolAmount).multipliedBy(10 ** 18).toFixed(0));
+  const amount = ethers.BigNumber.from(
+    BigNumber(poolAmount)
+      .multipliedBy(10 ** 18)
+      .toFixed(0),
+  );
   const amountEthNecessary = await recipe.calcToPie(pieAddress, amount);
   return {
     val: amountEthNecessary,
-    label: ethers.utils.formatEther(amountEthNecessary)
+    label: ethers.utils.formatEther(amountEthNecessary),
   };
-}
+};
 
 export const fetchPooledTokens = (token, amount, current, allowancesData, balancesData) => {
   const composition = current || poolsConfig[token];
@@ -450,7 +455,9 @@ export const subscribeToPoolWeights = async (poolAddress) => {
   const poolContract = await contract({ address: poolAddress });
   const bPoolAddress = await poolContract.getBPool();
 
-  await Promise.all(composition.map(({ address }) => subscribeToBalance(address, bPoolAddress, false)));
+  await Promise.all(
+    composition.map(({ address }) => subscribeToBalance(address, bPoolAddress, false)),
+  );
 
   composition.forEach(async ({ address }) => {
     const tokenContract = await contract({ address });
