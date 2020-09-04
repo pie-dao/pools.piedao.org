@@ -1,9 +1,8 @@
 <script>
-  import { _ } from "svelte-i18n";
-  import get from "lodash/get";
-  import first from "lodash/first";
-  import flattenDeep from "lodash/flattenDeep";
-
+  import { _ } from 'svelte-i18n';
+  import get from 'lodash/get';
+  import first from 'lodash/first';
+  import flattenDeep from 'lodash/flattenDeep';
   import { onMount } from "svelte";
   import { currentRoute } from "../stores/routes.js";
   import TradingViewWidget from "../components/TradingViewWidget.svelte";
@@ -12,21 +11,20 @@
   import Quantstamp from "../components/Quantstamp.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
 
+  import images from '../config/images.json';
+  import poolsConfig from '../config/pools.json';
+  import { CoinGecko, piesMarketDataStore } from '../stores/coingecko.js';
 
-  import images from "../config/images.json";
-  import poolsConfig from "../config/pools.json";
-  import { CoinGecko, piesMarketDataStore } from "../stores/coingecko.js";
+  import { fetchPooledTokens, pooledTokenAmountRequired } from '../components/helpers.js';
 
-  import { fetchPooledTokens } from '../components/helpers.js';
-
-  import { amountFormatter, getTokenImage, formatFiat } from "../components/helpers.js";
+  import { amountFormatter, getTokenImage, formatFiat } from '../components/helpers.js';
 
   import { pools } from '../stores/eth.js';
 
   export let params;
 
   $: token = params.address;
-  
+
   let pieOfPies = false;
   let tradingViewWidgetComponent;
 
@@ -36,12 +34,12 @@
   $: change24H = get(
     $piesMarketDataStore,
     `${token}.market_data.price_change_percentage_24h`,
-    null
+    null,
   );
   $: tokenPrice = get(
     $piesMarketDataStore,
     `${token.toLowerCase()}.market_data.current_price.usd`,
-    null
+    null,
   );
 
   $: (() => {
@@ -72,10 +70,10 @@
   $: options = {
     symbol: poolsConfig[token].tradingViewFormula,
     container_id: `single-pie-chart-${token}`,
-    theme: "light",
+    theme: 'light',
     autosize: true,
-    interval: "60",
-    locale: "en",
+    interval: '60',
+    locale: 'en',
     style: 3,
     hide_top_toolbar: true,
     hide_legend: true,
@@ -83,14 +81,9 @@
   };
 
   $: tradingViewWidgetComponent ? tradingViewWidgetComponent.initWidget(options) : null;
-
-  onMount(async () => {
-    CoinGecko.sync();
-  });
 </script>
 
 <div class="content flex flex-col spl">
-
   <div class="flex flex-wrap w-full">
     <div class="flex flex-row content-between justify-between flex-wrap w-full">
       <div class="flex flex-row sm:w-full md:w-2/3">
@@ -122,7 +115,6 @@
           <button class="btn clear text-white font-bold py-2 px-4 rounded">Redeem</button>
         </a> -->
       </div>
-
     </div>
   </div>
   <div class="flex justify-between flex-wrap w-full mt-2 md:mt-8">
@@ -171,9 +163,7 @@
     <h4>*This allocation is composed of multiple pies, find below the exploded allocation.</h4>
     <ul>
       {#each pieOfPies as subPie}
-        <li>
-          <a href="#/pie/{subPie.address}">{subPie.symbol}</a>
-        </li>
+        <li><a href="#/pie/{subPie.address}">{subPie.symbol}</a></li>
       {/each}
     </ul>
   {/if}
@@ -203,7 +193,7 @@
             <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.current_price.usd`, '-'))}
             </td>
-            <td class="border text-center px-4 py-2">{pooledToken.percentage}%</td>
+            <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td>
             <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.market_cap.usd`, '-'))}
             </td>
