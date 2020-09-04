@@ -44,9 +44,24 @@
   line-height: 32px;
 }
 
-.toggle-btn .active {
-  background-color: white;
+.toggle-btn {
+
+}
+
+/* .toggle-btn .active {
+  background: white;
   font-weight: bold;
+  color: #EC1EA0;
+} */
+
+.toggle-btn.bg-grey-243.p-20px.w-50pc.text-center.active {
+  background: white;
+  font-weight: bold;
+  color: #EC1EA0;
+  /* border: 1px solid #000;
+  border-radius: 1rem;
+  background-clip: padding-box; */
+
 }
 
 /* Allocation Breakdown */
@@ -507,6 +522,14 @@
 
 .singleTag:hover {
 opacity: 0.6;
+}
+
+/* Markets */
+
+.markets-container {
+  font-weight: 300;
+  text-align: left;
+  font-size: 1.2rem;
 }
 
 /* purgecss end ignore */
