@@ -113,10 +113,10 @@
 
       <div class="sm:w-full md:w-1/3 flex justify-between">
         <a href={`#/pools/${token}`}>
-          <button class="btn text-white font-bold md:ml-4 py-2 px-4 rounded">Mint</button>
+          <button class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Mint</button>
         </a>
         <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
-          <button class="btn clear font-bold py-2 px-4 rounded">Buy</button>
+          <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
         </a>
         <!-- <a href={`#/pools/${token}`}></a>
           <button class="btn clear text-white font-bold py-2 px-4 rounded">Redeem</button>
@@ -125,23 +125,23 @@
 
     </div>
   </div>
-  <div class="flex content-between flex-wrap w-full mt-8">
-    <div class="w-1/4 p-0 self-start">
-      <div class="text-center font-thin">MarketCap</div>
+  <div class="flex justify-between flex-wrap w-full mt-2 md:mt-8">
+    <div class="p-0 self-start md:w-1/4">
+      <div class="text-center font-thin text-xs md:text-base">MarketCap</div>
       <div class="text-center text-xl font-black">
         {formatFiat(get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap.usd`, '-'))}
       </div>
     </div>
-    <div class="w-1/4 p-0">
-      <div class="text-center font-thin">Swap fee</div>
+    <div class="p-0 md:w-1/4">
+      <div class="text-center font-thin text-xs md:text-base">Swap fee</div>
       <div class="text-center text-xl font-black">{swapFees}%</div>
     </div>
-    <div class="w-1/4 p-0">
-      <div class="text-center font-thin">Streaming fee</div>
+    <div class="p-0 md:w-1/4">
+      <div class="text-center font-thin text-xs md:text-base">Streaming fee</div>
       <div class="text-center text-xl font-black">0%</div>
     </div>
-    <div class="w-1/4 p-0">
-      <div class="text-center font-thin">7 Days Change</div>
+    <div class="p-0 md:w-1/4">
+      <div class="text-center font-thin text-xs md:text-base">7 Days Change</div>
       <div class="text-center text-xl font-black">
         {get($piesMarketDataStore, `${token.toLowerCase()}.market_data.price_change_percentage_7d_in_currency.usd`, '-')}
       </div>
