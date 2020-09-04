@@ -44,11 +44,28 @@
 
   $: (() => {
     pieOfPies = false;
+    
   })(token);
 
   $: console.log('pools', $pools);
 
-  $: composition = $pools[token];
+  $: composition = flattenDeep(
+    poolsConfig[token].composition.map((component) => {
+      if (component.isPie) {
+        if(!pieOfPies) pieOfPies = [];
+        pieOfPies.push(component);
+        return poolsConfig[component.address].composition.map((internal) => {
+          return {
+            ...internal,
+            percentage: ((component.percentage / 100) * (internal.percentage / 100) * 100).toFixed(
+              2
+            ),
+          };
+        });
+      }
+      return component;
+    })
+  );
 
   $: options = {
     symbol: poolsConfig[token].tradingViewFormula,
