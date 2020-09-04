@@ -154,7 +154,7 @@
   </div>
 
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
-    <div class="p-0 md:half">
+    <div class="p-0 mt-2 md:half">
       <Farming token={$currentRoute.params.address} />
     </div>  
     <div class="p-0 mt-2 md:w-1/4">
@@ -223,10 +223,10 @@
     </table>
   </div>
   <PoolDescription />
-  <div class="tags-container w-full flex justify-between my-8">
-    <a class="singleTag" href="https://medium.com/piedao">Read more on Medium</a>
-    <a class="singleTag" href="https://medium.com/piedao">DeFi++S on CoinGecko</a>
-    <a class="singleTag" href="https://medium.com/piedao">DeFi++S on CoinMarketCap</a>
-    <a class="singleTag" href="https://medium.com/piedao">DeFi++S is 4th Liquidity on Balancer Pools</a>
+  <div class="tags-container w-full my-2 flex flex-col md:flex-row md:justify-between md:my-8">
+    <a class="singleTag my-2" href="https://medium.com/piedao">Read more on Medium</a>
+    <a class="singleTag my-2" href="https://medium.com/piedao">DeFi++S on CoinGecko</a>
+    <a class="singleTag my-2" href="https://medium.com/piedao">DeFi++S on CoinMarketCap</a>
+    <a class="singleTag my-2" href="https://medium.com/piedao">DeFi++S is 4th Liquidity on Balancer Pools</a>
   </div>
 </div>
