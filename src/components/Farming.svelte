@@ -23,15 +23,15 @@
 
 <div class="farming-container">
   <div class="left">
-    <img src={images.logos.piedao_clean} alt="PieDAO logo" />
-    <h2>
+    <img class="h-40px md:h-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
+    <h2 class="text-sm md:text-lg">
       <!-- {$_(`brands.${brand}`)} -->
       
       {$_('defi.liquidity.mining')} 
     </h2>
   </div>
   <div class="right">
-    <h1 class="text-xl">Soon™️</h1>
+    <h1 class="text-lg md:text-xl">Soon™️</h1>
     <span class="text-xs">
       Join us on Discord to learn more
     </span>

@@ -71,6 +71,31 @@
                 {$_('general.docs')}
               </a>
             </li>
+            <li>
+              <a class="navbar-item" href="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">
+                DEFI+S
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href="#/pie/0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e">
+                USD++
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href="#/pie/0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd">
+                BTC++
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href={links.vision} target="_blank" rel="noopener noreferrer">
+                {$_('general.vision')}
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href={links.dao} target="_blank" rel="noopener noreferrer">
+                {$_('piedao.aragonLink')}
+              </a>
+            </li>
           </ul>
         </nav>
       </div>

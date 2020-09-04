@@ -291,7 +291,7 @@
   };
 </script>
 
-<div class="liquidity-container bg-grey-243 w-100pc rounded-4px p-6">
+<div class="liquidity-container bg-grey-243 rounded-4px p-4 md:p-6 w-full">
   <h1 class="text-center text-xl">
     {#if approach === 'add'}
       {$_('general.add')} {$_('general.liquidity')}
@@ -321,10 +321,10 @@
     <div class="flex-auto text-left">{$_('general.multi')} {$_('general.asset')}</div>
   </div>
 
-  <p class="text-center m-4">
+  <p class="text-center font-thin my-4 mx-2">
 
   {#if type === 'single'}
-    <div class="text-left my-16px mx-20px">
+    <div class="text-left md:my-16px md:mx-20px">
       Using Single asset Entry, you can use ETH to mint a Pie in one transaction.
       <br> Single Asset Entry fetches the underlying assets for you from external markets like Uniswap, because of that slippage might apply.
     </div>
@@ -349,15 +349,15 @@
   </p>
 
   {#if type === 'multi'}
-    <div class="row bg-white border border-solid rounded-8px border-grey-204 mx-4 flex mb-32px font-thin pointer">
+    <div class="row bg-white mx-0 md:mx-4 flex mb-32px font-thin pointer border border-solid rounded-sm overflow-hidden border-gray-400">
       <div class="toggle-btn bg-grey-243 p-20px w-50pc text-center {approach === 'add' ? 'active' : ''}" on:click={() => approach = "add"}>{$_('general.add')} {$_('general.liquidity')}</div>
       <div class="toggle-btn bg-grey-243 text-center p-20px w-50pc {approach === 'withdraw' ? 'active' : ''}" on:click={() => approach = "withdraw"}>{$_('general.withdraw')}</div>
     </div>
   {/if}
 
   {#if type === 'multi'}
-    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
-      <div class="top h-32px text-sm font-thin px-4 py-2">
+    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+      <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
         <div class="left float-left">{$_('general.amount')}</div>
         <div
           class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
@@ -383,13 +383,13 @@
           </div>
         </div>
       </div>
-      <div class="bottom px-4 pb-2">
-        <input type="number" bind:value={amount} class="text-xl w-75pc font-thin" />
+      <div class="bottom  px-4 py-4 md:px-4 pb-4">
+        <input type="number" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
         <div
-          class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
-          align-middle justify-center items-center pointer"
+          class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
+          align-middle justify-center items-center pointer mt-0 md:mt-14px"
           on:click={() => (tokenSelectModalOpen = true)}>
-          <img class="token-icon w-26px h-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
+          <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
           <span class="py-2px px-4px">{tokenSymbol}</span>
         </div>
         <TokenSelectModal
@@ -401,20 +401,20 @@
   {/if}
 
   {#if type === 'single'}
-    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
-      <div class="top h-32px text-sm font-thin px-4 py-2">
+    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+      <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
         <div class="left float-left">{$_('general.amount')}</div>
         <div class="right font-bold text-xs py-1px text-center align-right float-right rounded">
           ⚠️ slippage might apply
         </div>
       </div>
-      <div class="bottom px-4 pb-2">
-        <input type="number" on:input="{ debounce(fetchQuote, 250)}" bind:value={amount} class="text-xl w-75pc font-thin" />
+      <div class="bottom px-4 py-4 md:py-2">
+        <input type="number" on:input="{ debounce(fetchQuote, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
         <div
-          class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
-          align-middle justify-center items-center pointer"
+          class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
+          align-middle justify-center items-center pointer mt-0 md:mt-14px"
           on:click={() => (tokenSelectModalOpen = true)}>
-          <img class="token-icon w-26px h-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
+          <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
           <span class="py-2px px-4px">{tokenSymbol}</span>
         </div>
         <TokenSelectModal
@@ -438,15 +438,15 @@
 
 
   {#if type === 'single'}
-  <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-4">
-    <div class="top h-32px text-sm font-thin px-4 py-2">
+  <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+    <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
       <div class="left float-left">{$_('general.amount')}</div>
     </div>
-    <div class="bottom px-4 pb-2">
-      <input type="text" disabled value={ethNeededSingleEntry.label} class="text-xl w-75pc font-thin" />
+    <div class="bottom px-4 py-4 md:py-2">
+      <input type="text" disabled value={ethNeededSingleEntry.label} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
       <div
-        class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
-        align-middle justify-center items-center pointer">
+        class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
+        align-middle justify-center items-center pointer mt-0 md:mt-14px">
         <img class="token-icon w-26px h-26px my-4px mx-2px" src={getTokenImage('eth')} alt="ETH" />
         <span class="py-2px px-4px">ETH</span>
       </div>
@@ -457,27 +457,26 @@
 
   {#if type === 'multi'}
     {#each pooledTokens as pooledToken}
-      <div class="token-summary bg-white rounded-8px mx-4 my-4px flex">
-        <div class="p-12px text-sm w-75px" style={`color: ${pooledToken.color}`}>
-          {amountFormatter({
-            amount: pooledToken.percentage,
-            approximatePrefix: '',
-            displayDecimals: 2,
-            rounding: 4,
-          })}%
-        </div>
-        <img
-          class="token-icon my-8px w-26px h-26px"
-          src={getTokenImage(pooledToken.address)}
-          alt={pooledToken.symbol} />
-        <div
-          class="token-symbol px-6px py-12px text-sm font-thin border-r-2 border-r-solid
-          border-grey-243 w-60px">
-          {pooledToken.symbol}
-        </div>
+      <div class="token-summary overflow-x-scroll bg-white rounded-8px mx-0 md:mx-4 my-4px flex flex-start items-center">
+          <div class="min-w-22pc p-12px text-sm md:text-lg" style={`color: ${pooledToken.color}`}>
+            {amountFormatter({
+              amount: pooledToken.percentage,
+              approximatePrefix: '',
+              displayDecimals: 2,
+              rounding: 4,
+            })}%
+          </div>
+          <img
+            class="token-icon my-8px w-26px h-26px"
+            src={getTokenImage(pooledToken.address)}
+            alt={pooledToken.symbol} />
+          <div
+            class="token-symbol min-w-15pc md:min-w-10pc px-6px py-12px text-sm font-thin border-r-2 border-r-solid border-grey-243 align-middle md:leading-8">
+            {pooledToken.symbol}
+          </div>
         {#if approach === "add"}
           <div class="amount tex-sm px-20px py-12px w-150px">{pooledToken.amountRequired}</div>
-          <div class={`${pooledToken.amountVsBalanceClass} font-thin text-xs mt-14px w-150px`}>
+          <div class={`${pooledToken.amountVsBalanceClass} whitespace-no-wrap font-thin text-xs text-right w-130px pr-2 md:pr-0`}>
             Bal - {pooledToken.amountVsBalance}
           </div>
           <a

@@ -9,6 +9,10 @@
 /* Custom css */
 /* purgecss start ignore */
 
+.half { width: 47%;}
+
+.border-half {border: 0.5px;}
+
 #App {
   max-width: 1200px!important;
   margin: 0 auto;
@@ -40,9 +44,24 @@
   line-height: 32px;
 }
 
-.toggle-btn .active {
-  background-color: white;
+.toggle-btn {
+
+}
+
+/* .toggle-btn .active {
+  background: white;
   font-weight: bold;
+  color: #EC1EA0;
+} */
+
+.toggle-btn.bg-grey-243.p-20px.w-50pc.text-center.active {
+  background: white;
+  font-weight: bold;
+  color: #EC1EA0;
+  /* border: 1px solid #000;
+  border-radius: 1rem;
+  background-clip: padding-box; */
+
 }
 
 /* Allocation Breakdown */
@@ -98,7 +117,8 @@
 
 .etherscan-container,
 .quantstamp-container {
-  @apply bg-grey-243 rounded-4px mt-4 pt-2 pb-4 px-4;
+  @apply bg-grey-243 pt-2 pb-4 px-4;
+  border-radius: 8px;
 }
 
 .etherscan-container span,
@@ -114,7 +134,9 @@
 /* Farming */
 
 .farming-container {
-  @apply flex rounded-4px mt-4 text-grey-243 overflow-hidden antialiased;
+  @apply flex text-grey-243 overflow-hidden antialiased;
+  border-radius: 8px;
+  max-height: 102px;
 }
 
 .farming-container .left {
@@ -123,20 +145,28 @@
 }
 
 .farming-container .left img {
-  @apply h-70px inline;
+  @apply inline;
 }
 
 .farming-container .left h2 {
-  @apply inline-block align-middle leading-none text-m-lg pl-2;
+  @apply inline-block align-middle leading-none pl-2;
 }
 
 .farming-container .right {
-  @apply flex-auto bg-green text-center leading-none px-4 py-3;
+  @apply text-center;
   background-color: #61497f;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  padding: 0 1.5rem;
 }
 
 .farming-container .right h1 {
   font-size: 2.8rem;
+  margin: 0;
+  line-height: 2.8rem;
 }
 
 .farming-container .right span {
@@ -325,7 +355,7 @@
 }
 
 .spl h1 {
-  @apply text-lg w-full mt-8;
+  @apply w-full;
   width: 100;
 }
 
@@ -467,6 +497,51 @@
 .token-select-container tr {
   border-bottom: 1px solid #f3f3f3;
 }
+
+/* Pool Description */
+
+.pooldescription-container {
+  font-weight: 300;
+  text-align: left;
+  font-size: 1.2rem;
+}
+
+/* Tags container */
+
+.tags-container {
+  @apply flex justify-between;
+}
+
+.singleTag {
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  background-color: #eaeaea;
+  text-align: center;
+}
+
+.singleTag:hover {
+opacity: 0.6;
+}
+
+/* Markets */
+
+.markets-container {
+  font-weight: 300;
+  text-align: left;
+  font-size: 1.2rem;
+}
+
+/* Breakdown Table */
+
+@media screen and (max-width: 640px) {
+  .breakdown-table {
+    display: block;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+}
+
 
 
 /* purgecss end ignore */
