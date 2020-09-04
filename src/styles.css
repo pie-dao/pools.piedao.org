@@ -356,7 +356,6 @@
 
 .spl h1 {
   @apply w-full;
-  font-size: 2rem;
   width: 100;
 }
 
@@ -531,5 +530,18 @@ opacity: 0.6;
   text-align: left;
   font-size: 1.2rem;
 }
+
+/* Breakdown Table */
+
+@media screen and (max-width: 640px) {
+  .breakdown-table {
+    display: block;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+}
+
+
 
 /* purgecss end ignore */

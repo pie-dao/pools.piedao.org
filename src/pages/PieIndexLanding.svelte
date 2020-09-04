@@ -166,7 +166,7 @@
     </div>
   </div>
 
-  <h1 class="mt-8 mb-4">Allocation breakdown</h1>
+  <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
   {#if pieOfPies }
     <h4>*This allocation is composed of multiple pies, find below the exploded allocation.</h4>
     <ul>
@@ -179,7 +179,7 @@
   {/if}
 
   <div class="w-99pc m-4">
-    <table class="table-auto w-full">
+    <table class="breakdown-table table-auto w-full">
       <thead>
         <tr>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
