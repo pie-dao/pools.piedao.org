@@ -398,7 +398,7 @@ export const subscribeToAllowance = async (token, address, spender) => {
   bumpLifecycle();
 };
 
-export const subscribeToBalance = async (tokenAddress, address) => {
+export const subscribeToBalance = async (tokenAddress, address, shouldBump = true) => {
   let token = tokenAddress;
 
   if (!token) {
@@ -432,7 +432,9 @@ export const subscribeToBalance = async (tokenAddress, address) => {
     },
   });
 
-  bumpLifecycle();
+  if (shouldBump) {
+    bumpLifecycle();
+  }
 };
 
 export const subscribeToPoolWeights = async (poolAddress) => {
@@ -451,7 +453,7 @@ export const subscribeToPoolWeights = async (poolAddress) => {
   const poolContract = await contract({ address: poolAddress });
   const bPoolAddress = await poolContract.getBPool();
 
-  await Promise.all(composition.map(({ address }) => subscribeToBalance(address, bPoolAddress)));
+  await Promise.all(composition.map(({ address }) => subscribeToBalance(address, bPoolAddress, false)));
 
   composition.forEach(async ({ address }) => {
     const tokenContract = await contract({ address });
