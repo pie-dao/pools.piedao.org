@@ -153,15 +153,15 @@
     <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
   </div>
 
-  <div class="flex justify-between flex-wrap w-full mt-2 md:mt-8">
-    <div class="half p-0">
+  <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
+    <div class="p-0 md:half">
       <Farming token={$currentRoute.params.address} />
     </div>  
-    <div class="w-1/4 p-0">
+    <div class="p-0 mt-2 md:w-1/4">
       <Etherscan token={$currentRoute.params.address} />
     </div>
 
-    <div class="w-1/4 p-0">
+    <div class="p-0 mt-2 md:w-1/4">
       <Quantstamp class="w-1/2" token={$currentRoute.params.address} />
     </div>
   </div>

@@ -145,11 +145,11 @@
 }
 
 .farming-container .left img {
-  @apply h-70px inline;
+  @apply inline;
 }
 
 .farming-container .left h2 {
-  @apply inline-block align-middle leading-none text-m-lg pl-2;
+  @apply inline-block align-middle leading-none pl-2;
 }
 
 .farming-container .right {
