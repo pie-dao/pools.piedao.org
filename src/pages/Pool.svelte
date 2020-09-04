@@ -11,7 +11,7 @@
 </script>
 
 <div class="content flex flex-col">
-  <div class="flex flex-col flex-row-reverse md:flex-row">
+  <div class="flex flex-col w-full flex-row-reverse md:flex-row">
     <div class="left flex-1">
       
       <div class="flex hidden md:block">
@@ -36,7 +36,7 @@
       </div>
     </div>
     
-    <div class="right w-full md:w-2/4 flex-1 ml-2">
+    <div class="right w-full md:w-2/4 flex md:flex-1 md:ml-2">
       <Liquidity token={$currentRoute.params.address} />
     </div>
   </div>
