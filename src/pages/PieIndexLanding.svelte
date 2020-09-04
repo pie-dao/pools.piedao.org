@@ -128,21 +128,21 @@
   <div class="flex justify-between flex-wrap w-full mt-2 md:mt-8">
     <div class="p-0 self-start md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">MarketCap</div>
-      <div class="text-center text-xl font-black">
+      <div class="text-center text-2xl md:text-xl font-black">
         {formatFiat(get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap.usd`, '-'))}
       </div>
     </div>
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">Swap fee</div>
-      <div class="text-center text-xl font-black">{swapFees}%</div>
+      <div class="text-center text-2xl md:text-xl font-black">{swapFees}%</div>
     </div>
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">Streaming fee</div>
-      <div class="text-center text-xl font-black">0%</div>
+      <div class="text-center text-2xl md:text-xl font-black">0%</div>
     </div>
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">7 Days Change</div>
-      <div class="text-center text-xl font-black">
+      <div class="text-center text-2xl md:text-xl font-black">
         {get($piesMarketDataStore, `${token.toLowerCase()}.market_data.price_change_percentage_7d_in_currency.usd`, '-')}
       </div>
     </div>
