@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from "svelte";
   import BigNumber from "bignumber.js";
 
   import debounce from "lodash/debounce";
@@ -9,6 +10,7 @@
 
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
+  import recipeAbi from '../config/recipeABI.json';
 
   import displayNotification from "../notifications.js";
   import TokenSelectModal from "./TokenSelectModal.svelte";
@@ -35,31 +37,29 @@
     fetchCalcToPie,
   } from "./helpers.js";
 
-  export let token; // NOTE: This really should be named poolAddress. Token is too generic.
-  let type = "single";
+  export let token; // NOTE: This really should be named poolAddress. Token is too generic.;
 
   let tokenSelectModalOpen = false;
   const tokenSelectCallback = (token) => {
     tokenSelectModalOpen = false;
     if (token) {
       window.location.hash = `#/pools/${token.address}`;
+      fetchQuote(null, token.address);
     }
   };
-
-  // let balanceClass = 'blur-heavy';
-  // let yourBalanceClass = 'blur-light';
 
   let amount = "1.00000000";
   let approach = "add";
   let ethKey;
   let ethBalance = 0;
-  let ethNeededSingleEntry = { val: 0, label:'0'};
+  let ethNeededSingleEntry = { val: 0, label:'-'};
   let isLoading;
 
   $: pieTokens = fetchPieTokens($balances);
 
   $: tokenSymbol = (poolsConfig[token] || {}).symbol;
   $: tokenLogo = images.logos[token];
+  $: type = poolsConfig[token].useRecipe === true ? 'single' : 'multi';
 
   $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
   $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");
@@ -70,6 +70,19 @@
   }
 
   $: ethBalance = BigNumber($balances[ethKey]).toString();
+
+  const fetchQuote = async (event, pieAddress=null) => {
+    ethNeededSingleEntry.label = '-';
+    try {
+      isLoading = true;  
+      const pieToMint = pieAddress || token;
+      ethNeededSingleEntry = (await fetchCalcToPie(pieToMint, amount));
+    } catch (e) { console.error(e)}
+  }
+
+  onMount(async () => {
+    fetchQuote()
+  });
 
   const action = async (evt, pooledToken) => {
     const { address } = pooledToken;
@@ -92,7 +105,7 @@
       return;
     }
 
-    if (requestedAmount.isGreaterThan(max)) {
+    if (BigNumber(ethNeededSingleEntry.val).isGreaterThan(max)) {
       const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
       //TODO i18n
       const message = `Not enough ETH`;
@@ -100,9 +113,7 @@
       return;
     }
 
-    
-
-    //const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
+    const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
@@ -115,32 +126,32 @@
       value: ethNeededSingleEntry.val
     })
 
-    // const { emitter } = displayNotification(await recipe.toPie(token, amountWei, overrides) );
+    const { emitter } = displayNotification(await recipe.toPie(token, amountWei, overrides) );
 
-    // emitter.on("txConfirmed", ({ hash }) => {
-    //   const { dismiss } = displayNotification({
-    //     message: "Confirming...",
-    //     type: "pending",
-    //   });
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
 
-    //   const subscription = subject("blockNumber").subscribe({
-    //     next: () => {
-    //       displayNotification({
-    //         autoDismiss: 15000,
-    //         message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
-    //         type: "success",
-    //       });
-    //       dismiss();
-    //       subscription.unsubscribe();
-    //     },
-    //   });
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
 
-    //   return {
-    //     autoDismiss: 1,
-    //     message: "Mined",
-    //     type: "success",
-    //   };
-    // });
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
   };
 
   const mint = async () => {
@@ -292,6 +303,11 @@
   <div class="row flex font-thin">
     <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
     <div class="switch mx-4" on:click={() => {
+      if(!poolsConfig[token].useRecipe) {
+        alert($_('piedao.single.asset.coming.soon'));
+        return
+      }
+
       if(type === 'single'){
         type = 'multi';
       } else {
@@ -306,15 +322,15 @@
   </div>
 
   <p class="text-center m-4">
-    {#if type === 'multi'}
-    <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
-  {/if}
 
   {#if type === 'single'}
-    <div class="my-16px mx-20px">
-    Using this much ETH
+    <div class="text-left my-16px mx-20px">
+      Using Single asset Entry, you can use ETH to mint a Pie in one transaction.
+      <br> Single Asset Entry fetches the underlying assets for you from external markets like Uniswap, because of that slippage might apply.
     </div>
   {/if}
+
+  {#if type === 'multi'}
     {#if approach === 'add'}
       {$_('piedao.multi.asset.enables.minting')} 
     {:else}
@@ -328,6 +344,8 @@
     {:else}
       {$_('piedao.multi.asset.all.underlying')}
     {/if}
+  {/if}
+    
   </p>
 
   {#if type === 'multi'}
@@ -391,14 +409,7 @@
         </div>
       </div>
       <div class="bottom px-4 pb-2">
-        <input type="number" on:input="{ debounce(async () => {
-          ethNeededSingleEntry.label = '-';
-          try {
-            isLoading = true;  
-            ethNeededSingleEntry = (await fetchCalcToPie(token, amount));
-            console.log('ethNeededSingleEntry', ethNeededSingleEntry)
-          } catch (e) {}
-        }, 250)}" bind:value={amount} class="text-xl w-75pc font-thin" />
+        <input type="number" on:input="{ debounce(fetchQuote, 250)}" bind:value={amount} class="text-xl w-75pc font-thin" />
         <div
           class="asset-btn float-right mt-14px h-32px bg-grey-243 rounded-32px px-2px flex
           align-middle justify-center items-center pointer"
