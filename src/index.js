@@ -15,7 +15,6 @@ for (let i = 0; i < poolsConfig.available.length; i++) {
 }
 
 pools.set(poolsDefault);
-
 CoinGecko.sync();
 
 var app = new App({
