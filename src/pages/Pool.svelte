@@ -37,7 +37,11 @@
     </div>
     
     <div class="right w-full md:w-2/4 flex md:flex-1 md:ml-2">
-      <Liquidity token={$currentRoute.params.address} />
+      <Liquidity 
+        token={$currentRoute.params.address} 
+        method={$currentRoute.params.method} 
+        poolAction={$currentRoute.params.poolAction}
+      />
     </div>
   </div>
 </div>

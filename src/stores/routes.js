@@ -31,6 +31,8 @@ const deriveRoute = () => {
 
 const formatRoute = (route) => {
   let address;
+  let poolAction;
+  let method;
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
   switch (route[0] || 'root') {
@@ -39,8 +41,11 @@ const formatRoute = (route) => {
       return { page: PieLanding, params: { address } };
     case 'pools':
       address = (route[1] || '').toLowerCase();
+      poolAction = (route[2] || 'add').toLowerCase();
+      method = (route[3] || 'single').toLowerCase();
+
       if (pools.available.includes(address)) {
-        return { page: Pool, params: { address } };
+        return { page: Pool, params: { address, poolAction, method } };
       }
 
       break;

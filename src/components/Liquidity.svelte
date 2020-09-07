@@ -37,7 +37,9 @@
     fetchCalcToPie,
   } from "./helpers.js";
 
-  export let token; // NOTE: This really should be named poolAddress. Token is too generic.;
+  export let token;
+  export let poolAction;
+  export let method; // NOTE: This really should be named poolAddress. Token is too generic.;
 
   let tokenSelectModalOpen = false;
   const tokenSelectCallback = (token) => {
@@ -49,7 +51,7 @@
   };
 
   let amount = "1.00000000";
-  let approach = "add";
+  let approach = poolAction;
   let ethKey;
   let ethBalance = 0;
   let ethNeededSingleEntry = { val: 0, label:'-'};
@@ -59,7 +61,7 @@
 
   $: tokenSymbol = (poolsConfig[token] || {}).symbol;
   $: tokenLogo = images.logos[token];
-  $: type = poolsConfig[token].useRecipe === true ? 'single' : 'multi';
+  $: type = poolsConfig[token].useRecipe === true ? method : 'multi';
 
   $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
   $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");
