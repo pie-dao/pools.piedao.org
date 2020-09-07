@@ -59,7 +59,9 @@
 
   $: tokenSymbol = (poolsConfig[token] || {}).symbol;
   $: tokenLogo = images.logos[token];
-  $: type = poolsConfig[token].useRecipe === true ? 'single' : 'multi';
+  // Default to multi to prevent confusion
+  $: type = 'multi';
+  // $: type = poolsConfig[token].useRecipe === true ? 'single' : 'multi';
 
   $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
   $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");
