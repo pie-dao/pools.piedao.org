@@ -3,8 +3,10 @@
   import { currentRoute } from '../stores/routes.js';
 </script>
 
+
+
 <div class="content flex flex-col">
-    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 md:p-6 w-full">
+    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-4 md:p-6 w-full">
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">Select a pool</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
 
@@ -50,7 +52,7 @@
     </div>
 
 
-    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 md:p-6 w-full">
+    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-4 md:p-6 w-full">
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">ETH pool Balancer 2 Rewards</h1>
         <div class="subtitle px-2 text-center font-thin mb-4">Here you can stake your XXX Tokens, Clain XXX Rewards or exit the pool</div>
         <div class="buttons-group flex flex-col justify-center items-center md:flex-row">
@@ -67,6 +69,16 @@
                 <button class="btn clear font-bold my-2 ml-1 mr-0 py-2 px-4 min-w-160px md:mr-4 md:min-w-0">Claim & Unstake</button>
             </a>
         </div>
+    </div>
+
+    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-4 md:p-6 w-full">
+        <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">Stake Tokens</h1>
+        <div class="subtitle px-2 text-center font-thin mb-4">Here you can stake your XXX Tokens, Clain XXX Rewards or exit the pool</div>
+        <input />
+            <a class="text-center" href="#button">
+                <button class="btn clear font-bold my-2 ml-1 mr-0 py-2 px-4 min-w-160px md:mr-4 md:min-w-0">Stake Tokens</button>
+            </a>
+
     </div>
 
 
