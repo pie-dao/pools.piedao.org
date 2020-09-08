@@ -48,11 +48,11 @@
   })(token);
 
   $: composition = flattenDeep(
-    poolsConfig[token].composition.map((component) => {
+    $pools[token].map((component) => {
       if (component.isPie) {
         if(!pieOfPies) pieOfPies = [];
         pieOfPies.push(component);
-        return poolsConfig[component.address].composition.map((internal) => {
+        return $pools[component.address].map((internal) => {
           return {
             ...internal,
             percentage: ((component.percentage / 100) * (internal.percentage / 100) * 100).toFixed(
@@ -210,12 +210,10 @@
       </tbody>
     </table>
   </div>
-  <PoolDescription />
+  <!-- <PoolDescription /> -->
   <div class="tags-container w-full my-2 flex flex-col md:flex-row md:justify-between md:my-8">
     <a class="singleTag my-2" href="https://medium.com/piedao">Read more on Medium</a>
     <a class="singleTag my-2" href="https://medium.com/piedao">DeFi++S on CoinGecko</a>
-    <a class="singleTag my-2" href="https://medium.com/piedao">DeFi++S on CoinMarketCap</a>
-    <a class="singleTag my-2" href="https://medium.com/piedao">DeFi++S is 4th Liquidity on Balancer Pools</a>
   </div>
   <div class="flex flex-col w-full justify-between md:flex-row">
     <div class="w-full md:w-49pc">
