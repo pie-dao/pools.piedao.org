@@ -354,6 +354,13 @@
   width: 11rem;
 }
 
+.approvebtn {
+  border-radius: 6px;
+  font-size: 28px;
+  font-weight: 200;
+  width: 11rem;
+}
+
 .spl h1 {
   @apply w-full;
   width: 100;
