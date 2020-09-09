@@ -1,29 +1,99 @@
 <script>
+  import { ethers } from "ethers";
+  import BigNumber from "bignumber.js";
   import { _ } from "svelte-i18n";
   import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
 
-  const incentivizedPools = [
+  import {
+    amountFormatter,
+    fetchPieTokens,
+    fetchPooledTokens,
+    maxAmount,
+    getTokenImage,
+    fetchEthBalance,
+    fetchCalcToPie,
+    subscribeToBalance,
+    subscribeToAllowance,
+  } from "../components/helpers.js";
+
+  import {
+    allowances,
+    functionKey,
+    approveMax,
+    balanceKey,
+    balances,
+    connectWeb3,
+    contract,
+    eth,
+    pools,
+    bumpLifecycle,
+    subject,
+  } from "../stores/eth.js";
+
+  let ethKey;
+  let ethBalance = 0;
+  let intiated = false;
+  let amountToStake = 0;
+  let amountToClaim = "0.00000000";
+  let amountToUnstake = "0.00000000";
+  
+  $: needAllowance = true;
+  $: incentivizedPools = [
     {
-      address: '0x1',
+      addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
+      addressUniPoll: '0xb35CA434880E07416485971ad9388fd46dA27EC4',
       name: 'Uniswap Pool',
       description: 'WEEKLY REWARDS',
       weeklyRewards: 10000,
       apy: 1.8,
-      needsApproval: true,
-    },
-    {
-      address: '0x2',
-      name: 'Balancer Pool',
-      weeklyRewards: 10000,
-      description: 'somethign goes here',
-      apy: 1.8,
-      needsApproval: false,
+      allowance: 0,
+      allowanceKey: '',
+      needAllowance: true,
     },
   ]
 
+  $: if($eth.address) {
+    fetchEthBalance($eth.address);
+    ethKey = balanceKey(ethers.constants.AddressZero, $eth.address);
+  }
+
+  $: ethBalance = BigNumber($balances[ethKey]).toString();
+  $: {     
+     needAllowance = needApproval(pool, ($allowances[pool.allowanceKey] || BigNumber(0)));
+  }
+
   $: pool = incentivizedPools[0];
-  $: console.log(pool);
+
+  $: if($eth.address && !intiated) {
+    incentivizedPools.forEach( p => {
+      console.log(`Subscribing to ${p.addressTokenToStake} for ${$eth.address}`);
+      subscribeToBalance(p.addressTokenToStake, $eth.address, true);
+      subscribeToAllowance(p.addressTokenToStake, $eth.address, p.addressUniPoll);
+      const allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [$eth.address, p.addressUniPoll]);
+      
+      p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, $eth.address);
+      p.allowanceKey = allowanceKey;
+    })
+    intiated = true;
+    console.log('incentivizedPools', incentivizedPools);
+    bumpLifecycle();
+  }
+
+  const needApproval = (pool, allowance) => {
+    if( allowance.isEqualTo(0) ) return true;
+    if( allowance.isGreaterThanOrEqualTo( BigNumber(amountToStake)) ) return false;
+  }
+
+  const action = async (pool, actionType) => {
+    const { addressTokenToStake, addressUniPoll } = pool;
+
+    if (actionType === "unlock") {
+      await approveMax(addressTokenToStake, addressUniPoll);
+      bumpLifecycle();
+    }
+  };
+
 </script>
 
 
@@ -76,20 +146,27 @@
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
                     <div class="title text-lg"> STAKE</div>
                     <div class="subtitle font-thin">BALANCE</div>
-                    <div class="apy">0.00000 UNI</div>
+                    <div class="apy">
+                      {pool.KeyAddressTokenToStake ? amountFormatter({ amount: $balances[pool.KeyAddressTokenToStake], displayDecimals: 4}) : 0.0000} UNI
+                    </div>
                     <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
-                            <div class="left float-left">{$_('general.amount')} to stake</div>
+                            <div class="text-black left black float-left">{$_('general.amount')} to stake</div>
                         </div>
                         <div class="bottom px-4 py-4 md:py-2">
-                            <input type="text" class="font-thin text-base w-60pc md:w-75pc md:text-lg">
-                            <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
-                                <button class="text-black py-2px px-4px">MAX</button>
+                            <input bind:value={amountToStake} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
+                            <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
+                                <button on:click={() => {
+                                  if($balances[pool.KeyAddressTokenToStake]) {
+                                    amountToStake = $balances[pool.KeyAddressTokenToStake].toFixed(4, BigNumber.ROUND_DOWN);
+                                  } else {
+                                    amountToStake = 0;
+                                  }}} class="text-black py-2px px-4px">MAX</button>
                             </div>
                         </div>           
                     </div>
-                    {#if pool.needsApproval}
-                      <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Approve</button>
+                    {#if needAllowance }
+                      <button on:click={ () => action(pool, 'unlock')} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Approve</button>
                     {:else}
                       <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Stake</button>
                     {/if}
