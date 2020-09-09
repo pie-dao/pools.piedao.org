@@ -47,7 +47,30 @@
     {
       addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
       addressUniPoll: '0x233aC080DE7Ec6e08089a4A6789ee5565bfB677e',
-      name: 'Uniswap Pool',
+      name: 'DOUGH / ETH',
+      description: 'WEEKLY REWARDS',
+      weeklyRewards: 10000,
+      apy: 1.8,
+      allowance: 0,
+      allowanceKey: '',
+      highlight: true,
+      needAllowance: true,
+    },
+    {
+      addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
+      addressUniPoll: '0x233aC080DE7Ec6e08089a4A6789ee5565bfB677e',
+      name: 'DEFI+S',
+      description: 'WEEKLY REWARDS',
+      weeklyRewards: 10000,
+      apy: 1.8,
+      allowance: 0,
+      allowanceKey: '',
+      needAllowance: true,
+    },
+    {
+      addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
+      addressUniPoll: '0x233aC080DE7Ec6e08089a4A6789ee5565bfB677e',
+      name: 'DEFI+S / DAI',
       description: 'WEEKLY REWARDS',
       weeklyRewards: 10000,
       apy: 1.8,
@@ -233,13 +256,23 @@
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">Select a pool</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
             {#each incentivizedPools as ammPool}
-              <div class="farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
+              {#if ammPool.highlight }
+                <div class="highlight-box farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
                   <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
-                  <div class="title text-lg"> {ammPool.name}</div>
-                  <div class="subtitle font-thin">{ammPool.description}</div>
-                  <div class="apy">{ammPool.weeklyRewards} DOUGH</div>
-                  <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
-              </div>
+                    <div class="title text-lg"> {ammPool.name}</div>
+                    <div class="subtitle font-thin">{ammPool.description}</div>
+                    <div class="apy">{ammPool.weeklyRewards} DOUGH</div>
+                    <button on:click={() => pool = ammPool } class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
+                </div>
+              {:else}
+                <div class="farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
+                  <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
+                    <div class="title text-lg"> {ammPool.name}</div>
+                    <div class="subtitle font-thin">{ammPool.description}</div>
+                    <div class="apy">{ammPool.weeklyRewards} DOUGH</div>
+                    <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
+                </div>
+              {/if}
             {/each}
         </div>
         {:else}

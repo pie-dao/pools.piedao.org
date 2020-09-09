@@ -8,7 +8,7 @@ import LPStaking from '../pages/LPStaking.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
 
 export const defaultRouteObj = {
-  page: Pool,
+  page: PieLanding,
   params: {
     address: pools.default,
   },

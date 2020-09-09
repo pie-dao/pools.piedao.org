@@ -7,14 +7,14 @@ import { pools } from './stores/eth.js';
 
 pools.set(poolsConfig);
 
-// const poolsDefault = {};
+const poolsDefault = {};
 
-// for (let i = 0; i < poolsConfig.available.length; i++) {
-//   poolsDefault[poolsConfig.available[i]] = poolsConfig[poolsConfig.available[i]].composition;
-//   subscribeToPoolWeights(poolsConfig.available[i]);
-// }
+for (let i = 0; i < poolsConfig.available.length; i++) {
+  poolsDefault[poolsConfig.available[i]] = poolsConfig[poolsConfig.available[i]].composition;
+  subscribeToPoolWeights(poolsConfig.available[i]);
+}
 
-// pools.set(poolsDefault);
+pools.set(poolsDefault);
 CoinGecko.sync();
 
 var app = new App({
