@@ -99,6 +99,49 @@
     }
   };
 
+  const unstake = async () => {
+    const requestedAmount = BigNumber(amountToUnstake);
+    const max = $balances[pool.KeyUnipoolBalance];
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    const unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+    const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
+
+    // displayNotification({ message, type: "error", autoDismiss: 30000 });
+
+    const { emitter } = displayNotification(await unipool.withdraw(amountWei) );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} unstaked successfully`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  }
+
   const stake = async () => {
     const requestedAmount = BigNumber(amountToStake);
     const max = $balances[pool.KeyAddressTokenToStake];
@@ -193,7 +236,7 @@
                             </div>
                         </div>            
                     </div>
-                    <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Unstake</button>
+                    <button on:click={() => unstake()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Unstake</button>
               </div>
 
               <!-- STAKE BOX -->
