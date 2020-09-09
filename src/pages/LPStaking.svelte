@@ -39,14 +39,14 @@
   let ethBalance = 0;
   let intiated = false;
   let amountToStake = 0;
-  let amountToClaim = "0.00000000";
+  $: amountToClaim = pool && $balances[pool.KeyUnipoolEarnedBalance] ? $balances[pool.KeyUnipoolEarnedBalance] : "0.00000000";
   let amountToUnstake = "0.00000000";
   
   $: needAllowance = true;
   $: incentivizedPools = [
     {
       addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
-      addressUniPoll: '0xb35CA434880E07416485971ad9388fd46dA27EC4',
+      addressUniPoll: '0x233aC080DE7Ec6e08089a4A6789ee5565bfB677e',
       name: 'Uniswap Pool',
       description: 'WEEKLY REWARDS',
       weeklyRewards: 10000,
@@ -58,10 +58,11 @@
   ]
 
   $: {     
-    needAllowance = needApproval(pool, ($allowances[pool.allowanceKey] || BigNumber(0)));
+    if(pool)
+      needAllowance = needApproval(pool, ($allowances[pool.allowanceKey] || BigNumber(0)));
   }
 
-  $: pool = incentivizedPools[0];
+  $: pool = null;
 
   $: if($eth.address && !intiated) {
     incentivizedPools.forEach( p => {
@@ -185,6 +186,42 @@
     });
   }
 
+  const getRewards = async () => {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    const unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+    const { emitter } = displayNotification(await unipool.getReward() );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} staked successfully`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  }
+
 </script>
 
 
@@ -274,7 +311,7 @@
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
                     <div class="title text-lg">REWARDS AVAILABLE</div>
-                    <div class="subtitle font-thin">STAKED BALANCE</div>
+                    <div class="subtitle font-thin">DOUGH TO CLAIM</div>
                     <div class="apy">
                       {pool.KeyUnipoolEarnedBalance ? amountFormatter({ amount: $balances[pool.KeyUnipoolEarnedBalance], displayDecimals: 4}) : 0.0000} DOUGH
                     </div>
@@ -283,7 +320,7 @@
                             <div class="left float-left">{$_('general.amount')} to claim</div>
                         </div>
                         <div class="bottom px-4 py-4 md:py-2">
-                            <input bind:value={amountToClaim} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
+                            <input disabled bind:value={amountToClaim} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
                             <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
                                 <button on:click={() => {
                                   if($balances[pool.KeyUnipoolEarnedBalance]) {
@@ -294,7 +331,7 @@
                             </div>
                         </div>            
                     </div>
-                    <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
+                    <button on:click={() => getRewards()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
               </div>
             </div>
         {/if}
