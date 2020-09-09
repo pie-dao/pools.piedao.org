@@ -555,4 +555,21 @@ opacity: 0.6;
   border-color: #d1d1d1;
 }
 
+.highlight {
+  border: 2px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
+}
+
+.highlight-box{
+  background: linear-gradient(to left, #743ad5, #d53a9d);
+  color: white;
+}
+
+.border-white {
+  border-color: white !important;
+  border: 1px solid;
+}
+
+
 /* purgecss end ignore */
