@@ -33,6 +33,10 @@
 
     <span class="link">🥧</span>
 
+    <a class="link" href="#/stake">
+      Stake
+    </a>
+    <span class="link">🥧</span>
 
     <a class="link" href={links.vision} target="_blank" rel="noopener noreferrer">
       {$_('general.vision')}
@@ -84,6 +88,11 @@
             <li>
               <a class="navbar-item" href="#/pie/0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd">
                 BTC++
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href="#/stake">
+                Stake
               </a>
             </li>
             <li>

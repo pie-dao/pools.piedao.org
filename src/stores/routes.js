@@ -8,7 +8,7 @@ import LPStaking from '../pages/LPStaking.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
 
 export const defaultRouteObj = {
-  page: LPStaking,
+  page: Pool,
   params: {
     address: pools.default,
   },
@@ -38,6 +38,8 @@ const formatRoute = (route) => {
     case 'pie':
       address = (route[1] || '').toLowerCase();
       return { page: PieLanding, params: { address } };
+    case 'stake':
+        return { page: LPStaking};
     case 'pools':
       address = (route[1] || '').toLowerCase();
       if (pools.available.includes(address)) {
