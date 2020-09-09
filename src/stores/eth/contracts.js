@@ -4,6 +4,7 @@ import { get } from "svelte/store";
 import { isAddress, isPOJO, validateIsAddress } from "@pie-dao/utils";
 
 import contractOverrides from "../../config/contractOverrides.json";
+import unipoolAbi from '../../config/unipoolABI.json';
 
 import { balanceKey, functionKey } from "./keys";
 import { eth } from "./writables";
@@ -13,6 +14,7 @@ import { subject } from "./observables";
 let contracts = {};
 
 const trackedBalances = new Set();
+const trackedEarningBalances = new Set();
 const trackedFunctions = {};
 
 let blockNumberPid = [0];
@@ -28,6 +30,18 @@ const updateOnBlock = () => {
     } else {
       console.warn("Invalid key found in trackedBalances", key);
       console.warn("key should be formatted '[token address].[wallet address]'");
+    }
+  });
+
+  trackedEarningBalances.forEach(async (key) => {
+    const [token, account] = key.split(".");
+    if (isAddress(token) && isAddress(account)) {
+      const contract = (await observableContract({ abi: unipoolAbi, address: token })).raw;
+      const balance = (await contract.earned(account)).toString();
+      subject(key).next(balance);
+    } else {
+      console.warn("Invalid key found in trackedEarningBalances", key);
+      console.warn("key should be formatted '[token address].[wallet address].earned'");
     }
   });
 
@@ -70,6 +84,34 @@ const expectedArgLength = (functionName, contract) => {
   }
 
   return definition.inputs.length;
+};
+
+const generateTrackStakedBalanceFunction = (contractAddress) => {
+  return async (account) => {
+    validateIsAddress(account);
+    const key = balanceKey(contractAddress, account);
+    trackedBalances.add(key);
+    const contract = await observableContract({ abi: unipoolAbi, address: contractAddress });
+    contract.balanceOf(account).then((balance) => {
+      subject(key).next(balance.toString());
+    });
+    return subject(key);
+  };
+};
+
+const generateTrackEarnedBalanceFromStakingFunction = (contractAddress) => {
+  return async (account) => {
+    validateIsAddress(account);
+    const key = balanceKey(contractAddress, account, '.earned');
+    trackedEarningBalances.add(key);
+
+    const contract = await observableContract({ abi: unipoolAbi, address: contractAddress });
+
+    contract.earned(account).then((balance) => {
+      subject(key).next(balance.toString());
+    });
+    return subject(key);
+  };
 };
 
 const generateTrackBalanceFunction = (contractAddress) => {
@@ -178,6 +220,8 @@ export const observableContract = async ({ abi, address }) => {
 
   addons.raw = contract;
   addons.trackBalance = generateTrackBalanceFunction(address);
+  addons.trackStakedBalance = generateTrackStakedBalanceFunction(address);
+  addons.trackEarnedBalance = generateTrackEarnedBalanceFromStakingFunction(address);
   addons.functions = {};
 
   Object.keys(contract.functions).map((functionName) => {

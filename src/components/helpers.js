@@ -7,6 +7,7 @@ import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@
 import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
 import recipeAbi from '../config/recipeABI.json';
+import unipoolAbi from '../config/unipoolABI.json';
 
 import {
   allowances,
@@ -398,6 +399,70 @@ export const subscribeToAllowance = async (token, address, spender) => {
   });
 
   bumpLifecycle();
+};
+
+export const subscribeToStakingEarnings = async (contractAddress, address, shouldBump = true) => {
+  let token = contractAddress;
+
+  validateIsAddress(token);
+  validateIsAddress(address);
+
+  const keyEarned = balanceKey(token, address, '.earned');
+
+  if (balanceSubscriptions.has(keyEarned)) {
+    return;
+  }
+  balanceSubscriptions.add(keyEarned);
+
+  const unipool = await contract({ address: contractAddress, abi: unipoolAbi });
+
+  const observableEarned = await unipool.trackEarnedBalance(address);
+  let decimals = 18;
+
+  observableEarned.subscribe({
+    next: async (updatedBalance) => {
+      const updates = {};
+      updates[keyEarned] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
+      balances.set({ ...get(balances), ...updates });
+    },
+  });
+
+  if (shouldBump) {
+    bumpLifecycle();
+  }
+};
+
+export const subscribeToStaking = async (contractAddress, address, shouldBump = true) => {
+  let token = contractAddress;
+
+  validateIsAddress(token);
+  validateIsAddress(address);
+
+  const key = balanceKey(token, address);
+
+  if (balanceSubscriptions.has(key)) {
+    return;
+  }
+
+  balanceSubscriptions.add(key);
+
+  const unipool = await contract({ address: contractAddress, abi: unipoolAbi });
+
+  const observable = await unipool.trackStakedBalance(address);
+  let decimals = 18;
+
+
+  observable.subscribe({
+    next: async (updatedBalance) => {
+      const updates = {};
+      updates[key] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
+      balances.set({ ...get(balances), ...updates });
+    },
+  });
+
+  if (shouldBump) {
+    bumpLifecycle();
+  }
 };
 
 export const subscribeToBalance = async (tokenAddress, address, shouldBump = true) => {
