@@ -28,6 +28,8 @@
   let pieOfPies = false;
   let tradingViewWidgetComponent;
 
+  $: links = (poolsConfig[token] || {}).landingLinks || [];
+
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: swapFees = (poolsConfig[token] || {}).swapFees;
   $: tokenLogo = images.logos[token];
@@ -44,7 +46,6 @@
 
   $: (() => {
     pieOfPies = false;
-    
   })(token);
 
   $: composition = flattenDeep(
@@ -85,9 +86,13 @@
   <div class="flex flex-wrap w-full">
     <div class="flex flex-row content-between justify-between flex-wrap w-full">
       <div class="flex flex-row sm:w-full md:w-1/3">
-        <img class="h-80px inline" src={tokenLogo} alt={symbol} />
+        <a href={`#/pools/${token}`}>
+          <img class="h-80px inline" src={tokenLogo} alt={symbol} />
+        </a>
         <div class="mx-3 flex flex-col justify-center">
-          <h1 class="text-xl leading-none font-black">{symbol}</h1>
+          <a href={`#/pools/${token}`}>
+            <h1 class="text-xl leading-none font-black">{symbol}</h1>
+          </a>
           {#if change24H}
             <h5
               class:green={change24H > 0}
@@ -109,19 +114,21 @@
         <a href={`#/pools/${token}`}>
           <button class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Mint</button>
         </a>
-        <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
+        <!-- <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
           <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
-        </a>
+        </a> -->
       </div>
     </div>
   </div>
   <div class="flex justify-between flex-wrap w-full mt-2 md:mt-8">
+    {#if get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap.usd`, '-') != '-'}
     <div class="p-0 self-start md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">MarketCap</div>
       <div class="text-center text-2xl md:text-xl font-black">
         {formatFiat(get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap.usd`, '-'))}
       </div>
     </div>
+    {/if}
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">Swap fee</div>
       <div class="text-center text-2xl md:text-xl font-black">{swapFees}%</div>
@@ -212,9 +219,13 @@
   </div>
   <!-- <PoolDescription /> -->
   <div class="tags-container w-full my-2 flex flex-col md:flex-row md:justify-between md:my-8">
-    <a class="singleTag my-2" href="https://medium.com/piedao">Read more on Medium</a>
-    <a class="singleTag my-2" href="https://medium.com/piedao">DeFi++S on CoinGecko</a>
+    {#each links as link}
+      <a class="singleTag my-2" target="_blank" href={link.url}>{link.label}</a>
+    {/each}
   </div>
+
+  <h1 class="mt-8 mb-4 text-base md:text-3xl">Latest news</h1>
+
   <div class="flex flex-col w-full justify-between md:flex-row">
     <div class="w-full md:w-49pc">
       <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Membership Proposal ✅ passed<br><br>The proposal will enable members <a href="https://twitter.com/TheLAOOfficial?ref_src=twsrc%5Etfw">@TheLAOOfficial</a> to join <a href="https://twitter.com/PieDAO_DeFi?ref_src=twsrc%5Etfw">@PieDAO_DeFi</a>, a fee-collecting organization coordinating weights of “tokenized asset allocations”, PIEs that is open to anyone <a href="https://twitter.com/ethereum?ref_src=twsrc%5Etfw">@ethereum</a> through the purchase of its voting shares, <a href="https://twitter.com/search?q=%24DOUGH&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$DOUGH</a> 💜 <a href="https://t.co/ikCkLTeGJy">https://t.co/ikCkLTeGJy</a> <a href="https://t.co/4L13l1xsXl">pic.twitter.com/4L13l1xsXl</a></p>&mdash; ⟠ DeFi++ (@defiopfi) <a href="https://twitter.com/defiopfi/status/1299419505018515457?ref_src=twsrc%5Etfw">August 28, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>

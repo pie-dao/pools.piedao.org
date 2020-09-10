@@ -21,6 +21,9 @@
         <div class="left flex-1 mt-4 mr-4">
           <Farming token={$currentRoute.params.address} />
         </div>
+        <div class="hidden md:block">
+          <AllocationBreakdown token={$currentRoute.params.address} />
+        </div>
         <div class="left flex-1 mt-4 mr-4">
           <Etherscan token={$currentRoute.params.address} />
         </div>
@@ -28,12 +31,10 @@
           <Quantstamp class="my-2" token={$currentRoute.params.address} />
         </div>
       </div>
-      <div class="hidden md:block">
+      <!-- <div class="hidden md:block">
         <Info token={$currentRoute.params.address} />
-      </div>
-      <div class="hidden md:block">
-        <AllocationBreakdown token={$currentRoute.params.address} />
-      </div>
+      </div> -->
+      
     </div>
     
     <div class="right w-full md:w-2/4 flex md:flex-1 md:ml-2">

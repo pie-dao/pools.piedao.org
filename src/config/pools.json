@@ -85,7 +85,17 @@
         "coingeckoId": "nusd"
       }
     ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md",
+    "landingLinks": [
+      {
+        "label": "Tutorial: How to Mint USD++",
+        "url": "https://medium.com/piedao/how-to-mint-usd-70501ad3db4e?source=collection_home---6------0-----------------------"
+      },
+      {
+        "label": "Latest rebalance proposal",
+        "url": "https://forum.piedao.org/t/usd-v2-the-stablecoin-basket/116/6?u=alexintosh"
+      }
+    ]
   },
   "0xa25d24af7e67f8736d2e0794a1aa440b6d83a4fc": {
     "symbol": "TDEFI+L",
@@ -259,7 +269,13 @@
       }
       
     ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md",
+    "landingLinks": [
+      {
+        "label": "Read more on Medium",
+        "url": "akasdjf"
+      }
+    ]
   },
   "0x880873a96ce38c7fd39dc714592902b069bde048": {
     "symbol": "DEFI++",
