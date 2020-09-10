@@ -45,8 +45,8 @@
   $: needAllowance = true;
   $: incentivizedPools = [
     {
-      addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
-      addressUniPoll: '0x233aC080DE7Ec6e08089a4A6789ee5565bfB677e',
+      addressTokenToStake: '0x43c3A3d3616B492E0788AB70905e28D17666a91D',
+      addressUniPoll: '0x57eFE63548Ec9aA39Fc06cacA3D5Ee71c1814869',
       name: 'DOUGH / ETH',
       description: 'WEEKLY REWARDS',
       weeklyRewards: 10000,
