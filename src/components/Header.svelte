@@ -12,7 +12,6 @@
     mobileMenuVisible = !mobileMenuVisible;
   };
 </script>
-
 <div class="header-container">
   <div class="left">
     <a href={links.root}>

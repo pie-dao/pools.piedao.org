@@ -81,7 +81,6 @@
 
   $: tradingViewWidgetComponent ? tradingViewWidgetComponent.initWidget(options) : null;
 </script>
-
 <div class="content flex flex-col spl">
   <div class="flex flex-wrap w-full">
     <div class="flex flex-row content-between justify-between flex-wrap w-full">
