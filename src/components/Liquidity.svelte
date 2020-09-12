@@ -37,6 +37,8 @@
     fetchCalcToPie,
   } from "./helpers.js";
 
+  window.B = BigNumber;
+
   export let token;
   export let poolAction;
   export let method; // NOTE: This really should be named poolAddress. Token is too generic.;
@@ -99,7 +101,9 @@
 
   const mintFromRecipe = async () => {
     const requestedAmount = BigNumber(amount);
-    const max = ethBalance;
+    const max = BigNumber(ethBalance).multipliedBy(10 ** 18).toFixed(0);
+
+    await fetchQuote();
 
     if (!$eth.address || !$eth.signer) {
       displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
@@ -107,7 +111,10 @@
       return;
     }
 
-    if (BigNumber(ethNeededSingleEntry.val).isGreaterThan(max)) {
+    const percentagePlus = BigNumber(ethNeededSingleEntry.val.toString()).multipliedBy(BigNumber(1.05)).toFixed(0);
+
+
+    if (BigNumber(percentagePlus).isGreaterThan(BigNumber(max)) ) {
       const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
       //TODO i18n
       const message = `Not enough ETH`;
@@ -119,7 +126,7 @@
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
-      value: ethNeededSingleEntry.val
+      value: percentagePlus
     }
 
     console.log({
@@ -329,6 +336,7 @@
     <div class="text-left md:my-16px md:mx-20px">
       Using Single asset Entry, you can use ETH to mint a Pie in one transaction.
       <br> Single Asset Entry fetches the underlying assets for you from external markets like Uniswap, because of that slippage might apply.
+      <strong>5% more ETH</strong> are sent during the TX to avoid unxpected errors, any unused ETH is returned.
     </div>
   {/if}
 
