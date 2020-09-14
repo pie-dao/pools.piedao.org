@@ -29,6 +29,7 @@
   } from "../stores/eth.js";
   import {
     amountFormatter,
+    fetchCalcTokensForAmounts,
     fetchPieTokens,
     fetchPooledTokens,
     maxAmount,
@@ -57,6 +58,7 @@
   let ethKey;
   let ethBalance = 0;
   let ethNeededSingleEntry = { val: 0, label:'-'};
+  let amountsRequired = {};
   let isLoading;
 
   $: pieTokens = fetchPieTokens($balances);
@@ -78,11 +80,24 @@
   const fetchQuote = async (event, pieAddress=null) => {
     ethNeededSingleEntry.label = '-';
     try {
-      isLoading = true;  
+      isLoading = true;
       const pieToMint = pieAddress || token;
       ethNeededSingleEntry = (await fetchCalcToPie(pieToMint, amount));
+      isLoading = false;
     } catch (e) { console.error(e)}
   }
+
+  const fetchAmounts = async (event, pieAddress=null) => {
+    try {
+      isLoading = true;  
+      const pieToMint = pieAddress || token;
+      console.log('amount dio cane', amount);
+      amountsRequired = (await fetchCalcTokensForAmounts(pieToMint, amount));
+      isLoading = false;
+    } catch (e) { console.error(e)}
+  }
+
+  
 
   onMount(async () => {
     fetchQuote()
@@ -373,6 +388,7 @@
     <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
       <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
         <div class="left float-left">{$_('general.amount')}</div>
+        {#if approach === "withdraw"}
         <div
           class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
           <div
@@ -396,9 +412,10 @@
             100%
           </div>
         </div>
+        {/if}
       </div>
       <div class="bottom  px-4 py-4 md:px-4 pb-4">
-        <input type="number" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
+        <input type="number" on:keyup="{ debounce(fetchAmounts, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
         <div
           class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
           align-middle justify-center items-center pointer mt-0 md:mt-14px"
@@ -423,7 +440,7 @@
         </div>
       </div>
       <div class="bottom px-4 py-4 md:py-2">
-        <input type="number" on:input="{ debounce(fetchQuote, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
+        <input type="number" on:keyup="{ debounce(fetchQuote, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
         <div
           class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
           align-middle justify-center items-center pointer mt-0 md:mt-14px"
@@ -440,7 +457,14 @@
   {/if}
   
 
-  {#if type === 'multi'}
+  {#if isLoading === true}
+    <div class="h-12px mx-50pc my-16px">
+        <div class="loadingio-spinner-wedges-meab1ddaeuq"><div class="ldio-qudhur211ps">
+        <div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div></div>
+        </div></div>
+    </div>
+  {/if}
+  {#if type === 'multi' && isLoading != true}
     <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
   {/if}
 
@@ -489,9 +513,8 @@
             {pooledToken.symbol}
           </div>
         {#if approach === "add"}
-          <div class="amount tex-sm px-20px py-12px w-150px">{pooledToken.amountRequired}</div>
-          <div class={`${pooledToken.amountVsBalanceClass} whitespace-no-wrap font-thin text-xs text-right w-130px pr-2 md:pr-0`}>
-            Bal - {pooledToken.amountVsBalance}
+          <div class="amount tex-sm px-20px py-12px w-150px">
+            {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
           </div>
           <a
             class={pooledToken.actionBtnClass}
@@ -501,7 +524,9 @@
             {pooledToken.actionBtnLabel}
           </a>
         {:else}
-          <div class="amount tex-sm px-20px py-12px m-auto">{pooledToken.amountRequired}</div>
+          <div class="amount tex-sm px-20px py-12px m-auto">
+            {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
+          </div>
         {/if}
         <div class="hidden">{$eth.address}</div>
       </div>

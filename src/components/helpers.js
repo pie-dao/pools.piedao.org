@@ -267,7 +267,7 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   validateIsAddress(pieAddress);
 
   const tokenContract = await contract({ abi: pieSmartPool, address: pieAddress });
-  const decimals = await tokenContract.decimals();
+  console.log('poolAmount', poolAmount);
 
   const amount = ethers.BigNumber.from(
     BigNumber(poolAmount)
@@ -275,13 +275,17 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
       .toFixed(0),
   );
   
-  const amounts = await tokenContract.calcTokensForAmounts(amount);
-  console.log('amounts', amounts);
+  const res = await tokenContract.calcTokensForAmount(amount);
+  let data = {};
 
-  // return {
-  //   val: amountEthNecessary,
-  //   label: ethers.utils.formatEther(amountEthNecessary),
-  // };
+  res['tokens'].forEach((token, index) => {
+    data[token.toLowerCase()] = {
+      amount: res['amounts'][index],
+      label: ethers.utils.formatEther(res['amounts'][index])
+    }
+  })
+
+  return data;
 };
 
 export const fetchCalcToPie = async (pieAddress, poolAmount) => {
