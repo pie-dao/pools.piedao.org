@@ -3,10 +3,12 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
+import { pieSmartPool } from "@pie-dao/abis";
 
 import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
 import recipeAbi from '../config/recipeABI.json';
+import find from 'lodash/find';
 
 import {
   allowances,
@@ -261,6 +263,27 @@ export const fetchEthBalance = (address) => {
   subscribeToBalance(null, address);
 };
 
+export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
+  validateIsAddress(pieAddress);
+
+  const tokenContract = await contract({ abi: pieSmartPool, address: pieAddress });
+  const decimals = await tokenContract.decimals();
+
+  const amount = ethers.BigNumber.from(
+    BigNumber(poolAmount)
+      .multipliedBy(10 ** 18)
+      .toFixed(0),
+  );
+  
+  const amounts = await tokenContract.calcTokensForAmounts(amount);
+  console.log('amounts', amounts);
+
+  // return {
+  //   val: amountEthNecessary,
+  //   label: ethers.utils.formatEther(amountEthNecessary),
+  // };
+};
+
 export const fetchCalcToPie = async (pieAddress, poolAmount) => {
   validateIsAddress(pieAddress);
   const recipe = await contract({
@@ -321,9 +344,11 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
       }
     }
 
+    const originalWeights = find(poolsConfig[token].composition, { 'address':pooledToken.address });
+
     return {
       ...pooledToken,
-
+      originalWeight: originalWeights.percentage,
       actionBtnClass,
       actionBtnLabel,
       amountRequired: amountFormatter({

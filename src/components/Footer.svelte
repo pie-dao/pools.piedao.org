@@ -32,9 +32,10 @@
         Block: {$eth.currentBlockNumber}
       </a>
     {/if}
-    <a class="footer-link" href="/#" on:click={hardReset}>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="mailto:piedao@protonmail.org" class="footer-link">
+      piedao@protonmail.org
     </a>
+    
 
   </div>
   <div class="right">

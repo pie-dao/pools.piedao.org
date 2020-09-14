@@ -47,11 +47,7 @@
       <div class="labels" style={valuesStyle} bind:offsetHeight={labelsHeight}>
         {#each values as value}
           <p class="label" style={bgColor(value)}>
-            {#if value.percentageUSD}
-              {amountFormatter({ amount: value.percentageUSD, displayDecimals: 2 })}% {value.symbol}
-            {:else}
               {amountFormatter({ amount: value.percentage, displayDecimals: 2 })}% {value.symbol}
-            {/if}
           </p>
         {/each}
       </div>

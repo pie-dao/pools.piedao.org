@@ -164,64 +164,68 @@
   };
 
   const mint = async () => {
-    const requestedAmount = BigNumber(amount);
-    const max = maxAmount(token, pooledTokens, 1);
+    try {
+      const requestedAmount = BigNumber(amount);
+      const max = maxAmount(token, pooledTokens, 1);
 
-    if (!$eth.address || !$eth.signer) {
-      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
-      connectWeb3();
-      return;
-    }
+      if (!$eth.address || !$eth.signer) {
+        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+        connectWeb3();
+        return;
+      }
 
-    if (requestedAmount.isGreaterThan(max)) {
-      const needMore = pooledTokens
-        .filter(({ actionBtnLabel }) => actionBtnLabel === "BUY")
-        .map(({ symbol }) => symbol)
-        .join(", ");
+      if (requestedAmount.isGreaterThan(max)) {
+        const needMore = pooledTokens
+          .filter(({ actionBtnLabel }) => actionBtnLabel === "BUY")
+          .map(({ symbol }) => symbol)
+          .join(", ");
 
-      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
+        const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
 
-      const message =
-        `${$_("piedao.max.mint.notice")} ${maxFormatted} ${tokenSymbol}. ` +
-        `${$_("piedao.more.tokens.notice")}: ${needMore}`;
+        const message =
+          `${$_("piedao.max.mint.notice")} ${maxFormatted} ${tokenSymbol}. ` +
+          `${$_("piedao.more.tokens.notice")}: ${needMore}`;
 
-      displayNotification({ message, type: "error", autoDismiss: 30000 });
-      return;
-    }
+        displayNotification({ message, type: "error", autoDismiss: 30000 });
+        return;
+      }
 
-    for (let i = 0; i < lockedPoolTokens.length; i += 1) {
-      approveMax(lockedPoolTokens[i].address, token);
-    }
+      for (let i = 0; i < lockedPoolTokens.length; i += 1) {
+        approveMax(lockedPoolTokens[i].address, token);
+      }
 
-    const tokenContract = await contract({ abi: pieSmartPool, address: token });
-    const decimals = await tokenContract.decimals();
-    const arg = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
-    const { emitter } = displayNotification(await tokenContract.joinPool(arg));
+      const tokenContract = await contract({ abi: pieSmartPool, address: token });
+      const decimals = await tokenContract.decimals();
+      const arg = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
+      const { emitter } = displayNotification(await tokenContract.joinPool(arg));
 
-    emitter.on("txConfirmed", ({ hash }) => {
-      const { dismiss } = displayNotification({
-        message: "Confirming...",
-        type: "pending",
+      emitter.on("txConfirmed", ({ hash }) => {
+        const { dismiss } = displayNotification({
+          message: "Confirming...",
+          type: "pending",
+        });
+
+        const subscription = subject("blockNumber").subscribe({
+          next: () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
+              type: "success",
+            });
+            dismiss();
+            subscription.unsubscribe();
+          },
+        });
+
+        return {
+          autoDismiss: 1,
+          message: "Mined",
+          type: "success",
+        };
       });
-
-      const subscription = subject("blockNumber").subscribe({
-        next: () => {
-          displayNotification({
-            autoDismiss: 15000,
-            message: `${requestedAmount.toFixed()} ${tokenSymbol} successfully minted`,
-            type: "success",
-          });
-          dismiss();
-          subscription.unsubscribe();
-        },
-      });
-
-      return {
-        autoDismiss: 1,
-        message: "Mined",
-        type: "success",
-      };
-    });
+    } catch (e) {
+      displayNotification({ message: e.message, type: "error", autoDismiss: 30000 });
+    }
   };
 
   const primaryAction = () => {
@@ -470,7 +474,7 @@
       <div class="token-summary overflow-x-scroll bg-white rounded-8px mx-0 md:mx-4 my-4px flex flex-start items-center">
           <div class="min-w-22pc p-12px text-sm md:text-lg" style={`color: ${pooledToken.color}`}>
             {amountFormatter({
-              amount: pooledToken.percentage,
+              amount: pooledToken.originalWeight,
               approximatePrefix: '',
               displayDecimals: 2,
               rounding: 4,
