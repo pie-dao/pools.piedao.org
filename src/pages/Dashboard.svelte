@@ -68,6 +68,11 @@
     <BalanceSmall token={'0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e'} />
   </div>
   <div class="w-99pc m-4">
+
+    <div class="my-10">
+      <h1 class="text-lg">🥧 Explore Pies</h1>
+      <p class="font-thin">An Entire Portfolio in a Single Token</p>
+    </div>
     <table class="breakdown-table table-auto w-full">
       <thead>
         <tr>
@@ -127,8 +132,10 @@
       </tbody>
     </table>
 
-    <h1>Explore Pie Farming Opportunities</h1>
-    <p>Add liquidity to earn fees and DOUGH incentives.</p>
+    <div class="my-10">
+      <h1 class="text-lg">👨‍🌾 Honest worker? Explore Pie Farming Opportunities</h1>
+      <p class="font-thin">Add liquidity to earn fees and DOUGH incentives.</p>
+    </div>
 
     <table class="breakdown-table table-auto w-full">
       <thead>
