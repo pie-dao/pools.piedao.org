@@ -4,10 +4,12 @@ import pools from '../config/pools.json';
 
 import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
+import Migration from '../pages/Migrations.svelte';
+import Dashboard from '../pages/Dashboard.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
 
 export const defaultRouteObj = {
-  page: PieLanding,
+  page: Dashboard,
   params: {
     address: pools.default,
   },

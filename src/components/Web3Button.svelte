@@ -1,5 +1,8 @@
 <script>
   import { connectWeb3, eth } from '../stores/eth.js';
+  import { shortenAddress } from "@pie-dao/utils";
+  const address = window.localStorage.getItem('address');
+  const shortAddress = shortenAddress(address);
 </script>
 
 <button
@@ -16,6 +19,11 @@
       </div>
     </div>
   {:else}
-    Connect Web3
+    {#if address}
+      <p>{shortAddress}</p>
+      🔌
+    {:else}
+      Connect Web3
+    {/if}
   {/if}
 </button>
