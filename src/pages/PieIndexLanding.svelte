@@ -40,7 +40,7 @@
   );
   $: tokenPrice = get(
     $piesMarketDataStore,
-    `${token.toLowerCase()}.market_data.current_price.usd`,
+    `${token.toLowerCase()}.market_data.current_price`,
     null,
   );
 
@@ -120,11 +120,11 @@
     </div>
   </div>
   <div class="flex justify-between flex-wrap w-full mt-2 md:mt-8">
-    {#if get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap.usd`, '-') != '-'}
+    {#if get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap`, '-') != '-'}
     <div class="p-0 self-start md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">MarketCap</div>
       <div class="text-center text-2xl md:text-xl font-black">
-        {formatFiat(get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap.usd`, '-'))}
+        {formatFiat(get($piesMarketDataStore, `${token}.market_data.market_cap`, '-'))}
       </div>
     </div>
     {/if}
@@ -139,7 +139,7 @@
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">7 Days Change</div>
       <div class="text-center text-2xl md:text-xl font-black">
-        {get($piesMarketDataStore, `${token.toLowerCase()}.market_data.price_change_percentage_7d_in_currency.usd`, '-')}
+        {get($piesMarketDataStore, `${token}.market_data.price_change_percentage_7d_in_currency`, '-')}
       </div>
     </div>
   </div>

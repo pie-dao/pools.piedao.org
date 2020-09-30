@@ -77,6 +77,7 @@ export class CoinGecko {
       const pie = poolsConfig[pieAddress] || null;
       if (pie.coingeckoId !== undefined) {
         idToSymbolMap[pie.coingeckoId] = poolsConfig[pieAddress];
+        idToSymbolMap[pie.coingeckoId].address = pieAddress;
         idQueryString += `${pie.coingeckoId}%2C`;
       }
 
@@ -87,7 +88,6 @@ export class CoinGecko {
         }
       });
     });
-
     const baseURL = 'https://api.coingecko.com/api/v3';
     const query = `/coins/markets?ids=${idQueryString}&vs_currency=usd`;
 
@@ -101,7 +101,6 @@ export class CoinGecko {
       });
 
       prices = await response.json();
-      console.log('prices', prices);
     } catch (err) {
       console.log('Coingecko call error. Using backup prices.');
     }
