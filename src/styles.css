@@ -11,7 +11,7 @@
 
 .half { width: 47%;}
 
-.border-half {border: 0.5px;}icon
+.border-half {border: 0.5px;}
 
 #App {
   max-width: 1200px!important;
@@ -411,7 +411,7 @@
   border-color: #edf2f7;
 } 
 
-.spl table td > img.icon {
+.spl img.icon {
   @apply h-40px;
 }
 

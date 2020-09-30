@@ -80,8 +80,6 @@
   };
 
   $: tradingViewWidgetComponent ? tradingViewWidgetComponent.initWidget(options) : null;
-
-  $: console.log('piesMarketDataStore', $piesMarketDataStore);
 </script>
 <div class="content flex flex-col spl">
   <div class="flex flex-wrap w-full">

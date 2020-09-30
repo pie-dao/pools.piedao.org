@@ -20,17 +20,7 @@
   </div>
   <div class="right">
     
-    <a class="link" href="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">
-      DEFI+S
-    </a>
-    <a class="link" href="#/pie/0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e">
-      USD++
-    </a>
-    <a class="link" href="#/pie/0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd">
-      BTC++
-    </a>
-
-    <!-- <span class="link">🥧</span>
+    <!-- 
     <a class="link" href="#/stake">
       Stake
     </a>
@@ -46,6 +36,7 @@
     <a class="link" href={links.docs} target="_blank" rel="noopener noreferrer">
       {$_('general.docs')}
     </a>
+    <span class="link">🥧</span>
     <Web3Button />
     <div class="mobile-placeholder" />
 

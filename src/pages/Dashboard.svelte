@@ -21,6 +21,33 @@
     };
   }) || [])
 
+  const addToken = (pie) => {
+    const tokenAddress = '0xd00981105e61274c8a5cd5a88fe7e037d935b513'
+    const tokenSymbol = 'TUT'
+    const tokenDecimals = 18
+    const tokenImage = 'http://placekitten.com/200/300'
+
+    ethereum.sendAsync({
+        method: 'wallet_watchAsset',
+        params: {
+          "type":"ERC20",
+          "options":{
+            "address": pie.address,
+            "symbol": pie.symbol,
+            "decimals": 18,
+            "image": pie.icon,
+          },
+        },
+        id: Math.round(Math.random() * 100000),
+    }, (err, added) => {
+      if (added) {
+        console.log('Thanks for your interest!')
+      } else {
+        alert('Something went wrong. Is Metamask there?')
+      }
+    })
+  };
+
   const tokensSwapOut = [
     {
       symbol: "DOUGH/ETH",
@@ -115,11 +142,13 @@
         {#each pies as pie}
           <tr>
             <td class="border border-gray-800 px-2 py-2 text-left">
-                <img
-                  class="inline icon ml-2 mr-2"
-                  src={pie.icon}
-                  alt={pie.symbol} />
-                  ({pie.symbol})
+                <a href={`#/pie/${pie.address}`}>
+                  <img
+                    class="inline icon ml-2 mr-2"
+                    src={pie.icon}
+                    alt={pie.symbol} />
+                    {pie.symbol}
+                </a>
             </td>
             <td class="border text-center px-4 py-2 hidden md:block">
               {#each pie.composition as coin}
@@ -130,7 +159,9 @@
               {/each}
             </td>
             <td class="border text-center px-4 py-2">
-              {pie.totalLiquidity}
+              <a href={`#/pie/${pie.address}`}>
+                {pie.totalLiquidity}
+              </a>
             </td>
             <td class="border text-center px-4 py-2">
               <a href={`#/pools/${pie.address}`}>
@@ -146,6 +177,12 @@
                 </button>
               </a>
             </td>
+            <td class="border text-center py-2">
+              <button on:click={() => addToken(pie)} class="table-btn">
+                Add to MetaMask 🦊
+              </button>
+            </td>
+            
             <!-- <td class="border text-center py-2">
               <button disabled class="table-btn">
                 Stake
