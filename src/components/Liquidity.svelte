@@ -515,7 +515,6 @@
         <span class="py-2px px-4px">ETH</span>
       </div>
     </div>
-    
   </div>
   {/if}
 

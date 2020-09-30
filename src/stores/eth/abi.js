@@ -43,11 +43,9 @@ const loadAbi = (addy) => {
 
 const storeAbi = (addy, abi) => {
   const address = addy.toLowerCase();
-  console.log("storing abi", address, abi);
   try {
     const json = JSON.stringify(abi);
     window.localStorage.setItem(`abis.${address}`, json);
-    console.log("stored abi", address, json);
   } catch (e) {
     console.warn("Unable to store abi for address", address, e);
   }

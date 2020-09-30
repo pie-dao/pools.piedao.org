@@ -35,6 +35,7 @@
   }
 </script>
 
+{#if balance !== ''}
 <div class="small-balance-container">
     <div class="flex flex-col">
         <div class="flex flex-row">
@@ -44,3 +45,4 @@
         <h3 class={yourBalanceClass}>{balance}</h3>
     </div>
 </div>
+{/if}

@@ -175,7 +175,7 @@
               $300,000
             </td>
             <td class="border text-center px-4 py-2">
-              25%
+              N/A
             </td>
             <td class="border text-center px-4 py-2">
               <button class="table-btn">

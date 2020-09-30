@@ -381,6 +381,13 @@
   padding: 8px;
 }
 
+.approvebtn {
+  border-radius: 6px;
+  font-size: 28px;
+  font-weight: 200;
+  width: 11rem;
+}
+
 .spl h1 {
   @apply w-full;
   width: 100;
@@ -575,6 +582,27 @@ opacity: 0.6;
   }
 }
 
+/* Farming */
+
+.farming-card {
+  border-color: #d1d1d1;
+}
+
+.highlight {
+  border: 2px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
+}
+
+.highlight-box{
+  background: linear-gradient(to left, #743ad5, #d53a9d);
+  color: white;
+}
+
+.border-white {
+  border-color: white !important;
+  border: 1px solid;
+}
 
 /* LOADING GIF */
 @keyframes ldio-qudhur211ps {
