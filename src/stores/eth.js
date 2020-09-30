@@ -30,7 +30,7 @@ const providerOptions = {
 };
 
 const web3Modal = new Web3Modal({
-  network: 'kovan', // optional
+  network: 'mainnet', // optional
   cacheProvider: false, // optional
   providerOptions, // required
 });

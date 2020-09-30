@@ -11,7 +11,7 @@
 
 .half { width: 47%;}
 
-.border-half {border: 0.5px;}
+.border-half {border: 0.5px;}icon
 
 #App {
   max-width: 1200px!important;
@@ -412,7 +412,7 @@
 } 
 
 .spl table td > img.icon {
-  @apply h-30px;
+  @apply h-40px;
 }
 
 .spark:hover {

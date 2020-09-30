@@ -5,6 +5,7 @@
   import poolsConfig from "../config/pools.json";
   import { CoinGecko, piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
+  import images from "../config/images.json";
 
   import {
     getTokenImage,
@@ -22,16 +23,38 @@
 
   const tokensSwapOut = [
     {
-      symbol: "USDC/ETH",
-      address: "0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc",
+      symbol: "DOUGH/ETH",
+      address: "",
       balance: '0',
-      type: 'UniswapV2',
+      type: 'Balancer',
+      weeklyRewards: '200,000',
       containing: [
         {
-          symbol: "USDC",
-          address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+          symbol: "DOUGH",
+          address: "0xad32A8e6220741182940c5aBF610bDE99E737b2D",
           balance: '0',
-          icon: getTokenImage('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
+          icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
+        },
+        {
+          symbol: "ETH",
+          address: "0x0000000000000000000000000000000000000000",
+          balance: '0',
+          icon: getTokenImage('eth')
+        },
+      ]
+    },
+    {
+      symbol: "DEFI+S/ETH",
+      address: "",
+      balance: '0',
+      weeklyRewards: '25,000',
+      type: 'Balancer',
+      containing: [
+        {
+          symbol: "DEFI+S",
+          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+          balance: '0',
+          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
         },
         {
           symbol: "ETH",
@@ -43,8 +66,9 @@
     },
     {
       symbol: "DEFI+S/DAI",
-      address: "0x7aefaf3ea1b465dd01561b0548c9fd969e3f76ba",
+      address: "",
       type: 'UniswapV2',
+      weeklyRewards: '25,000',
       balance: '0',
       containing: [
         {
@@ -65,7 +89,9 @@
 </script>
 
 <div class="content flex flex-col spl">
-  <div class="flex flex-row content-between justify-between flex-wrap w-full">
+
+  <img alt="ready to diversify?" src={images.banner} />
+  <div class="flex flex-row hidden md:flex content-between justify-between flex-wrap w-full">
     <BalanceSmall token={'0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c'} />
     <BalanceSmall token={'0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd'} />
     <BalanceSmall token={'0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e'} />
@@ -80,7 +106,7 @@
       <thead>
         <tr>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Pie name</th>
-          <th class="font-thin border-b-2 px-4 py-2">Assets</th>
+          <th class="font-thin border-b-2 px-4 py-2 hidden md:block">Assets</th>
           <th class="font-thin border-b-2 px-4 py-2">Liquidity</th>
           <th class="font-thin border-b-2 px-4 py-2"></th>
           <th class="font-thin border-b-2 px-4 py-2"></th>
@@ -96,7 +122,7 @@
                   alt={pie.symbol} />
                   ({pie.symbol})
             </td>
-            <td class="border text-center px-4 py-2">
+            <td class="border text-center px-4 py-2 hidden md:block">
               {#each pie.composition as coin}
                 <img
                   class="close-icons inline icon"
@@ -124,11 +150,11 @@
                 </button>
               </a>
             </td>
-            <td class="border text-center py-2">
-              <button class="table-btn">
+            <!-- <td class="border text-center py-2">
+              <button disabled class="table-btn">
                 Stake
               </button>
-            </td>
+            </td> -->
           </tr>
         {/each}
       </tbody>
@@ -142,19 +168,17 @@
     <table class="breakdown-table table-auto w-full">
       <thead>
         <tr>
-          <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left hidden md:block">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2">DEX</th>
-          <th class="font-thin border-b-2 px-4 py-2">Liquidity</th>
+          <th class="font-thin border-b-2 px-4 py-2">Weekly Rewards</th>
           <th class="font-thin border-b-2 px-4 py-2">APY</th>
-          <th class="font-thin border-b-2 px-4 py-2"></th>
-          <th class="font-thin border-b-2 px-4 py-2"></th>
-          <th class="font-thin border-b-2 px-4 py-2"></th>
+          <th class="font-thin border-b-2 px-4 py-2">Date of launch</th>
         </tr>
       </thead>
       <tbody>
         {#each tokensSwapOut as pool}
           <tr>
-            <td class="border border-gray-800 px-2 py-2 text-left">
+            <td class="border border-gray-800 px-2 py-2 text-left hidden md:block">
               {#each pool.containing as coins}
                 <img
                   class="inline icon ml-2 mr-2"
@@ -172,24 +196,14 @@
               {/if}
             </td>
             <td class="border text-center px-4 py-2">
-              $300,000
+              {pool.weeklyRewards}
             </td>
             <td class="border text-center px-4 py-2">
               N/A
             </td>
             <td class="border text-center px-4 py-2">
               <button class="table-btn">
-                Add Liquidity
-              </button>
-            </td>
-            <td class="border text-center py-2">
-              <button class="table-btn">
-                Stake
-              </button>
-            </td>
-            <td class="border text-center py-2">
-              <button class="table-btn">
-                Migrate
+                3rd October 2020
               </button>
             </td>
           </tr>

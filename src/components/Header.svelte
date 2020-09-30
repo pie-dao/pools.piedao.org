@@ -30,12 +30,11 @@
       BTC++
     </a>
 
-    <span class="link">🥧</span>
-
+    <!-- <span class="link">🥧</span>
     <a class="link" href="#/stake">
       Stake
     </a>
-    <span class="link">🥧</span>
+    <span class="link">🥧</span> -->
 
     <a class="link" href={links.vision} target="_blank" rel="noopener noreferrer">
       {$_('general.vision')}

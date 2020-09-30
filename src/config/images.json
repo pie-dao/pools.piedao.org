@@ -24,6 +24,8 @@
     "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/wbtc.png",
     "0x880873a96ce38c7fd39dc714592902b069bde048": "https://i.imgur.com/m7FKG5u.png",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/DeFi%2B%2BS.svg",
-    "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": "https://i.imgur.com/m7FKG5u.png"
-  }
+    "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": "https://i.imgur.com/m7FKG5u.png",
+    "0xad32A8e6220741182940c5aBF610bDE99E737b2D": "https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png"
+  },
+  "banner": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true"
 }
