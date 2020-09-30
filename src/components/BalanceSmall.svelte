@@ -19,8 +19,7 @@
   $: symbol = (pools[token] || {}).symbol;
   $: tokenLogo = images.logos[token];
 
-  const address = window.localStorage.getItem('address');
-  console.log('address', address);
+  const address = $eth.address || window.localStorage.getItem('address');
 
   $: if (isAddress(token) && isAddress(address)) {
     balanceClass = "";
@@ -32,7 +31,7 @@
   $: if ($balances[key]) {
     balance = $balances[key].dp(9).toString();
   } else {
-    balance = `${$_("general.loading")}...`;
+    balance = ``;
   }
 </script>
 

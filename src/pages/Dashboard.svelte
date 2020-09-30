@@ -1,21 +1,24 @@
 <script>
+  import BigNumber from 'bignumber.js';
   import BalanceSmall from '../components/BalanceSmall.svelte';
   import { currentRoute } from '../stores/routes.js';
   import poolsConfig from "../config/pools.json";
+  import { CoinGecko, piesMarketDataStore } from '../stores/coingecko.js';
+  import { pools } from '../stores/eth.js';
 
   import {
     getTokenImage,
+    formatFiat
   } from "../components/helpers.js";
 
   $: pies = (poolsConfig.selectable.map(address => {
-    console.log('address', address)
     return {
       ...poolsConfig[address],
-      icon: getTokenImage(address)
+      address,
+      icon: getTokenImage(address),
+      totalLiquidity: $pools[`${address}-usd`] ? formatFiat( $pools[`${address}-usd`].toFixed(2).toString() ) : '-'
     };
   }) || [])
-
-  $: console.log('pies', pies);
 
   const tokensSwapOut = [
     {
@@ -79,8 +82,6 @@
           <th class="font-thin border-b-2 px-4 py-2 text-left">Pie name</th>
           <th class="font-thin border-b-2 px-4 py-2">Assets</th>
           <th class="font-thin border-b-2 px-4 py-2">Liquidity</th>
-          <th class="font-thin border-b-2 px-4 py-2">Net ROI(1mo)</th>
-          <th class="font-thin border-b-2 px-4 py-2"></th>
           <th class="font-thin border-b-2 px-4 py-2"></th>
           <th class="font-thin border-b-2 px-4 py-2"></th>
         </tr>
@@ -104,23 +105,24 @@
               {/each}
             </td>
             <td class="border text-center px-4 py-2">
+              {pie.totalLiquidity}
+            </td>
+            <td class="border text-center px-4 py-2">
               
             </td>
             <td class="border text-center px-4 py-2">
-              $300,000
-            </td>
-            <td class="border text-center px-4 py-2">
-              25%
-            </td>
-            <td class="border text-center px-4 py-2">
-              <button class="table-btn">
-                Mint
-              </button>
+              <a href={`#/pools/${pie.address}`}>
+                <button class="table-btn">
+                  Mint
+                </button>
+              </a>
             </td>
             <td class="border text-center py-2">
-              <button class="table-btn">
-                Redeem
-              </button>
+              <a href={`#/pools/${pie.address}/withdraw/multi`}>
+                <button class="table-btn">
+                  Redeem
+                </button>
+              </a>
             </td>
             <td class="border text-center py-2">
               <button class="table-btn">
@@ -143,7 +145,7 @@
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2">DEX</th>
           <th class="font-thin border-b-2 px-4 py-2">Liquidity</th>
-          <th class="font-thin border-b-2 px-4 py-2">Net ROI(1mo)</th>
+          <th class="font-thin border-b-2 px-4 py-2">APY</th>
           <th class="font-thin border-b-2 px-4 py-2"></th>
           <th class="font-thin border-b-2 px-4 py-2"></th>
           <th class="font-thin border-b-2 px-4 py-2"></th>

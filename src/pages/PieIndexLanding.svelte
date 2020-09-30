@@ -80,6 +80,8 @@
   };
 
   $: tradingViewWidgetComponent ? tradingViewWidgetComponent.initWidget(options) : null;
+
+  $: console.log('piesMarketDataStore', $piesMarketDataStore);
 </script>
 <div class="content flex flex-col spl">
   <div class="flex flex-wrap w-full">
@@ -195,20 +197,20 @@
               {pooledToken.symbol}
             </td>
             <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.current_price.usd`, '-'))}
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
             <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td>
             <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.market_cap.usd`, '-'))}
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.market_cap`, '-'))}
             </td>
             <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.total_volume.usd`, '-'))}
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.total_volume`, '-'))}
             </td>
             <td class="border text-center py-2">
               <img
                 class="w-30 spark mx-0"
                 alt="Sparkline"
-                src="https://www.coingecko.com/coins/{(first(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.image.small`, '').match(/\d+\//g)) || '').slice(0, -1)}/sparkline" 
+                src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
                 style="margin: auto;" />
             </td>
           </tr>

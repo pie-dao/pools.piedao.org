@@ -85,7 +85,11 @@ const updatePoolWeight = async (poolAddress) => {
   const totalUSD = Object.keys(poolCurrentBalances).reduce((sum, token) => {
     let price;
     try {
-      price = marketData[`${token.toLowerCase()}`].market_data.current_price.usd;
+      if(marketData[token]) {
+        price = marketData[token].market_data.current_price;
+      } else {
+        price = 0;
+      }
     } catch (e) {
       console.error(e);
     }
@@ -94,7 +98,10 @@ const updatePoolWeight = async (poolAddress) => {
     return sum.plus(poolCurrentUSD[token]);
   }, BigNumber(0));
 
+  
+
   const updates = {};
+  updates[`${poolAddress}-usd`] = totalUSD;
   updates[poolAddress] = composition.map((definition) => {
     const percentage = BigNumber(poolCurrentBalances[definition.address])
       .dividedBy(total)
