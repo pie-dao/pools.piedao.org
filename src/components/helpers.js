@@ -3,12 +3,12 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
-import { pieSmartPool } from "@pie-dao/abis";
+import { pieSmartPool } from '@pie-dao/abis';
 
+import find from 'lodash/find';
 import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
 import recipeAbi from '../config/recipeABI.json';
-import find from 'lodash/find';
 import unipoolAbi from '../config/unipoolABI.json';
 
 import {
@@ -86,7 +86,7 @@ const updatePoolWeight = async (poolAddress) => {
   const totalUSD = Object.keys(poolCurrentBalances).reduce((sum, token) => {
     let price;
     try {
-      if(marketData[token]) {
+      if (marketData[token]) {
         price = marketData[token].market_data.current_price;
       } else {
         price = 0;
@@ -98,8 +98,6 @@ const updatePoolWeight = async (poolAddress) => {
     poolCurrentUSD[token] = balance.multipliedBy(price);
     return sum.plus(poolCurrentUSD[token]);
   }, BigNumber(0));
-
-  
 
   const updates = {};
   updates[`${poolAddress}-usd`] = totalUSD;
@@ -282,16 +280,16 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
       .multipliedBy(10 ** 18)
       .toFixed(0),
   );
-  
-  const res = await tokenContract.calcTokensForAmount(amount);
-  let data = {};
 
-  res['tokens'].forEach((token, index) => {
+  const res = await tokenContract.calcTokensForAmount(amount);
+  const data = {};
+
+  res.tokens.forEach((token, index) => {
     data[token.toLowerCase()] = {
-      amount: res['amounts'][index],
-      label: ethers.utils.formatEther(res['amounts'][index])
-    }
-  })
+      amount: res.amounts[index],
+      label: ethers.utils.formatEther(res.amounts[index]),
+    };
+  });
 
   return data;
 };
@@ -356,7 +354,7 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
       }
     }
 
-    const originalWeights = find(poolsConfig[token].composition, { 'address':pooledToken.address });
+    const originalWeights = find(poolsConfig[token].composition, { address: pooledToken.address });
 
     return {
       ...pooledToken,
@@ -438,7 +436,7 @@ export const subscribeToAllowance = async (token, address, spender) => {
 };
 
 export const subscribeToStakingEarnings = async (contractAddress, address, shouldBump = true) => {
-  let token = contractAddress;
+  const token = contractAddress;
 
   validateIsAddress(token);
   validateIsAddress(address);
@@ -453,7 +451,7 @@ export const subscribeToStakingEarnings = async (contractAddress, address, shoul
   const unipool = await contract({ address: contractAddress, abi: unipoolAbi });
 
   const observableEarned = await unipool.trackEarnedBalance(address);
-  let decimals = 18;
+  const decimals = 18;
 
   observableEarned.subscribe({
     next: async (updatedBalance) => {
@@ -469,7 +467,7 @@ export const subscribeToStakingEarnings = async (contractAddress, address, shoul
 };
 
 export const subscribeToStaking = async (contractAddress, address, shouldBump = true) => {
-  let token = contractAddress;
+  const token = contractAddress;
 
   validateIsAddress(token);
   validateIsAddress(address);
@@ -485,8 +483,7 @@ export const subscribeToStaking = async (contractAddress, address, shouldBump = 
   const unipool = await contract({ address: contractAddress, abi: unipoolAbi });
 
   const observable = await unipool.trackStakedBalance(address);
-  let decimals = 18;
-
+  const decimals = 18;
 
   observable.subscribe({
     next: async (updatedBalance) => {

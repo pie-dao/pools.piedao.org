@@ -1,5 +1,4 @@
 import { writable } from 'svelte/store';
-import BigNumber from 'bignumber.js';
 import poolsConfig from '../config/pools.json';
 
 const store = writable({});
@@ -44,7 +43,7 @@ function objectToQueryString(obj) {
 export class CoinGecko {
   static async sync() {
     await CoinGecko.fetchAssetPrices();
-    //await CoinGecko.fetchPiesDataAndUnderlying();
+    // await CoinGecko.fetchPiesDataAndUnderlying();
   }
 
   static async fetchPiesDataAndUnderlying() {
@@ -71,67 +70,52 @@ export class CoinGecko {
   }
 
   static async fetchAssetPrices() {
-      let idQueryString = '';
-      let idToSymbolMap = {};
-      let pools = [];
+    let idQueryString = '';
+    const idToSymbolMap = {};
 
-      poolsConfig.available.forEach((pieAddress, index) => {
-        let pie = poolsConfig[pieAddress] || null;
-        
-        console.log('pie', pie);
-
-        if(pie.coingeckoId !== undefined) {
-            idToSymbolMap[pie.coingeckoId] = poolsConfig[pieAddress];
-            idQueryString += `${pie.coingeckoId}%2C`;
-        } 
-
-        pie.composition.forEach((t, index) => {
-          if (t.coingeckoId !== undefined) {
-            idToSymbolMap[t.coingeckoId] = t;
-            idQueryString += `${t.coingeckoId}%2C`;
-          }
-        });
-      });
-
-      const baseURL = 'https://api.coingecko.com/api/v3';
-      const query = `/coins/markets?ids=${idQueryString}&vs_currency=usd`;
-      
-      let prices = {};
-      try {
-          const response = await fetch(`${baseURL}/${query}`, {
-              headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-              },
-          });
-
-          prices = await response.json();
-          console.log('prices', prices)
-      } catch (err) {
-          console.log(`Coingecko call error. Using backup prices.`);
+    poolsConfig.available.forEach((pieAddress) => {
+      const pie = poolsConfig[pieAddress] || null;
+      if (pie.coingeckoId !== undefined) {
+        idToSymbolMap[pie.coingeckoId] = poolsConfig[pieAddress];
+        idQueryString += `${pie.coingeckoId}%2C`;
       }
 
-      store.update((currentState) => {
-        const newState = { ...currentState };
-        prices.forEach(coin => {
-            idToSymbolMap[coin.id].market_data = coin;
-            newState[idToSymbolMap[coin.id].address] = idToSymbolMap[coin.id];
-        });
-        console.log('newState', newState)
-        return newState;
+      pie.composition.forEach((t) => {
+        if (t.coingeckoId !== undefined) {
+          idToSymbolMap[t.coingeckoId] = t;
+          idQueryString += `${t.coingeckoId}%2C`;
+        }
+      });
+    });
+
+    const baseURL = 'https://api.coingecko.com/api/v3';
+    const query = `/coins/markets?ids=${idQueryString}&vs_currency=usd`;
+
+    let prices = {};
+    try {
+      const response = await fetch(`${baseURL}/${query}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
 
-      console.log('idToSymbolMap', idToSymbolMap);
+      prices = await response.json();
+      console.log('prices', prices);
+    } catch (err) {
+      console.log('Coingecko call error. Using backup prices.');
+    }
 
-      // store.update((currentState) => {
-      //   const newState = { ...currentState };
-      //   res.forEach((data) => {
-      //     newState[data.contract_address] = data;
-      //   });
-      //   return newState;
-      // });
+    store.update((currentState) => {
+      const newState = { ...currentState };
+      prices.forEach((coin) => {
+        idToSymbolMap[coin.id].market_data = coin;
+        newState[idToSymbolMap[coin.id].address] = idToSymbolMap[coin.id];
+      });
+      return newState;
+    });
 
-      return idToSymbolMap;
+    return idToSymbolMap;
   }
 
   static fetchCoinData(coingeckoID) {

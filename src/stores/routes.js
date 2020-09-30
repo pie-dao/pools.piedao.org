@@ -45,7 +45,7 @@ const formatRoute = (route) => {
     case 'migrate':
       return { page: Migration, params: { address } };
     case 'stake':
-        return { page: LPStaking};
+      return { page: LPStaking };
     case 'pools':
       address = (route[1] || '').toLowerCase();
       poolAction = (route[2] || 'add').toLowerCase();
