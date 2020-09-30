@@ -42,6 +42,8 @@ const formatRoute = (route) => {
     case 'pie':
       address = (route[1] || '').toLowerCase();
       return { page: PieLanding, params: { address } };
+    case 'migrate':
+      return { page: Migration, params: { address } };
     case 'stake':
         return { page: LPStaking};
     case 'pools':
