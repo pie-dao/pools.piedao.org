@@ -1,8 +1,7 @@
 <script>
   import { connectWeb3, eth } from '../stores/eth.js';
   import { shortenAddress } from "@pie-dao/utils";
-  const address = window.localStorage.getItem('address');
-  console.log('address', address);
+  const address = null;// window.localStorage.getItem('address');
   const shortAddress = address ? shortenAddress(address) : '';
 </script>
 
