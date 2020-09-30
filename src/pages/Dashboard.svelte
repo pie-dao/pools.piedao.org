@@ -91,11 +91,11 @@
 <div class="content flex flex-col spl">
 
   <img alt="ready to diversify?" src={images.banner} />
-  <div class="flex flex-row hidden md:flex content-between justify-between flex-wrap w-full">
+  <!-- <div class="flex flex-row hidden md:flex content-between justify-between flex-wrap w-full">
     <BalanceSmall token={'0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c'} />
     <BalanceSmall token={'0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd'} />
     <BalanceSmall token={'0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e'} />
-  </div>
+  </div> -->
   <div class="w-99pc m-4">
 
     <div class="my-10">
