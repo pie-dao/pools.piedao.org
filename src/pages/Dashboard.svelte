@@ -109,7 +109,6 @@
           <th class="font-thin border-b-2 px-4 py-2 hidden md:block">Assets</th>
           <th class="font-thin border-b-2 px-4 py-2">Liquidity</th>
           <th class="font-thin border-b-2 px-4 py-2"></th>
-          <th class="font-thin border-b-2 px-4 py-2"></th>
         </tr>
       </thead>
       <tbody>
@@ -132,9 +131,6 @@
             </td>
             <td class="border text-center px-4 py-2">
               {pie.totalLiquidity}
-            </td>
-            <td class="border text-center px-4 py-2">
-              
             </td>
             <td class="border text-center px-4 py-2">
               <a href={`#/pools/${pie.address}`}>
