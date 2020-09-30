@@ -3,12 +3,13 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
-import { pieSmartPool } from "@pie-dao/abis";
+import { pieSmartPool } from '@pie-dao/abis';
 
+import find from 'lodash/find';
 import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
 import recipeAbi from '../config/recipeABI.json';
-import find from 'lodash/find';
+import unipoolAbi from '../config/unipoolABI.json';
 
 import {
   allowances,
@@ -85,7 +86,11 @@ const updatePoolWeight = async (poolAddress) => {
   const totalUSD = Object.keys(poolCurrentBalances).reduce((sum, token) => {
     let price;
     try {
-      price = marketData[`${token.toLowerCase()}`].market_data.current_price.usd;
+      if (marketData[token]) {
+        price = marketData[token].market_data.current_price;
+      } else {
+        price = 0;
+      }
     } catch (e) {
       console.error(e);
     }
@@ -95,6 +100,7 @@ const updatePoolWeight = async (poolAddress) => {
   }, BigNumber(0));
 
   const updates = {};
+  updates[`${poolAddress}-usd`] = totalUSD;
   updates[poolAddress] = composition.map((definition) => {
     const percentage = BigNumber(poolCurrentBalances[definition.address])
       .dividedBy(total)
@@ -274,16 +280,16 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
       .multipliedBy(10 ** 18)
       .toFixed(0),
   );
-  
-  const res = await tokenContract.calcTokensForAmount(amount);
-  let data = {};
 
-  res['tokens'].forEach((token, index) => {
+  const res = await tokenContract.calcTokensForAmount(amount);
+  const data = {};
+
+  res.tokens.forEach((token, index) => {
     data[token.toLowerCase()] = {
-      amount: res['amounts'][index],
-      label: ethers.utils.formatEther(res['amounts'][index])
-    }
-  })
+      amount: res.amounts[index],
+      label: ethers.utils.formatEther(res.amounts[index]),
+    };
+  });
 
   return data;
 };
@@ -348,7 +354,7 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
       }
     }
 
-    const originalWeights = find(poolsConfig[token].composition, { 'address':pooledToken.address });
+    const originalWeights = find(poolsConfig[token].composition, { address: pooledToken.address });
 
     return {
       ...pooledToken,
@@ -427,6 +433,69 @@ export const subscribeToAllowance = async (token, address, spender) => {
   });
 
   bumpLifecycle();
+};
+
+export const subscribeToStakingEarnings = async (contractAddress, address, shouldBump = true) => {
+  const token = contractAddress;
+
+  validateIsAddress(token);
+  validateIsAddress(address);
+
+  const keyEarned = balanceKey(token, address, '.earned');
+
+  if (balanceSubscriptions.has(keyEarned)) {
+    return;
+  }
+  balanceSubscriptions.add(keyEarned);
+
+  const unipool = await contract({ address: contractAddress, abi: unipoolAbi });
+
+  const observableEarned = await unipool.trackEarnedBalance(address);
+  const decimals = 18;
+
+  observableEarned.subscribe({
+    next: async (updatedBalance) => {
+      const updates = {};
+      updates[keyEarned] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
+      balances.set({ ...get(balances), ...updates });
+    },
+  });
+
+  if (shouldBump) {
+    bumpLifecycle();
+  }
+};
+
+export const subscribeToStaking = async (contractAddress, address, shouldBump = true) => {
+  const token = contractAddress;
+
+  validateIsAddress(token);
+  validateIsAddress(address);
+
+  const key = balanceKey(token, address);
+
+  if (balanceSubscriptions.has(key)) {
+    return;
+  }
+
+  balanceSubscriptions.add(key);
+
+  const unipool = await contract({ address: contractAddress, abi: unipoolAbi });
+
+  const observable = await unipool.trackStakedBalance(address);
+  const decimals = 18;
+
+  observable.subscribe({
+    next: async (updatedBalance) => {
+      const updates = {};
+      updates[key] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
+      balances.set({ ...get(balances), ...updates });
+    },
+  });
+
+  if (shouldBump) {
+    bumpLifecycle();
+  }
 };
 
 export const subscribeToBalance = async (tokenAddress, address, shouldBump = true) => {

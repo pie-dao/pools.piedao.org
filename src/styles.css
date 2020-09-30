@@ -86,7 +86,26 @@
   @apply flex-1;
 }
 
-/* Balance */
+/* Balance Small */
+
+.small-balance-container {
+  @apply flex bg-grey-243 rounded-4px p-6;
+}
+
+.small-balance-container img {
+  @apply h-30px inline;
+}
+
+.small-balance-container h1 {
+  @apply inline text-lg align-middle pl-2;
+}
+
+.small-balance-container span {
+  @apply text-sm font-thin text-grey-115 capitalize;
+}
+
+
+/* Balance Small */
 
 .balance-container {
   @apply flex bg-grey-243 w-100pc rounded-4px p-6;
@@ -354,6 +373,21 @@
   width: 11rem;
 }
 
+.table-btn {
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 200;
+  border: 1px solid #fc02a7;
+  padding: 8px;
+}
+
+.approvebtn {
+  border-radius: 6px;
+  font-size: 28px;
+  font-weight: 200;
+  width: 11rem;
+}
+
 .spl h1 {
   @apply w-full;
   width: 100;
@@ -377,8 +411,8 @@
   border-color: #edf2f7;
 } 
 
-.spl table td > img.icon {
-  @apply h-30px;
+.spl img.icon {
+  @apply h-40px;
 }
 
 .spark:hover {
@@ -523,6 +557,12 @@
 opacity: 0.6;
 }
 
+/* Dashboard */
+
+.close-icons {
+  margin-left: -8px;
+}
+
 /* Markets */
 
 .markets-container {
@@ -542,6 +582,27 @@ opacity: 0.6;
   }
 }
 
+/* Farming */
+
+.farming-card {
+  border-color: #d1d1d1;
+}
+
+.highlight {
+  border: 2px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
+}
+
+.highlight-box{
+  background: linear-gradient(to left, #743ad5, #d53a9d);
+  color: white;
+}
+
+.border-white {
+  border-color: white !important;
+  border: 1px solid;
+}
 
 /* LOADING GIF */
 @keyframes ldio-qudhur211ps {

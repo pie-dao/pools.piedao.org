@@ -7,6 +7,7 @@
   import Liquidity from '../components/Liquidity.svelte';
   import Quantstamp from '../components/Quantstamp.svelte';
 
+  import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
 </script>
 
@@ -44,5 +45,5 @@
         poolAction={$currentRoute.params.poolAction}
       />
     </div>
-  </div>
+    </div>
 </div>

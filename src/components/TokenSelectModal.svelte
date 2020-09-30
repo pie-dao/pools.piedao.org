@@ -6,6 +6,7 @@
 
   export let open;
 
+  $: console.log('tokens', tokens);
   /** Dispatch event on click outside of node */
   export function clickOutside(node) {
     
@@ -47,10 +48,12 @@
           {#each tokens as token}
             <tr class="border-grey-243 pointer" on:click={() => callback(token)}>
               <td class="flex text-left py-4px">
+                {#if token.icon}
                 <img
                   src={token.icon}
                   alt={token.symbol}
                   class="token-icon w-24px h-24px my-4px mx-2px" />
+                {/if}
                 <span class="leading-32px pl-2 text-md">{token.symbol}</span>
               </td>
               <td class="text-right py-4px text-md font-thin">{token.balance}</td>

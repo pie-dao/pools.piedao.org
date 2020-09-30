@@ -42,7 +42,8 @@ function objectToQueryString(obj) {
 
 export class CoinGecko {
   static async sync() {
-    await CoinGecko.fetchPiesDataAndUnderlying();
+    await CoinGecko.fetchAssetPrices();
+    // await CoinGecko.fetchPiesDataAndUnderlying();
   }
 
   static async fetchPiesDataAndUnderlying() {
@@ -61,10 +62,59 @@ export class CoinGecko {
     store.update((currentState) => {
       const newState = { ...currentState };
       res.forEach((data) => {
+        console.log('data', data);
         newState[data.contract_address] = data;
       });
       return newState;
     });
+  }
+
+  static async fetchAssetPrices() {
+    let idQueryString = '';
+    const idToSymbolMap = {};
+
+    poolsConfig.available.forEach((pieAddress) => {
+      const pie = poolsConfig[pieAddress] || null;
+      if (pie.coingeckoId !== undefined) {
+        idToSymbolMap[pie.coingeckoId] = poolsConfig[pieAddress];
+        idToSymbolMap[pie.coingeckoId].address = pieAddress;
+        idQueryString += `${pie.coingeckoId}%2C`;
+      }
+
+      pie.composition.forEach((t) => {
+        if (t.coingeckoId !== undefined) {
+          idToSymbolMap[t.coingeckoId] = t;
+          idQueryString += `${t.coingeckoId}%2C`;
+        }
+      });
+    });
+    const baseURL = 'https://api.coingecko.com/api/v3';
+    const query = `/coins/markets?ids=${idQueryString}&vs_currency=usd`;
+
+    let prices = {};
+    try {
+      const response = await fetch(`${baseURL}/${query}`, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+
+      prices = await response.json();
+    } catch (err) {
+      console.log('Coingecko call error. Using backup prices.');
+    }
+
+    store.update((currentState) => {
+      const newState = { ...currentState };
+      prices.forEach((coin) => {
+        idToSymbolMap[coin.id].market_data = coin;
+        newState[idToSymbolMap[coin.id].address] = idToSymbolMap[coin.id];
+      });
+      return newState;
+    });
+
+    return idToSymbolMap;
   }
 
   static fetchCoinData(coingeckoID) {

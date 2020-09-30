@@ -19,27 +19,30 @@
   $: symbol = (pools[token] || {}).symbol;
   $: tokenLogo = images.logos[token];
 
-  $: if (isAddress(token) && isAddress($eth.address)) {
+  const address = $eth.address || window.localStorage.getItem('address');
+
+  $: if (isAddress(token) && isAddress(address)) {
     balanceClass = "";
     yourBalanceClass = "";
-    key = balanceKey(token, $eth.address);
-    subscribeToBalance(token, $eth.address);
+    key = balanceKey(token, address);
+    subscribeToBalance(token, address);
   }
 
   $: if ($balances[key]) {
     balance = $balances[key].dp(9).toString();
   } else {
-    balance = `${$_("general.loading")}...`;
+    balance = ``;
   }
 </script>
 
-<div class="balance-container">
-  <div class="left">
-    <img src={tokenLogo} alt={symbol} />
-    <h1>{symbol}</h1>
-  </div>
-  <div class="right">
-    <span class={yourBalanceClass}>{$_('your')} {$_('balance')}</span>
-    <h5 class={balanceClass}>{balance} </h5>
-  </div>
+{#if balance !== ''}
+<div class="small-balance-container">
+    <div class="flex flex-col">
+        <div class="flex flex-row">
+            <img src={tokenLogo} alt={symbol} />
+            <h1>{symbol}</h1>
+        </div>
+        <h3 class={yourBalanceClass}>{balance}</h3>
+    </div>
 </div>
+{/if}

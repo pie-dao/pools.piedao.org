@@ -40,7 +40,7 @@
   );
   $: tokenPrice = get(
     $piesMarketDataStore,
-    `${token.toLowerCase()}.market_data.current_price.usd`,
+    `${token.toLowerCase()}.market_data.current_price`,
     null,
   );
 
@@ -120,11 +120,11 @@
     </div>
   </div>
   <div class="flex justify-between flex-wrap w-full mt-2 md:mt-8">
-    {#if get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap.usd`, '-') != '-'}
+    {#if get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap`, '-') != '-'}
     <div class="p-0 self-start md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">MarketCap</div>
       <div class="text-center text-2xl md:text-xl font-black">
-        {formatFiat(get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap.usd`, '-'))}
+        {formatFiat(get($piesMarketDataStore, `${token}.market_data.market_cap`, '-'))}
       </div>
     </div>
     {/if}
@@ -139,7 +139,7 @@
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">7 Days Change</div>
       <div class="text-center text-2xl md:text-xl font-black">
-        {get($piesMarketDataStore, `${token.toLowerCase()}.market_data.price_change_percentage_7d_in_currency.usd`, '-')}
+        {get($piesMarketDataStore, `${token}.market_data.price_change_percentage_7d_in_currency`, '-')}
       </div>
     </div>
   </div>
@@ -195,20 +195,20 @@
               {pooledToken.symbol}
             </td>
             <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.current_price.usd`, '-'))}
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
             <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td>
             <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.market_cap.usd`, '-'))}
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.market_cap`, '-'))}
             </td>
             <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.market_data.total_volume.usd`, '-'))}
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.total_volume`, '-'))}
             </td>
             <td class="border text-center py-2">
               <img
                 class="w-30 spark mx-0"
                 alt="Sparkline"
-                src="https://www.coingecko.com/coins/{(first(get($piesMarketDataStore, `${pooledToken.address.toLowerCase()}.image.small`, '').match(/\d+\//g)) || '').slice(0, -1)}/sparkline" 
+                src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
                 style="margin: auto;" />
             </td>
           </tr>

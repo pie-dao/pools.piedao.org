@@ -8,7 +8,6 @@
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
-    
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
@@ -23,28 +22,32 @@
         "color": "#58a4fc",
         "percentage": 25,
         "symbol": "imBTC",
-        "coingeckoId": "the-tokenized-bitcoin"
+        "coingeckoId": "the-tokenized-bitcoin",
+        "coingeckoImageId": 10702
       },
       {
         "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
         "color": "#fd6761",
         "percentage": 25,
         "symbol": "wBTC",
-        "coingeckoId": "wrapped-bitcoin"
+        "coingeckoId": "wrapped-bitcoin",
+        "coingeckoImageId": 7598
       },
       {
         "address": "0x5228a22e72ccC52d415EcFd199F99D0665E7733b",
         "color": "#6beab1",
         "percentage": 25,
         "symbol": "pBTC",
-        "coingeckoId": "ptokens-btc"
+        "coingeckoId": "ptokens-btc",
+        "coingeckoImageId": 10805
       },
       {
         "address": "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6",
         "color": "#c4ccce",
         "percentage": 25,
         "symbol": "sBTC",
-        "coingeckoId": "sbtc"
+        "coingeckoId": "sbtc",
+        "coingeckoImageId": 8838
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
@@ -61,28 +64,32 @@
         "percentage": 47.22,
         "color": "#58a4fc",
         "symbol": "USDC",
-        "coingeckoId": "usd-coin"
+        "coingeckoId": "usd-coin",
+        "coingeckoImageId": 6319
       },
       {
         "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
         "percentage": 20.42,
         "color": "#fd6761",
         "symbol": "DAI",
-        "coingeckoId": "dai"
+        "coingeckoId": "dai",
+        "coingeckoImageId": 9956
       },
       {
         "address": "0x0000000000085d4780B73119b644AE5ecd22b376",
         "percentage": 28.58,
         "color": "#6beab1",
         "symbol": "TUSD",
-        "coingeckoId": "true-usd"
+        "coingeckoId": "true-usd",
+        "coingeckoImageId": 3449
       },
       {
         "address": "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
         "percentage": 3.78,
         "color": "#c4ccce",
         "symbol": "sUSD",
-        "coingeckoId": "nusd"
+        "coingeckoId": "nusd",
+        "coingeckoImageId": 5013
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md",
@@ -230,42 +237,48 @@
         "color": "#58a4fc",
         "address": "0xba100000625a3754423978a60c9317c58a424e3D",
         "percentage": 13.57,
-        "coingeckoId": "balancer"
+        "coingeckoId": "balancer",
+        "coingeckoImageId": 11683
       },
       {
         "symbol": "LRC",
         "color": "#fd6761",
         "address": "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
         "percentage": 21.14,
-        "coingeckoId": "loopring"
+        "coingeckoId": "loopring",
+        "coingeckoImageId": 913
       },
       {
         "symbol": "REN",
         "color": "#6beab1",
         "address": "0x408e41876cCCDC0F92210600ef50372656052a38",
         "percentage": 27.80,
-        "coingeckoId": "republic-protocol"
+        "coingeckoId": "republic-protocol",
+        "coingeckoImageId": 3139
       },
       {
         "symbol": "UMA",
         "color": "#c4ccce",
         "address": "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828",
         "percentage": 30,
-        "coingeckoId": "uma"
+        "coingeckoId": "uma",
+        "coingeckoImageId": 10951
       },
       {
         "symbol": "PNT",
         "color": "#c4ccce",
         "address": "0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD",
         "percentage": 4.34,
-        "coingeckoId": "pnetwork"
+        "coingeckoId": "pnetwork",
+        "coingeckoImageId": 11659
       },
       {
         "symbol": "MLN",
         "color": "#c4ccce",
         "address": "0xec67005c4E498Ec7f55E092bd1d35cbC47C91892",
         "percentage": 3.13,
-        "coingeckoId": "melon"
+        "coingeckoId": "melon",
+        "coingeckoImageId": 605
       }
       
     ],

@@ -31,9 +31,9 @@
     </h2>
   </div>
   <div class="right">
-    <h1 class="text-lg md:text-xl">Soon™️</h1>
+    <h1 class="text-lg md:text-xl">Stake</h1>
     <span class="text-xs">
-      Join us on Discord to learn more
+      To get DOUGH Rewards
     </span>
   </div>
 </div>
