@@ -30,5 +30,12 @@
   "banner": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true",
   "stake": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/stake.png",
   "claim": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/claim.png",
-  "withdraw": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/withdraw.png"
+  "withdraw": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/withdraw.png",
+  "herodough": "https://raw.githubusercontent.com/pie-dao/brand/master/dough_hero.png",
+  "tokenmigration": "https://i.ibb.co/tY41vvx/migra.png",
+  "liquiditymining": "https://i.ibb.co/3YyvfzX/farming.png",
+  "vestingperiod": "https://i.ibb.co/VSyRLBY/astro.png",
+  "howtomigrate": "https://i.ibb.co/7zwSFds/howtomig.png"
+
+
 }

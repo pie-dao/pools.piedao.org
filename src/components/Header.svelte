@@ -26,6 +26,10 @@
     </a>
     <span class="link">🥧</span>
 
+    <a class="link" href="#/dough" rel="noopener noreferrer">
+      $DOUGH
+    </a>
+
     <a class="link" href={links.vision} target="_blank" rel="noopener noreferrer">
       {$_('general.vision')}
     </a>
@@ -62,6 +66,11 @@
                 rel="noopener noreferrer"
                 target="_blank">
                 {$_('general.docs')}
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href="#/dough">
+                $DOUGH
               </a>
             </li>
             <li>

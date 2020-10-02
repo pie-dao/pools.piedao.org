@@ -5,6 +5,7 @@ import pools from '../config/pools.json';
 import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
 import Migration from '../pages/Migrations.svelte';
+import Dough from '../pages/Dough.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
@@ -43,6 +44,8 @@ const formatRoute = (route) => {
     case 'pie':
       address = (route[1] || '').toLowerCase();
       return { page: PieLanding, params: { address } };
+    case 'dough':
+      return { page: Dough };
     case 'migrate':
       return { page: Migration, params: { address } };
     case 'stake':
