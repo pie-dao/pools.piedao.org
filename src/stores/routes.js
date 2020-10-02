@@ -11,7 +11,7 @@ import LPStaking from '../pages/LPStaking.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
 
 export const defaultRouteObj = {
-  page: Dough,
+  page: Dashboard,
   params: {
     address: pools.default,
   },
@@ -43,6 +43,8 @@ const formatRoute = (route) => {
     case 'pie':
       address = (route[1] || '').toLowerCase();
       return { page: PieLanding, params: { address } };
+    case 'dough':
+      return { page: Dough };
     case 'migrate':
       return { page: Migration, params: { address } };
     case 'stake':
