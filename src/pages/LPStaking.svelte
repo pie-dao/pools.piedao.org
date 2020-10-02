@@ -49,7 +49,7 @@
   let intiated = false;
   let amountToStake = 0;
   $: amountToClaim = pool && $balances[pool.KeyUnipoolEarnedBalance] ? $balances[pool.KeyUnipoolEarnedBalance] : "0.00000000";
-  let amountToUnstake = "0.00000000";
+  let amountToUnstake = 0;
   
   const referral = $currentRoute.params.referral || window.localStorage.getItem('referral');
   console.log('referral', referral);
@@ -167,7 +167,7 @@
 
   const unstake = async () => {
     if(amountToStake === 0) {
-      displayNotification({ message: "Amount it zero", type: "hint" });
+      displayNotification({ message: "Amount is zero", type: "hint" });
       return;
     }
     const requestedAmount = BigNumber(amountToUnstake);
@@ -410,7 +410,12 @@
                             </div>
                         </div>            
                     </div>
-                    <button on:click={() => unstake()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Unstake</button>
+                    {#if amountToUnstake === 0 }
+                        <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
+                    {:else}
+                      <button on:click={() => unstake()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Unstake</button>
+                    {/if}
+                    
               </div>
 
               <!-- STAKE BOX -->
@@ -440,7 +445,11 @@
                     {#if needAllowance }
                       <button on:click={ () => action(pool, 'unlock')} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Approve</button>
                     {:else}
-                      <button on:click={() => stake()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Stake</button>
+                      {#if amountToStake === 0 }
+                        <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
+                      {:else}
+                        <button on:click={() => stake()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Stake</button>
+                      {/if}
                     {/if}
               </div>
 
