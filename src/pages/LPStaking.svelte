@@ -166,12 +166,19 @@
   };
 
   const unstake = async () => {
-    if(amountToStake === 0) {
+    if(amountToUnstake === 0) {
       displayNotification({ message: "Amount is zero", type: "hint" });
       return;
     }
-    const requestedAmount = BigNumber(amountToUnstake);
+
+    let requestedAmount = BigNumber(amountToUnstake);
     const max = $balances[pool.KeyUnipoolBalance];
+
+    if(requestedAmount.isGreaterThan(max)) {
+      requestedAmount = max;
+      amountToUnstake = max.toNumber();
+      displayNotification({ message: "Amount set to max", type: "hint" });
+    }
 
     if (!$eth.address || !$eth.signer) {
       displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
@@ -254,7 +261,7 @@
       displayNotification({ message: "Amount it zero", type: "hint" });
       return;
     }
-    const requestedAmount = BigNumber(amountToStake);
+    let requestedAmount = BigNumber(amountToStake);
     const max = $balances[pool.KeyAddressTokenToStake];
     let referralValidated = '0x4efD8CEad66bb0fA64C8d53eBE65f31663199C6d'; //Agent address
 
@@ -262,6 +269,12 @@
       displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
       connectWeb3();
       return;
+    }
+
+    if(requestedAmount.isGreaterThan(max)) {
+      requestedAmount = max;
+      amountToStake = max.toNumber();
+      displayNotification({ message: "Amount set to max", type: "hint" });
     }
 
 
