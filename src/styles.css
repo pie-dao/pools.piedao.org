@@ -584,6 +584,15 @@ opacity: 0.6;
 
 /* Farming */
 
+.info-box {
+  font-weight: 200;
+}
+
+.info-box a {
+  text-decoration: underline;
+  font-weight: 400;
+}
+
 .farming-card {
   border-color: #d1d1d1;
 }
@@ -597,6 +606,10 @@ opacity: 0.6;
 .highlight-box{
   background: linear-gradient(to left, #743ad5, #d53a9d);
   color: white;
+}
+
+.farming-card a, .highlight-box a {
+  text-decoration: underline;
 }
 
 .border-white {

@@ -20,11 +20,11 @@
   </div>
   <div class="right">
     
-    <!-- 
+    <span class="link">🥧</span>
     <a class="link" href="#/stake">
       Stake
     </a>
-    <span class="link">🥧</span> -->
+    <span class="link">🥧</span>
 
     <a class="link" href={links.vision} target="_blank" rel="noopener noreferrer">
       {$_('general.vision')}
@@ -36,7 +36,7 @@
     <a class="link" href={links.docs} target="_blank" rel="noopener noreferrer">
       {$_('general.docs')}
     </a>
-    <span class="link">🥧</span>
+    
     <Web3Button />
     <div class="mobile-placeholder" />
 

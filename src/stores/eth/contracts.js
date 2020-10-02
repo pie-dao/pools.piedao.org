@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import { erc20 } from "@pie-dao/abis";
 import { ethers } from "ethers";
 import { get } from "svelte/store";

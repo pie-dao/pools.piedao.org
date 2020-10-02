@@ -35,6 +35,7 @@ const deriveRoute = () => {
 const formatRoute = (route) => {
   let address;
   let poolAction;
+  let referral;
   let method;
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
@@ -45,7 +46,12 @@ const formatRoute = (route) => {
     case 'migrate':
       return { page: Migration, params: { address } };
     case 'stake':
-      return { page: LPStaking };
+      referral = (route[1] || null);
+
+      if (referral) {
+        window.localStorage.setItem('referral', referral);
+      }
+      return { page: LPStaking, params: { referral } };
     case 'pools':
       address = (route[1] || '').toLowerCase();
       poolAction = (route[2] || 'add').toLowerCase();
