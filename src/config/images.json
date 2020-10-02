@@ -27,5 +27,8 @@
     "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": "https://i.imgur.com/m7FKG5u.png",
     "0xad32A8e6220741182940c5aBF610bDE99E737b2D": "https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png"
   },
-  "banner": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true"
+  "banner": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true",
+  "stake": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/stake.png",
+  "claim": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/claim.png",
+  "withdraw": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/withdraw.png"
 }
