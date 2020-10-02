@@ -5,12 +5,13 @@ import pools from '../config/pools.json';
 import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
 import Migration from '../pages/Migrations.svelte';
+import Dough from '../pages/Dough.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
 
 export const defaultRouteObj = {
-  page: Dashboard,
+  page: Dough,
   params: {
     address: pools.default,
   },
