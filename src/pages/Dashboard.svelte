@@ -93,6 +93,14 @@
                 {pie.totalLiquidity}
               </a>
             </td>
+            
+            <td class="border text-center px-4 py-2">
+              <a target="_blank" href={`https://balancer.exchange/#/swap/ether/${pie.address}`}>
+                <button class="table-btn highlight-box">
+                  Buy
+                </button>
+              </a>
+            </td>
             <td class="border text-center px-4 py-2">
               <a href={`#/pools/${pie.address}`}>
                 <button class="table-btn">

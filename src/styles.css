@@ -381,6 +381,10 @@
   padding: 8px;
 }
 
+.table-btn.highlight-box {
+  font-weight: 400;
+}
+
 .approvebtn {
   border-radius: 6px;
   font-size: 28px;
