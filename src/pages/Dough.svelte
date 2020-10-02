@@ -33,7 +33,8 @@
   </div>
 
 
-  <img class="w-20pc h-auto mt-8 l md:mt-12 md:w-20pc h-auto"src={images.tokenmigration} alt="PieDAO Hero" />
+  
+  <img class="w-20pc h-auto mt-8 l md:mt-12 md:w-20pc"src={images.tokenmigration} alt="DOUGH Migration" />
   <h1 class="text-center text-lg  mt-8 md:text-xl md:mt-12">Token Migration</h1>
   <div class="text-center font-thin text-xs mt-2 md:mt-4 md:text-lg">
     PieDAO is entering the next phase of its mission to democratize the access to wealth allocation strategies by migrating the currently non-transferable token (DOUGHv1) to a transferable one (DOUGHv2).<br/>
@@ -55,11 +56,11 @@
               </ul>
         </div>
     </div>
-    <div class="p-4 flex justify-center w-full flex-wrap md:w-1/3 p-16"><img class="w-100pc h-auto md:w-100pc h-auto"src={images.vestingperiod} alt="PieDAO Hero" /></div>
+    <div class="p-4 flex justify-center w-full flex-wrap md:w-1/3 p-16"><img class="w-100pc h-full md:h-auto md:w-100pc"src={images.vestingperiod} alt="PieDAO Hero" /></div>
   </div>
 
   <div class="bg-grey-243 rounded-sm p-8 flex justify-between flex-wrap w-full mt-4 md:mt-8">
-    <div class="p-4 flex justify-center w-full flex-wrap md:w-1/3 p-16"><img class="w-100pc h-auto md:w-100pc h-auto"src={images.howtomigrate} alt="PieDAO Hero" /></div>
+    <div class="p-4 flex justify-center w-full flex-wrap md:w-1/3 p-16"><img class="w-100pc h-full h-auto md:w-100pc"src={images.howtomigrate} alt="PieDAO Hero" /></div>
     <div class="p-4 flex justify-center items-center content-center flex-wrap md:w-2/3">
         <h1 class="text-lg md:text-xl">How to Migrate</h1>
         <div class="font-thin text-xs mt-2 md:mt-4 md:text-base">
