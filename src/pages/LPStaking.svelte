@@ -49,6 +49,7 @@
       addressTokenToStake: '0x43c3A3d3616B492E0788AB70905e28D17666a91D',
       addressUniPoll: '0x57eFE63548Ec9aA39Fc06cacA3D5Ee71c1814869',
       name: 'DOUGH / ETH',
+      platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
       weeklyRewards: formatFiat(200000, ',', '.', ''),
       apy: 1.8,
@@ -60,7 +61,8 @@
     {
       addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
       addressUniPoll: '0x233aC080DE7Ec6e08089a4A6789ee5565bfB677e',
-      name: 'DEFI+S',
+      name: 'DEFI+S / DAI',
+      platform: "🦄 Uniswap",
       description: 'WEEKLY REWARDS',
       weeklyRewards: formatFiat(25000, ',', '.', ''),
       apy: 1.8,
@@ -71,7 +73,8 @@
     {
       addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
       addressUniPoll: '0x233aC080DE7Ec6e08089a4A6789ee5565bfB677e',
-      name: 'DEFI+S / DAI',
+      name: 'DEFI+S / ETH',
+      platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
       weeklyRewards: formatFiat(25000, ',', '.', ''),
       apy: 1.8,
@@ -300,6 +303,8 @@
                     <div class="title text-lg"> {ammPool.name}</div>
                     <div class="subtitle font-thin">{ammPool.description}</div>
                     <div class="apy">{ammPool.weeklyRewards} DOUGH</div>
+                    <div class="apy">{ammPool.platform}</div>
+                    
                     <button on:click={() => pool = ammPool } class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
                 </div>
               {:else}
@@ -308,6 +313,7 @@
                     <div class="title text-lg"> {ammPool.name}</div>
                     <div class="subtitle font-thin">{ammPool.description}</div>
                     <div class="apy">{ammPool.weeklyRewards} DOUGH</div>
+                    <div class="apy">{ammPool.platform}</div>
                     <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
                 </div>
               {/if}
