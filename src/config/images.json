@@ -28,13 +28,11 @@
     "0xad32A8e6220741182940c5aBF610bDE99E737b2D": "https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png"
   },
   "banner": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true",
-  "herodough": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true",
-  "tokenmigration": "https://i.ibb.co/SVv1YVt/migration.png",
+  "herodough": "https://raw.githubusercontent.com/pie-dao/brand/master/dough_hero.png",
+  "tokenmigration": "https://i.ibb.co/tY41vvx/migra.png",
   "liquiditymining": "https://i.ibb.co/3YyvfzX/farming.png",
   "vestingperiod": "https://i.ibb.co/VSyRLBY/astro.png",
-  "howtomigrate": "https://i.ibb.co/QkL07jg/howtomigrate.png"
-
-
+  "howtomigrate": "https://i.ibb.co/7zwSFds/howtomig.png"
 
 
 }

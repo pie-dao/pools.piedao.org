@@ -342,7 +342,7 @@
   </div>
 
 
-  <img class="w-25pc h-auto mt-8 l md:mt-12 md:w-25pc h-auto"src={images.tokenmigration} alt="PieDAO Hero" />
+  <img class="w-20pc h-auto mt-8 l md:mt-12 md:w-20pc h-auto"src={images.tokenmigration} alt="PieDAO Hero" />
   <h1 class="text-center text-lg  mt-8 md:text-xl md:mt-12">Token Migration</h1>
   <div class="text-center font-thin text-xs mt-2 md:mt-4 md:text-lg">
     PieDAO is entering the next phase of its mission to democratize the access to wealth allocation strategies by migrating the currently non-transferable token (DOUGHv1) to a transferable one (DOUGHv2).<br/>
