@@ -39,7 +39,6 @@
 
   const isAddress = (thing) => (
     thing
-    && isString(thing)
     && ethers.utils.isHexString(thing)
     && thing.length === 42
   );
@@ -416,7 +415,7 @@
                             <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
                                 <button on:click={() => {
                                   if($balances[pool.KeyUnipoolBalance]) {
-                                    amountToUnstake = $balances[pool.KeyUnipoolBalance].toFixed(4, BigNumber.ROUND_DOWN);
+                                    amountToUnstake = $balances[pool.KeyUnipoolBalance];
                                   } else {
                                     amountToUnstake = 0;
                                   }}} class="text-black py-2px px-4px">MAX</button>
@@ -448,7 +447,7 @@
                             <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
                                 <button on:click={() => {
                                   if($balances[pool.KeyAddressTokenToStake]) {
-                                    amountToStake = $balances[pool.KeyAddressTokenToStake].toFixed(4, BigNumber.ROUND_DOWN);
+                                    amountToStake = $balances[pool.KeyAddressTokenToStake];
                                   } else {
                                     amountToStake = 0;
                                   }}} class="text-black py-2px px-4px">MAX</button>
