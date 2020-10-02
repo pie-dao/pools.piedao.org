@@ -37,6 +37,13 @@
     subject,
   } from "../stores/eth.js";
 
+  const isAddress = (thing) => (
+    thing
+    && isString(thing)
+    && ethers.utils.isHexString(thing)
+    && thing.length === 42
+  );
+
   let ethKey;
   let ethBalance = 0;
   let intiated = false;
@@ -159,6 +166,10 @@
   };
 
   const unstake = async () => {
+    if(amountToStake === 0) {
+      displayNotification({ message: "Amount it zero", type: "hint" });
+      return;
+    }
     const requestedAmount = BigNumber(amountToUnstake);
     const max = $balances[pool.KeyUnipoolBalance];
 
@@ -239,6 +250,10 @@
   }
 
   const stake = async () => {
+    if(amountToStake === 0) {
+      displayNotification({ message: "Amount it zero", type: "hint" });
+      return;
+    }
     const requestedAmount = BigNumber(amountToStake);
     const max = $balances[pool.KeyAddressTokenToStake];
     let referralValidated = '0x4efD8CEad66bb0fA64C8d53eBE65f31663199C6d'; //Agent address
@@ -249,7 +264,8 @@
       return;
     }
 
-    if(validateIsAddress(referral) && referral.toLowerCase() !== $eth.address.toLowerCase()) {
+
+    if(referral && isAddress(referral) && referral.toLowerCase() !== $eth.address.toLowerCase()) {
       console.log('Im setting the referral to '+referral);
       referralValidated = referral;
     }

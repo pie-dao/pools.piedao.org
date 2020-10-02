@@ -49,7 +49,7 @@ const formatRoute = (route) => {
     case 'migrate':
       return { page: Migration, params: { address } };
     case 'stake':
-      referral = (route[1] || null);
+      referral = route[1] || null;
 
       if (referral) {
         window.localStorage.setItem('referral', referral);

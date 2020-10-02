@@ -2,9 +2,6 @@
   import images from "../config/images.json";
   import FarmerTable from '../components/FarmerTable.svelte';
 </script>
-  
-  
-  
   <div class="content flex flex-col spl">
    <img class="w-100pc h-auto md:w-100pc h-auto"src={images.herodough} alt="PieDAO Hero" />
 
