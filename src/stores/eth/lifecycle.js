@@ -8,7 +8,7 @@ const trackedEthBalances = new Set();
 // subject("block").subscribe({ next: (block) => console.log("block", block) });
 subject("blockNumber").subscribe({
   next: async (currentBlockNumber) => {
-    console.log("currentBlockNumber", currentBlockNumber, Date.now());
+    // console.log("currentBlockNumber", currentBlockNumber, Date.now());
     const ethData = get(eth);
 
     eth.set({ ...ethData, currentBlockNumber });
@@ -32,7 +32,6 @@ export const trackEthBalance = (walletAddress) => {
   trackedEthBalances.add(walletAddress);
   const subj = subject(`ethBalanceOf${walletAddress}`);
   get(eth).provider.getBalance(walletAddress).then((balance) => {
-    console.log('balance', balance.toString());
     subj.next(balance.toString());
   });
   return subj;

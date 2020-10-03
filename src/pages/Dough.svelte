@@ -1,6 +1,45 @@
 <script>
+  import BigNumber from "bignumber.js";
   import images from "../config/images.json";
   import FarmerTable from '../components/FarmerTable.svelte';
+  import {
+    formatFiat,
+    subscribeToBalance,
+  } from "../components/helpers.js";
+   import {
+    balanceKey,
+    balances,
+    contract,
+  } from "../stores/eth.js";
+  
+  const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
+  const DAO = '0x4efD8CEad66bb0fA64C8d53eBE65f31663199C6d';
+  const MULTISIG = '0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0';
+
+  let daoBalanceKey;
+  let msBalanceKey;
+  let circulatingSupply = 0;
+  
+  
+  $: (async () => {
+
+    const doughToken = await contract({ address: DOUGH });
+    // DAO
+    subscribeToBalance(DOUGH, DAO, true);
+    // Multisig
+    subscribeToBalance(DOUGH, MULTISIG, true);
+
+    daoBalanceKey = balanceKey(DOUGH, DAO);
+    msBalanceKey = balanceKey(DOUGH, MULTISIG);
+
+    const totalSupply = await doughToken.totalSupply();
+    const daoBal = $balances[daoBalanceKey] || BigNumber(0);
+    const msBal = $balances[msBalanceKey] || BigNumber(0);
+    if(daoBal > 0 && msBal > 0) {
+      const ts = BigNumber(totalSupply.toString()).dividedBy(10**18)
+      circulatingSupply = ts.minus(BigNumber(msBal)).minus(BigNumber(daoBal));
+    }
+  })()
 </script>
   <div class="content flex flex-col spl">
    <img class="w-100pc h-auto md:w-100pc h-auto"src={images.herodough} alt="PieDAO Hero" />
@@ -9,9 +48,20 @@
    <div class="text-center font-thin text-xs mt-8 md:mt-20 md:text-lg">
     <strong>DOUGH</strong> is the PieDAO governance token. Owning DOUGH makes you a member of PieDAO. Holders are capable of participating in the DAO’s governance votes and proposing votes of their own. 1.5M DOUGH tokens will be available on <strong>Balancer around Oct 3, 2020, at 1:00 pm UTC.</strong><br/>
    </div>
-   <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
 
+   <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-8">
+     
+     <!-- <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>0.002 ETH = 1 DOUGH</strong></div> -->
+     <div class="bg-black text-white p-4 rounded-sm text-center">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
+     <a href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
+      <button class="btn m-0 mt-4 rounded-8px px-56px py-15px min-w-200px w-800px">
+        Buy
+      </button>
+    </a>
 
+   </div>
+
+ 
 
    <div class="bg-grey-243 rounded-sm pt-8 pb-8 flex justify-between flex-wrap w-full mt-4 md:mt-8">
     <div class="p-0 md:w-1/4">
@@ -32,6 +82,7 @@
     </div>
   </div>
 
+  <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
 
   
   <img class="w-20pc h-auto mt-8 l md:mt-12 md:w-20pc"src={images.tokenmigration} alt="DOUGH Migration" />

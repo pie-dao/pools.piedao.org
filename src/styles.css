@@ -371,6 +371,7 @@
   font-size: 28px;
   font-weight: 200;
   width: 11rem;
+  min-width: 230px!important;
 }
 
 .table-btn {

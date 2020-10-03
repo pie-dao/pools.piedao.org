@@ -19,7 +19,11 @@
     </a>
   </div>
   <div class="right">
-    
+    <a class="link" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
+      <button class="table-btn highlight-box">
+        Buy $DOUGH
+      </button>
+    </a>
     <span class="link">🥧</span>
     <a class="link" href="#/stake">
       Stake

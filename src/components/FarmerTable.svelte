@@ -11,6 +11,7 @@
       balance: '0',
       type: 'Balancer',
       weeklyRewards: '200,000',
+      poolLink: '',
       containing: [
         {
           symbol: "DOUGH",
@@ -31,6 +32,7 @@
       address: "",
       balance: '0',
       weeklyRewards: '25,000',
+      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       type: 'Balancer',
       containing: [
         {
@@ -51,6 +53,7 @@
       symbol: "DEFI+S/DAI",
       address: "",
       type: 'UniswapV2',
+      poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
       weeklyRewards: '25,000',
       balance: '0',
       containing: [
@@ -77,7 +80,6 @@
         <th class="font-thin border-b-2 px-4 py-2">DEX</th>
         <th class="font-thin border-b-2 px-4 py-2">Weekly Rewards</th>
         <th class="font-thin border-b-2 px-4 py-2">APY</th>
-        <th class="font-thin border-b-2 px-4 py-2">Date of launch</th>
     </tr>
     </thead>
     <tbody>
@@ -106,11 +108,22 @@
         <td class="border text-center px-4 py-2">
             N/A
         </td>
-        <td class="border text-center px-4 py-2">
+        <td class="border text-center py-2">
+          <a href="#/stake">
             <button class="table-btn">
-            3rd October 2020
+              Stake
             </button>
+          </a>
         </td>
+        {#if pool.poolLink}
+        <td class="border text-center py-2">
+          <a href={`${pool.poolLink}`} target="_blank">
+            <button class="table-btn">
+              Add to Pool
+            </button>
+          </a>
+        </td>
+        {/if}
         </tr>
     {/each}
     </tbody>
