@@ -9,9 +9,17 @@
    <div class="text-center font-thin text-xs mt-8 md:mt-20 md:text-lg">
     <strong>DOUGH</strong> is the PieDAO governance token. Owning DOUGH makes you a member of PieDAO. Holders are capable of participating in the DAO’s governance votes and proposing votes of their own. 1.5M DOUGH tokens will be available on <strong>Balancer around Oct 3, 2020, at 1:00 pm UTC.</strong><br/>
    </div>
-   <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
 
+   <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-8">
+     <div class="bg-black text-white p-4 rounded-sm text-center">Total Supply: <strong>234.059.432 DOUGH</strong></div>
+     <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>0.002 ETH = 1 DOUGH</strong></div>
+     <button class="btn m-0 mt-4 rounded-8px px-56px py-15px min-w-200px w-200px">
+      Buy Now
+    </button>
 
+   </div>
+
+ 
 
    <div class="bg-grey-243 rounded-sm pt-8 pb-8 flex justify-between flex-wrap w-full mt-4 md:mt-8">
     <div class="p-0 md:w-1/4">
@@ -32,6 +40,7 @@
     </div>
   </div>
 
+  <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
 
   
   <img class="w-20pc h-auto mt-8 l md:mt-12 md:w-20pc"src={images.tokenmigration} alt="DOUGH Migration" />
