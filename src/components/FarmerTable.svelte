@@ -11,7 +11,7 @@
       balance: '0',
       type: 'Balancer',
       weeklyRewards: '200,000',
-      poolLink: '',
+      poolLink: 'https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/',
       containing: [
         {
           symbol: "DOUGH",
@@ -79,7 +79,7 @@
         <th class="font-thin border-b-2 px-4 py-2 text-left hidden md:block">Asset name</th>
         <th class="font-thin border-b-2 px-4 py-2">DEX</th>
         <th class="font-thin border-b-2 px-4 py-2">Weekly Rewards</th>
-        <th class="font-thin border-b-2 px-4 py-2">APY</th>
+        <!-- <th class="font-thin border-b-2 px-4 py-2">APY</th> -->
     </tr>
     </thead>
     <tbody>
@@ -105,9 +105,9 @@
         <td class="border text-center px-4 py-2">
             {pool.weeklyRewards}
         </td>
-        <td class="border text-center px-4 py-2">
+        <!-- <td class="border text-center px-4 py-2">
             N/A
-        </td>
+        </td> -->
         <td class="border text-center py-2">
           <a href="#/stake">
             <button class="table-btn">

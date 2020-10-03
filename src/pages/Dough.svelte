@@ -20,6 +20,28 @@
   let msBalanceKey;
   let circulatingSupply = 0;
   
+
+  const addToken = () => {
+    ethereum.sendAsync({
+        method: 'wallet_watchAsset',
+        params: {
+          "type":"ERC20",
+          "options":{
+            "address": '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
+            "symbol": 'DOUGH',
+            "decimals": 18,
+            "image": 'https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png',
+          },
+        },
+        id: Math.round(Math.random() * 100000),
+    }, (err, added) => {
+      if (added) {
+        console.log('Thanks for your interest!')
+      } else {
+        alert('Something went wrong. Is Metamask there?')
+      }
+    })
+  };
   
   $: (async () => {
 
@@ -53,11 +75,17 @@
      
      <!-- <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>0.002 ETH = 1 DOUGH</strong></div> -->
      <div class="bg-black text-white p-4 rounded-sm text-center">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
+
      <a href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
       <button class="btn m-0 mt-4 rounded-8px px-56px py-15px min-w-200px w-800px">
         Buy
       </button>
     </a>
+
+    <button on:click={() => addToken()} class="table-btn mt-4">
+      Add to MetaMask 🦊
+    </button>
+    
 
    </div>
 

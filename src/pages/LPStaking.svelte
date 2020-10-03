@@ -73,8 +73,9 @@
     //   enabled: true,
     // },
     {
-      addressTokenToStake: '0x43c3A3d3616B492E0788AB70905e28D17666a91D',
-      addressUniPoll: '0x57eFE63548Ec9aA39Fc06cacA3D5Ee71c1814869',
+      addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
+      addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
+      poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
       name: 'DOUGH / ETH',
       platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
@@ -86,11 +87,11 @@
       allowanceKey: '',
       highlight: true,
       needAllowance: true,
-      enabled: false,
+      enabled: true,
     },
     {
-      addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
-      addressUniPoll: '0x233aC080DE7Ec6e08089a4A6789ee5565bfB677e',
+      addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
+      addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
       name: 'DEFI+S / DAI',
       platform: "🦄 Uniswap",
       toStakeSymbol: 'LP',
@@ -101,11 +102,12 @@
       allowance: 0,
       allowanceKey: '',
       needAllowance: true,
-      enabled: false,
+      enabled: true,
     },
     {
-      addressTokenToStake: '0x83a6Fa745cF0bc3880D0be47A878EB5b80fd8Fa5',
-      addressUniPoll: '0x233aC080DE7Ec6e08089a4A6789ee5565bfB677e',
+      addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
+      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
+      addressUniPoll: '0x220f25C2105a65425913FE0CF38e7699E3992B97',
       name: 'DEFI+S / ETH',
       rewards_token: 'DOUGH',
       toStakeSymbol: 'BPT',
@@ -116,7 +118,7 @@
       allowance: 0,
       allowanceKey: '',
       needAllowance: true,
-      enabled: false,
+      enabled: true,
     },
   ]
 
@@ -494,8 +496,8 @@
             <div class="info-box">
               <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
-              <p>Buy DEFI+S on <a href="">Balancer</a> or <a href="#/pools/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">mint now!</a></p>
-              <p>Buy DOUGH on <a href="">Balancer</a></p>
+              <p>Buy DEFI+S on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">Balancer</a> or <a href="#/pools/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">mint now!</a></p>
+              <p>Buy DOUGH on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D">Balancer</a></p>
             </div>
         {/if}
     </div>
