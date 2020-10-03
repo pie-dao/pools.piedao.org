@@ -1,6 +1,45 @@
 <script>
+  import BigNumber from "bignumber.js";
   import images from "../config/images.json";
   import FarmerTable from '../components/FarmerTable.svelte';
+  import {
+    formatFiat,
+    subscribeToBalance,
+  } from "../components/helpers.js";
+   import {
+    balanceKey,
+    balances,
+    contract,
+  } from "../stores/eth.js";
+  
+  const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
+  const DAO = '0x4efD8CEad66bb0fA64C8d53eBE65f31663199C6d';
+  const MULTISIG = '0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0';
+
+  let daoBalanceKey;
+  let msBalanceKey;
+  let circulatingSupply = 0;
+  
+  
+  $: (async () => {
+
+    const doughToken = await contract({ address: DOUGH });
+    // DAO
+    subscribeToBalance(DOUGH, DAO, true);
+    // Multisig
+    subscribeToBalance(DOUGH, MULTISIG, true);
+
+    daoBalanceKey = balanceKey(DOUGH, DAO);
+    msBalanceKey = balanceKey(DOUGH, MULTISIG);
+
+    const totalSupply = await doughToken.totalSupply();
+    const daoBal = $balances[daoBalanceKey] || BigNumber(0);
+    const msBal = $balances[msBalanceKey] || BigNumber(0);
+    if(daoBal > 0 && msBal > 0) {
+      const ts = BigNumber(totalSupply.toString()).dividedBy(10**18)
+      circulatingSupply = ts.minus(BigNumber(msBal)).minus(BigNumber(daoBal));
+    }
+  })()
 </script>
   <div class="content flex flex-col spl">
    <img class="w-100pc h-auto md:w-100pc h-auto"src={images.herodough} alt="PieDAO Hero" />
@@ -11,11 +50,14 @@
    </div>
 
    <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-8">
-     <div class="bg-black text-white p-4 rounded-sm text-center">Total Supply: <strong>234.059.432 DOUGH</strong></div>
-     <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>0.002 ETH = 1 DOUGH</strong></div>
-     <button class="btn m-0 mt-4 rounded-8px px-56px py-15px min-w-200px w-200px">
-      Buy Now
-    </button>
+     
+     <!-- <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>0.002 ETH = 1 DOUGH</strong></div> -->
+     <div class="bg-black text-white p-4 rounded-sm text-center">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
+     <a href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
+      <button class="btn m-0 mt-4 rounded-8px px-56px py-15px min-w-200px w-800px">
+        Buy
+      </button>
+    </a>
 
    </div>
 

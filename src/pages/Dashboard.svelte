@@ -120,12 +120,6 @@
                 Add to MetaMask 🦊
               </button>
             </td>
-            
-            <!-- <td class="border text-center py-2">
-              <button disabled class="table-btn">
-                Stake
-              </button>
-            </td> -->
           </tr>
         {/each}
       </tbody>
