@@ -9,6 +9,7 @@
   import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
   import { get } from "svelte/store";
   import displayNotification from "../notifications.js";
+  import { piesMarketDataStore } from '../stores/coingecko.js';
   import {
     amountFormatter,
     fetchPieTokens,
@@ -92,6 +93,7 @@
   }
 
   const calculateAPY = async (pool) => {
+      const marketData = get(piesMarketDataStore);
       try {
       console.log(`Initialized ${$eth.address}`);
       console.log("Reading smart contracts...", pool);
@@ -117,12 +119,12 @@
       const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
       const rewardPerToken = weekly_reward / totalStakedBPTAmount;
 
-      console.log("Finished reading smart contracts... Looking up prices... \n")
+      console.log("Finished reading smart contracts... Looking up prices... \n", marketData[DOUGH])
 
       // Look up prices
       const prices = [1.80, 347.99]; //TODO coingecko
-      const DOUGHPrice = prices[0];
-      const ETHPrice = prices[1];
+      const DOUGHPrice = marketData[DOUGH].market_data.current_price;
+      const ETHPrice =  marketData[WETH].market_data.current_price
       const BALPrice = 22;
 
       const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
@@ -134,7 +136,6 @@
       console.log(`1 WETH = $${ETHPrice}\n`);
       console.log(`1 BPT  = [${DOUGHperBPT} DOUGH, ${WETHperBPT} ETH]`);
       console.log(`       = $${DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice}\n`);
-      console.log(`1 BAL  = $${BALPrice}\n`)
 
       console.log("========== STAKING =========")
       console.log(`There are total   : ${totalBPTAmount} BPT in the Balancer Contract.`);
@@ -206,8 +207,8 @@
     },
     {
       addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
-      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       addressUniPoll: '0x220f25C2105a65425913FE0CF38e7699E3992B97',
+      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       name: 'DEFI+S / ETH',
       rewards_token: 'DOUGH',
       toStakeSymbol: 'BPT',

@@ -70,8 +70,11 @@ export class CoinGecko {
   }
 
   static async fetchAssetPrices() {
-    let idQueryString = '';
-    const idToSymbolMap = {};
+    let idQueryString = 'piedao-dough-v2%2Cweth%2C';
+    const idToSymbolMap = {
+      'piedao-dough-v2': { address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D' },
+      weth: { address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
+    };
 
     poolsConfig.available.forEach((pieAddress) => {
       const pie = poolsConfig[pieAddress] || null;

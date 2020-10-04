@@ -1,3 +1,4 @@
+ /* eslint-disable */
 import BigNumber from 'bignumber.js';
 
 import { ethers } from 'ethers';
@@ -10,6 +11,7 @@ import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
 import recipeAbi from '../config/recipeABI.json';
 import unipoolAbi from '../config/unipoolABI.json';
+import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
 
 import {
   allowances,
@@ -22,6 +24,9 @@ import {
   pools,
   trackBalance,
 } from '../stores/eth.js';
+
+import { farming } from '../stores/eth/writables.js';
+
 import { piesMarketDataStore } from '../stores/coingecko.js';
 
 const poolUpdatePids = {};
@@ -569,3 +574,89 @@ export const subscribeToPoolWeights = async (poolAddress) => {
 
   bumpLifecycle();
 };
+
+export const toFixed = function(num, fixed) {
+  const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?')
+  const arr = num.toString().match(re)
+  if (arr && arr.length > 0) {
+    return arr[0]
+  } else {
+    return '0'
+  }
+}
+
+const isRewardPeriodOver = async function(reward_contract_instance) {
+  const now = Date.now() / 1000
+  const periodFinish = await getPeriodFinishForReward(reward_contract_instance)
+  return periodFinish < now
+}
+
+const getPeriodFinishForReward = async function(reward_contract_instance) {
+  return await reward_contract_instance.periodFinish()
+}
+
+const getPoolWeeklyReward = async (instance) => {
+  if (await isRewardPeriodOver(instance)) {
+    return 0
+  }
+
+  const rewardRate = await instance.rewardRate()
+  return Math.round((rewardRate / 1e18) * 604800)
+};
+
+const getLatestTotalBALAmount = async function(addr) {
+  const bal_earnings = await getBALEarnings(addr, BAL_DISTRIBUTION_WEEK - 1)
+  return bal_earnings[0]
+}
+
+export const calculateAPYBalancer = async (addressStakingPool, tokenToStake, assetOne, assetTwo ) => {
+    console.log('addressStakingPool', addressStakingPool)
+    console.log('tokenToStake', tokenToStake)
+    const marketData = get(piesMarketDataStore);
+    const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
+    const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+
+    console.log(`Initialized `);
+    console.log("Reading smart contracts...");
+
+    const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
+    const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
+    
+    const totalBPTAmount = await BALANCER_POOL.totalSupply() / 1e18;
+    console.log('totalBPTAmount', totalBPTAmount);
+    const totalStakedBPTAmount = await StakingPOOL.totalSupply() / 1e18;
+
+    const totalDOUGHAmount = await BALANCER_POOL.getBalance(DOUGH) / 1e18;
+    console.log('totalDOUGHAmount', totalDOUGHAmount);
+    const totalWETHAmount = await BALANCER_POOL.getBalance(WETH) / 1e18;
+
+    const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
+    const WETHperBPT = totalWETHAmount / totalBPTAmount;
+    
+    // Find out reward rate
+    const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
+    const rewardPerToken = weekly_reward / totalStakedBPTAmount;
+
+    console.log("Finished reading smart contracts... Looking up prices... \n", marketData[DOUGH])
+
+    // Look up prices
+    const DOUGHPrice = marketData[DOUGH].market_data.current_price;
+    const ETHPrice =  marketData[WETH].market_data.current_price
+
+    const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
+
+    // Finished. Start printing
+    const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice) * 100 / (BPTPrice);
+
+    const res = {
+      roi: DOUGHWeeklyROI,
+      weekly: `${toFixed(DOUGHWeeklyROI, 4)}%`,
+      apr: `${toFixed(DOUGHWeeklyROI * 52, 4)}%`
+    }
+
+    console.log('res', res);
+
+    const updates = {};
+    updates[addressStakingPool] = res;
+    farming.set({ ...get(farming), ...updates });
+}
