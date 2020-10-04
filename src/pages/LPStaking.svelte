@@ -6,6 +6,7 @@
   import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
   import recipeUnipool from '../config/unipoolABI.json';
+  import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
   import { get } from "svelte/store";
   import displayNotification from "../notifications.js";
   import {
@@ -53,25 +54,123 @@
   const referral = $currentRoute.params.referral || window.localStorage.getItem('referral');
   console.log('referral', referral);
 
+  const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
+  const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+
+  const toFixed = function(num, fixed) {
+    const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?')
+    const arr = num.toString().match(re)
+    if (arr && arr.length > 0) {
+      return arr[0]
+    } else {
+      return '0'
+    }
+  }
+
+  const isRewardPeriodOver = async function(reward_contract_instance) {
+    const now = Date.now() / 1000
+    const periodFinish = await getPeriodFinishForReward(reward_contract_instance)
+    return periodFinish < now
+  }
+
+  const getPeriodFinishForReward = async function(reward_contract_instance) {
+    return await reward_contract_instance.periodFinish()
+  }
+
+  const getPoolWeeklyReward = async (instance) => {
+    if (await isRewardPeriodOver(instance)) {
+      return 0
+    }
+
+    const rewardRate = await instance.rewardRate()
+    return Math.round((rewardRate / 1e18) * 604800)
+  };
+
+  const getLatestTotalBALAmount = async function(addr) {
+    const bal_earnings = await getBALEarnings(addr, BAL_DISTRIBUTION_WEEK - 1)
+    return bal_earnings[0]
+  }
+
+  const calculateAPY = async (pool) => {
+      try {
+      console.log(`Initialized ${$eth.address}`);
+      console.log("Reading smart contracts...", pool);
+
+      const StakingPOOL = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+      const BALANCER_POOL = await contract({ address: pool.addressTokenToStake, abi: BALANCER_POOL_ABI });
+      const BALANCER_POOL_ERC20 = await contract({ address:pool.addressTokenToStake });
+      const stakedBPTAmount = await StakingPOOL.balanceOf($eth.address) / 1e18;
+      const earnedDOUGH = await StakingPOOL.earned($eth.address) / 1e18;
+      const totalBPTAmount = await BALANCER_POOL.totalSupply() / 1e18;
+
+      const totalStakedBPTAmount = await StakingPOOL.totalSupply() / 1e18;
+      console.log('totalStakedBPTAmount', totalStakedBPTAmount);
+
+      // todo DOUGH
+      const totalDOUGHAmount = await BALANCER_POOL.getBalance(DOUGH) / 1e18;
+      // todo WETH
+      const totalWETHAmount = await BALANCER_POOL.getBalance(WETH) / 1e18;
+
+      const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
+      const WETHperBPT = totalWETHAmount / totalBPTAmount;
+      // Find out reward rate
+      const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
+      const rewardPerToken = weekly_reward / totalStakedBPTAmount;
+
+      console.log("Finished reading smart contracts... Looking up prices... \n")
+
+      // Look up prices
+      const prices = [1.80, 347.99]; //TODO coingecko
+      const DOUGHPrice = prices[0];
+      const ETHPrice = prices[1];
+      const BALPrice = 22;
+
+      const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
+
+      // Finished. Start printing
+
+      console.log("========== PRICES ==========")
+      console.log(`1 DOUGH  = $${DOUGHPrice}`);
+      console.log(`1 WETH = $${ETHPrice}\n`);
+      console.log(`1 BPT  = [${DOUGHperBPT} DOUGH, ${WETHperBPT} ETH]`);
+      console.log(`       = $${DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice}\n`);
+      console.log(`1 BAL  = $${BALPrice}\n`)
+
+      console.log("========== STAKING =========")
+      console.log(`There are total   : ${totalBPTAmount} BPT in the Balancer Contract.`);
+      console.log(`There are total   : ${totalStakedBPTAmount} BPT staked in Staking pool. \n`);
+      console.log(`You are staking   : ${stakedBPTAmount} BPT (${toFixed(stakedBPTAmount * 100 / totalStakedBPTAmount, 3)}% of the pool)`);
+      console.log(`                  = [${DOUGHperBPT * stakedBPTAmount} SNX, ${WETHperBPT * stakedBPTAmount} USDC]`);
+      console.log(`                  = $${toFixed(DOUGHperBPT * stakedBPTAmount * DOUGHPrice + WETHperBPT * stakedBPTAmount * ETHPrice, 2)}\n`);
+
+      // DOUGH REWARDS
+      console.log("======== DOUGH REWARDS ========")
+      console.log(`Claimable Rewards : ${toFixed(earnedDOUGH, 2)} DOUGH = $${toFixed(earnedDOUGH * DOUGHPrice, 2)}`);
+      console.log(`Weekly estimate   : ${toFixed(rewardPerToken * stakedBPTAmount, 2)} DOUGH = $${toFixed(rewardPerToken * stakedBPTAmount * DOUGHPrice, 2)} (out of total ${weekly_reward} DOUGH)`)
+      const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice) * 100 / (BPTPrice);
+      console.log(`Weekly ROI in USD : ${toFixed(DOUGHWeeklyROI, 4)}%`)
+      console.log(`APR (unstable)    : ${toFixed(DOUGHWeeklyROI * 52, 4)}% \n`)
+      } catch (e) {
+        console.log(e);
+      }
+
+      // BAL REWARDS
+      // console.log("======== BAL REWARDS ========")
+      // console.log("WARNING: This estimate is based on last week's reward and current pool liquidity amount.")
+      // console.log("       : **It will be MUCH higher than what you actually get at the end of this week.** \n")
+
+      // const totalBALAmount = await getLatestTotalBALAmount(SYNTH_USDC_SNX_BPT_STAKING_POOL_ADDR);
+      // const BALPerToken = totalBALAmount * (1 / totalBPTAmount);
+      // const yourBALEarnings = BALPerToken * stakedBPTAmount;
+
+      // console.log(`Weekly estimate   : ${toFixed(yourBALEarnings, 4)} BAL = $${toFixed(yourBALEarnings * BALPrice, 2)} (out of total ${toFixed(totalBALAmount, 4)} BAL)`);
+      // const BALWeeklyROI = (BALPerToken * BALPrice) * 100 / BPTPrice;
+      // console.log(`Weekly ROI in USD : ${toFixed(BALWeeklyROI, 4)}%`);
+      // console.log(`APR (unstable)    : ${toFixed(BALWeeklyROI * 52, 4)}% \n`)
+  }
+
   $: needAllowance = true;
   $: incentivizedPools = [
-    // {
-    //   addressTokenToStake: '0x35333cf3db8e334384ec6d2ea446da6e445701df',
-    //   addressUniPoll: '0x76ac0f89b93f4e0b9884ad1547381445a1a7d2c8',
-    //   name: 'DEFI+S / ETH',
-    //   platform: "⚖️ Balancer",
-    //   poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
-    //   description: 'WEEKLY REWARDS',
-    //   rewards_token: 'DEFI+S',
-    //   toStakeSymbol: 'BPT',
-    //   weeklyRewards: formatFiat(100, ',', '.', ''),
-    //   apy: 1.8,
-    //   allowance: 0,
-    //   allowanceKey: '',
-    //   highlight: true,
-    //   needAllowance: true,
-    //   enabled: true,
-    // },
     {
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
       addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
@@ -131,6 +230,7 @@
   $: pool = null;
 
   $: if($eth.address && !intiated) {
+    calculateAPY(incentivizedPools[0]);
     incentivizedPools.forEach( p => {
       subscribeToBalance(p.addressTokenToStake, $eth.address, true);
       subscribeToStaking(p.addressUniPoll, $eth.address, true);
