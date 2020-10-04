@@ -16,6 +16,10 @@ for (let i = 0; i < poolsConfig.available.length; i++) {
 
 pools.set(poolsDefault);
 CoinGecko.sync();
+setInterval(() => {
+  CoinGecko.sync();
+  console.log('calling afaing');
+}, 120000);
 
 var app = new App({
   target: document.body,

@@ -43,6 +43,8 @@ function objectToQueryString(obj) {
 export class CoinGecko {
   static async sync() {
     await CoinGecko.fetchAssetPrices();
+    const event = new Event('price-update');
+    window.dispatchEvent(event);
     // await CoinGecko.fetchPiesDataAndUnderlying();
   }
 

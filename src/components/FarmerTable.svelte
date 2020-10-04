@@ -2,7 +2,7 @@
   import {
     getTokenImage,
     formatFiat,
-    calculateAPYBalancer
+    calculateAPRBalancer
   } from "../components/helpers.js";
 
   import { farming } from '../stores/eth/writables.js';
@@ -86,15 +86,14 @@
     },
   ];
 
-  $: (() => {
-    setTimeout(() =>{
-      tokensSwapOut.forEach( async pool => {
+  window.addEventListener('price-update', function (e) {
+    console.log('price-update', e)
+    tokensSwapOut.forEach( async pool => {
         if(pool.aprEnabled) {
-          const res = await calculateAPYBalancer(pool.addressUniPoll, pool.addressTokenToStake, pool.containing[0].address, pool.containing[1].address);
+          const res = await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, pool.containing[0].address, pool.containing[1].address);
         }  
-      });
-    }, 2000)
-  })();
+    });
+  }, false);
 
   $: console.log('farming', $farming);
 </script>
@@ -104,7 +103,7 @@
         <th class="font-thin border-b-2 px-4 py-2 text-left hidden md:block">Asset name</th>
         <th class="font-thin border-b-2 px-4 py-2">DEX</th>
         <th class="font-thin border-b-2 px-4 py-2">Weekly Rewards</th>
-        <th class="font-thin border-b-2 px-4 py-2">APR</th>
+        <th class="font-thin border-b-2 px-4 py-2">APR (unstable)</th>
         <!-- <th class="font-thin border-b-2 px-4 py-2">APY</th> -->
     </tr>
     </thead>

@@ -1,4 +1,4 @@
- /* eslint-disable */
+/* eslint-disable */
 import BigNumber from 'bignumber.js';
 
 import { ethers } from 'ethers';
@@ -34,9 +34,10 @@ const poolUpdatePids = {};
 const allowanceSubscriptions = new Set();
 const balanceSubscriptions = new Set();
 
-export const getTokenImage = (tokenAddress) => (images.logos[tokenAddress]
-  ? images.logos[tokenAddress]
-  : `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`);
+export const getTokenImage = (tokenAddress) =>
+  images.logos[tokenAddress]
+    ? images.logos[tokenAddress]
+    : `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
 
 const enqueueWeightUpdate = (poolAddress) => {
   clearTimeout(poolUpdatePids[poolAddress]);
@@ -242,33 +243,34 @@ export const pooledTokenAmountRequired = (amt, { percentage }, raw = false) => {
   return amountFormatter({ amount: requiredAmount, displayDecimals: 8 });
 };
 
-export const fetchPieTokens = (balancesData) => poolsConfig.selectable.map((address) => {
-  const ethData = get(eth);
-  const icon = getTokenImage(address);
-  const { symbol } = poolsConfig[address];
-  let balance = BigNumber(0);
+export const fetchPieTokens = (balancesData) =>
+  poolsConfig.selectable.map((address) => {
+    const ethData = get(eth);
+    const icon = getTokenImage(address);
+    const { symbol } = poolsConfig[address];
+    let balance = BigNumber(0);
 
-  if (ethData.address) {
-    subscribeToBalance(address, ethData.address);
+    if (ethData.address) {
+      subscribeToBalance(address, ethData.address);
 
-    const balKey = balanceKey(address, ethData.address);
-    balance = balancesData[balKey];
-  }
+      const balKey = balanceKey(address, ethData.address);
+      balance = balancesData[balKey];
+    }
 
-  balance = amountFormatter({
-    amount: balance,
-    approximatePrefix: '',
-    displayDecimals: 8,
-    maxDigits: 10,
+    balance = amountFormatter({
+      amount: balance,
+      approximatePrefix: '',
+      displayDecimals: 8,
+      maxDigits: 10,
+    });
+
+    return {
+      address,
+      balance,
+      icon,
+      symbol,
+    };
   });
-
-  return {
-    address,
-    balance,
-    icon,
-    symbol,
-  };
-});
 
 export const fetchEthBalance = (address) => {
   subscribeToBalance(null, address);
@@ -332,8 +334,9 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
     let actionBtnClass = 'hidden';
     let actionBtnLabel = '';
 
-    const buyLink = pooledToken.buyLink
-      || 'https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0';
+    const buyLink =
+      pooledToken.buyLink ||
+      'https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0';
 
     if (ethData.address) {
       subscribeToAllowance(address, ethData.address, token);
@@ -344,17 +347,20 @@ export const fetchPooledTokens = (token, amount, current, allowancesData, balanc
       const balKey = balanceKey(address, ethData.address);
 
       if (
-        balancesData[balKey]
-        && balancesData[balKey].isGreaterThan(amountRequired)
-        && (!isBigNumber(allowance) || allowance.isLessThan(amountRequired))
+        balancesData[balKey] &&
+        balancesData[balKey].isGreaterThan(amountRequired) &&
+        (!isBigNumber(allowance) || allowance.isLessThan(amountRequired))
       ) {
-        actionBtnClass = 'btn-unlock cursor rounded-20px h-26px bg-white border border-black w-60px m-auto text-center text-xs font-thin leading-26px';
+        actionBtnClass =
+          'btn-unlock cursor rounded-20px h-26px bg-white border border-black w-60px m-auto text-center text-xs font-thin leading-26px';
         actionBtnLabel = 'Unlock';
       } else if (balancesData[balKey] && balancesData[balKey].isLessThan(amountRequired)) {
-        actionBtnClass = 'btn-buy cursor rounded-20px h-26px bg-black text-white w-60px m-auto text-center text-xs font-thin leading-26px';
+        actionBtnClass =
+          'btn-buy cursor rounded-20px h-26px bg-black text-white w-60px m-auto text-center text-xs font-thin leading-26px';
         actionBtnLabel = 'BUY';
       } else {
-        actionBtnClass = 'btn-buy rounded-20px h-26px bg-white text-grey w-60px m-auto text-center text-xs font-thin leading-26px';
+        actionBtnClass =
+          'btn-buy rounded-20px h-26px bg-white text-grey w-60px m-auto text-center text-xs font-thin leading-26px';
         actionBtnLabel = 'ready';
       }
     }
@@ -575,88 +581,138 @@ export const subscribeToPoolWeights = async (poolAddress) => {
   bumpLifecycle();
 };
 
-export const toFixed = function(num, fixed) {
-  const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?')
-  const arr = num.toString().match(re)
+export const toFixed = function (num, fixed) {
+  const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
+  const arr = num.toString().match(re);
   if (arr && arr.length > 0) {
-    return arr[0]
+    return arr[0];
   } else {
-    return '0'
+    return '0';
   }
-}
+};
 
-const isRewardPeriodOver = async function(reward_contract_instance) {
-  const now = Date.now() / 1000
-  const periodFinish = await getPeriodFinishForReward(reward_contract_instance)
-  return periodFinish < now
-}
+const isRewardPeriodOver = async function (reward_contract_instance) {
+  const now = Date.now() / 1000;
+  const periodFinish = await getPeriodFinishForReward(reward_contract_instance);
+  return periodFinish < now;
+};
 
-const getPeriodFinishForReward = async function(reward_contract_instance) {
-  return await reward_contract_instance.periodFinish()
-}
+const getPeriodFinishForReward = async function (reward_contract_instance) {
+  return await reward_contract_instance.periodFinish();
+};
 
 const getPoolWeeklyReward = async (instance) => {
   if (await isRewardPeriodOver(instance)) {
-    return 0
+    return 0;
   }
 
-  const rewardRate = await instance.rewardRate()
-  return Math.round((rewardRate / 1e18) * 604800)
+  const rewardRate = await instance.rewardRate();
+  return Math.round((rewardRate / 1e18) * 604800);
 };
 
-const getLatestTotalBALAmount = async function(addr) {
-  const bal_earnings = await getBALEarnings(addr, BAL_DISTRIBUTION_WEEK - 1)
-  return bal_earnings[0]
-}
+const getLatestTotalBALAmount = async function (addr) {
+  const bal_earnings = await getBALEarnings(addr, BAL_DISTRIBUTION_WEEK - 1);
+  return bal_earnings[0];
+};
 
-export const calculateAPYBalancer = async (addressStakingPool, tokenToStake, assetOne, assetTwo ) => {
-    console.log('addressStakingPool', addressStakingPool)
-    console.log('tokenToStake', tokenToStake)
-    const marketData = get(piesMarketDataStore);
-    const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
-    const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+export const calculateAPRBalancer = async (
+  addressStakingPool,
+  tokenToStake,
+  stakedBPTAmount = null,
+  earnedDOUGH = null,
+) => {
+  const marketData = get(piesMarketDataStore);
+  const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
+  const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
 
-    console.log(`Initialized `);
-    console.log("Reading smart contracts...");
+  console.log(`Initialized `);
+  console.log('Reading smart contracts...');
 
-    const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
-    const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
-    
-    const totalBPTAmount = await BALANCER_POOL.totalSupply() / 1e18;
-    console.log('totalBPTAmount', totalBPTAmount);
-    const totalStakedBPTAmount = await StakingPOOL.totalSupply() / 1e18;
+  const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
+  const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
 
-    const totalDOUGHAmount = await BALANCER_POOL.getBalance(DOUGH) / 1e18;
-    console.log('totalDOUGHAmount', totalDOUGHAmount);
-    const totalWETHAmount = await BALANCER_POOL.getBalance(WETH) / 1e18;
+  const totalBPTAmount = (await BALANCER_POOL.totalSupply()) / 1e18;
+  const totalStakedBPTAmount = (await StakingPOOL.totalSupply()) / 1e18;
 
-    const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
-    const WETHperBPT = totalWETHAmount / totalBPTAmount;
-    
-    // Find out reward rate
-    const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
-    const rewardPerToken = weekly_reward / totalStakedBPTAmount;
+  const totalDOUGHAmount = (await BALANCER_POOL.getBalance(DOUGH)) / 1e18;
+  const totalWETHAmount = (await BALANCER_POOL.getBalance(WETH)) / 1e18;
 
-    console.log("Finished reading smart contracts... Looking up prices... \n", marketData[DOUGH])
+  const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
+  const WETHperBPT = totalWETHAmount / totalBPTAmount;
 
-    // Look up prices
-    const DOUGHPrice = marketData[DOUGH].market_data.current_price;
-    const ETHPrice =  marketData[WETH].market_data.current_price
+  // Find out reward rate
+  const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
+  const rewardPerToken = weekly_reward / totalStakedBPTAmount;
 
-    const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
+  console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
 
-    // Finished. Start printing
-    const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice) * 100 / (BPTPrice);
+  // Look up prices
+  const DOUGHPrice = marketData[DOUGH].market_data.current_price;
+  const ETHPrice = marketData[WETH].market_data.current_price;
+  const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
+  // Finished. Start printing
+  const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
 
-    const res = {
-      roi: DOUGHWeeklyROI,
-      weekly: `${toFixed(DOUGHWeeklyROI, 4)}%`,
-      apr: `${toFixed(DOUGHWeeklyROI * 52, 4)}%`
+  if (1) {
+    console.log('========== STAKING =========');
+    console.log(`There are total   : ${totalBPTAmount} BPT in the Balancer Contract.`);
+    console.log(`There are total   : ${totalStakedBPTAmount} BPT staked in Staking pool. \n`);
+    if (stakedBPTAmount) {
+      console.log(
+        `You are staking   : ${stakedBPTAmount} BPT (${toFixed(
+          (stakedBPTAmount * 100) / totalStakedBPTAmount,
+          3,
+        )}% of the pool)`,
+      );
+      console.log(
+        `                  = [${DOUGHperBPT * stakedBPTAmount} SNX, ${
+          WETHperBPT * stakedBPTAmount
+        } USDC]`,
+      );
+      console.log(
+        `                  = $${toFixed(
+          DOUGHperBPT * stakedBPTAmount * DOUGHPrice + WETHperBPT * stakedBPTAmount * ETHPrice,
+          2,
+        )}\n`,
+      );
     }
 
-    console.log('res', res);
+    // DOUGH REWARDS
+    console.log('======== DOUGH REWARDS ========');
+    if (stakedBPTAmount && earnedDOUGH) {
+      console.log(
+        `Claimable Rewards : ${toFixed(earnedDOUGH, 2)} DOUGH = $${toFixed(
+          earnedDOUGH * DOUGHPrice,
+          2,
+        )}`,
+      );
+      console.log(
+        `Weekly estimate   : ${toFixed(rewardPerToken * stakedBPTAmount, 2)} DOUGH = $${toFixed(
+          rewardPerToken * stakedBPTAmount * DOUGHPrice,
+          2,
+        )} (out of total ${weekly_reward} DOUGH)`,
+      );
+    }
+    console.log(`Weekly ROI in USD : ${toFixed(DOUGHWeeklyROI, 4)}%`);
+    console.log(`APR (unstable)    : ${toFixed(DOUGHWeeklyROI * 52, 4)}% \n`);
+  }
 
-    const updates = {};
-    updates[addressStakingPool] = res;
-    farming.set({ ...get(farming), ...updates });
-}
+  const res = {
+    roi: DOUGHWeeklyROI,
+    weekly: `${toFixed(DOUGHWeeklyROI, 4)}%`,
+    apr: `${toFixed(DOUGHWeeklyROI * 52, 4)}%`,
+    totalBPTAmount,
+    totalStakedBPTAmount,
+    BPTPrice,
+    weekly_reward,
+    rewardPerToken,
+    DOUGHperBPT,
+    WETHperBPT,
+    DOUGHPrice,
+    ETHPrice,
+  };
+
+  const updates = {};
+  updates[addressStakingPool] = res;
+  farming.set({ ...get(farming), ...updates });
+};

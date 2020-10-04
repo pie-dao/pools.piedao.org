@@ -10,6 +10,7 @@
   import { get } from "svelte/store";
   import displayNotification from "../notifications.js";
   import { piesMarketDataStore } from '../stores/coingecko.js';
+  import { farming } from '../stores/eth/writables.js';
   import {
     amountFormatter,
     fetchPieTokens,
@@ -18,6 +19,8 @@
     getTokenImage,
     fetchEthBalance,
     fetchCalcToPie,
+    toFixed,
+    calculateAPRBalancer,
     formatFiat,
     subscribeToBalance,
     subscribeToAllowance,
@@ -53,128 +56,15 @@
   let amountToUnstake = 0;
   
   const referral = $currentRoute.params.referral || window.localStorage.getItem('referral');
-  console.log('referral', referral);
 
-  const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
-  const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
-
-  const toFixed = function(num, fixed) {
-    const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?')
-    const arr = num.toString().match(re)
-    if (arr && arr.length > 0) {
-      return arr[0]
-    } else {
-      return '0'
-    }
-  }
-
-  const isRewardPeriodOver = async function(reward_contract_instance) {
-    const now = Date.now() / 1000
-    const periodFinish = await getPeriodFinishForReward(reward_contract_instance)
-    return periodFinish < now
-  }
-
-  const getPeriodFinishForReward = async function(reward_contract_instance) {
-    return await reward_contract_instance.periodFinish()
-  }
-
-  const getPoolWeeklyReward = async (instance) => {
-    if (await isRewardPeriodOver(instance)) {
-      return 0
-    }
-
-    const rewardRate = await instance.rewardRate()
-    return Math.round((rewardRate / 1e18) * 604800)
-  };
-
-  const getLatestTotalBALAmount = async function(addr) {
-    const bal_earnings = await getBALEarnings(addr, BAL_DISTRIBUTION_WEEK - 1)
-    return bal_earnings[0]
-  }
-
-  const calculateAPY = async (pool) => {
-      const marketData = get(piesMarketDataStore);
-      try {
-      console.log(`Initialized ${$eth.address}`);
-      console.log("Reading smart contracts...", pool);
-
-      const StakingPOOL = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
-      const BALANCER_POOL = await contract({ address: pool.addressTokenToStake, abi: BALANCER_POOL_ABI });
-      const BALANCER_POOL_ERC20 = await contract({ address:pool.addressTokenToStake });
-      const stakedBPTAmount = await StakingPOOL.balanceOf($eth.address) / 1e18;
-      const earnedDOUGH = await StakingPOOL.earned($eth.address) / 1e18;
-      const totalBPTAmount = await BALANCER_POOL.totalSupply() / 1e18;
-
-      const totalStakedBPTAmount = await StakingPOOL.totalSupply() / 1e18;
-      console.log('totalStakedBPTAmount', totalStakedBPTAmount);
-
-      // todo DOUGH
-      const totalDOUGHAmount = await BALANCER_POOL.getBalance(DOUGH) / 1e18;
-      // todo WETH
-      const totalWETHAmount = await BALANCER_POOL.getBalance(WETH) / 1e18;
-
-      const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
-      const WETHperBPT = totalWETHAmount / totalBPTAmount;
-      // Find out reward rate
-      const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
-      const rewardPerToken = weekly_reward / totalStakedBPTAmount;
-
-      console.log("Finished reading smart contracts... Looking up prices... \n", marketData[DOUGH])
-
-      // Look up prices
-      const prices = [1.80, 347.99]; //TODO coingecko
-      const DOUGHPrice = marketData[DOUGH].market_data.current_price;
-      const ETHPrice =  marketData[WETH].market_data.current_price
-      const BALPrice = 22;
-
-      const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
-
-      // Finished. Start printing
-
-      console.log("========== PRICES ==========")
-      console.log(`1 DOUGH  = $${DOUGHPrice}`);
-      console.log(`1 WETH = $${ETHPrice}\n`);
-      console.log(`1 BPT  = [${DOUGHperBPT} DOUGH, ${WETHperBPT} ETH]`);
-      console.log(`       = $${DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice}\n`);
-
-      console.log("========== STAKING =========")
-      console.log(`There are total   : ${totalBPTAmount} BPT in the Balancer Contract.`);
-      console.log(`There are total   : ${totalStakedBPTAmount} BPT staked in Staking pool. \n`);
-      console.log(`You are staking   : ${stakedBPTAmount} BPT (${toFixed(stakedBPTAmount * 100 / totalStakedBPTAmount, 3)}% of the pool)`);
-      console.log(`                  = [${DOUGHperBPT * stakedBPTAmount} SNX, ${WETHperBPT * stakedBPTAmount} USDC]`);
-      console.log(`                  = $${toFixed(DOUGHperBPT * stakedBPTAmount * DOUGHPrice + WETHperBPT * stakedBPTAmount * ETHPrice, 2)}\n`);
-
-      // DOUGH REWARDS
-      console.log("======== DOUGH REWARDS ========")
-      console.log(`Claimable Rewards : ${toFixed(earnedDOUGH, 2)} DOUGH = $${toFixed(earnedDOUGH * DOUGHPrice, 2)}`);
-      console.log(`Weekly estimate   : ${toFixed(rewardPerToken * stakedBPTAmount, 2)} DOUGH = $${toFixed(rewardPerToken * stakedBPTAmount * DOUGHPrice, 2)} (out of total ${weekly_reward} DOUGH)`)
-      const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice) * 100 / (BPTPrice);
-      console.log(`Weekly ROI in USD : ${toFixed(DOUGHWeeklyROI, 4)}%`)
-      console.log(`APR (unstable)    : ${toFixed(DOUGHWeeklyROI * 52, 4)}% \n`)
-      } catch (e) {
-        console.log(e);
-      }
-
-      // BAL REWARDS
-      // console.log("======== BAL REWARDS ========")
-      // console.log("WARNING: This estimate is based on last week's reward and current pool liquidity amount.")
-      // console.log("       : **It will be MUCH higher than what you actually get at the end of this week.** \n")
-
-      // const totalBALAmount = await getLatestTotalBALAmount(SYNTH_USDC_SNX_BPT_STAKING_POOL_ADDR);
-      // const BALPerToken = totalBALAmount * (1 / totalBPTAmount);
-      // const yourBALEarnings = BALPerToken * stakedBPTAmount;
-
-      // console.log(`Weekly estimate   : ${toFixed(yourBALEarnings, 4)} BAL = $${toFixed(yourBALEarnings * BALPrice, 2)} (out of total ${toFixed(totalBALAmount, 4)} BAL)`);
-      // const BALWeeklyROI = (BALPerToken * BALPrice) * 100 / BPTPrice;
-      // console.log(`Weekly ROI in USD : ${toFixed(BALWeeklyROI, 4)}%`);
-      // console.log(`APR (unstable)    : ${toFixed(BALWeeklyROI * 52, 4)}% \n`)
-  }
+  $: console.log('farming', $farming);
 
   $: needAllowance = true;
   $: incentivizedPools = [
     {
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
       addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
+      aprEnabled: true,
       poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
       name: 'DOUGH / ETH',
       platform: "⚖️ Balancer",
@@ -191,6 +81,7 @@
     },
     {
       addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
+      aprEnabled: false,
       addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
       name: 'DEFI+S / DAI',
       poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
@@ -207,6 +98,7 @@
     },
     {
       addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
+      aprEnabled: false,
       addressUniPoll: '0x220f25C2105a65425913FE0CF38e7699E3992B97',
       poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       name: 'DEFI+S / ETH',
@@ -230,9 +122,18 @@
 
   $: pool = null;
 
+  window.addEventListener('price-update', function (e) {
+    console.log('price-update', e)
+    calculateAPRBalancer(
+          incentivizedPools[0].addressUniPoll,
+          incentivizedPools[0].addressTokenToStake
+    );
+  }, false);
+
+
   $: if($eth.address && !intiated) {
-    calculateAPY(incentivizedPools[0]);
-    incentivizedPools.forEach( p => {
+    incentivizedPools.forEach( p => {      
+      calculateAPRBalancer()
       subscribeToBalance(p.addressTokenToStake, $eth.address, true);
       subscribeToStaking(p.addressUniPoll, $eth.address, true);
       subscribeToStakingEarnings(p.addressUniPoll, $eth.address, true);
@@ -242,6 +143,8 @@
       p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, $eth.address);
       p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, $eth.address);
       p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, $eth.address, '.earned');
+
+      amountToClaim
     })
     intiated = true;
     bumpLifecycle();
@@ -472,6 +375,13 @@
                     <div class="subtitle font-thin">{ammPool.description}</div>
                     <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
                     <div class="apy"> <a href={ammPool.poolLink} target="_blank"> {ammPool.platform} </a></div>
+                    <div class="apy">
+                      {#if $farming[ammPool.addressUniPoll] !== undefined}
+                        {$farming[ammPool.addressUniPoll].apr}
+                      {:else}
+                        n/a
+                      {/if}
+                    </div>
                     {#if ammPool.enabled}
                       <button on:click={() => pool = ammPool } class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
                     {:else}
@@ -596,6 +506,13 @@
               </div>
             </div>
             <div class="info-box">
+              {#if $farming[pool.addressUniPoll] !== undefined}
+              <p>There are total of  : <strong>{$farming[pool.addressUniPoll].totalBPTAmount} BPT </strong>.</p>
+              <p>There are total   : <strong>{$farming[pool.addressUniPoll].totalStakedBPTAmount} BPT</strong> staked in the Staking contract.</p>
+                {#if pool.KeyAddressTokenToStake }
+                  <p>You are staking   : <strong>{toFixed($balances[pool.KeyAddressTokenToStake] * 100 / $farming[pool.addressUniPoll].totalStakedBPTAmount, 3) }% </strong> of the pool</p>
+                {/if}   
+              {/if}
               <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
               <p>Buy DEFI+S on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">Balancer</a> or <a href="#/pools/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">mint now!</a></p>
