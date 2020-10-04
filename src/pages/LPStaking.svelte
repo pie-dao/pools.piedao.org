@@ -73,6 +73,7 @@
       weeklyRewards: formatFiat(200000, ',', '.', ''),
       apy: 1.8,
       toStakeSymbol: 'BPT',
+      toStakeDesc: 'Balancer: DOUGH/ETH 80/20',
       allowance: 0,
       allowanceKey: '',
       highlight: true,
@@ -86,6 +87,7 @@
       name: 'DEFI+S / DAI',
       poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
       platform: "🦄 Uniswap",
+      toStakeDesc: 'Uniswap: DEFI+S/DAI 50/50',
       toStakeSymbol: 'LP',
       description: 'WEEKLY REWARDS',
       rewards_token: 'DOUGH',
@@ -104,6 +106,7 @@
       name: 'DEFI+S / ETH',
       rewards_token: 'DOUGH',
       toStakeSymbol: 'BPT',
+      toStakeDesc: 'Balancer: DEFI+S/ETH 70/30',
       platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
       weeklyRewards: formatFiat(25000, ',', '.', ''),
@@ -415,10 +418,12 @@
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.withdraw} alt="PieDAO logo" />
                     <div class="title text-lg">UNSTAKE</div>
-                    <div class="subtitle font-thin">STAKED BALANCE</div>
                     <div class="apy">
                       {pool.KeyAddressTokenToStake ? amountFormatter({ amount: $balances[pool.KeyUnipoolBalance], displayDecimals: 4}) : 0.0000} {pool.toStakeSymbol}
                     </div>
+                    <div class="subtitle font-thin">STAKED BALANCE</div>
+                    
+                    <div class="apy text-sm">{pool.toStakeDesc}</div>
                     <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="left float-left">{$_('general.amount')} to unstake</div>
@@ -447,10 +452,11 @@
               <div class="farming-card highlight-box flex flex-col justify-center align-center items-center mx-1 my-4  border border-grey border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.stake} alt="PieDAO logo" />
                     <div class="title text-lg"> STAKE</div>
-                    <div class="subtitle font-thin">BALANCE</div>
                     <div class="apy">
                       {pool.KeyAddressTokenToStake ? amountFormatter({ amount: $balances[pool.KeyAddressTokenToStake], displayDecimals: 4}) : 0.0000} {pool.toStakeSymbol}
                     </div>
+                    <div class="subtitle font-thin">BALANCE</div>
+                    <div class="apy text-sm">{pool.toStakeDesc}</div>
                     <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="text-black left black float-left">{$_('general.amount')} to stake</div>
