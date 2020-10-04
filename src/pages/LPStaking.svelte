@@ -507,12 +507,13 @@
             </div>
             <div class="info-box">
               {#if $farming[pool.addressUniPoll] !== undefined}
-              <p>There are total of  : <strong>{$farming[pool.addressUniPoll].totalBPTAmount} BPT </strong>.</p>
-              <p>There are total   : <strong>{$farming[pool.addressUniPoll].totalStakedBPTAmount} BPT</strong> staked in the Staking contract.</p>
+              <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
+              <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} BPT</strong> staked in the Staking contract.</p>
                 {#if pool.KeyAddressTokenToStake }
                   <p>You are staking   : <strong>{toFixed($balances[pool.KeyAddressTokenToStake] * 100 / $farming[pool.addressUniPoll].totalStakedBPTAmount, 3) }% </strong> of the pool</p>
                 {/if}   
               {/if}
+              <br/><br/>
               <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
               <p>Buy DEFI+S on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">Balancer</a> or <a href="#/pools/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">mint now!</a></p>
