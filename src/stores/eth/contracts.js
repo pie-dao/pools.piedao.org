@@ -60,7 +60,7 @@ const updateOnBlock = () => {
 
 subject("blockNumber").subscribe({
   next: (blockNumber) => {
-    console.log('blockNumber', blockNumber);
+    //console.log('blockNumber', blockNumber);
     if (blockNumber > blockNumberPid[0] + 4) {
       clearTimeout(blockNumberPid[1]);
       blockNumberPid = [blockNumber, setTimeout(updateOnBlock, 500)];

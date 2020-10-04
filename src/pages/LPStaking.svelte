@@ -6,8 +6,11 @@
   import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
   import recipeUnipool from '../config/unipoolABI.json';
+  import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
   import { get } from "svelte/store";
   import displayNotification from "../notifications.js";
+  import { piesMarketDataStore } from '../stores/coingecko.js';
+  import { farming } from '../stores/eth/writables.js';
   import {
     amountFormatter,
     fetchPieTokens,
@@ -16,6 +19,8 @@
     getTokenImage,
     fetchEthBalance,
     fetchCalcToPie,
+    toFixed,
+    calculateAPRBalancer,
     formatFiat,
     subscribeToBalance,
     subscribeToAllowance,
@@ -51,30 +56,15 @@
   let amountToUnstake = 0;
   
   const referral = $currentRoute.params.referral || window.localStorage.getItem('referral');
-  console.log('referral', referral);
+
+  $: console.log('farming', $farming);
 
   $: needAllowance = true;
   $: incentivizedPools = [
-    // {
-    //   addressTokenToStake: '0x35333cf3db8e334384ec6d2ea446da6e445701df',
-    //   addressUniPoll: '0x76ac0f89b93f4e0b9884ad1547381445a1a7d2c8',
-    //   name: 'DEFI+S / ETH',
-    //   platform: "⚖️ Balancer",
-    //   poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
-    //   description: 'WEEKLY REWARDS',
-    //   rewards_token: 'DEFI+S',
-    //   toStakeSymbol: 'BPT',
-    //   weeklyRewards: formatFiat(100, ',', '.', ''),
-    //   apy: 1.8,
-    //   allowance: 0,
-    //   allowanceKey: '',
-    //   highlight: true,
-    //   needAllowance: true,
-    //   enabled: true,
-    // },
     {
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
       addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
+      aprEnabled: true,
       poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
       name: 'DOUGH / ETH',
       platform: "⚖️ Balancer",
@@ -83,6 +73,7 @@
       weeklyRewards: formatFiat(200000, ',', '.', ''),
       apy: 1.8,
       toStakeSymbol: 'BPT',
+      toStakeDesc: 'Balancer: DOUGH/ETH 80/20',
       allowance: 0,
       allowanceKey: '',
       highlight: true,
@@ -91,10 +82,12 @@
     },
     {
       addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
+      aprEnabled: false,
       addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
       name: 'DEFI+S / DAI',
       poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
       platform: "🦄 Uniswap",
+      toStakeDesc: 'Uniswap: DEFI+S/DAI 50/50',
       toStakeSymbol: 'LP',
       description: 'WEEKLY REWARDS',
       rewards_token: 'DOUGH',
@@ -107,11 +100,13 @@
     },
     {
       addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
-      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
+      aprEnabled: false,
       addressUniPoll: '0x220f25C2105a65425913FE0CF38e7699E3992B97',
+      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       name: 'DEFI+S / ETH',
       rewards_token: 'DOUGH',
       toStakeSymbol: 'BPT',
+      toStakeDesc: 'Balancer: DEFI+S/ETH 70/30',
       platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
       weeklyRewards: formatFiat(25000, ',', '.', ''),
@@ -130,8 +125,18 @@
 
   $: pool = null;
 
+  window.addEventListener('price-update', function (e) {
+    console.log('price-update', e)
+    calculateAPRBalancer(
+          incentivizedPools[0].addressUniPoll,
+          incentivizedPools[0].addressTokenToStake
+    );
+  }, false);
+
+
   $: if($eth.address && !intiated) {
-    incentivizedPools.forEach( p => {
+    incentivizedPools.forEach( p => {      
+      calculateAPRBalancer()
       subscribeToBalance(p.addressTokenToStake, $eth.address, true);
       subscribeToStaking(p.addressUniPoll, $eth.address, true);
       subscribeToStakingEarnings(p.addressUniPoll, $eth.address, true);
@@ -141,6 +146,8 @@
       p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, $eth.address);
       p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, $eth.address);
       p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, $eth.address, '.earned');
+
+      amountToClaim
     })
     intiated = true;
     bumpLifecycle();
@@ -371,6 +378,13 @@
                     <div class="subtitle font-thin">{ammPool.description}</div>
                     <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
                     <div class="apy"> <a href={ammPool.poolLink} target="_blank"> {ammPool.platform} </a></div>
+                    <div class="apy">
+                      {#if $farming[ammPool.addressUniPoll] !== undefined}
+                        {$farming[ammPool.addressUniPoll].apr}
+                      {:else}
+                        n/a
+                      {/if}
+                    </div>
                     {#if ammPool.enabled}
                       <button on:click={() => pool = ammPool } class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
                     {:else}
@@ -404,10 +418,12 @@
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.withdraw} alt="PieDAO logo" />
                     <div class="title text-lg">UNSTAKE</div>
-                    <div class="subtitle font-thin">STAKED BALANCE</div>
                     <div class="apy">
                       {pool.KeyAddressTokenToStake ? amountFormatter({ amount: $balances[pool.KeyUnipoolBalance], displayDecimals: 4}) : 0.0000} {pool.toStakeSymbol}
                     </div>
+                    <div class="subtitle font-thin">STAKED BALANCE</div>
+                    
+                    <div class="apy text-sm">{pool.toStakeDesc}</div>
                     <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="left float-left">{$_('general.amount')} to unstake</div>
@@ -436,10 +452,11 @@
               <div class="farming-card highlight-box flex flex-col justify-center align-center items-center mx-1 my-4  border border-grey border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.stake} alt="PieDAO logo" />
                     <div class="title text-lg"> STAKE</div>
-                    <div class="subtitle font-thin">BALANCE</div>
                     <div class="apy">
                       {pool.KeyAddressTokenToStake ? amountFormatter({ amount: $balances[pool.KeyAddressTokenToStake], displayDecimals: 4}) : 0.0000} {pool.toStakeSymbol}
                     </div>
+                    <div class="subtitle font-thin">BALANCE</div>
+                    <div class="apy text-sm">{pool.toStakeDesc}</div>
                     <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="text-black left black float-left">{$_('general.amount')} to stake</div>
@@ -495,6 +512,14 @@
               </div>
             </div>
             <div class="info-box">
+              {#if $farming[pool.addressUniPoll] !== undefined}
+              <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
+              <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} BPT</strong> staked in the Staking contract.</p>
+                {#if pool.KeyAddressTokenToStake }
+                  <p>You are staking   : <strong>{toFixed($balances[pool.KeyUnipoolBalance] * 100 / $farming[pool.addressUniPoll].totalStakedBPTAmount, 3) }% </strong> of the pool</p>
+                {/if}   
+              {/if}
+              <br/><br/>
               <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
               <p>Buy DEFI+S on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">Balancer</a> or <a href="#/pools/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">mint now!</a></p>
