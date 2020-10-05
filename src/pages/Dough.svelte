@@ -2,8 +2,10 @@
   import BigNumber from "bignumber.js";
   import images from "../config/images.json";
   import FarmerTable from '../components/FarmerTable.svelte';
+  import { farming } from '../stores/eth/writables.js';
   import {
     formatFiat,
+    toFixed,
     subscribeToBalance,
   } from "../components/helpers.js";
    import {
@@ -18,6 +20,8 @@
 
   let daoBalanceKey;
   let msBalanceKey;
+  let doughStaked;
+  let price = 'n/a';
   let circulatingSupply = 0;
   
 
@@ -57,9 +61,12 @@
     const totalSupply = await doughToken.totalSupply();
     const daoBal = $balances[daoBalanceKey] || BigNumber(0);
     const msBal = $balances[msBalanceKey] || BigNumber(0);
+    doughStaked = $farming['0x8314337d2b13e1A61EadF0FD1686b2134D43762F'].doughStaked.toFixed(2) || 0;
+    price = $farming['0x8314337d2b13e1A61EadF0FD1686b2134D43762F'].DOUGHPrice.toFixed(2) || 0;
+
     if(daoBal > 0 && msBal > 0) {
       const ts = BigNumber(totalSupply.toString()).dividedBy(10**18)
-      circulatingSupply = ts.minus(BigNumber(msBal)).minus(BigNumber(daoBal));
+      circulatingSupply = ts.minus(BigNumber(msBal)).minus(BigNumber(daoBal)).toFixed(2);
     }
   })()
 </script>
@@ -71,11 +78,13 @@
     <strong>DOUGH</strong> is the PieDAO governance token. Owning DOUGH makes you a member of PieDAO. Holders are capable of participating in the DAO’s governance votes and proposing votes of their own. 1.5M DOUGH tokens will be available on <strong>Balancer around Oct 3, 2020, at 1:00 pm UTC.</strong><br/>
    </div>
 
-   <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-8">
-     
-     <!-- <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>0.002 ETH = 1 DOUGH</strong></div> -->
-     <div class="bg-black text-white p-4 rounded-sm text-center">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
+   <div class="flex justify-around my-2">
+      <div class="bg-black text-white p-2 rounded-sm text-center">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
+      <div class="bg-black text-white p-2 mx-5 rounded-sm text-center">Staked: <strong>{formatFiat(doughStaked, ',', '.', '')} DOUGH</strong></div>
+    </div>
 
+   <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-4">
+     <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>{price} DOUGH</strong></div>
      <a href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
       <button class="btn m-0 mt-4 rounded-8px px-56px py-15px min-w-200px w-800px">
         Buy

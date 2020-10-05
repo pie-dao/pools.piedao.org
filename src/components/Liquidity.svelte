@@ -91,7 +91,6 @@
     try {
       isLoading = true;  
       const pieToMint = pieAddress || token;
-      console.log('amount dio cane', amount);
       amountsRequired = (await fetchCalcTokensForAmounts(pieToMint, amount));
       isLoading = false;
     } catch (e) { console.error(e)}
@@ -550,7 +549,7 @@
           </a>
         {:else}
           <div class="amount tex-sm px-20px py-12px m-auto">
-            {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
+           * {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
           </div>
         {/if}
         <div class="hidden">{$eth.address}</div>

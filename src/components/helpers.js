@@ -292,6 +292,12 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   const data = {};
 
   res.tokens.forEach((token, index) => {
+    const tokenInfo = find(poolsConfig[pieAddress].composition, { address: token });
+    let d = tokenInfo.decimals ? tokenInfo.decimals : 18;
+    console.log('here', tokenInfo, d);
+    console.log(res.amounts[index].toString());
+    console.log(BigNumber(res.amounts[index].toString()).multipliedBy(10 ** (18-decimals)).toString());
+    
     data[token.toLowerCase()] = {
       amount: res.amounts[index],
       label: ethers.utils.formatEther(res.amounts[index]),
@@ -710,6 +716,8 @@ export const calculateAPRBalancer = async (
     WETHperBPT,
     DOUGHPrice,
     ETHPrice,
+    doughStaked: totalDOUGHAmount,
+    ethStaked: totalWETHAmount
   };
 
   const updates = {};
