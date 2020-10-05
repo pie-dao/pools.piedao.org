@@ -93,7 +93,13 @@
     console.log('price-update', e)
     tokensSwapOut.forEach( async pool => {
         if(pool.aprEnabled) {
-          const res = await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, pool.containing[0].address, pool.containing[1].address);
+          console.log('symbol', pool.symbol);
+          try {
+            await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+          } catch(e) {
+            console.log('e', e);
+          }
+          
         }  
     });
   }, false);

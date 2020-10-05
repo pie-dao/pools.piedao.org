@@ -62,6 +62,7 @@
       {
         "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
         "percentage": 47.22,
+        "decimals": 6,
         "color": "#58a4fc",
         "symbol": "USDC",
         "coingeckoId": "usd-coin",
@@ -229,7 +230,8 @@
   "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": {
     "symbol": "DEFI+S",
     "useRecipe": true,
-    "swapFees": "10",
+    "coingeckoId": "piedao-defi-small-cap",
+    "swapFees": "0",
     "tradingViewFormula": "(14.5963755424312*FTX:BALUSD+2054.02209261576*BINANCE:LRCUSD+1722.09625381525*BINANCE:RENUSD+73.0624250372347*POLONIEX:UMAUSDT+127.189465362368*BINANCE:PNTUSD+1.51056073059322*KRAKEN:MLNUSD)/1000",
     "composition": [
       {

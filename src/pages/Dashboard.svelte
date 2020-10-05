@@ -60,7 +60,9 @@
           <th class="font-thin border-b-2 px-4 py-2 text-left">Pie name</th>
           <th class="font-thin border-b-2 px-4 py-2 hidden md:block">Assets</th>
           <th class="font-thin border-b-2 px-4 py-2">Liquidity</th>
-          <th class="font-thin border-b-2 px-4 py-2"></th>
+          <th class="font-thin border-b-2 px-4 py-2">Market Buy</th>
+          <th class="font-thin border-b-2 px-4 py-2">Mints new tokens</th>
+          <th class="font-thin border-b-2 px-4 py-2">Unwrap tokens</th>
         </tr>
       </thead>
       <tbody>

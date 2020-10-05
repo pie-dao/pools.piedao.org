@@ -516,7 +516,10 @@
               <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
               <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} BPT</strong> staked in the Staking contract.</p>
                 {#if pool.KeyAddressTokenToStake }
-                  <p>You are staking   : <strong>{toFixed($balances[pool.KeyUnipoolBalance] * 100 / $farming[pool.addressUniPoll].totalStakedBPTAmount, 3) }% </strong> of the pool</p>
+                  <p>You are staking   : <strong>{toFixed($balances[pool.KeyUnipoolBalance] * 100 / $farming[pool.addressUniPoll].totalStakedBPTAmount, 3) }% </strong> of the pool
+                          = [{toFixed($farming[pool.addressUniPoll].DOUGHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)} DOUGH, {toFixed($farming[pool.addressUniPoll].WETHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)}  ETH]
+                          = {formatFiat( ($farming[pool.addressUniPoll].DOUGHperBPT * $balances[pool.KeyUnipoolBalance].toNumber() * $farming[pool.addressUniPoll].DOUGHPrice + $farming[pool.addressUniPoll].WETHperBPT * $balances[pool.KeyUnipoolBalance].toNumber() * $farming[pool.addressUniPoll].ETHPrice).toFixed(2) )}
+                  </p>
                 {/if}   
               {/if}
               <br/><br/>
