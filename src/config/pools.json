@@ -1,15 +1,15 @@
 {
   "available": [
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
+    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-    "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863"
+    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
   ],
   "selectable": [
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863"
+    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
@@ -60,6 +60,12 @@
     "swapFees": "0",
     "coingeckoId": "piedao-usd",
     "tradingViewFormula": "(0.4722*KRAKEN:USDCUSD+0.2042*KRAKEN:DAIUSD+0.2858*BITTREX:TUSDUSD+0.0378*KUCOIN:SUSDUSDT)",
+    "mapDynamicTradingViewFormula": {
+      "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": "KRAKEN:USDCUSD",
+      "0x6B175474E89094C44Da98b954EedeAC495271d0F": "KRAKEN:DAIUSD",
+      "0x0000000000085d4780B73119b644AE5ecd22b376": "BITTREX:TUSDUSD",
+      "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51": "KUCOIN:SUSDUSDT"
+    },
     "composition": [
       {
         "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -107,8 +113,8 @@
       }
     ]
   },
-  "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863": {
-    "symbol": "TDEFI+L",
+  "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": {
+    "symbol": "DEFI+L",
     "useRecipe": true,
     "swapFees": "0.1",
     "composition": [
@@ -208,62 +214,21 @@
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
   },
-  "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": {
-    "symbol": "DEFI+L",
-    "swapFees": "10",
-    "tradingViewFormula": "(1.53015207201541*COINBASE:COMPUSD+123.707552594595*COINBASE:KNCUSD+34.1805555555556*COINBASE:LINKUSD+0.563871597269154*COINBASE:MKRUSD+56.6591297307692*BINANCE:SNXUSD+0.00568535314153928*BINANCE:YFIUSD)/1000",
-    "composition": [
-      {
-        "symbol": "COMP",
-        "color": "#58a4fc",
-        "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
-        "percentage": 13.39,
-        "coingeckoId": "compound-governance-token"
-      },
-      {
-        "symbol": "KNC",
-        "color": "#fd6761",
-        "address": "0xdd974D5C2e2928deA5F71b9825b8b646686BD200",
-        "percentage": 10.17,
-        "coingeckoId": "kyber-network"
-      },
-      {
-        "symbol": "LEND",
-        "color": "#6beab1",
-        "address": "0x80fB784B7eD66730e8b1DBd9820aFD29931aab03",
-        "percentage": 16.49,
-        "coingeckoId": "ethlend"
-      },
-      {
-        "symbol": "LINK",
-        "color": "#c4ccce",
-        "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
-        "percentage": 25,
-        "coingeckoId": "chainlink"
-      },
-      {
-        "symbol": "MKR",
-        "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
-        "color": "#000000",
-        "percentage": 20.14,
-        "coingeckoId": "maker"
-      },
-      {
-        "symbol": "SNX",
-        "color": "#000000",
-        "address": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
-        "percentage": 14.81,
-        "coingeckoId": "havven"
-      }
-    ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
-  },
   "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": {
     "symbol": "DEFI+S",
     "useRecipe": true,
     "coingeckoId": "piedao-defi-small-cap",
+    "bPool": "0x94743cfaa3fdc62e9693572314b5ee377eba5d11",
     "swapFees": "0",
-    "tradingViewFormula": "(14.5963755424312*FTX:BALUSD+2054.02209261576*BINANCE:LRCUSD+1722.09625381525*BINANCE:RENUSD+73.0624250372347*POLONIEX:UMAUSDT+127.189465362368*BINANCE:PNTUSD+1.51056073059322*KRAKEN:MLNUSD)/1000",
+    "mapDynamicTradingViewFormula": {
+      "0xba100000625a3754423978a60c9317c58a424e3D": "FTX:BALUSD",
+      "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD": "BINANCE:LRCUSD",
+      "0x408e41876cCCDC0F92210600ef50372656052a38": "BINANCE:RENUSD",
+      "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828": "POLONIEX:UMAUSDT",
+      "0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD": "BINANCE:PNTUSD",
+      "0xec67005c4E498Ec7f55E092bd1d35cbC47C91892": "KRAKEN:MLNUSD"
+    },
+    "tradingViewFormula": "0.014596375542431261*FTX:BALUSD+2.054022092615757*BINANCE:LRCUSD+1.7220962538152524*BINANCE:RENUSD+0.07306242503723467*POLONIEX:UMAUSDT+0.12718946536236797*BINANCE:PNTUSD+0.0015105607305932233*KRAKEN:MLNUSD",
     "composition": [
       {
         "symbol": "BAL",

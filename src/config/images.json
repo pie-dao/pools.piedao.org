@@ -29,7 +29,9 @@
     "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": "https://assets.coingecko.com/coins/images/12504/small/uniswap-uni.png?1600306604",
     "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": "https://assets.coingecko.com/coins/images/12645/small/AAVE.png?1601374110",
     "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e": "https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330",
-    "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863": "https://raw.githubusercontent.com/pie-dao/brand/8dc5975d9a6940c6ef3b9c2e1f446212b5bf99e4/PIE%20Tokens/DeFi%2B%2BL.svg"
+    "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863": "https://raw.githubusercontent.com/pie-dao/brand/8dc5975d9a6940c6ef3b9c2e1f446212b5bf99e4/PIE%20Tokens/DeFi%2B%2BL.svg",
+    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": "https://raw.githubusercontent.com/pie-dao/brand/8dc5975d9a6940c6ef3b9c2e1f446212b5bf99e4/PIE%20Tokens/DeFi%2B%2BL.svg"
+    
   },
   "banner": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true",
   "stake": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/stake.png",

@@ -1,5 +1,6 @@
 <script>
   import { _ } from 'svelte-i18n';
+  import BigNumber from 'bignumber.js';
   import get from 'lodash/get';
   import first from 'lodash/first';
   import flattenDeep from 'lodash/flattenDeep';
@@ -23,6 +24,7 @@
 
   import {
     balanceKey,
+    contract,
     balances,
   } from "../stores/eth.js";
 
@@ -32,6 +34,22 @@
 
   let pieOfPies = false;
   let tradingViewWidgetComponent;
+  let initialized = false;
+
+  $: console.log(token, poolsConfig);
+  
+  $: options = {
+    symbol: poolsConfig[token] ? poolsConfig[token].tradingViewFormula : '',
+    container_id: `single-pie-chart-${token}`,
+    theme: 'light',
+    autosize: true,
+    interval: '60',
+    locale: 'en',
+    style: 3,
+    hide_top_toolbar: true,
+    hide_legend: true,
+    allow_symbol_change: false,
+  };
 
   $: links = (poolsConfig[token] || {}).landingLinks || [];
 
@@ -73,44 +91,37 @@
 
   $: pieTokens = fetchPieTokens($balances);
 
-  $: {
-    console.log('pieTokens', $balances['0xba100000625a3754423978a60c9317c58a424e3D']);
-    // if(pieTokens) {
-    //   console.log('pieTokens', $pieTokens);
-    // }
+  $: (async () => {
+    if(initialized) return;
 
-    let mapDynamicTradingViewFormula = {
-      '0xba100000625a3754423978a60c9317c58a424e3D': 'FTX:BALUSD',
-      '0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD': 'BINANCE:LRCUSD',
-      '0x408e41876cCCDC0F92210600ef50372656052a38': 'BINANCE:RENUSD',
-      '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828': 'POLONIEX:UMAUSDT',
-      '0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD': 'BINANCE:PNTUSD',
-      '0xec67005c4E498Ec7f55E092bd1d35cbC47C91892': 'KRAKEN:MLNUSD',
+    let mapDynamicTradingViewFormula = poolsConfig[token].mapDynamicTradingViewFormula;
+    let formula = '';
+
+    const poolContract = await contract({ address: token });
+    const bPoolAddress = await poolContract.getBPool();
+    let totalSupply = await poolContract.totalSupply();
+    totalSupply = BigNumber(totalSupply.toString()).dividedBy(10 ** 18);
+
+    $pools[token].map((component) => {
+      let key = `${component.address.toLowerCase()}.${bPoolAddress.toLowerCase()}`;
+      const bal = $balances[key] || 0;
+
+      if(bal !== 0) {
+        formula += `${bal / totalSupply.toNumber()}*${mapDynamicTradingViewFormula[component.address]}+`;
+      }
+    })
+
+    if(formula !== '') {
+      const finalFormula = `${formula.slice(0, -1)}`;
+      console.log(`formula`, finalFormula);
+      options.symbol = finalFormula;
+      if(tradingViewWidgetComponent) {
+        initialized = true;
+        tradingViewWidgetComponent.initWidget(options)
+      }
     }
+  })();
 
-    // $pools[token].map((component) => {
-    //   const key = balanceKey(token, token);
-    // })
-
-    
-
-    //"(14.5963755424312*FTX:BALUSD+2054.02209261576*BINANCE:LRCUSD+1722.09625381525*BINANCE:RENUSD+73.0624250372347*POLONIEX:UMAUSDT+127.189465362368*BINANCE:PNTUSD+1.51056073059322*KRAKEN:MLNUSD)/1000",
-  };
-
-  $: options = {
-    symbol: poolsConfig[token].tradingViewFormula,
-    container_id: `single-pie-chart-${token}`,
-    theme: 'light',
-    autosize: true,
-    interval: '60',
-    locale: 'en',
-    style: 3,
-    hide_top_toolbar: true,
-    hide_legend: true,
-    allow_symbol_change: false,
-  };
-
-  $: tradingViewWidgetComponent ? tradingViewWidgetComponent.initWidget(options) : null;
 </script>
 <div class="content flex flex-col spl">
   <div class="flex flex-wrap w-full">
@@ -176,7 +187,7 @@
   </div>
 
   <div
-    class="flex flex-row w-100pc mt-2 spl-chart-container md:mt-8 {poolsConfig[token].tradingViewFormula ? '' : 'hidden'}">
+    class="flex flex-row w-100pc mt-2 spl-chart-container md:mt-8 {poolsConfig[token].mapDynamicTradingViewFormula ? '' : 'hidden'}">
     <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
   </div>
 
