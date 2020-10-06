@@ -2,12 +2,14 @@
   "available": [
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
+    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+    "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863"
   ],
   "selectable": [
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+    "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
@@ -105,44 +107,73 @@
       }
     ]
   },
-  "0xa25d24af7e67f8736d2e0794a1aa440b6d83a4fc": {
+  "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863": {
     "symbol": "TDEFI+L",
+    "useRecipe": true,
+    "swapFees": "0.1",
     "composition": [
       {
         "symbol": "COMP",
+        "decimals": 18,
         "color": "#58a4fc",
+        "coingeckoId": "compound-governance-token",
         "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
-        "percentage": 13.39
+        "coingeckoImageId": 10775,
+        "percentage": 10.73
       },
       {
-        "symbol": "KNC",
+        "symbol": "Aave",
         "color": "#fd6761",
-        "address": "0xdd974D5C2e2928deA5F71b9825b8b646686BD200",
-        "percentage": 10.17
+        "coingeckoImageId": 1365,
+        "coingeckoId": "aave",
+        "address": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
+        "decimals": 18,
+        "percentage": 16.19
       },
       {
-        "symbol": "LEND",
+        "symbol": "UNI",
         "color": "#6beab1",
-        "address": "0x80fB784B7eD66730e8b1DBd9820aFD29931aab03",
-        "percentage": 16.49
+        "coingeckoImageId": 12504,
+        "coingeckoId": "uniswap",
+        "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
+        "decimals": 18,
+        "percentage": 13.1924
       },
       {
         "symbol": "LINK",
+        "coingeckoId": "chainlink",
+        "coingeckoImageId": 877,
         "color": "#c4ccce",
+        "decimals": 18,
         "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
-        "percentage": 25
+        "percentage": 18.82
       },
       {
         "symbol": "MKR",
         "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
         "color": "#000000",
-        "percentage": 20.14
+        "coingeckoImageId": 1364,
+        "coingeckoId": "maker",
+        "decimals": 18,
+        "percentage": 10.06
       },
       {
         "symbol": "SNX",
         "color": "#000000",
+        "coingeckoImageId": 3406,
         "address": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
-        "percentage": 14.81
+        "percentage": 12.64,
+        "coingeckoId": "havven",
+        "decimals": 18
+      },
+      {
+        "symbol": "YFI",
+        "color": "#000000",
+        "coingeckoImageId": 11849,
+        "coingeckoId": "yearn-finance",
+        "address": "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e",
+        "percentage": 18.34,
+        "decimals": 18
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"

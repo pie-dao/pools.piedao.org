@@ -17,9 +17,14 @@
 
   import { fetchPooledTokens, pooledTokenAmountRequired } from '../components/helpers.js';
 
-  import { amountFormatter, getTokenImage, formatFiat } from '../components/helpers.js';
+  import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
 
   import { pools } from '../stores/eth.js';
+
+  import {
+    balanceKey,
+    balances,
+  } from "../stores/eth.js";
 
   export let params;
 
@@ -65,6 +70,32 @@
       return component;
     })
   );
+
+  $: pieTokens = fetchPieTokens($balances);
+
+  $: {
+    console.log('pieTokens', $balances['0xba100000625a3754423978a60c9317c58a424e3D']);
+    // if(pieTokens) {
+    //   console.log('pieTokens', $pieTokens);
+    // }
+
+    let mapDynamicTradingViewFormula = {
+      '0xba100000625a3754423978a60c9317c58a424e3D': 'FTX:BALUSD',
+      '0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD': 'BINANCE:LRCUSD',
+      '0x408e41876cCCDC0F92210600ef50372656052a38': 'BINANCE:RENUSD',
+      '0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828': 'POLONIEX:UMAUSDT',
+      '0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD': 'BINANCE:PNTUSD',
+      '0xec67005c4E498Ec7f55E092bd1d35cbC47C91892': 'KRAKEN:MLNUSD',
+    }
+
+    // $pools[token].map((component) => {
+    //   const key = balanceKey(token, token);
+    // })
+
+    
+
+    //"(14.5963755424312*FTX:BALUSD+2054.02209261576*BINANCE:LRCUSD+1722.09625381525*BINANCE:RENUSD+73.0624250372347*POLONIEX:UMAUSDT+127.189465362368*BINANCE:PNTUSD+1.51056073059322*KRAKEN:MLNUSD)/1000",
+  };
 
   $: options = {
     symbol: poolsConfig[token].tradingViewFormula,
