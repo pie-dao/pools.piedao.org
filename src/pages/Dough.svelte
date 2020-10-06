@@ -75,7 +75,7 @@
 
 
    <div class="text-center font-thin text-xs mt-8 md:mt-20 md:text-lg">
-    <strong>DOUGH</strong> is the PieDAO governance token. Owning DOUGH makes you a member of PieDAO. Holders are capable of participating in the DAO’s governance votes and proposing votes of their own. 1.5M DOUGH tokens will be available on <strong>Balancer around Oct 3, 2020, at 1:00 pm UTC.</strong><br/>
+    <strong>DOUGH</strong> is the PieDAO governance token. Owning DOUGH makes you a member of PieDAO. Holders are capable of participating in the DAO’s governance votes and proposing votes of their own. <br/>
    </div>
 
    <div class="flex justify-around my-2">
@@ -87,7 +87,7 @@
      <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>{price} DOUGH</strong></div>
      <a href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
       <button class="btn m-0 mt-4 rounded-8px px-56px py-15px min-w-200px w-800px">
-        Buy
+        Market Buy
       </button>
     </a>
 
