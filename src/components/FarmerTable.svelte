@@ -16,11 +16,11 @@
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
       addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
       balance: '0',
-      type: 'Balancer',
       weights: "80 / 20",
       aprEnabled: true,
       weeklyRewards: '200,000',
       poolLink: 'https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/',
+      type: 'Balancer',
       containing: [
         {
           symbol: "DOUGH",
@@ -97,7 +97,7 @@
           console.log('symbol', pool.symbol);
           try {
             if( pool.type === 'UniswapV2') {
-                await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+              await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
             } else {
               await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
             }
