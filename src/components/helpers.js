@@ -280,8 +280,6 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   validateIsAddress(pieAddress);
 
   const tokenContract = await contract({ abi: pieSmartPool, address: pieAddress });
-  console.log('poolAmount', poolAmount);
-
   const amount = ethers.BigNumber.from(
     BigNumber(poolAmount)
       .multipliedBy(10 ** 18)
@@ -292,16 +290,27 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   const data = {};
 
   res.tokens.forEach((token, index) => {
-    const tokenInfo = find(poolsConfig[pieAddress].composition, { address: token });
-    let d = tokenInfo.decimals ? tokenInfo.decimals : 18;
-    console.log('here', tokenInfo, d);
-    console.log(res.amounts[index].toString());
-    console.log(BigNumber(res.amounts[index].toString()).multipliedBy(10 ** (18-decimals)).toString());
+
+    const tokenInfo = find(poolsConfig[pieAddress.toLowerCase()].composition, { address: token });
+    let d = tokenInfo && tokenInfo.decimals ? tokenInfo.decimals : 18;
+
+    if(d < 18) {
+      let adjustedAmount = BigNumber(res.amounts[index].toString()).multipliedBy(10 ** (18-d));
+      let bnAdjustedAmount = ethers.BigNumber.from(adjustedAmount.toString());
+
+      data[token.toLowerCase()] = {
+        amount: bnAdjustedAmount,
+        label: ethers.utils.formatEther(bnAdjustedAmount),
+      };
+
+    } else {
+      data[token.toLowerCase()] = {
+        amount: res.amounts[index],
+        label: ethers.utils.formatEther(res.amounts[index]),
+      };
+    }
     
-    data[token.toLowerCase()] = {
-      amount: res.amounts[index],
-      label: ethers.utils.formatEther(res.amounts[index]),
-    };
+    
   });
 
   return data;
@@ -659,7 +668,7 @@ export const calculateAPRBalancer = async (
   // Finished. Start printing
   const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
 
-  if (1) {
+  if (null) {
     console.log('========== STAKING =========');
     console.log(`There are total   : ${totalBPTAmount} BPT in the Balancer Contract.`);
     console.log(`There are total   : ${totalStakedBPTAmount} BPT staked in Staking pool. \n`);

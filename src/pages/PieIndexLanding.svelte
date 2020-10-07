@@ -1,5 +1,6 @@
 <script>
   import { _ } from 'svelte-i18n';
+  import BigNumber from 'bignumber.js';
   import get from 'lodash/get';
   import first from 'lodash/first';
   import flattenDeep from 'lodash/flattenDeep';
@@ -17,9 +18,15 @@
 
   import { fetchPooledTokens, pooledTokenAmountRequired } from '../components/helpers.js';
 
-  import { amountFormatter, getTokenImage, formatFiat } from '../components/helpers.js';
+  import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
 
   import { pools } from '../stores/eth.js';
+
+  import {
+    balanceKey,
+    contract,
+    balances,
+  } from "../stores/eth.js";
 
   export let params;
 
@@ -27,6 +34,22 @@
 
   let pieOfPies = false;
   let tradingViewWidgetComponent;
+  let initialized = false;
+
+  $: console.log(token, poolsConfig);
+  
+  $: options = {
+    symbol: poolsConfig[token] ? poolsConfig[token].tradingViewFormula : '',
+    container_id: `single-pie-chart-${token}`,
+    theme: 'light',
+    autosize: true,
+    interval: '60',
+    locale: 'en',
+    style: 3,
+    hide_top_toolbar: true,
+    hide_legend: true,
+    allow_symbol_change: false,
+  };
 
   $: links = (poolsConfig[token] || {}).landingLinks || [];
 
@@ -66,20 +89,39 @@
     })
   );
 
-  $: options = {
-    symbol: poolsConfig[token].tradingViewFormula,
-    container_id: `single-pie-chart-${token}`,
-    theme: 'light',
-    autosize: true,
-    interval: '60',
-    locale: 'en',
-    style: 3,
-    hide_top_toolbar: true,
-    hide_legend: true,
-    allow_symbol_change: false,
-  };
+  $: pieTokens = fetchPieTokens($balances);
 
-  $: tradingViewWidgetComponent ? tradingViewWidgetComponent.initWidget(options) : null;
+  $: (async () => {
+    if(initialized) return;
+
+    let mapDynamicTradingViewFormula = poolsConfig[token].mapDynamicTradingViewFormula;
+    let formula = '';
+
+    const poolContract = await contract({ address: token });
+    const bPoolAddress = await poolContract.getBPool();
+    let totalSupply = await poolContract.totalSupply();
+    totalSupply = BigNumber(totalSupply.toString()).dividedBy(10 ** 18);
+
+    $pools[token].map((component) => {
+      let key = `${component.address.toLowerCase()}.${bPoolAddress.toLowerCase()}`;
+      const bal = $balances[key] || 0;
+
+      if(bal !== 0) {
+        formula += `${bal / totalSupply.toNumber()}*${mapDynamicTradingViewFormula[component.address]}+`;
+      }
+    })
+
+    if(formula !== '') {
+      const finalFormula = `${formula.slice(0, -1)}`;
+      console.log(`formula`, finalFormula);
+      options.symbol = finalFormula;
+      if(tradingViewWidgetComponent) {
+        initialized = true;
+        tradingViewWidgetComponent.initWidget(options)
+      }
+    }
+  })();
+
 </script>
 <div class="content flex flex-col spl">
   <div class="flex flex-wrap w-full">
@@ -145,7 +187,7 @@
   </div>
 
   <div
-    class="flex flex-row w-100pc mt-2 spl-chart-container md:mt-8 {poolsConfig[token].tradingViewFormula ? '' : 'hidden'}">
+    class="flex flex-row w-100pc mt-2 spl-chart-container md:mt-8 {poolsConfig[token].mapDynamicTradingViewFormula ? '' : 'hidden'}">
     <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
   </div>
 

@@ -5,8 +5,6 @@
   export let tokens;
 
   export let open;
-
-  $: console.log('tokens', tokens);
   /** Dispatch event on click outside of node */
   export function clickOutside(node) {
     

@@ -100,7 +100,7 @@
 
   onMount(async () => {
     fetchQuote();
-    calcArb();
+    fetchAmounts();
   });
 
   const action = async (evt, pooledToken) => {
@@ -289,6 +289,7 @@
     }
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
+    fetchAmounts();
   };
 
   const withdraw = async () => {
@@ -549,7 +550,7 @@
           </a>
         {:else}
           <div class="amount tex-sm px-20px py-12px m-auto">
-           * {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
+           {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
           </div>
         {/if}
         <div class="hidden">{$eth.address}</div>
