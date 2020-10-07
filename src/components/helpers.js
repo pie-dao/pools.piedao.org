@@ -11,6 +11,7 @@ import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
 import recipeAbi from '../config/recipeABI.json';
 import unipoolAbi from '../config/unipoolABI.json';
+import uniswapPair from '../config/uniswapPair.json';
 import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
 
 import {
@@ -290,27 +291,23 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   const data = {};
 
   res.tokens.forEach((token, index) => {
-
     const tokenInfo = find(poolsConfig[pieAddress.toLowerCase()].composition, { address: token });
     let d = tokenInfo && tokenInfo.decimals ? tokenInfo.decimals : 18;
 
-    if(d < 18) {
-      let adjustedAmount = BigNumber(res.amounts[index].toString()).multipliedBy(10 ** (18-d));
+    if (d < 18) {
+      let adjustedAmount = BigNumber(res.amounts[index].toString()).multipliedBy(10 ** (18 - d));
       let bnAdjustedAmount = ethers.BigNumber.from(adjustedAmount.toString());
 
       data[token.toLowerCase()] = {
         amount: bnAdjustedAmount,
         label: ethers.utils.formatEther(bnAdjustedAmount),
       };
-
     } else {
       data[token.toLowerCase()] = {
         amount: res.amounts[index],
         label: ethers.utils.formatEther(res.amounts[index]),
       };
     }
-    
-    
   });
 
   return data;
@@ -630,15 +627,124 @@ const getLatestTotalBALAmount = async function (addr) {
   return bal_earnings[0];
 };
 
+export const calculateAPRUniswap = async (
+  addressStakingPool,
+  tokenToStake,
+  stakedBPTAmount = null,
+  earnedDOUGH = null,
+  assetOne,
+  assetTwo,
+) => {
+  const marketData = get(piesMarketDataStore);
+  const DOUGH = assetOne;
+  const WETH = assetTwo;
+  const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
+  const BALANCER_POOL = await contract({ address: tokenToStake, abi: uniswapPair });
+
+  const totalBPTAmount = (await BALANCER_POOL.totalSupply()) / 1e18;
+  const totalStakedBPTAmount = (await StakingPOOL.totalSupply()) / 1e18;
+
+  const WETH_TOKEN = await contract({ address: WETH });
+  const DOUGH_TOKEN = await contract({ address: DOUGH });
+
+  const totalDOUGHAmount = (await DOUGH_TOKEN.balanceOf(tokenToStake)) / 1e18;
+  const totalWETHAmount = (await WETH_TOKEN.balanceOf(tokenToStake)) / 1e18;
+
+  const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
+  const WETHperBPT = totalWETHAmount / totalBPTAmount;
+
+  // Find out reward rate
+  const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
+  const rewardPerToken = weekly_reward / totalStakedBPTAmount;
+
+  console.log('Uniswap Finished reading smart contracts... Looking up prices... \n');
+
+  // Look up prices
+  const DOUGHPrice = marketData[DOUGH].market_data.current_price;
+  const ETHPrice = marketData[WETH].market_data.current_price;
+  const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
+  const totalLiquidity = BPTPrice * totalBPTAmount;
+  // Finished. Start printing
+  const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
+
+  if (false) {
+    console.log('========== STAKING =========');
+    console.log(`There are total   : ${totalBPTAmount} BPT in the Balancer Contract.`);
+    console.log(`There are total   : ${totalStakedBPTAmount} BPT staked in Staking pool. \n`);
+    if (stakedBPTAmount) {
+      console.log(
+        `You are staking   : ${stakedBPTAmount} BPT (${toFixed(
+          (stakedBPTAmount * 100) / totalStakedBPTAmount,
+          3,
+        )}% of the pool)`,
+      );
+      console.log(
+        `                  = [${DOUGHperBPT * stakedBPTAmount} SNX, ${
+          WETHperBPT * stakedBPTAmount
+        } USDC]`,
+      );
+      console.log(
+        `                  = $${toFixed(
+          DOUGHperBPT * stakedBPTAmount * DOUGHPrice + WETHperBPT * stakedBPTAmount * ETHPrice,
+          2,
+        )}\n`,
+      );
+    }
+
+    // DOUGH REWARDS
+    console.log('======== DOUGH REWARDS ========');
+    if (stakedBPTAmount && earnedDOUGH) {
+      console.log(
+        `Claimable Rewards : ${toFixed(earnedDOUGH, 2)} DOUGH = $${toFixed(
+          earnedDOUGH * DOUGHPrice,
+          2,
+        )}`,
+      );
+      console.log(
+        `Weekly estimate   : ${toFixed(rewardPerToken * stakedBPTAmount, 2)} DOUGH = $${toFixed(
+          rewardPerToken * stakedBPTAmount * DOUGHPrice,
+          2,
+        )} (out of total ${weekly_reward} DOUGH)`,
+      );
+    }
+    console.log(`Weekly ROI in USD : ${toFixed(DOUGHWeeklyROI, 4)}%`);
+    console.log(`APR (unstable)    : ${toFixed(DOUGHWeeklyROI * 52, 4)}% \n`);
+  }
+
+  const res = {
+    roi: DOUGHWeeklyROI,
+    weekly: `${toFixed(DOUGHWeeklyROI, 4)}%`,
+    apr: `${toFixed(DOUGHWeeklyROI * 52, 4)}%`,
+    totalBPTAmount,
+    totalStakedBPTAmount,
+    BPTPrice,
+    weekly_reward,
+    rewardPerToken,
+    DOUGHperBPT,
+    WETHperBPT,
+    DOUGHPrice,
+    ETHPrice,
+    doughStaked: totalDOUGHAmount,
+    ethStaked: totalWETHAmount,
+    totalLiquidity,
+  };
+
+  const updates = {};
+  updates[addressStakingPool] = res;
+  farming.set({ ...get(farming), ...updates });
+};
+
 export const calculateAPRBalancer = async (
   addressStakingPool,
   tokenToStake,
   stakedBPTAmount = null,
   earnedDOUGH = null,
+  assetOne,
+  assetTwo,
 ) => {
   const marketData = get(piesMarketDataStore);
-  const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
-  const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+  const DOUGH = assetOne;
+  const WETH = assetTwo;
 
   console.log(`Initialized `);
   console.log('Reading smart contracts...');
@@ -667,6 +773,7 @@ export const calculateAPRBalancer = async (
   const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
   // Finished. Start printing
   const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
+  const totalLiquidity = BPTPrice * totalBPTAmount;
 
   if (null) {
     console.log('========== STAKING =========');
@@ -726,7 +833,8 @@ export const calculateAPRBalancer = async (
     DOUGHPrice,
     ETHPrice,
     doughStaked: totalDOUGHAmount,
-    ethStaked: totalWETHAmount
+    ethStaked: totalWETHAmount,
+    totalLiquidity,
   };
 
   const updates = {};

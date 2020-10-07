@@ -2,7 +2,8 @@
   import {
     getTokenImage,
     formatFiat,
-    calculateAPRBalancer
+    calculateAPRBalancer,
+    calculateAPRUniswap
   } from "../components/helpers.js";
 
   import { farming } from '../stores/eth/writables.js';
@@ -15,11 +16,11 @@
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
       addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
       balance: '0',
-      type: 'Balancer',
       weights: "80 / 20",
       aprEnabled: true,
       weeklyRewards: '200,000',
       poolLink: 'https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/',
+      type: 'Balancer',
       containing: [
         {
           symbol: "DOUGH",
@@ -29,7 +30,7 @@
         },
         {
           symbol: "ETH",
-          address: "0x0000000000000000000000000000000000000000",
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
           balance: '0',
           icon: getTokenImage('eth')
         },
@@ -38,7 +39,7 @@
     {
       symbol: "DEFI+S/ETH",
       address: "",
-      aprEnabled: false,
+      aprEnabled: true,
       balance: '0',
       weights: "70 / 30",
       addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
@@ -55,7 +56,7 @@
         },
         {
           symbol: "ETH",
-          address: "0x0000000000000000000000000000000000000000",
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
           balance: '0',
           icon: getTokenImage('eth')
         },
@@ -64,7 +65,7 @@
     {
       symbol: "DEFI+S/DAI",
       address: "",
-      aprEnabled: false,
+      aprEnabled: true,
       addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
       addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
       weights: "50 / 50",
@@ -75,13 +76,13 @@
       containing: [
         {
           symbol: "DEFI+S",
-          address: "0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C",
+          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
           balance: '0',
           icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
         },
         {
           symbol: "DAI",
-          address: "0x6b175474e89094c44da98b954eedeac495271d0f",
+          address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
           balance: '0',
           icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
         },
@@ -95,7 +96,11 @@
         if(pool.aprEnabled) {
           console.log('symbol', pool.symbol);
           try {
-            await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+            if( pool.type === 'UniswapV2') {
+              await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+            } else {
+              await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+            }
           } catch(e) {
             console.log('e', e);
           }
@@ -103,8 +108,6 @@
         }  
     });
   }, false);
-
-  $: console.log('farming', $farming);
 </script>
 <table class="breakdown-table table-auto w-full">
     <thead>
@@ -114,6 +117,7 @@
         <th class="font-thin border-b-2 px-4 py-2">Weights</th>
         <th class="font-thin border-b-2 px-4 py-2">Weekly Rewards</th>
         <th class="font-thin border-b-2 px-4 py-2">APR (unstable)</th>
+        <th class="font-thin border-b-2 px-4 py-2">Liquidity</th>
         <!-- <th class="font-thin border-b-2 px-4 py-2">APY</th> -->
     </tr>
     </thead>
@@ -147,6 +151,14 @@
         <td class="border text-center py-2">
           {#if $farming[pool.addressUniPoll]}
             {$farming[pool.addressUniPoll].apr}
+          {:else}
+            n/a
+          {/if}
+        </td>
+
+        <td class="border text-center py-2">
+          {#if $farming[pool.addressUniPoll]}
+            {formatFiat($farming[pool.addressUniPoll].totalLiquidity.toFixed(2))}
           {:else}
             n/a
           {/if}

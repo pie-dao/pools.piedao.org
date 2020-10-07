@@ -1,5 +1,6 @@
 <script>
   import BigNumber from 'bignumber.js';
+  import orderBy from 'lodash/orderBy';
   import BalanceSmall from '../components/BalanceSmall.svelte';
   import FarmerTable from '../components/FarmerTable.svelte';
   import { currentRoute } from '../stores/routes.js';
@@ -13,14 +14,15 @@
     formatFiat,
   } from "../components/helpers.js";
 
-  $: pies = (poolsConfig.selectable.map(address => {
+  $: pies = orderBy((poolsConfig.selectable.map(address => {
     return {
       ...poolsConfig[address],
       address,
       icon: getTokenImage(address),
-      totalLiquidity: $pools[`${address}-usd`] ? formatFiat( $pools[`${address}-usd`].toFixed(2).toString() ) : '-'
+      totalLiquidity: $pools[`${address}-usd`] ? formatFiat( $pools[`${address}-usd`].toFixed(2).toString() ) : '-',
+      totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0
     };
-  }) || [])
+  }) || []), ['totalLiquidityNum'], ['desc']);
 
   const addToken = (pie) => {
     ethereum.sendAsync({

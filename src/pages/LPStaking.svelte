@@ -21,6 +21,7 @@
     fetchCalcToPie,
     toFixed,
     calculateAPRBalancer,
+    calculateAPRUniswap,
     formatFiat,
     subscribeToBalance,
     subscribeToAllowance,
@@ -76,6 +77,21 @@
       toStakeSymbol: 'BPT',
       toStakeDesc: 'Balancer: DOUGH/ETH 80/20',
       allowance: 0,
+      type: 'Balancer',
+      containing: [
+        {
+          symbol: "DOUGH",
+          address: "0xad32A8e6220741182940c5aBF610bDE99E737b2D",
+          balance: '0',
+          icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
+        },
+        {
+          symbol: "ETH",
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          balance: '0',
+          icon: getTokenImage('eth')
+        },
+      ],
       allowanceKey: '',
       highlight: true,
       needAllowance: true,
@@ -83,11 +99,26 @@
     },
     {
       addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
-      aprEnabled: false,
+      aprEnabled: true,
       addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
       name: 'DEFI+S / DAI',
       poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
       platform: "🦄 Uniswap",
+      containing: [
+        {
+          symbol: "DEFI+S",
+          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+          balance: '0',
+          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
+        },
+        {
+          symbol: "DAI",
+          address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+          balance: '0',
+          icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
+        },
+      ],
+      type: 'UniswapV2',
       toStakeDesc: 'Uniswap: DEFI+S/DAI 50/50',
       toStakeSymbol: 'LP',
       description: 'WEEKLY REWARDS',
@@ -101,10 +132,25 @@
     },
     {
       addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
-      aprEnabled: false,
+      aprEnabled: true,
       addressUniPoll: '0x220f25C2105a65425913FE0CF38e7699E3992B97',
       poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       name: 'DEFI+S / ETH',
+      type: 'Balancer',
+      containing: [
+        {
+          symbol: "DEFI+S",
+          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+          balance: '0',
+          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
+        },
+        {
+          symbol: "ETH",
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          balance: '0',
+          icon: getTokenImage('eth')
+        },
+      ],
       rewards_token: 'DOUGH',
       toStakeSymbol: 'BPT',
       toStakeDesc: 'Balancer: DEFI+S/ETH 70/30',
@@ -129,18 +175,25 @@
   window.addEventListener('price-update', function (e) {
     console.log('price-update', e)
     isReady = true;
-    calculateAPRBalancer(
-          incentivizedPools[0].addressUniPoll,
-          incentivizedPools[0].addressTokenToStake
-    );
+    incentivizedPools.forEach( async pool => {
+      if( pool.type === 'UniswapV2') {
+        await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+      } else {
+        await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+      }
+    })
+    
   }, false);
 
   $: if($eth.address) {
     if(isReady) {
-      calculateAPRBalancer(
-          incentivizedPools[0].addressUniPoll,
-          incentivizedPools[0].addressTokenToStake
-      );
+      incentivizedPools.forEach( async pool => {
+        if( pool.type === 'UniswapV2') {
+          await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+        } else {
+          await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+        }
+      })
     }
 
     if(!intiated) {
@@ -408,6 +461,13 @@
                     <div class="subtitle font-thin">{ammPool.description}</div>
                     <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
                     <div class="apy">{ammPool.platform}</div>
+                    <div class="apy">
+                      {#if $farming[ammPool.addressUniPoll] !== undefined}
+                        {$farming[ammPool.addressUniPoll].apr}
+                      {:else}
+                        n/a
+                      {/if}
+                    </div>
                     {#if ammPool.enabled}
                       <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
                     {:else}
