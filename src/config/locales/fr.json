@@ -1,53 +1,65 @@
 {
-    "brands": {
-        "aragon": "Aragon",
-        "balancer": "Balancer Labs",
-        "discord": "Discord",
-        "etherscan": "Etherscan",
-        "github": "Github",
-        "medium": "Medium",
-        "piedao": "PieDAO",
-        "quantstamp": "Quantstamp",
-        "twitter": "Twitter"
-    },
-    "defi": {
-        "liquidity": {
-            "mining": "Extraction de liquidité"
-        }
-    },
-    "general": {
-        "add": "Ajouter",
-        "allocation": "Allocation",
-        "amount": "Montant",
-        "asset": "Actif",
-        "balance": "Balance",
-        "breakdown": "Répartition",
-        "close": "Fermé",
-        "docs": "Docs",
-        "documentation": "Documentation",
-        "duration": {
-            "annualized": "Annualized"
-        },
-        "forum": "Forum",
-        "home": "Home",
-        "info": "Info",
-        "liquidity": "Liquidité",
-        "loading": "Chargement",
-        "logo": "Logo",
-        "multi": "Multi",
-        "program": "Program",
-        "returns": "Retour",
-        "single": "Unique",
-        "tokens": "Tokens",
-        "whitepaper": "Whitepaper",
-        "withdraw": "Retirer",
-        "your": "Votre"
-    },
-    "piedao": {
-        "aragonLink": "piedao.aragon",
-        "audit.result": "Resultat de l'audit",
-        "check.contract.on": "Vérifiez le contract sur",
-        "multi.asset.according.to.allocation": "selon son allocation",
-        "multi.asset.enables.minting": "La saisie Multi Actifs vous permet de monnayer"
+  "brands": {
+    "aragon": "Aragon",
+    "balancer": "Balancer Labs",
+    "discord": "Discord",
+    "etherscan": "Etherscan",
+    "github": "Github",
+    "medium": "Medium",
+    "piedao": "PieDAO",
+    "quantstamp": "Quantstamp",
+    "twitter": "Twitter"
+  },
+  "defi": {
+    "liquidity": {
+      "mining": "Liquidity Mining"
     }
+  },
+  "general": {
+    "add": "Ajouter",
+    "allocation": "Allocation",
+    "amount": "Montant",
+    "asset": "Actif",
+    "balance": "Solde",
+    "breakdown": "Répartition",
+    "close": "Fermer",
+    "docs": "Doc",
+    "documentation": "Documentation",
+    "duration": {
+      "annualized": "Annualisé"
+    },
+    "forum": "Forum",
+    "home": "Accueil",
+    "info": "Info",
+    "liquidity": "Liquidité",
+    "loading": "Chargement",
+    "logo": "Logo",
+    "mined": "Miné",
+    "multi": "Multi",
+    "program": "Programme",
+    "returns": "Retours",
+    "single": "Simple",
+    "successfully": "Avec succès",
+    "tokens": "Jetons",
+    "whitepaper": "Livre blanc",
+    "withdraw": "Retirer de la liquidité",
+    "withdrawn": "Retiré",
+    "your": "Votre",
+    "vision": "vision"
+  },
+  "piedao": {
+    "aragonLink": "piedao.aragon",
+    "audit.result": "Résultat de l'audit",
+    "check.contract.on": "Vérifiez le contrat sur",
+    "confirming": "En cours de confirmation...",
+    "max.mint.notice": "Vous avez suffisamment de fonds pour frapper",
+    "max.withdraw.notice": "Vous avez suffisamment de fonds pour retirer",
+    "more.tokens.notice": "Pour continuer, vous aurez besoin de plus de ces jetons",
+    "multi.asset.according.to.allocation": "selon son allocation",
+    "multi.asset.all.underlying": "de tous les actifs sous-jacents",
+    "multi.asset.enables.minting": "La saisie multi-actifs vous permet de frapper",
+    "multi.asset.enables.withdraw": "La saisie multi-actifs vous permet de retirer",
+    "please.connect.wallet": "Veuillez connecter un portefeuille et réessayer.",
+    "single.asset.coming.soon": "La saisie simple-actif entré/sortie sera bientôt disponible !"
+  }
 }
