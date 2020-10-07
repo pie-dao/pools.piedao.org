@@ -100,7 +100,7 @@
 
   onMount(async () => {
     fetchQuote();
-    calcArb();
+    fetchAmounts();
   });
 
   const action = async (evt, pooledToken) => {
@@ -289,6 +289,7 @@
     }
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
+    fetchAmounts();
   };
 
   const withdraw = async () => {
