@@ -77,7 +77,7 @@ addMessages('es', es);
 addMessages('fa', fa);
 
 // fr
-addMessages('fr', fr);
+// addMessages('fr', fr);
 
 // ga
 addMessages('ga', ga);
