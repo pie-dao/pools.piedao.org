@@ -30,7 +30,7 @@ import en from './config/locales/en.json';
 import es from './config/locales/es.json';
 // fa
 import fa from './config/locales/fa.json';
-import fr from './config/locales/fr.json';
+// import fr from './config/locales/fr.json';
 
 // ga
 import ga from './config/locales/ga.json';

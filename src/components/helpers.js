@@ -291,27 +291,23 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   const data = {};
 
   res.tokens.forEach((token, index) => {
-
     const tokenInfo = find(poolsConfig[pieAddress.toLowerCase()].composition, { address: token });
     let d = tokenInfo && tokenInfo.decimals ? tokenInfo.decimals : 18;
 
-    if(d < 18) {
-      let adjustedAmount = BigNumber(res.amounts[index].toString()).multipliedBy(10 ** (18-d));
+    if (d < 18) {
+      let adjustedAmount = BigNumber(res.amounts[index].toString()).multipliedBy(10 ** (18 - d));
       let bnAdjustedAmount = ethers.BigNumber.from(adjustedAmount.toString());
 
       data[token.toLowerCase()] = {
         amount: bnAdjustedAmount,
         label: ethers.utils.formatEther(bnAdjustedAmount),
       };
-
     } else {
       data[token.toLowerCase()] = {
         amount: res.amounts[index],
         label: ethers.utils.formatEther(res.amounts[index]),
       };
     }
-    
-    
   });
 
   return data;
@@ -648,11 +644,11 @@ export const calculateAPRUniswap = async (
   const totalBPTAmount = (await BALANCER_POOL.totalSupply()) / 1e18;
   const totalStakedBPTAmount = (await StakingPOOL.totalSupply()) / 1e18;
 
-  const WETH_TOKEN = await contract({ address: WETH});
+  const WETH_TOKEN = await contract({ address: WETH });
   const DOUGH_TOKEN = await contract({ address: DOUGH });
 
-  const totalDOUGHAmount = await DOUGH_TOKEN.balanceOf(tokenToStake) / 1e18;
-  const totalWETHAmount = await WETH_TOKEN.balanceOf(tokenToStake) / 1e18;
+  const totalDOUGHAmount = (await DOUGH_TOKEN.balanceOf(tokenToStake)) / 1e18;
+  const totalWETHAmount = (await WETH_TOKEN.balanceOf(tokenToStake)) / 1e18;
 
   const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
   const WETHperBPT = totalWETHAmount / totalBPTAmount;
@@ -730,13 +726,12 @@ export const calculateAPRUniswap = async (
     ETHPrice,
     doughStaked: totalDOUGHAmount,
     ethStaked: totalWETHAmount,
-    totalLiquidity
+    totalLiquidity,
   };
 
   const updates = {};
   updates[addressStakingPool] = res;
   farming.set({ ...get(farming), ...updates });
-
 };
 
 export const calculateAPRBalancer = async (
@@ -839,7 +834,7 @@ export const calculateAPRBalancer = async (
     ETHPrice,
     doughStaked: totalDOUGHAmount,
     ethStaked: totalWETHAmount,
-    totalLiquidity
+    totalLiquidity,
   };
 
   const updates = {};
