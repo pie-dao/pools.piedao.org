@@ -133,6 +133,7 @@
           incentivizedPools[0].addressUniPoll,
           incentivizedPools[0].addressTokenToStake
     );
+    
   }, false);
 
   $: if($eth.address) {

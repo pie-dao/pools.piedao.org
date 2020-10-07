@@ -29,7 +29,7 @@
         },
         {
           symbol: "ETH",
-          address: "0x0000000000000000000000000000000000000000",
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
           balance: '0',
           icon: getTokenImage('eth')
         },
@@ -38,7 +38,7 @@
     {
       symbol: "DEFI+S/ETH",
       address: "",
-      aprEnabled: false,
+      aprEnabled: true,
       balance: '0',
       weights: "70 / 30",
       addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
@@ -55,7 +55,7 @@
         },
         {
           symbol: "ETH",
-          address: "0x0000000000000000000000000000000000000000",
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
           balance: '0',
           icon: getTokenImage('eth')
         },

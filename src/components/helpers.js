@@ -635,10 +635,16 @@ export const calculateAPRBalancer = async (
   tokenToStake,
   stakedBPTAmount = null,
   earnedDOUGH = null,
+  assetOne,
+  assetTwo,
 ) => {
+  console.log(
+    'calculateAPRBalancer',
+    {assetOne,
+    assetTwo})
   const marketData = get(piesMarketDataStore);
-  const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
-  const WETH = '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+  const DOUGH = assetOne;//'0xad32A8e6220741182940c5aBF610bDE99E737b2D';
+  const WETH = assetTwo;//'0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
 
   console.log(`Initialized `);
   console.log('Reading smart contracts...');
