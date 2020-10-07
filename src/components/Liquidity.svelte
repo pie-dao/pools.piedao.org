@@ -549,7 +549,7 @@
           </a>
         {:else}
           <div class="amount tex-sm px-20px py-12px m-auto">
-           * {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
+           {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
           </div>
         {/if}
         <div class="hidden">{$eth.address}</div>
