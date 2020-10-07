@@ -668,7 +668,6 @@ export const calculateAPRUniswap = async (
   const ETHPrice = marketData[WETH].market_data.current_price;
   const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
   const totalLiquidity = BPTPrice * totalBPTAmount;
-  console.log('totalLiquidity', totalLiquidity);
   // Finished. Start printing
   const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
 
@@ -748,13 +747,9 @@ export const calculateAPRBalancer = async (
   assetOne,
   assetTwo,
 ) => {
-  console.log(
-    'calculateAPRBalancer',
-    {assetOne,
-    assetTwo})
   const marketData = get(piesMarketDataStore);
-  const DOUGH = assetOne;//'0xad32A8e6220741182940c5aBF610bDE99E737b2D';
-  const WETH = assetTwo;//'0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2';
+  const DOUGH = assetOne;
+  const WETH = assetTwo;
 
   console.log(`Initialized `);
   console.log('Reading smart contracts...');
@@ -783,6 +778,7 @@ export const calculateAPRBalancer = async (
   const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
   // Finished. Start printing
   const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
+  const totalLiquidity = BPTPrice * totalBPTAmount;
 
   if (null) {
     console.log('========== STAKING =========');
@@ -842,7 +838,8 @@ export const calculateAPRBalancer = async (
     DOUGHPrice,
     ETHPrice,
     doughStaked: totalDOUGHAmount,
-    ethStaked: totalWETHAmount
+    ethStaked: totalWETHAmount,
+    totalLiquidity
   };
 
   const updates = {};

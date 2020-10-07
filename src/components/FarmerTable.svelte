@@ -108,8 +108,6 @@
         }  
     });
   }, false);
-
-  $: console.log('farming', $farming);
 </script>
 <table class="breakdown-table table-auto w-full">
     <thead>
@@ -119,6 +117,7 @@
         <th class="font-thin border-b-2 px-4 py-2">Weights</th>
         <th class="font-thin border-b-2 px-4 py-2">Weekly Rewards</th>
         <th class="font-thin border-b-2 px-4 py-2">APR (unstable)</th>
+        <th class="font-thin border-b-2 px-4 py-2">Liquidity</th>
         <!-- <th class="font-thin border-b-2 px-4 py-2">APY</th> -->
     </tr>
     </thead>
@@ -152,6 +151,14 @@
         <td class="border text-center py-2">
           {#if $farming[pool.addressUniPoll]}
             {$farming[pool.addressUniPoll].apr}
+          {:else}
+            n/a
+          {/if}
+        </td>
+
+        <td class="border text-center py-2">
+          {#if $farming[pool.addressUniPoll]}
+            {formatFiat($farming[pool.addressUniPoll].totalLiquidity.toFixed(2))}
           {:else}
             n/a
           {/if}
