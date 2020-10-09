@@ -78,6 +78,7 @@
       toStakeDesc: 'Balancer: DOUGH/ETH 80/20',
       allowance: 0,
       type: 'Balancer',
+      contractType: 'UniPool',
       containing: [
         {
           symbol: "DOUGH",
@@ -104,6 +105,7 @@
       name: 'DEFI+S / DAI',
       poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
       platform: "🦄 Uniswap",
+      contractType: 'UniPool',
       containing: [
         {
           symbol: "DEFI+S",
@@ -137,6 +139,41 @@
       poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       name: 'DEFI+S / ETH',
       type: 'Balancer',
+      contractType: 'UniPool',
+      containing: [
+        {
+          symbol: "DEFI+S",
+          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+          balance: '0',
+          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
+        },
+        {
+          symbol: "ETH",
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          balance: '0',
+          icon: getTokenImage('eth')
+        },
+      ],
+      rewards_token: 'DOUGH',
+      toStakeSymbol: 'BPT',
+      toStakeDesc: 'Balancer: DEFI+S/ETH 70/30',
+      platform: "⚖️ Balancer",
+      description: 'WEEKLY REWARDS',
+      weeklyRewards: formatFiat(25000, ',', '.', ''),
+      apy: 1.8,
+      allowance: 0,
+      allowanceKey: '',
+      needAllowance: true,
+      enabled: true,
+    },
+    {
+      addressTokenToStake: '0xaFF4481D10270F50f203E0763e2597776068CBc5',
+      aprEnabled: false,
+      addressUniPoll: '0xAFbfcf1794C3E0c36dE52dFE48f8fd06Dcba22EC',
+      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
+      name: 'DEFI+L/ETH',
+      type: 'Balancer',
+      contractType: 'Geyser',
       containing: [
         {
           symbol: "DEFI+S",
@@ -206,8 +243,16 @@
 
         p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [$eth.address, p.addressUniPoll]);
         p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, $eth.address);
-        p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, $eth.address);
-        p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, $eth.address, '.earned');
+        if(p.contractType === "UniPool") {
+          p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, $eth.address);
+          p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, $eth.address, '.earned');
+        } else {
+          console.log("Getting staked balance from geyser");
+          console.log(p.addressUniPoll, "address");
+          p.KeyUnipoolBalance = functionKey(p.addressUniPoll, 'totalStakedFor', [$eth.address]);
+          // p.KeyUnipoolEarnedBalance = functionKey(p.addressUniPoll, '')
+        }
+        
 
         amountToClaim
       });
@@ -489,7 +534,7 @@
               <!-- UNSTAKE BOX -->
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.withdraw} alt="PieDAO logo" />
-                    <div class="title text-lg">UNSTAKE</div>
+                    <div class="title text-lg">UNSTAKE {#if pool.contractType === "Geyser"} and CLAIM {/if}</div>
                     <div class="apy">
                       {pool.KeyAddressTokenToStake ? amountFormatter({ amount: $balances[pool.KeyUnipoolBalance], displayDecimals: 4}) : 0.0000} {pool.toStakeSymbol}
                     </div>
@@ -557,6 +602,7 @@
               </div>
 
               <!-- CLAIM BOX -->
+              {#if pool.contractType === "UniPool"}
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.claim} alt="PieDAO logo" />
                     <div class="title text-lg">REWARDS AVAILABLE</div>
@@ -582,6 +628,7 @@
                     </div>
                     <button on:click={() => getRewards()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
               </div>
+              {/if}
             </div>
             <div class="info-box">
               {#if $farming[pool.addressUniPoll] !== undefined}
