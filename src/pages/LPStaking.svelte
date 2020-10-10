@@ -7,6 +7,7 @@
   import { currentRoute } from '../stores/routes.js';
   import recipeUnipool from '../config/unipoolABI.json';
   import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
+  import geyserABI from '../config/geyser.json';
   import { get } from "svelte/store";
   import displayNotification from "../notifications.js";
   import { piesMarketDataStore } from '../stores/coingecko.js';
@@ -27,6 +28,7 @@
     subscribeToAllowance,
     subscribeToStaking,
     subscribeToStakingEarnings,
+    subscribeToStakingEarningsGeyser,
   } from "../components/helpers.js";
 
   import {
@@ -167,19 +169,19 @@
       enabled: true,
     },
     {
-      addressTokenToStake: '0xaFF4481D10270F50f203E0763e2597776068CBc5',
+      addressTokenToStake: '0xa795600590a7da0057469049ab8f1284baed977e',
       aprEnabled: false,
-      addressUniPoll: '0xAFbfcf1794C3E0c36dE52dFE48f8fd06Dcba22EC',
+      addressUniPoll: '0xe9442BbCEcDae175BeF23bE781A565f63bd48e55',
       poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       name: 'DEFI+L/ETH',
       type: 'Balancer',
       contractType: 'Geyser',
       containing: [
         {
-          symbol: "DEFI+S",
-          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+          symbol: "DEFI+L",
+          address: "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
           balance: '0',
-          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
+          icon: getTokenImage('0x78f225869c08d478c34e5f645d07a87d3fe8eb78')
         },
         {
           symbol: "ETH",
@@ -190,7 +192,7 @@
       ],
       rewards_token: 'DOUGH',
       toStakeSymbol: 'BPT',
-      toStakeDesc: 'Balancer: DEFI+S/ETH 70/30',
+      toStakeDesc: 'Balancer: DEFI+L/ETH 70/30',
       platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
       weeklyRewards: formatFiat(25000, ',', '.', ''),
@@ -238,23 +240,23 @@
         calculateAPRBalancer()
         subscribeToBalance(p.addressTokenToStake, $eth.address, true);
         subscribeToStaking(p.addressUniPoll, $eth.address, true);
-        subscribeToStakingEarnings(p.addressUniPoll, $eth.address, true);
         subscribeToAllowance(p.addressTokenToStake, $eth.address, p.addressUniPoll);
 
         p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [$eth.address, p.addressUniPoll]);
         p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, $eth.address);
+
         if(p.contractType === "UniPool") {
+          subscribeToStakingEarnings(p.addressUniPoll, $eth.address, true);
           p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, $eth.address);
           p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, $eth.address, '.earned');
         } else {
           console.log("Getting staked balance from geyser");
           console.log(p.addressUniPoll, "address");
-          p.KeyUnipoolBalance = functionKey(p.addressUniPoll, 'totalStakedFor', [$eth.address]);
-          // p.KeyUnipoolEarnedBalance = functionKey(p.addressUniPoll, '')
+          subscribeToStakingEarningsGeyser(p.addressUniPoll, $eth.address, true);
+          p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, $eth.address);
+          p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, $eth.address, '.geyserEarned');
         }
         
-
-        amountToClaim
       });
       intiated = true;
       bumpLifecycle();
@@ -302,14 +304,22 @@
       return;
     }
 
-    const unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+    let unipool;
+    let emitterToUse;
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
-    // displayNotification({ message, type: "error", autoDismiss: 30000 });
+    if(pool.contractType === "UniPool") {
+      unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+      const { emitter } = displayNotification(await unipool.withdraw(amountWei) );
+      emitterToUse = emitter;
+    } else {
+      unipool = await contract({ address: pool.addressUniPoll, abi: geyserABI });
+      const { emitter } = displayNotification(await unipool.unstake(amountWei, 0x0) );
+      emitterToUse = emitter;
+    }
+  
 
-    const { emitter } = displayNotification(await unipool.withdraw(amountWei) );
-
-    emitter.on("txConfirmed", ({ hash }) => {
+    emitterToUse.on("txConfirmed", ({ hash }) => {
       const { dismiss } = displayNotification({
         message: "Confirming...",
         type: "pending",
@@ -393,20 +403,26 @@
       displayNotification({ message: "Amount set to max", type: "hint" });
     }
 
-
     if(referral && isAddress(referral) && referral.toLowerCase() !== $eth.address.toLowerCase()) {
       console.log('Im setting the referral to '+referral);
       referralValidated = referral;
     }
-    const unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
+    let unipool;
+    let emitterToUse;
+    if(pool.contractType === "UniPool") {
+      unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+      console.log(`Staking ${amountToStake} ${pool.toStakeSymbol} with referral ${referralValidated}`)
+      const { emitter } = displayNotification(await unipool["stake(uint256,address)"](amountWei, referralValidated) );
+      emitterToUse = emitter;
+    } else {
+      unipool = await contract({ address: pool.addressUniPoll, abi: geyserABI });
+      const { emitter } = displayNotification(await unipool["stake(uint256)"](amountWei) );
+      emitterToUse = emitter;
+    }
 
-    // displayNotification({ message, type: "error", autoDismiss: 30000 });
-    console.log(`Staking ${amountToStake} ${pool.toStakeSymbol} with referral ${referralValidated}`)
-    
-    const { emitter } = displayNotification(await unipool["stake(uint256,address)"](amountWei, referralValidated) );
-
-    emitter.on("txConfirmed", ({ hash }) => {
+    emitterToUse.on("txConfirmed", ({ hash }) => {
       const { dismiss } = displayNotification({
         message: "Confirming...",
         type: "pending",

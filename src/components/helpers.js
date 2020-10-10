@@ -11,6 +11,7 @@ import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
 import recipeAbi from '../config/recipeABI.json';
 import unipoolAbi from '../config/unipoolABI.json';
+import geyserABI from '../config/geyser.json';
 import uniswapPair from '../config/uniswapPair.json';
 import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
 
@@ -472,6 +473,37 @@ export const subscribeToStakingEarnings = async (contractAddress, address, shoul
   balanceSubscriptions.add(keyEarned);
 
   const unipool = await contract({ address: contractAddress, abi: unipoolAbi });
+
+  const observableEarned = await unipool.trackEarnedBalance(address);
+  const decimals = 18;
+
+  observableEarned.subscribe({
+    next: async (updatedBalance) => {
+      const updates = {};
+      updates[keyEarned] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
+      balances.set({ ...get(balances), ...updates });
+    },
+  });
+
+  if (shouldBump) {
+    bumpLifecycle();
+  }
+};
+
+export const subscribeToStakingEarningsGeyser = async (contractAddress, address, shouldBump = true) => {
+  const token = contractAddress;
+
+  validateIsAddress(token);
+  validateIsAddress(address);
+
+  const keyEarned = balanceKey(token, address, '.geyserEarned');
+
+  if (balanceSubscriptions.has(keyEarned)) {
+    return;
+  }
+  balanceSubscriptions.add(keyEarned);
+
+  const unipool = await contract({ address: contractAddress, abi: geyserABI });
 
   const observableEarned = await unipool.trackEarnedBalance(address);
   const decimals = 18;
