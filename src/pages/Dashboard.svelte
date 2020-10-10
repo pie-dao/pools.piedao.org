@@ -74,7 +74,7 @@
                     class="inline icon ml-2 mr-2"
                     src={pie.icon}
                     alt={pie.symbol} />
-                    {pie.symbol}
+                    <span class="hidden md:block">{pie.symbol}</span>
                 </a>
             </td>
             <td class="border text-center px-4 py-2 hidden md:block">
