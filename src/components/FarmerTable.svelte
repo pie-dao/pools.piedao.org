@@ -72,7 +72,7 @@
       addressTokenToStake: '0xa795600590a7da0057469049ab8f1284baed977e',
       addressUniPoll: '0xe9442BbCEcDae175BeF23bE781A565f63bd48e55',
       weeklyRewards: '20,000',
-      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
+      poolLink: "https://pools.balancer.exchange/#/pool/0xa795600590a7da0057469049ab8f1284baed977e/",
       type: 'Balancer',
       containing: [
         {
