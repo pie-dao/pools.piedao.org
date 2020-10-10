@@ -18,7 +18,7 @@
       balance: '0',
       weights: "80 / 20",
       aprEnabled: true,
-      weeklyRewards: '200,000',
+      weeklyRewards: '110,000',
       poolLink: 'https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/',
       type: 'Balancer',
       containing: [
@@ -44,7 +44,7 @@
       weights: "70 / 30",
       addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
       addressUniPoll: '0x220f25C2105a65425913FE0CF38e7699E3992B97',
-      weeklyRewards: '25,000',
+      weeklyRewards: '20,000',
       poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       type: 'Balancer',
       containing: [
@@ -63,15 +63,43 @@
       ]
     },
     {
+      symbol: "DEFI+L/ETH",
+      address: "",
+      aprEnabled: true,
+      balance: '0',
+      weights: "70 / 30",
+      contractType: 'Geyser',
+      addressTokenToStake: '0xa795600590a7da0057469049ab8f1284baed977e',
+      addressUniPoll: '0xe9442BbCEcDae175BeF23bE781A565f63bd48e55',
+      weeklyRewards: '20,000',
+      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
+      type: 'Balancer',
+      containing: [
+        {
+          symbol: "DEFI+L",
+          address: "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
+          balance: '0',
+          icon: getTokenImage('0x78f225869c08d478c34e5f645d07a87d3fe8eb78')
+        },
+        {
+          symbol: "ETH",
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          balance: '0',
+          icon: getTokenImage('eth')
+        },
+      ]
+    },
+    {
       symbol: "DEFI+S/DAI",
       address: "",
       aprEnabled: true,
+      deprecated: true,
       addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
       addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
       weights: "50 / 50",
       type: 'UniswapV2',
       poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
-      weeklyRewards: '25,000',
+      weeklyRewards: '20,000',
       balance: '0',
       containing: [
         {
@@ -149,7 +177,7 @@
         </td>
         
         <td class="border text-center py-2">
-          {#if $farming[pool.addressUniPoll]}
+          {#if $farming[pool.addressUniPoll] && $farming[pool.addressUniPoll].apr}
             {$farming[pool.addressUniPoll].apr}
           {:else}
             n/a
@@ -166,9 +194,15 @@
         
         <td class="border text-center py-2">
           <a href="#/stake">
-            <button class="table-btn">
-              Stake
-            </button>
+            {#if pool.deprecated}
+              <button class="table-btn">
+                Unstake
+              </button>
+            {:else}
+              <button class="table-btn highlight-box">
+                Stake
+              </button>
+            {/if}
           </a>
         </td>
         {#if pool.poolLink}

@@ -127,6 +127,7 @@
     <div class="my-10">
       <h1 class="text-lg">👨‍🌾 Honest worker? Explore Pie Farming Opportunities</h1>
       <p class="font-thin">Add liquidity to earn fees and DOUGH incentives.</p>
+      <p class="font-thin">ℹ️ APR does not account for gains or losses from holding liquidity tokens.</p>
     </div>
 
     <FarmerTable />

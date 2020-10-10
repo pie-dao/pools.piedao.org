@@ -5,6 +5,9 @@
   import { _ } from "svelte-i18n";
   import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
+  
+  import filter from 'lodash/filter';
+
   import recipeUnipool from '../config/unipoolABI.json';
   import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
   import geyserABI from '../config/geyser.json';
@@ -69,12 +72,13 @@
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
       addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
       aprEnabled: true,
+      deprecated: false,
       poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
       name: 'DOUGH / ETH',
       platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
       rewards_token: 'DOUGH',
-      weeklyRewards: formatFiat(200000, ',', '.', ''),
+      weeklyRewards: formatFiat(110000, ',', '.', ''),
       apy: 1.8,
       toStakeSymbol: 'BPT',
       toStakeDesc: 'Balancer: DOUGH/ETH 80/20',
@@ -101,42 +105,9 @@
       enabled: true,
     },
     {
-      addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
-      aprEnabled: true,
-      addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
-      name: 'DEFI+S / DAI',
-      poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
-      platform: "🦄 Uniswap",
-      contractType: 'UniPool',
-      containing: [
-        {
-          symbol: "DEFI+S",
-          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-          balance: '0',
-          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
-        },
-        {
-          symbol: "DAI",
-          address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-          balance: '0',
-          icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
-        },
-      ],
-      type: 'UniswapV2',
-      toStakeDesc: 'Uniswap: DEFI+S/DAI 50/50',
-      toStakeSymbol: 'LP',
-      description: 'WEEKLY REWARDS',
-      rewards_token: 'DOUGH',
-      weeklyRewards: formatFiat(25000, ',', '.', ''),
-      apy: 1.8,
-      allowance: 0,
-      allowanceKey: '',
-      needAllowance: true,
-      enabled: true,
-    },
-    {
       addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
       aprEnabled: true,
+      deprecated: false,
       addressUniPoll: '0x220f25C2105a65425913FE0CF38e7699E3992B97',
       poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       name: 'DEFI+S / ETH',
@@ -161,7 +132,7 @@
       toStakeDesc: 'Balancer: DEFI+S/ETH 70/30',
       platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
-      weeklyRewards: formatFiat(25000, ',', '.', ''),
+      weeklyRewards: formatFiat(20000, ',', '.', ''),
       apy: 1.8,
       allowance: 0,
       allowanceKey: '',
@@ -171,6 +142,7 @@
     {
       addressTokenToStake: '0xa795600590a7da0057469049ab8f1284baed977e',
       aprEnabled: false,
+      deprecated: false,
       addressUniPoll: '0xe9442BbCEcDae175BeF23bE781A565f63bd48e55',
       poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
       name: 'DEFI+L/ETH',
@@ -195,6 +167,41 @@
       toStakeDesc: 'Balancer: DEFI+L/ETH 70/30',
       platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
+      weeklyRewards: formatFiat(20000, ',', '.', ''),
+      apy: 1.8,
+      allowance: 0,
+      allowanceKey: '',
+      needAllowance: true,
+      enabled: true,
+    },
+    {
+      addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
+      aprEnabled: true,
+      deprecated: true,
+      addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
+      name: 'DEFI+S / DAI',
+      poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
+      platform: "🦄 Uniswap",
+      contractType: 'UniPool',
+      containing: [
+        {
+          symbol: "DEFI+S",
+          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+          balance: '0',
+          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
+        },
+        {
+          symbol: "DAI",
+          address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+          balance: '0',
+          icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
+        },
+      ],
+      type: 'UniswapV2',
+      toStakeDesc: 'Uniswap: DEFI+S/DAI 50/50',
+      toStakeSymbol: 'LP',
+      description: 'DEPRECATED POOL',
+      rewards_token: 'DOUGH',
       weeklyRewards: formatFiat(25000, ',', '.', ''),
       apy: 1.8,
       allowance: 0,
@@ -494,7 +501,7 @@
         {#if !pool}
         <h1 class="mt-8 mb-1 px-2 text-left text-lg md:text-xl">Select a pool</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
-            {#each incentivizedPools as ammPool}
+            {#each filter(incentivizedPools, { deprecated: false }) as ammPool}
               {#if ammPool.highlight }
                 <div class="highlight-box farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
                   <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
@@ -522,13 +529,19 @@
                     <div class="subtitle font-thin">{ammPool.description}</div>
                     <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
                     <div class="apy">{ammPool.platform}</div>
-                    <div class="apy">
-                      {#if $farming[ammPool.addressUniPoll] !== undefined}
-                        {$farming[ammPool.addressUniPoll].apr}
-                      {:else}
-                        n/a
-                      {/if}
-                    </div>
+                    
+                    {#if ammPool.contractType === 'Geyser'}
+                      <div class="apy"><a target="_blank" href="https://forum.piedao.org/t/pip-20-week-2-incentive-programs/197">ℹ️ Geyser With Multiplier</a></div>
+                    {:else}
+                      <div class="apy">
+                        {#if $farming[ammPool.addressUniPoll] !== undefined}
+                          {$farming[ammPool.addressUniPoll].apr}
+                        {:else}
+                          n/a
+                        {/if}
+                      </div>
+                    {/if}
+
                     {#if ammPool.enabled}
                       <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
                     {:else}
@@ -538,6 +551,25 @@
               {/if}
             {/each}
         </div>
+
+        <h1 class="mt-8 mb-1 px-2 text-left text-lg md:text-xl">⚠️ Deprecated pools</h1>
+        <div class="flex flex-col w-full justify-center md:flex-row">
+          {#each filter(incentivizedPools, { deprecated: true }) as ammPool}
+            <div class="farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
+              <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
+                <div class="title text-lg"> <a href={ammPool.poolLink} target="_blank"> {ammPool.name} </a></div>
+                <div class="subtitle font-thin">{ammPool.description}</div>
+                <div class="apy">{ammPool.platform}</div>
+
+                {#if ammPool.enabled}
+                  <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
+                {:else}
+                  <button disabled class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Oct 3rd, 6:00pm UTC</button>
+                {/if}
+            </div>
+          {/each}
+        </div>
+        
         {:else}
             <div>
               <button on:click={() => pool = null } class="md:w-1 float-left btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Go back</button>
