@@ -625,7 +625,7 @@ export const subscribeToPoolWeights = async (poolAddress) => {
   bumpLifecycle();
 };
 
-export const toFixed = function (num, fixed) {
+export const toFixed = function (num=0, fixed) {
   const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
   const arr = num.toString().match(re);
   if (arr && arr.length > 0) {
@@ -780,33 +780,36 @@ export const calculateAPRBalancer = async (
 
   console.log(`Initialized `);
   console.log('Reading smart contracts...');
-  
+  const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
+  const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
+
+  const totalBPTAmount = (await BALANCER_POOL.totalSupply()) / 1e18;
+  const totalStakedBPTAmount = (await StakingPOOL.totalSupply()) / 1e18;
+
+  const totalDOUGHAmount = (await BALANCER_POOL.getBalance(DOUGH)) / 1e18;
+  const totalWETHAmount = (await BALANCER_POOL.getBalance(WETH)) / 1e18;
+
+  const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
+  const WETHperBPT = totalWETHAmount / totalBPTAmount;
+
+  // Look up prices
+  const DOUGHPrice = marketData[DOUGH].market_data.current_price;
+  const ETHPrice = marketData[WETH].market_data.current_price;
+  const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
+  const totalLiquidity = BPTPrice * totalBPTAmount;
+
+  let res;
+
   try {
-    const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
-    const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
-  
-    const totalBPTAmount = (await BALANCER_POOL.totalSupply()) / 1e18;
-    const totalStakedBPTAmount = (await StakingPOOL.totalSupply()) / 1e18;
-  
-    const totalDOUGHAmount = (await BALANCER_POOL.getBalance(DOUGH)) / 1e18;
-    const totalWETHAmount = (await BALANCER_POOL.getBalance(WETH)) / 1e18;
-  
-    const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
-    const WETHperBPT = totalWETHAmount / totalBPTAmount;
-  
+    
     // Find out reward rate
     const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
     const rewardPerToken = weekly_reward / totalStakedBPTAmount;
   
     console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
-  
-    // Look up prices
-    const DOUGHPrice = marketData[DOUGH].market_data.current_price;
-    const ETHPrice = marketData[WETH].market_data.current_price;
-    const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
     // Finished. Start printing
     const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
-    const totalLiquidity = BPTPrice * totalBPTAmount;
+    
   
     if (null) {
       console.log('========== STAKING =========');
@@ -852,7 +855,7 @@ export const calculateAPRBalancer = async (
       console.log(`APR (unstable)    : ${toFixed(DOUGHWeeklyROI * 52, 4)}% \n`);
     }
   
-    const res = {
+    res = {
       roi: DOUGHWeeklyROI,
       weekly: `${toFixed(DOUGHWeeklyROI, 4)}%`,
       apr: `${toFixed(DOUGHWeeklyROI * 52, 4)}%`,
@@ -874,28 +877,25 @@ export const calculateAPRBalancer = async (
     updates[addressStakingPool] = res;
     farming.set({ ...get(farming), ...updates });
   } catch(e) {
-    const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
-  
-    const totalBPTAmount = (await BALANCER_POOL.totalSupply()) / 1e18;
-  
-    const totalDOUGHAmount = (await BALANCER_POOL.getBalance(DOUGH)) / 1e18;
-    const totalWETHAmount = (await BALANCER_POOL.getBalance(WETH)) / 1e18;
-
-    const DOUGHperBPT = totalDOUGHAmount / totalBPTAmount;
-    const WETHperBPT = totalWETHAmount / totalBPTAmount;
-
-    console.log('DOUGH', DOUGH);
-    console.log('WETH', WETH);
-    console.log('marketData', marketData);
-    const DOUGHPrice = marketData[DOUGH].market_data.current_price;
-    const ETHPrice = marketData[WETH].market_data.current_price;
-
-    const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
-    const totalLiquidity = BPTPrice * totalBPTAmount;
+    res = {
+      totalBPTAmount,
+      totalStakedBPTAmount,
+      BPTPrice,
+      weekly_reward,
+      rewardPerToken,
+      DOUGHperBPT,
+      WETHperBPT,
+      DOUGHPrice,
+      ETHPrice,
+      doughStaked: totalDOUGHAmount,
+      ethStaked: totalWETHAmount,
+      totalLiquidity,
+    };
     
-    const updates = {};
-    updates[addressStakingPool] = {totalLiquidity};
-    farming.set({ ...get(farming), ...updates });
   }
+
+  const updates = {};
+    updates[addressStakingPool] = res;
+    farming.set({ ...get(farming), ...updates });
   
 };
