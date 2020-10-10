@@ -27,6 +27,9 @@ const providerOptions = {
       infuraId: 'e106b2b27c0f4941be1f2c183a20b3ea', // required
     },
   },
+  injected: {
+    package: null
+  },
 };
 
 const web3Modal = new Web3Modal({
@@ -36,6 +39,26 @@ const web3Modal = new Web3Modal({
 });
 
 // CONNECTION MANAGEMENT
+
+export const connectWeb3Cached = async () => {
+  try {
+    resetConnection();
+
+    const web3 = await web3Modal.connectTo('injected');
+
+    if (!web3) {
+      console.log('NOT CONNECTED');
+      return;
+    }
+
+    console.log('CONNECTED', web3);
+
+    registerConnection(web3);
+  } catch (e) {
+    console.error('ERROR CONNECTION TO WEB3', e);
+    resetConnection();
+  }
+};
 
 export const connectWeb3 = async () => {
   try {

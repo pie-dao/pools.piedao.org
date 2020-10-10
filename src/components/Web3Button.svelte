@@ -1,7 +1,10 @@
 <script>
-  import { connectWeb3, eth } from '../stores/eth.js';
+  import { connectWeb3, eth, connectWeb3Cached } from '../stores/eth.js';
   import { shortenAddress } from "@pie-dao/utils";
-  const address = null;// window.localStorage.getItem('address');
+  const address = null;
+  if(window.localStorage.getItem('address')) {
+    connectWeb3Cached();
+  }
   const shortAddress = address ? shortenAddress(address) : '';
 </script>
 
