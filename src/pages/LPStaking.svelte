@@ -143,7 +143,7 @@
       addressTokenToStake: '0xa795600590a7da0057469049ab8f1284baed977e',
       aprEnabled: false,
       deprecated: false,
-      addressUniPoll: '0xe9442BbCEcDae175BeF23bE781A565f63bd48e55',
+      addressUniPoll: '0xb3c2b0056627cc1dc148d8fc29f5abdf4dd837bc',
       poolLink: "https://pools.balancer.exchange/#/pool/0x78f225869c08d478c34e5f645d07a87d3fe8eb78/",
       name: 'DEFI+L/ETH',
       type: 'Balancer',
@@ -573,7 +573,7 @@
         {:else}
             <div>
               <button on:click={() => pool = null } class="md:w-1 float-left btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Go back</button>
-              {#if pool.KeyAddressTokenToStake && $balances[pool.KeyUnipoolBalance] > 0 }
+              {#if pool.KeyAddressTokenToStake && $balances[pool.KeyUnipoolBalance] > 0 && pool.contractType !== 'Geyser' }
                 <button on:click={() => exit() } class="float-right btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim and Unstake</button>
               {/if}
             </div>

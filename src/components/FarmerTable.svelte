@@ -70,7 +70,7 @@
       weights: "70 / 30",
       contractType: 'Geyser',
       addressTokenToStake: '0xa795600590a7da0057469049ab8f1284baed977e',
-      addressUniPoll: '0xe9442BbCEcDae175BeF23bE781A565f63bd48e55',
+      addressUniPoll: '0xb3c2b0056627cc1dc148d8fc29f5abdf4dd837bc',
       weeklyRewards: '20,000',
       poolLink: "https://pools.balancer.exchange/#/pool/0xa795600590a7da0057469049ab8f1284baed977e/",
       type: 'Balancer',
