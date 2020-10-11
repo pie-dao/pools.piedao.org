@@ -881,8 +881,6 @@ export const calculateAPRBalancer = async (
       totalBPTAmount,
       totalStakedBPTAmount,
       BPTPrice,
-      weekly_reward,
-      rewardPerToken,
       DOUGHperBPT,
       WETHperBPT,
       DOUGHPrice,

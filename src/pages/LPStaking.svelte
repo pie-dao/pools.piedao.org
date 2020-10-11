@@ -144,7 +144,7 @@
       aprEnabled: false,
       deprecated: false,
       addressUniPoll: '0xb3c2b0056627cc1dc148d8fc29f5abdf4dd837bc',
-      poolLink: "https://pools.balancer.exchange/#/pool/0x78f225869c08d478c34e5f645d07a87d3fe8eb78/",
+      poolLink: "https://pools.balancer.exchange/#/pool/0xa795600590a7da0057469049ab8f1284baed977e/",
       name: 'DEFI+L/ETH',
       type: 'Balancer',
       contractType: 'Geyser',
@@ -692,7 +692,7 @@
               <br/><br/>
               <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
-              <p>Buy DEFI+S on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">Balancer</a> or <a href="#/pools/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">mint now!</a></p>
+              <p>Buy {pool.containing[0].symbol} on <a target="_blank" href="https://balancer.exchange/#/swap/ether/{pool.containing[0].address}">Balancer</a> or <a href="#/pools/{pool.containing[0].address}">mint now!</a></p>
               <p>Buy DOUGH on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D">Balancer</a></p>
             </div>
         {/if}
