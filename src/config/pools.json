@@ -116,6 +116,7 @@
   "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": {
     "symbol": "DEFI+L",
     "useRecipe": true,
+    "coingeckoId": "piedao-defi-large-cap",
     "swapFees": "0.1",
     "composition": [
       {
