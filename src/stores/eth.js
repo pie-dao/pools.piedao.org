@@ -111,7 +111,8 @@ export const trackGasPrice = async () => subject('gasPrice');
 
 export const approve = async (address, spender, amount) => {
   const erc20Contract = await contract({ address });
-  const { hash } = await erc20Contract.approve(spender, amount);
+  const { hash } = await erc20Contract['approve(address,uint256)'](spender, amount);
+
   const { emitter } = displayNotification({ hash });
   const symbol = await erc20Contract.symbol();
   let currentBlockNumber;

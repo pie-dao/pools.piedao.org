@@ -6,7 +6,7 @@
 
   import { _ } from "svelte-i18n";
   import { ethers } from "ethers";
-  import { pieSmartPool } from "@pie-dao/abis";
+  import { pieSmartPool, erc20 } from "@pie-dao/abis";
 
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
@@ -55,6 +55,7 @@
 
   let amount = "1.00000000";
   let approach = poolAction;
+  let areTokensEnoughBool = true;
   let ethKey;
   let ethBalance = 0;
   let ethNeededSingleEntry = { val: 0, label:'-'};
@@ -93,10 +94,9 @@
       const pieToMint = pieAddress || token;
       amountsRequired = (await fetchCalcTokensForAmounts(pieToMint, amount));
       isLoading = false;
+      areTokensEnough();
     } catch (e) { console.error(e)}
   }
-
-  
 
   onMount(async () => {
     fetchQuote();
@@ -104,10 +104,15 @@
   });
 
   const action = async (evt, pooledToken) => {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
     const { address } = pooledToken;
 
     if (pooledToken.actionBtnLabel === "Unlock") {
-      evt.preventDefault();
       await approveMax(address, token);
     } else if (pooledToken.actionBtnLabel === "ready") {
       evt.preventDefault();
@@ -203,10 +208,53 @@
     });
   };
 
+  const areTokensEnough = () => {
+      let errors = [];
+      Object.keys(amountsRequired).forEach( token => {
+        let key = balanceKey(token, $eth.address);
+        let max = $balances[key];
+
+        if(BigNumber(amountsRequired[token].label).isGreaterThan(BigNumber(max.toString()))) {
+          errors.push(token);
+        }
+      });
+
+      if( errors.length > 0) {
+        console.log('Missing tokens', errors);
+        areTokensEnoughBool = false;
+        displayNotification({ message: 'Looks like you are missing some tokens!', type: "error", autoDismiss: 30000 });
+        return false;
+      }
+
+      areTokensEnoughBool = true;
+
+      return true;
+  };
+
+  const askApproval = async (address, spender) => {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    let erc20Contract = new ethers.Contract(address, erc20, $eth.signer);
+    console.log('Im being calle');
+
+    const { hash } = await erc20Contract['approve(address,uint256)'](spender, ethers.constants.MaxUint256);
+    const { emitter } = displayNotification({ hash });
+    const symbol = await erc20Contract.symbol();
+    
+    await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
+      currentBlockNumber = blockNumber;
+      resolve();
+      return { message: `${symbol} unlocked`, type: 'success' };
+    }));
+  }
+
   const mint = async () => {
     try {
       const requestedAmount = BigNumber(amount);
-      const max = maxAmount(token, pooledTokens, 1);
 
       if (!$eth.address || !$eth.signer) {
         displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
@@ -214,24 +262,12 @@
         return;
       }
 
-      if (requestedAmount.isGreaterThan(max)) {
-        const needMore = pooledTokens
-          .filter(({ actionBtnLabel }) => actionBtnLabel === "BUY")
-          .map(({ symbol }) => symbol)
-          .join(", ");
-
-        const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
-
-        const message =
-          `${$_("piedao.max.mint.notice")} ${maxFormatted} ${tokenSymbol}. ` +
-          `${$_("piedao.more.tokens.notice")}: ${needMore}`;
-
-        displayNotification({ message, type: "error", autoDismiss: 30000 });
+      if(!areTokensEnough()) {
         return;
       }
 
       for (let i = 0; i < lockedPoolTokens.length; i += 1) {
-        approveMax(lockedPoolTokens[i].address, token);
+        askApproval(lockedPoolTokens[i].address, token);
       }
 
       const tokenContract = await contract({ abi: pieSmartPool, address: token });
@@ -541,13 +577,13 @@
           <div class="amount tex-sm px-20px py-12px w-150px">
             {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
           </div>
-          <a
+          <!-- <a
             class={pooledToken.actionBtnClass}
             href={pooledToken.buyLink}
             on:click={evt => action(evt, pooledToken)}
             target="_blank">
             {pooledToken.actionBtnLabel}
-          </a>
+          </a> -->
         {:else}
           <div class="amount tex-sm px-20px py-12px m-auto">
            {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
@@ -560,7 +596,7 @@
   
 
   <center>
-    <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+    <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
       {#if approach === 'add'}
         {$_('general.add')} {$_('general.liquidity')}
       {:else}
