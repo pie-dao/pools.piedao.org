@@ -806,7 +806,7 @@ export const calculateAPRBalancer = async (
     const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
     const rewardPerToken = weekly_reward / totalStakedBPTAmount;
   
-    console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
+    // console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
     // Finished. Start printing
     const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
     

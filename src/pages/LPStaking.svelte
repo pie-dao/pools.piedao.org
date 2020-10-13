@@ -236,8 +236,17 @@
       let stakingShareSeconds = data[2];
       let totalUnlocked = data[1];
 
+      
+
       let totalUserRewards = totalUnlocked.mul(stakingShareSeconds).div(_totalStakingShareSeconds);
       let label = BigNumber(totalUserRewards.toString()).dividedBy(10 ** 18);
+
+      console.log({
+        _totalStakingShareSeconds,
+        stakingShareSeconds,
+        totalUnlocked,
+        totalUserRewards: label.toString()
+      })
       return label;
   };
 
