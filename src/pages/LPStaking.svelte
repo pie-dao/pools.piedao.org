@@ -302,7 +302,6 @@
           p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, $eth.address, '.geyserEarned');
 
           let earned = await estimateUnstake();
-          console.log('earned', earned);
           p.earned = earned;
           geyserEarned = earned;
         }
