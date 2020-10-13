@@ -599,6 +599,7 @@ opacity: 0.6;
 }
 
 .farming-card {
+  position: relative;
   border-color: #d1d1d1;
 }
 

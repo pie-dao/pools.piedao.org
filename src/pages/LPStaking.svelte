@@ -1,5 +1,6 @@
 <script>
   import { ethers } from "ethers";
+  import { onMount } from 'svelte';
   import BigNumber from "bignumber.js";
   import { validateIsAddress } from '@pie-dao/utils';
   import { _ } from "svelte-i18n";
@@ -7,6 +8,7 @@
   import { currentRoute } from '../stores/routes.js';
   
   import filter from 'lodash/filter';
+  import isNaN from 'lodash/isNaN';
 
   import recipeUnipool from '../config/unipoolABI.json';
   import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
@@ -64,7 +66,6 @@
   
   const referral = $currentRoute.params.referral || window.localStorage.getItem('referral');
 
-  $: console.log('farming', $farming);
 
   $: needAllowance = true;
   $: incentivizedPools = [
@@ -218,6 +219,33 @@
 
   $: pool = null;
 
+  $: geyserEarned = BigNumber(0);
+
+  const estimateUnstake = async () => {
+      const { provider, signer } = get(eth);
+      let contract = new ethers.Contract('0xb3c2b0056627cc1dc148d8fc29f5abdf4dd837bc', geyserABI, provider);
+      let overrides = {
+        from: $eth.address
+      }
+
+      let data = await contract.callStatic.updateAccounting(
+        overrides
+      );
+
+      let _totalStakingShareSeconds = data[3];
+      let stakingShareSeconds = data[2];
+      let totalUnlocked = data[1];
+
+      let totalUserRewards = totalUnlocked.mul(stakingShareSeconds).div(_totalStakingShareSeconds);
+      let label = BigNumber(totalUserRewards.toString()).dividedBy(10 ** 18);
+      return label;
+  };
+
+  onMount(() => {
+    console.log('YYY on mount');
+  });
+
+
   window.addEventListener('price-update', function (e) {
     console.log('price-update', e)
     isReady = true;
@@ -236,14 +264,24 @@
       incentivizedPools.forEach( async pool => {
         if( pool.type === 'UniswapV2') {
           await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-        } else {
+        } 
+        
+        if( pool.type === 'Balancer' && pool.contractType === 'UniPool') {
           await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
         }
-      })
+
+        if( pool.type === 'Balancer' && pool.contractType === 'Geyser') {
+          let earned = await estimateUnstake();
+          console.log('earned', earned);
+          geyserEarned = earned;
+        }
+      });
+
+      console.log('incentivizedPools', incentivizedPools[2])
     }
 
     if(!intiated) {
-      incentivizedPools.forEach( p => {      
+      incentivizedPools.forEach( async p => {      
         calculateAPRBalancer()
         subscribeToBalance(p.addressTokenToStake, $eth.address, true);
         subscribeToStaking(p.addressUniPoll, $eth.address, true);
@@ -262,6 +300,11 @@
           subscribeToStakingEarningsGeyser(p.addressUniPoll, $eth.address, true);
           p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, $eth.address);
           p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, $eth.address, '.geyserEarned');
+
+          let earned = await estimateUnstake();
+          console.log('earned', earned);
+          p.earned = earned;
+          geyserEarned = earned;
         }
         
       });
@@ -531,7 +574,8 @@
                     <div class="apy">{ammPool.platform}</div>
                     
                     {#if ammPool.contractType === 'Geyser'}
-                      <div class="apy"><a target="_blank" href="https://forum.piedao.org/t/pip-20-week-2-incentive-programs/197">ℹ️ Geyser With Multiplier</a></div>
+                      <div style="position:absolute; top:10px; right:10px;" class="apy"><a target="_blank" href="https://forum.piedao.org/t/pip-20-week-2-incentive-programs/197">ℹ️</a></div>
+                      Earned: {amountFormatter({ amount: geyserEarned, displayDecimals: 5})} DOUGH
                     {:else}
                       <div class="apy">
                         {#if $farming[ammPool.addressUniPoll] !== undefined}
@@ -675,6 +719,25 @@
                         </div>            
                     </div>
                     <button on:click={() => getRewards()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
+              </div>
+              {/if}
+
+              {#if pool.contractType === "Geyser"}
+              <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
+                    <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.claim} alt="PieDAO logo" />
+                    <div class="title text-lg">REWARDS EARNED</div>
+                    <div class="subtitle font-thin">{geyserEarned}</div>
+                    <div class="apy">
+                      {pool.KeyUnipoolEarnedBalance ? amountFormatter({ amount: $balances[pool.KeyUnipoolEarnedBalance], displayDecimals: 16}) : 0.0000} {pool.rewards_token}
+                    </div>
+                    <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+                        <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
+                            <div class="left float-left">{$_('general.amount')} accrued</div>
+                        </div>
+                        <div class="bottom px-4 py-4 md:py-2">
+                            <input disabled bind:value={geyserEarned} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
+                        </div>            
+                    </div>
               </div>
               {/if}
             </div>
