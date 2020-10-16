@@ -230,6 +230,8 @@
         from: $eth.address
       }
 
+      
+
       let data = await contract.callStatic.updateAccounting(
         overrides
       );
@@ -248,6 +250,16 @@
       let seconds = 0;
       let balances = 0;
       if($balances[incentivizedPools[2].KeyUnipoolBalance]) {
+        
+        console.log('calling hey');
+
+        let hey = await contract.callStatic.unstakeQuery(
+          BigNumber( $balances[pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18).toString(),
+          overrides
+        );
+
+        console.log('hey', hey.toString());
+
         seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
         balances = $balances[incentivizedPools[2].KeyUnipoolBalance].toString();
       }
@@ -278,9 +290,9 @@
 
       if( $farming[pool.addressUniPoll] !== undefined ) {
         let { DOUGHPrice, BPTPrice } = $farming[pool.addressUniPoll];
-        let x = rewardPer8Week.toNumber();
+        let x = rewardPerWeek.toNumber();
         apy = (x * DOUGHPrice ) / BPTPrice;
-        apy8Wweeks = ((x * DOUGHPrice ) / BPTPrice) * 6.5;
+        apy8Wweeks = ((x * DOUGHPrice) / BPTPrice);
       }
       
       // const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
@@ -300,7 +312,7 @@
         totalUserRewards: label.toString()
       })
 
-      geyserApy = apy8Wweeks;
+      geyserApy = apy8Wweeks * 52;
 
       return label;
   };
