@@ -49,7 +49,7 @@
 
 <div class="content flex flex-col spl">
 
-  <img alt="ready to diversify?" src={images.banner} />
+  <img alt="ready to diversify?" src={images.amazingrewards} />
   <div class="w-99pc m-4">
 
     <div class="my-10">
