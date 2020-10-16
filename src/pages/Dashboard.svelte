@@ -97,27 +97,27 @@
             
             <td class="border text-center px-4 py-2">
               <a target="_blank" href={`https://balancer.exchange/#/swap/ether/${pie.address}`}>
-                <button class="table-btn highlight-box">
+                <button class="table-btn highlight-box min-w-70px">
                   Buy
                 </button>
               </a>
             </td>
             <td class="border text-center px-4 py-2">
               <a href={`#/pools/${pie.address}`}>
-                <button class="table-btn">
+                <button class="table-btn min-w-70px">
                   Mint
                 </button>
               </a>
             </td>
             <td class="border text-center py-2">
               <a href={`#/pools/${pie.address}/withdraw/multi`}>
-                <button class="table-btn">
+                <button class="table-btn min-w-70px">
                   Redeem
                 </button>
               </a>
             </td>
             <td class="border text-center py-2">
-              <button on:click={() => addToken(pie)} class="table-btn">
+              <button on:click={() => addToken(pie)} class="table-btn min-w-70px">
                 Add to MetaMask 🦊
               </button>
             </td>
