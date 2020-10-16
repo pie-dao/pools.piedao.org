@@ -417,7 +417,7 @@
 } 
 
 .spl img.icon {
-  @apply h-40px;
+  @apply h-34px;
 }
 
 .spark:hover {
@@ -565,7 +565,7 @@ opacity: 0.6;
 /* Dashboard */
 
 .close-icons {
-  margin-left: -8px;
+  margin-left: -12px;
 }
 
 /* Markets */
