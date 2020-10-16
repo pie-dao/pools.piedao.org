@@ -56,7 +56,7 @@
       <h1 class="text-lg">🥧 Explore Pies</h1>
       <p class="font-thin">An Entire Portfolio in a Single Token</p>
     </div>
-    <table class="breakdown-table table-auto w-full">
+    <!-- <table class="breakdown-table table-auto w-full">
       <thead>
         <tr>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Pie name</th>
@@ -66,12 +66,24 @@
           <th class="font-thin border-b-2 px-4 py-2">Mints new tokens</th>
           <th class="font-thin border-b-2 px-4 py-2">Unwrap tokens</th>
         </tr>
-      </thead>
-      <tbody>
+      </thead> -->
+
+          <div class="flex w-100pc justify-between items-center">
+            <div class=" font-thin px-2 py-2 text-left md:w-15pc">Pie name</div>
+            <div class=" font-thin px-4 py-2 text-center hidden md:block w-18pc">Assets</div>
+            <div class=" font-thin px-4 py-2 text-center hidden md:block md:w-18pc">Liquidity</div>
+            <div class=" font-thin px-4 py-2 text-center md:w-10pc">Market Buy</div>
+            <div class=" font-thin px-4 py-2 text-center w-10pc">Mint tokens</div>
+            <div class=" font-thin px-4 py-2 text-center md:w-10pc">Unwrap</div>
+            <div class=" font-thin px-4 py-2 text-center w-16pc">Metamask</div>
+          </div>
+
+
+      <!-- <tbody>
         {#each pies as pie}
           <tr>
             <td class="border border-gray-800 px-2 py-2 text-left">
-                <a href={`#/pie/${pie.address}`}>
+                <a class="flex" href={`#/pie/${pie.address}`}>
                   <img
                     class="inline icon ml-2 mr-2"
                     src={pie.icon}
@@ -79,8 +91,8 @@
                     <span class="hidden md:block">{pie.symbol}</span>
                 </a>
             </td>
-            <td class="border text-center px-4 py-2 hidden md:block">
-              <a href={`#/pie/${pie.address}`}>
+            <td class="border border-gray-800 text-center px-4 py-2 hidden md:block">
+              <a class="flex" href={`#/pie/${pie.address}`}>
               {#each pie.composition as coin}
                 <img
                   class="close-icons inline icon"
@@ -124,7 +136,75 @@
           </tr>
         {/each}
       </tbody>
-    </table>
+    </table> -->
+  <!-- </table> -->
+
+  <div class="flex flex-col w-100pc breakdown-table pt-2px">
+    {#each pies as pie}
+      <div class="flex w-100pc min-w-1140px min-h-50px justify-between items-center py-3 negativetop thinborder">
+       
+        <div class="text-center thinborderight items-stretch md:block w-15pc">
+            <a class="flex items-center px-2" href={`#/pie/${pie.address}`}>
+              <img
+                class="inline icon ml-2 mr-2"
+                src={pie.icon}
+                alt={pie.symbol} />
+                <span class="md:block">{pie.symbol}</span>
+            </a>
+        </div>
+       
+        <div class="text-center thinborderight block w-18pc w-18pc md:block">
+          <a class="" href={`#/pie/${pie.address}`}>
+          {#each pie.composition as coin}
+            <img
+              class="close-icons inline icon"
+              src={getTokenImage(coin.address)}
+              alt={coin.symbol} />
+          {/each}
+        </a>
+        </div>
+       
+        <div class="text-center px-4 thinborderight w-18pc">
+          <a href={`#/pie/${pie.address}`}>
+            {pie.totalLiquidity}
+          </a>
+        </div>
+        
+        <div class="text-center px-4 thinborderight w-10pc">
+          <a target="_blank" href={`https://balancer.exchange/#/swap/ether/${pie.address}`}>
+            <button class="table-btn highlight-box min-w-70px">
+              Buy
+            </button>
+          </a>
+        </div>
+       
+        <div class="text-center px-4 thinborderight w-10pc">
+          <a href={`#/pools/${pie.address}`}>
+            <button class="table-btn min-w-70px">
+              Mint
+            </button>
+          </a>
+        </div>
+       
+        <div class="text-center px-4 thinborderight w-10pc">
+          <a href={`#/pools/${pie.address}/withdraw/multi`}>
+            <button class="table-btn min-w-70px">
+              Redeem
+            </button>
+          </a>
+        </div>
+       
+        <div class="text-center px-4 w-16pc">
+          <button on:click={() => addToken(pie)} class="table-btn min-w-70px">
+            Add to MetaMask 🦊
+          </button>
+        </div>
+     
+      </div>
+    {/each}
+    </div>
+
+
 
     <div class="my-10">
       <h1 class="text-lg">👨‍🌾 Honest worker? Explore Pie Farming Opportunities</h1>

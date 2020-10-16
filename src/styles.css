@@ -64,6 +64,18 @@
 
 }
 
+.thinborder {
+  border: solid 0.5px #d1d1d1;
+}
+
+.thinborderight {
+  border-right: solid 0.5px #d1d1d1;
+}
+
+.negativetop {
+  margin-top: -1px;
+}
+
 /* Allocation Breakdown */
 
 .allocation-breakdown-container {
@@ -565,7 +577,8 @@ opacity: 0.6;
 /* Dashboard */
 
 .close-icons {
-  margin-left: -12px;
+  margin-left: -6px;
+  margin-right: -6px;
 }
 
 /* Markets */
