@@ -80,12 +80,14 @@
                 </a>
             </td>
             <td class="border text-center px-4 py-2 hidden md:block">
+              <a href={`#/pie/${pie.address}`}>
               {#each pie.composition as coin}
                 <img
                   class="close-icons inline icon"
                   src={getTokenImage(coin.address)}
                   alt={coin.symbol} />
               {/each}
+            </a>
             </td>
             <td class="border text-center px-4 py-2">
               <a href={`#/pie/${pie.address}`}>
