@@ -230,8 +230,6 @@
         from: $eth.address
       }
 
-      
-
       let data = await contract.callStatic.updateAccounting(
         overrides
       );
@@ -239,82 +237,79 @@
       let _totalStakingShareSeconds = data[3];
       let stakingShareSeconds = data[2];
       let totalUnlocked = data[1];
-      let pool = incentivizedPools[2];
-
-      
-
-      let totalUserRewards = totalUnlocked.mul(stakingShareSeconds).div(_totalStakingShareSeconds);
-      let label = BigNumber(totalUserRewards.toString()).dividedBy(10 ** 18);
-
-      // let seconds = BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[incentivizedPools[2].KeyUnipoolBalance].toString() ) );
+      let _pool = incentivizedPools[2];
+      let apy8Wweeks = 0;
+      let apy = 0;
+      let rewardsPerBPT = 0;
+      let $RewardsPerBPT = 0;
+      let days60APY = 0;
+      let apyV2 = 0;
+      let apyV2NotOptimistic = 0;
+      let yourStake = 0;
       let seconds = 0;
-      let balances = 0;
-      if($balances[incentivizedPools[2].KeyUnipoolBalance]) {
-        
-        console.log('calling hey');
+      let rewardPerSecond = 0;
+      let rewardPerWeek = 0;
+      let rewardPer8Week = 0;
+      let unstakeNowRewards = 0;
+      let totalUserRewards = totalUnlocked.mul(stakingShareSeconds).div(_totalStakingShareSeconds);
+      let earnedOptimistic = BigNumber(totalUserRewards.toString()).dividedBy(10 ** 18);
 
-        let hey = await contract.callStatic.unstakeQuery(
-          BigNumber( $balances[pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18).toString(),
+
+      rewardPerSecond = earnedOptimistic.dividedBy(seconds);
+      rewardPerWeek = rewardPerSecond.multipliedBy( 60 * 60 * 24 * 7 );
+      rewardPer8Week = rewardPerSecond.multipliedBy(60 * 60 * 24 * 7 * 8);
+      
+      if($balances[_pool.KeyUnipoolBalance] && $farming[_pool.addressUniPoll] !== undefined) {
+        let { DOUGHPrice, BPTPrice } = $farming[_pool.addressUniPoll];
+
+        unstakeNowRewards = await contract.callStatic.unstakeQuery(
+          BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18).toString(),
           overrides
         );
 
-        console.log('hey', hey.toString());
 
-        seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
-        balances = $balances[incentivizedPools[2].KeyUnipoolBalance].toString();
+        console.log('unstakeNowRewards', unstakeNowRewards.toString());
+
+        seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);        
+        yourStake = $balances[_pool.KeyUnipoolBalance].toNumber();
+
+        rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
+        $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
+
+        days60APY = $RewardsPerBPT*100/(BPTPrice/yourStake);
+
+        apyV2 = days60APY; //  * 6.5 || 52weeks / 8
+        apyV2NotOptimistic =  ( (((BigNumber(unstakeNowRewards.toString()).dividedBy(10 ** 18)).toNumber() / yourStake) * 100) / (BPTPrice/yourStake) );
+
+        // let x = rewardPerWeek.toNumber();
+        // apy = (x * DOUGHPrice ) / BPTPrice;
+        // apy8Wweeks = ((x * DOUGHPrice) / BPTPrice);
+        console.log('RECAP', BPTPrice)
       }
-      
-
-      // // Get the filter (the second null could be omitted)
-      // const filter = contract.filters.Staked($eth.address, null, $eth.address, 0x0);
-
-      // // Query the filter (the latest could be omitted)
-      // const logs = contract.queryFilter(filter, 0, "latest");
-
-      // // Print out all the values:
-      // logs.forEach((log) => {
-      //   // The log object contains lots of useful things, but the args are what you prolly want)
-      //   console.log(log.args._to, log.args._value);
-      // });
-
-      let rewardPerSecond = label.dividedBy(seconds);
-      let rewardPerWeek = rewardPerSecond.multipliedBy( 60 * 60 * 24 * 7 );
-      let rewardPer8Week = rewardPerSecond.multipliedBy(60 * 60 * 24 * 7 * 8);
-
-      // <p>You are staking   : <strong>{toFixed($balances[pool.KeyUnipoolBalance] * 100 / $farming[pool.addressUniPoll].totalStakedBPTAmount, 3) }% </strong> of the pool
-      //   = [{toFixed($farming[pool.addressUniPoll].DOUGHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)} {pool.containing[0].symbol}, {toFixed($farming[pool.addressUniPoll].WETHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)}  {pool.containing[1].symbol}]
-      //   = {formatFiat( ($farming[pool.addressUniPoll].DOUGHperBPT * $balances[pool.KeyUnipoolBalance].toNumber() * $farming[pool.addressUniPoll].DOUGHPrice + $farming[pool.addressUniPoll].WETHperBPT * $balances[pool.KeyUnipoolBalance].toNumber() * $farming[pool.addressUniPoll].ETHPrice).toFixed(2) )}
-
-      let apy8Wweeks = 0;
-      let apy = 0;
-
-      if( $farming[pool.addressUniPoll] !== undefined ) {
-        let { DOUGHPrice, BPTPrice } = $farming[pool.addressUniPoll];
-        let x = rewardPerWeek.toNumber();
-        apy = (x * DOUGHPrice ) / BPTPrice;
-        apy8Wweeks = ((x * DOUGHPrice) / BPTPrice);
-      }
-      
-      // const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
 
       console.log('RECAP', {
+        yourStake,
+        apyV2,
+        apyV2NotOptimistic: apyV2NotOptimistic * 52,
+        $RewardsPerBPT,
+        rewardsPerBPT,
         apy,
         apy8Wweeks,
-        balances,
         rewardPerSecond: rewardPerSecond.toString(),
-        label: label.toString(),
+        earnedOptimistic: earnedOptimistic.toString(),
         rewardPerWeek: rewardPerWeek.toString(),
         rewardPer8Week: rewardPer8Week.toString(),
         seconds: seconds.toString(),
         _totalStakingShareSeconds: _totalStakingShareSeconds.toString(),
         stakingShareSeconds: stakingShareSeconds.toString(),
         totalUnlocked: totalUnlocked.toString(),
-        totalUserRewards: label.toString()
+        totalUserRewards: earnedOptimistic.toString(),
+        farm: $farming[_pool.addressUniPoll] || {}
       })
 
-      geyserApy = apy8Wweeks * 52;
+      geyserApy = apyV2 > 0 ? apyV2.toFixed(2) : 0;
 
-      return label;
+      return earnedOptimistic;
   };
 
   onMount(() => {
@@ -347,6 +342,7 @@
         }
 
         if( pool.type === 'Balancer' && pool.contractType === 'Geyser') {
+          await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
           let earned = await estimateUnstake();
         }
       });
