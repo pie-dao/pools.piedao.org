@@ -600,6 +600,31 @@ opacity: 0.6;
   }
 }
 
+
+@media screen and (max-width: 640px) {
+  .banner-desktop {
+    display: none; 
+  }
+}
+
+@media screen and (min-width: 641px) {
+  .banner-desktop {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .banner-mobile {
+    display: block; 
+  }
+}
+
+@media screen and (min-width: 641px) {
+  .banner-mobile {
+    display: none;
+  }
+}
+
 /* Farming */
 
 .info-box {

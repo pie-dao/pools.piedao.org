@@ -496,8 +496,9 @@
 
 
 <div class="content flex flex-col">
-    <img src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amatingrewards.png" />
-    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-4 md:p-6 w-full">    
+    <img class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
+    <img class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" />
+    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">    
         {#if !pool}
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">Select a pool</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
