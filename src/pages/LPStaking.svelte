@@ -649,7 +649,7 @@
                       <div style="position:absolute; top:10px; right:10px;" class="apy"><a target="_blank" href="https://forum.piedao.org/t/pip-20-week-2-incentive-programs/197">ℹ️</a></div>
                       
                       {#if geyserApy.loaded === false}
-                        Connect MetaMask 🦊
+                        Loading 🧘‍♀️
                       {/if}
                       
                       {#if geyserApy.loaded && geyserApy.yourStake > 0}
