@@ -38,10 +38,11 @@ const updateOnBlock = () => {
     const [token, account] = key.split(".");
     if (isAddress(token) && isAddress(account)) {
       const contract = (await observableContract({ abi: unipoolAbi, address: token })).raw;
+      if (!contract.earned) return;
       const balance = (await contract.earned(account)).toString();
       subject(key).next(balance);
     } else {
-      console.warn("Invalid key found in trackedEarningBalances", key);
+      console.warn('Invalid key found in trackedEarningBalances', key);
       console.warn("key should be formatted '[token address].[wallet address].earned'");
     }
   });
@@ -107,10 +108,11 @@ const generateTrackEarnedBalanceFromStakingFunction = (contractAddress) => {
     trackedEarningBalances.add(key);
 
     const contract = await observableContract({ abi: unipoolAbi, address: contractAddress });
-
-    contract.earned(account).then((balance) => {
-      subject(key).next(balance.toString());
-    });
+    if (contract.earned) {
+      contract.earned(account).then((balance) => {
+        subject(key).next(balance.toString());
+      });
+    }
     return subject(key);
   };
 };

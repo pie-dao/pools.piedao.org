@@ -778,8 +778,8 @@ export const calculateAPRBalancer = async (
   const DOUGH = assetOne;
   const WETH = assetTwo;
 
-  // console.log(`Initialized `);
-  // console.log('Reading smart contracts...');
+  if( addressStakingPool === '' || tokenToStake === '') return;
+  
   const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
   const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
 

@@ -236,6 +236,7 @@
       let data = await contract.callStatic.updateAccounting(
         overrides
       );
+      console.log(0);
 
       let loaded = false;
       let _totalStakingShareSeconds = data[3];
@@ -261,16 +262,17 @@
       let DOUGHPrice = 0;
       let BPTPrice = 0;
 
-
+      console.log(1);
       rewardPerSecond = earnedOptimistic.dividedBy(seconds);
       rewardPerWeek = rewardPerSecond.multipliedBy( 60 * 60 * 24 * 7 );
       rewardPer8Week = rewardPerSecond.multipliedBy(60 * 60 * 24 * 7 * 8);
+      console.log(2);
       
       if($balances[_pool.KeyUnipoolBalance] && $farming[_pool.addressUniPoll] !== undefined) {
         DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll] && $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice ? $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice : 0;
         BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0
         tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
-
+        console.log(3);
         unstakeNowRewards = await contract.callStatic.unstakeQuery(
           BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18).toString(),
           overrides
@@ -280,6 +282,7 @@
         seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
 
         yourStake = $balances[_pool.KeyUnipoolBalance].toNumber();
+        console.log(4);
 
         rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
         $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
@@ -287,7 +290,7 @@
         let rewardsPerBPTNotOptimistic = unstakeNowRewards / yourStake;
         let $RewardsPerBPTNotOptimistic = rewardsPerBPTNotOptimistic * DOUGHPrice;
         let days60APYNotOptimistic = $RewardsPerBPTNotOptimistic*100/BPTPrice;
-
+        console.log(5);
         days60APY = $RewardsPerBPT*100/BPTPrice;
         apyV2 = days60APY * (31536000 / seconds.toNumber() )
 
@@ -295,6 +298,7 @@
         loaded = true;
       }
 
+      console.log(6);
       geyserApy = {
         BPTPrice,
         rewardsPerBPT,
@@ -311,7 +315,9 @@
         totalUserRewards: earnedOptimistic.toString(),
         $RewardsPerBPT,
         loaded
-      }
+      };
+
+      console.log('geyserApy', geyserApy);
 
       return earnedOptimistic;
   };
@@ -343,7 +349,7 @@
 
         if( pool.type === 'Balancer' && pool.contractType === 'Geyser') {
           await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-          let earned = await estimateUnstake();
+          await estimateUnstake();
         }
       });
       
@@ -370,12 +376,7 @@
           console.log(p.addressUniPoll, "address");
           subscribeToStakingEarningsGeyser(p.addressUniPoll, address, true);
           p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
-          
-          p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.geyserEarned');
-
-          let earned = await estimateUnstake();
-          p.earned = earned;
-          geyserEarned = earned;
+          await estimateUnstake();
         }
         
       });
