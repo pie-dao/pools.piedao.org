@@ -261,18 +261,20 @@
       let DOUGHPrice = 0;
       let BPTPrice = 0;
 
-
-      rewardPerSecond = earnedOptimistic.dividedBy(seconds);
-      rewardPerWeek = rewardPerSecond.multipliedBy( 60 * 60 * 24 * 7 );
-      rewardPer8Week = rewardPerSecond.multipliedBy(60 * 60 * 24 * 7 * 8);
       
       if($balances[_pool.KeyUnipoolBalance] && $farming[_pool.addressUniPoll] !== undefined) {
         DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll] && $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice ? $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice : 0;
         BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0
         tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
 
+        const amount = ethers.BigNumber.from(
+          BigNumber($balances[_pool.KeyUnipoolBalance].toString())
+            .multipliedBy(10 ** 18)
+            .toFixed(0),
+        );
+
         unstakeNowRewards = await contract.callStatic.unstakeQuery(
-          BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18).toString(),
+          amount,
           overrides
         );
 
@@ -287,7 +289,7 @@
         let rewardsPerBPTNotOptimistic = unstakeNowRewards / yourStake;
         let $RewardsPerBPTNotOptimistic = rewardsPerBPTNotOptimistic * DOUGHPrice;
         let days60APYNotOptimistic = $RewardsPerBPTNotOptimistic*100/BPTPrice;
-
+        
         days60APY = $RewardsPerBPT*100/BPTPrice;
         apyV2 = days60APY * (31536000 / seconds.toNumber() )
 
@@ -295,6 +297,7 @@
         loaded = true;
       }
 
+      
       geyserApy = {
         BPTPrice,
         rewardsPerBPT,
@@ -311,7 +314,9 @@
         totalUserRewards: earnedOptimistic.toString(),
         $RewardsPerBPT,
         loaded
-      }
+      };
+
+      console.log('geyserApy', geyserApy);
 
       return earnedOptimistic;
   };
@@ -343,7 +348,7 @@
 
         if( pool.type === 'Balancer' && pool.contractType === 'Geyser') {
           await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-          let earned = await estimateUnstake();
+          await estimateUnstake();
         }
       });
       
@@ -353,29 +358,28 @@
       const address = $eth.address;
 
       incentivizedPools.forEach( async p => {      
-        calculateAPRBalancer()
-        subscribeToBalance(p.addressTokenToStake, address, true);
-        subscribeToStaking(p.addressUniPoll, address, true);
-        subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
+        try {
+          calculateAPRBalancer()
+          subscribeToBalance(p.addressTokenToStake, address, true);
+          subscribeToStaking(p.addressUniPoll, address, true);
+          subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
 
-        p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
-        p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, address);
+          p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
+          p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, address);
 
-        if(p.contractType === "UniPool") {
-          subscribeToStakingEarnings(p.addressUniPoll, address, true);
-          p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
-          p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
-        } else {
-          console.log("Getting staked balance from geyser");
-          console.log(p.addressUniPoll, "address");
-          subscribeToStakingEarningsGeyser(p.addressUniPoll, address, true);
-          p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
-          
-          p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.geyserEarned');
-
-          let earned = await estimateUnstake();
-          p.earned = earned;
-          geyserEarned = earned;
+          if(p.contractType === "UniPool") {
+            subscribeToStakingEarnings(p.addressUniPoll, address, true);
+            p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
+            p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
+          } else {
+            console.log("Getting staked balance from geyser");
+            console.log(p.addressUniPoll, "address");
+            subscribeToStakingEarningsGeyser(p.addressUniPoll, address, true);
+            p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
+            await estimateUnstake();
+          }
+        } catch (e) {
+          console.log(e);
         }
         
       });
