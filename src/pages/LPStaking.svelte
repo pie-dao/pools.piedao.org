@@ -844,7 +844,7 @@
               {#if pool.contractType === "Geyser"}
                 <br/>
                 <p> Your stake of <strong>{geyserApy.yourStake.toFixed(2)} BPT</strong> is earning right now <strong>{geyserApy.earnedOptimistic} DOUGH</strong> assuming you will not unstake until the end of the program. </p>
-                <p>Approx <strong>{geyserApy.apy}%</strong> until now, as the programs goes on, so does your earnings and therefore your apy.</p>
+                <p>Approx <strong>{geyserApy.apy}%</strong>.</p>
                 <p>If you would unstake right now, you would get exactly <strong>{geyserApy.earnedNotOptimistic} DOUGH</strong>, which is approx <strong>{geyserApy.apyNotOptimistic}% APR</strong>.</p>
               {/if}
 
