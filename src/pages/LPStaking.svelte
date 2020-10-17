@@ -236,7 +236,6 @@
       let data = await contract.callStatic.updateAccounting(
         overrides
       );
-      console.log(0);
 
       let loaded = false;
       let _totalStakingShareSeconds = data[3];
@@ -262,19 +261,20 @@
       let DOUGHPrice = 0;
       let BPTPrice = 0;
 
-      console.log(1);
-      rewardPerSecond = earnedOptimistic.dividedBy(seconds);
-      rewardPerWeek = rewardPerSecond.multipliedBy( 60 * 60 * 24 * 7 );
-      rewardPer8Week = rewardPerSecond.multipliedBy(60 * 60 * 24 * 7 * 8);
-      console.log(2);
       
       if($balances[_pool.KeyUnipoolBalance] && $farming[_pool.addressUniPoll] !== undefined) {
         DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll] && $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice ? $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice : 0;
         BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0
         tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
-        console.log(3);
+
+        const amount = ethers.BigNumber.from(
+          BigNumber($balances[_pool.KeyUnipoolBalance].toString())
+            .multipliedBy(10 ** 18)
+            .toFixed(0),
+        );
+
         unstakeNowRewards = await contract.callStatic.unstakeQuery(
-          BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18).toString(),
+          amount,
           overrides
         );
 
@@ -282,7 +282,6 @@
         seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
 
         yourStake = $balances[_pool.KeyUnipoolBalance].toNumber();
-        console.log(4);
 
         rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
         $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
@@ -290,7 +289,7 @@
         let rewardsPerBPTNotOptimistic = unstakeNowRewards / yourStake;
         let $RewardsPerBPTNotOptimistic = rewardsPerBPTNotOptimistic * DOUGHPrice;
         let days60APYNotOptimistic = $RewardsPerBPTNotOptimistic*100/BPTPrice;
-        console.log(5);
+        
         days60APY = $RewardsPerBPT*100/BPTPrice;
         apyV2 = days60APY * (31536000 / seconds.toNumber() )
 
@@ -298,7 +297,7 @@
         loaded = true;
       }
 
-      console.log(6);
+      
       geyserApy = {
         BPTPrice,
         rewardsPerBPT,
@@ -359,24 +358,28 @@
       const address = $eth.address;
 
       incentivizedPools.forEach( async p => {      
-        calculateAPRBalancer()
-        subscribeToBalance(p.addressTokenToStake, address, true);
-        subscribeToStaking(p.addressUniPoll, address, true);
-        subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
+        try {
+          calculateAPRBalancer()
+          subscribeToBalance(p.addressTokenToStake, address, true);
+          subscribeToStaking(p.addressUniPoll, address, true);
+          subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
 
-        p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
-        p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, address);
+          p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
+          p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, address);
 
-        if(p.contractType === "UniPool") {
-          subscribeToStakingEarnings(p.addressUniPoll, address, true);
-          p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
-          p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
-        } else {
-          console.log("Getting staked balance from geyser");
-          console.log(p.addressUniPoll, "address");
-          subscribeToStakingEarningsGeyser(p.addressUniPoll, address, true);
-          p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
-          await estimateUnstake();
+          if(p.contractType === "UniPool") {
+            subscribeToStakingEarnings(p.addressUniPoll, address, true);
+            p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
+            p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
+          } else {
+            console.log("Getting staked balance from geyser");
+            console.log(p.addressUniPoll, "address");
+            subscribeToStakingEarningsGeyser(p.addressUniPoll, address, true);
+            p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
+            await estimateUnstake();
+          }
+        } catch (e) {
+          console.log(e);
         }
         
       });
