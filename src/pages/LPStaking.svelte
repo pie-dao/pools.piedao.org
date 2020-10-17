@@ -250,13 +250,16 @@
       let apyV2 = 0;
       let apyV2NotOptimistic = 0;
       let yourStake = 0;
-      let seconds = 0;
+      let seconds = BigNumber(0);
       let rewardPerSecond = 0;
       let rewardPerWeek = 0;
       let rewardPer8Week = 0;
       let unstakeNowRewards = 0;
       let totalUserRewards = totalUnlocked.mul(stakingShareSeconds).div(_totalStakingShareSeconds);
       let earnedOptimistic = BigNumber(totalUserRewards.toString()).dividedBy(10 ** 18);
+      let tokenStakedPrice = 0;
+      let DOUGHPrice = 0;
+      let BPTPrice = 0;
 
 
       rewardPerSecond = earnedOptimistic.dividedBy(seconds);
@@ -264,7 +267,10 @@
       rewardPer8Week = rewardPerSecond.multipliedBy(60 * 60 * 24 * 7 * 8);
       
       if($balances[_pool.KeyUnipoolBalance] && $farming[_pool.addressUniPoll] !== undefined) {
-        let { DOUGHPrice, BPTPrice } = $farming[_pool.addressUniPoll];
+        DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice;
+        console.log('piesMarketDataStore', DOUGHPrice);
+        BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0
+        tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
 
         unstakeNowRewards = await contract.callStatic.unstakeQuery(
           BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18).toString(),
@@ -281,6 +287,8 @@
         yourStake = $balances[_pool.KeyUnipoolBalance].toNumber();
 
         rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
+        console.log('rewardsPerBPT', rewardsPerBPT);
+        console.log('DOUGHPrice', DOUGHPrice);
         $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
 
         // MY version days60APY = $RewardsPerBPT*100/(BPTPrice/yourStake);
@@ -295,6 +303,8 @@
       }
 
       geyserApy = {
+        rewardsPerBPT,
+        DOUGHPrice,
         seconds: seconds.toNumber(),
         earnedOptimistic: earnedOptimistic.toFixed(4),
         earnedNotOptimistic: unstakeNowRewards.toFixed(4),
