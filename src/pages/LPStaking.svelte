@@ -267,7 +267,7 @@
       rewardPer8Week = rewardPerSecond.multipliedBy(60 * 60 * 24 * 7 * 8);
       
       if($balances[_pool.KeyUnipoolBalance] && $farming[_pool.addressUniPoll] !== undefined) {
-        DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice;
+        DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll] && $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice ? $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice : 0;
         console.log('piesMarketDataStore', DOUGHPrice);
         BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0
         tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
@@ -292,17 +292,18 @@
         $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
 
         // MY version days60APY = $RewardsPerBPT*100/(BPTPrice/yourStake);
-        days60APY = $RewardsPerBPT/(BPTPrice/yourStake);
-
-        //apyV2 = days60APY; //  * 6.5 || 52weeks / 8
+        days60APY = $RewardsPerBPT*100/BPTPrice;
         apyV2 = days60APY * (31536000 / seconds.toNumber() )
-        apyV2NotOptimistic =  ( ((unstakeNowRewards / yourStake) * 100) / (BPTPrice/yourStake) );
+
+
+        apyV2NotOptimistic =  ( ((unstakeNowRewards * DOUGHPrice) * 100) / BPTPrice );
 
         console.log('RECAP', BPTPrice)
         loaded = true;
       }
 
       geyserApy = {
+        BPTPrice,
         rewardsPerBPT,
         DOUGHPrice,
         seconds: seconds.toNumber(),
