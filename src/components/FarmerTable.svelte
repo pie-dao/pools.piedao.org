@@ -99,7 +99,7 @@
       weights: "50 / 50",
       type: 'UniswapV2',
       poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
-      weeklyRewards: '20,000',
+      weeklyRewards: 'deprecated',
       balance: '0',
       containing: [
         {
@@ -180,7 +180,11 @@
           {#if $farming[pool.addressUniPoll] && $farming[pool.addressUniPoll].apr}
             {$farming[pool.addressUniPoll].apr}
           {:else}
-            n/a
+            {#if pool.contractType === 'Geyser'}
+              See stake page
+            {:else}
+              n/a
+            {/if}
           {/if}
         </td>
 
