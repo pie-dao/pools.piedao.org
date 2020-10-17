@@ -689,7 +689,7 @@ export const calculateAPRUniswap = async (
   const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
   const rewardPerToken = weekly_reward / totalStakedBPTAmount;
 
-  console.log('Uniswap Finished reading smart contracts... Looking up prices... \n');
+  //console.log('Uniswap Finished reading smart contracts... Looking up prices... \n');
 
   // Look up prices
   const DOUGHPrice = marketData[DOUGH].market_data.current_price;
@@ -778,8 +778,8 @@ export const calculateAPRBalancer = async (
   const DOUGH = assetOne;
   const WETH = assetTwo;
 
-  console.log(`Initialized `);
-  console.log('Reading smart contracts...');
+  // console.log(`Initialized `);
+  // console.log('Reading smart contracts...');
   const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
   const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
 
@@ -806,7 +806,7 @@ export const calculateAPRBalancer = async (
     const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
     const rewardPerToken = weekly_reward / totalStakedBPTAmount;
   
-    console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
+    // console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
     // Finished. Start printing
     const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
     
@@ -867,6 +867,7 @@ export const calculateAPRBalancer = async (
       DOUGHperBPT,
       WETHperBPT,
       DOUGHPrice,
+      BPTPrice,
       ETHPrice,
       doughStaked: totalDOUGHAmount,
       ethStaked: totalWETHAmount,
@@ -883,6 +884,7 @@ export const calculateAPRBalancer = async (
       BPTPrice,
       DOUGHperBPT,
       WETHperBPT,
+      BPTPrice,
       DOUGHPrice,
       ETHPrice,
       doughStaked: totalDOUGHAmount,

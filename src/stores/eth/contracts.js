@@ -21,7 +21,7 @@ const trackedFunctions = {};
 let blockNumberPid = [0];
 
 const updateOnBlock = () => {
-  console.log('running balance update', Date.now());
+  // console.log('running balance update', Date.now());
   trackedBalances.forEach(async (key) => {
     const [token, account] = key.split(".");
     if (isAddress(token) && isAddress(account)) {
