@@ -496,10 +496,11 @@
 
 
 <div class="content flex flex-col">
-    <img src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/stake-banner-small.png" />
-    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-4 md:p-6 w-full">    
+    <img class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
+    <img class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" />
+    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">    
         {#if !pool}
-        <h1 class="mt-8 mb-1 px-2 text-left text-lg md:text-xl">Select a pool</h1>
+        <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">Select a pool</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
             {#each filter(incentivizedPools, { deprecated: false }) as ammPool}
               {#if ammPool.highlight }
@@ -552,7 +553,7 @@
             {/each}
         </div>
 
-        <h1 class="mt-8 mb-1 px-2 text-left text-lg md:text-xl">⚠️ Deprecated pools</h1>
+        <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">⚠️ Deprecated pools</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
           {#each filter(incentivizedPools, { deprecated: true }) as ammPool}
             <div class="farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">

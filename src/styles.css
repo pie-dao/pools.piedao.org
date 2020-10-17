@@ -64,6 +64,18 @@
 
 }
 
+.thinborder {
+  border: solid 0.5px #d1d1d1;
+}
+
+.thinborderight {
+  border-right: solid 0.5px #d1d1d1;
+}
+
+.negativetop {
+  margin-top: -1px;
+}
+
 /* Allocation Breakdown */
 
 .allocation-breakdown-container {
@@ -417,7 +429,7 @@
 } 
 
 .spl img.icon {
-  @apply h-40px;
+  @apply h-34px;
 }
 
 .spark:hover {
@@ -565,7 +577,8 @@ opacity: 0.6;
 /* Dashboard */
 
 .close-icons {
-  margin-left: -8px;
+  margin-left: -6px;
+  margin-right: -6px;
 }
 
 /* Markets */
@@ -578,12 +591,37 @@ opacity: 0.6;
 
 /* Breakdown Table */
 
-@media screen and (max-width: 640px) {
+@media screen and (max-width: 1200px) {
   .breakdown-table {
     display: block;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
+  }
+}
+
+
+@media screen and (max-width: 640px) {
+  .banner-desktop {
+    display: none; 
+  }
+}
+
+@media screen and (min-width: 641px) {
+  .banner-desktop {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .banner-mobile {
+    display: block; 
+  }
+}
+
+@media screen and (min-width: 641px) {
+  .banner-mobile {
+    display: none;
   }
 }
 

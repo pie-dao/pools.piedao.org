@@ -195,11 +195,11 @@
         <td class="border text-center py-2">
           <a href="#/stake">
             {#if pool.deprecated}
-              <button class="table-btn">
+              <button class="table-btn min-w-70px">
                 Unstake
               </button>
             {:else}
-              <button class="table-btn highlight-box">
+              <button class="table-btn highlight-box min-w-70px">
                 Stake
               </button>
             {/if}
@@ -208,7 +208,7 @@
         {#if pool.poolLink}
         <td class="border text-center py-2">
           <a href={`${pool.poolLink}`} target="_blank">
-            <button class="table-btn">
+            <button class="table-btn min-w-70px">
               Add to Pool
             </button>
           </a>
