@@ -221,7 +221,10 @@
 
   $: geyserEarned = BigNumber(0);
 
-  $: geyserApy = 0;
+  $: geyserApy = {
+    apy: 0,
+    loaded: false,
+  };
 
   const estimateUnstake = async () => {
       const { provider, signer } = get(eth);
@@ -234,6 +237,7 @@
         overrides
       );
 
+      let loaded = false;
       let _totalStakingShareSeconds = data[3];
       let stakingShareSeconds = data[2];
       let totalUnlocked = data[1];
@@ -267,6 +271,8 @@
           overrides
         );
 
+        unstakeNowRewards = (BigNumber(unstakeNowRewards.toString()).dividedBy(10 ** 18)).toNumber();
+
 
         console.log('unstakeNowRewards', unstakeNowRewards.toString());
 
@@ -279,35 +285,50 @@
         days60APY = $RewardsPerBPT*100/(BPTPrice/yourStake);
 
         apyV2 = days60APY; //  * 6.5 || 52weeks / 8
-        apyV2NotOptimistic =  ( (((BigNumber(unstakeNowRewards.toString()).dividedBy(10 ** 18)).toNumber() / yourStake) * 100) / (BPTPrice/yourStake) );
+        apyV2NotOptimistic =  ( ((unstakeNowRewards / yourStake) * 100) / (BPTPrice/yourStake) );
 
         // let x = rewardPerWeek.toNumber();
         // apy = (x * DOUGHPrice ) / BPTPrice;
         // apy8Wweeks = ((x * DOUGHPrice) / BPTPrice);
         console.log('RECAP', BPTPrice)
+        loaded = true;
       }
 
-      console.log('RECAP', {
+      // console.log('RECAP', {
+      //   yourStake,
+      //   apyV2,
+      //   apyV2NotOptimistic: apyV2NotOptimistic * 6.5,
+      //   $RewardsPerBPT,
+      //   rewardsPerBPT,
+      //   apy,
+      //   apy8Wweeks,
+      //   rewardPerSecond: rewardPerSecond.toString(),
+      //   earnedOptimistic: earnedOptimistic.toString(),
+      //   rewardPerWeek: rewardPerWeek.toString(),
+      //   rewardPer8Week: rewardPer8Week.toString(),
+      //   seconds: seconds.toString(),
+      //   _totalStakingShareSeconds: _totalStakingShareSeconds.toString(),
+      //   stakingShareSeconds: stakingShareSeconds.toString(),
+      //   totalUnlocked: totalUnlocked.toString(),
+      //   totalUserRewards: earnedOptimistic.toString(),
+      //   farm: $farming[_pool.addressUniPoll] || {}
+      // })
+
+      geyserApy = {
+        earnedOptimistic: earnedOptimistic.toFixed(4),
+        earnedNotOptimistic: unstakeNowRewards.toFixed(4),
         yourStake,
-        apyV2,
-        apyV2NotOptimistic: apyV2NotOptimistic * 52,
-        $RewardsPerBPT,
-        rewardsPerBPT,
-        apy,
-        apy8Wweeks,
-        rewardPerSecond: rewardPerSecond.toString(),
-        earnedOptimistic: earnedOptimistic.toString(),
-        rewardPerWeek: rewardPerWeek.toString(),
-        rewardPer8Week: rewardPer8Week.toString(),
-        seconds: seconds.toString(),
-        _totalStakingShareSeconds: _totalStakingShareSeconds.toString(),
+        apy: apyV2.toFixed(2),
+        apyNotOptimistic: apyV2NotOptimistic.toFixed(2),
+        totalStakingShareSeconds: _totalStakingShareSeconds.toString(),
         stakingShareSeconds: stakingShareSeconds.toString(),
         totalUnlocked: totalUnlocked.toString(),
         totalUserRewards: earnedOptimistic.toString(),
-        farm: $farming[_pool.addressUniPoll] || {}
-      })
+        $RewardsPerBPT,
+        loaded
+      }
 
-      geyserApy = apyV2 > 0 ? apyV2.toFixed(2) : 0;
+      console.log('geyserApy', geyserApy);
 
       return earnedOptimistic;
   };
@@ -646,8 +667,19 @@
                     
                     {#if ammPool.contractType === 'Geyser'}
                       <div style="position:absolute; top:10px; right:10px;" class="apy"><a target="_blank" href="https://forum.piedao.org/t/pip-20-week-2-incentive-programs/197">ℹ️</a></div>
-                      Earned: {amountFormatter({ amount: geyserEarned, displayDecimals: 5})} DOUGH
-                      <div class="apy">APY: {geyserApy} %</div>
+                      
+                      {#if geyserApy.loaded === false}
+                        Connect MetaMask 🦊
+                      {/if}
+                      
+                      {#if geyserApy.loaded && geyserApy.yourStake > 0}
+                        <div class="apy">{geyserApy.apy} %</div>
+                      {/if}
+
+                      {#if geyserApy.loaded && geyserApy.yourStake == 0}
+                        <div class="apy">You are not staking</div>
+                      {/if}
+
                     {:else}
                       <div class="apy">
                         {#if $farming[ammPool.addressUniPoll] !== undefined}
@@ -815,8 +847,8 @@
             </div>
             <div class="info-box">
               {#if $farming[pool.addressUniPoll] !== undefined}
-              <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
-              <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} BPT</strong> staked in the Staking contract.</p>
+                <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
+                <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} BPT</strong> staked in the Staking contract.</p>
                 {#if pool.KeyAddressTokenToStake && $balances[pool.KeyUnipoolBalance]}
                   <p>You are staking   : <strong>{toFixed($balances[pool.KeyUnipoolBalance] * 100 / $farming[pool.addressUniPoll].totalStakedBPTAmount, 3) }% </strong> of the pool
                           = [{toFixed($farming[pool.addressUniPoll].DOUGHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)} {pool.containing[0].symbol}, {toFixed($farming[pool.addressUniPoll].WETHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)}  {pool.containing[1].symbol}]
@@ -824,6 +856,14 @@
                   </p>
                 {/if}   
               {/if}
+              
+              {#if pool.contractType === "Geyser"}
+                <br/>
+                <p> Your stake of <strong>{geyserApy.yourStake.toFixed(2)} BPT</strong> is earning right now <strong>{geyserApy.earnedOptimistic} DOUGH</strong> assuming you will not unstake until the end of the program. </p>
+                <p>Approx <strong>{geyserApy.apy}%</strong> until now, as the programs goes on, so does your earnings and therefore your apy.</p>
+                <p>If you would unstake right now, you would get exactly <strong>{geyserApy.earnedNotOptimistic} DOUGH</strong>, which is approx <strong>{geyserApy.apyNotOptimistic}% APR</strong>.</p>
+              {/if}
+
               <br/><br/>
               <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
