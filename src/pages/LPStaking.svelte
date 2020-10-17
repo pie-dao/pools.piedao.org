@@ -316,12 +316,7 @@
       return earnedOptimistic;
   };
 
-  onMount(() => {
-    console.log('YYY on mount');
-  });
-
-
-  window.addEventListener('price-update', function (e) {
+  window.addEventListener('price-update', async function (e) {
     console.log('price-update', e)
     isReady = true;
     incentivizedPools.forEach( async pool => {
@@ -331,6 +326,7 @@
         await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
       }
     })
+    await estimateUnstake();
     
   }, false);
 
