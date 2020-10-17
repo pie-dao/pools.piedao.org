@@ -276,7 +276,8 @@
 
         console.log('unstakeNowRewards', unstakeNowRewards.toString());
 
-        seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);        
+        seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
+
         yourStake = $balances[_pool.KeyUnipoolBalance].toNumber();
 
         rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
@@ -294,6 +295,7 @@
       }
 
       geyserApy = {
+        seconds: seconds.toNumber(),
         earnedOptimistic: earnedOptimistic.toFixed(4),
         earnedNotOptimistic: unstakeNowRewards.toFixed(4),
         yourStake,
