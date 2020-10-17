@@ -814,16 +814,16 @@
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.claim} alt="PieDAO logo" />
                     <div class="title text-lg">REWARDS EARNED</div>
-                    <div class="subtitle font-thin">{geyserEarned}</div>
+                    <div class="subtitle font-thin">Optimistic reward</div>
                     <div class="apy">
-                      {pool.KeyUnipoolEarnedBalance ? amountFormatter({ amount: $balances[pool.KeyUnipoolEarnedBalance], displayDecimals: 16}) : 0.0000} {pool.rewards_token}
+                      {geyserApy.earnedOptimistic} {pool.rewards_token}
                     </div>
                     <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="left float-left">{$_('general.amount')} accrued</div>
                         </div>
                         <div class="bottom px-4 py-4 md:py-2">
-                            <input disabled bind:value={geyserEarned} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
+                            <input disabled bind:value={geyserApy.earnedOptimistic} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
                         </div>            
                     </div>
               </div>
