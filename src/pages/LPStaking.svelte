@@ -268,7 +268,6 @@
       
       if($balances[_pool.KeyUnipoolBalance] && $farming[_pool.addressUniPoll] !== undefined) {
         DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll] && $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice ? $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice : 0;
-        console.log('piesMarketDataStore', DOUGHPrice);
         BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0
         tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
 
@@ -278,27 +277,21 @@
         );
 
         unstakeNowRewards = (BigNumber(unstakeNowRewards.toString()).dividedBy(10 ** 18)).toNumber();
-
-
-        console.log('unstakeNowRewards', unstakeNowRewards.toString());
-
         seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
 
         yourStake = $balances[_pool.KeyUnipoolBalance].toNumber();
 
         rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
-        console.log('rewardsPerBPT', rewardsPerBPT);
-        console.log('DOUGHPrice', DOUGHPrice);
         $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
 
-        // MY version days60APY = $RewardsPerBPT*100/(BPTPrice/yourStake);
+        let rewardsPerBPTNotOptimistic = unstakeNowRewards / yourStake;
+        let $RewardsPerBPTNotOptimistic = rewardsPerBPTNotOptimistic * DOUGHPrice;
+        let days60APYNotOptimistic = $RewardsPerBPTNotOptimistic*100/BPTPrice;
+
         days60APY = $RewardsPerBPT*100/BPTPrice;
         apyV2 = days60APY * (31536000 / seconds.toNumber() )
 
-
-        apyV2NotOptimistic =  ( ((unstakeNowRewards * DOUGHPrice) * 100) / BPTPrice );
-
-        console.log('RECAP', BPTPrice)
+        apyV2NotOptimistic =  days60APYNotOptimistic * (31536000 / seconds.toNumber() );
         loaded = true;
       }
 
@@ -319,8 +312,6 @@
         $RewardsPerBPT,
         loaded
       }
-
-      console.log('geyserApy', geyserApy);
 
       return earnedOptimistic;
   };
