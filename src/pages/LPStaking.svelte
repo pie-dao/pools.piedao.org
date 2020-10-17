@@ -282,37 +282,16 @@
         rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
         $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
 
-        days60APY = $RewardsPerBPT*100/(BPTPrice/yourStake);
+        // MY version days60APY = $RewardsPerBPT*100/(BPTPrice/yourStake);
+        days60APY = $RewardsPerBPT/(BPTPrice/yourStake);
 
-        apyV2 = days60APY; //  * 6.5 || 52weeks / 8
+        //apyV2 = days60APY; //  * 6.5 || 52weeks / 8
+        apyV2 = days60APY * (31536000 / seconds.toNumber() )
         apyV2NotOptimistic =  ( ((unstakeNowRewards / yourStake) * 100) / (BPTPrice/yourStake) );
 
-        // let x = rewardPerWeek.toNumber();
-        // apy = (x * DOUGHPrice ) / BPTPrice;
-        // apy8Wweeks = ((x * DOUGHPrice) / BPTPrice);
         console.log('RECAP', BPTPrice)
         loaded = true;
       }
-
-      // console.log('RECAP', {
-      //   yourStake,
-      //   apyV2,
-      //   apyV2NotOptimistic: apyV2NotOptimistic * 6.5,
-      //   $RewardsPerBPT,
-      //   rewardsPerBPT,
-      //   apy,
-      //   apy8Wweeks,
-      //   rewardPerSecond: rewardPerSecond.toString(),
-      //   earnedOptimistic: earnedOptimistic.toString(),
-      //   rewardPerWeek: rewardPerWeek.toString(),
-      //   rewardPer8Week: rewardPer8Week.toString(),
-      //   seconds: seconds.toString(),
-      //   _totalStakingShareSeconds: _totalStakingShareSeconds.toString(),
-      //   stakingShareSeconds: stakingShareSeconds.toString(),
-      //   totalUnlocked: totalUnlocked.toString(),
-      //   totalUserRewards: earnedOptimistic.toString(),
-      //   farm: $farming[_pool.addressUniPoll] || {}
-      // })
 
       geyserApy = {
         earnedOptimistic: earnedOptimistic.toFixed(4),
