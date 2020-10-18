@@ -234,4 +234,89 @@
 
 </div>
 
+<!-- <table class="breakdown-table table-auto w-full">
+    <thead>
+    <tr>
+        <th class="font-thin border-b-2 px-4 py-2 text-left hidden md:block">Asset name</th>
+        <th class="font-thin border-b-2 px-4 py-2">DEX</th>
+        <th class="font-thin border-b-2 px-4 py-2">Weights</th>
+        <th class="font-thin border-b-2 px-4 py-2">Weekly Rewards</th>
+        <th class="font-thin border-b-2 px-4 py-2">APR (unstable)</th>
+        <th class="font-thin border-b-2 px-4 py-2">Liquidity</th>
+    </tr>
+    </thead>
+    <tbody>
+    {#each tokensSwapOut as pool}
+        <tr>
+        <td class="border border-gray-800 px-2 py-2 text-left hidden md:block">
+            {#each pool.containing as coins}
+            <img
+                class="inline icon ml-2 mr-2"
+                src={coins.icon}
+                alt={pool.symbol} />
+                ({coins.symbol})
+            {/each}
+        </td>
+        <td class="border text-center px-4 py-2">
+            {#if pool.type === 'UniswapV2'}
+            🦄 Uniswap V2
+            {/if}
+            {#if pool.type === 'Balancer'}
+            ⚖️ Balancer
+            {/if}
+        </td>
+        <td class="border text-center px-4 py-2">
+            {pool.weights}
+        </td>
+        <td class="border text-center px-4 py-2">
+            {pool.weeklyRewards}
+        </td>
+        
+        <td class="border text-center py-2">
+          {#if $farming[pool.addressUniPoll] && $farming[pool.addressUniPoll].apr}
+            {$farming[pool.addressUniPoll].apr}
+          {:else}
+            {#if pool.contractType === 'Geyser'}
+              See stake page
+            {:else}
+              n/a
+            {/if}
+          {/if}
+        </td>
+
+        <td class="border text-center py-2">
+          {#if $farming[pool.addressUniPoll]}
+            {formatFiat($farming[pool.addressUniPoll].totalLiquidity.toFixed(2))}
+          {:else}
+            n/a
+          {/if}
+        </td>
+        
+        <td class="border text-center py-2">
+          <a href="#/stake">
+            {#if pool.deprecated}
+              <button class="table-btn min-w-70px">
+                Unstake
+              </button>
+            {:else}
+              <button class="table-btn highlight-box min-w-70px">
+                Stake
+              </button>
+            {/if}
+          </a>
+        </td>
+        {#if pool.poolLink}
+        <td class="border text-center py-2">
+          <a href={`${pool.poolLink}`} target="_blank">
+            <button class="table-btn min-w-70px">
+              Add to Pool
+            </button>
+          </a>
+        </td>
+        {/if}
+        </tr>
+    {/each}
+    </tbody>
+</table> -->
+
         
