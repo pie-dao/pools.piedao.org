@@ -152,7 +152,7 @@
     <div class=" font-thin px-4 py-2 text-center w-18pc">Stake</div>
   </div> -->
 
-  <div class="flex w-100pc min-w-1140px min-h-50px justify-center items-center py-3 mb-2 negativetop">
+  <div class="flex w-100pc min-w-1140px min-h-50px justify-center items-center py-1 mb-2 negativetop">
 
     <div class="font-thin text-left px-1pc items-stretch md:block w-20pc">
       Asset Name
