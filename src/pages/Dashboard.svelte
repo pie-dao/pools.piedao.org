@@ -68,7 +68,7 @@
         </tr>
       </thead> -->
 
-          <div class="flex w-100pc justify-between items-center">
+          <!-- <div class="flex w-100pc justify-between items-center">
             <div class=" font-thin px-2 py-2 text-left md:w-15pc">Pie name</div>
             <div class=" font-thin px-4 py-2 text-center hidden md:block w-18pc">Assets</div>
             <div class=" font-thin px-4 py-2 text-center hidden md:block md:w-18pc">Liquidity</div>
@@ -76,8 +76,7 @@
             <div class=" font-thin px-4 py-2 text-center w-10pc">Mint tokens</div>
             <div class=" font-thin px-4 py-2 text-center md:w-10pc">Unwrap</div>
             <div class=" font-thin px-4 py-2 text-center w-16pc">Metamask</div>
-          </div>
-
+          </div> -->
 
       <!-- <tbody>
         {#each pies as pie}
@@ -140,6 +139,30 @@
   <!-- </table> -->
 
   <div class="flex flex-col w-100pc breakdown-table pt-2px">
+
+    <div class="flex w-100pc min-w-1140px min-h-50px justify-center items-center py-3 mb-2 negativetop">
+      <div class="font-thin text-left px-1pc items-stretch md:block w-15pc">
+        Pie Name
+      </div>
+      <div class="font-thin text-center px-1pc block w-18pc md:block">
+        Assets
+      </div>
+      <div class="font-thin text-center px-1pc w-18pc">
+        Liquidity  
+      </div>
+      <div class="font-thin text-center px-1pc w-10pc">
+        Market Buy
+      </div>
+      <div class="font-thin text-center px-1pc w-10pc">
+        Mint tokens
+      </div>
+      <div class="font-thin text-center px-1pc w-10pc">
+        Unwrap
+      </div>
+      <div class="font-thin ext-center px-1pc w-16pc">
+      </div>
+    </div>
+
     {#each pies as pie}
       <div class="flex w-100pc min-w-1140px min-h-50px justify-between items-center py-3 negativetop thinborder">
        
