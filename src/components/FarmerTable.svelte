@@ -142,7 +142,7 @@
 
 <div class="flex flex-col w-100pc breakdown-table pt-2px">
 
-  <div class="flex w-100pc min-w-1140px justify-center items-center mb-4">
+  <!-- <div class="flex w-100pc min-w-1140px justify-between items-center mb-4">
     <div class=" font-thin px-2 py-2 text-left md:w-20pc">Asset name</div>
     <div class=" font-thin px-4 py-2 text-center hidden md:block w-14pc">DEX</div>
     <div class=" font-thin px-4 py-2 text-center hidden md:block md:w-8pc">Weights</div>
@@ -150,11 +150,39 @@
     <div class=" font-thin px-4 py-2 text-center w-14pc">APR (unstable)</div>
     <div class=" font-thin px-4 py-2 text-center md:w-16pc">Liquidity</div>
     <div class=" font-thin px-4 py-2 text-center w-18pc">Stake</div>
+  </div> -->
+
+  <div class="flex w-100pc min-w-1140px min-h-50px justify-center items-center py-3 negativetop">
+
+    <div class="font-thin text-left px-1pc items-stretch md:block w-20pc">
+      Asset Name
+    </div>
+    <div class="font-thin text-center px-1pc block w-14pc md:block">
+      DEX
+    </div>
+    <div class="font-thin text-center px-1pc w-8pc">
+      Weights  
+    </div>
+    <div class="font-thin text-center px-1pc w-10pc">
+      W Rewards
+    </div>
+    <div class="font-thin text-center px-1pc w-14pc">
+      APR (unstable)
+    </div>
+    <div class="font-thin text-center px-1pc w-16pc">
+      Liquidity
+    </div>
+    <div class="font-thin text-center w-8pc px-1pc">
+    </div>
+    <div class="font-thin ext-center px-1pc w-10pc">
+    </div>
   </div>
 
   {#each tokensSwapOut as pool}
   
       <div class="flex w-100pc min-w-1140px min-h-50px justify-center items-center py-3 negativetop thinborder">
+
+        
 
       <div class="text-center px-1pc thinborderight items-stretch md:block w-20pc">
           {#each pool.containing as coins}
@@ -320,3 +348,6 @@
 </table> -->
 
         
+
+
+
