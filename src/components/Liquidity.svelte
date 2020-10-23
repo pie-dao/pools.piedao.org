@@ -227,7 +227,6 @@
       }
 
       areTokensEnoughBool = true;
-
       return true;
   };
 
@@ -253,23 +252,26 @@
   }
 
   const mint = async () => {
+    const requestedAmount = BigNumber(amount);
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    if(!areTokensEnough()) {
+      alert('tokens not enough');
+      return;
+    }
+
+    console.log('lockedPoolTokens', lockedPoolTokens);
+    
+    for (let i = 0; i < lockedPoolTokens.length; i += 1) {
+      askApproval(lockedPoolTokens[i].address, token);
+    }
+
     try {
-      const requestedAmount = BigNumber(amount);
-
-      if (!$eth.address || !$eth.signer) {
-        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
-        connectWeb3();
-        return;
-      }
-
-      if(!areTokensEnough()) {
-        return;
-      }
-
-      for (let i = 0; i < lockedPoolTokens.length; i += 1) {
-        askApproval(lockedPoolTokens[i].address, token);
-      }
-
       const tokenContract = await contract({ abi: pieSmartPool, address: token });
       const decimals = await tokenContract.decimals();
       const arg = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
