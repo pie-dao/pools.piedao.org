@@ -4,6 +4,7 @@ import pools from '../config/pools.json';
 
 import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
+import Oven from '../pages/Oven.svelte';
 import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
@@ -62,6 +63,16 @@ const formatRoute = (route) => {
 
       if (pools.available.includes(address)) {
         return { page: Pool, params: { address, poolAction, method } };
+      }
+      break;
+
+    case 'oven':
+      address = (route[1] || '').toLowerCase();
+      poolAction = (route[2] || 'add').toLowerCase();
+      method = (route[3] || 'single').toLowerCase();
+
+      if (pools.available.includes(address)) {
+        return { page: Oven, params: { address, poolAction, method } };
       }
 
       break;
