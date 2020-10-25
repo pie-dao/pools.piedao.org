@@ -327,7 +327,9 @@
     }
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
-    fetchAmounts();
+    if (approach === "add") {
+      fetchAmounts();
+    }
   };
 
   const withdraw = async () => {
@@ -598,12 +600,14 @@
   
 
   <center>
-    <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
-      {#if approach === 'add'}
-        {$_('general.add')} {$_('general.liquidity')}
-      {:else}
-        {$_('general.withdraw')}
-      {/if}
-    </button>
+    {#if approach === 'add'}
+      <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+          {$_('general.add')} {$_('general.liquidity')}
+      </button>
+    {:else}
+      <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+          {$_('general.withdraw')}
+      </button>
+    {/if}
   </center>
 </div>
