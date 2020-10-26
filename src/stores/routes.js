@@ -8,6 +8,7 @@ import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
+import Oven from '../pages/Oven.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
 
 export const defaultRouteObj = {
@@ -48,6 +49,9 @@ const formatRoute = (route) => {
       return { page: Dough };
     case 'migrate':
       return { page: Migration, params: { address } };
+    case 'oven':
+      referral = null;
+      return { page: Oven, params: { referral } };
     case 'stake':
       referral = route[1] || null;
 
