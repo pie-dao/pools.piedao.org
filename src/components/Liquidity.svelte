@@ -227,7 +227,6 @@
       }
 
       areTokensEnoughBool = true;
-
       return true;
   };
 
@@ -253,23 +252,26 @@
   }
 
   const mint = async () => {
+    const requestedAmount = BigNumber(amount);
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    if(!areTokensEnough()) {
+      alert('tokens not enough');
+      return;
+    }
+
+    console.log('lockedPoolTokens', lockedPoolTokens);
+    
+    for (let i = 0; i < lockedPoolTokens.length; i += 1) {
+      askApproval(lockedPoolTokens[i].address, token);
+    }
+
     try {
-      const requestedAmount = BigNumber(amount);
-
-      if (!$eth.address || !$eth.signer) {
-        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
-        connectWeb3();
-        return;
-      }
-
-      if(!areTokensEnough()) {
-        return;
-      }
-
-      for (let i = 0; i < lockedPoolTokens.length; i += 1) {
-        askApproval(lockedPoolTokens[i].address, token);
-      }
-
       const tokenContract = await contract({ abi: pieSmartPool, address: token });
       const decimals = await tokenContract.decimals();
       const arg = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
@@ -325,7 +327,9 @@
     }
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
-    fetchAmounts();
+    if (approach === "add") {
+      fetchAmounts();
+    }
   };
 
   const withdraw = async () => {
@@ -596,12 +600,14 @@
   
 
   <center>
-    <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
-      {#if approach === 'add'}
-        {$_('general.add')} {$_('general.liquidity')}
-      {:else}
-        {$_('general.withdraw')}
-      {/if}
-    </button>
+    {#if approach === 'add'}
+      <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+          {$_('general.add')} {$_('general.liquidity')}
+      </button>
+    {:else}
+      <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+          {$_('general.withdraw')}
+      </button>
+    {/if}
   </center>
 </div>
