@@ -24,7 +24,8 @@
     "rxjs": "^6.6.0",
     "svelte": "^3.21.0",
     "svelte-apollo": "^0.3.0",
-    "svelte-i18n": "^3.0.4"
+    "svelte-i18n": "^3.0.4",
+    "svelte-tabs": "^1.1.0"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.3.0",

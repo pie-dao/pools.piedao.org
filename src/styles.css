@@ -48,6 +48,16 @@
 
 }
 
+.font-huge {
+  font-size: 3rem;
+  line-height: 3.6rem;
+}
+
+.font-veryhuge {
+  font-size: 4rem;
+  line-height: 5rem;
+}
+
 /* .toggle-btn .active {
   background: white;
   font-weight: bold;
@@ -74,6 +84,10 @@
 
 .negativetop {
   margin-top: -1px;
+}
+
+.bg-lightgrey {
+  background-color: #f2f2f2;
 }
 
 /* Allocation Breakdown */
@@ -659,6 +673,13 @@ opacity: 0.6;
 .border-white {
   border-color: white !important;
   border: 1px solid;
+}
+
+.investment-card:hover {
+  border: 2px solid #EC1EA0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
 }
 
 /* LOADING GIF */
