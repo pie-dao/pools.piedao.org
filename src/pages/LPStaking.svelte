@@ -759,7 +759,7 @@
               <ol>
                 <li>👉 Unstake from the <button class="underline" on:click={() => pool = incentivizedPools[1] }>OLD staking contract</button></li>
                 <li>🥩 Stake in this staking contract</li>
-                <li>📝 <a href="https://forms.gle/2g8ekufLErpZ8jwD9">Fill the form</a> with the 2 tx by November 6th at 00:00 UTC. (anonymous)</li>
+                <li>📝 <a class="underline" href="https://forms.gle/2g8ekufLErpZ8jwD9">Fill the form</a> with the 2 tx by November 6th at 00:00 UTC. (anonymous)</li>
               </ol>
             </div>
             {/if}

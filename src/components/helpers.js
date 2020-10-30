@@ -490,7 +490,11 @@ export const subscribeToStakingEarnings = async (contractAddress, address, shoul
   }
 };
 
-export const subscribeToStakingEarningsGeyser = async (contractAddress, address, shouldBump = true) => {
+export const subscribeToStakingEarningsGeyser = async (
+  contractAddress,
+  address,
+  shouldBump = true,
+) => {
   const token = contractAddress;
 
   validateIsAddress(token);
@@ -625,7 +629,7 @@ export const subscribeToPoolWeights = async (poolAddress) => {
   bumpLifecycle();
 };
 
-export const toFixed = function (num=0, fixed) {
+export const toFixed = function (num = 0, fixed) {
   const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
   const arr = num.toString().match(re);
   if (arr && arr.length > 0) {
@@ -778,8 +782,8 @@ export const calculateAPRBalancer = async (
   const DOUGH = assetOne;
   const WETH = assetTwo;
 
-  if( addressStakingPool === '' || tokenToStake === '') return;
-  
+  if (addressStakingPool === '' || tokenToStake === '') return;
+
   const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
   const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
 
@@ -801,16 +805,14 @@ export const calculateAPRBalancer = async (
   let res;
 
   try {
-    
     // Find out reward rate
     const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
     const rewardPerToken = weekly_reward / totalStakedBPTAmount;
-  
+
     // console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
     // Finished. Start printing
     const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
-    
-  
+
     if (null) {
       console.log('========== STAKING =========');
       console.log(`There are total   : ${totalBPTAmount} BPT in the Balancer Contract.`);
@@ -834,7 +836,7 @@ export const calculateAPRBalancer = async (
           )}\n`,
         );
       }
-  
+
       // DOUGH REWARDS
       console.log('======== DOUGH REWARDS ========');
       if (stakedBPTAmount && earnedDOUGH) {
@@ -854,7 +856,7 @@ export const calculateAPRBalancer = async (
       console.log(`Weekly ROI in USD : ${toFixed(DOUGHWeeklyROI, 4)}%`);
       console.log(`APR (unstable)    : ${toFixed(DOUGHWeeklyROI * 52, 4)}% \n`);
     }
-  
+
     res = {
       roi: DOUGHWeeklyROI,
       weekly: `${toFixed(DOUGHWeeklyROI, 4)}%`,
@@ -873,11 +875,11 @@ export const calculateAPRBalancer = async (
       ethStaked: totalWETHAmount,
       totalLiquidity,
     };
-  
+
     const updates = {};
     updates[addressStakingPool] = res;
     farming.set({ ...get(farming), ...updates });
-  } catch(e) {
+  } catch (e) {
     res = {
       totalBPTAmount,
       totalStakedBPTAmount,
@@ -891,11 +893,9 @@ export const calculateAPRBalancer = async (
       ethStaked: totalWETHAmount,
       totalLiquidity,
     };
-    
   }
 
   const updates = {};
-    updates[addressStakingPool] = res;
-    farming.set({ ...get(farming), ...updates });
-  
+  updates[addressStakingPool] = res;
+  farming.set({ ...get(farming), ...updates });
 };
