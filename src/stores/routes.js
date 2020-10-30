@@ -6,6 +6,7 @@ import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
 import Oven from '../pages/Oven.svelte';
 import Guides from '../pages/Guides.svelte';
+import Tokensswap from '../pages/Tokensswap.svelte';
 import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
@@ -50,6 +51,8 @@ const formatRoute = (route) => {
       return { page: Dough };
     case 'Guides':
       return { page: Guides };
+    case 'Tokensswap':
+      return { page: Tokensswap };
     case 'migrate':
       return { page: Migration, params: { address } };
     case 'stake':

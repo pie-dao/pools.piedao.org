@@ -1,21 +1,5 @@
 <script>
-  import AllocationBreakdown from '../components/AllocationBreakdown.svelte';
-  import Balance from '../components/Balance.svelte';
-  import Etherscan from '../components/Etherscan.svelte';
-  import Farming from '../components/Farming.svelte';
-  import Info from '../components/Info.svelte';
-  import Migration from '../components/Migration.svelte';
-  import Quantstamp from '../components/Quantstamp.svelte';
-
-  import { currentRoute } from '../stores/routes.js';
   import images from "../config/images.json";
-  import links from '../config/links.json';
-
-
-
-  import {
-    getTokenImage,
-  } from "../components/helpers.js";
 </script>
   
 
