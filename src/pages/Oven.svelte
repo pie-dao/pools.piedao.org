@@ -106,8 +106,6 @@
 
 </script>
 
-
-
 <div class="content flex flex-col">
     <!-- <img class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
     <img class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" /> -->
@@ -140,6 +138,7 @@
         {:else}
             <div>
               <button on:click={() => oven = null } class="md:w-1 float-left btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Go back</button>
+              <button on:click={() => exit() } class="float-right btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Withdraw ETH & Tokens</button>
             </div>
 
             <div class="flex flex-col w-full justify-around md:flex-row">
