@@ -70,12 +70,13 @@
   $: needAllowance = true;
   $: incentivizedPools = [
     {
+      id: 0,
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
-      addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
+      addressUniPoll: '0xB9a4Bca06F14A982fcD14907D31DFACaDC8ff88E',
       aprEnabled: true,
       deprecated: false,
       poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
-      name: 'DOUGH / ETH',
+      name: '🆕 DOUGH / ETH 🆕',
       platform: "⚖️ Balancer",
       description: 'WEEKLY REWARDS',
       rewards_token: 'DOUGH',
@@ -102,6 +103,43 @@
       ],
       allowanceKey: '',
       highlight: true,
+      needAllowance: true,
+      enabled: true,
+    },
+    {
+      id: 1,
+      addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
+      addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
+      aprEnabled: true,
+      deprecated: false,
+      poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
+      name: 'DOUGH / ETH',
+      platform: "⚖️ Balancer",
+      description: '⚠️ Ends in Sat 31st, 7pm UTC',
+      rewards_token: 'DOUGH',
+      weeklyRewards: formatFiat(110000, ',', '.', ''),
+      apy: 1.8,
+      toStakeSymbol: 'BPT',
+      toStakeDesc: 'Balancer: DOUGH/ETH 80/20',
+      allowance: 0,
+      type: 'Balancer',
+      contractType: 'UniPool',
+      containing: [
+        {
+          symbol: "DOUGH",
+          address: "0xad32A8e6220741182940c5aBF610bDE99E737b2D",
+          balance: '0',
+          icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
+        },
+        {
+          symbol: "ETH",
+          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          balance: '0',
+          icon: getTokenImage('eth')
+        },
+      ],
+      allowanceKey: '',
+      highlight: false,
       needAllowance: true,
       enabled: true,
     },
@@ -331,8 +369,11 @@
         await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
       }
     })
-    await estimateUnstake();
-    
+    try {
+      await estimateUnstake();
+    } catch(e){
+
+    }
   }, false);
 
   $: if($eth.address) {
@@ -710,6 +751,36 @@
               {/if}
             </div>
 
+            {#if pool.id === 0 }
+            <div class="m-3 box-border">
+              <span class="text-lg">🥳</span> The migration of BPTs to this new staking contract is further incentivized with an additional bonus of <strong>15% of weekly rewards</strong>.
+              To be eligible for the migration rewards, you need to <strong>migrate exactly the same amount staked in the previous pool</strong>
+              <br/><br/>
+              <ol>
+                <li>👉 Unstake from the <button class="underline" on:click={() => pool = incentivizedPools[1] }>OLD staking contract</button></li>
+                <li>🥩 Stake in this staking contract</li>
+                <li>📝 <a href="https://forms.gle/2g8ekufLErpZ8jwD9">Fill the form</a> with the 2 tx by November 6th at 00:00 UTC. (anonymous)</li>
+              </ol>
+            </div>
+            {/if}
+
+            {#if pool.id === 1 }
+              <div class="m-3 box-border">
+                <span class="text-lg">⚠️</span> Rewards for this staking contract expire Sat 31st, 7pm UTC. 
+                  {#if $balances[pool.KeyUnipoolBalance].toNumber() > 0}
+                  Migrate exactly <strong>{$balances[pool.KeyUnipoolBalance].toNumber()} BPT</strong> to the new pool to earn <strong>15% extra</strong> of the weekly rewards.
+                <br/><br/>
+                {/if}
+                <ol>
+                  {#if $balances[pool.KeyUnipoolBalance].toNumber() > 0}
+                    <li>👉 <button class="underline" on:click={() => exit() }>Unstake</button> from this staking contract</li>
+                  {/if}
+                  <li>🥩 Stake in the <button class="underline" on:click={() => pool = incentivizedPools[0] }>new staking contract</button> </li>
+                  <li>📝 <a class="underline" href="https://forms.gle/2g8ekufLErpZ8jwD9">Fill the form</a> with the 2 tx by November 6th at 00:00 UTC. (anonymous)</li>
+                </ol>
+              </div>
+            {/if}
+
             <div class="flex flex-col w-full justify-around md:flex-row">
               <!-- UNSTAKE BOX -->
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
@@ -790,6 +861,15 @@
                     <div class="apy">
                       {pool.KeyUnipoolEarnedBalance ? amountFormatter({ amount: $balances[pool.KeyUnipoolEarnedBalance], displayDecimals: 16}) : 0.0000} {pool.rewards_token}
                     </div>
+
+                    {#if pool.id === 0}
+                      <div class="apy">
+                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * 0.15, 3) } </strong> Escrowed / 
+                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * 0.85, 3) } </strong> Liquid
+                      </div>
+                    {/if}
+
+                    
                     <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="left float-left">{$_('general.amount')} to claim</div>
@@ -831,6 +911,15 @@
             </div>
             <div class="info-box">
               {#if $farming[pool.addressUniPoll] !== undefined}
+
+                {#if pool.id === 0}
+                  <p>ℹ️ <strong>DOUGH/ETH</strong> Staking Rewards - the pool will keep receiving 110,000 DOUGH as nominal weekly reward distributed to LPs, of which
+                      85% distributed liquid along the week
+                      15% escrowed within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
+                  </p>
+                {/if}
+                <br/><br/>
+                
                 <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
                 <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} BPT</strong> staked in the Staking contract.</p>
                 {#if pool.KeyAddressTokenToStake && $balances[pool.KeyUnipoolBalance]}
