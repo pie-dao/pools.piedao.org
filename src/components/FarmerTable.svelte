@@ -88,34 +88,7 @@
           icon: getTokenImage('eth')
         },
       ]
-    },
-    {
-      symbol: "DEFI+S/DAI",
-      address: "",
-      aprEnabled: true,
-      deprecated: true,
-      addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
-      addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
-      weights: "50/50",
-      type: 'UniswapV2',
-      poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
-      weeklyRewards: 'deprecated',
-      balance: '0',
-      containing: [
-        {
-          symbol: "DEFI+S",
-          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-          balance: '0',
-          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
-        },
-        {
-          symbol: "DAI",
-          address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-          balance: '0',
-          icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
-        },
-      ]
-    },
+    }
   ];
 
   window.addEventListener('price-update', function (e) {
