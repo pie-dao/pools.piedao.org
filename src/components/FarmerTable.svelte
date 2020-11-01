@@ -14,7 +14,7 @@
       symbol: "DOUGH/ETH",
       address: "",
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
-      addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
+      addressUniPoll: '0xB9a4Bca06F14A982fcD14907D31DFACaDC8ff88E',
       balance: '0',
       weights: "80/20",
       aprEnabled: true,

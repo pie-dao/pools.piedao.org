@@ -111,11 +111,11 @@
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
       addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
       aprEnabled: true,
-      deprecated: false,
+      deprecated: true,
       poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
       name: 'DOUGH / ETH',
       platform: "⚖️ Balancer",
-      description: '⚠️ Ends in Sat 31st, 7pm UTC',
+      description: 'End in Sat 31st, 7pm UTC',
       rewards_token: 'DOUGH',
       weeklyRewards: formatFiat(110000, ',', '.', ''),
       apy: 1.8,
@@ -299,27 +299,25 @@
       let DOUGHPrice = 0;
       let BPTPrice = 0;
 
+      let balanceStaked = await contract.balanceOf($eth.address);
       
-      if($balances[_pool.KeyUnipoolBalance] && $farming[_pool.addressUniPoll] !== undefined) {
+      if($farming[_pool.addressUniPoll] !== undefined) {
         DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll] && $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice ? $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice : 0;
         BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0
         tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
 
-        const amount = ethers.BigNumber.from(
-          BigNumber($balances[_pool.KeyUnipoolBalance].toString())
-            .multipliedBy(10 ** 18)
-            .toFixed(0),
-        );
+        const amount = balanceStaked;
 
+        const bnJsAmount = BigNumber(balanceStaked.toString()).dividedBy(10 ** 18);
         unstakeNowRewards = await contract.callStatic.unstakeQuery(
           amount,
           overrides
         );
 
         unstakeNowRewards = (BigNumber(unstakeNowRewards.toString()).dividedBy(10 ** 18)).toNumber();
-        seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
+        seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( bnJsAmount ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
 
-        yourStake = $balances[_pool.KeyUnipoolBalance].toNumber();
+        yourStake = bnJsAmount.toNumber();
 
         rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
         $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
@@ -368,11 +366,12 @@
       } else {
         await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
       }
-    })
+    });
+
     try {
       await estimateUnstake();
     } catch(e){
-
+      console.log('estimateUnstake', e);
     }
   }, false);
 
@@ -415,7 +414,7 @@
           } else {
             console.log("Getting staked balance from geyser");
             console.log(p.addressUniPoll, "address");
-            subscribeToStakingEarningsGeyser(p.addressUniPoll, address, true);
+            //subscribeToStakingEarningsGeyser(p.addressUniPoll, address, true);
             p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
             await estimateUnstake();
           }
