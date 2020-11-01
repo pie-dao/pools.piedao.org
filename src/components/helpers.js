@@ -799,6 +799,11 @@ export const calculateAPRBalancer = async (
   // Look up prices
   const DOUGHPrice = marketData[DOUGH].market_data.current_price;
   const ETHPrice = marketData[WETH].market_data.current_price;
+
+
+  const $assetOnePerBPT = DOUGHperBPT * DOUGHPrice;
+  const $assetTwoPerBPT = WETHperBPT * ETHPrice;
+  
   const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
   const totalLiquidity = BPTPrice * totalBPTAmount;
 

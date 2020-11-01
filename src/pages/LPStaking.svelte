@@ -279,7 +279,7 @@
       let _totalStakingShareSeconds = data[3];
       let stakingShareSeconds = data[2];
       let totalUnlocked = data[1];
-      let _pool = incentivizedPools[2];
+      let _pool = incentivizedPools[3];
       let apy8Wweeks = 0;
       let apy = 0;
       let rewardsPerBPT = 0;
@@ -303,7 +303,8 @@
       
       if($farming[_pool.addressUniPoll] !== undefined) {
         DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll] && $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice ? $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice : 0;
-        BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0
+        BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0;
+
         tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
 
         const amount = balanceStaked;
@@ -349,7 +350,8 @@
         totalUnlocked: totalUnlocked.toString(),
         totalUserRewards: earnedOptimistic.toString(),
         $RewardsPerBPT,
-        loaded
+        loaded,
+        days60APY
       };
 
       console.log('geyserApy', geyserApy);
