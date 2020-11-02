@@ -61,8 +61,8 @@
     const totalSupply = await doughToken.totalSupply();
     const daoBal = $balances[daoBalanceKey] || BigNumber(0);
     const msBal = $balances[msBalanceKey] || BigNumber(0);
-    doughStaked = $farming['0x8314337d2b13e1A61EadF0FD1686b2134D43762F'].doughStaked.toFixed(2) || 0;
-    price = $farming['0x8314337d2b13e1A61EadF0FD1686b2134D43762F'].DOUGHPrice.toFixed(2) || 0;
+    doughStaked = $farming['0xB9a4Bca06F14A982fcD14907D31DFACaDC8ff88E'].doughStaked.toFixed(2) || 0;
+    price = $farming['0xB9a4Bca06F14A982fcD14907D31DFACaDC8ff88E'].DOUGHPrice.toFixed(2) || 0;
 
     if(daoBal > 0 && msBal > 0) {
       const ts = BigNumber(totalSupply.toString()).dividedBy(10**18)
