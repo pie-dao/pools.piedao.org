@@ -1,11 +1,13 @@
 {
   "available": [
+    "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
   ],
   "selectable": [
+    "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
@@ -299,24 +301,26 @@
       }
     ]
   },
-  "0x880873a96ce38c7fd39dc714592902b069bde048": {
+  "0x8d1ce361eb68e9e05573443c407d4a3bed23b033": {
     "symbol": "DEFI++",
     "useRecipe": false,
-    "swapFees": "10",
-    "tradingViewFormula": "(1.0069862312601948*COINBASE:COMPUSD+70.6180873079698*COINBASE:KNCUSD+493.8217925005066*BINANCE:LENDUSD+33.61720214153774*COINBASE:LINKUSD+0.3545441741414431*COINBASE:MKRUSD+41.28487136484088*BINANCE:SNXUSD)/1000",
+    "swapFees": "1",
     "composition": [
       {
         "symbol": "DEFI+S",
         "address": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
         "color": "#58a4fc",
-        "percentage": 10,
+        "coingeckoId": "piedao-defi-small-cap",
+        "percentage": 30,
         "isPie": true
       },
       {
         "symbol": "DEFI+L",
-        "address": "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441",
+        "address": "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
         "color": "#6beab1",
-        "percentage": 90,
+        "coingeckoId": "piedao-defi-large-cap",
+        "coingeckoImageId": 1,
+        "percentage": 70,
         "isPie": true
       }
     ],

@@ -18,6 +18,7 @@
   import {
     allowances,
     approveMax,
+    functionKey,
     balanceKey,
     balances,
     connectWeb3,
@@ -265,11 +266,21 @@
       return;
     }
 
-    console.log('lockedPoolTokens', lockedPoolTokens);
+    console.log('pooledTokens', pooledTokens, $allowances);
+
+
     
-    for (let i = 0; i < lockedPoolTokens.length; i += 1) {
-      askApproval(lockedPoolTokens[i].address, token);
+    for (let i = 0; i < pooledTokens.length; i += 1) {
+      let allowanceKey = functionKey(pooledTokens[i].address, 'allowance', [$eth.address, token]);
+      let allowance = $allowances[allowanceKey];
+      console.log(`Allowance ${pooledTokens[i].symbol}: ${allowance}`);
+      if( new BigNumber(allowance).isLessThan(requestedAmount) ) {
+        console.log('Im asking for allowance')
+        askApproval(pooledTokens[i].address, token);
+      }
     }
+
+    console.log('Allowance done');
 
     try {
       const tokenContract = await contract({ abi: pieSmartPool, address: token });
