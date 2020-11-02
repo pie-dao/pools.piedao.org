@@ -169,7 +169,7 @@
     <div class="p-0 self-start md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">MarketCap</div>
       <div class="text-center text-2xl md:text-xl font-black">
-        {formatFiat(get($piesMarketDataStore, `${token}.market_data.market_cap`, '-'))}
+        {formatFiat($pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : '')}
       </div>
     </div>
     {/if}
@@ -181,12 +181,12 @@
       <div class="text-center font-thin text-xs md:text-base">Streaming fee</div>
       <div class="text-center text-2xl md:text-xl font-black">0%</div>
     </div>
-    <div class="p-0 md:w-1/4">
+    <!-- <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">7 Days Change</div>
       <div class="text-center text-2xl md:text-xl font-black">
         {get($piesMarketDataStore, `${token}.market_data.price_change_percentage_7d_in_currency`, '-')}
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div
@@ -223,7 +223,11 @@
         <tr>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2">Price</th>
-          <th class="font-thin border-b-2 px-4 py-2">Current Allocation</th>
+          <th class="font-thin border-b-2 px-4 py-2">Allocation</th>
+          {#if !pieOfPies }
+              <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th>
+              <th class="font-thin border-b-2 px-4 py-2">Balance</th>
+          {/if}
           <th class="font-thin border-b-2 px-4 py-2">Market Cap</th>
           <th class="font-thin border-b-2 px-4 py-2">Volume</th>
           <th class="font-thin border-b-2 px-4 py-2">Change</th>
@@ -242,10 +246,11 @@
             <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
-            {#if pieOfPies }
-              <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</td>
-            {:else}
+            <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</td>
+
+            {#if !pieOfPies }
               <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td>
+              <td class="border text-center px-4 py-2">{formatFiat(pooledToken.balance ? pooledToken.balance.toFixed(2) : '0', ',', '.', '')}</td>
             {/if}
             
             <td class="border text-center px-4 py-2">

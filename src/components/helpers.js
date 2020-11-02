@@ -120,7 +120,9 @@ const updatePoolWeight = async (poolAddress) => {
       .multipliedBy(100)
       .toNumber();
 
-    return { ...definition, percentageByBalances, percentageUSD };
+    const balance = poolCurrentBalances[definition.address];
+
+    return { ...definition, percentageByBalances, percentageUSD, balance };
   });
 
   pools.set({ ...get(pools), ...updates });
