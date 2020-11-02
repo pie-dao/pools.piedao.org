@@ -138,7 +138,7 @@
         "coingeckoId": "compound-governance-token",
         "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
         "coingeckoImageId": 10775,
-        "percentage": 10.73
+        "percentage": 10.74
       },
       {
         "symbol": "Aave",
@@ -156,7 +156,7 @@
         "coingeckoId": "uniswap",
         "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
         "decimals": 18,
-        "percentage": 13.1924
+        "percentage": 13.19
       },
       {
         "symbol": "LINK",
@@ -181,7 +181,7 @@
         "color": "#080221",
         "coingeckoImageId": 3406,
         "address": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
-        "percentage": 12.64,
+        "percentage": 12.65,
         "coingeckoId": "havven",
         "decimals": 18
       },
@@ -191,7 +191,7 @@
         "coingeckoImageId": 11849,
         "coingeckoId": "yearn-finance",
         "address": "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e",
-        "percentage": 18.34,
+        "percentage": 18.35,
         "decimals": 18
       }
     ],
@@ -247,7 +247,7 @@
         "symbol": "BAL",
         "color": "#58a4fc",
         "address": "0xba100000625a3754423978a60c9317c58a424e3D",
-        "percentage": 13.57,
+        "percentage": 13.75,
         "coingeckoId": "balancer",
         "coingeckoImageId": 11683
       },
@@ -255,7 +255,7 @@
         "symbol": "LRC",
         "color": "#fd6761",
         "address": "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
-        "percentage": 21.14,
+        "percentage": 21.51,
         "coingeckoId": "loopring",
         "coingeckoImageId": 913
       },
@@ -263,7 +263,7 @@
         "symbol": "REN",
         "color": "#6beab1",
         "address": "0x408e41876cCCDC0F92210600ef50372656052a38",
-        "percentage": 27.80,
+        "percentage": 27.11,
         "coingeckoId": "republic-protocol",
         "coingeckoImageId": 3139
       },
@@ -279,7 +279,7 @@
         "symbol": "PNT",
         "color": "#c4ccce",
         "address": "0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD",
-        "percentage": 4.34,
+        "percentage": 4.42,
         "coingeckoId": "pnetwork",
         "coingeckoImageId": 11659
       },
@@ -287,7 +287,7 @@
         "symbol": "MLN",
         "color": "#c4ccce",
         "address": "0xec67005c4E498Ec7f55E092bd1d35cbC47C91892",
-        "percentage": 3.13,
+        "percentage": 3.21,
         "coingeckoId": "melon",
         "coingeckoImageId": 605
       }

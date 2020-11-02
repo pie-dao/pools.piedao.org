@@ -4,6 +4,7 @@
   import get from 'lodash/get';
   import first from 'lodash/first';
   import flattenDeep from 'lodash/flattenDeep';
+  import orderBy from 'lodash/orderBy';
   import { onMount } from "svelte";
   import { currentRoute } from "../stores/routes.js";
   import TradingViewWidget from "../components/TradingViewWidget.svelte";
@@ -79,15 +80,15 @@
         return $pools[component.address].map((internal) => {
           return {
             ...internal,
-            percentage: ((component.percentage / 100) * (internal.percentage / 100) * 100).toFixed(
-              2
-            ),
+            // percentage: ((component.percentage / 100) * (internal.percentage / 100) * 100),
+            percentage: (internal.percentage * component.percentage) / 100,
           };
         });
       }
       return component;
     })
   );
+
 
   $: pieTokens = fetchPieTokens($balances);
 
@@ -96,6 +97,8 @@
 
     let mapDynamicTradingViewFormula = poolsConfig[token].mapDynamicTradingViewFormula;
     let formula = '';
+
+    if(!mapDynamicTradingViewFormula) return;
 
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
@@ -227,7 +230,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each composition as pooledToken}
+        {#each orderBy(composition,['percentage'], ['desc']) as pooledToken}
           <tr>
             <td class="border border-gray-800 px-2 py-2 text-left">
               <img
@@ -239,7 +242,12 @@
             <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
-            <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td>
+            {#if pieOfPies }
+              <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</td>
+            {:else}
+              <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td>
+            {/if}
+            
             <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.market_cap`, '-'))}
             </td>

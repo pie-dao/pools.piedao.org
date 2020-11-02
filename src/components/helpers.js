@@ -110,16 +110,17 @@ const updatePoolWeight = async (poolAddress) => {
   const updates = {};
   updates[`${poolAddress}-usd`] = totalUSD;
   updates[poolAddress] = composition.map((definition) => {
-    const percentage = BigNumber(poolCurrentBalances[definition.address])
+    const percentageByBalances = BigNumber(poolCurrentBalances[definition.address])
       .dividedBy(total)
       .multipliedBy(100)
       .toNumber();
+
     const percentageUSD = BigNumber(poolCurrentUSD[definition.address])
       .dividedBy(totalUSD)
       .multipliedBy(100)
       .toNumber();
 
-    return { ...definition, percentage, percentageUSD };
+    return { ...definition, percentageByBalances, percentageUSD };
   });
 
   pools.set({ ...get(pools), ...updates });
@@ -188,7 +189,8 @@ export const amountFormatter = ({
   const base = value.toFixed(decimals, rounding);
 
   if (value.isGreaterThan(base)) {
-    return `${approximatePrefix}${base}`;
+    // return `${approximatePrefix}${base}`;
+    return `${base}`;
   }
 
   return base;
