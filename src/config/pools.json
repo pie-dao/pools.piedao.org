@@ -303,7 +303,7 @@
   },
   "0x8d1ce361eb68e9e05573443c407d4a3bed23b033": {
     "symbol": "DEFI++",
-    "useRecipe": false,
+    "useRecipe": true,
     "swapFees": "1",
     "composition": [
       {

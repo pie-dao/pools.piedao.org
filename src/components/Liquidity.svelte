@@ -168,7 +168,7 @@
       return;
     }
 
-    const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
+    const recipe = await contract({ address: '0xccE6cC6423fa82d50F2D545b1c534E4AB2890F79', abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
