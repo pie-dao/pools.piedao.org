@@ -310,7 +310,7 @@
       let _totalStakingShareSeconds = data[3];
       let stakingShareSeconds = data[2];
       let totalUnlocked = data[1];
-      let _pool = incentivizedPools[3];
+      let _pool = incentivizedPools[4];
       let apy8Wweeks = 0;
       let apy = 0;
       let rewardsPerBPT = 0;
