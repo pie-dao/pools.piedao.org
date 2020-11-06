@@ -144,6 +144,37 @@
       enabled: true,
     },
     {
+      id: 2,
+      addressTokenToStake: '0x8D1ce361eb68e9E05573443C407D4A3Bed23B033',
+      addressUniPoll: '0x59706D38F1452F387563f06b632af7302456fE66',
+      aprEnabled: true,
+      deprecated: false,
+      poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
+      name: 'DEFI++',
+      description: 'WEEKLY REWARDS (Escrowed)',
+      platform: "🥧 PieDAO",
+      rewards_token: 'DOUGH',
+      weeklyRewards: formatFiat(20000, ',', '.', ''),
+      apy: 1.8,
+      toStakeSymbol: 'DEFI++',
+      toStakeDesc: 'DEFI++ Index',
+      allowance: 0,
+      type: 'Balancer',
+      contractType: 'UniPool',
+      containing: [
+        {
+          symbol: "DEFI++",
+          address: "0x8D1ce361eb68e9E05573443C407D4A3Bed23B033",
+          balance: '0',
+          icon: getTokenImage('0x8d1ce361eb68e9e05573443c407d4a3bed23b033')
+        }
+      ],
+      allowanceKey: '',
+      highlight: false,
+      needAllowance: true,
+      enabled: true,
+    },
+    {
       addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
       aprEnabled: true,
       deprecated: false,
@@ -250,7 +281,7 @@
     },
   ]
 
-  $: {     
+  $: {
     if(pool)
       needAllowance = needApproval(pool, ($allowances[pool.allowanceKey] || BigNumber(0)));
   }
@@ -366,7 +397,9 @@
       if( pool.type === 'UniswapV2') {
         await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
       } else {
-        await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+        if( pool.id != 2){
+            await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+        }
       }
     });
 
@@ -384,7 +417,7 @@
           await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
         } 
         
-        if( pool.type === 'Balancer' && pool.contractType === 'UniPool') {
+        if( pool.type === 'Balancer' && pool.contractType === 'UniPool' && pool.id != 2) {
           await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
         }
 
@@ -401,7 +434,10 @@
 
       incentivizedPools.forEach( async p => {      
         try {
-          calculateAPRBalancer()
+          if( p.id != 2){
+            calculateAPRBalancer();
+          }
+          
           subscribeToBalance(p.addressTokenToStake, address, true);
           subscribeToStaking(p.addressUniPoll, address, true);
           subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
@@ -445,6 +481,7 @@
     const { addressTokenToStake, addressUniPoll } = pool;
 
     if (actionType === "unlock") {
+      console.log('calling', addressTokenToStake, addressUniPoll);
       await approveMax(addressTokenToStake, addressUniPoll);
       needAllowance = false;
     }
@@ -911,6 +948,9 @@
               {/if}
             </div>
             <div class="info-box">
+              {#if pool.id === 2}
+                  <p>ℹ️ <strong>DEFI++</strong> Staking Rewards are subject to 52 weeks vesting from the moment they will be claimed.</p>
+              {/if}
               {#if $farming[pool.addressUniPoll] !== undefined}
 
                 {#if pool.id === 0}
@@ -918,6 +958,10 @@
                       85% distributed liquid along the week
                       15% escrowed within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
                   </p>
+                {/if}
+
+                {#if pool.id === 2}
+                  <p>ℹ️ <strong>DEFI++</strong> Staking Rewards are subject to 52 weeks vesting from the moment they will be claimed.</p>
                 {/if}
                 <br/><br/>
                 

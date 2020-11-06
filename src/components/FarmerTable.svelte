@@ -11,6 +11,38 @@
 
   $: tokensSwapOut = [
     {
+      id: 2,
+      addressTokenToStake: '0x8d1ce361eb68e9e05573443c407d4a3bed23b033',
+      addressUniPoll: '0x59706D38F1452F387563f06b632af7302456fE66',
+      aprEnabled: false,
+      weights: "100%",
+      deprecated: false,
+      poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
+      name: 'DEFI++',
+      description: 'WEEKLY REWARDS (Escrowed)',
+      platform: "🥧 PieDAO",
+      rewards_token: 'DOUGH',
+      weeklyRewards: formatFiat(20000, ',', '.', ''),
+      apy: 1.8,
+      toStakeSymbol: 'DEFI++',
+      toStakeDesc: 'DEFI++ Index',
+      allowance: 0,
+      type: 'Balancer',
+      contractType: 'UniPool',
+      containing: [
+        {
+          symbol: "DEFI++",
+          address: "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+          balance: '0',
+          icon: getTokenImage('0x8d1ce361eb68e9e05573443c407d4a3bed23b033')
+        }
+      ],
+      allowanceKey: '',
+      highlight: false,
+      needAllowance: true,
+      enabled: true,
+    },
+    {
       symbol: "DOUGH/ETH",
       address: "",
       addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
