@@ -17,7 +17,7 @@
       aprEnabled: false,
       weights: "100%",
       deprecated: false,
-      poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
+      poolLink: "#/pools/0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
       name: 'DEFI++',
       description: 'WEEKLY REWARDS (Escrowed)',
       platform: "🥧 PieDAO",
@@ -27,7 +27,7 @@
       toStakeSymbol: 'DEFI++',
       toStakeDesc: 'DEFI++ Index',
       allowance: 0,
-      type: 'Balancer',
+      type: 'PieDAO',
       contractType: 'UniPool',
       containing: [
         {
@@ -207,6 +207,10 @@
           {#if pool.type === 'Balancer'}
           <span>⚖️ Balancer</span>
           {/if}
+          {#if pool.type === 'PieDAO'}
+          <span>🥧 PieDAO</span>
+          {/if}
+          
       </div>
 
       <div class="text-center px-1pc thinborderight w-8pc">
