@@ -5,6 +5,7 @@
   import links from "../config/links.json";
 
   import Web3Button from "./Web3Button.svelte";
+  import TVL from "./Tvl.svelte";
 
   let mobileMenuVisible = false;
 
@@ -19,11 +20,13 @@
     </a>
   </div>
   <div class="right">
-    <a class="link" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
+    <TVL class="link"/>
+    
+    <!-- <a class="link" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
       <button class="table-btn highlight-box">
         Buy $DOUGH
       </button>
-    </a>
+    </a> -->
     <span class="link">🥧</span>
     <a class="link" href="#/stake">
       Stake

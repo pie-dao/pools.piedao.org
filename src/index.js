@@ -18,7 +18,6 @@ pools.set(poolsDefault);
 CoinGecko.sync();
 setInterval(() => {
   CoinGecko.sync();
-  console.log('calling afaing');
 }, 120000);
 
 var app = new App({
