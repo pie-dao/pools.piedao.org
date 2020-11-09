@@ -1,7 +1,4 @@
-import {
-  getTokenImage,
-  formatFiat,
-} from '../components/helpers.js';
+import { getTokenImage, formatFiat } from '../components/helpers.js';
 
 const incentivizedPools = [
   {
@@ -28,13 +25,13 @@ const incentivizedPools = [
         symbol: 'DOUGH',
         address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
         balance: '0',
-        icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
+        icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D'),
       },
       {
         symbol: 'ETH',
         address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
         balance: '0',
-        icon: getTokenImage('eth')
+        icon: getTokenImage('eth'),
       },
     ],
     allowanceKey: '',
@@ -65,13 +62,13 @@ const incentivizedPools = [
         symbol: 'DOUGH',
         address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
         balance: '0',
-        icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
+        icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D'),
       },
       {
         symbol: 'ETH',
         address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
         balance: '0',
-        icon: getTokenImage('eth')
+        icon: getTokenImage('eth'),
       },
     ],
     allowanceKey: '',
@@ -104,7 +101,7 @@ const incentivizedPools = [
         symbol: 'DEFI++',
         address: '0x8D1ce361eb68e9E05573443C407D4A3Bed23B033',
         balance: '0',
-        icon: getTokenImage('0x8d1ce361eb68e9e05573443c407d4a3bed23b033')
+        icon: getTokenImage('0x8d1ce361eb68e9e05573443c407d4a3bed23b033'),
       },
     ],
     allowanceKey: '',
@@ -127,13 +124,13 @@ const incentivizedPools = [
         symbol: 'DEFI+S',
         address: '0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c',
         balance: '0',
-        icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
+        icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c'),
       },
       {
         symbol: 'ETH',
         address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
         balance: '0',
-        icon: getTokenImage('eth')
+        icon: getTokenImage('eth'),
       },
     ],
     rewards_token: 'DOUGH',
@@ -163,13 +160,13 @@ const incentivizedPools = [
         symbol: 'DEFI+L',
         address: '0x78f225869c08d478c34e5f645d07a87d3fe8eb78',
         balance: '0',
-        icon: getTokenImage('0x78f225869c08d478c34e5f645d07a87d3fe8eb78')
+        icon: getTokenImage('0x78f225869c08d478c34e5f645d07a87d3fe8eb78'),
       },
       {
         symbol: 'ETH',
         address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
         balance: '0',
-        icon: getTokenImage('eth')
+        icon: getTokenImage('eth'),
       },
     ],
     rewards_token: 'DOUGH',
@@ -190,7 +187,8 @@ const incentivizedPools = [
     deprecated: true,
     addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
     name: 'DEFI+S / DAI',
-    poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
+    poolLink:
+      'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
     platform: '🦄 Uniswap',
     contractType: 'UniPool',
     containing: [
@@ -198,13 +196,13 @@ const incentivizedPools = [
         symbol: 'DEFI+S',
         address: '0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c',
         balance: '0',
-        icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
+        icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c'),
       },
       {
         symbol: 'DAI',
         address: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
         balance: '0',
-        icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
+        icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F'),
       },
     ],
     type: 'UniswapV2',

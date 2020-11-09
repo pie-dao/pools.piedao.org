@@ -1,16 +1,20 @@
-const defaultColors = ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"];
+/* eslint-disable */
+// Based on https://github.com/daniel-lundin/dom-confetti
+// License MIT, copyright Daniel Lundin 2019
+
+const defaultColors = ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a'];
 
 function createElements(root, elementCount, colors, width, height) {
   return Array.from({ length: elementCount }).map((_, index) => {
-    const element = document.createElement("div");
+    const element = document.createElement('div');
     const color = colors[index % colors.length];
-    element.style["background-color"] = color; // eslint-disable-line space-infix-ops
+    element.style['background-color'] = color; // eslint-disable-line space-infix-ops
     element.style.width = width;
     element.style.height = height;
-    element.style.position = "absolute";
-    element.style.zIndex = "10000";
-    element.style.willChange = "transform, opacity";
-    element.style.visibility = "hidden";
+    element.style.position = 'absolute';
+    element.style.zIndex = '10000';
+    element.style.willChange = 'transform, opacity';
+    element.style.visibility = 'hidden';
     root.appendChild(element);
     return element;
   });
@@ -29,7 +33,7 @@ function randomPhysics(angle, spread, startVelocity, random) {
     angle2D: -radAngle + (0.5 * radSpread - random() * radSpread),
     angle3D: -(Math.PI / 4) + random() * (Math.PI / 2),
     tiltAngle: random() * Math.PI,
-    tiltAngleSpeed: 0.1 + random() * 0.3
+    tiltAngleSpeed: 0.1 + random() * 0.3,
   };
 }
 
@@ -53,7 +57,7 @@ function updateFetti(fetti, progress, dragFriction, decay) {
   const wobbleY = y + 10 * Math.sin(wobble);
   const transform = `translate3d(${wobbleX}px, ${wobbleY}px, ${z}px) rotate3d(1, 1, 1, ${tiltAngle}rad)`;
 
-  fetti.element.style.visibility = "visible";
+  fetti.element.style.visibility = 'visible';
   fetti.element.style.transform = transform;
   fetti.element.style.opacity = 1 - progress;
 
@@ -63,19 +67,19 @@ function updateFetti(fetti, progress, dragFriction, decay) {
 function animate(root, fettis, dragFriction, decay, duration, stagger) {
   let startTime;
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     function update(time) {
       if (!startTime) startTime = time;
       const elapsed = time - startTime;
       const progress = startTime === time ? 0 : (time - startTime) / duration;
-      fettis.slice(0, Math.ceil(elapsed / stagger)).forEach(fetti => {
+      fettis.slice(0, Math.ceil(elapsed / stagger)).forEach((fetti) => {
         updateFetti(fetti, progress, dragFriction, decay);
       });
 
       if (time - startTime < duration) {
         requestAnimationFrame(update);
       } else {
-        fettis.forEach(fetti => {
+        fettis.forEach((fetti) => {
           if (fetti.element.parentNode === root) {
             return root.removeChild(fetti.element);
           }
@@ -93,14 +97,14 @@ const defaults = {
   spread: 45,
   startVelocity: 45,
   elementCount: 50,
-  width: "10px",
-  height: "10px",
-  perspective: "",
+  width: '10px',
+  height: '10px',
+  perspective: '',
   colors: defaultColors,
   duration: 3000,
   stagger: 0,
   dragFriction: 0.1,
-  random: Math.random
+  random: Math.random,
 };
 
 function backwardPatch(config) {
@@ -124,14 +128,15 @@ export default function confetti(root, config = {}) {
     dragFriction,
     duration,
     stagger,
-    random
-  } = Object.assign({}, defaults, backwardPatch(config));
+    random,
+  } = { ...defaults, ...backwardPatch(config) };
   root.style.perspective = perspective;
   const elements = createElements(root, elementCount, colors, width, height);
-  const fettis = elements.map(element => ({
+  const fettis = elements.map((element) => ({
     element,
-    physics: randomPhysics(angle, spread, startVelocity, random)
+    physics: randomPhysics(angle, spread, startVelocity, random),
   }));
 
   return animate(root, fettis, dragFriction, decay, duration, stagger);
 }
+/* eslint-enable */
