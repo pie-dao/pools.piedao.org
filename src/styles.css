@@ -13,6 +13,11 @@
 
 .border-half {border: 0.5px;}
 
+#confetti {
+  position: absolute;
+  left:50%;
+}
+
 #App {
   max-width: 1200px!important;
   margin: 0 auto;
