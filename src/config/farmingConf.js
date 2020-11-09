@@ -116,6 +116,7 @@ const incentivizedPools = [
     addressUniPoll: '0x220f25C2105a65425913FE0CF38e7699E3992B97',
     poolLink: 'https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/',
     name: 'DEFI+S / ETH',
+    id: 3,
     weights: '70/30',
     type: 'Balancer',
     contractType: 'UniPool',
@@ -152,6 +153,7 @@ const incentivizedPools = [
     addressUniPoll: '0xb3c2b0056627cc1dc148d8fc29f5abdf4dd837bc',
     poolLink: 'https://pools.balancer.exchange/#/pool/0xa795600590a7da0057469049ab8f1284baed977e/',
     name: 'DEFI+L/ETH',
+    id: 4,
     weights: '70/30',
     type: 'Balancer',
     contractType: 'Geyser',
@@ -187,6 +189,7 @@ const incentivizedPools = [
     deprecated: true,
     addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
     name: 'DEFI+S / DAI',
+    id: 5,
     poolLink:
       'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
     platform: '🦄 Uniswap',
