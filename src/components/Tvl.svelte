@@ -1,10 +1,12 @@
 <script>
   import BigNumber from 'bignumber.js';
   import orderBy from 'lodash/orderBy';
+  import { get } from 'svelte/store';
+  import { ethers } from "ethers";
   import poolsConfig from "../config/pools.json";
-  import { pools } from '../stores/eth.js';
+  import { pools, contract } from '../stores/eth.js';
   import { farming } from '../stores/eth/writables.js';
-
+  import { piesMarketDataStore } from '../stores/coingecko.js';
   import confetti from '../components/Confetti.js';
 
   import {
@@ -58,6 +60,10 @@
         if($farming[p.addressUniPoll])
             total += $farming[p.addressUniPoll].totalStakedBPTAmount * $farming[p.addressUniPoll].BPTPrice;
       });
+
+      
+
+      
       return total;
   };
 
@@ -87,14 +93,29 @@
     await Promise.all(promises);
     stakedLiquidity = calcStakedLiquidity();
 
+    
+
+    // Staked DEFI++ ONLY
+    const defiplus = await contract({ address: '0x59706d38f1452f387563f06b632af7302456fe66' });
+    const defiplusTotSupply = await defiplus.totalSupply();
+    const amountDefippBN = BigNumber(defiplusTotSupply.toString()).dividedBy(10 ** 18).toNumber();
+
+    const marketData = get(piesMarketDataStore);
+    const defis = marketData['0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c'].market_data.current_price;
+    const defil = marketData['0x78f225869c08d478c34e5f645d07a87d3fe8eb78'].market_data.current_price;
+    const defiplusDollarValue = ((amountDefippBN * 0.7) * defil) + ((amountDefippBN * 0.3) * defis);
+
+    stakedLiquidity += defiplusDollarValue;
+
     if(pieLiquidity+stakedLiquidity > 10000000 && pieLiquidity+stakedLiquidity < 11000000) {
         triggerConfetti();
     }
+
 
   }, false);
 
   </script>
 
-  <button on:click={triggerConfetti} id="totalLiquidityButton" class="table-btn highlight-box">
+  <button id="totalLiquidityButton" class="table-btn highlight-box">
         TVL: {formatFiat((pieLiquidity+stakedLiquidity).toFixed(2).toString())}
   </button>
