@@ -9,7 +9,7 @@
   
   import filter from 'lodash/filter';
   import isNaN from 'lodash/isNaN';
-
+  import rewardEscrewABI from '../config/rewardEscrowABI.json';
   import recipeUnipool from '../config/unipoolABI.json';
   import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
   import geyserABI from '../config/geyser.json';
@@ -83,6 +83,12 @@
   $: geyserApy = {
     apy: 0,
     loaded: false,
+  };
+
+  $: rewardEscrewData = {
+    totalEscrewed: 0,
+    nextVestingWindow: null,
+    numVestingEntries: null 
   };
 
   const estimateUnstake = async () => {
@@ -175,10 +181,10 @@
         days60APY
       };
 
-      console.log('geyserApy', geyserApy);
-
       return earnedOptimistic;
   };
+
+  const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toNumber();
 
   window.addEventListener('price-update', async function (e) {
     isReady = true;
@@ -192,14 +198,6 @@
   $: if($eth.address) {
     if(isReady) {
       incentivizedPools.forEach( async pool => {
-        if( pool.type === 'UniswapV2') {
-          await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-        } 
-        
-        if( pool.type === 'Balancer' && pool.contractType === 'UniPool') {
-          await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-        }
-
         if( pool.type === 'Balancer' && pool.contractType === 'Geyser') {
           await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
           await estimateUnstake();
@@ -210,12 +208,21 @@
 
     if(!intiated) {
       const address = $eth.address;
+      
+      
+      (async () => {
+        const rewardEscrew = await contract({ address: '0x63cbd1858bd79de1a06c3c26462db360b834912d', abi: rewardEscrewABI });
+        const totalEscrewed = await rewardEscrew.totalEscrowedAccountBalance(address);
+        // const nextVestingEntry = await rewardEscrew.getNextVestingEntry(address);
+        const numVestingEntries = await rewardEscrew.numVestingEntries(address);
 
+        rewardEscrewData.totalEscrewed = toNum(totalEscrewed).toFixed(2);
+        // rewardEscrewData.nextVestingWindow = nextVestingEntry;
+        rewardEscrewData.numVestingEntries = numVestingEntries.toString();
+      })();
+      
       incentivizedPools.forEach( async p => {      
         try {
-          if( p.id != 2){
-            calculateAPRBalancer();
-          }
           
           subscribeToBalance(p.addressTokenToStake, address, true);
           subscribeToStaking(p.addressUniPoll, address, true);
@@ -231,7 +238,6 @@
           } else {
             console.log("Getting staked balance from geyser");
             console.log(p.addressUniPoll, "address");
-            //subscribeToStakingEarningsGeyser(p.addressUniPoll, address, true);
             p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
             await estimateUnstake();
           }
@@ -474,7 +480,64 @@
 <div class="content flex flex-col">
     <img class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
     <img class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" />
-    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">    
+    
+    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">
+        <!-- component -->
+        {#if $eth.address}
+        <div class="py-5">
+          <main class="h-full overflow-y-auto">
+              <div class="container flex flex-row items-center justify-center ">
+                    <!-- Cards -->
+                    <div class="flex flex-row items-center">
+                      <!-- Card -->
+                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
+                        <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
+                          💰
+                        </div>
+                        <div>
+                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                            Escrewed Dough Amount
+                          </p>
+                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                            {formatFiat(rewardEscrewData.totalEscrewed, ',', '.', '')}
+                          </p>
+                        </div>
+                      </div>
+                      <!-- Card -->
+                      <!-- <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
+                        <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
+                          ⏳
+                        </div>
+                        <div>
+                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                              Next Vesting time
+                          </p>
+                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                          {formatFiat(rewardEscrewData.nextVestingWindow)}
+                          </p>
+                        </div>
+                      </div> -->
+                      <!-- Card -->
+                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
+                          <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
+                              🧮
+                            </div>
+                        <div>
+                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                            Vesting entries
+                          </p>
+                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                            {rewardEscrewData.numVestingEntries ? rewardEscrewData.numVestingEntries : 'n/a'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+        
+                  </div>
+          </main>
+        </div>
+        {/if}
+
         {#if !pool}
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">Select a pool</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
