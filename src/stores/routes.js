@@ -9,6 +9,7 @@ import Dough from '../pages/Dough.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
+import Markets from '../pages/Markets.svelte';
 
 export const defaultRouteObj = {
   page: Dashboard,
@@ -41,6 +42,8 @@ const formatRoute = (route) => {
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
   switch (route[0] || 'root') {
+    case 'markets':
+      return { page: Markets };
     case 'pie':
       address = (route[1] || '').toLowerCase();
       return { page: PieLanding, params: { address } };
