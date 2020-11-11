@@ -69,15 +69,15 @@
       <div class="font-thin text-center px-1pc w-18pc">
         Liquidity  
       </div>
-      <div class="font-thin text-center px-1pc w-10pc">
-        Market Buy
+      <div class="font-thin text-center px-1pc w-18pc">
+        Get it
       </div>
       <div class="font-thin text-center px-1pc w-10pc">
         Mint tokens
       </div>
-      <div class="font-thin text-center px-1pc w-10pc">
+      <!-- <div class="font-thin text-center px-1pc w-10pc">
         Unwrap
-      </div>
+      </div> -->
       <div class="font-thin ext-center px-1pc w-16pc">
       </div>
     </div>
@@ -112,10 +112,10 @@
           </a>
         </div>
         
-        <div class="text-center px-4 thinborderight w-10pc">
-          <a target="_blank" href={`https://balancer.exchange/#/swap/ether/${pie.address}`}>
+        <div class="text-center px-4 thinborderight w-15pc">
+          <a target={pie.useMintOverBuy ? '' : "_blank"} href={ pie.useMintOverBuy ? `#/pools/${pie.address}` : `https://balancer.exchange/#/swap/ether/${pie.address}`}>
             <button class="table-btn highlight-box min-w-70px">
-              Buy
+              Get {pie.symbol}
             </button>
           </a>
         </div>
@@ -128,13 +128,13 @@
           </a>
         </div>
        
-        <div class="text-center px-4 thinborderight w-10pc">
+        <!-- <div class="text-center px-4 thinborderight w-10pc">
           <a href={`#/pools/${pie.address}/withdraw/multi`}>
             <button class="table-btn min-w-70px">
               Redeem
             </button>
           </a>
-        </div>
+        </div> -->
        
         <div class="text-center px-4 w-16pc">
           <button on:click={() => addToken(pie)} class="table-btn min-w-70px">
