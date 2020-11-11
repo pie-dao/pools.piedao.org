@@ -10,10 +10,11 @@ const swaps = await getPoolSwaps(poolId);
 const metrics = await getPoolMetrics(poolId);
 
 console.log('res', {
-    swaps: orderBy(swaps, ['timestamp'], ['desc']),
+    swaps,
     metadata,
     metrics
 });
+
 })()
 </script>
 <div>

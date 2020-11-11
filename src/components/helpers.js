@@ -819,9 +819,11 @@ export const calculateAPRBalancer = async (
 
     // console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
     // Finished. Start printing
-    const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
 
-    if (null) {
+    const RewardTokenPrice = marketData[`0xad32A8e6220741182940c5aBF610bDE99E737b2D`].market_data.current_price;
+    const DOUGHWeeklyROI = (rewardPerToken * RewardTokenPrice * 100) / BPTPrice;
+
+    if (true) {
       console.log('========== STAKING =========');
       console.log(`There are total   : ${totalBPTAmount} BPT in the Balancer Contract.`);
       console.log(`There are total   : ${totalStakedBPTAmount} BPT staked in Staking pool. \n`);
@@ -883,6 +885,8 @@ export const calculateAPRBalancer = async (
       ethStaked: totalWETHAmount,
       totalLiquidity,
     };
+
+    console.log('res', res)
 
     const updates = {};
     updates[addressStakingPool] = res;
