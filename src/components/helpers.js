@@ -819,7 +819,8 @@ export const calculateAPRBalancer = async (
 
     // console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
     // Finished. Start printing
-    const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
+    const RewardTokenPrice = marketData[`0xad32A8e6220741182940c5aBF610bDE99E737b2D`].market_data.current_price;
+    const DOUGHWeeklyROI = (rewardPerToken * RewardTokenPrice * 100) / BPTPrice;
 
     if (null) {
       console.log('========== STAKING =========');
