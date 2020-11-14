@@ -13,7 +13,7 @@ const incentivizedPools = [
     platform: '⚖️ Balancer',
     description: 'WEEKLY REWARDS',
     rewards_token: 'DOUGH',
-    weeklyRewards: formatFiat(110000, ',', '.', ''),
+    weeklyRewards: formatFiat(90000, ',', '.', ''),
     apy: 1.8,
     toStakeSymbol: 'BPT',
     toStakeDesc: 'Balancer: DOUGH/ETH 80/20',
