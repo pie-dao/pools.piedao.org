@@ -8,7 +8,7 @@ import { defaultEth, eth } from "./writables.js";
 import { bumpLifecycle, updateCurrentBlock } from "./lifecycle.js";
 import { resetContractCache } from "./contracts.js";
 
-export const defaultProvider = new ethers.providers.InfuraProvider();
+export const defaultProvider = new ethers.providers.InfuraProvider('homestead', 'e106b2b27c0f4941be1f2c183a20b3ea');
 defaultProvider.on("block", updateCurrentBlock);
 
 eth.set({ ...get(eth), provider: defaultProvider });
@@ -59,8 +59,11 @@ export const registerConnection = async (newWeb3) => {
     signer.getAddress(),
   ]);
 
+  window.localStorage.setItem('address', address);
+
   const shortAddress = shortenAddress(address);
   const icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
+
 
   eth.set({
     address,

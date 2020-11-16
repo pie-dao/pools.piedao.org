@@ -1,7 +1,8 @@
 {
   "icons": {
     "downArrow": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/downArrow.svg",
-    "hamburger": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/hamburger.svg"
+    "hamburger": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/hamburger.svg",
+    "timesLight": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/timesLight.svg"
   },
   "logos": {
     "aragon": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/aragon.svg",
@@ -11,9 +12,10 @@
     "etherscan": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/etherscan.svg",
     "0x3212b29E33587A00FB1C83346f5dBFA69A458923": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/imbtc.png",
     "0x5228a22e72ccC52d415EcFd199F99D0665E7733b": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/pBTC.svg",
-    "piedao": "https://piedao.org/assets/logo.png",
+    "piedao": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Complete%20Black.png",
     "piedao_clean": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Icon%20Clean.png",
     "quantstamp": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/quantstamp.svg",
+    "eth": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png",
     "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sBTC.png",
     "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sUSD.png",
     "0x0000000000085d4780B73119b644AE5ecd22b376": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/tusd.svg",
@@ -21,7 +23,26 @@
     "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/usdc.svg",
     "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/wbtc.png",
     "0x880873a96ce38c7fd39dc714592902b069bde048": "https://i.imgur.com/m7FKG5u.png",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": "https://i.imgur.com/m7FKG5u.png",
-    "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": "https://i.imgur.com/m7FKG5u.png"
-  }
+    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BS.svg",
+    "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": "https://i.imgur.com/m7FKG5u.png",
+    "0xad32A8e6220741182940c5aBF610bDE99E737b2D": "https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png",
+    "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": "https://assets.coingecko.com/coins/images/12504/small/uniswap-uni.png?1600306604",
+    "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": "https://assets.coingecko.com/coins/images/12645/small/AAVE.png?1601374110",
+    "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e": "https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330",
+    "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg",
+    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg",
+    "0x8d1ce361eb68e9e05573443c407d4a3bed23b033":"https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/DeFi%2B%2B.svg"
+  },
+  "amazingrewards":"https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards2.png",
+  "banner": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true",
+  "stake": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/stake.png",
+  "claim": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/claim.png",
+  "withdraw": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/withdraw.png",
+  "herodough": "https://raw.githubusercontent.com/pie-dao/brand/master/dough_hero.png",
+  "tokenmigration": "https://i.ibb.co/tY41vvx/migra.png",
+  "liquiditymining": "https://i.ibb.co/3YyvfzX/farming.png",
+  "vestingperiod": "https://i.ibb.co/VSyRLBY/astro.png",
+  "howtomigrate": "https://i.ibb.co/7zwSFds/howtomig.png"
+
+
 }

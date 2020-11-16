@@ -1,37 +1,64 @@
-import BigNumber from "bignumber.js";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import { ethers } from "ethers";
+import BigNumber from 'bignumber.js';
+import WalletConnectProvider from '@walletconnect/web3-provider';
 
-import { allowances, eth } from "./eth/writables.js";
-import { displayNotification } from "../notifications";
-import { functionKey } from "./eth/keys.js";
-import { get } from "svelte/store";
-import { observableContract } from "./eth/contracts.js";
-import { registerConnection, resetConnection } from "./eth/connection.js";
-import { subject } from "./eth/observables.js";
+import { erc20 } from '@pie-dao/abis';
+import { ethers } from 'ethers';
+import { get } from 'svelte/store';
 
-export { allowances, balances, eth, pools } from "./eth/writables.js";
-export { balanceKey, functionKey } from "./eth/keys.js";
-export { bumpLifecycle } from "./eth/lifecycle.js";
-export { subject } from "./eth/observables.js";
+import displayNotification from '../notifications';
+
+import { allowances, eth } from './eth/writables.js';
+import { functionKey } from './eth/keys.js';
+import { observableContract } from './eth/contracts.js';
+import { registerConnection, resetConnection } from './eth/connection.js';
+import { subject } from './eth/observables.js';
+import { trackEthBalance } from './eth/lifecycle.js';
+
+export { allowances, balances, eth, pools } from './eth/writables.js';
+export { balanceKey, functionKey } from './eth/keys.js';
+export { bumpLifecycle } from './eth/lifecycle.js';
+export { subject } from './eth/observables.js';
 
 const Web3Modal = window.Web3Modal.default;
 const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
-      infuraId: "8043bb2cf99347b1bfadfb233c5325c0" // required
-    }
-  }
+      infuraId: 'e106b2b27c0f4941be1f2c183a20b3ea', // required
+    },
+  },
+  injected: {
+    package: null,
+  },
 };
 
 const web3Modal = new Web3Modal({
-  network: "mainnet", // optional
+  network: 'mainnet', // optional
   cacheProvider: false, // optional
   providerOptions, // required
 });
 
 // CONNECTION MANAGEMENT
+
+export const connectWeb3Cached = async () => {
+  try {
+    resetConnection();
+
+    const web3 = await web3Modal.connectTo('injected');
+
+    if (!web3) {
+      console.log('NOT CONNECTED');
+      return;
+    }
+
+    console.log('CONNECTED', web3);
+
+    registerConnection(web3);
+  } catch (e) {
+    console.error('ERROR CONNECTION TO WEB3', e);
+    resetConnection();
+  }
+};
 
 export const connectWeb3 = async () => {
   try {
@@ -40,50 +67,69 @@ export const connectWeb3 = async () => {
     const web3 = await web3Modal.connect();
 
     if (!web3) {
-      console.log("NOT CONNECTED");
+      console.log('NOT CONNECTED');
       return;
     }
 
-    console.log("CONNECTED", web3);
+    console.log('CONNECTED', web3);
 
     registerConnection(web3);
   } catch (e) {
-    console.error("ERROR CONNECTION TO WEB3", e);
+    console.error('ERROR CONNECTION TO WEB3', e);
     resetConnection();
   }
 };
 
 // SUBSPACE(ISH)
 
-export const contract = async ({ abi, address }) => await observableContract({ abi, address });
-export const trackBlock = async () => subject("block");
-export const trackBlockNumber = async () => subject("blockNumber");
-export const trackGasPrice = async () => subject("gasPrice");
+export const contract = ({ abi, address }) => observableContract({ abi, address }); // async
+export const trackBalance = async (address, tokenAddress) => {
+  const ethData = get(eth);
+  let walletAddress = address;
+
+  if (!walletAddress) {
+    if (!ethData.address) {
+      throw new Error(
+        'stores/eth#trackBalance - an wallet must be connected or a wallet address passed as the first argument',
+      );
+    }
+    walletAddress = ethData.address;
+  }
+
+  if (tokenAddress && tokenAddress !== ethers.constants.AddressZero) {
+    const tokenContract = await contract({ abi: erc20, address: tokenAddress });
+    return tokenContract.trackBalance(walletAddress);
+  }
+
+  return trackEthBalance(walletAddress);
+};
+export const trackBlock = async () => subject('block');
+export const trackBlockNumber = async () => subject('blockNumber');
+export const trackGasPrice = async () => subject('gasPrice');
 
 // Shortcuts
 
 export const approve = async (address, spender, amount) => {
   const erc20Contract = await contract({ address });
-  const { hash } = await erc20Contract.approve(spender, amount);
+  const { hash } = await erc20Contract['approve(address,uint256)'](spender, amount);
+
   const { emitter } = displayNotification({ hash });
   const symbol = await erc20Contract.symbol();
   let currentBlockNumber;
 
-  await new Promise((resolve) =>
-    emitter.on("txConfirmed", ({ blockNumber }) => {
-      currentBlockNumber = blockNumber;
-      resolve();
-      return { message: `${symbol} unlocked`, type: "success" };
-    })
-  );
+  await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
+    currentBlockNumber = blockNumber;
+    resolve();
+    return { message: `${symbol} unlocked`, type: 'success' };
+  }));
 
   const decimals = await erc20Contract.decimals();
   const updates = {};
   const args = [get(eth).address, spender];
-  const key = functionKey(address, "allowance", args);
+  const key = functionKey(address, 'allowance', args);
 
   updates[key] = BigNumber(amount.toString()).dividedBy(10 ** decimals);
-  console.log("update allowances", updates[key].toString(), { ...get(allowances), ...updates });
+  console.log('update allowances', updates[key].toString(), { ...get(allowances), ...updates });
   allowances.set({ ...get(allowances), ...updates });
   const lastBlock = get(eth).currentBlockNumber;
   if (currentBlockNumber > lastBlock) {

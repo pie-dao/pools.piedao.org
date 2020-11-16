@@ -5,10 +5,10 @@ import {
   validateIsString,
 } from "@pie-dao/utils";
 
-export const balanceKey = (token, address) => {
+export const balanceKey = (token, address, method = '') => {
   validateIsAddress(token);
   validateIsAddress(address);
-  return `${token}.${address}`.toLowerCase();
+  return `${token}.${address}${method}`.toLowerCase();
 };
 
 export const functionKey = (contractAddress, functionName, functionArgs, overrides = {}) => {

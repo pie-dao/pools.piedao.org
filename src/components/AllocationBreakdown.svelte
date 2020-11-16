@@ -1,14 +1,15 @@
 <script>
-  import { _ } from "svelte-i18n";
+  import { _ } from 'svelte-i18n';
 
-  import { onMount } from "svelte";
+  import { onMount } from 'svelte';
 
-  import AllocationChart from "./AllocationChart.svelte";
-  import poolsConfig from "../config/pools.json";
+  import AllocationChart from './AllocationChart.svelte';
+  import poolsConfig from '../config/pools.json';
 
-  import { pools } from "../stores/eth.js";
-  import { amountFormatter, subscribeToPoolWeights } from "./helpers.js";
+  import { pools } from '../stores/eth.js';
+  import { amountFormatter, subscribeToPoolWeights } from './helpers.js';
 
+  let defaultAllocation = true;
   export let token;
   export let leftWidth;
 
@@ -16,9 +17,15 @@
   export let rightHeight;
 
   let balanceKeys = [];
+  let values = [];
 
-  $: subscribeToPoolWeights(token);
-  $: values = $pools[token] || poolsConfig[token].composition;
+  //$: subscribeToPoolWeights(token);
+  $: values = ((useConfig, storeValues) => {
+    if (useConfig) {
+      return poolsConfig[token].composition;
+    }
+    return storeValues;
+  })(defaultAllocation, $pools[token]);
   $: leftHeight = leftWidth;
   $: valuesMarginTop = (rightHeight - labelsHeight) / 2;
   $: valuesStyle = `margin-top: ${valuesMarginTop}px`;
@@ -27,7 +34,11 @@
 </script>
 
 <div class="allocation-breakdown-container">
-  <h1>{$_('general.allocation')} {$_('general.breakdown')}</h1>
+  <h1>
+    {$_('general.allocation')}
+    {$_('general.breakdown')}
+    <button on:click={() => (defaultAllocation = !defaultAllocation)}>{defaultAllocation}</button>
+  </h1>
   <div class="row">
     <div class="left" bind:offsetWidth={leftWidth}>
       <AllocationChart height={leftHeight} width={leftWidth} margin={20} {values} />
@@ -36,7 +47,7 @@
       <div class="labels" style={valuesStyle} bind:offsetHeight={labelsHeight}>
         {#each values as value}
           <p class="label" style={bgColor(value)}>
-            {amountFormatter({ amount: value.percentage, displayDecimals: 2 })}% {value.symbol}
+              {amountFormatter({ amount: value.percentage, displayDecimals: 2 })}% {value.symbol}
           </p>
         {/each}
       </div>

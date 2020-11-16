@@ -1,1 +1,53 @@
-{}
+{
+    "brands": {
+        "aragon": "Aragon",
+        "balancer": "Balancer Labs",
+        "discord": "Discord",
+        "etherscan": "Etherscan",
+        "github": "Github",
+        "medium": "Medium",
+        "piedao": "PieDAO",
+        "quantstamp": "Quantstamp",
+        "twitter": "Twitter"
+    },
+    "defi": {
+        "liquidity": {
+            "mining": "Extraction de liquidité"
+        }
+    },
+    "general": {
+        "add": "Ajouter",
+        "allocation": "Allocation",
+        "amount": "Montant",
+        "asset": "Actif",
+        "balance": "Balance",
+        "breakdown": "Répartition",
+        "close": "Fermé",
+        "docs": "Docs",
+        "documentation": "Documentation",
+        "duration": {
+            "annualized": "Annualized"
+        },
+        "forum": "Forum",
+        "home": "Home",
+        "info": "Info",
+        "liquidity": "Liquidité",
+        "loading": "Chargement",
+        "logo": "Logo",
+        "multi": "Multi",
+        "program": "Program",
+        "returns": "Retour",
+        "single": "Unique",
+        "tokens": "Tokens",
+        "whitepaper": "Whitepaper",
+        "withdraw": "Retirer",
+        "your": "Votre"
+    },
+    "piedao": {
+        "aragonLink": "piedao.aragon",
+        "audit.result": "Resultat de l'audit",
+        "check.contract.on": "Vérifiez le contract sur",
+        "multi.asset.according.to.allocation": "selon son allocation",
+        "multi.asset.enables.minting": "La saisie Multi Actifs vous permet de monnayer"
+    }
+}

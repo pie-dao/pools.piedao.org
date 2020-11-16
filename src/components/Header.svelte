@@ -5,6 +5,7 @@
   import links from "../config/links.json";
 
   import Web3Button from "./Web3Button.svelte";
+  import TVL from "./Tvl.svelte";
 
   let mobileMenuVisible = false;
 
@@ -12,26 +13,33 @@
     mobileMenuVisible = !mobileMenuVisible;
   };
 </script>
-
 <div class="header-container">
   <div class="left">
-    <a href={links.root}>
+    <a href="#/">
       <img src={images.logos.piedao} alt={$_('general.logo')} />
     </a>
   </div>
   <div class="right">
+    <TVL class="link"/>
     
-    <a class="link" href="#/pie/0x880873a96ce38c7fd39dc714592902b069bde048">
-      DEFI++
+    <!-- <a class="link" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
+      <button class="table-btn highlight-box">
+        Buy $DOUGH
+      </button>
+    </a> -->
+    <span class="link">🥧</span>
+    <a class="link" href="#/stake">
+      Stake
     </a>
-    <a class="link" href="#/pie/0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e">
-      USD++
-    </a>
-    <a class="link" href="#/pie/0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd">
-      BTC++
+    <span class="link">🥧</span>
+
+    <a class="link" href="#/dough" rel="noopener noreferrer">
+      $DOUGH
     </a>
 
-    <span class="link">🥧</span>
+    <a class="link" href={links.vision} target="_blank" rel="noopener noreferrer">
+      {$_('general.vision')}
+    </a>
 
     <a class="link" href={links.dao} target="_blank" rel="noopener noreferrer">
       {$_('piedao.aragonLink')}
@@ -39,6 +47,7 @@
     <a class="link" href={links.docs} target="_blank" rel="noopener noreferrer">
       {$_('general.docs')}
     </a>
+    
     <Web3Button />
     <div class="mobile-placeholder" />
 
@@ -64,6 +73,41 @@
                 rel="noopener noreferrer"
                 target="_blank">
                 {$_('general.docs')}
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href="#/dough">
+                $DOUGH
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">
+                DEFI+S
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href="#/pie/0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e">
+                USD++
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href="#/pie/0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd">
+                BTC++
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href="#/stake">
+                Stake
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href={links.vision} target="_blank" rel="noopener noreferrer">
+                {$_('general.vision')}
+              </a>
+            </li>
+            <li>
+              <a class="navbar-item" href={links.dao} target="_blank" rel="noopener noreferrer">
+                {$_('piedao.aragonLink')}
               </a>
             </li>
           </ul>

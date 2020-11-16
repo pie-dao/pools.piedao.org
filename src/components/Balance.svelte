@@ -40,6 +40,6 @@
   </div>
   <div class="right">
     <span class={yourBalanceClass}>{$_('your')} {$_('balance')}</span>
-    <h5 class={balanceClass}>{balance} {symbol}</h5>
+    <h5 class={balanceClass}>{balance} </h5>
   </div>
 </div>

@@ -1,0 +1,838 @@
+<script>
+  import { ethers } from "ethers";
+  import { onMount } from 'svelte';
+  import BigNumber from "bignumber.js";
+  import { validateIsAddress } from '@pie-dao/utils';
+  import { _ } from "svelte-i18n";
+  import images from "../config/images.json";
+  import { currentRoute } from '../stores/routes.js';
+  
+  import filter from 'lodash/filter';
+  import isNaN from 'lodash/isNaN';
+  import rewardEscrewABI from '../config/rewardEscrowABI.json';
+  import recipeUnipool from '../config/unipoolABI.json';
+  import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
+  import geyserABI from '../config/geyser.json';
+  import { get } from "svelte/store";
+  import displayNotification from "../notifications.js";
+  import { piesMarketDataStore } from '../stores/coingecko.js';
+  import { farming } from '../stores/eth/writables.js';
+  import {
+    amountFormatter,
+    fetchPieTokens,
+    fetchPooledTokens,
+    maxAmount,
+    getTokenImage,
+    fetchEthBalance,
+    fetchCalcToPie,
+    toFixed,
+    calculateAPRBalancer,
+    calculateAPRUniswap,
+    formatFiat,
+    subscribeToBalance,
+    subscribeToAllowance,
+    subscribeToStaking,
+    subscribeToStakingEarnings,
+    subscribeToStakingEarningsGeyser,
+  } from "../components/helpers.js";
+
+  import {
+    allowances,
+    functionKey,
+    approveMax,
+    balanceKey,
+    balances,
+    connectWeb3,
+    contract,
+    eth,
+    pools,
+    bumpLifecycle,
+    subject,
+  } from "../stores/eth.js";
+
+  import incentivizedPools from '../config/farmingConf.js';
+
+  const isAddress = (thing) => (
+    thing
+    && ethers.utils.isHexString(thing)
+    && thing.length === 42
+  );
+
+  let ethKey;
+  let ethBalance = 0;
+  let intiated = false;
+  let amountToStake = 0;
+  $: amountToClaim = pool && $balances[pool.KeyUnipoolEarnedBalance] ? $balances[pool.KeyUnipoolEarnedBalance] : "0.00000000";
+  let amountToUnstake = 0;
+  let isReady = false;
+  
+  const referral = $currentRoute.params.referral || window.localStorage.getItem('referral');
+
+
+  $: needAllowance = true;
+
+  $: {
+    if(pool)
+      needAllowance = needApproval(pool, ($allowances[pool.allowanceKey] || BigNumber(0)));
+  }
+
+  $: pool = null;
+
+  $: geyserEarned = BigNumber(0);
+
+  $: geyserApy = {
+    apy: 0,
+    loaded: false,
+  };
+
+  $: rewardEscrewData = {
+    totalEscrewed: 0,
+    nextVestingWindow: null,
+    numVestingEntries: null 
+  };
+
+  const estimateUnstake = async () => {
+      const { provider, signer } = get(eth);
+      let contract = new ethers.Contract('0xb3c2b0056627cc1dc148d8fc29f5abdf4dd837bc', geyserABI, provider);
+      let overrides = {
+        from: $eth.address
+      }
+
+      let data = await contract.callStatic.updateAccounting(
+        overrides
+      );
+
+      let loaded = false;
+      let _totalStakingShareSeconds = data[3];
+      let stakingShareSeconds = data[2];
+      let totalUnlocked = data[1];
+      let _pool = incentivizedPools[4];
+      let apy8Wweeks = 0;
+      let apy = 0;
+      let rewardsPerBPT = 0;
+      let $RewardsPerBPT = 0;
+      let days60APY = 0;
+      let apyV2 = 0;
+      let apyV2NotOptimistic = 0;
+      let yourStake = 0;
+      let seconds = BigNumber(0);
+      let rewardPerSecond = 0;
+      let rewardPerWeek = 0;
+      let rewardPer8Week = 0;
+      let unstakeNowRewards = 0;
+      let totalUserRewards = totalUnlocked.mul(stakingShareSeconds).div(_totalStakingShareSeconds);
+      let earnedOptimistic = BigNumber(totalUserRewards.toString()).dividedBy(10 ** 18);
+      let tokenStakedPrice = 0;
+      let DOUGHPrice = 0;
+      let BPTPrice = 0;
+
+      let balanceStaked = await contract.balanceOf($eth.address);
+      
+      if($farming[_pool.addressUniPoll] !== undefined) {
+        DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll] && $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice ? $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice : 0;
+        BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0;
+
+        tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
+
+        const amount = balanceStaked;
+
+        const bnJsAmount = BigNumber(balanceStaked.toString()).dividedBy(10 ** 18);
+        unstakeNowRewards = await contract.callStatic.unstakeQuery(
+          amount,
+          overrides
+        );
+
+        unstakeNowRewards = (BigNumber(unstakeNowRewards.toString()).dividedBy(10 ** 18)).toNumber();
+        seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( bnJsAmount ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
+
+        yourStake = bnJsAmount.toNumber();
+
+        rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
+        $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
+
+        let rewardsPerBPTNotOptimistic = unstakeNowRewards / yourStake;
+        let $RewardsPerBPTNotOptimistic = rewardsPerBPTNotOptimistic * DOUGHPrice;
+        let days60APYNotOptimistic = $RewardsPerBPTNotOptimistic*100/BPTPrice;
+        
+        days60APY = $RewardsPerBPT*100/BPTPrice;
+        apyV2 = days60APY * (31536000 / seconds.toNumber() )
+
+        apyV2NotOptimistic =  days60APYNotOptimistic * (31536000 / seconds.toNumber() );
+        loaded = true;
+      }
+
+      
+      geyserApy = {
+        BPTPrice,
+        rewardsPerBPT,
+        DOUGHPrice,
+        seconds: seconds.toNumber(),
+        earnedOptimistic: earnedOptimistic.toFixed(4),
+        earnedNotOptimistic: unstakeNowRewards.toFixed(4),
+        yourStake,
+        apy: apyV2.toFixed(2),
+        apyNotOptimistic: apyV2NotOptimistic.toFixed(2),
+        totalStakingShareSeconds: _totalStakingShareSeconds.toString(),
+        stakingShareSeconds: stakingShareSeconds.toString(),
+        totalUnlocked: totalUnlocked.toString(),
+        totalUserRewards: earnedOptimistic.toString(),
+        $RewardsPerBPT,
+        loaded,
+        days60APY
+      };
+
+      return earnedOptimistic;
+  };
+
+  const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toNumber();
+
+  window.addEventListener('price-update', async function (e) {
+    isReady = true;
+    try {
+      await estimateUnstake();
+    } catch(e){
+      console.log('estimateUnstake', e);
+    }
+  }, false);
+
+  $: if($eth.address) {
+    if(isReady) {
+      incentivizedPools.forEach( async pool => {
+        if( pool.type === 'Balancer' && pool.contractType === 'Geyser') {
+          await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+          await estimateUnstake();
+        }
+      });
+      
+    }
+
+    if(!intiated) {
+      const address = $eth.address;
+      
+      
+      (async () => {
+        const rewardEscrew = await contract({ address: '0x63cbd1858bd79de1a06c3c26462db360b834912d', abi: rewardEscrewABI });
+        const totalEscrewed = await rewardEscrew.totalEscrowedAccountBalance(address);
+        // const nextVestingEntry = await rewardEscrew.getNextVestingEntry(address);
+        const numVestingEntries = await rewardEscrew.numVestingEntries(address);
+
+        rewardEscrewData.totalEscrewed = toNum(totalEscrewed).toFixed(2);
+        // rewardEscrewData.nextVestingWindow = nextVestingEntry;
+        rewardEscrewData.numVestingEntries = numVestingEntries.toString();
+      })();
+      
+      incentivizedPools.forEach( async p => {      
+        try {
+          
+          subscribeToBalance(p.addressTokenToStake, address, true);
+          subscribeToStaking(p.addressUniPoll, address, true);
+          subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
+
+          p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
+          p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, address);
+
+          if(p.contractType === "UniPool") {
+            subscribeToStakingEarnings(p.addressUniPoll, address, true);
+            p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
+            p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
+          } else {
+            console.log("Getting staked balance from geyser");
+            console.log(p.addressUniPoll, "address");
+            p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
+            await estimateUnstake();
+          }
+        } catch (e) {
+          console.log(e);
+        }
+        
+      });
+      intiated = true;
+      bumpLifecycle();
+    }
+  }
+
+  const needApproval = (pool, allowance) => {
+    if( allowance.isEqualTo(0) ) return true;
+    if( allowance.isGreaterThanOrEqualTo( BigNumber(amountToStake)) ) return false;
+  }
+
+  const action = async (pool, actionType) => {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    const { addressTokenToStake, addressUniPoll } = pool;
+
+    if (actionType === "unlock") {
+      console.log('calling', addressTokenToStake, addressUniPoll);
+      await approveMax(addressTokenToStake, addressUniPoll);
+      needAllowance = false;
+    }
+  };
+
+  const unstake = async () => {
+    if(amountToUnstake === 0) {
+      displayNotification({ message: "Amount is zero", type: "hint" });
+      return;
+    }
+
+    let requestedAmount = BigNumber(amountToUnstake);
+    const max = $balances[pool.KeyUnipoolBalance];
+
+    if(requestedAmount.isGreaterThan(max)) {
+      requestedAmount = max;
+      amountToUnstake = max.toNumber();
+      displayNotification({ message: "Amount set to max", type: "hint" });
+    }
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    let unipool;
+    let emitterToUse;
+    const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
+
+    if(pool.contractType === "UniPool") {
+      unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+      const { emitter } = displayNotification(await unipool.withdraw(amountWei) );
+      emitterToUse = emitter;
+    } else {
+      unipool = await contract({ address: pool.addressUniPoll, abi: geyserABI });
+      const { emitter } = displayNotification(await unipool.unstake(amountWei, 0x0) );
+      emitterToUse = emitter;
+    }
+  
+
+    emitterToUse.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} unstaked successfully`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  }
+
+  const exit = async () => {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    const unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+
+    const { emitter } = displayNotification(await unipool.exit() );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `You claimed and unstaked`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  }
+
+  const stake = async () => {
+    if(amountToStake === 0) {
+      displayNotification({ message: "Amount it zero", type: "hint" });
+      return;
+    }
+    let requestedAmount = BigNumber(amountToStake);
+    const max = $balances[pool.KeyAddressTokenToStake];
+    let referralValidated = '0x4efD8CEad66bb0fA64C8d53eBE65f31663199C6d'; //Agent address
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    if(requestedAmount.isGreaterThan(max)) {
+      requestedAmount = max;
+      amountToStake = max.toNumber();
+      displayNotification({ message: "Amount set to max", type: "hint" });
+    }
+
+    if(referral && isAddress(referral) && referral.toLowerCase() !== $eth.address.toLowerCase()) {
+      console.log('Im setting the referral to '+referral);
+      referralValidated = referral;
+    }
+
+    const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
+    let unipool;
+    let emitterToUse;
+    if(pool.contractType === "UniPool") {
+      unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+      console.log(`Staking ${amountToStake} ${pool.toStakeSymbol} with referral ${referralValidated}`)
+      const { emitter } = displayNotification(await unipool["stake(uint256,address)"](amountWei, referralValidated) );
+      emitterToUse = emitter;
+    } else {
+      unipool = await contract({ address: pool.addressUniPoll, abi: geyserABI });
+      const { emitter } = displayNotification(await unipool["stake(uint256)"](amountWei) );
+      emitterToUse = emitter;
+    }
+
+    emitterToUse.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} staked successfully`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  }
+
+  const getRewards = async () => {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    const unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
+    const { emitter } = displayNotification(await unipool.getReward() );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} staked successfully`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  }
+
+</script>
+
+
+
+<div class="content flex flex-col">
+    <img class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
+    <img class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" />
+    
+    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">
+        <!-- component -->
+        {#if $eth.address}
+        <div class="py-5">
+          <main class="h-full overflow-y-auto">
+              <div class="container flex flex-row items-center justify-center ">
+                    <!-- Cards -->
+                    <div class="flex flex-row items-center">
+                      <!-- Card -->
+                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
+                        <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
+                          💰
+                        </div>
+                        <div>
+                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                            DOUGH in Escrow
+                          </p>
+                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                            {formatFiat(rewardEscrewData.totalEscrewed, ',', '.', '')}
+                          </p>
+                        </div>
+                      </div>
+                      <!-- Card -->
+                      <!-- <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
+                        <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
+                          ⏳
+                        </div>
+                        <div>
+                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                              Next Vesting time
+                          </p>
+                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                          {formatFiat(rewardEscrewData.nextVestingWindow)}
+                          </p>
+                        </div>
+                      </div> -->
+                      <!-- Card -->
+                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
+                          <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
+                              🧮
+                            </div>
+                        <div>
+                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                            Vesting entries
+                          </p>
+                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                            {rewardEscrewData.numVestingEntries ? rewardEscrewData.numVestingEntries : 'n/a'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+        
+                  </div>
+          </main>
+        </div>
+        {/if}
+
+        {#if !pool}
+        <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">Select a pool</h1>
+        <div class="flex flex-col w-full justify-center md:flex-row">
+            {#each filter(incentivizedPools, { deprecated: false }) as ammPool}
+              {#if ammPool.highlight }
+                <div class="highlight-box farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
+                  <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
+                    <div class="title text-lg"> <a href={ammPool.poolLink} target="_blank"> {ammPool.name} </a></div>
+                    <div class="subtitle font-thin">{ammPool.description}</div>
+                    <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
+                    <div class="apy"> <a href={ammPool.poolLink} target="_blank"> {ammPool.platform} </a></div>
+                    <div class="apy">
+                      {#if $farming[ammPool.addressUniPoll] !== undefined}
+                        {$farming[ammPool.addressUniPoll].apr}
+                      {:else}
+                        n/a
+                      {/if}
+                    </div>
+                    {#if ammPool.enabled}
+                      <button on:click={() => pool = ammPool } class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
+                    {:else}
+                      <button disabled class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Oct 3rd, 6:00pm UTC</button>
+                    {/if}
+                </div>
+              {:else}
+                <div class="farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
+                  <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
+                    <div class="title text-lg"> <a href={ammPool.poolLink} target="_blank"> {ammPool.name} </a></div>
+                    <div class="subtitle font-thin">{ammPool.description}</div>
+                    <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
+                    <div class="apy">{ammPool.platform}</div>
+                    
+                    {#if ammPool.contractType === 'Geyser'}
+                      <div style="position:absolute; top:10px; right:10px;" class="apy"><a target="_blank" href="https://forum.piedao.org/t/pip-20-week-2-incentive-programs/197">ℹ️</a></div>
+                      
+                      {#if geyserApy.loaded === false}
+                        Loading 🧘‍♀️
+                      {/if}
+                      
+                      {#if geyserApy.loaded && geyserApy.yourStake > 0}
+                        <div class="apy">{geyserApy.apy} %</div>
+                      {/if}
+
+                      {#if geyserApy.loaded && geyserApy.yourStake == 0}
+                        <div class="apy">You are not staking</div>
+                      {/if}
+
+                    {:else}
+                      <div class="apy">
+                        {#if $farming[ammPool.addressUniPoll] !== undefined}
+                          {$farming[ammPool.addressUniPoll].apr}
+                        {:else}
+                          n/a
+                        {/if}
+                      </div>
+                    {/if}
+
+                    {#if ammPool.enabled}
+                      <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
+                    {:else}
+                      <button disabled class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Oct 3rd, 6:00pm UTC</button>
+                    {/if}
+                </div>
+              {/if}
+            {/each}
+        </div>
+
+        <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">⚠️ Deprecated pools</h1>
+        <div class="flex flex-col w-full justify-center md:flex-row">
+          {#each filter(incentivizedPools, { deprecated: true }) as ammPool}
+            <div class="farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
+              <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
+                <div class="title text-lg"> <a href={ammPool.poolLink} target="_blank"> {ammPool.name} </a></div>
+                <div class="subtitle font-thin">{ammPool.description}</div>
+                <div class="apy">{ammPool.platform}</div>
+
+                {#if ammPool.enabled}
+                  <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
+                {:else}
+                  <button disabled class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Oct 3rd, 6:00pm UTC</button>
+                {/if}
+            </div>
+          {/each}
+        </div>
+        
+        {:else}
+            <div>
+              <button on:click={() => pool = null } class="md:w-1 float-left btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Go back</button>
+              {#if pool.KeyAddressTokenToStake && $balances[pool.KeyUnipoolBalance] > 0 && pool.contractType !== 'Geyser' }
+                <button on:click={() => exit() } class="float-right btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim and Unstake</button>
+              {/if}
+            </div>
+
+            {#if pool.id === 0 }
+            <div class="m-3 box-border">
+              <span class="text-lg">🥳</span> The migration of BPTs to this new staking contract is further incentivized with an additional bonus of <strong>15% of weekly rewards</strong>.
+              To be eligible for the migration rewards, you need to <strong>migrate exactly the same amount staked in the previous pool</strong>
+              <br/><br/>
+              <ol>
+                <li>👉 Unstake from the <button class="underline" on:click={() => pool = incentivizedPools[1] }>OLD staking contract</button></li>
+                <li>🥩 Stake in this staking contract</li>
+                <li>📝 <a class="underline" href="https://forms.gle/2g8ekufLErpZ8jwD9">Fill the form</a> with the 2 tx by November 6th at 00:00 UTC. (anonymous)</li>
+              </ol>
+            </div>
+            {/if}
+
+            {#if pool.id === 1 }
+              <div class="m-3 box-border">
+                <span class="text-lg">⚠️</span> Rewards for this staking contract expire Sat 31st, 7pm UTC. 
+                  {#if $balances[pool.KeyUnipoolBalance].toNumber() > 0}
+                  Migrate exactly <strong>{$balances[pool.KeyUnipoolBalance].toNumber()} BPT</strong> to the new pool to earn <strong>15% extra</strong> of the weekly rewards.
+                <br/><br/>
+                {/if}
+                <ol>
+                  {#if $balances[pool.KeyUnipoolBalance].toNumber() > 0}
+                    <li>👉 <button class="underline" on:click={() => exit() }>Unstake</button> from this staking contract</li>
+                  {/if}
+                  <li>🥩 Stake in the <button class="underline" on:click={() => pool = incentivizedPools[0] }>new staking contract</button> </li>
+                  <li>📝 <a class="underline" href="https://forms.gle/2g8ekufLErpZ8jwD9">Fill the form</a> with the 2 tx by November 6th at 00:00 UTC. (anonymous)</li>
+                </ol>
+              </div>
+            {/if}
+
+            <div class="flex flex-col w-full justify-around md:flex-row">
+              <!-- UNSTAKE BOX -->
+              <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
+                    <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.withdraw} alt="PieDAO logo" />
+                    <div class="title text-lg">UNSTAKE {#if pool.contractType === "Geyser"} and CLAIM {/if}</div>
+                    <div class="apy">
+                      {pool.KeyAddressTokenToStake ? amountFormatter({ amount: $balances[pool.KeyUnipoolBalance], displayDecimals: 4}) : 0.0000} {pool.toStakeSymbol}
+                    </div>
+                    <div class="subtitle font-thin">STAKED BALANCE</div>
+                    
+                    <div class="apy text-sm">{pool.toStakeDesc}</div>
+                    <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+                        <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
+                            <div class="left float-left">{$_('general.amount')} to unstake</div>
+                        </div>
+                        <div class="bottom px-4 py-4 md:py-2">
+                            <input bind:value={amountToUnstake} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
+                            <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
+                                <button on:click={() => {
+                                  if($balances[pool.KeyUnipoolBalance]) {
+                                    amountToUnstake = $balances[pool.KeyUnipoolBalance];
+                                  } else {
+                                    amountToUnstake = 0;
+                                  }}} class="text-black py-2px px-4px">MAX</button>
+                            </div>
+                        </div>            
+                    </div>
+                    {#if amountToUnstake === 0 }
+                        <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
+                    {:else}
+                      <button on:click={() => unstake()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Unstake</button>
+                    {/if}
+                    
+              </div>
+
+              <!-- STAKE BOX -->
+              <div class="farming-card highlight-box flex flex-col justify-center align-center items-center mx-1 my-4  border border-grey border-opacity-50 border-solid rounded-sm py-2">
+                    <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.stake} alt="PieDAO logo" />
+                    <div class="title text-lg"> STAKE</div>
+                    <div class="apy">
+                      {pool.KeyAddressTokenToStake ? amountFormatter({ amount: $balances[pool.KeyAddressTokenToStake], displayDecimals: 4}) : 0.0000} {pool.toStakeSymbol}
+                    </div>
+                    <div class="subtitle font-thin">BALANCE</div>
+                    <div class="apy text-sm">{pool.toStakeDesc}</div>
+                    <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+                        <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
+                            <div class="text-black left black float-left">{$_('general.amount')} to stake</div>
+                        </div>
+                        <div class="bottom px-4 py-4 md:py-2">
+                            <input bind:value={amountToStake} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
+                            <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
+                                <button on:click={() => {
+                                  if($balances[pool.KeyAddressTokenToStake]) {
+                                    amountToStake = $balances[pool.KeyAddressTokenToStake];
+                                  } else {
+                                    amountToStake = 0;
+                                  }}} class="text-black py-2px px-4px">MAX</button>
+                            </div>
+                        </div>           
+                    </div>
+                    {#if needAllowance }
+                      <button on:click={ () => action(pool, 'unlock')} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Approve</button>
+                    {:else}
+                      {#if amountToStake === 0 }
+                        <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
+                      {:else}
+                        <button on:click={() => stake()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Stake</button>
+                      {/if}
+                    {/if}
+              </div>
+
+              <!-- CLAIM BOX -->
+              {#if pool.contractType === "UniPool"}
+              <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
+                    <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.claim} alt="PieDAO logo" />
+                    <div class="title text-lg">REWARDS AVAILABLE</div>
+                    <div class="subtitle font-thin">{pool.rewards_token} TO CLAIM</div>
+                    <div class="apy">
+                      {pool.KeyUnipoolEarnedBalance ? amountFormatter({ amount: $balances[pool.KeyUnipoolEarnedBalance], displayDecimals: 16}) : 0.0000} {pool.rewards_token}
+                    </div>
+
+                    {#if pool.id === 0}
+                      <div class="apy">
+                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * 0.15, 3) } </strong> Escrowed / 
+                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * 0.85, 3) } </strong> Liquid
+                      </div>
+                    {/if}
+
+                    
+                    <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+                        <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
+                            <div class="left float-left">{$_('general.amount')} to claim</div>
+                        </div>
+                        <div class="bottom px-4 py-4 md:py-2">
+                            <input disabled bind:value={amountToClaim} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
+                            <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
+                                <button on:click={() => {
+                                  if($balances[pool.KeyUnipoolEarnedBalance]) {
+                                    amountToClaim = $balances[pool.KeyUnipoolEarnedBalance].toFixed(4, BigNumber.ROUND_DOWN);
+                                  } else {
+                                    amountToClaim = 0;
+                                  }}} class="text-black py-2px px-4px">MAX</button>
+                            </div>
+                        </div>            
+                    </div>
+                    <button on:click={() => getRewards()} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
+              </div>
+              {/if}
+
+              {#if pool.contractType === "Geyser"}
+              <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
+                    <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.claim} alt="PieDAO logo" />
+                    <div class="title text-lg">REWARDS EARNED</div>
+                    <div class="subtitle font-thin">Optimistic reward</div>
+                    <div class="apy">
+                      {geyserApy.earnedOptimistic} {pool.rewards_token}
+                    </div>
+                    <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+                        <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
+                            <div class="left float-left">{$_('general.amount')} accrued</div>
+                        </div>
+                        <div class="bottom px-4 py-4 md:py-2">
+                            <input disabled bind:value={geyserApy.earnedOptimistic} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
+                        </div>            
+                    </div>
+              </div>
+              {/if}
+            </div>
+            <div class="info-box">
+              {#if pool.id === 2}
+                  <p>ℹ️ <strong>DEFI++</strong> Staking Rewards are subject to 52 weeks vesting from the moment they will be claimed.</p>
+              {/if}
+              {#if $farming[pool.addressUniPoll] !== undefined}
+
+                {#if pool.id === 0}
+                  <p>ℹ️ <strong>DOUGH/ETH</strong> Staking Rewards - the pool will keep receiving 110,000 DOUGH as nominal weekly reward distributed to LPs, of which
+                      85% distributed liquid along the week
+                      15% escrowed within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
+                  </p>
+                {/if}
+
+                {#if pool.id === 2}
+                  <p>ℹ️ <strong>DEFI++</strong> Staking Rewards are subject to 52 weeks vesting from the moment they will be claimed.</p>
+                {/if}
+                <br/><br/>
+                
+                <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
+                <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} BPT</strong> staked in the Staking contract.</p>
+                {#if pool.KeyAddressTokenToStake && $balances[pool.KeyUnipoolBalance]}
+                  <p>You are staking   : <strong>{toFixed($balances[pool.KeyUnipoolBalance] * 100 / $farming[pool.addressUniPoll].totalStakedBPTAmount, 3) }% </strong> of the pool
+                          = [{toFixed($farming[pool.addressUniPoll].DOUGHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)} {pool.containing[0].symbol}, {toFixed($farming[pool.addressUniPoll].WETHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)}  {pool.containing[1].symbol}]
+                          = {formatFiat( ($farming[pool.addressUniPoll].DOUGHperBPT * $balances[pool.KeyUnipoolBalance].toNumber() * $farming[pool.addressUniPoll].DOUGHPrice + $farming[pool.addressUniPoll].WETHperBPT * $balances[pool.KeyUnipoolBalance].toNumber() * $farming[pool.addressUniPoll].ETHPrice).toFixed(2) )}
+                  </p>
+                {/if}   
+              {/if}
+              
+              {#if pool.contractType === "Geyser"}
+                <br/>
+                {#if geyserApy.yourStake}
+                  <p> Your stake of <strong>{geyserApy.yourStake.toFixed(2)} BPT</strong> is earning right now <strong>{geyserApy.earnedOptimistic} DOUGH</strong> assuming you will not unstake until the end of the program. </p>
+                  <p>Approx <strong>{geyserApy.apy}%</strong>.</p>
+                  <p>If you would unstake right now, you would get exactly <strong>{geyserApy.earnedNotOptimistic} DOUGH</strong>, which is approx <strong>{geyserApy.apyNotOptimistic}% APR</strong>.</p>
+                {/if}
+              {/if}
+
+              <br/><br/>
+              <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
+              <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
+              <p>Buy {pool.containing[0].symbol} on <a target="_blank" href="https://balancer.exchange/#/swap/ether/{pool.containing[0].address}">Balancer</a> or <a href="#/pools/{pool.containing[0].address}">mint now!</a></p>
+              <p>Buy DOUGH on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D">Balancer</a></p>
+            </div>
+        {/if}
+    </div>
+
+</div>
