@@ -17,6 +17,7 @@
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
     "symbol": "BTC++",
     "useRecipe": false,
+    "swapEnabled": false,
     "swapFees": "0.2",
     "coingeckoId": "piedao-btc",
     "composition": [
@@ -59,6 +60,7 @@
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
     "symbol": "USD++",
     "useRecipe": true,
+    "swapEnabled": false,
     "swapFees": "0",
     "coingeckoId": "piedao-usd",
     "tradingViewFormula": "(0.4722*KRAKEN:USDCUSD+0.2042*KRAKEN:DAIUSD+0.2858*BITTREX:TUSDUSD+0.0378*KUCOIN:SUSDUSDT)",
@@ -130,6 +132,7 @@
     "useRecipe": true,
     "coingeckoId": "piedao-defi-large-cap",
     "swapFees": "0.1",
+    "swapEnabled": true,
     "composition": [
       {
         "symbol": "COMP",
@@ -230,6 +233,7 @@
   "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": {
     "symbol": "DEFI+S",
     "useRecipe": true,
+    "swapEnabled": false,
     "coingeckoId": "piedao-defi-small-cap",
     "bPool": "0x94743cfaa3fdc62e9693572314b5ee377eba5d11",
     "swapFees": "0",
@@ -305,6 +309,7 @@
     "symbol": "DEFI++",
     "useRecipe": true,
     "useMintOverBuy": true,
+    "swapEnabled": true,
     "swapFees": "1",
     "composition": [
       {

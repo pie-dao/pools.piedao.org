@@ -1,6 +1,7 @@
 <script>
   import {getSubgraphMetadata, getPoolSwaps, getPoolMetrics} from '../helpers/subgraph.js'
   import { _ } from 'svelte-i18n';
+  import moment from 'moment';
   import BigNumber from 'bignumber.js';
   import get from 'lodash/get';
   import first from 'lodash/first';
@@ -97,6 +98,7 @@
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
     metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
+    console.log('metadata', metadata)
 
     const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
     renderWidget(formula);
@@ -155,11 +157,28 @@
   <div class="flex w-full mt-2 md:mt-8">
     <div class="p-0 flex-initial self-start mr-6">
       <div class="text-md md:text-md font-black">
-        {formatFiat(metadata.liquidity)}
+        {#if poolsConfig[token].swapEnabled}
+          {formatFiat(metadata.liquidity)}
+        {:else}
+          {formatFiat($pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : '')}
+        {/if}
       </div>
       <div class="font-thin text-xs md:text-base">Liquidity</div>
     </div>
 
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        {#if metadata.createTime}
+          {moment(moment.unix(metadata.createTime)).format('MMMM Do YYYY')}
+        {:else}
+          n/a
+        {/if}
+      </div>
+      <div class="font-thin text-xs md:text-base">Inception date</div>
+    </div>
+    
+    
+    {#if poolsConfig[token].swapEnabled}
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
         {formatFiat(metadata.totalSwapVolume)}
@@ -180,6 +199,7 @@
       </div>
       <div class="font-thin text-xs md:text-base">24h Pool Volume</div>
     </div>
+    {/if}
 
   </div>
 
