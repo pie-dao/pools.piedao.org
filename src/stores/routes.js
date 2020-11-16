@@ -47,6 +47,8 @@ const formatRoute = (route) => {
   switch (route[0] || 'root') {
     case 'markets':
       return { page: Markets };
+    case 'pies':
+      return { page: Dashboard };
     case 'pie':
       address = (route[1] || '').toLowerCase();
       return { page: PieLanding, params: { address } };

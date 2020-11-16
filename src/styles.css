@@ -681,6 +681,13 @@ opacity: 0.6;
   border: 1px solid;
 }
 
+.investment-card {
+  border: 2px solid #fff;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
 .investment-card:hover {
   border: 2px solid #EC1EA0;
   box-sizing: border-box;

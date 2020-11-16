@@ -27,11 +27,9 @@
         Buy $DOUGH
       </button>
     </a> -->
-    <span class="link">🥧</span>
-    <a class="link" href="#/stake">
-      Stake
+    <a class="link" href="#/pies">
+      Pies
     </a>
-    <span class="link">🥧</span>
 
     <a class="link" href="#/dough" rel="noopener noreferrer">
       $DOUGH
