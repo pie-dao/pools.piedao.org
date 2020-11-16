@@ -1,4 +1,5 @@
 <script>
+  import {getSubgraphMetadata, getPoolSwaps, getPoolMetrics} from '../helpers/subgraph.js'
   import { _ } from 'svelte-i18n';
   import BigNumber from 'bignumber.js';
   import get from 'lodash/get';
@@ -20,14 +21,16 @@
   import { fetchPooledTokens, pooledTokenAmountRequired } from '../components/helpers.js';
 
   import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
-
-  import { pools } from '../stores/eth.js';
-
   import {
+    pools,
     balanceKey,
     contract,
     balances,
   } from "../stores/eth.js";
+
+  import {
+    buildFormulaNative
+  } from '../helpers/tradingView.js'
 
   export let params;
 
@@ -36,8 +39,6 @@
   let pieOfPies = false;
   let tradingViewWidgetComponent;
   let initialized = false;
-
-  $: console.log(token, poolsConfig);
   
   $: options = {
     symbol: poolsConfig[token] ? poolsConfig[token].tradingViewFormula : '',
@@ -95,35 +96,33 @@
   $: (async () => {
     if(initialized) return;
 
-    let mapDynamicTradingViewFormula = poolsConfig[token].mapDynamicTradingViewFormula;
-    let formula = '';
-
-    if(!mapDynamicTradingViewFormula) return;
-
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
-    let totalSupply = await poolContract.totalSupply();
-    totalSupply = BigNumber(totalSupply.toString()).dividedBy(10 ** 18);
 
-    $pools[token].map((component) => {
-      let key = `${component.address.toLowerCase()}.${bPoolAddress.toLowerCase()}`;
-      const bal = $balances[key] || 0;
+    const metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
+    const swaps = await getPoolSwaps(bPoolAddress.toLowerCase());
+    const metrics = await getPoolMetrics(bPoolAddress.toLowerCase());
 
-      if(bal !== 0) {
-        formula += `${bal / totalSupply.toNumber()}*${mapDynamicTradingViewFormula[component.address]}+`;
-      }
-    })
+    // console.log('res', {
+    //     bPoolAddress,
+    //     swaps,
+    //     metadata,
+    //     metrics
+    // });
 
-    if(formula !== '') {
-      const finalFormula = `${formula.slice(0, -1)}`;
-      console.log(`formula`, finalFormula);
-      options.symbol = finalFormula;
-      if(tradingViewWidgetComponent) {
-        initialized = true;
-        tradingViewWidgetComponent.initWidget(options)
-      }
-    }
+    const formula = await buildFormulaNative(token, $pools, $balances);
+    renderWidget(formula);
   })();
+
+  const renderWidget = (formula) => {
+    if( formula === '') return;
+    const finalFormula = `${formula.slice(0, -1)}`;
+    options.symbol = finalFormula;
+    if(tradingViewWidgetComponent) {
+      initialized = true;
+      tradingViewWidgetComponent.initWidget(options)
+    }
+}
 
 </script>
 <div class="content flex flex-col spl">

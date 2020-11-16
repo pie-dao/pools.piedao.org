@@ -85,8 +85,6 @@ export async function getSubgraphMetadata(address) {
       subgraphUrl,
       merge(queries['getPool'], query)
     );
-
-    console.log('response.pool', response.pool);
     return formatPool(response.pool);
   } catch (e) {
     console.error(e);
