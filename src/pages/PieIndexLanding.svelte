@@ -13,13 +13,10 @@
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
-
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
-  import { CoinGecko, piesMarketDataStore } from '../stores/coingecko.js';
-
+  import { piesMarketDataStore } from '../stores/coingecko.js';
   import { fetchPooledTokens, pooledTokenAmountRequired } from '../components/helpers.js';
-
   import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
   import {
     pools,
@@ -81,7 +78,6 @@
         return $pools[component.address].map((internal) => {
           return {
             ...internal,
-            // percentage: ((component.percentage / 100) * (internal.percentage / 100) * 100),
             percentage: (internal.percentage * component.percentage) / 100,
           };
         });
@@ -93,24 +89,16 @@
 
   $: pieTokens = fetchPieTokens($balances);
 
+  $: metadata = {};
+
   $: (async () => {
     if(initialized) return;
 
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
+    metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
 
-    const metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
-    const swaps = await getPoolSwaps(bPoolAddress.toLowerCase());
-    const metrics = await getPoolMetrics(bPoolAddress.toLowerCase());
-
-    // console.log('res', {
-    //     bPoolAddress,
-    //     swaps,
-    //     metadata,
-    //     metrics
-    // });
-
-    const formula = await buildFormulaNative(token, $pools, $balances);
+    const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
     renderWidget(formula);
   })();
 
@@ -163,47 +151,41 @@
       </div>
     </div>
   </div>
-  <div class="flex justify-between flex-wrap w-full mt-2 md:mt-8">
-    {#if get($piesMarketDataStore, `${token.toLowerCase()}.market_data.market_cap`, '-') != '-'}
-    <div class="p-0 self-start md:w-1/4">
-      <div class="text-center font-thin text-xs md:text-base">MarketCap</div>
-      <div class="text-center text-2xl md:text-xl font-black">
-        {formatFiat($pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : '')}
+  
+  <div class="flex w-full mt-2 md:mt-8">
+    <div class="p-0 flex-initial self-start mr-6">
+      <div class="text-md md:text-md font-black">
+        {formatFiat(metadata.liquidity)}
       </div>
+      <div class="font-thin text-xs md:text-base">Liquidity</div>
     </div>
-    {/if}
-    <div class="p-0 md:w-1/4">
-      <div class="text-center font-thin text-xs md:text-base">Swap fee</div>
-      <div class="text-center text-2xl md:text-xl font-black">{swapFees}%</div>
-    </div>
-    <div class="p-0 md:w-1/4">
-      <div class="text-center font-thin text-xs md:text-base">Streaming fee</div>
-      <div class="text-center text-2xl md:text-xl font-black">0%</div>
-    </div>
-    <!-- <div class="p-0 md:w-1/4">
-      <div class="text-center font-thin text-xs md:text-base">7 Days Change</div>
-      <div class="text-center text-2xl md:text-xl font-black">
-        {get($piesMarketDataStore, `${token}.market_data.price_change_percentage_7d_in_currency`, '-')}
+
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        {formatFiat(metadata.totalSwapVolume)}
       </div>
-    </div> -->
+      <div class="font-thin text-xs md:text-base">Total Swap Volume</div>
+    </div>
+
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        {formatFiat(metadata.totalSwapFee)}
+      </div>
+      <div class="font-thin text-xs md:text-base">Fees to LPs</div>
+    </div>
+
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        {formatFiat(metadata.lastSwapVolume)}
+      </div>
+      <div class="font-thin text-xs md:text-base">24h Pool Volume</div>
+    </div>
+
   </div>
 
   <div
     class="flex flex-row w-100pc mt-2 spl-chart-container md:mt-8 {poolsConfig[token].mapDynamicTradingViewFormula ? '' : 'hidden'}">
     <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
-  </div>
-
-  <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
-    <div class="p-0 mt-2 md:half">
-      <Farming token={$currentRoute.params.address} />
-    </div>  
-    <div class="p-0 mt-2 md:w-1/4">
-      <Etherscan token={$currentRoute.params.address} />
-    </div>
-
-    <div class="p-0 mt-2 md:w-1/4">
-      <Quantstamp class="w-1/2" token={$currentRoute.params.address} />
-    </div>
   </div>
 
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
@@ -249,7 +231,7 @@
 
             {#if !pieOfPies }
               <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td>
-              <td class="border text-center px-4 py-2">{formatFiat(pooledToken.balance ? pooledToken.balance.toFixed(2) : '0', ',', '.', '')}</td>
+              <td class="border text-center px-4 py-2">{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')}</td>
             {/if}
             
             <td class="border text-center px-4 py-2">
@@ -270,11 +252,18 @@
       </tbody>
     </table>
   </div>
-  <!-- <PoolDescription /> -->
-  <div class="tags-container w-full my-2 flex flex-col md:flex-row md:justify-between md:my-8">
-    {#each links as link}
-      <a class="singleTag my-2" target="_blank" href={link.url}>{link.label}</a>
-    {/each}
+  
+  <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
+    <div class="p-0 mt-2 md:half">
+      <Farming token={$currentRoute.params.address} />
+    </div>  
+    <div class="p-0 mt-2 md:w-1/4">
+      <Etherscan token={$currentRoute.params.address} />
+    </div>
+
+    <div class="p-0 mt-2 md:w-1/4">
+      <Quantstamp class="w-1/2" token={$currentRoute.params.address} />
+    </div>
   </div>
 
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Latest news</h1>

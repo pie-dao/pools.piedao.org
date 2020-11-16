@@ -25,13 +25,12 @@ export const buildFormulaGraph = async (pieAddress) => {
   return formula;
 };
 
-export const buildFormulaNative = async (pieAddress, pools, balances) => {
+export const buildFormulaNative = async (pieAddress, bPoolAddress, pools, balances) => {
   let formula = '';
   const { mapDynamicTradingViewFormula } = poolsConfig[pieAddress];
   if (!mapDynamicTradingViewFormula) return '';
 
   const poolContract = await contract({ address: pieAddress });
-  const bPoolAddress = await poolContract.getBPool();
   let totalSupply = await poolContract.totalSupply();
   totalSupply = BigNumber(totalSupply.toString()).dividedBy(10 ** 18);
 
