@@ -64,9 +64,11 @@ export const registerConnection = async (newWeb3) => {
   const shortAddress = shortenAddress(address);
   const icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
 
+  const ens = await provider.lookupAddress(address);
 
   eth.set({
     address,
+    ens,
     currentBlockNumber,
     icon,
     network,

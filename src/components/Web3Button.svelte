@@ -1,11 +1,17 @@
 <script>
   import { connectWeb3, eth, connectWeb3Cached } from '../stores/eth.js';
   import { shortenAddress } from "@pie-dao/utils";
+  import { get } from 'svelte/store';
   const address = null;
-  if(window.localStorage.getItem('address')) {
-    connectWeb3Cached();
-  }
-  const shortAddress = address ? shortenAddress(address) : '';
+
+  $: shortAddress = address ? shortenAddress(address) : '';
+
+  $: ( async () => {
+    if(window.localStorage.getItem('address')) {
+      await connectWeb3Cached();
+    }
+  })()
+  
 </script>
 
 <button
@@ -15,7 +21,12 @@
   tabIndex="-100"
 >
   {#if $eth.address}
-    <p>{$eth.shortAddress}</p>
+    {#if $eth.ens}
+      <p>{$eth.ens}</p>
+    {:else}
+      <p>{$eth.shortAddress}</p>
+    {/if}
+    
     <div class="icon-container">
       <div class="image-container">
         {@html $eth.icon}
