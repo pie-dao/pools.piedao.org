@@ -11,6 +11,7 @@
     "@pie-dao/eth-tailwind": "^1.0.0",
     "@pie-dao/tailwind": "^1.1.2",
     "@pie-dao/utils": "^1.0.0",
+    "@tailwindcss/ui": "^0.7.2",
     "@walletconnect/web3-provider": "^1.1.0",
     "animate.css": "^4.1.0",
     "authereum": "^0.0.4-beta.164",
@@ -27,7 +28,8 @@
     "svelte": "^3.21.0",
     "svelte-apollo": "^0.3.0",
     "svelte-i18n": "^3.0.4",
-    "svelte-tabs": "^1.1.0"
+    "svelte-tabs": "^1.1.0",
+    "tailwindcss": "^1.9.6"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.3.0",

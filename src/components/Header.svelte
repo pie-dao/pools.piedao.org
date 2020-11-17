@@ -9,9 +9,24 @@
 
   let mobileMenuVisible = false;
 
+  let dropdownOpen = false;
+  let dropdownOpen2 = false;
+
   const toggleMobileMenu = () => {
     mobileMenuVisible = !mobileMenuVisible;
   };
+
+  const toggleDropdow = () => {
+    dropdownOpen2 = false;
+    dropdownOpen = !dropdownOpen;
+  };
+
+
+  const toggleDropdow2 = () => {
+    dropdownOpen = false;
+    dropdownOpen2 = !dropdownOpen2;
+  };
+
 </script>
 <div class="header-container">
   <div class="left">
@@ -20,97 +35,79 @@
     </a>
   </div>
   <div class="right">
-    <TVL class="link"/>
+
+    <div class="hidden md:block">
+      <TVL/>
+    </div>
     
-    <!-- <a class="link" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
-      <button class="table-btn highlight-box">
-        Buy $DOUGH
-      </button>
-    </a> -->
-    <a class="link" href="#/pies">
-      Pies
-    </a>
 
-    <a class="link" href="#/dough" rel="noopener noreferrer">
-      $DOUGH
-    </a>
+    <div class="relative inline-block text-left">
 
-    <a class="link" href={links.vision} target="_blank" rel="noopener noreferrer">
-      {$_('general.vision')}
-    </a>
+      <div>
+        <span class="shadow-sm">
+          <button on:click={toggleDropdow} type="button" class="inline-flex justify-center w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150" id="options-menu" aria-haspopup="true" aria-expanded="true">
+            Products
+            <!-- Heroicon name: chevron-down -->
+            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </span>
+      </div>
+      {#if dropdownOpen}
+        <div class="origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
+          <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <div class="py-1">
+              <a href="#/pies" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Indexes</a>
+              <a href="#/stake" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farms</a>
+            </div>
+            <div class="border-t border-gray-100"></div>
+            <div class="py-1">
+              <a href="#/dough" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+                $DOUGH
+              </a>
+            </div>
+          </div>
+        </div>
+        {/if}
+      </div>
 
-    <a class="link" href={links.dao} target="_blank" rel="noopener noreferrer">
-      {$_('piedao.aragonLink')}
-    </a>
-    <a class="link" href={links.docs} target="_blank" rel="noopener noreferrer">
+    <div class="relative inline-block text-left">
+    <div>
+        <span class="shadow-sm">
+          <button on:click={toggleDropdow2} type="button" class="inline-flex justify-center w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150" id="options-menu" aria-haspopup="true" aria-expanded="true">
+            Governance
+            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </span>
+      </div>
+      {#if dropdownOpen2}
+        <div class="origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
+          <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <div class="py-1">
+              <a href="http://forum.piedao.org/" target="_blank" on:click={toggleDropdow2} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Forum</a>
+              <a href="{$_('piedao.aragonLink')}" target="_blank" on:click={toggleDropdow2} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Aragon DAO</a>
+              <a href="https://snapshot.page/#/piedao" target="_blank" on:click={toggleDropdow2} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Snapshot</a>
+            </div>
+          </div>
+        </div>
+      {/if}
+    </div>
+
+  
+  
+
+    
+    
+    <a class="text-sm leading-5 font-medium text-gray-700" href={links.docs} target="_blank" rel="noopener noreferrer">
       {$_('general.docs')}
     </a>
     
-    <Web3Button />
-    <div class="mobile-placeholder" />
+    <div class="hidden md:block">
+      <Web3Button />
+    </div>
 
-    <button class="hamburger" type="button" on:click={toggleMobileMenu}>
-      <img src={images.icons.hamburger} alt="hamburger icon" class="w-min-20px" />
-    </button>
-
-    {#if mobileMenuVisible}
-      <div class="overlay">
-        <button type="button" class="close" on:click={toggleMobileMenu}>
-          {$_('general.close')}
-        </button>
-        <nav>
-          <ul>
-            <li>
-              <a href={links.root} on:click={toggleMobileMenu}>{$_('general.home')}</a>
-            </li>
-            <li>
-              <a
-                class="navbar-item"
-                href={links.docs}
-                on:click={toggleMobileMenu}
-                rel="noopener noreferrer"
-                target="_blank">
-                {$_('general.docs')}
-              </a>
-            </li>
-            <li>
-              <a class="navbar-item" href="#/dough">
-                $DOUGH
-              </a>
-            </li>
-            <li>
-              <a class="navbar-item" href="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c">
-                DEFI+S
-              </a>
-            </li>
-            <li>
-              <a class="navbar-item" href="#/pie/0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e">
-                USD++
-              </a>
-            </li>
-            <li>
-              <a class="navbar-item" href="#/pie/0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd">
-                BTC++
-              </a>
-            </li>
-            <li>
-              <a class="navbar-item" href="#/stake">
-                Stake
-              </a>
-            </li>
-            <li>
-              <a class="navbar-item" href={links.vision} target="_blank" rel="noopener noreferrer">
-                {$_('general.vision')}
-              </a>
-            </li>
-            <li>
-              <a class="navbar-item" href={links.dao} target="_blank" rel="noopener noreferrer">
-                {$_('piedao.aragonLink')}
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    {/if}
   </div>
 </div>

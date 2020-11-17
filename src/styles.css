@@ -285,6 +285,7 @@
 
 .header-container {
   @apply content font-secondary;
+  overflow: visible;
 }
 
 .header-container .hamburger {
@@ -309,7 +310,7 @@
 }
 
 .header-container .right .link {
-  @apply text-grey-10 no-underline ml-8 text-sm hidden;
+  @apply text-grey-10 no-underline ml-4 text-sm hidden;
 }
 
 .header-container .right .link:hover {
