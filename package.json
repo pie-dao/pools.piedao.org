@@ -31,6 +31,7 @@
     "svelte-apollo": "^0.3.0",
     "svelte-i18n": "^3.0.4",
     "svelte-tabs": "^1.1.0",
+    "svelte-watch-resize": "^1.0.3",
     "tailwindcss": "^1.9.6"
   },
   "devDependencies": {

@@ -30,6 +30,7 @@
     buildFormulaNative
   } from '../helpers/tradingView.js'
 
+  import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
   export let params;
 
   $: token = params.address;
@@ -93,15 +94,14 @@
   $: metadata = {};
 
   $: (async () => {
-    if(initialized) return;
+    // if(initialized) return;
 
-    const poolContract = await contract({ address: token });
-    const bPoolAddress = await poolContract.getBPool();
-    metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
-    console.log('metadata', metadata)
+    // const poolContract = await contract({ address: token });
+    // const bPoolAddress = await poolContract.getBPool();
+    // metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
 
-    const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
-    renderWidget(formula);
+    // const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
+    // renderWidget(formula);
   })();
 
   const renderWidget = (formula) => {
@@ -203,10 +203,14 @@
 
   </div>
 
-  <div
+  {#if poolsConfig[token].coingeckoId}
+    <PriceChartArea coingeckoId={poolsConfig[token].coingeckoId}/>
+  {/if}
+
+  <!-- <div
     class="flex flex-row w-100pc mt-2 spl-chart-container md:mt-8 {poolsConfig[token].mapDynamicTradingViewFormula ? '' : 'hidden'}">
     <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
-  </div>
+  </div> -->
 
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
   {#if pieOfPies }
