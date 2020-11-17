@@ -13,6 +13,7 @@ import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
 import Markets from '../pages/Markets.svelte';
+import DefiPie from '../pages/landings/defiPie.svelte';
 
 export const defaultRouteObj = {
   page: Guides,
@@ -45,6 +46,8 @@ const formatRoute = (route) => {
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
   switch (route[0] || 'root') {
+    case 'dxp-defi-index':
+      return { page: DefiPie };
     case 'markets':
       return { page: Markets };
     case 'pies':

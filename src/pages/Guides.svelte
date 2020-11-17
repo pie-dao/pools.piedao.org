@@ -16,7 +16,7 @@
     </div>
 
     <div class="flex justify-around w-100pc content-center">
-      <a href="ciao" class="investment-card flex flex-col w-1/3 items-center min-h-150px bg-lightgrey m-10px p-20px rounded-sm">
+      <a href="#/pie/0x78f225869c08d478c34e5f645d07a87d3fe8eb78" class="investment-card flex flex-col w-1/3 items-center min-h-150px bg-lightgrey m-10px p-20px rounded-sm">
         <div class="text-center"><img class="w-80px h-auto"src={images.defiplusl} alt="PieDAO Hero" /></div>
         <div class="flex flex-col text-center">
           <div class="text-lg">DLP</div>
@@ -24,7 +24,7 @@
         </div>
       </a>
 
-      <a href="ciao" class="investment-card flex flex-col w-1/3 items-center min-h-150px bg-lightgrey m-10px p-20px rounded-sm">
+      <a href="#/pie/0x8d1ce361eb68e9e05573443c407d4a3bed23b033" class="investment-card flex flex-col w-1/3 items-center min-h-150px bg-lightgrey m-10px p-20px rounded-sm">
         <div class="text-center"><img class="w-80px h-auto"src={images.defiplusplus} alt="PieDAO Hero" /></div>
         <div class="flex flex-col text-center">
           <div class="text-lg">DXP</div>
@@ -32,7 +32,7 @@
         </div>
       </a>
       
-      <a href="ciao" class="investment-card flex flex-col w-1/3 items-center min-h-150px bg-lightgrey m-10px p-20px rounded-sm">
+      <a href="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c" class="investment-card flex flex-col w-1/3 items-center min-h-150px bg-lightgrey m-10px p-20px rounded-sm">
         <div class="text-center"><img class="w-80px h-auto"src={images.defipluss} alt="PieDAO Hero" /></div>
         <div class="flex flex-col text-center">
           <div class="text-lg">DSP</div>

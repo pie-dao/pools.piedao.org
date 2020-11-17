@@ -1,13 +1,15 @@
 <script>
   import images from "../../config/images.json";
 </script>
-
 <div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
-  <div class="text-white bg-black rounded-4px py-6px px-8px mb-10px">DeFi++</div>
-  <div class="font-veryhuge">Small, Large, One-Size.<br/>
-    Choose the DeFi that
-    fits you best.</div>
-    <div class="font-thin text-lg mt-10px mb-10px md:w-80pc">Assets represented within DEFI+S/L and DEFI++ have been weighted in as a function of their current Market Capitalization, capped by a max weight of 30%.</div>
+  <div class="font-veryhuge">
+    One token.<br/>
+    Full DeFi Exposure
+  </div>
+    <div class="font-thin text-lg mt-10px mb-10px md:w-80pc">
+    Index investing is one of the best ways to gain passive exposure to a diversified portfolio.
+    With <strong>DXP</strong> you just set it and forget it and let the market do the work!
+    </div>
       <div class="my-20px">
         <img class="w-400px h-auto" src={images.defiplusicons} alt="DeFi plus icons" />
       </div>
