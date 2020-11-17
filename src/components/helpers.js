@@ -131,7 +131,7 @@ const updatePoolWeight = async (poolAddress) => {
 export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') => {
   if (!value) return 'n/a';
   try {
-    const values = (parseFloat(value).toFixed(2)).toString().replace(/^-/, '').split('.');
+    const values = parseFloat(value).toFixed(2).toString().replace(/^-/, '').split('.');
     const dollars = values[0];
     const cents = values[1];
     const groups = /(\d)(?=(\d{3})+\b)/g;
@@ -819,7 +819,8 @@ export const calculateAPRBalancer = async (
 
     // console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
     // Finished. Start printing
-    const RewardTokenPrice = marketData[`0xad32A8e6220741182940c5aBF610bDE99E737b2D`].market_data.current_price;
+    const RewardTokenPrice =
+      marketData[`0xad32A8e6220741182940c5aBF610bDE99E737b2D`].market_data.current_price;
     const DOUGHWeeklyROI = (rewardPerToken * RewardTokenPrice * 100) / BPTPrice;
 
     if (false) {

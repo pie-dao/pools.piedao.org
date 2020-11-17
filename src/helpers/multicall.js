@@ -10,10 +10,7 @@ export async function multicall(provider, abi, calls, options = {}) {
   const itf = new Interface(abi);
   try {
     const [, response] = await multi.aggregate(
-      calls.map((call) => [
-        call[0].toLowerCase(),
-        itf.encodeFunctionData(call[1], call[2]),
-      ]),
+      calls.map((call) => [call[0].toLowerCase(), itf.encodeFunctionData(call[1], call[2])]),
       options,
     );
     return response.map((call, i) => itf.decodeFunctionResult(calls[i][1], call));

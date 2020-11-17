@@ -6,24 +6,20 @@ import cloneDeep from 'lodash/cloneDeep';
 import queries from './queries.json';
 
 const subgraphUrl = 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer';
-const jsonToGraphQLQuery = _jsonToGraphQLQuery.default.jsonToGraphQLQuery;
+const { jsonToGraphQLQuery } = _jsonToGraphQLQuery.default;
 
 console.log('jsonToGraphQLQuery', jsonToGraphQLQuery);
 
 export async function request(key, _jsonQuery) {
-  const jsonQuery = key
-    ? merge(cloneDeep(queries[key]), cloneDeep(_jsonQuery))
-    : _jsonQuery;
+  const jsonQuery = key ? merge(cloneDeep(queries[key]), cloneDeep(_jsonQuery)) : _jsonQuery;
 
-  const query = typeof jsonQuery === 'string'
-    ? jsonQuery
-    : jsonToGraphQLQuery({ query: jsonQuery });
+  const query = typeof jsonQuery === 'string' ? jsonQuery : jsonToGraphQLQuery({ query: jsonQuery });
 
   const res = await fetch(subgraphUrl, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ query }),
   });
@@ -40,9 +36,9 @@ export async function subgraphRequest(url, query) {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ query: jsonToGraphQLQuery({ query }) })
+    body: JSON.stringify({ query: jsonToGraphQLQuery({ query }) }),
   });
   const { data } = await res.json();
   return data || {};
@@ -56,10 +52,9 @@ export function formatPool(pool) {
   if (pool.shares) pool.holders = pool.shares.length;
   // pool.tokensList = pool.tokensList.map((token) => getAddress(token));
   pool.lastSwapVolume = 0;
-  const poolTotalSwapVolume =
-      pool.swaps && pool.swaps[0] && pool.swaps[0].poolTotalSwapVolume
-        ? parseFloat(pool.swaps[0].poolTotalSwapVolume)
-        : 0;
+  const poolTotalSwapVolume = pool.swaps && pool.swaps[0] && pool.swaps[0].poolTotalSwapVolume
+    ? parseFloat(pool.swaps[0].poolTotalSwapVolume)
+    : 0;
   pool.lastSwapVolume = parseFloat(pool.totalSwapVolume) - poolTotalSwapVolume;
   return pool;
 }
@@ -69,22 +64,19 @@ export async function getSubgraphMetadata(address) {
   const query = {
     pool: {
       __args: {
-        id: address
+        id: address,
       },
       swaps: {
         __args: {
           where: {
-            timestamp_lt: swapTsStart
-          }
-        }
-      }
-    }
+            timestamp_lt: swapTsStart,
+          },
+        },
+      },
+    },
   };
   try {
-    const response = await subgraphRequest(
-      subgraphUrl,
-      merge(queries['getPool'], query)
-    );
+    const response = await subgraphRequest(subgraphUrl, merge(queries.getPool, query));
     return formatPool(response.pool);
   } catch (e) {
     console.error(e);
@@ -98,10 +90,10 @@ export async function getPoolSwaps(address) {
         orderBy: 'timestamp',
         orderDirection: 'desc',
         where: {
-          poolAddress: address.toLowerCase()
-        }
-      }
-    }
+          poolAddress: address.toLowerCase(),
+        },
+      },
+    },
   };
 
   const { swaps } = await request('getPoolSwaps', query);
@@ -125,12 +117,12 @@ export async function getPoolMetrics(address) {
           where: {
             poolAddress: address,
             timestamp_gt: timestamp / 1000,
-            timestamp_lt: (timestamp + day) / 1000
-          }
+            timestamp_lt: (timestamp + day) / 1000,
+          },
         },
         poolTotalSwapVolume: true,
         poolTotalSwapFee: true,
-        poolLiquidity: true
+        poolLiquidity: true,
       };
     }
     return await request('getPoolMetrics', query);

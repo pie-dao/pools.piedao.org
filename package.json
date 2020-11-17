@@ -7,6 +7,8 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ethersproject/abi": "^5.0.7",
+    "@ethersproject/contracts": "^5.0.5",
     "@pie-dao/abis": "^1.0.0",
     "@pie-dao/eth-tailwind": "^1.0.0",
     "@pie-dao/tailwind": "^1.1.2",

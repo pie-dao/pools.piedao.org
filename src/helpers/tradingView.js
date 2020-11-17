@@ -1,9 +1,8 @@
 import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 import { getSubgraphMetadata } from './subgraph.js';
 import poolsConfig from '../config/pools.json';
-import {
-  contract,
-} from '../stores/eth.js';
+import { contract } from '../stores/eth.js';
 
 export const buildFormulaGraph = async (pieAddress) => {
   let formula = '';
@@ -17,9 +16,11 @@ export const buildFormulaGraph = async (pieAddress) => {
 
   const metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
 
-  metadata.tokens.map((component) => {
+  metadata.tokens.forEach((component) => {
     const checksummed = ethers.utils.getAddress(component.address);
-    formula += `${component.balance / totalSupply.toNumber()}*${mapDynamicTradingViewFormula[checksummed]}+`;
+    formula += `${component.balance / totalSupply.toNumber()}*${
+      mapDynamicTradingViewFormula[checksummed]
+    }+`;
   });
 
   return formula;
@@ -39,7 +40,9 @@ export const buildFormulaNative = async (pieAddress, bPoolAddress, pools, balanc
     const bal = balances[key] || 0;
 
     if (bal !== 0) {
-      formula += `${bal / totalSupply.toNumber()}*${mapDynamicTradingViewFormula[component.address]}+`;
+      formula += `${bal / totalSupply.toNumber()}*${
+        mapDynamicTradingViewFormula[component.address]
+      }+`;
     }
   });
 
