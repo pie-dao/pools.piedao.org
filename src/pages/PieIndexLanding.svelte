@@ -94,11 +94,12 @@
   $: metadata = {};
 
   $: (async () => {
-    // if(initialized) return;
+    if(initialized) return;
 
-    // const poolContract = await contract({ address: token });
-    // const bPoolAddress = await poolContract.getBPool();
-    // metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
+    const poolContract = await contract({ address: token });
+    const bPoolAddress = await poolContract.getBPool();
+    metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
+    initialized = true;
 
     // const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
     // renderWidget(formula);
