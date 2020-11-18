@@ -93,6 +93,7 @@
     try {
       isLoading = true;  
       const pieToMint = pieAddress || token;
+      console.log('amount', amount)
       amountsRequired = (await fetchCalcTokensForAmounts(pieToMint, amount));
       isLoading = false;
       areTokensEnough();
@@ -338,9 +339,7 @@
     }
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
-    if (approach === "add") {
-      fetchAmounts();
-    }
+    fetchAmounts();
   };
 
   const withdraw = async () => {

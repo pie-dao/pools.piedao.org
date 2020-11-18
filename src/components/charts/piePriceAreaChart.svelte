@@ -38,7 +38,7 @@ chart = LightweightCharts.createChart(document.getElementById(chartId), {
 });
 
 var areaSeries = chart.addAreaSeries({
-    bottomColor: 'rgba(116, 58, 213, 0.5)',
+    bottomColor: 'rgba(116, 58, 213, 0.1)',
     topColor: '#d53a9d',
     lineColor: '#34D8FF',
     lineWidth: 2,

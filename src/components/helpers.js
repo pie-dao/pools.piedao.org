@@ -292,7 +292,9 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
       .toFixed(0),
   );
 
-  const res = await tokenContract.calcTokensForAmount(amount);
+  console.log('amount', amount.toString())
+
+  const res = await tokenContract.calcTokensForAmount(amount.toString());
   const data = {};
 
   res.tokens.forEach((token, index) => {
