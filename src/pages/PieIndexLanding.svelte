@@ -91,8 +91,7 @@
       return component;
     })
   );
-
-
+  
   $: pieTokens = fetchPieTokens($balances);
 
   $: metadata = {};
