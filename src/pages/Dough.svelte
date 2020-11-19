@@ -5,6 +5,8 @@
   import { farming } from '../stores/eth/writables.js';
 
   import SectionImageTop from "../components/elements/SectionImageTop.svelte"
+  import SectionImageLeft from "../components/elements/SectionImageLeft.svelte"
+  import SectionImageRight from "../components/elements/SectionImageRight.svelte"
   
   import {
     formatFiat,
@@ -124,46 +126,37 @@
   <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
 
   
-  <img class="w-20pc h-auto mt-8 l md:mt-12 md:w-20pc" src={images.tokenmigration} alt="DOUGH Migration" />
-  <h1 class="text-center text-lg  mt-8 md:text-xl md:mt-12">Token Migration</h1>
-  <div class="text-center font-thin text-xs mt-2 md:mt-4 md:text-lg">
-    PieDAO is entering the next phase of its mission to democratize the access to wealth allocation strategies by migrating the currently non-transferable token (DOUGHv1) to a transferable one (DOUGHv2).<br/>
+  <SectionImageTop title="Token Migration" image={images.tokenmigration}>
+    <span slot="content">
+      PieDAO is entering the next phase of its mission to democratize the access to wealth allocation strategies by migrating the currently non-transferable token (DOUGHv1) to a transferable one (DOUGHv2).<br/>
     To further develop the community and to incentivize early adopters through the liquidity mining program the community believes the time is right to start the migration of DOUGH to DOUGH v2.<br/>
-  </div>
+    </span>
+  </SectionImageTop>
+
+
   <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/piedao-token-migration-d2e9cd5d1a16`}>DOUGH Migration on Medium</a>
   
+  <SectionImageRight title="Vesting Period" image={images.vestingperiod} isGrey={true}>
+    <span slot="content">
+      To align incentives early token requests were accepted at a lower rate then later ones but are subject to longer vesting periods. DOUGH holders are subject to the following vesting schedules:<br/>
+      <ul class="list-disc list-inside mt-2 md:mt-4">
+          <li>Contribution on Epoch 1 (from block to block) 1.5y vesting</li>
+          <li>Contribution on Epoch 2 (from block to block) 1y vesting</li>
+          <li>Summoners 3y vesting</li>
+          <li>Bounties, no vesting applied</li>
+      </ul>
+    </span>
+  </SectionImageRight>
 
-  <div class="bg-grey-243 rounded-sm p-8 flex justify-between flex-wrap w-full mt-8 md:mt-20">
-    <div class="p-4 flex justify-center items-center content-center flex-wrap md:w-2/3">
-        <h1 class="text-lg md:text-xl">Vesting Period</h1>
-        <div class="font-thin text-xs mt-2 md:mt-4 md:text-base">
-            To align incentives early token requests were accepted at a lower rate then later ones but are subject to longer vesting periods. DOUGH holders are subject to the following vesting schedules:<br/>
-            <ul class="list-disc list-inside mt-2 md:mt-4">
-                <li>Contribution on Epoch 1 (from block to block) 1.5y vesting</li>
-                <li>Contribution on Epoch 2 (from block to block) 1y vesting</li>
-                <li>Summoners 3y vesting</li>
-                <li>Bounties, no vesting applied</li>
-              </ul>
-        </div>
-    </div>
-    <div class="p-4 flex justify-center w-full flex-wrap md:w-1/3 p-16"><img class="w-100pc h-full md:h-auto md:w-100pc"src={images.vestingperiod} alt="PieDAO Hero" /></div>
-  </div>
-
-  <div class="bg-grey-243 rounded-sm p-8 flex justify-between flex-wrap w-full mt-4 md:mt-8">
-    <div class="p-4 flex justify-center w-full flex-wrap md:w-1/3 p-16"><img class="w-100pc h-full h-auto md:w-100pc"src={images.howtomigrate} alt="PieDAO Hero" /></div>
-    <div class="p-4 flex justify-center items-center content-center flex-wrap md:w-2/3">
-        <h1 class="text-lg md:text-xl">How to Migrate</h1>
-        <div class="font-thin text-xs mt-2 md:mt-4 md:text-base">
-            To make the process as simple as possible an Aragon app will be installed which allows you to migrate your tokens.<br/>
-            By visiting the Aragon interface of PieDAO and opening the migration app you can easily migrate your already vested tokens to DOUGH v2.
-            The interface will automatically fill in the maximum amount you are able to migrate.<br/>
-            <a class="font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-farming-season-7329ea5e84dd`}>Migration Tutorial</a><br/>
-            <a class="font-bold mt-4 md:mt-4" target="_blank" href={`https://client.aragon.org/?#/piedao/0x968986e7ab9d05b4f6334efdc6c4c5efd89d4119/`}>Migrate Now</a>
-
-
-        </div>
-    </div>
-  </div>
+  <SectionImageLeft title="How to Migrate" image={images.howtomigrate} isGrey={true}>
+    <span slot="content">
+      To make the process as simple as possible an Aragon app will be installed which allows you to migrate your tokens.<br/>
+      By visiting the Aragon interface of PieDAO and opening the migration app you can easily migrate your already vested tokens to DOUGH v2.
+      The interface will automatically fill in the maximum amount you are able to migrate.<br/>
+      <a class="font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-farming-season-7329ea5e84dd`}>Migration Tutorial</a><br/>
+      <a class="font-bold mt-4 md:mt-4" target="_blank" href={`https://client.aragon.org/?#/piedao/0x968986e7ab9d05b4f6334efdc6c4c5efd89d4119/`}>Migrate Now</a>
+    </span>
+  </SectionImageLeft>
 
   <SectionImageTop title="Liquidity Mining" image={images.liquiditymining}>
     <span slot="content">
