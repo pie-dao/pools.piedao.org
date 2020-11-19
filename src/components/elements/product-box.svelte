@@ -5,7 +5,7 @@
   export let description;
 </script>
 {#if link}
-<a href="#/pie/0x78f225869c08d478c34e5f645d07a87d3fe8eb78" class="investment-card flex flex-col w-1/3 items-center min-h-150px bg-lightgrey m-10px p-20px rounded-sm">
+<a href={link} class="investment-card flex flex-col w-1/3 items-center min-h-150px bg-lightgrey m-10px p-20px rounded-sm">
     <div class="text-center"><img class="w-80px h-auto"src={image} alt={title} /></div>
     <div class="flex flex-col text-center">
         <div class="text-lg">{title}</div>

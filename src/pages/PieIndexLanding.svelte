@@ -1,5 +1,6 @@
 <script>
   import {getSubgraphMetadata, getPoolSwaps, getPoolMetrics} from '../helpers/subgraph.js'
+  import { pieSmartPool } from '@pie-dao/abis';
   import { _ } from 'svelte-i18n';
   import moment from 'moment';
   import BigNumber from 'bignumber.js';
@@ -17,7 +18,7 @@
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
-  import { fetchPooledTokens, pooledTokenAmountRequired } from '../components/helpers.js';
+  import { fetchPooledTokens, pooledTokenAmountRequired, fetchCalcTokensForAmounts } from '../components/helpers.js';
   import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
   import {
     pools,
@@ -31,6 +32,7 @@
   } from '../helpers/tradingView.js'
 
   import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
+  import Change from '../components/Change.svelte'
   export let params;
 
   $: token = params.address;
@@ -68,6 +70,8 @@
     null,
   );
 
+  $: nav = 0;
+
   $: (() => {
     pieOfPies = false;
   })(token);
@@ -94,18 +98,34 @@
   $: metadata = {};
 
   $: (async () => {
+    console.log('compo', composition);
+    
     if(initialized) return;
 
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
     metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
+    nav = await calculateNavValue();
+    
     initialized = true;
 
-    // const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
-    // renderWidget(formula);
   })();
 
-  const renderWidget = (formula) => {
+  const calculateNavValue = async () => {
+    const tokenContract = await contract({ abi: pieSmartPool, address: token });
+    let totalSupply = await tokenContract.totalSupply() / 1e18;
+    return getLiquidity() / totalSupply;
+  }
+
+  const getLiquidity = () => {
+    if(poolsConfig[token].swapEnabled)
+      return metadata.liquidity;
+
+    return $pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : 0
+  }
+
+  const renderWidget = async () => {
+    const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
     if( formula === '') return;
     const finalFormula = `${formula.slice(0, -1)}`;
     options.symbol = finalFormula;
@@ -127,17 +147,10 @@
           <a href={`#/pools/${token}`}>
             <h1 class="text-xl leading-none font-black">{symbol}</h1>
           </a>
-          {#if change24H}
-            <h5
-              class:green={change24H > 0}
-              class:red={change24H < 0}
-              class="text-sm leading-none font-thin">
-              {change24H}%
-            </h5>
-          {/if}
           {#if tokenPrice}
-            <h5 class="text-xl leading-none font-thin">{formatFiat(tokenPrice)}</h5>
+            <h5 class="text-xl leading-none font-thin relative">{formatFiat(tokenPrice)} <span class="text-lg absolute font-black" style="top: 5px; right: -66px;"><Change value={change24H} /></span></h5>
           {/if}
+          
         </div>
       </div>
 
@@ -177,15 +190,21 @@
       </div>
       <div class="font-thin text-xs md:text-base">Inception date</div>
     </div>
-    
-    
-    {#if poolsConfig[token].swapEnabled}
+
     <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        {formatFiat(nav)}
+      </div>
+      <div class="font-thin text-xs md:text-base">NAV</div>
+    </div>
+
+    {#if poolsConfig[token].swapEnabled}
+    <!-- <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
         {formatFiat(metadata.totalSwapVolume)}
       </div>
       <div class="font-thin text-xs md:text-base">Total Swap Volume</div>
-    </div>
+    </div> -->
 
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
@@ -194,12 +213,12 @@
       <div class="font-thin text-xs md:text-base">Fees to LPs</div>
     </div>
 
-    <div class="p-0 flex-initial self-start mr-8">
+    <!-- <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
         {formatFiat(metadata.lastSwapVolume)}
       </div>
       <div class="font-thin text-xs md:text-base">24h Pool Volume</div>
-    </div>
+    </div> -->
     {/if}
 
   </div>
@@ -207,11 +226,6 @@
   {#if poolsConfig[token].coingeckoId}
     <PriceChartArea coingeckoId={poolsConfig[token].coingeckoId}/>
   {/if}
-
-  <!-- <div
-    class="flex flex-row w-100pc mt-2 spl-chart-container md:mt-8 {poolsConfig[token].mapDynamicTradingViewFormula ? '' : 'hidden'}">
-    <TradingViewWidget bind:this={tradingViewWidgetComponent} {options} />
-  </div> -->
 
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
   {#if pieOfPies }
@@ -231,12 +245,13 @@
           <th class="font-thin border-b-2 px-4 py-2">Price</th>
           <th class="font-thin border-b-2 px-4 py-2">Allocation</th>
           {#if !pieOfPies }
-              <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th>
+              <!-- <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th> -->
               <th class="font-thin border-b-2 px-4 py-2">Balance</th>
           {/if}
-          <th class="font-thin border-b-2 px-4 py-2">Market Cap</th>
-          <th class="font-thin border-b-2 px-4 py-2">Volume</th>
-          <th class="font-thin border-b-2 px-4 py-2">Change</th>
+          <!-- <th class="font-thin border-b-2 px-4 py-2">Market Cap</th> -->
+          <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
+          <!-- <th class="font-thin border-b-2 px-4 py-2">Volume</th> -->
+          <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
         </tr>
       </thead>
       <tbody>
@@ -249,25 +264,32 @@
                 alt={pooledToken.symbol} />
               {pooledToken.symbol}
             </td>
-            <td class="border text-center px-4 py-2">
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
-            <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</td>
+            <td class="border text-center px-4 py-2 font-thin">{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</td>
 
             {#if !pieOfPies }
-              <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td>
-              <td class="border text-center px-4 py-2">{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')}</td>
+              <!-- <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td> -->
+              <td class="border text-center px-4 py-2 font-thin">{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')}</td>
             {/if}
             
-            <td class="border text-center px-4 py-2">
+            <!-- <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.market_cap`, '-'))}
-            </td>
+            </td> -->
+
             <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.total_volume`, '-'))}
+              <Change value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
             </td>
+
+
+            <!-- <td class="border text-center px-4 py-2">
+              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.total_volume`, '-'))}
+            </td> -->
+
             <td class="border text-center py-2">
               <img
-                class="w-30 spark mx-0"
+                class="w-30 spark greyoutImage mx-0"
                 alt="Sparkline"
                 src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
                 style="margin: auto;" />
@@ -289,15 +311,5 @@
     <div class="p-0 mt-2 md:w-1/4">
       <Quantstamp class="w-1/2" token={$currentRoute.params.address} />
     </div>
-  </div>
-
-  <h1 class="mt-8 mb-4 text-base md:text-3xl">Latest news</h1>
-
-  <div class="flex flex-col w-full justify-between md:flex-row">
-    <div class="w-full md:w-49pc">
-      <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Membership Proposal ✅ passed<br><br>The proposal will enable members <a href="https://twitter.com/TheLAOOfficial?ref_src=twsrc%5Etfw">@TheLAOOfficial</a> to join <a href="https://twitter.com/PieDAO_DeFi?ref_src=twsrc%5Etfw">@PieDAO_DeFi</a>, a fee-collecting organization coordinating weights of “tokenized asset allocations”, PIEs that is open to anyone <a href="https://twitter.com/ethereum?ref_src=twsrc%5Etfw">@ethereum</a> through the purchase of its voting shares, <a href="https://twitter.com/search?q=%24DOUGH&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$DOUGH</a> 💜 <a href="https://t.co/ikCkLTeGJy">https://t.co/ikCkLTeGJy</a> <a href="https://t.co/4L13l1xsXl">pic.twitter.com/4L13l1xsXl</a></p>&mdash; ⟠ DeFi++ (@defiopfi) <a href="https://twitter.com/defiopfi/status/1299419505018515457?ref_src=twsrc%5Etfw">August 28, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    </div>
-    <div class="w-full md:w-49pc">
-      <blockquote class="twitter-tweet" data-conversation="none"><p lang="en" dir="ltr">1/2 Proposing a few changes to DEFI++<br><br>Model<br>1) Using an 30d AVG for market cap to calculate weights (better in volatile markets)<br><br>Allocation<br>1) Adding <a href="https://twitter.com/search?q=%24MLN&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$MLN</a> from <a href="https://twitter.com/melonprotocol?ref_src=twsrc%5Etfw">@melonprotocol</a> and <a href="https://twitter.com/search?q=%24PNT&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$PNT</a> from <a href="https://twitter.com/pTokens_io?ref_src=twsrc%5Etfw">@pTokens_io</a> on DEFI+S <br>2) Adding <a href="https://twitter.com/search?q=%24YFI&amp;src=ctag&amp;ref_src=twsrc%5Etfw">$YFI</a> to DEFI+L<br><br>By <a href="https://twitter.com/Alexintosh?ref_src=twsrc%5Etfw">@Alexintosh</a> via <a href="https://twitter.com/PieDAO_DeFi?ref_src=twsrc%5Etfw">@PieDAO_DeFi</a> Discord</p>&mdash; ⟠ DeFi++ (@defiopfi) <a href="https://twitter.com/defiopfi/status/1297027983459471360?ref_src=twsrc%5Etfw">August 22, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>    </div>
   </div>
 </div>

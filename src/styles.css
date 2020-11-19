@@ -23,6 +23,18 @@
   margin: 0 auto;
 }
 
+.text-green {
+  color: #4eaf0a;
+}
+
+.text-red {
+  color: #e15241;
+}
+
+.greyoutImage {
+  filter: grayscale(100%);
+}
+
 .blur-heavy {
   filter: blur(2px);
   -o-filter: blur(2px);
