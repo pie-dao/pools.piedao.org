@@ -144,7 +144,7 @@
             <h1 class="text-xl leading-none font-black">{symbol}</h1>
           </a>
           {#if tokenPrice}
-            <h5 class="text-xl leading-none font-thin relative">{formatFiat(tokenPrice)} <span class="text-lg absolute font-black" style="top: 5px; right: -66px;"><Change value={change24H} /></span></h5>
+            <h5 class="text-xl leading-none font-thin relative">{formatFiat(tokenPrice)} <span class="text-lg absolute font-black" style="top: 5px; right: -75px;"><Change value={change24H} /></span></h5>
           {/if}
           
         </div>
