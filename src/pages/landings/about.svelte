@@ -23,17 +23,8 @@
     <span slot="content">
 		<div class="font-thin mb-50px">
             PieDAO is a decentralized ETF manager governed by holders of the DOUGH token. Holding DOUGH gives you a voice in everything we do, as well as a share of the fees our products generate. Our index offerings provide risk-minimised exposure to the rapidly expanding DeFi ecosystem. Get involved today.
+            <a class="font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-farming-season-7329ea5e84dd`}>Migration Tutorial</a><br/>
+            <a class="font-bold mt-4 md:mt-4" target="_blank" href={`https://client.aragon.org/?#/piedao/0x968986e7ab9d05b4f6334efdc6c4c5efd89d4119/`}>Migrate Now</a>
         </div>
 	</span>
 </SectionImageLeft>
-
-<div class="content flex w-100pc justify-between spl">
-    <div class="flex w-7/12 flex-col mt-10 p-5">
-        <img class="w-100pc h-auto md:w-100pc h-auto"src={images.banner} alt="PieDAO Hero" />
-    </div>
-    <div class="flex w-5/12 flex-col mt-10 p-5">
-        <div class="font-thin mb-50px">
-            PieDAO is a decentralized ETF manager governed by holders of the DOUGH token. Holding DOUGH gives you a voice in everything we do, as well as a share of the fees our products generate. Our index offerings provide risk-minimised exposure to the rapidly expanding DeFi ecosystem. Get involved today.
-        </div>
-    </div>
-</div>

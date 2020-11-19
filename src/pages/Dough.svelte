@@ -3,11 +3,15 @@
   import images from "../config/images.json";
   import FarmerTable from '../components/FarmerTable.svelte';
   import { farming } from '../stores/eth/writables.js';
+
+  import SectionImageTop from "../components/elements/SectionImageTop.svelte"
+  
   import {
     formatFiat,
     toFixed,
     subscribeToBalance,
   } from "../components/helpers.js";
+   
    import {
     balanceKey,
     balances,
@@ -94,8 +98,6 @@
     <button on:click={() => addToken()} class="table-btn mt-4">
       Add to MetaMask 🦊
     </button>
-    
-
    </div>
 
  
@@ -122,7 +124,7 @@
   <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
 
   
-  <img class="w-20pc h-auto mt-8 l md:mt-12 md:w-20pc"src={images.tokenmigration} alt="DOUGH Migration" />
+  <img class="w-20pc h-auto mt-8 l md:mt-12 md:w-20pc" src={images.tokenmigration} alt="DOUGH Migration" />
   <h1 class="text-center text-lg  mt-8 md:text-xl md:mt-12">Token Migration</h1>
   <div class="text-center font-thin text-xs mt-2 md:mt-4 md:text-lg">
     PieDAO is entering the next phase of its mission to democratize the access to wealth allocation strategies by migrating the currently non-transferable token (DOUGHv1) to a transferable one (DOUGHv2).<br/>
@@ -163,34 +165,21 @@
     </div>
   </div>
 
+  <SectionImageTop title="Liquidity Mining" image={images.liquiditymining}>
+    <span slot="content">
+      <div class="mt-2 md:mt-4">
+        With the imminent migration to the DOUGH v2 governance token and the launch of the DOUGH / ETH liquidity pool on Balancer, PieDAO will also open its DOUGH farming season!
+      </div>
 
+      <div class="mt-2 md:mt-4">
+        <strong>Incentives: </strong>60,000,000 DOUGH v2 tokens (60% of total) will be locked in a vault off-circulation and assigned to the DAO to promote its development overtime through liquidity mining programs and other incentives.  
+      </div>
 
-  <img class="w-25pc h-auto mt-8 l md:mt-16 md:w-25pc h-auto"src={images.liquiditymining} alt="PieDAO Hero" />
-  <h1 class="text-center text-lg  mt-8 md:text-xl md:mt-12">Liquidity Mining</h1>
-  <div class="text-left font-thin text-xs mt-2 md:mt-4 md:text-lg">
-    With the imminent migration to the DOUGH v2 governance token and the launch of the DOUGH / ETH liquidity pool on Balancer, PieDAO will also open its DOUGH farming season!
-  </div>
-    <div class="text-left font-thin text-xs mt-2 md:mt-4 md:text-lg">
-    <strong>Incentives: </strong>60,000,000 DOUGH v2 tokens (60% of total) will be locked in a vault off-circulation and assigned to the DAO to promote its development overtime through liquidity mining programs and other incentives.
-</div>
-    <div class="text-left font-thin text-xs mt-2 md:mt-4 md:text-lg">
-    <strong>Eligibility: </strong>All Liquidity Providers to selected pools will be eligible for these incentive programs by staking their LP tokens to PieDAO staking contract.
-</div>
-    <!-- <div class="w-100pc text-left font-thin text-xs mt-2 md:mt-4 md:text-lg">
-    <strong>Pools: </strong>
-    <ul class="list-disc list-inside mt-2 md:mt-4">
-        <li>Contribution on Epoch 1 (from block to block) 1.5y vesting</li>
-        <li>Contribution on Epoch 2 (from block to block) 1y vesting</li>
-        <li>Summoners 3y vesting</li>
-        <li>Bounties, no vesting applied</li>
-      </ul>
-    </div> -->
-
-  <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-farming-season-7329ea5e84dd`}>Farming Season on Medium</a>
-  <h1 class="text-center text-lg  mt-8 md:text-xl md:mt-12">Available Pools</h1>
-  <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-4 md:p-6 w-full">
-  <FarmerTable />
-</div>
+      <div class="mt-2 md:mt-4">
+        <strong>Eligibility: </strong>All Liquidity Providers to selected pools will be eligible for these incentive programs by staking their LP tokens to PieDAO staking contract.
+      </div>      
+    </span>
+  </SectionImageTop>
 </div>
 
 
