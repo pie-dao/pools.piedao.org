@@ -24,7 +24,7 @@
   </HeroCentered>
 </div>
 
-<SectionImageRight title="Some text here" image={images.howtomigrate} isGrey={true}>
+<SectionImageRight title="Some text here" image={images.defiplusicons} isGrey={true}>
     <span slot="content">
       A lot more text a lot more text a lot more text a lot more text a lot more text a lot more text a lot more text a lot more text.<br/>
       a lot more text a lot more text a lot more text a lot more text a lot more text a lot more texta lot more text a lot more text.
