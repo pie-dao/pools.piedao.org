@@ -91,7 +91,7 @@
       return component;
     })
   );
-  
+
   $: pieTokens = fetchPieTokens($balances);
 
   $: metadata = {};
@@ -232,6 +232,7 @@
       {/each}
     </ul>
   {/if}
+
 
   <div class="w-99pc m-4">
     <table class="breakdown-table table-auto w-full">
