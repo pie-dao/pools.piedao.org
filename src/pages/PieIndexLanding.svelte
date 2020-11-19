@@ -97,9 +97,7 @@
 
   $: metadata = {};
 
-  $: (async () => {
-    console.log('compo', composition);
-    
+  $: (async () => {    
     if(initialized) return;
 
     const poolContract = await contract({ address: token });
@@ -108,7 +106,6 @@
     nav = await calculateNavValue();
     
     initialized = true;
-
   })();
 
   const calculateNavValue = async () => {

@@ -466,7 +466,7 @@
 }
 
 .spark:hover {
-  -webkit-animation: filter-animation 5s infinite;
+  filter: grayscale(0%);
 }
 
 @-webkit-keyframes filter-animation {
