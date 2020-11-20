@@ -213,7 +213,7 @@
       <thead>
         <tr>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
-          <th class="font-thin border-b-2 px-4 py-2">Allocation</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">Allocation</th>
           <th class="font-thin border-b-2 px-4 py-2">Price</th>
           
           {#if !pieOfPies }
@@ -236,7 +236,7 @@
             </td>
 
             <td class="border text-center px-4 py-2 font-thin relative w-50">
-                <div style={`width: ${40 * (pooledToken.percentage/100)}rem`} class="percentage-bar float-left bg-pink h-6 mt-2 rounded-md hidden md:block">
+                <div style={`width: ${40 * (pooledToken.percentage/100)}rem`} class="percentage-bar float-left bg-pink h-6 mt-2 roundedxs hidden md:block">
                   {#if pooledToken.percentage >= 7}
                   <span>{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</span>
                   {/if}
