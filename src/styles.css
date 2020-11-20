@@ -424,10 +424,10 @@
 
 .spl .btn {
   border-radius: 6px;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 200;
-  width: 11rem;
-  min-width: 230px!important;
+  width: 7rem;
+  min-width: 150px!important;
 }
 
 .table-btn {

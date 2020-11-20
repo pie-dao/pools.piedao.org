@@ -18,7 +18,7 @@
       Community Governed ETFs
     </div>
 
-    <div class="flex justify-around w-100pc content-center">
+    <div class="flex flex-col justify-around w-100pc content-center lg:flex-row">
 
       <ProductBox 
         link="#/pie/0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
@@ -42,7 +42,7 @@
       />
   </div>
 
-  <div class="content flex w-100pc justify-between spl">
+  <div class="content flex flex-col w-100pc justify-between spl lg:flex-row">
     <div class="flex w-7/12 flex-col mt-10 p-5">
       <div class="text-xl">
         Tokenized ETFs <br/>
