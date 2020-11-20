@@ -166,20 +166,20 @@
         </div>
       </div>
 
-      <div class="sm:w-full md:w-2/3 flex flex-row-reverse">
+      <div class="w-100pc sm:w-full md:w-2/3 flex flex-row-reverse">
         <button on:click={() => {
           modalOption.method = "multi";
           modalOption.poolAction = "withdraw";
           modalOption.title = "Redeem";
           modal.open()
-        }} class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Redeem</button>
+        }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Redeem</button>
 
         <button on:click={() => {
           modalOption.method = "single";
           modalOption.poolAction = "add";
           modalOption.title = "Add Liquidity";
           modal.open()
-        }} class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Issue</button>
+        }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Issue</button>
         
         <!-- <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
           <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
