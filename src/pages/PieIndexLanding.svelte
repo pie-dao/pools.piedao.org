@@ -14,6 +14,7 @@
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
+  import KeyFacts from "../components/KeyFacts.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
@@ -314,3 +315,8 @@
     </div>
   </div>
 </div>
+
+<div class="content spl">
+  <KeyFacts />
+</div>
+
