@@ -459,7 +459,7 @@ border-radius: 6px;
   border-radius: 6px;
   font-size: 20px;
   font-weight: 200;
-  width: 7rem;
+  /* width: 7rem; */
   min-width: 150px!important;
 }
 
@@ -1072,3 +1072,25 @@ constructed stylesheet
 /* purgecss end ignore */
 
 .keyborder { border-bottom: solid 1px #a2a2a2; }
+
+.genericmodal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: rgba(35, 30, 34, 0.9);
+  background: rgba(35, 30, 34, 0.9);
+  color: rgba(35, 30, 34, 0.9);
+}
+
+.modalcontent{
+  z-index: 200;
+  border-radius: 10px;
+}
+
+.borderDiveder {
+  margin: 0 10px;
+  border-bottom: solid 0.5px #b9b9b9;
+}

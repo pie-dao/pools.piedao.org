@@ -38,7 +38,7 @@
 
       <ProductBox 
         link="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
-        image={images.defiplusl}
+        image={images.defipluss}
         title="DEFI+S"
         subTitle="DeFi Small Cap"
         description="Small Cap Projects with Big Potential."
