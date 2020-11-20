@@ -114,6 +114,10 @@
   line-height: 5rem;
 }
 
+.roundedxs {
+border-radius: 6px;
+}
+
 /* .toggle-btn .active {
   background: white;
   font-weight: bold;
