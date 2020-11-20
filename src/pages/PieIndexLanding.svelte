@@ -42,6 +42,10 @@
   export let params;
 
   let modal;
+  let modalOption = {
+    method: "single",
+    poolAction: "add"
+  }
 
   $: token = params.address;
 
@@ -133,12 +137,13 @@
 }
 
 </script>
-<Modal bind:this="{modal}">
+<Modal backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
     <LiquidityModal 
-    token={token} 
-    method={"single"} 
-    poolAction={"add"}/>
+      token={token} 
+      method={modalOption.method} 
+      poolAction={modalOption.poolAction}
+    />
   </span>
 </Modal>
 <div class="content flex flex-col spl">
@@ -161,13 +166,17 @@
       </div>
 
       <div class="sm:w-full md:w-2/3 flex flex-row-reverse">
-        <a href={`#/pools/${token}/withdraw/multi`}>
-          <button class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Redeem</button>
-        </a>
-        <a href={`#/pools/${token}`}>
-          <button class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Mint</button>
-        </a>
-        <button on:click={() => modal.open()} class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Modal</button>
+        <button on:click={() => {
+          modalOption.method = "multi";
+          modalOption.poolAction = "withdraw";
+          modal.open()
+        }} class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Redeem</button>
+        
+        <button on:click={() => {
+          modalOption.method = "single";
+          modalOption.poolAction = "add";
+          modal.open()
+        }} class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Issue</button>
         
         <!-- <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
           <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>

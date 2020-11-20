@@ -390,6 +390,7 @@
     {/if}
   </h1>
 
+  {#if approach === 'add'}
   <div class="row flex font-thin">
     <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
     <div class="switch mx-4" on:click={() => {
@@ -410,6 +411,7 @@
     </div>
     <div class="flex-auto text-left">{$_('general.multi')} {$_('general.asset')}</div>
   </div>
+  {/if}
 
   <p class="text-center font-thin my-4 mx-2">
 
@@ -438,13 +440,6 @@
   {/if}
     
   </p>
-
-  {#if type === 'multi'}
-    <div class="row bg-white mx-0 md:mx-4 flex mb-32px font-thin pointer border border-solid rounded-sm overflow-hidden border-gray-400">
-      <div class="toggle-btn bg-grey-243 p-20px w-50pc text-center {approach === 'add' ? 'active' : ''}" on:click={() => approach = "add"}>{$_('general.add')} {$_('general.liquidity')}</div>
-      <div class="toggle-btn bg-grey-243 text-center p-20px w-50pc {approach === 'withdraw' ? 'active' : ''}" on:click={() => approach = "withdraw"}>{$_('general.withdraw')}</div>
-    </div>
-  {/if}
 
   {#if type === 'multi'}
     <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
