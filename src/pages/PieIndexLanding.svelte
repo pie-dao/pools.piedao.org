@@ -14,6 +14,7 @@
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
+  import LiquidityModal from "../components/LiquidityModal.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
   import KeyFacts from "../components/KeyFacts.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
@@ -134,7 +135,10 @@
 </script>
 <Modal bind:this="{modal}">
   <span slot="content">
-    This is a modal
+    <LiquidityModal 
+    token={token} 
+    method={"single"} 
+    poolAction={"add"}/>
   </span>
 </Modal>
 <div class="content flex flex-col spl">
