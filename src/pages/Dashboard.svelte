@@ -44,7 +44,7 @@
     </div>
 
 
-  <div class="w-99pc">
+  <div class="w-99pc m-4">
     <table class="breakdown-table table-auto w-full">
       <thead>
         <tr>
@@ -59,7 +59,7 @@
       <tbody>
         {#each pies as pie}
           <tr class="row-highlight">
-            <td class="pointer border border-gray-800 px-2 py-2 text-left" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+            <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
               <a class="flex items-center px-2" href={`#/pie/${pie.address}`}>
                 <img
                   class="inline icon ml-2 mr-2"
@@ -68,7 +68,7 @@
                   <span class="md:block">{pie.symbol}</span>
               </a>
             </td>
-            <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+            <td class="pointer border px-4 ml-8 py-2 font-thin text-center min-w-200px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
               <a class="" href={`#/pie/${pie.address}`}>
                 {#each pie.composition as coin}
                   <img
