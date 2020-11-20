@@ -37,7 +37,6 @@
   <h1>
     {$_('general.allocation')}
     {$_('general.breakdown')}
-    <button on:click={() => (defaultAllocation = !defaultAllocation)}>{defaultAllocation}</button>
   </h1>
   <div class="row">
     <div class="left" bind:offsetWidth={leftWidth}>

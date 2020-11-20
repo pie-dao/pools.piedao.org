@@ -153,7 +153,8 @@
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
-      value: percentagePlus
+      value: percentagePlus,
+      gasLimit: 3000000
     }
 
     console.log({
@@ -204,7 +205,6 @@
       if( errors.length > 0) {
         console.log('Missing tokens', errors);
         areTokensEnoughBool = false;
-        displayNotification({ message: 'Looks like you are missing some tokens!', type: "error", autoDismiss: 30000 });
         return false;
       }
 
@@ -243,13 +243,9 @@
     }
 
     if(!areTokensEnough()) {
-      alert('tokens not enough');
+      displayNotification({ message: 'Looks like you are missing some tokens!', type: "error", autoDismiss: 30000 });
       return;
     }
-
-    console.log('pooledTokens', pooledTokens, $allowances);
-
-
     
     for (let i = 0; i < pooledTokens.length; i += 1) {
       let allowanceKey = functionKey(pooledTokens[i].address, 'allowance', [$eth.address, token]);
@@ -381,15 +377,9 @@
   };
 </script>
 
-<div class="liquidity-container bg-grey-243 rounded-4px p-4 md:p-6 w-full">
-  <h1 class="text-center text-xl">
-    {#if approach === 'add'}
-      {$_('general.add')} {$_('general.liquidity')}
-    {:else}
-      {$_('general.withdraw')}
-    {/if}
-  </h1>
+<div class="liquidity-container bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
 
+  {#if approach === 'add'}
   <div class="row flex font-thin">
     <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
     <div class="switch mx-4" on:click={() => {
@@ -410,6 +400,7 @@
     </div>
     <div class="flex-auto text-left">{$_('general.multi')} {$_('general.asset')}</div>
   </div>
+  {/if}
 
   <p class="text-center font-thin my-4 mx-2">
 
@@ -438,13 +429,6 @@
   {/if}
     
   </p>
-
-  {#if type === 'multi'}
-    <div class="row bg-white mx-0 md:mx-4 flex mb-32px font-thin pointer border border-solid rounded-sm overflow-hidden border-gray-400">
-      <div class="toggle-btn bg-grey-243 p-20px w-50pc text-center {approach === 'add' ? 'active' : ''}" on:click={() => approach = "add"}>{$_('general.add')} {$_('general.liquidity')}</div>
-      <div class="toggle-btn bg-grey-243 text-center p-20px w-50pc {approach === 'withdraw' ? 'active' : ''}" on:click={() => approach = "withdraw"}>{$_('general.withdraw')}</div>
-    </div>
-  {/if}
 
   {#if type === 'multi'}
     <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">

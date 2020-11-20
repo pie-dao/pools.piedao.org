@@ -14,4 +14,4 @@ export const allowances = writable({});
 export const balances = writable({});
 export const farming = writable({});
 export const eth = writable({ ...defaultEth, currentBlockNumber: 0 });
-export const pools = writable({});
+export const pools = writable({ composition: [], nav: 0 });

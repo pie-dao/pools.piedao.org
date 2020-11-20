@@ -10,6 +10,7 @@
   import filter from 'lodash/filter';
   import isNaN from 'lodash/isNaN';
   import rewardEscrewABI from '../config/rewardEscrowABI.json';
+  import escrewRewardsStakingPool from '../config/escrewRewardsStakingPool.json';
   import recipeUnipool from '../config/unipoolABI.json';
   import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
   import geyserABI from '../config/geyser.json';
@@ -188,8 +189,14 @@
 
   window.addEventListener('price-update', async function (e) {
     isReady = true;
+    incentivizedPools.forEach( async pool => {
+        if(pool.contractType === 'escrewRewardsStakingPool') {
+          const rewardEscrewContract = await contract({ address: pool.addressUniPoll, abi: escrewRewardsStakingPool });
+          pool.escrowPercentage = await rewardEscrewContract.escrowPercentage() / 1e18;
+        }
+    });
     try {
-      await estimateUnstake();
+      await estimateUnstake();  
     } catch(e){
       console.log('estimateUnstake', e);
     }
@@ -202,14 +209,12 @@
           await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
           await estimateUnstake();
         }
-      });
-      
+      });      
     }
 
     if(!intiated) {
       const address = $eth.address;
-      
-      
+
       (async () => {
         const rewardEscrew = await contract({ address: '0x63cbd1858bd79de1a06c3c26462db360b834912d', abi: rewardEscrewABI });
         const totalEscrewed = await rewardEscrew.totalEscrowedAccountBalance(address);
@@ -231,10 +236,16 @@
           p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
           p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, address);
 
-          if(p.contractType === "UniPool") {
+          if(p.contractType === "UniPool" || p.contractType === 'escrewRewardsStakingPool') {
             subscribeToStakingEarnings(p.addressUniPoll, address, true);
             p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
             p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
+
+            if(p.contractType === 'escrewRewardsStakingPool') {
+              const rewardEscrewContract = await contract({ address: p.addressUniPoll, abi: escrewRewardsStakingPool });
+              p.escrowPercentage = await rewardEscrewContract.escrowPercentage() / 1e18;
+              console.log('p.escrowPercentage', p.escrowPercentage)
+            }
           } else {
             console.log("Getting staked balance from geyser");
             console.log(p.addressUniPoll, "address");
@@ -297,7 +308,7 @@
     let emitterToUse;
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
-    if(pool.contractType === "UniPool") {
+    if(pool.contractType === "UniPool" || pool.contractType === 'escrewRewardsStakingPool') {
       unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
       const { emitter } = displayNotification(await unipool.withdraw(amountWei) );
       emitterToUse = emitter;
@@ -400,7 +411,7 @@
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
     let unipool;
     let emitterToUse;
-    if(pool.contractType === "UniPool") {
+    if(pool.contractType === "UniPool" || pool.contractType === 'escrewRewardsStakingPool') {
       unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
       console.log(`Staking ${amountToStake} ${pool.toStakeSymbol} with referral ${referralValidated}`)
       const { emitter } = displayNotification(await unipool["stake(uint256,address)"](amountWei, referralValidated) );
@@ -631,36 +642,6 @@
               {/if}
             </div>
 
-            {#if pool.id === 0 }
-            <div class="m-3 box-border">
-              <span class="text-lg">🥳</span> The migration of BPTs to this new staking contract is further incentivized with an additional bonus of <strong>15% of weekly rewards</strong>.
-              To be eligible for the migration rewards, you need to <strong>migrate exactly the same amount staked in the previous pool</strong>
-              <br/><br/>
-              <ol>
-                <li>👉 Unstake from the <button class="underline" on:click={() => pool = incentivizedPools[1] }>OLD staking contract</button></li>
-                <li>🥩 Stake in this staking contract</li>
-                <li>📝 <a class="underline" href="https://forms.gle/2g8ekufLErpZ8jwD9">Fill the form</a> with the 2 tx by November 6th at 00:00 UTC. (anonymous)</li>
-              </ol>
-            </div>
-            {/if}
-
-            {#if pool.id === 1 }
-              <div class="m-3 box-border">
-                <span class="text-lg">⚠️</span> Rewards for this staking contract expire Sat 31st, 7pm UTC. 
-                  {#if $balances[pool.KeyUnipoolBalance].toNumber() > 0}
-                  Migrate exactly <strong>{$balances[pool.KeyUnipoolBalance].toNumber()} BPT</strong> to the new pool to earn <strong>15% extra</strong> of the weekly rewards.
-                <br/><br/>
-                {/if}
-                <ol>
-                  {#if $balances[pool.KeyUnipoolBalance].toNumber() > 0}
-                    <li>👉 <button class="underline" on:click={() => exit() }>Unstake</button> from this staking contract</li>
-                  {/if}
-                  <li>🥩 Stake in the <button class="underline" on:click={() => pool = incentivizedPools[0] }>new staking contract</button> </li>
-                  <li>📝 <a class="underline" href="https://forms.gle/2g8ekufLErpZ8jwD9">Fill the form</a> with the 2 tx by November 6th at 00:00 UTC. (anonymous)</li>
-                </ol>
-              </div>
-            {/if}
-
             <div class="flex flex-col w-full justify-around md:flex-row">
               <!-- UNSTAKE BOX -->
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
@@ -733,7 +714,7 @@
               </div>
 
               <!-- CLAIM BOX -->
-              {#if pool.contractType === "UniPool"}
+              {#if pool.contractType === "UniPool" || pool.contractType === 'escrewRewardsStakingPool'}
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.claim} alt="PieDAO logo" />
                     <div class="title text-lg">REWARDS AVAILABLE</div>
@@ -744,8 +725,8 @@
 
                     {#if pool.id === 0}
                       <div class="apy">
-                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * 0.15, 3) } </strong> Escrowed / 
-                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * 0.85, 3) } </strong> Liquid
+                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * pool.escrowPercentage, 3) } </strong> Escrowed / 
+                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * (1-pool.escrowPercentage), 3) } </strong> Liquid
                       </div>
                     {/if}
 
@@ -796,9 +777,9 @@
               {#if $farming[pool.addressUniPoll] !== undefined}
 
                 {#if pool.id === 0}
-                  <p>ℹ️ <strong>DOUGH/ETH</strong> Staking Rewards - the pool will keep receiving 110,000 DOUGH as nominal weekly reward distributed to LPs, of which
-                      85% distributed liquid along the week
-                      15% escrowed within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
+                  <p>ℹ️ <strong>DOUGH/ETH</strong> Staking Rewards - the pool will keep receiving 90,000 DOUGH as nominal weekly reward distributed to LPs, of which
+                      {(1-pool.escrowPercentage)*100}% distributed liquid along the week
+                      {pool.escrowPercentage*100}% escrowed within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
                   </p>
                 {/if}
 
@@ -829,7 +810,11 @@
               <br/><br/>
               <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
-              <p>Buy {pool.containing[0].symbol} on <a target="_blank" href="https://balancer.exchange/#/swap/ether/{pool.containing[0].address}">Balancer</a> or <a href="#/pools/{pool.containing[0].address}">mint now!</a></p>
+              {#if pool.id != 2}
+                <p>Buy {pool.containing[0].symbol} on <a target="_blank" href="https://balancer.exchange/#/swap/ether/{pool.containing[0].address}">Balancer</a> or <a href="#/pools/{pool.containing[0].address}">mint now!</a></p>
+              {:else}
+                <p><a href="#/pools/{pool.containing[0].address}">Mint {pool.containing[0].symbol} now!</a></p>
+              {/if}
               <p>Buy DOUGH on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D">Balancer</a></p>
             </div>
         {/if}

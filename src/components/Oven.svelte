@@ -18,7 +18,6 @@
   import {
     allowances,
     approveMax,
-    functionKey,
     balanceKey,
     balances,
     connectWeb3,
@@ -57,7 +56,6 @@
   let amount = "1.00000000";
   let approach = poolAction;
   let areTokensEnoughBool = true;
-  let withdrawDisabled = false;
   let ethKey;
   let ethBalance = 0;
   let ethNeededSingleEntry = { val: 0, label:'-'};
@@ -96,12 +94,7 @@
       const pieToMint = pieAddress || token;
       amountsRequired = (await fetchCalcTokensForAmounts(pieToMint, amount));
       isLoading = false;
-
-      if(approach === 'add')
-        areTokensEnough();
-      else {
-        enoughPieToRedeem();
-      }
+      areTokensEnough();
     } catch (e) { console.error(e)}
   }
 
@@ -126,6 +119,30 @@
     }
   };
 
+  const calcArb = () => {
+    const reserveA = BigNumber(3490);
+    const reserveB = BigNumber(890);
+    const truePriceTokenA = BigNumber(1);
+    const truePriceTokenB = BigNumber(2.4);
+
+    const aToB = BigNumber((BigNumber(amount).multipliedBy(truePriceTokenB)).dividedBy(reserveB)).isGreaterThan(truePriceTokenA);
+    // aToB = reserveA.mul(truePriceTokenB) / reserveB < truePriceTokenA;
+
+    const invariant = reserveA.multipliedBy(reserveB);
+
+    const leftSide = (invariant.multipliedBy(aToB ? truePriceTokenA : truePriceTokenB).multipliedBy(BigNumber(1000)).dividedBy(aToB ? truePriceTokenB : truePriceTokenA).multipliedBy(997)).sqrt();
+    // uint256 leftSide = Babylonian.sqrt(
+    //     invariant.mul(aToB ? truePriceTokenA : truePriceTokenB).mul(1000) /
+    //     uint256(aToB ? truePriceTokenB : truePriceTokenA).mul(997)
+    // );
+    const rightSide = (aToB ? reserveA.multipliedBy(BigNumber(1000)) : reserveB.multipliedBy(BigNumber(1000))).dividedBy(BigNumber(997));
+    // uint256 rightSide = (aToB ? reserveA.mul(1000) : reserveB.mul(1000)) / 997;
+
+    // // compute the amount that must be sent to move the price to the profit-maximizing price
+    const amountIn = leftSide.minus(rightSide);
+
+    console.log('amountIn', amountIn.toString())
+  }
 
   const mintFromRecipe = async () => {
     const requestedAmount = BigNumber(amount);
@@ -144,12 +161,13 @@
 
     if (BigNumber(percentagePlus).isGreaterThan(BigNumber(max)) ) {
       const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
+      //TODO i18n
       const message = `Not enough ETH`;
       displayNotification({ message, type: "error", autoDismiss: 30000 });
       return;
     }
 
-    const recipe = await contract({ address: '0xccE6cC6423fa82d50F2D545b1c534E4AB2890F79', abi: recipeAbi });
+    const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
@@ -209,6 +227,7 @@
       }
 
       areTokensEnoughBool = true;
+
       return true;
   };
 
@@ -234,36 +253,23 @@
   }
 
   const mint = async () => {
-    const requestedAmount = BigNumber(amount);
-
-    if (!$eth.address || !$eth.signer) {
-      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
-      connectWeb3();
-      return;
-    }
-
-    if(!areTokensEnough()) {
-      alert('tokens not enough');
-      return;
-    }
-
-    console.log('pooledTokens', pooledTokens, $allowances);
-
-
-    
-    for (let i = 0; i < pooledTokens.length; i += 1) {
-      let allowanceKey = functionKey(pooledTokens[i].address, 'allowance', [$eth.address, token]);
-      let allowance = $allowances[allowanceKey];
-      console.log(`Allowance ${pooledTokens[i].symbol}: ${allowance}`);
-      if( new BigNumber(allowance).isLessThan(requestedAmount) ) {
-        console.log('Im asking for allowance')
-        askApproval(pooledTokens[i].address, token);
-      }
-    }
-
-    console.log('Allowance done');
-
     try {
+      const requestedAmount = BigNumber(amount);
+
+      if (!$eth.address || !$eth.signer) {
+        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+        connectWeb3();
+        return;
+      }
+
+      if(!areTokensEnough()) {
+        return;
+      }
+
+      for (let i = 0; i < lockedPoolTokens.length; i += 1) {
+        askApproval(lockedPoolTokens[i].address, token);
+      }
+
       const tokenContract = await contract({ abi: pieSmartPool, address: token });
       const decimals = await tokenContract.decimals();
       const arg = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
@@ -310,12 +316,6 @@
       withdraw();
     }
   }
-
-  const enoughPieToRedeem = () => {
-    const key = balanceKey(token, $eth.address);
-    let max = $balances[key];
-    withdrawDisabled = amount > max;
-  };
 
   const setValuePercentage = percent => {
     let max = maxAmount(token, pooledTokens);
@@ -383,41 +383,16 @@
 
 <div class="liquidity-container bg-grey-243 rounded-4px p-4 md:p-6 w-full">
   <h1 class="text-center text-xl">
-    {#if approach === 'add'}
-      {$_('general.add')} {$_('general.liquidity')}
-    {:else}
-      {$_('general.withdraw')}
-    {/if}
+Oven Liquidity
   </h1>
 
-  <div class="row flex font-thin">
-    <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
-    <div class="switch mx-4" on:click={() => {
-      if(!poolsConfig[token].useRecipe) {
-        alert($_('piedao.single.asset.coming.soon'));
-        return
-      }
-
-      if(type === 'single'){
-        type = 'multi';
-      } else {
-        type = 'single';
-        approach = 'add';
-      }
-    }}>
-      <input type="checkbox" class="toggle-input" checked={type === 'multi'} />
-      <span class="toggle active border-grey" />
-    </div>
-    <div class="flex-auto text-left">{$_('general.multi')} {$_('general.asset')}</div>
-  </div>
 
   <p class="text-center font-thin my-4 mx-2">
 
   {#if type === 'single'}
     <div class="text-left md:my-16px md:mx-20px">
-      Using Single asset Entry, you can use ETH to mint a Pie in one transaction.
-      <br> Single Asset Entry fetches the underlying assets for you from external markets like Uniswap, because of that slippage might apply.
-      <strong>5% more ETH</strong> are sent during the TX to avoid unxpected errors, any unused ETH is returned.
+      Minting is gas expensive, this is why we created <strong>Oven pools.</strong><br/>
+      Provide liquidity to this pool: when it will reach the cap if 10 ETH, we will mint the PIE for you. This way LP will share tha gas, reducing the cost significantly.
     </div>
   {/if}
 
@@ -447,75 +422,32 @@
   {/if}
 
   {#if type === 'multi'}
-    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
-      <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-        <div class="left float-left">{$_('general.amount')}</div>
-        {#if approach === "withdraw"}
-        <div
-          class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-          <div
-            class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-            on:click={() => setValuePercentage(25)}>
-            25%
-          </div>
-          <div
-            class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-            on:click={() => setValuePercentage(50)}>
-            50%
-          </div>
-          <div
-            class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-            on:click={() => setValuePercentage(75)}>
-            75%
-          </div>
-          <div
-            class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
-            on:click={() => setValuePercentage(100)}>
-            100%
-          </div>
-        </div>
-        {/if}
-      </div>
-      <div class="bottom  px-4 py-4 md:px-4 pb-4">
-        <input type="number" on:keyup="{ debounce(fetchAmounts, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
-        <div
-          class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
-          align-middle justify-center items-center pointer mt-0 md:mt-14px"
-          on:click={() => (tokenSelectModalOpen = true)}>
-          <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
-          <span class="py-2px px-4px">{tokenSymbol}</span>
-        </div>
-        <TokenSelectModal
-          tokens={pieTokens}
-          open={tokenSelectModalOpen}
-          callback={tokenSelectCallback} />
+  <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+    <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
+      <div class="left float-left">{$_('general.amount')}</div>
+      <div class="right font-bold text-xs py-1px text-center align-right float-right rounded">
+        ⚠️ slippage might apply
       </div>
     </div>
+    <div class="bottom px-4 py-4 md:py-2">
+      <input type="number" on:keyup="{ debounce(fetchQuote, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
+      <div
+        class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
+        align-middle justify-center items-center pointer mt-0 md:mt-14px"
+        on:click={() => (tokenSelectModalOpen = true)}>
+        <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
+        <span class="py-2px px-4px">{tokenSymbol}</span>
+      </div>
+      <TokenSelectModal
+        tokens={pieTokens}
+        open={tokenSelectModalOpen}
+        callback={tokenSelectCallback} />
+    </div>
+  </div>
   {/if}
 
   {#if type === 'single'}
-    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
-      <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-        <div class="left float-left">{$_('general.amount')}</div>
-        <div class="right font-bold text-xs py-1px text-center align-right float-right rounded">
-          ⚠️ slippage might apply
-        </div>
-      </div>
-      <div class="bottom px-4 py-4 md:py-2">
-        <input type="number" on:keyup="{ debounce(fetchQuote, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
-        <div
-          class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
-          align-middle justify-center items-center pointer mt-0 md:mt-14px"
-          on:click={() => (tokenSelectModalOpen = true)}>
-          <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
-          <span class="py-2px px-4px">{tokenSymbol}</span>
-        </div>
-        <TokenSelectModal
-          tokens={pieTokens}
-          open={tokenSelectModalOpen}
-          callback={tokenSelectCallback} />
-      </div>
-    </div>
+
   {/if}
   
 
@@ -531,8 +463,8 @@
   {/if}
 
   {#if type === 'single'}
-    <div class="my-16px mx-20px">
-    Using this much ETH
+    <div class="my-16px mx-20px font-thin">
+    Pool: <strong>8.5</strong> of <strong>10 ETH</strong>
     </div>
   {/if}
 
@@ -556,47 +488,34 @@
 
   {#if type === 'multi'}
     {#each pooledTokens as pooledToken}
-      <div class="token-summary overflow-x-scroll bg-white rounded-8px mx-0 md:mx-4 my-4px flex flex-start items-center">
-          <div class="min-w-22pc p-12px text-sm md:text-lg" style={`color: ${pooledToken.color}`}>
-            {amountFormatter({
-              amount: pooledToken.originalWeight,
-              approximatePrefix: '',
-              displayDecimals: 2,
-              rounding: 4,
-            })}%
-          </div>
-          <img
-            class="token-icon my-8px w-26px h-26px"
-            src={getTokenImage(pooledToken.address)}
-            alt={pooledToken.symbol} />
-          <div
-            class="token-symbol min-w-15pc md:min-w-10pc px-6px py-12px text-sm font-thin border-r-2 border-r-solid border-grey-243 align-middle md:leading-8">
-            {pooledToken.symbol}
-          </div>
-        {#if approach === "add"}
-          <div class="amount tex-sm px-20px py-12px w-150px">
-            {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
-          </div>
-        {:else}
-          <div class="amount tex-sm px-20px py-12px m-auto">
-           {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
-          </div>
-        {/if}
-        <div class="hidden">{$eth.address}</div>
+    <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+      <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
+        <div class="left float-left">{$_('general.amount')}</div>
       </div>
+      <div class="bottom px-4 py-4 md:py-2">
+        <input type="text" disabled value={ethNeededSingleEntry.label} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
+        <div
+          class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
+          align-middle justify-center items-center pointer mt-0 md:mt-14px">
+          <img class="token-icon w-26px h-26px my-4px mx-2px" src={getTokenImage('eth')} alt="ETH" />
+          <span class="py-2px px-4px">ETH</span>
+        </div>
+      </div>
+    </div>
     {/each}
   {/if}
   
 
   <center>
-    {#if approach === 'add'}
-      <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
-          {$_('general.add')} {$_('general.liquidity')}
-      </button>
-    {:else}
-      <button disabled={withdrawDisabled} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
-          {$_('general.withdraw')}
-      </button>
-    {/if}
+    <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+      {#if approach === 'add'}
+        {$_('general.add')} {$_('general.liquidity')}
+      {:else}
+        {$_('general.withdraw')}
+      {/if}
+    </button>
   </center>
 </div>
+
+
+
