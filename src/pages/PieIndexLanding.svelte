@@ -190,31 +190,6 @@
       <div class="font-thin text-xs md:text-base">Inception date</div>
     </div>
 
-    
-
-    {#if poolsConfig[token].swapEnabled}
-    <!-- <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
-        {formatFiat(metadata.totalSwapVolume)}
-      </div>
-      <div class="font-thin text-xs md:text-base">Total Swap Volume</div>
-    </div> -->
-
-    <!-- <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
-        {formatFiat(metadata.totalSwapFee)}
-      </div>
-      <div class="font-thin text-xs md:text-base">Fees to LPs</div>
-    </div> -->
-
-    <!-- <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
-        {formatFiat(metadata.lastSwapVolume)}
-      </div>
-      <div class="font-thin text-xs md:text-base">24h Pool Volume</div>
-    </div> -->
-    {/if}
-
   </div>
 
   {#if poolsConfig[token].coingeckoId}
@@ -244,9 +219,7 @@
               <!-- <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th> -->
               <th class="font-thin border-b-2 px-4 py-2">Balance</th>
           {/if}
-          <!-- <th class="font-thin border-b-2 px-4 py-2">Market Cap</th> -->
           <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
-          <!-- <th class="font-thin border-b-2 px-4 py-2">Volume</th> -->
           <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
         </tr>
       </thead>
@@ -330,28 +303,8 @@
 
 <div class="content spl">
   
+{#if poolsConfig[token].swapEnabled}
 <div class="container mt-4">
-
-    <!-- <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
-        {formatFiat(metadata.totalSwapVolume)}
-      </div>
-      <div class="font-thin text-xs md:text-base">Total Swap Volume</div>
-    </div> -->
-
-    <!-- <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
-        {formatFiat(metadata.totalSwapFee)}
-      </div>
-      <div class="font-thin text-xs md:text-base">Fees to LPs</div>
-    </div> -->
-
-    <!-- <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
-        {formatFiat(metadata.lastSwapVolume)}
-      </div>
-      <div class="font-thin text-xs md:text-base">24h Pool Volume</div>
-    </div> -->
   <h1 class="text-xl leading-none font-black text-center mb-5">Key Facts</h1>
 
     <div class="flex flex-col justify-between mt-4  lg:flex-row">
@@ -404,8 +357,9 @@
           <div class="info font-thin mb-1">{formatFiat(metadata.lastSwapVolume)}</div>
         </div>
       </div>
-    </div>
-
+    </div>    
   </div>
+{/if}
+
 </div>
 
