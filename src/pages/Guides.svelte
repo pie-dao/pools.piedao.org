@@ -23,21 +23,24 @@
       <ProductBox 
         link="#/pie/0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
         image={images.defiplusl}
-        title="DLP"
+        title="DEFI+L"
+        subTitle="DeFi Large Cap"
         description="DeFi’s Blue Chips. Bigger is Better."
       />
 
       <ProductBox 
         link="#/pie/0x8d1ce361eb68e9e05573443c407d4a3bed23b033"
         image={images.defiplusplus}
-        title="DXP"
+        title="DEFI++"
+        subTitle="DeFi Index"
         description="The Most Diversified DeFi Index on the Market."
       />
 
       <ProductBox 
         link="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
         image={images.defiplusl}
-        title="DSP"
+        title="DEFI+S"
+        subTitle="DeFi Small Cap"
         description="Small Cap Projects with Big Potential."
       />
   </div>
