@@ -243,8 +243,9 @@
       <thead>
         <tr>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
-          <th class="font-thin border-b-2 px-4 py-2">Price</th>
           <th class="font-thin border-b-2 px-4 py-2">Allocation</th>
+          <th class="font-thin border-b-2 px-4 py-2">Price</th>
+          
           {#if !pieOfPies }
               <!-- <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th> -->
               <th class="font-thin border-b-2 px-4 py-2">Balance</th>
@@ -265,10 +266,18 @@
                 alt={pooledToken.symbol} />
               {pooledToken.symbol}
             </td>
+
+            <td class="border text-center px-4 py-2 font-thin relative w-65">
+                <div style={`width: ${40 * (pooledToken.percentage/100)}rem`} class="percentage-bar float-left bg-pink h-6 mt-2 rounded hidden md:block">
+                  <span>{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</span>
+                </div>
+                <div class="float-right">{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</div>
+            </td>
+
             <td class="border px-4 ml-8 py-2 font-thin text-center">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
-            <td class="border text-center px-4 py-2 font-thin">{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</td>
+            
 
             {#if !pieOfPies }
               <!-- <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td> -->

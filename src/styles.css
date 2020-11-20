@@ -27,6 +27,28 @@
   color: #EC1EA0;
 }
 
+.percentage-bar {
+  font-size: 12px;
+  color: white;
+  font-weight: 600;
+  text-align: right;
+  position: relative;
+}
+
+.percentage-bar span {
+  position: absolute;
+  right:8px;
+  top: 2px;
+}
+
+.rounded {
+  border-radius: 1rem;
+}
+
+.bg-pink {
+  background-color: #EC1EA0;
+}
+
 .text-green {
   color: #4eaf0a;
 }
