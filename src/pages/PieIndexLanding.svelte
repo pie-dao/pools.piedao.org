@@ -14,6 +14,7 @@
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
+  import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
   import KeyFacts from "../components/KeyFacts.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
   import images from '../config/images.json';
@@ -288,7 +289,7 @@
   </div>
   
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
-    <div class="p-0 mt-2 md:half">
+    <div class="p-0 mt-2 md:w-1/4">
       <Farming token={$currentRoute.params.address} />
     </div>  
     <div class="p-0 mt-2 md:w-1/4">
@@ -296,7 +297,10 @@
     </div>
 
     <div class="p-0 mt-2 md:w-1/4">
-      <Quantstamp class="w-1/2" token={$currentRoute.params.address} />
+      <Quantstamp token={$currentRoute.params.address} />
+    </div>
+    <div class="p-0 mt-2 md:w-1/4">
+      <AddMetamaskBanner token={$currentRoute.params.address} />
     </div>
   </div>
 </div>

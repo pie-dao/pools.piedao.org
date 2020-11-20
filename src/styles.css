@@ -218,7 +218,7 @@
 
 .etherscan-container,
 .quantstamp-container {
-  @apply bg-grey-243 pt-2 pb-4 px-4;
+  @apply bg-grey-243 pt-2 pb-4 px-4 mx-2;
   border-radius: 8px;
 }
 
@@ -230,6 +230,8 @@
 .etherscan-container img,
 .quantstamp-container img {
   @apply h-54px;
+  width: auto;
+  max-width: 100%;
 }
 
 /* Farming */

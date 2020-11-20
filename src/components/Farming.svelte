@@ -3,6 +3,8 @@
 
   import images from "../config/images.json";
   import pools from "../config/pools.json";
+  import links from '../config/links.json';
+
 
   export let token;
 
@@ -21,7 +23,7 @@
   // })();
 </script>
 
-<div class="farming-container">
+<!-- <div class="farming-container">
     <div class="left">
       <img class="h-40px md:h-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
       <h2 class="text-sm md:text-lg">
@@ -36,4 +38,11 @@
         </span>
       </a>
     </div>
+</div> -->
+
+<div class="quantstamp-container">
+  <a href={links.audit} alt={token} target="_blank">
+    <span>Get amazing rewards</span>
+    <img src={images.logos.stakedough} alt="{$_('brands.stakedough')}" />
+  </a>
 </div>
