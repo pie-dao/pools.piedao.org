@@ -105,16 +105,9 @@
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
     metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
-    nav = await calculateNavValue();
-    
+    console.log('metadata', $piesMarketDataStore[token.toLowerCase()] );
     initialized = true;
   })();
-
-  const calculateNavValue = async () => {
-    const tokenContract = await contract({ abi: pieSmartPool, address: token });
-    let totalSupply = await tokenContract.totalSupply() / 1e18;
-    return getLiquidity() / totalSupply;
-  }
 
   const getLiquidity = () => {
     if(poolsConfig[token].swapEnabled)
@@ -207,12 +200,12 @@
       <div class="font-thin text-xs md:text-base">Total Swap Volume</div>
     </div> -->
 
-    <div class="p-0 flex-initial self-start mr-8">
+    <!-- <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
         {formatFiat(metadata.totalSwapFee)}
       </div>
       <div class="font-thin text-xs md:text-base">Fees to LPs</div>
-    </div>
+    </div> -->
 
     <!-- <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
@@ -268,7 +261,7 @@
               {pooledToken.symbol}
             </td>
 
-            <td class="border text-center px-4 py-2 font-thin relative w-65">
+            <td class="border text-center px-4 py-2 font-thin relative w-50">
                 <div style={`width: ${40 * (pooledToken.percentage/100)}rem`} class="percentage-bar float-left bg-pink h-6 mt-2 rounded hidden md:block">
                   {#if pooledToken.percentage >= 7}
                   <span>{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</span>
@@ -279,9 +272,10 @@
                     {amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%
                   </div>
                 {/if}
-                <!-- <div class="float-right">
-                  {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
-                </div> -->
+
+                <div class="block md:hidden">
+                  {amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%
+                </div>
             </td>
 
             <td class="border px-4 ml-8 py-2 font-thin text-center">
@@ -335,6 +329,83 @@
 </div>
 
 <div class="content spl">
-  <KeyFacts />
+  
+<div class="container mt-4">
+
+    <!-- <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        {formatFiat(metadata.totalSwapVolume)}
+      </div>
+      <div class="font-thin text-xs md:text-base">Total Swap Volume</div>
+    </div> -->
+
+    <!-- <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        {formatFiat(metadata.totalSwapFee)}
+      </div>
+      <div class="font-thin text-xs md:text-base">Fees to LPs</div>
+    </div> -->
+
+    <!-- <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        {formatFiat(metadata.lastSwapVolume)}
+      </div>
+      <div class="font-thin text-xs md:text-base">24h Pool Volume</div>
+    </div> -->
+  <h1 class="text-xl leading-none font-black text-center mb-5">Key Facts</h1>
+
+    <div class="flex flex-col justify-between mt-4  lg:flex-row">
+      <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
+        <div class="top flex justify-between">
+            <div class="titolo">Fees to LPs</div>
+            <div class="info font-thin mb-1">{formatFiat(metadata.totalSwapFee)}</div>
+          </div>
+          <div class="bottom font-thin text-sm mb-2">as of Nov 19, 2020</div>
+      </div>
+
+      <div class="right flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:ml-20px lg:flex-row">
+        <div class="top flex justify-between">
+          <div class="titolo">Pool Swap Fee</div>
+          <div class="info font-thin mb-1">{metadata.swapFee * 100}%</div>
+        </div>
+        <div class="bottom font-thin text-sm mb-2">as of Nov 19, 2020</div>
+      </div>
+    </div>
+
+    <div class="flex flex-col justify-between mt-4  lg:flex-row">
+      <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
+        <div class="top flex justify-between">
+          <div class="titolo">Streaming Fees</div>
+          <div class="info font-thin mb-1">0.7%</div>
+        </div>
+        <div class="bottom font-thin text-sm mb-2">as of Nov 19, 2020</div>
+      </div>
+
+      <div class="right flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:ml-20px lg:flex-row">
+        <div class="top flex justify-between">
+          <div class="titolo">Total Swap Volume</div>
+          <div class="info font-thin mb-1">{formatFiat(metadata.totalSwapVolume)}</div>
+        </div>
+        <div class="bottom font-thin text-sm mb-2">as of Nov 19, 2020</div>
+      </div>
+    </div>
+
+    <div class="flex flex-col justify-between mt-4  lg:flex-row">
+      <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
+        <div class="top flex justify-between">
+          <div class="titolo">All Time Low</div>
+          <div class="info font-thin mb-1">{formatFiat(get($piesMarketDataStore, `${token.toLowerCase()}.market_data.atl`,'n/a'))}</div>
+        </div>
+      </div>
+
+      <div class="right flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:ml-20px lg:flex-row">
+        <div class="top flex justify-between">
+          <div class="titolo">Daily Pool Volume</div>
+          <div class="info font-thin mb-1">{formatFiat(metadata.lastSwapVolume)}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
