@@ -189,8 +189,14 @@
 
   window.addEventListener('price-update', async function (e) {
     isReady = true;
+    incentivizedPools.forEach( async pool => {
+        if(pool.contractType === 'escrewRewardsStakingPool') {
+          const rewardEscrewContract = await contract({ address: pool.addressUniPoll, abi: escrewRewardsStakingPool });
+          pool.escrowPercentage = await rewardEscrewContract.escrowPercentage() / 1e18;
+        }
+    });
     try {
-      await estimateUnstake();
+      await estimateUnstake();  
     } catch(e){
       console.log('estimateUnstake', e);
     }
