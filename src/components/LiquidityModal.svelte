@@ -381,8 +381,8 @@
   };
 </script>
 
-<div class="liquidity-container bg-grey-243 rounded-4px p-4 md:p-6 w-full">
-  <h1 class="text-center text-xl">
+<div class="liquidity-container bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
+  <h1 class="text-center text-xl w-100pc">
     {#if approach === 'add'}
       {$_('general.add')} {$_('general.liquidity')}
     {:else}
