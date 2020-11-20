@@ -1,5 +1,6 @@
 <script>
   export let title;
+  export let subTitle;
   export let image;
   export let link;
   export let description;
@@ -9,6 +10,9 @@
     <div class="text-center"><img class="w-80px h-auto"src={image} alt={title} /></div>
     <div class="flex flex-col text-center">
         <div class="text-lg">{title}</div>
+        {#if subTitle}
+            <div>{subTitle}</div>
+        {/if}
         <div class="font-thin">{description}</div>
     </div>
 </a>
