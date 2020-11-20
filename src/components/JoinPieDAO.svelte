@@ -6,7 +6,8 @@
       Join the community with $DOUGH. Participate in governance and be rewarded.
     </div>
     <div class="flex flex-col justify-around w-100pc content-center lg:flex-row">
-      <div class="investment-card items-center flex flex-col w-100pc min-h-150px bg-lightgrey m-10px p-15px lg:w-1/3">
+      <!-- Want icon centered? add items-center -->
+      <div class="investment-card flex flex-col w-100pc min-h-150px bg-lightgrey m-10px p-15px lg:w-1/3">
         <img class="w-80px h-auto"src='https://assets.website-files.com/5e997428d0f2eb13a90aec8c/5e9f10bfd877555cb6ec4924_icon_03.png' alt="PieDAO Hero" />
         <div class="flex flex-col text-left">
           <div class="text-lg mt-5">Community Owned</div>
@@ -14,7 +15,7 @@
         </div>
       </div>
 
-      <div class="investment-card items-center flex flex-col w-100pc min-h-150px bg-lightgrey m-10px p-15px lg:w-1/3">
+      <div class="investment-card flex flex-col w-100pc min-h-150px bg-lightgrey m-10px p-15px lg:w-1/3">
         <div class="text-center"><img class="w-80px h-auto" src='https://assets.website-files.com/5e997428d0f2eb13a90aec8c/5e9f10b52f493ec2926f4b17_icon_02.png' alt="PieDAO Hero" /></div>
         <div class="flex flex-col text-left">
           <div class="text-lg mt-5">Borderless</div>
@@ -22,7 +23,7 @@
         </div>
       </div>
       
-      <div class="investment-card items-center flex flex-col w-100pc min-h-150px bg-lightgrey m-10px p-15px lg:w-1/3">
+      <div class="investment-card flex flex-col w-100pc min-h-150px bg-lightgrey m-10px p-15px lg:w-1/3">
         <div class="text-center"><img class="w-80px h-auto" src='https://assets.website-files.com/5e997428d0f2eb13a90aec8c/5e9f10b52f493ec2926f4b17_icon_02.png' alt="PieDAO Hero" /></div>
         <div class="flex flex-col text-left">
           <div class="text-lg mt-5">Frictionless</div>

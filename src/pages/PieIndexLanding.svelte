@@ -165,7 +165,7 @@
       <div class="text-md md:text-md font-black text-pink">
         {formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')}
       </div>
-      <div class="font-thin text-xs md:text-base text-pink">NAV</div>
+      <div class="font-bold text-xs md:text-base text-pink">NAV</div>
     </div>
 
     <div class="p-0 flex-initial self-start mr-6">
@@ -274,7 +274,7 @@
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.total_volume`, '-'))}
             </td> -->
 
-            <td class="border text-center py-2">
+            <td class="border text-center py-2 px-4 md:px-0">
               <img
                 class="w-30 spark greyoutImage mx-0"
                 alt="Sparkline"
