@@ -44,7 +44,8 @@
   let modal;
   let modalOption = {
     method: "single",
-    poolAction: "add"
+    poolAction: "add",
+    title: "Add Liquidity"
   }
 
   $: token = params.address;
@@ -137,7 +138,7 @@
 }
 
 </script>
-<Modal backgroundColor="#f3f3f3" bind:this="{modal}">
+<Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
     <LiquidityModal 
       token={token} 
@@ -169,12 +170,14 @@
         <button on:click={() => {
           modalOption.method = "multi";
           modalOption.poolAction = "withdraw";
+          modalOption.title = "Redeem";
           modal.open()
         }} class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Redeem</button>
-        
+
         <button on:click={() => {
           modalOption.method = "single";
           modalOption.poolAction = "add";
+          modalOption.title = "Add Liquidity";
           modal.open()
         }} class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Issue</button>
         
