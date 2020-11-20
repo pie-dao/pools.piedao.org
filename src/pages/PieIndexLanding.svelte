@@ -35,11 +35,14 @@
 
   import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
   import Change from '../components/Change.svelte'
+  import Modal from '../components/elements/Modal.svelte';
+
+
   export let params;
 
-  $: token = params.address;
+  let modal;
 
-  $: console.log('token', token)
+  $: token = params.address;
 
   let pieOfPies = false;
   let tradingViewWidgetComponent;
@@ -129,7 +132,13 @@
 }
 
 </script>
+<Modal bind:this="{modal}">
+  <span slot="content">
+    This is a modal
+  </span>
+</Modal>
 <div class="content flex flex-col spl">
+  
   <div class="flex flex-wrap w-full">
     <div class="flex flex-row content-between justify-between flex-wrap w-full">
       <div class="flex flex-row sm:w-full md:w-1/3">
@@ -154,6 +163,8 @@
         <a href={`#/pools/${token}`}>
           <button class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Mint</button>
         </a>
+        <button on:click={() => modal.open()} class="btn text-white font-bold ml-0 mr-1 rounded md:ml-4 py-2 px-4">Modal</button>
+        
         <!-- <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
           <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
         </a> -->
