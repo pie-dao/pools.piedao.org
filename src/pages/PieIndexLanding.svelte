@@ -177,7 +177,7 @@
           {formatFiat($pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : '')}
         {/if}
       </div>
-      <div class="font-thin text-xs md:text-base">Liquidity</div>
+      <div class="font-thin text-xs md:text-base">Market Cap</div>
     </div>
 
     <div class="p-0 flex-initial self-start mr-8">
