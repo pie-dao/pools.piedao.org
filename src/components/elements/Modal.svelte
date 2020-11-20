@@ -13,7 +13,11 @@ let modalIsOpen = false;
 </script>
 
 {#if modalIsOpen}
-    <div class="content flex flex-col" use:clickOutside on:click_outside={() => modalIsOpen = false}>
-        <slot name="content"></slot>
+    <div class="genericmodal flex flex-col justify-center items-center">
+        <div use:clickOutside on:click_outside={() => modalIsOpen = false}>
+            <slot name="content" class="bg-white modalcontent">
+                    
+            </slot>
+        </div>
     </div>
 {/if}
