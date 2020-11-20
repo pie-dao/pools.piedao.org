@@ -153,7 +153,8 @@
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
-      value: percentagePlus
+      value: percentagePlus,
+      gasLimit: 3000000
     }
 
     console.log({
@@ -204,7 +205,6 @@
       if( errors.length > 0) {
         console.log('Missing tokens', errors);
         areTokensEnoughBool = false;
-        displayNotification({ message: 'Looks like you are missing some tokens!', type: "error", autoDismiss: 30000 });
         return false;
       }
 
@@ -243,13 +243,9 @@
     }
 
     if(!areTokensEnough()) {
-      alert('tokens not enough');
+      displayNotification({ message: 'Looks like you are missing some tokens!', type: "error", autoDismiss: 30000 });
       return;
     }
-
-    console.log('pooledTokens', pooledTokens, $allowances);
-
-
     
     for (let i = 0; i < pooledTokens.length; i += 1) {
       let allowanceKey = functionKey(pooledTokens[i].address, 'allowance', [$eth.address, token]);
