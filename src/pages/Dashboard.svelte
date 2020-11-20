@@ -44,7 +44,7 @@
     </div>
 
 
-  <div class="w-99pc m-4">
+  <div class="w-99pc">
     <table class="breakdown-table table-auto w-full">
       <thead>
         <tr>

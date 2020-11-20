@@ -14,8 +14,6 @@ let modalIsOpen = false;
 
 {#if modalIsOpen}
     <div class="content flex flex-col" use:clickOutside on:click_outside={() => modalIsOpen = false}>
-        <slot name="content">
-                
-        </slot>
+        <slot name="content"></slot>
     </div>
 {/if}
