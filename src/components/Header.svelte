@@ -126,7 +126,7 @@
         </span>
       </div>
       {#if mobileMenuVisible}
-        <div class="origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
+        <div class="origin-top-right absolute right-0 mt-2 w-56 shadow-lg z-50">
           <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
             <div class="inline-flex justify-center w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150">Products:</div>
             <div class="border-t border-gray-100"></div>
