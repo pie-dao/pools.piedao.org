@@ -160,7 +160,7 @@
             <h1 class="text-xl leading-none font-black">{symbol}</h1>
           </a>
           {#if tokenPrice}
-            <h5 class="text-xl leading-none font-thin relative">{formatFiat(tokenPrice)} <span class="text-lg absolute font-black" style="top: 5px; right: -75px;"><Change value={change24H} /></span></h5>
+            <h5 class="text-xl leading-none font-thin relative">{formatFiat(tokenPrice)} <span class="text-lg absolute font-black" style="top: 5px; right: -100px;"><Change value={change24H} /></span></h5>
           {/if}
           
         </div>
@@ -269,7 +269,7 @@
                   {/if}
                 </div>
                 {#if pooledToken.percentage < 7}
-                  <div class="float-left mt-3 ml-2 percentage-bar-extra-num">
+                  <div class="float-left mt-1 ml-2 percentage-bar-extra-num">
                     {amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%
                   </div>
                 {/if}
