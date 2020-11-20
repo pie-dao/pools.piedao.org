@@ -19,7 +19,7 @@ const incentivizedPools = [
     toStakeDesc: 'Balancer: DOUGH/ETH 80/20',
     allowance: 0,
     type: 'Balancer',
-    contractType: 'UniPool',
+    contractType: 'escrewRewardsStakingPool',
     containing: [
       {
         symbol: 'DOUGH',
