@@ -43,6 +43,10 @@
   filter: grayscale(100%);
 }
 
+.row-highlight:hover {
+  background-color: aliceblue;
+}
+
 .blur-heavy {
   filter: blur(2px);
   -o-filter: blur(2px);

@@ -58,7 +58,7 @@
       </thead>
       <tbody>
         {#each pies as pie}
-          <tr>
+          <tr class="row-highlight">
             <td class="pointer border border-gray-800 px-2 py-2 text-left" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
               <a class="flex items-center px-2" href={`#/pie/${pie.address}`}>
                 <img
@@ -96,7 +96,7 @@
             <td class="border px-4 ml-8 py-2 font-thin text-center">
               <a target={pie.useMintOverBuy ? '' : "_blank"} href={ pie.useMintOverBuy ? `#/pools/${pie.address}` : `https://balancer.exchange/#/swap/ether/${pie.address}`}>
                 <button class="table-btn highlight-box min-w-70px">
-                  Buy {pie.symbol}
+                  {pie.symbol}
                 </button>
               </a>
             </td>
