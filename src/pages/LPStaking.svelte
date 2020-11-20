@@ -810,7 +810,11 @@
               <br/><br/>
               <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
-              <p>Buy {pool.containing[0].symbol} on <a target="_blank" href="https://balancer.exchange/#/swap/ether/{pool.containing[0].address}">Balancer</a> or <a href="#/pools/{pool.containing[0].address}">mint now!</a></p>
+              {#if pool.id != 2}
+                <p>Buy {pool.containing[0].symbol} on <a target="_blank" href="https://balancer.exchange/#/swap/ether/{pool.containing[0].address}">Balancer</a> or <a href="#/pools/{pool.containing[0].address}">mint now!</a></p>
+              {:else}
+                <p><a href="#/pools/{pool.containing[0].address}">Mint {pool.containing[0].symbol} now!</a></p>
+              {/if}
               <p>Buy DOUGH on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D">Balancer</a></p>
             </div>
         {/if}
