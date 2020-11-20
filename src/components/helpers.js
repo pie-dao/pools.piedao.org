@@ -107,8 +107,13 @@ const updatePoolWeight = async (poolAddress) => {
     return sum.plus(poolCurrentUSD[token]);
   }, BigNumber(0));
 
+  let totalSupply = await poolContract.totalSupply() / 1e18;
+  const nav = totalUSD / totalSupply;
+
   const updates = {};
   updates[`${poolAddress}-usd`] = totalUSD;
+  updates[`${poolAddress}-nav`] = nav;
+
   updates[poolAddress] = composition.map((definition) => {
     const percentageByBalances = BigNumber(poolCurrentBalances[definition.address])
       .dividedBy(total)

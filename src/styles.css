@@ -23,12 +23,20 @@
   margin: 0 auto;
 }
 
+.text-pink {
+  color: #EC1EA0;
+}
+
 .text-green {
   color: #4eaf0a;
 }
 
 .text-red {
   color: #e15241;
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .greyoutImage {

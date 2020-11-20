@@ -2,7 +2,7 @@
     export let value;
 </script>
 
-{#if value === '-'}
+{#if value === '-' || value === null}
     n/a
 {:else}
     {#if value > 0}

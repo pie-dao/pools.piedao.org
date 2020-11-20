@@ -37,6 +37,8 @@
 
   $: token = params.address;
 
+  $: console.log('token', token)
+
   let pieOfPies = false;
   let tradingViewWidgetComponent;
   let initialized = false;
@@ -165,6 +167,13 @@
   </div>
   
   <div class="flex w-full mt-2 md:mt-8">
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black text-pink">
+        {formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')}
+      </div>
+      <div class="font-thin text-xs md:text-base text-pink">NAV</div>
+    </div>
+
     <div class="p-0 flex-initial self-start mr-6">
       <div class="text-md md:text-md font-black">
         {#if poolsConfig[token].swapEnabled}
@@ -187,12 +196,7 @@
       <div class="font-thin text-xs md:text-base">Inception date</div>
     </div>
 
-    <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
-        {formatFiat(nav)}
-      </div>
-      <div class="font-thin text-xs md:text-base">NAV</div>
-    </div>
+    
 
     {#if poolsConfig[token].swapEnabled}
     <!-- <div class="p-0 flex-initial self-start mr-8">
