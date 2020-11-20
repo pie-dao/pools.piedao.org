@@ -34,7 +34,7 @@
     </div>
     
     <a href="#/dough">
-      <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-600px">
+      <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-200px">
         Learn more
       </button>
     </a>

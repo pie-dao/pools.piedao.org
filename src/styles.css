@@ -1089,3 +1089,8 @@ constructed stylesheet
   z-index: 200;
   border-radius: 10px;
 }
+
+.borderDiveder {
+  margin: 0 10px;
+  border-bottom: solid 0.5px #b9b9b9;
+}
