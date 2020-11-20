@@ -60,7 +60,7 @@
         {#each pies as pie}
           <tr class="row-highlight">
             <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
-              <a class="flex items-center px-2" href={`#/pie/${pie.address}`}>
+              <a class="flex items-center px-2 py-2" href={`#/pie/${pie.address}`}>
                 <img
                   class="inline icon ml-2 mr-2"
                   src={pie.icon}
