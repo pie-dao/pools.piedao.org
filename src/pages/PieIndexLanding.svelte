@@ -269,9 +269,18 @@
 
             <td class="border text-center px-4 py-2 font-thin relative w-65">
                 <div style={`width: ${40 * (pooledToken.percentage/100)}rem`} class="percentage-bar float-left bg-pink h-6 mt-2 rounded hidden md:block">
+                  {#if pooledToken.percentage >= 7}
                   <span>{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</span>
+                  {/if}
                 </div>
-                <div class="float-right">{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</div>
+                {#if pooledToken.percentage < 7}
+                  <div class="float-left mt-3 ml-2 percentage-bar-extra-num">
+                    {amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%
+                  </div>
+                {/if}
+                <!-- <div class="float-right">
+                  {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
+                </div> -->
             </td>
 
             <td class="border px-4 ml-8 py-2 font-thin text-center">

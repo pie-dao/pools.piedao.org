@@ -37,8 +37,13 @@
 
 .percentage-bar span {
   position: absolute;
-  right:8px;
-  top: 2px;
+  left:5px;
+  top: 3px;
+}
+
+.percentage-bar-extra-num {
+  font-size: 12px;
+  font-weight: 600;
 }
 
 .rounded {
