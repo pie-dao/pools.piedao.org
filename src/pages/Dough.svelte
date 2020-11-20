@@ -92,8 +92,8 @@
    <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-4">
      <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>{price}$ / DOUGH</strong></div>
      <a href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
-      <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-800px">
-        Market Buy
+      <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
+        Buy
       </button>
     </a>
 
