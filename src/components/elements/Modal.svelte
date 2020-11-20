@@ -1,5 +1,6 @@
 <script>
 import {clickOutside} from '../../helpers/clickOutside.js';
+import images from '../../config/images.json';
 
 export let backgroundColor;
 export let title;
@@ -25,7 +26,7 @@ console.log('backgroundColor', backgroundColor)
                 <h1 class="text-center text-xl w-100pc"> {title} </h1>
             {/if}
             <button on:click={close} class="w-30px h-30px mr-20px self-center">
-                X
+                <img src={images.closebutton} alt="closebutton" />
             </button>
         </div>
             <slot name="content">
