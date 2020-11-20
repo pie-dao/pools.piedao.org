@@ -300,7 +300,7 @@
       <Quantstamp token={$currentRoute.params.address} />
     </div>
     <div class="p-0 mt-2 md:w-1/4">
-      <AddMetamaskBanner token={$currentRoute.params.address} />
+      <AddMetamaskBanner pie={poolsConfig[token]} />
     </div>
   </div>
 </div>

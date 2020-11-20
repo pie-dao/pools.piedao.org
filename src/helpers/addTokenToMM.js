@@ -1,3 +1,5 @@
+import { getTokenImage } from '../components/helpers';
+
 // eslint-disable-next-line import/prefer-default-export
 export const addTokenToMM = (pie) => {
   ethereum.sendAsync({
@@ -8,7 +10,7 @@ export const addTokenToMM = (pie) => {
         address: pie.address,
         symbol: pie.symbol,
         decimals: 18,
-        image: pie.icon,
+        image: getTokenImage(pie.address),
       },
     },
     id: Math.round(Math.random() * 100000),
