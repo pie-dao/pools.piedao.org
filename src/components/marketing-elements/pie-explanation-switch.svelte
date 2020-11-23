@@ -3,9 +3,21 @@ import DLP from './dlp-explanation.svelte'
 import DXP from './dxp-explanation.svelte'
 import DSP from './dsp-explanation.svelte'
 import BTC from './btcp-explanation.svelte'
+import Meta from '../elements/meta.svelte';
+
 export let address;
 
+	
+const metadata = {
+    title: 'Test',
+    description: 'It really is!',
+    image: 'https://svelte.dev/images/twitter-card.png',
+    imageAlt: 'Svelte svelte.dev',
+    url:'svelte.dev'
+}
 </script>
+
+<Meta {metadata}/>
 <div>
     {#if address === '0x78f225869c08d478c34e5f645d07a87d3fe8eb78'}
         <DLP />
