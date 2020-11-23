@@ -37,6 +37,7 @@
   import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
   import Change from '../components/Change.svelte'
   import Modal from '../components/elements/Modal.svelte';
+  import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
 
 
   export let params;
@@ -332,7 +333,14 @@
   </div>
 </div>
 
+<div class="content mt-4">
+  <PieExplanation address={token} />
+</div>
+
 <div class="content spl">
+
+
+
   
 {#if poolsConfig[token].swapEnabled}
 <div class="container mt-4">
