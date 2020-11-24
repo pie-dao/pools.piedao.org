@@ -1,0 +1,163 @@
+{
+    "custom": {},
+    "getBalancer": {
+      "balancer": {
+        "__args": {
+          "id": 1
+        },
+        "color": true,
+        "poolCount": true,
+        "finalizedPoolCount": true,
+        "crpCount": true,
+        "txCount": true
+      }
+    },
+    "getTokenPrices": {
+      "tokenPrices": {
+        "__args": {
+          "first": 1000,
+          "where": {
+            "price_gt": 0
+          }
+        },
+        "id": true,
+        "symbol": true,
+        "name": true,
+        "decimals": true,
+        "price": true,
+        "poolLiquidity": true,
+        "poolTokenId": true
+      }
+    },
+    "getPool": {
+      "pool": {
+        "id": true,
+        "controller": true,
+        "finalized": true,
+        "crp": true,
+        "swapFee": true,
+        "totalWeight": true,
+        "totalSwapVolume": true,
+        "totalSwapFee": true,
+        "createTime": true,
+        "joinsCount": true,
+        "exitsCount": true,
+        "liquidity": true,
+        "tokensList": true,
+        "swapsCount": true,
+        "holdersCount": true,
+        "tx": true,
+        "tokens": {
+          "__args": {
+            "orderBy": "denormWeight",
+            "orderDirection": "desc"
+          },
+          "id": true,
+          "address": true,
+          "balance": true,
+          "decimals": true,
+          "symbol": true,
+          "denormWeight": true
+        },
+        "swaps": {
+          "__args": {
+            "first": 1,
+            "orderBy": "timestamp",
+            "orderDirection": "desc"
+          },
+          "poolTotalSwapVolume": true
+        }
+      }
+    },
+    "getPoolSwaps": {
+      "swaps": {
+        "id": true,
+        "tokenIn": true,
+        "tokenInSym": true,
+        "tokenAmountIn": true,
+        "tokenOut": true,
+        "tokenOutSym": true,
+        "tokenAmountOut": true,
+        "poolTotalSwapVolume": true,
+        "timestamp": true,
+        "value": true,
+        "feeValue": true
+      }
+    },
+    "getPoolShares": {
+      "poolShares": {
+        "__args": {
+          "orderBy": "balance",
+          "orderDirection": "desc",
+          "where": {
+            "balance_gt": 0
+          }
+        },
+        "id": true,
+        "userAddress": {
+          "id": true
+        },
+        "poolId": {
+          "id": true
+        },
+        "balance": true
+      }
+    },
+    "getPools": {
+      "pools": {
+        "__args": {
+          "where": {
+            "active": true,
+            "tokensCount_gt": 1
+          }
+        },
+        "id": true,
+        "publicSwap": true,
+        "finalized": true,
+        "crp": true,
+        "rights": true,
+        "swapFee": true,
+        "totalWeight": true,
+        "totalShares": true,
+        "totalSwapVolume": true,
+        "liquidity": true,
+        "tokensList": true,
+        "swapsCount": true,
+        "tokens": {
+          "__args": {
+            "orderBy": "denormWeight",
+            "orderDirection": "desc"
+          },
+          "id": true,
+          "address": true,
+          "balance": true,
+          "decimals": true,
+          "symbol": true,
+          "denormWeight": true
+        },
+        "swaps": {
+          "__args": {
+            "first": 1,
+            "orderBy": "timestamp",
+            "orderDirection": "desc"
+          },
+          "poolTotalSwapVolume": true
+        }
+      }
+    },
+    "getUserPoolShares": {
+      "poolShares": {
+        "__args": {
+          "orderBy": "balance",
+          "orderDirection": "desc",
+          "where": {
+            "balance_gt": 0
+          }
+        },
+        "balance": true,
+        "poolId": {
+          "id": true
+        }
+      }
+    }
+  }

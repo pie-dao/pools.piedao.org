@@ -14,7 +14,9 @@
     "0x5228a22e72ccC52d415EcFd199F99D0665E7733b": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/pBTC.svg",
     "piedao": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Complete%20Black.png",
     "piedao_clean": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Icon%20Clean.png",
-    "quantstamp": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/quantstamp.svg",
+    "quantstamp": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/quantstamp.svg", 
+    "stakedough": "https://raw.githubusercontent.com/pie-dao/brand/37c432a9e05d4c7c411426e49ee05134781a973b/misc/stakedough2.svg",
+    "addmetamask": "https://raw.githubusercontent.com/pie-dao/brand/6187f8a09d1e6c003f34058e70f03a79283d7929/misc/metamaskbanner.svg",
     "eth": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png",
     "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sBTC.png",
     "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/sUSD.png",
@@ -30,8 +32,8 @@
     "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": "https://assets.coingecko.com/coins/images/12645/small/AAVE.png?1601374110",
     "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e": "https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330",
     "0xd22936b2b3e0ffc971fda1a95bd675f90aee2863": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg",
-    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg"
-    
+    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg",
+    "0x8d1ce361eb68e9e05573443c407d4a3bed23b033":"https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/DeFi%2B%2B.svg"
   },
   "amazingrewards":"https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards2.png",
   "banner": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true",
@@ -42,7 +44,35 @@
   "tokenmigration": "https://i.ibb.co/tY41vvx/migra.png",
   "liquiditymining": "https://i.ibb.co/3YyvfzX/farming.png",
   "vestingperiod": "https://i.ibb.co/VSyRLBY/astro.png",
-  "howtomigrate": "https://i.ibb.co/7zwSFds/howtomig.png"
+  "howtomigrate": "https://i.ibb.co/7zwSFds/howtomig.png",
+  "moneytowork": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/moneytowork1.png",
+  "ready_to_diversify": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/ready_to_diversify.png",
+  "defimadesimple": "images/defi-made-simple.png",
+  "koala": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/koala.png",
+  "defihero": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/hero.png",
+  "degen": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/degen.png",
+  "etflike": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/etflike.png",
+  "usdpluscoins": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/usd++coins.png",
+  "defiplusicons": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/defiplusicons.png",
+  "btcplusicons": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/btcplusicons.png",
+  "olddaysfarming": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/olddaysfarming.png",
+  "usdplus": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/Cash%2B%2B.png",
+  "btcplusplus": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/BTC%2B%2B.png",
+  "defipluss": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BS.svg",
+  "defiplusl": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg",
+  "defiplusplus": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/defiplusplustoken.png",
+  "defiplusd": "https://raw.githubusercontent.com/pie-dao/brand/b16cd7ac19a38b55e272df4e5552138f91c9d412/misc/defiplusd.svg",
+  "doughtoken": "https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png",
+  "press": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/press.png",
+  "closebutton": "https://raw.githubusercontent.com/pie-dao/brand/4972f839cd2b0993afe45410d478b3f70f84398c/misc/close.svg"
+
+
+
+
+
+  
+  
+  
 
 
 }

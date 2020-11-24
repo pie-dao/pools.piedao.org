@@ -107,19 +107,27 @@ const updatePoolWeight = async (poolAddress) => {
     return sum.plus(poolCurrentUSD[token]);
   }, BigNumber(0));
 
+  let totalSupply = await poolContract.totalSupply() / 1e18;
+  const nav = totalUSD / totalSupply;
+
   const updates = {};
   updates[`${poolAddress}-usd`] = totalUSD;
+  updates[`${poolAddress}-nav`] = nav;
+
   updates[poolAddress] = composition.map((definition) => {
-    const percentage = BigNumber(poolCurrentBalances[definition.address])
+    const percentageByBalances = BigNumber(poolCurrentBalances[definition.address])
       .dividedBy(total)
       .multipliedBy(100)
       .toNumber();
+
     const percentageUSD = BigNumber(poolCurrentUSD[definition.address])
       .dividedBy(totalUSD)
       .multipliedBy(100)
       .toNumber();
 
-    return { ...definition, percentage, percentageUSD };
+    const balance = poolCurrentBalances[definition.address];
+
+    return { ...definition, percentageByBalances, percentageUSD, balance };
   });
 
   pools.set({ ...get(pools), ...updates });
@@ -128,7 +136,7 @@ const updatePoolWeight = async (poolAddress) => {
 export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') => {
   if (!value) return 'n/a';
   try {
-    const values = value.toString().replace(/^-/, '').split('.');
+    const values = parseFloat(value).toFixed(2).toString().replace(/^-/, '').split('.');
     const dollars = values[0];
     const cents = values[1];
     const groups = /(\d)(?=(\d{3})+\b)/g;
@@ -188,7 +196,8 @@ export const amountFormatter = ({
   const base = value.toFixed(decimals, rounding);
 
   if (value.isGreaterThan(base)) {
-    return `${approximatePrefix}${base}`;
+    // return `${approximatePrefix}${base}`;
+    return `${base}`;
   }
 
   return base;
@@ -288,7 +297,7 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
       .toFixed(0),
   );
 
-  const res = await tokenContract.calcTokensForAmount(amount);
+  const res = await tokenContract.calcTokensForAmount(amount.toString());
   const data = {};
 
   res.tokens.forEach((token, index) => {
@@ -490,7 +499,11 @@ export const subscribeToStakingEarnings = async (contractAddress, address, shoul
   }
 };
 
-export const subscribeToStakingEarningsGeyser = async (contractAddress, address, shouldBump = true) => {
+export const subscribeToStakingEarningsGeyser = async (
+  contractAddress,
+  address,
+  shouldBump = true,
+) => {
   const token = contractAddress;
 
   validateIsAddress(token);
@@ -625,7 +638,7 @@ export const subscribeToPoolWeights = async (poolAddress) => {
   bumpLifecycle();
 };
 
-export const toFixed = function (num=0, fixed) {
+export const toFixed = function (num = 0, fixed) {
   const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
   const arr = num.toString().match(re);
   if (arr && arr.length > 0) {
@@ -778,8 +791,8 @@ export const calculateAPRBalancer = async (
   const DOUGH = assetOne;
   const WETH = assetTwo;
 
-  if( addressStakingPool === '' || tokenToStake === '') return;
-  
+  if (addressStakingPool === '' || tokenToStake === '') return;
+
   const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
   const BALANCER_POOL = await contract({ address: tokenToStake, abi: BALANCER_POOL_ABI });
 
@@ -795,23 +808,27 @@ export const calculateAPRBalancer = async (
   // Look up prices
   const DOUGHPrice = marketData[DOUGH].market_data.current_price;
   const ETHPrice = marketData[WETH].market_data.current_price;
+
+  const $assetOnePerBPT = DOUGHperBPT * DOUGHPrice;
+  const $assetTwoPerBPT = WETHperBPT * ETHPrice;
+
   const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
   const totalLiquidity = BPTPrice * totalBPTAmount;
 
   let res;
 
   try {
-    
     // Find out reward rate
     const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
     const rewardPerToken = weekly_reward / totalStakedBPTAmount;
-  
+
     // console.log('Finished reading smart contracts... Looking up prices... \n', marketData[DOUGH]);
     // Finished. Start printing
-    const DOUGHWeeklyROI = (rewardPerToken * DOUGHPrice * 100) / BPTPrice;
-    
-  
-    if (null) {
+    const RewardTokenPrice =
+      marketData[`0xad32A8e6220741182940c5aBF610bDE99E737b2D`].market_data.current_price;
+    const DOUGHWeeklyROI = (rewardPerToken * RewardTokenPrice * 100) / BPTPrice;
+
+    if (false) {
       console.log('========== STAKING =========');
       console.log(`There are total   : ${totalBPTAmount} BPT in the Balancer Contract.`);
       console.log(`There are total   : ${totalStakedBPTAmount} BPT staked in Staking pool. \n`);
@@ -834,7 +851,7 @@ export const calculateAPRBalancer = async (
           )}\n`,
         );
       }
-  
+
       // DOUGH REWARDS
       console.log('======== DOUGH REWARDS ========');
       if (stakedBPTAmount && earnedDOUGH) {
@@ -854,7 +871,7 @@ export const calculateAPRBalancer = async (
       console.log(`Weekly ROI in USD : ${toFixed(DOUGHWeeklyROI, 4)}%`);
       console.log(`APR (unstable)    : ${toFixed(DOUGHWeeklyROI * 52, 4)}% \n`);
     }
-  
+
     res = {
       roi: DOUGHWeeklyROI,
       weekly: `${toFixed(DOUGHWeeklyROI, 4)}%`,
@@ -873,11 +890,11 @@ export const calculateAPRBalancer = async (
       ethStaked: totalWETHAmount,
       totalLiquidity,
     };
-  
+
     const updates = {};
     updates[addressStakingPool] = res;
     farming.set({ ...get(farming), ...updates });
-  } catch(e) {
+  } catch (e) {
     res = {
       totalBPTAmount,
       totalStakedBPTAmount,
@@ -891,11 +908,9 @@ export const calculateAPRBalancer = async (
       ethStaked: totalWETHAmount,
       totalLiquidity,
     };
-    
   }
 
   const updates = {};
-    updates[addressStakingPool] = res;
-    farming.set({ ...get(farming), ...updates });
-  
+  updates[addressStakingPool] = res;
+  farming.set({ ...get(farming), ...updates });
 };

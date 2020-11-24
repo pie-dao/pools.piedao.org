@@ -45,7 +45,7 @@ const setWeb3Listeners = () => {
 
 export const registerConnection = async (newWeb3) => {
   const web3 = newWeb3 || get(eth).web3;
-
+  console.log('newWeb3', newWeb3)
   if (!web3) {
     throw new Error("Unable to find a web3 object. Was one passed?");
   }
@@ -64,9 +64,11 @@ export const registerConnection = async (newWeb3) => {
   const shortAddress = shortenAddress(address);
   const icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
 
+  const ens = await provider.lookupAddress(address);
 
   eth.set({
     address,
+    ens,
     currentBlockNumber,
     icon,
     network,

@@ -18,6 +18,7 @@
   import {
     allowances,
     approveMax,
+    functionKey,
     balanceKey,
     balances,
     connectWeb3,
@@ -56,6 +57,7 @@
   let amount = "1.00000000";
   let approach = poolAction;
   let areTokensEnoughBool = true;
+  let withdrawDisabled = false;
   let ethKey;
   let ethBalance = 0;
   let ethNeededSingleEntry = { val: 0, label:'-'};
@@ -94,7 +96,12 @@
       const pieToMint = pieAddress || token;
       amountsRequired = (await fetchCalcTokensForAmounts(pieToMint, amount));
       isLoading = false;
-      areTokensEnough();
+
+      if(approach === 'add')
+        areTokensEnough();
+      else {
+        enoughPieToRedeem();
+      }
     } catch (e) { console.error(e)}
   }
 
@@ -119,30 +126,6 @@
     }
   };
 
-  const calcArb = () => {
-    const reserveA = BigNumber(3490);
-    const reserveB = BigNumber(890);
-    const truePriceTokenA = BigNumber(1);
-    const truePriceTokenB = BigNumber(2.4);
-
-    const aToB = BigNumber((BigNumber(amount).multipliedBy(truePriceTokenB)).dividedBy(reserveB)).isGreaterThan(truePriceTokenA);
-    // aToB = reserveA.mul(truePriceTokenB) / reserveB < truePriceTokenA;
-
-    const invariant = reserveA.multipliedBy(reserveB);
-
-    const leftSide = (invariant.multipliedBy(aToB ? truePriceTokenA : truePriceTokenB).multipliedBy(BigNumber(1000)).dividedBy(aToB ? truePriceTokenB : truePriceTokenA).multipliedBy(997)).sqrt();
-    // uint256 leftSide = Babylonian.sqrt(
-    //     invariant.mul(aToB ? truePriceTokenA : truePriceTokenB).mul(1000) /
-    //     uint256(aToB ? truePriceTokenB : truePriceTokenA).mul(997)
-    // );
-    const rightSide = (aToB ? reserveA.multipliedBy(BigNumber(1000)) : reserveB.multipliedBy(BigNumber(1000))).dividedBy(BigNumber(997));
-    // uint256 rightSide = (aToB ? reserveA.mul(1000) : reserveB.mul(1000)) / 997;
-
-    // // compute the amount that must be sent to move the price to the profit-maximizing price
-    const amountIn = leftSide.minus(rightSide);
-
-    console.log('amountIn', amountIn.toString())
-  }
 
   const mintFromRecipe = async () => {
     const requestedAmount = BigNumber(amount);
@@ -161,13 +144,12 @@
 
     if (BigNumber(percentagePlus).isGreaterThan(BigNumber(max)) ) {
       const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
-      //TODO i18n
       const message = `Not enough ETH`;
       displayNotification({ message, type: "error", autoDismiss: 30000 });
       return;
     }
 
-    const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
+    const recipe = await contract({ address: '0xccE6cC6423fa82d50F2D545b1c534E4AB2890F79', abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
@@ -265,11 +247,21 @@
       return;
     }
 
-    console.log('lockedPoolTokens', lockedPoolTokens);
+    console.log('pooledTokens', pooledTokens, $allowances);
+
+
     
-    for (let i = 0; i < lockedPoolTokens.length; i += 1) {
-      askApproval(lockedPoolTokens[i].address, token);
+    for (let i = 0; i < pooledTokens.length; i += 1) {
+      let allowanceKey = functionKey(pooledTokens[i].address, 'allowance', [$eth.address, token]);
+      let allowance = $allowances[allowanceKey];
+      console.log(`Allowance ${pooledTokens[i].symbol}: ${allowance}`);
+      if( new BigNumber(allowance).isLessThan(requestedAmount) ) {
+        console.log('Im asking for allowance')
+        askApproval(pooledTokens[i].address, token);
+      }
     }
+
+    console.log('Allowance done');
 
     try {
       const tokenContract = await contract({ abi: pieSmartPool, address: token });
@@ -319,6 +311,12 @@
     }
   }
 
+  const enoughPieToRedeem = () => {
+    const key = balanceKey(token, $eth.address);
+    let max = $balances[key];
+    withdrawDisabled = amount > max;
+  };
+
   const setValuePercentage = percent => {
     let max = maxAmount(token, pooledTokens);
     if (approach === 'withdraw') {
@@ -327,9 +325,7 @@
     }
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
-    if (approach === "add") {
-      fetchAmounts();
-    }
+    fetchAmounts();
   };
 
   const withdraw = async () => {
@@ -581,13 +577,6 @@
           <div class="amount tex-sm px-20px py-12px w-150px">
             {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
           </div>
-          <!-- <a
-            class={pooledToken.actionBtnClass}
-            href={pooledToken.buyLink}
-            on:click={evt => action(evt, pooledToken)}
-            target="_blank">
-            {pooledToken.actionBtnLabel}
-          </a> -->
         {:else}
           <div class="amount tex-sm px-20px py-12px m-auto">
            {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
@@ -605,7 +594,7 @@
           {$_('general.add')} {$_('general.liquidity')}
       </button>
     {:else}
-      <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+      <button disabled={withdrawDisabled} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
           {$_('general.withdraw')}
       </button>
     {/if}

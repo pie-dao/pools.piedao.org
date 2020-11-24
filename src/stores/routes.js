@@ -4,15 +4,20 @@ import pools from '../config/pools.json';
 
 import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
+import Oven from '../pages/Oven.svelte';
+import Guides from '../pages/Guides.svelte';
+import Tokensswap from '../pages/Tokensswap.svelte';
 import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
-import Oven from '../pages/Oven.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
+import Markets from '../pages/Markets.svelte';
+import DefiPie from '../pages/landings/defiPie.svelte';
+import About from '../pages/landings/about.svelte';
 
 export const defaultRouteObj = {
-  page: Dashboard,
+  page: Guides,
   params: {
     address: pools.default,
   },
@@ -42,11 +47,23 @@ const formatRoute = (route) => {
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
   switch (route[0] || 'root') {
+    case 'about':
+      return { page: About };
+    case 'dxp-defi-index':
+      return { page: DefiPie };
+    case 'markets':
+      return { page: Markets };
+    case 'pies':
+      return { page: Dashboard };
     case 'pie':
       address = (route[1] || '').toLowerCase();
       return { page: PieLanding, params: { address } };
     case 'dough':
       return { page: Dough };
+    case 'guides':
+      return { page: Guides };
+    case 'swap':
+      return { page: Tokensswap };
     case 'migrate':
       return { page: Migration, params: { address } };
     case 'oven':
@@ -67,6 +84,16 @@ const formatRoute = (route) => {
       if (pools.available.includes(address)) {
         return { page: Pool, params: { address, poolAction, method } };
       }
+      break;
+
+    case 'oven':
+      address = (route[1] || '').toLowerCase();
+      poolAction = (route[2] || 'add').toLowerCase();
+      method = (route[3] || 'single').toLowerCase();
+
+      if (pools.available.includes(address)) {
+        return { page: Oven, params: { address, poolAction, method } };
+      }
 
       break;
     case 'root':
@@ -84,5 +111,6 @@ export const currentRoute = writable({ ...formatRoute(route) });
 
 window.addEventListener('hashchange', () => {
   const newRoute = deriveRoute();
+  console.log('newRoute', newRoute);
   currentRoute.set({ ...formatRoute(newRoute) });
 });

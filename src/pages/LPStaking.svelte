@@ -9,7 +9,8 @@
   
   import filter from 'lodash/filter';
   import isNaN from 'lodash/isNaN';
-
+  import rewardEscrewABI from '../config/rewardEscrowABI.json';
+  import escrewRewardsStakingPool from '../config/escrewRewardsStakingPool.json';
   import recipeUnipool from '../config/unipoolABI.json';
   import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
   import geyserABI from '../config/geyser.json';
@@ -50,6 +51,8 @@
     subject,
   } from "../stores/eth.js";
 
+  import incentivizedPools from '../config/farmingConf.js';
+
   const isAddress = (thing) => (
     thing
     && ethers.utils.isHexString(thing)
@@ -68,151 +71,8 @@
 
 
   $: needAllowance = true;
-  $: incentivizedPools = [
-    {
-      addressTokenToStake: '0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A',
-      addressUniPoll: '0x8314337d2b13e1A61EadF0FD1686b2134D43762F',
-      aprEnabled: true,
-      deprecated: false,
-      poolLink: "https://pools.balancer.exchange/#/pool/0xfae2809935233d4bfe8a56c2355c4a2e7d1fff1a/",
-      name: 'DOUGH / ETH',
-      platform: "⚖️ Balancer",
-      description: 'WEEKLY REWARDS',
-      rewards_token: 'DOUGH',
-      weeklyRewards: formatFiat(110000, ',', '.', ''),
-      apy: 1.8,
-      toStakeSymbol: 'BPT',
-      toStakeDesc: 'Balancer: DOUGH/ETH 80/20',
-      allowance: 0,
-      type: 'Balancer',
-      contractType: 'UniPool',
-      containing: [
-        {
-          symbol: "DOUGH",
-          address: "0xad32A8e6220741182940c5aBF610bDE99E737b2D",
-          balance: '0',
-          icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
-        },
-        {
-          symbol: "ETH",
-          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          balance: '0',
-          icon: getTokenImage('eth')
-        },
-      ],
-      allowanceKey: '',
-      highlight: true,
-      needAllowance: true,
-      enabled: true,
-    },
-    {
-      addressTokenToStake: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
-      aprEnabled: true,
-      deprecated: false,
-      addressUniPoll: '0x220f25C2105a65425913FE0CF38e7699E3992B97',
-      poolLink: "https://pools.balancer.exchange/#/pool/0x35333cf3db8e334384ec6d2ea446da6e445701df/",
-      name: 'DEFI+S / ETH',
-      type: 'Balancer',
-      contractType: 'UniPool',
-      containing: [
-        {
-          symbol: "DEFI+S",
-          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-          balance: '0',
-          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
-        },
-        {
-          symbol: "ETH",
-          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          balance: '0',
-          icon: getTokenImage('eth')
-        },
-      ],
-      rewards_token: 'DOUGH',
-      toStakeSymbol: 'BPT',
-      toStakeDesc: 'Balancer: DEFI+S/ETH 70/30',
-      platform: "⚖️ Balancer",
-      description: 'WEEKLY REWARDS',
-      weeklyRewards: formatFiat(20000, ',', '.', ''),
-      apy: 1.8,
-      allowance: 0,
-      allowanceKey: '',
-      needAllowance: true,
-      enabled: true,
-    },
-    {
-      addressTokenToStake: '0xa795600590a7da0057469049ab8f1284baed977e',
-      aprEnabled: false,
-      deprecated: false,
-      addressUniPoll: '0xb3c2b0056627cc1dc148d8fc29f5abdf4dd837bc',
-      poolLink: "https://pools.balancer.exchange/#/pool/0xa795600590a7da0057469049ab8f1284baed977e/",
-      name: 'DEFI+L/ETH',
-      type: 'Balancer',
-      contractType: 'Geyser',
-      containing: [
-        {
-          symbol: "DEFI+L",
-          address: "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
-          balance: '0',
-          icon: getTokenImage('0x78f225869c08d478c34e5f645d07a87d3fe8eb78')
-        },
-        {
-          symbol: "ETH",
-          address: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          balance: '0',
-          icon: getTokenImage('eth')
-        },
-      ],
-      rewards_token: 'DOUGH',
-      toStakeSymbol: 'BPT',
-      toStakeDesc: 'Balancer: DEFI+L/ETH 70/30',
-      platform: "⚖️ Balancer",
-      description: 'WEEKLY REWARDS',
-      weeklyRewards: formatFiat(20000, ',', '.', ''),
-      apy: 1.8,
-      allowance: 0,
-      allowanceKey: '',
-      needAllowance: true,
-      enabled: true,
-    },
-    {
-      addressTokenToStake: '0x7aeFaF3ea1b465dd01561B0548c9FD969e3F76BA',
-      aprEnabled: true,
-      deprecated: true,
-      addressUniPoll: '0x64964cb69f40A1B56AF76e32Eb5BF2e2E52a747c',
-      name: 'DEFI+S / DAI',
-      poolLink: 'https://app.uniswap.org/#/add/0x6B175474E89094C44Da98b954EedeAC495271d0F/0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C',
-      platform: "🦄 Uniswap",
-      contractType: 'UniPool',
-      containing: [
-        {
-          symbol: "DEFI+S",
-          address: "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-          balance: '0',
-          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
-        },
-        {
-          symbol: "DAI",
-          address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-          balance: '0',
-          icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
-        },
-      ],
-      type: 'UniswapV2',
-      toStakeDesc: 'Uniswap: DEFI+S/DAI 50/50',
-      toStakeSymbol: 'LP',
-      description: 'DEPRECATED POOL',
-      rewards_token: 'DOUGH',
-      weeklyRewards: formatFiat(25000, ',', '.', ''),
-      apy: 1.8,
-      allowance: 0,
-      allowanceKey: '',
-      needAllowance: true,
-      enabled: true,
-    },
-  ]
 
-  $: {     
+  $: {
     if(pool)
       needAllowance = needApproval(pool, ($allowances[pool.allowanceKey] || BigNumber(0)));
   }
@@ -224,6 +84,12 @@
   $: geyserApy = {
     apy: 0,
     loaded: false,
+  };
+
+  $: rewardEscrewData = {
+    totalEscrewed: 0,
+    nextVestingWindow: null,
+    numVestingEntries: null 
   };
 
   const estimateUnstake = async () => {
@@ -241,7 +107,7 @@
       let _totalStakingShareSeconds = data[3];
       let stakingShareSeconds = data[2];
       let totalUnlocked = data[1];
-      let _pool = incentivizedPools[2];
+      let _pool = incentivizedPools[4];
       let apy8Wweeks = 0;
       let apy = 0;
       let rewardsPerBPT = 0;
@@ -261,27 +127,26 @@
       let DOUGHPrice = 0;
       let BPTPrice = 0;
 
+      let balanceStaked = await contract.balanceOf($eth.address);
       
-      if($balances[_pool.KeyUnipoolBalance] && $farming[_pool.addressUniPoll] !== undefined) {
+      if($farming[_pool.addressUniPoll] !== undefined) {
         DOUGHPrice = $farming[incentivizedPools[0].addressUniPoll] && $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice ? $farming[incentivizedPools[0].addressUniPoll].DOUGHPrice : 0;
-        BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0
+        BPTPrice = $farming[_pool.addressUniPoll].BPTPrice || 0;
+
         tokenStakedPrice = $farming[_pool.addressUniPoll].DOUGHPrice || 0
 
-        const amount = ethers.BigNumber.from(
-          BigNumber($balances[_pool.KeyUnipoolBalance].toString())
-            .multipliedBy(10 ** 18)
-            .toFixed(0),
-        );
+        const amount = balanceStaked;
 
+        const bnJsAmount = BigNumber(balanceStaked.toString()).dividedBy(10 ** 18);
         unstakeNowRewards = await contract.callStatic.unstakeQuery(
           amount,
           overrides
         );
 
         unstakeNowRewards = (BigNumber(unstakeNowRewards.toString()).dividedBy(10 ** 18)).toNumber();
-        seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( $balances[_pool.KeyUnipoolBalance].toString() ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
+        seconds = (BigNumber(stakingShareSeconds.toString()).dividedBy( BigNumber( bnJsAmount ).multipliedBy(10**18) )).dividedBy(1000).dividedBy(1000);
 
-        yourStake = $balances[_pool.KeyUnipoolBalance].toNumber();
+        yourStake = bnJsAmount.toNumber();
 
         rewardsPerBPT = earnedOptimistic.toNumber() / yourStake;
         $RewardsPerBPT = rewardsPerBPT * DOUGHPrice;
@@ -313,53 +178,57 @@
         totalUnlocked: totalUnlocked.toString(),
         totalUserRewards: earnedOptimistic.toString(),
         $RewardsPerBPT,
-        loaded
+        loaded,
+        days60APY
       };
-
-      console.log('geyserApy', geyserApy);
 
       return earnedOptimistic;
   };
 
+  const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toNumber();
+
   window.addEventListener('price-update', async function (e) {
-    console.log('price-update', e)
     isReady = true;
     incentivizedPools.forEach( async pool => {
-      if( pool.type === 'UniswapV2') {
-        await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-      } else {
-        await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-      }
-    })
-    await estimateUnstake();
-    
+        if(pool.contractType === 'escrewRewardsStakingPool') {
+          const rewardEscrewContract = await contract({ address: pool.addressUniPoll, abi: escrewRewardsStakingPool });
+          pool.escrowPercentage = await rewardEscrewContract.escrowPercentage() / 1e18;
+        }
+    });
+    try {
+      await estimateUnstake();  
+    } catch(e){
+      console.log('estimateUnstake', e);
+    }
   }, false);
 
   $: if($eth.address) {
     if(isReady) {
       incentivizedPools.forEach( async pool => {
-        if( pool.type === 'UniswapV2') {
-          await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-        } 
-        
-        if( pool.type === 'Balancer' && pool.contractType === 'UniPool') {
-          await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-        }
-
         if( pool.type === 'Balancer' && pool.contractType === 'Geyser') {
           await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
           await estimateUnstake();
         }
-      });
-      
+      });      
     }
 
     if(!intiated) {
       const address = $eth.address;
 
+      (async () => {
+        const rewardEscrew = await contract({ address: '0x63cbd1858bd79de1a06c3c26462db360b834912d', abi: rewardEscrewABI });
+        const totalEscrewed = await rewardEscrew.totalEscrowedAccountBalance(address);
+        // const nextVestingEntry = await rewardEscrew.getNextVestingEntry(address);
+        const numVestingEntries = await rewardEscrew.numVestingEntries(address);
+
+        rewardEscrewData.totalEscrewed = toNum(totalEscrewed).toFixed(2);
+        // rewardEscrewData.nextVestingWindow = nextVestingEntry;
+        rewardEscrewData.numVestingEntries = numVestingEntries.toString();
+      })();
+      
       incentivizedPools.forEach( async p => {      
         try {
-          calculateAPRBalancer()
+          
           subscribeToBalance(p.addressTokenToStake, address, true);
           subscribeToStaking(p.addressUniPoll, address, true);
           subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
@@ -367,14 +236,19 @@
           p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
           p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, address);
 
-          if(p.contractType === "UniPool") {
+          if(p.contractType === "UniPool" || p.contractType === 'escrewRewardsStakingPool') {
             subscribeToStakingEarnings(p.addressUniPoll, address, true);
             p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
             p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
+
+            if(p.contractType === 'escrewRewardsStakingPool') {
+              const rewardEscrewContract = await contract({ address: p.addressUniPoll, abi: escrewRewardsStakingPool });
+              p.escrowPercentage = await rewardEscrewContract.escrowPercentage() / 1e18;
+              console.log('p.escrowPercentage', p.escrowPercentage)
+            }
           } else {
             console.log("Getting staked balance from geyser");
             console.log(p.addressUniPoll, "address");
-            subscribeToStakingEarningsGeyser(p.addressUniPoll, address, true);
             p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
             await estimateUnstake();
           }
@@ -403,6 +277,7 @@
     const { addressTokenToStake, addressUniPoll } = pool;
 
     if (actionType === "unlock") {
+      console.log('calling', addressTokenToStake, addressUniPoll);
       await approveMax(addressTokenToStake, addressUniPoll);
       needAllowance = false;
     }
@@ -433,7 +308,7 @@
     let emitterToUse;
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
-    if(pool.contractType === "UniPool") {
+    if(pool.contractType === "UniPool" || pool.contractType === 'escrewRewardsStakingPool') {
       unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
       const { emitter } = displayNotification(await unipool.withdraw(amountWei) );
       emitterToUse = emitter;
@@ -536,7 +411,7 @@
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
     let unipool;
     let emitterToUse;
-    if(pool.contractType === "UniPool") {
+    if(pool.contractType === "UniPool" || pool.contractType === 'escrewRewardsStakingPool') {
       unipool = await contract({ address: pool.addressUniPoll, abi: recipeUnipool });
       console.log(`Staking ${amountToStake} ${pool.toStakeSymbol} with referral ${referralValidated}`)
       const { emitter } = displayNotification(await unipool["stake(uint256,address)"](amountWei, referralValidated) );
@@ -616,7 +491,64 @@
 <div class="content flex flex-col">
     <img class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
     <img class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" />
-    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">    
+    
+    <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">
+        <!-- component -->
+        {#if $eth.address}
+        <div class="py-5">
+          <main class="h-full overflow-y-auto">
+              <div class="container flex flex-row items-center justify-center ">
+                    <!-- Cards -->
+                    <div class="flex flex-row items-center">
+                      <!-- Card -->
+                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
+                        <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
+                          💰
+                        </div>
+                        <div>
+                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                            DOUGH in Escrow
+                          </p>
+                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                            {formatFiat(rewardEscrewData.totalEscrewed, ',', '.', '')}
+                          </p>
+                        </div>
+                      </div>
+                      <!-- Card -->
+                      <!-- <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
+                        <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
+                          ⏳
+                        </div>
+                        <div>
+                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                              Next Vesting time
+                          </p>
+                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                          {formatFiat(rewardEscrewData.nextVestingWindow)}
+                          </p>
+                        </div>
+                      </div> -->
+                      <!-- Card -->
+                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
+                          <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
+                              🧮
+                            </div>
+                        <div>
+                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
+                            Vesting entries
+                          </p>
+                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
+                            {rewardEscrewData.numVestingEntries ? rewardEscrewData.numVestingEntries : 'n/a'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+        
+                  </div>
+          </main>
+        </div>
+        {/if}
+
         {#if !pool}
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">Select a pool</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
@@ -782,7 +714,7 @@
               </div>
 
               <!-- CLAIM BOX -->
-              {#if pool.contractType === "UniPool"}
+              {#if pool.contractType === "UniPool" || pool.contractType === 'escrewRewardsStakingPool'}
               <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.claim} alt="PieDAO logo" />
                     <div class="title text-lg">REWARDS AVAILABLE</div>
@@ -790,6 +722,15 @@
                     <div class="apy">
                       {pool.KeyUnipoolEarnedBalance ? amountFormatter({ amount: $balances[pool.KeyUnipoolEarnedBalance], displayDecimals: 16}) : 0.0000} {pool.rewards_token}
                     </div>
+
+                    {#if pool.id === 0}
+                      <div class="apy">
+                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * pool.escrowPercentage, 3) } </strong> Escrowed / 
+                        <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * (1-pool.escrowPercentage), 3) } </strong> Liquid
+                      </div>
+                    {/if}
+
+                    
                     <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="left float-left">{$_('general.amount')} to claim</div>
@@ -830,7 +771,23 @@
               {/if}
             </div>
             <div class="info-box">
+              {#if pool.id === 2}
+                  <p>ℹ️ <strong>DEFI++</strong> Staking Rewards are subject to 52 weeks vesting from the moment they will be claimed.</p>
+              {/if}
               {#if $farming[pool.addressUniPoll] !== undefined}
+
+                {#if pool.id === 0}
+                  <p>ℹ️ <strong>DOUGH/ETH</strong> Staking Rewards - the pool will keep receiving 90,000 DOUGH as nominal weekly reward distributed to LPs, of which
+                      {(1-pool.escrowPercentage)*100}% distributed liquid along the week
+                      {pool.escrowPercentage*100}% escrowed within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
+                  </p>
+                {/if}
+
+                {#if pool.id === 2}
+                  <p>ℹ️ <strong>DEFI++</strong> Staking Rewards are subject to 52 weeks vesting from the moment they will be claimed.</p>
+                {/if}
+                <br/><br/>
+                
                 <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
                 <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} BPT</strong> staked in the Staking contract.</p>
                 {#if pool.KeyAddressTokenToStake && $balances[pool.KeyUnipoolBalance]}
@@ -843,15 +800,21 @@
               
               {#if pool.contractType === "Geyser"}
                 <br/>
-                <p> Your stake of <strong>{geyserApy.yourStake.toFixed(2)} BPT</strong> is earning right now <strong>{geyserApy.earnedOptimistic} DOUGH</strong> assuming you will not unstake until the end of the program. </p>
-                <p>Approx <strong>{geyserApy.apy}%</strong>.</p>
-                <p>If you would unstake right now, you would get exactly <strong>{geyserApy.earnedNotOptimistic} DOUGH</strong>, which is approx <strong>{geyserApy.apyNotOptimistic}% APR</strong>.</p>
+                {#if geyserApy.yourStake}
+                  <p> Your stake of <strong>{geyserApy.yourStake.toFixed(2)} BPT</strong> is earning right now <strong>{geyserApy.earnedOptimistic} DOUGH</strong> assuming you will not unstake until the end of the program. </p>
+                  <p>Approx <strong>{geyserApy.apy}%</strong>.</p>
+                  <p>If you would unstake right now, you would get exactly <strong>{geyserApy.earnedNotOptimistic} DOUGH</strong>, which is approx <strong>{geyserApy.apyNotOptimistic}% APR</strong>.</p>
+                {/if}
               {/if}
 
               <br/><br/>
               <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
-              <p>Buy {pool.containing[0].symbol} on <a target="_blank" href="https://balancer.exchange/#/swap/ether/{pool.containing[0].address}">Balancer</a> or <a href="#/pools/{pool.containing[0].address}">mint now!</a></p>
+              {#if pool.id != 2}
+                <p>Buy {pool.containing[0].symbol} on <a target="_blank" href="https://balancer.exchange/#/swap/ether/{pool.containing[0].address}">Balancer</a> or <a href="#/pools/{pool.containing[0].address}">mint now!</a></p>
+              {:else}
+                <p><a href="#/pools/{pool.containing[0].address}">Mint {pool.containing[0].symbol} now!</a></p>
+              {/if}
               <p>Buy DOUGH on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D">Balancer</a></p>
             </div>
         {/if}

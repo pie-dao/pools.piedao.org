@@ -7,10 +7,13 @@
     "test": "jest"
   },
   "dependencies": {
+    "@ethersproject/abi": "^5.0.7",
+    "@ethersproject/contracts": "^5.0.5",
     "@pie-dao/abis": "^1.0.0",
     "@pie-dao/eth-tailwind": "^1.0.0",
     "@pie-dao/tailwind": "^1.1.2",
     "@pie-dao/utils": "^1.0.0",
+    "@tailwindcss/ui": "^0.7.2",
     "@walletconnect/web3-provider": "^1.1.0",
     "animate.css": "^4.1.0",
     "authereum": "^0.0.4-beta.164",
@@ -19,12 +22,17 @@
     "d3": "^5.16.0",
     "ethers": "^5.0.2",
     "jazzicon": "^1.5.0",
+    "json-to-graphql-query": "^2.0.0",
     "lodash": "^4.17.19",
+    "moment": "^2.29.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "rxjs": "^6.6.0",
     "svelte": "^3.21.0",
     "svelte-apollo": "^0.3.0",
-    "svelte-i18n": "^3.0.4"
+    "svelte-i18n": "^3.0.4",
+    "svelte-tabs": "^1.1.0",
+    "svelte-watch-resize": "^1.0.3",
+    "tailwindcss": "^1.9.6"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.3.0",

@@ -28,7 +28,7 @@ const providerOptions = {
     },
   },
   injected: {
-    package: null
+    package: null,
   },
 };
 
