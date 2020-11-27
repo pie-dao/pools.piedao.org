@@ -72,15 +72,15 @@
       });
 
       // Staked DEFI++ ONLY
-      const defiplus = await contract({ address: '0x59706d38f1452f387563f06b632af7302456fe66' });
-      const defiplusTotSupply = await defiplus.totalSupply();
-      const amountDefippBN = BigNumber(defiplusTotSupply.toString()).dividedBy(10 ** 18).toNumber();
+      // const defiplus = await contract({ address: '0x59706d38f1452f387563f06b632af7302456fe66' });
+      // const defiplusTotSupply = await defiplus.totalSupply();
+      // const amountDefippBN = BigNumber(defiplusTotSupply.toString()).dividedBy(10 ** 18).toNumber();
 
-      const defis = marketData['0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c'].market_data.current_price;
-      const defil = marketData['0x78f225869c08d478c34e5f645d07a87d3fe8eb78'].market_data.current_price;
-      const defiplusDollarValue = ((amountDefippBN * 0.7) * defil) + ((amountDefippBN * 0.3) * defis);
+      // const defis = marketData['0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c'].market_data.current_price;
+      // const defil = marketData['0x78f225869c08d478c34e5f645d07a87d3fe8eb78'].market_data.current_price;
+      // const defiplusDollarValue = ((amountDefippBN * 0.7) * defil) + ((amountDefippBN * 0.3) * defis);
 
-      return total+defiplusDollarValue;
+      return total;
   };
 
   $: rows = [
