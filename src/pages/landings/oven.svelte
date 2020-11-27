@@ -39,7 +39,7 @@ import OvenModal from "../../components/OvenModal.svelte";
 
   <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
     <span slot="content">
-      <OvenModal />
+      <OvenModal pieAddress={'0x8d1ce361eb68e9e05573443c407d4a3bed23b033'} ovenAddress={'0x1d616dad84dd0b3ce83e5fe518e90617c7ae3915'}/>
     </span>
   </Modal>
   <section class="pt-12 px-4 text-center">

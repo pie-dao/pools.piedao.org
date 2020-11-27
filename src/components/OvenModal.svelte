@@ -1,14 +1,58 @@
 <script>
+import BigNumber from "bignumber.js";
+import { ethers } from "ethers";
 import images from "../config/images.json";
+import poolsConfig from "../config/pools.json";
+import ovenABI from '../config/ovenABI.json';
+import {
+    balanceKey,
+    balances,
+    contract,
+    eth
+} from "../stores/eth.js";
+
+import {
+  maxAmount,
+  getTokenImage,
+  fetchEthBalance,
+  fetchCalcToPie,
+  formatFiat,
+  subscribeToBalance
+} from "../components/helpers.js";
+
+export let ovenAddress;
+export let pieAddress;
+
+let instance;
+let ethKey;
 
 $: selectedTab = 1;
+$: ovenData = {
+  ethBalance: 0,
+  pieBalance: 0
+}
+
+$: pie = poolsConfig[pieAddress];
+
+$: if($eth.address) {
+  fetchEthBalance($eth.address);
+  ethKey = balanceKey(ethers.constants.AddressZero, $eth.address);
+
+  ( async () => {
+    instance = await contract({ address: ovenAddress, abi: ovenABI });
+    ovenData.ethBalance = await instance.ethBalanceOf($eth.address) / 1e18;
+    ovenData.pieBalance = await instance.outputBalanceOf($eth.address) / 1e18;
+    ovenData.cap = await instance.cap() / 1e18;
+  })()
+  
+}
+
+$: ethBalance = BigNumber($balances[ethKey]).toString();
 
 </script>
 
 
 <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
-
-
   <div class="flex justify-center font-thin mb-2">
     <table class="breakdown-table table-auto bg-white rounded w-full w-60pc md:w-75pc">
       <tbody>
@@ -34,10 +78,10 @@ $: selectedTab = 1;
   </div>
 
   <div class="w-100pc flex justify-center justify-items-center content-center text-center">
-  <button on:click={ () => selectedTab = 1} class="oven-button-active m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
+  <button on:click={ () => selectedTab = 1} class:oven-button-active={selectedTab === 1} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
       Deposit
   </button>
-  <button on:click={ () => selectedTab = 2} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
+  <button on:click={ () => selectedTab = 2} class:oven-button-active={selectedTab === 2} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
       Withdraw
   </button>
 </div>
@@ -69,8 +113,8 @@ $: selectedTab = 1;
           <input type="number" class="font-thin text-base w-60pc md:w-75pc md:text-xl">
           <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
         align-middle justify-center items-center pointer mt-0 md:mt-14px">
-        <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src="https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg" alt="ETH">
-        <span class="py-2px px-4px">DEFIL</span></div> 
+        <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={getTokenImage(pieAddress)} alt={`PieDAO ` + pie.symbol}>
+        <span class="py-2px px-4px">{pie.symbol}</span></div> 
       </div>
     </div>
 
@@ -109,8 +153,8 @@ $: selectedTab = 1;
           <input type="number" class="font-thin text-base w-60pc md:w-75pc md:text-xl">
           <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
         align-middle justify-center items-center pointer mt-0 md:mt-14px">
-        <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src="https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg" alt="ETH">
-        <span class="py-2px px-4px">DEFIL</span></div> 
+        <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={getTokenImage(pieAddress)} alt={`PieDAO ` + pie.symbol}>
+        <span class="py-2px px-4px">{pie.symbol}</span></div> 
       </div>
     </div>
 
