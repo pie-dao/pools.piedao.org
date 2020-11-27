@@ -2,61 +2,31 @@
   import { ethers } from "ethers";
   import { onMount } from 'svelte';
   import BigNumber from "bignumber.js";
-  import { validateIsAddress } from '@pie-dao/utils';
   import { _ } from "svelte-i18n";
+  import { get } from "svelte/store";
+  import filter from "lodash/filter";
+
   import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
-  
-  import filter from 'lodash/filter';
-  import isNaN from 'lodash/isNaN';
-
   import recipeUnipool from '../config/unipoolABI.json';
-  import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
-  import geyserABI from '../config/geyser.json';
-  import { get } from "svelte/store";
+  import ovenABI from '../config/ovenABI.json';
   import displayNotification from "../notifications.js";
   import { piesMarketDataStore } from '../stores/coingecko.js';
-  import { farming } from '../stores/eth/writables.js';
-
   import OvenCard from '../components/elements/oven-card.svelte';
   import {
-    amountFormatter,
-    fetchPieTokens,
-    fetchPooledTokens,
     maxAmount,
     getTokenImage,
     fetchEthBalance,
     fetchCalcToPie,
-    toFixed,
-    calculateAPRBalancer,
-    calculateAPRUniswap,
     formatFiat,
-    subscribeToBalance,
-    subscribeToAllowance,
-    subscribeToStaking,
-    subscribeToStakingEarnings,
-    subscribeToStakingEarningsGeyser,
+    subscribeToBalance
   } from "../components/helpers.js";
-
   import {
-    allowances,
-    functionKey,
-    approveMax,
     balanceKey,
     balances,
-    connectWeb3,
     contract,
-    eth,
-    pools,
-    bumpLifecycle,
-    subject,
+    eth
   } from "../stores/eth.js";
-
-  const isAddress = (thing) => (
-    thing
-    && ethers.utils.isHexString(thing)
-    && thing.length === 42
-  );
 
   let ethKey;
   let ethBalance = 0;
@@ -64,22 +34,22 @@
   let amountToStake = 0;
   let amountToUnstake = 0;
   let isReady = false;
-  
-  const referral = $currentRoute.params.referral || window.localStorage.getItem('referral');
 
-
-  $: needAllowance = true;
   $: ovens = [
     {
-      addressOven: '0x5e8dffda3d69f01fa1aaf941e28f935d773db61a',
+      addressOven: '0x1d616dad84dd0b3ce83e5fe518e90617c7ae3915',
       deprecated: false,
-      name: 'DEFI+L Oven',
-      description: 'Bakes DEFI+L at Zero cost',
+      name: 'DEFI++ Oven',
+      description: 'Bakes DEFI++ at Zero cost',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0
+      },
       baking: {
-          symbol: "DEFI+L",
-          address: "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
+          symbol: "DEFI++",
+          address: "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
           balance: '0',
-          icon: getTokenImage('0x78f225869c08d478c34e5f645d07a87d3fe8eb78')
+          icon: getTokenImage('0x8d1ce361eb68e9e05573443c407d4a3bed23b033')
       },
       highlight: true,
       enabled: true,
@@ -96,21 +66,21 @@
     if(!intiated) {
       const address = $eth.address;
 
-      ovens.forEach( async p => {      
-        //TODO get eth balance
-        //TODO get Pie balance
-        
+      ovens.forEach( async o => {      
+        o.instance = await contract({ address: o.addressOven, abi: ovenABI });
+        o.data.ethBalance = await o.instance.ethBalanceOf($eth.address) / 1e18;
+        o.data.pieBalance = await o.instance.outputBalanceOf($eth.address) / 1e18;
+        o.cap = await o.instance.cap() / 1e18;
       });
+
+      console.log('ovens', ovens);
       intiated = true;
-      bumpLifecycle();
     }
   }
 
 </script>
 
 <div class="content flex flex-col">
-    <!-- <img class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
-    <img class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" /> -->
     <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">    
         {#if !oven}
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">♨️ Select an Oven</h1>
