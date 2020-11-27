@@ -54,7 +54,7 @@ $: ethBalance = BigNumber($balances[ethKey]).toString();
 
 <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
   <div class="flex justify-center font-thin mb-2">
-    <table class="breakdown-table table-auto bg-white rounded w-full w-60pc md:w-75pc">
+    <!-- <table class="breakdown-table table-auto bg-white rounded w-full w-60pc md:w-75pc">
       <tbody>
         <tr class="">
           <td class="px-4 pt-4 pb-1 text-left" >Your ETH</td>
@@ -73,7 +73,35 @@ $: ethBalance = BigNumber($balances[ethKey]).toString();
           <td class="px-4 pt-1 pb-4 text-right" >2.14 ETH Left</td>
         </tr>
       </tbody>
-    </table>
+    </table> -->
+
+    <div class="flex w-full text-black text-center text-xs md:text-xs lg:text-base justify-around mt-2 md:mt-0">
+      <div class="p-0 mr-8 ">
+        <div class="">
+          Your ETH
+        </div>
+        <div class="font-bold">4.5 ETH</div>
+      </div>
+      <div class="p-0 mr-8">
+        <div class="">
+          Your Pie
+        </div>
+        <div class="font-bold">22.34 BTC++</div>
+      </div>
+      <div class="p-0 mr-8">
+        <div class="">
+          Last Bake
+        </div>
+        <div class="font-bold">3 hours ago</div>
+      </div>
+      <div class="flex flex-col justify-center p-0">
+        <div class="">
+          Next Bake
+        </div>
+        <div class="font-bold">2.42 ETH left</div>
+      </div>
+  
+    </div>
 
   </div>
 
