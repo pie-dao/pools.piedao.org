@@ -9,6 +9,8 @@
   } from "../../components/helpers.js";
 
   import Modal from '../../components/elements/Modal.svelte';
+  import LiquidityModal from '../../components/LiquidityModal.svelte';
+  
   import OvenModal from "../../components/OvenModal.svelte";
 
   $: ovens = [
@@ -33,6 +35,7 @@
   ]
 
   let modal;
+  let modalAdd;
   let modalOption = {
     title: "Bake"
   }
@@ -42,6 +45,16 @@
   <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
     <span slot="content">
       <OvenModal pieAddress={'0x8d1ce361eb68e9e05573443c407d4a3bed23b033'} ovenAddress={'0x1d616dad84dd0b3ce83e5fe518e90617c7ae3915'}/>
+    </span>
+  </Modal>
+
+  <Modal title="Add Liquidity" backgroundColor="#f3f3f3" bind:this="{modalAdd}">
+    <span slot="content">
+      <LiquidityModal 
+        token="0x8d1ce361eb68e9e05573443c407d4a3bed23b033" 
+        method="single"
+        poolAction="add"
+      />
     </span>
   </Modal>
   <section class="pt-12 px-4 text-center">
@@ -113,7 +126,7 @@
             Deposits Open
           </td>
           <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
-            70%
+            96%
           </td>
           <td class="border px-4 ml-8 py-2 font-thin text-center">
               <button on:click={modal.open} class="table-btn highlight-box min-w-70px">
@@ -135,11 +148,9 @@
     <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Want your PIE faster?</h2>
     <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">You are always free to mint a Pie on your own by issuing liquidity. Go check the Index page and select the right Pie for you.</p>
   </div>
-  <a href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
-    <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
-      Issue liquidity
-    </button>
-  </a>
+  <button on:click={modalAdd.open} class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
+    Issue liquidity
+  </button>
 </section>
 
 
