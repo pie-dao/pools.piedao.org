@@ -50,7 +50,7 @@ import OvenModal from "../../components/OvenModal.svelte";
   </section>
 
   <div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
-    <div class="flex justify-around w-100pc content-center">
+    <div class="flex flex-col justify-around w-100pc content-center lg:flex-row">
       <ProductBox 
         link="#/pie/0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
         image={images.depositeth}
@@ -80,9 +80,8 @@ import OvenModal from "../../components/OvenModal.svelte";
   </div>
 </section>
 
-<div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
-<div class="w-99pc">
-  <table class="breakdown-table table-auto w-full">
+<div class="flex flex-col w-96pc place-content-center spl">
+  <table class="breakdown-table table-auto w-full mx-6">
     <thead>
       <tr>
         <th class="font-thin border-b-2 px-4 py-2 text-left">Pie Name</th>
@@ -128,7 +127,6 @@ import OvenModal from "../../components/OvenModal.svelte";
       {/each}
     </tbody>
   </table>
-</div>
 </div>
 
 
