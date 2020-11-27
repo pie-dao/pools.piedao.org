@@ -150,6 +150,11 @@ border-radius: 6px;
   background-color: #f2f2f2;
 }
 
+.bg-lightgrey-2 {
+  background-color: rgb(228, 228, 228);
+  ;
+}
+
 /* Allocation Breakdown */
 
 .allocation-breakdown-container {
