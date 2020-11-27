@@ -1,34 +1,36 @@
 <script>
   import images from "../../config/images.json";
   import ProductBox from '../../components/elements/product-box.svelte';
-  import orderBy from 'lodash/orderBy';
   import poolsConfig from "../../config/pools.json";
   import { pools } from '../../stores/eth.js';
-
-
-  import get from 'lodash/get';
-  import {piesMarketDataStore} from '../../stores/coingecko.js';
   import {
     getTokenImage,
     formatFiat,
   } from "../../components/helpers.js";
+
   import Modal from '../../components/elements/Modal.svelte';
+  import OvenModal from "../../components/OvenModal.svelte";
 
-  import Change from '../../components/Change.svelte'
-import OvenModal from "../../components/OvenModal.svelte";
-
-  $: pies = orderBy((poolsConfig.selectable.map(address => {
-    let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
-    return {
-      ...poolsConfig[address],
-      address,
-      icon: getTokenImage(address),
-      totalLiquidity: $pools[`${address}-usd`] ? formatFiat( $pools[`${address}-usd`].toFixed(2).toString() ) : '-',
-      totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
-      change: change ? change : 0,
-      nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
-    };
-  }) || []), ['change'], ['desc']);
+  $: ovens = [
+    {
+      addressOven: '0x1d616dad84dd0b3ce83e5fe518e90617c7ae3915',
+      deprecated: false,
+      name: 'DEFI++ Oven',
+      description: 'Bakes DEFI++ at Zero cost',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0
+      },
+      baking: {
+          symbol: "DEFI++",
+          address: "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+          balance: '0',
+          icon: getTokenImage('0x8d1ce361eb68e9e05573443c407d4a3bed23b033')
+      },
+      highlight: true,
+      enabled: true,
+    }
+  ]
 
   let modal;
   let modalOption = {
@@ -54,7 +56,7 @@ import OvenModal from "../../components/OvenModal.svelte";
       <ProductBox 
         link="#/pie/0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
         image={images.depositeth}
-        title="Deposit ETH together"
+        title="Deposit ETH"
         description="Deposit the amount of ETH you want to use to issue the PIE you want"
       />
       
@@ -62,14 +64,14 @@ import OvenModal from "../../components/OvenModal.svelte";
         link="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
         image={images.waitoven}
         title="Wait the Oven limit"
-        description="Oven must be full as baking starts when a specific limit is reached"
+        description="Oven must be full as baking starts when a specific limit is reached."
       />
 
       <ProductBox 
       link="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
       image={images.sharegascost}
-      title="Share the gas cost"
-      description="Once the limit is reached we will bake the PIE all together using gas once"
+      title="Gas cost is on us"
+      description="Once the limit is reached we will bake the PIE all together."
     />
     </div>
 </div>
@@ -85,37 +87,33 @@ import OvenModal from "../../components/OvenModal.svelte";
     <thead>
       <tr>
         <th class="font-thin border-b-2 px-4 py-2 text-left">Pie Name</th>
-        <th class="font-thin border-b-2 px-4 py-2">Total Baked</th>
-        <th class="font-thin border-b-2 px-4 py-2">Next Bake</th>
+        <th class="font-thin border-b-2 px-4 py-2">Bake Session Limit</th>
+        <th class="font-thin border-b-2 px-4 py-2">Oven state</th>
         <th class="font-thin border-b-2 px-4 py-2">Gas Savings</th>
       </tr>
     </thead>
     <tbody>
-      {#each pies as pie}
+      {#each ovens as oven}
         <tr class="row-highlight">
-          <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
-            <a class="flex items-center px-2 py-2" href={`#/pie/${pie.address}`}>
+          <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
+            <a class="flex items-center px-2 py-2" href={`#/pie/${oven.baking.address}`}>
               <img
                 class="inline icon ml-2 mr-2"
-                src={pie.icon}
-                alt={pie.symbol} />
-                <span class="md:block">{pie.symbol}</span>
+                src={oven.baking.icon}
+                alt={oven.baking.symbol} />
+                <span class="md:block">{oven.baking.symbol}</span>
             </a>
           </td>
-          <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
-            <a href={`#/pie/${pie.address}`}>
-              {pie.totalLiquidity}
+          <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
+            <a href={`#/pie/${oven.baking.address}`}>
+              10 ETH
             </a>
           </td>
-          <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
-            <Change value={pie.change} />
+          <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
+            Deposits Open
           </td>
-          <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
-            {#if $piesMarketDataStore[pie.address] }
-              {formatFiat(get($piesMarketDataStore, `${pie.address}.market_data.current_price`, '-'))}
-            {:else}
-              {formatFiat(pie.nav)}
-            {/if}
+          <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
+            70%
           </td>
           <td class="border px-4 ml-8 py-2 font-thin text-center">
               <button on:click={modal.open} class="table-btn highlight-box min-w-70px">
