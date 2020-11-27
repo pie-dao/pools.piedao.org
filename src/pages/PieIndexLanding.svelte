@@ -176,7 +176,7 @@
         }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Redeem</button>
 
         <button on:click={() => {
-          modalOption.method = "single";
+          modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
           modalOption.poolAction = "add";
           modalOption.title = "Add Liquidity";
           modal.open()
