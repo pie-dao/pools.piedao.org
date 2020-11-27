@@ -17,6 +17,8 @@
   import displayNotification from "../notifications.js";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { farming } from '../stores/eth/writables.js';
+
+  import OvenCard from '../components/elements/oven-card.svelte';
   import {
     amountFormatter,
     fetchPieTokens,
@@ -114,25 +116,16 @@
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">♨️ Select an Oven</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
             {#each filter(ovens, { deprecated: false }) as ammPool}
-              {#if ammPool.highlight }
-                <div class="highlight-box farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
-                  <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
-                    <div class="title text-lg"> <a href="" target="_blank"> {ammPool.name} </a></div>
-                    <div class="subtitle font-thin">{ammPool.description}</div>
-                    <div class="apy">90% Full</div>
-                    <button on:click={() => oven = ammPool } class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
-                </div>
-              {:else}
-                <div class="farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
-                  <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
-                    <div class="title text-lg"> {ammPool.name} </div>
-                    <div class="subtitle font-thin">{ammPool.description}</div>
-                      <div class="apy">
-                          n/a
-                      </div>
-                    <button on:click={() => oven = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
-                </div>
-              {/if}
+              <OvenCard 
+                title={ammPool.name}
+                subTitle={"90% Full"}
+                image={images.logos.piedao_clean}
+                description={ammPool.description}
+                callback={(ammPool) => {
+                  oven = ammPool;
+                }}
+                isHighlighted={ammPool.highlight}
+              />
             {/each}
         </div>
         {:else}
