@@ -67,21 +67,18 @@
   <div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
     <div class="flex flex-col justify-around w-100pc content-center lg:flex-row">
       <ProductBox 
-        link="#/pie/0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
         image={images.depositeth}
         title="Deposit ETH"
         description="Deposit the amount of ETH you want to use to issue the PIE you want"
       />
       
       <ProductBox 
-        link="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
         image={images.waitoven}
         title="Wait the Oven limit"
         description="Oven must be full as baking starts when a specific limit is reached."
       />
 
       <ProductBox 
-      link="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
       image={images.sharegascost}
       title="Gas cost is on us"
       description="Once the limit is reached we will bake the PIE all together."
