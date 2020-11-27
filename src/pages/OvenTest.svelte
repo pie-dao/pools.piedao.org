@@ -34,6 +34,7 @@
   let amountToStake = 0;
   let amountToUnstake = 0;
   let isReady = false;
+  let amount = "1.00000000";
 
   $: ovens = [
     {
@@ -59,6 +60,13 @@
   $: oven = null;
 
   $: if($eth.address) {
+    fetchEthBalance($eth.address);
+    ethKey = balanceKey(ethers.constants.AddressZero, $eth.address);
+  }
+
+  $: ethBalance = BigNumber($balances[ethKey]).toString();
+
+  $: if($eth.address) {
     if(isReady) {
       
     }
@@ -78,10 +86,138 @@
     }
   }
 
+  const withdrawPie = async () => {
+    const requestedAmount = BigNumber(amount);
+    const max = BigNumber(ethBalance).multipliedBy(10 ** 18).toFixed(0);
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+    const { emitter } = displayNotification(await oven.withdrawOutput($eth.address) );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ${oven.baking.symbol} successfully withdrew from the Oven`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  };
+
+  const withdrawEth = async () => {
+    const requestedAmount = BigNumber(amount);
+    const max = BigNumber(ethBalance).multipliedBy(10 ** 18).toFixed(0);
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+    const { emitter } = displayNotification(await oven.withdrawAllETH($eth.address) );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ETH successfully withdrew from the Oven`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  };
+
+  const deposit = async () => {
+    const requestedAmount = BigNumber(amount);
+    const max = BigNumber(ethBalance).multipliedBy(10 ** 18).toFixed(0);
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+
+    if (BigNumber(requestedAmount).isGreaterThan(BigNumber(max)) ) {
+      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
+      const message = `Not enough ETH`;
+      displayNotification({ message, type: "error", autoDismiss: 30000 });
+      return;
+    }
+
+    const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
+
+    let overrides = {
+      gasLimit: 3000000
+    }
+
+    const { emitter } = displayNotification(await oven.deposit(amountWei) );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ETH successfully deposited in the Oven`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  };
+
 </script>
 
 <div class="content flex flex-col">
     <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">    
+
+        ethBalance {ethBalance}
         {#if !oven}
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">♨️ Select an Oven</h1>
         <div class="flex flex-col w-full justify-center md:flex-row">
