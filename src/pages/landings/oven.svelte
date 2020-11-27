@@ -74,7 +74,7 @@
   </div>
 </section>
 
-
+<div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
 <div class="w-99pc">
   <table class="breakdown-table table-auto w-full">
     <thead>
@@ -95,16 +95,6 @@
                 src={pie.icon}
                 alt={pie.symbol} />
                 <span class="md:block">{pie.symbol}</span>
-            </a>
-          </td>
-          <td class="pointer border px-4 ml-8 py-2 font-thin text-center min-w-200px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
-            <a class="" href={`#/pie/${pie.address}`}>
-              {#each pie.composition as coin}
-                <img
-                  class="close-icons inline icon"
-                  src={getTokenImage(coin.address)}
-                  alt={coin.symbol} />
-              {/each}
             </a>
           </td>
           <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
@@ -134,6 +124,7 @@
       {/each}
     </tbody>
   </table>
+</div>
 </div>
 
 
