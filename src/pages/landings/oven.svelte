@@ -7,7 +7,7 @@
 
 
   import get from 'lodash/get';
-  import  piesMarketDataStore from '../../stores/coingecko.js';
+  import {piesMarketDataStore} from '../../stores/coingecko.js';
   import {
     getTokenImage,
     formatFiat,
