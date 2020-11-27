@@ -6,9 +6,11 @@ import { ethers } from "ethers";
 import images from "../config/images.json";
 import poolsConfig from "../config/pools.json";
 import ovenABI from '../config/ovenABI.json';
+import displayNotification from "../notifications.js";
 import {
     balanceKey,
     balances,
+    subject,
     contract,
     eth
 } from "../stores/eth.js";
@@ -79,11 +81,17 @@ const deposit = async () => {
 
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
+    console.log({
+      amountWei,
+      amount
+    })
+
+
     let overrides = {
-      gasLimit: 3000000
+      value: amountWei
     }
 
-    const { emitter } = displayNotification(await oven.deposit(amountWei) );
+    const { emitter } = displayNotification(await instance.deposit(overrides) );
 
     emitter.on("txConfirmed", ({ hash }) => {
       const { dismiss } = displayNotification({
@@ -103,6 +111,7 @@ const deposit = async () => {
         },
       });
 
+      fetch();
       return {
         autoDismiss: 1,
         message: "Mined",
@@ -189,7 +198,7 @@ const deposit = async () => {
     </div> -->
 
     <div class="flex justify-center">
-      <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Bake</button>
+      <button on:click={deposit} class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Bake</button>
     </div>
     {/if}
 
