@@ -196,11 +196,12 @@ const deposit = async () => {
 
 
     {#if selectedTab === 2}
-            <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+    <div class="bg-lightgrey-2 px-4 py-8 rounded-8px">            
+      <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
           <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-            <div class="left float-left">Amount to withdraw</div>
+            <div class="left float-left">Amount</div>
             <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-              <div class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">100%</div>
+              <div class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">MAX</div>
             </div>
           </div>
           <div class="bottom  px-4 py-4 md:px-4 pb-4">
@@ -211,12 +212,17 @@ const deposit = async () => {
           <span class="py-2px px-4px">ETH</span></div> 
         </div>
       </div>
+      <div class="flex justify-center">
+        <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Withdraw ETH</button>
+      </div>
+    </div>
 
+    <div class="bg-lightgrey-2 px-4 py-8 rounded-8px mt-4">            
       <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 mt-4 md:mx-4">
         <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-          <div class="left float-left">Amount to withdraw</div>
+          <div class="left float-left">Amount</div>
           <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-            <div class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">100%</div>
+            <div class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">MAX</div>
           </div>
         </div>
         <div class="bottom  px-4 py-4 md:px-4 pb-4">
@@ -229,7 +235,8 @@ const deposit = async () => {
     </div>
 
       <div class="flex justify-center">
-      <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Withdraw</button>
+      <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Withdraw DEFIL</button>
+    </div>
     </div>
     {/if}
 
