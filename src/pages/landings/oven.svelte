@@ -15,6 +15,7 @@
   import Modal from '../../components/elements/Modal.svelte';
 
   import Change from '../../components/Change.svelte'
+import OvenModal from "../../components/OvenModal.svelte";
 
   $: pies = orderBy((poolsConfig.selectable.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
@@ -38,7 +39,7 @@
 
   <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
     <span slot="content">
-      This is a modal
+      <OvenModal />
     </span>
   </Modal>
   <section class="pt-12 px-4 text-center">
