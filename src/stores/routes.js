@@ -4,7 +4,7 @@ import pools from '../config/pools.json';
 
 import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
-import Oven from '../pages/Oven.svelte';
+import OvenTest from '../pages/OvenTest.svelte';
 import Guides from '../pages/Guides.svelte';
 import Tokensswap from '../pages/Tokensswap.svelte';
 import Migration from '../pages/Migrations.svelte';
@@ -15,6 +15,7 @@ import PieLanding from '../pages/PieIndexLanding.svelte';
 import Markets from '../pages/Markets.svelte';
 import DefiPie from '../pages/landings/defiPie.svelte';
 import About from '../pages/landings/about.svelte';
+import Oven from '../pages/landings/oven.svelte';
 
 export const defaultRouteObj = {
   page: Guides,
@@ -66,6 +67,10 @@ const formatRoute = (route) => {
       return { page: Tokensswap };
     case 'migrate':
       return { page: Migration, params: { address } };
+    case 'oven':
+      return { page: Oven };
+    case 'oven-test':
+        return { page: OvenTest };
     case 'stake':
       referral = route[1] || null;
 
