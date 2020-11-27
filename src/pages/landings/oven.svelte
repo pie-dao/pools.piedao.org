@@ -12,6 +12,7 @@
     getTokenImage,
     formatFiat,
   } from "../../components/helpers.js";
+  import Modal from '../../components/elements/Modal.svelte';
 
   import Change from '../../components/Change.svelte'
 
@@ -28,14 +29,18 @@
     };
   }) || []), ['change'], ['desc']);
 
-
-
-
-
+  let modal;
+  let modalOption = {
+    title: "Bake"
+  }
 
 </script>
 
-
+  <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
+    <span slot="content">
+      This is a modal
+    </span>
+  </Modal>
   <section class="pt-12 px-4 text-center">
     <div class="w-full max-w-2xl mx-auto">
       <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Bake a Pie together</h2>
@@ -113,11 +118,9 @@
             {/if}
           </td>
           <td class="border px-4 ml-8 py-2 font-thin text-center">
-            <a target={pie.useMintOverBuy ? '' : "_blank"} href={ pie.useMintOverBuy ? `#/pools/${pie.address}` : `https://balancer.exchange/#/swap/ether/${pie.address}`}>
-              <button class="table-btn highlight-box min-w-70px">
-                {pie.symbol}
+              <button on:click={modal.open} class="table-btn highlight-box min-w-70px">
+                Bake
               </button>
-            </a>
           </td>
           
         </tr>
