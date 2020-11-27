@@ -278,16 +278,16 @@ const deposit = async () => {
 
 
     {#if selectedTab === 2}
-    <div class="bg-lightgrey-2 px-4 py-8 rounded-8px">            
-      <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+    <div class="flex justify-center flex-col items-center bg-lightgrey-2 px-4 py-4 rounded-8px lg:flex-row">            
+      <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mr-4">
           <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
             <div class="left float-left">Amount</div>
             <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
               <div class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">MAX</div>
             </div>
           </div>
-          <div class="bottom  px-4 py-4 md:px-4 pb-4">
-            <input type="number" class="font-thin text-base w-60pc md:w-75pc md:text-xl">
+          <div class="bottom  px-4 py-1 md:px-4">
+            <input type="number" class="font-thin text-base w-90pc lg:w-70pc md:w-70pc md:text-xl">
             <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
           align-middle justify-center items-center pointer mt-0 md:mt-14px">
           <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
@@ -295,29 +295,28 @@ const deposit = async () => {
         </div>
       </div>
       <div class="flex justify-center">
-        <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Withdraw ETH</button>
+        <button class="btn m-0 mt-4 rounded-8px px-56px py-24px lg:mt-0" >Withdraw ETH</button>
       </div>
     </div>
 
-    <div class="bg-lightgrey-2 px-4 py-8 rounded-8px mt-4">            
-      <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 mt-4 md:mx-4">
-        <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
+    <div class="flex flex-col justify-center items-center bg-lightgrey-2 px-4 py-4 mt-4 rounded-8px lg:flex-row">            
+      <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mr-4">
+          <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
           <div class="left float-left">Amount</div>
           <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
             <div class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">MAX</div>
           </div>
         </div>
-        <div class="bottom  px-4 py-4 md:px-4 pb-4">
-          <input type="number" class="font-thin text-base w-60pc md:w-75pc md:text-xl">
+        <div class="bottom  px-4 py-1 md:px-4">
+          <input type="number" class="font-thin text-base w-90pc lg:w-70pc md:w-70pc md:text-xl">
           <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
         align-middle justify-center items-center pointer mt-0 md:mt-14px">
         <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={getTokenImage(pieAddress)} alt={`PieDAO ` + pie.symbol}>
         <span class="py-2px px-4px">{pie.symbol}</span></div> 
       </div>
     </div>
-
       <div class="flex justify-center">
-      <button class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Withdraw DEFIL</button>
+      <button class="btn m-0 mt-4 rounded-8px px-56px py-24px lg:mt-0">Withdraw DEFIL</button>
     </div>
     </div>
     {/if}
