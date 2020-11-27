@@ -279,7 +279,7 @@ const deposit = async () => {
 
     {#if selectedTab === 2}
       <div class="flex justify-between flex-col items-center  px-4 py-4 rounded-8px lg:flex-row">            
-        <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mr-4">
+        <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 w-100pc md:mr-4">
             <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
               <div class="left float-left">Amount</div>
               <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
@@ -290,7 +290,7 @@ const deposit = async () => {
               <input type="number" class="font-thin text-base w-90pc lg:w-70pc md:w-70pc md:text-xl">
               <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
             align-middle justify-center items-center pointer mt-0 md:mt-14px">
-            <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
+            <img class="token-icon w-20px mb-2 h-20px md:h-26px md:w-26px my-4px mx-2px " src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
             <span class="py-2px px-4px">ETH</span></div> 
           </div>
         </div>
@@ -300,7 +300,7 @@ const deposit = async () => {
       </div>
 
       <div class="flex justify-between flex-col items-center  px-4 py-4 rounded-8px lg:flex-row">            
-        <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mr-4 px-4 py-1 md:px-4">
+        <div class="input flex items-center h-97px bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mr-4 px-4 py-1 w-100pc md:px-4 lg:w-76pc">
           <img class="token-icon w-40px h-40px  my-4px mx-2px" src={getTokenImage(pieAddress)} alt={`PieDAO ` + pie.symbol}>
           <span class="w-90pc lg:w-70pc md:w-70pc md:text-xl py-2px px-4px">12 {pie.symbol}</span>
         </div>
