@@ -9,13 +9,13 @@ import Meta from '../elements/meta.svelte';
 export let address;
 
 	
-const metadata = {
-    title: 'Test',
-    description: 'It really is!',
-    image: 'https://svelte.dev/images/twitter-card.png',
-    imageAlt: 'Svelte svelte.dev',
-    url:'svelte.dev'
-}
+// const metadata = {
+//     title: 'Test',
+//     description: 'It really is!',
+//     image: 'https://svelte.dev/images/twitter-card.png',
+//     imageAlt: 'Svelte svelte.dev',
+//     url:'svelte.dev'
+// }
 </script>
 
 <div>
