@@ -61,6 +61,87 @@ const fetch = async () => {
     initialized = true;
 };
 
+const withdrawPie = async () => {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+    const { emitter } = displayNotification(await instance.withdrawOutput($eth.address) );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ${oven.baking.symbol} successfully withdrew from the Oven`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      fetch();
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+};
+
+const withdrawEth = async () => {
+    const requestedAmount = BigNumber(amount);
+    const max = BigNumber(ovenData.ethBalance).multipliedBy(10 ** 18).toFixed(0);
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    if (BigNumber(requestedAmount).isGreaterThan(BigNumber(max)) ) {
+      const message = `Not enough ETH in the Oven`;
+      displayNotification({ message, type: "error", autoDismiss: 30000 });
+      return;
+    }
+
+    const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
+
+    const { emitter } = displayNotification(await instance.withdrawETH(amountWei, $eth.address) );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${requestedAmount.toFixed()} ETH successfully withdrew from the Oven`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+};
+
 const deposit = async () => {
     const requestedAmount = BigNumber(amount);
     const max = BigNumber(ethBalance).multipliedBy(10 ** 18).toFixed(0);
@@ -71,7 +152,6 @@ const deposit = async () => {
       return;
     }
 
-
     if (BigNumber(requestedAmount).isGreaterThan(BigNumber(max)) ) {
       const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
       const message = `Not enough ETH`;
@@ -80,13 +160,6 @@ const deposit = async () => {
     }
 
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
-
-    console.log({
-      amountWei,
-      amount
-    })
-
-
     let overrides = {
       value: amountWei
     }
