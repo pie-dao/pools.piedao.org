@@ -90,17 +90,26 @@
     pieOfPies = false;
   })(token);
 
+  const getInternalWeights = (component, base) => {
+        return $pools[component.address].map((internal) => {
+          if (internal.isPie) {
+            let newbase = (base * internal.percentage/ 100)
+            return getInternalWeights(internal, newbase);
+          }
+
+          return {
+            ...internal,
+            percentage: (internal.percentage * base) / 100,
+          };
+        });
+  };
+
   $: composition = flattenDeep(
     $pools[token].map((component) => {
       if (component.isPie) {
         if(!pieOfPies) pieOfPies = [];
         pieOfPies.push(component);
-        return $pools[component.address].map((internal) => {
-          return {
-            ...internal,
-            percentage: (internal.percentage * component.percentage) / 100,
-          };
-        });
+        return getInternalWeights(component, component.percentage);
       }
       return component;
     })
@@ -116,16 +125,25 @@
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
     metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
-    console.log('metadata', $piesMarketDataStore[token.toLowerCase()] );
     initialized = true;
   })();
 
-  const getLiquidity = () => {
+  $: getLiquidity = (() => {
     if(poolsConfig[token].swapEnabled)
       return metadata.liquidity;
 
     return $pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : 0
-  }
+  })()
+
+  $: getNav =(() => {
+    if(token === '0xe4f726adc8e89c6a6017f01eada77865db22da14') {
+      let nav = $pools[token+"-nav"];
+      nav += $pools["0x8d1ce361eb68e9e05573443c407d4a3bed23b033-nav"] * poolsConfig[token].composition[2].percentage / 100;
+      return formatFiat(nav ? nav : '')
+    }
+
+    return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
+  })()
 
   const renderWidget = async () => {
     const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
@@ -192,7 +210,7 @@
   <div class="flex w-full mt-2 md:mt-8">
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black text-pink">
-        {formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')}
+        {getNav}
       </div>
       <div class="font-bold text-xs md:text-base text-pink">NAV</div>
     </div>
@@ -226,15 +244,6 @@
   {/if}
 
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
-  {#if pieOfPies }
-    <h4>*This allocation is composed of multiple pies, find below the exploded allocation.</h4>
-    <ul>
-      {#each pieOfPies as subPie}
-        <li><a href="#/pie/{subPie.address}">{subPie.symbol}</a></li>
-      {/each}
-    </ul>
-  {/if}
-
 
   <div class="w-99pc m-4">
     <table class="breakdown-table table-auto w-full">
@@ -315,6 +324,17 @@
       </tbody>
     </table>
   </div>
+
+  {#if pieOfPies }
+    <div class="font-thin w-full px-4 py-2 text-left">
+      <h4>*This allocation is composed of multiple pies, find below the exploded allocation.</h4>
+      <ul>
+        {#each pieOfPies as subPie}
+          <li><a class="font-bold" href="#/pie/{subPie.address}">{subPie.symbol}</a></li>
+        {/each}
+      </ul>
+    </div>
+  {/if}
   
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
     <div class="p-0 mt-2 md:w-1/4">
