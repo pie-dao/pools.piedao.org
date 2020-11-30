@@ -1,4 +1,9 @@
 <script>
+import { onMount } from 'svelte';
+import { get } from "svelte/store";
+import orderBy from 'lodash/orderBy';
+import groupBy from 'lodash/groupBy';
+
 import { _ } from "svelte-i18n";
 import debounce from "lodash/debounce";
 import BigNumber from "bignumber.js";
@@ -24,6 +29,8 @@ import {
   subscribeToBalance
 } from "../components/helpers.js";
 
+import Gauge from '../components/charts/gauge.svelte';
+
 export let ovenAddress;
 export let pieAddress;
 
@@ -32,10 +39,12 @@ let amount = 0;
 let instance;
 let ethKey;
 
+$: balanceKeyOven = balanceKey(ethers.constants.AddressZero, ovenAddress);
 $: selectedTab = 1;
 $: ovenData = {
   ethBalance: 0,
-  pieBalance: 0
+  pieBalance: 0,
+  logs: []
 }
 
 $: pie = poolsConfig[pieAddress];
@@ -47,18 +56,33 @@ $: if($eth.address) {
   if(!initialized) {
     fetch();
   }
-  
-  
 }
 
 $: ethBalance = BigNumber($balances[ethKey]).toFixed(4);
 
+onMount(async () => {
+  const { provider } = get(eth);
+  instance = new ethers.Contract(ovenAddress, ovenABI, provider);
+  // instance = await contract({ address: ovenAddress, abi: ovenABI });
+  let bakeLogs = await instance.queryFilter(instance.filters.Bake(), 3604155, "latest");
+  ovenData.logs = orderBy(bakeLogs.map( log => {
+    return {
+      amount: (log.args.amount / 1e18).toFixed(2),
+      price: log.args.price / 1e18,
+      user: log.args.user,
+      tx: log.blockHash,
+      blockNumber: log.blockNumber
+    }
+  }), ['blockNumber'], ['desc']);
+
+  console.log('bakeLogs', bakeLogs);
+});
+
 const fetch = async () => {
-    instance = await contract({ address: ovenAddress, abi: ovenABI });
     ovenData.ethBalance = await instance.ethBalanceOf($eth.address) / 1e18;
     ovenData.pieBalance = await instance.outputBalanceOf($eth.address) / 1e18;
     ovenData.cap = await instance.cap() / 1e18;
-    initialized = true;
+    initialized = true;  
 };
 
 const withdrawPie = async () => {
@@ -230,14 +254,48 @@ const deposit = async () => {
   </div>
 
   <div class="w-100pc flex justify-center justify-items-center content-center text-center">
-  <button on:click={ () => selectedTab = 1} class:oven-button-active={selectedTab === 1} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
-      Deposit
-  </button>
-  <button on:click={ () => selectedTab = 2} class:oven-button-active={selectedTab === 2} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
-      Withdraw
-  </button>
-</div>
+    <button on:click={ () => selectedTab = 0} class:oven-button-active={selectedTab === 0} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
+        Status
+    </button>
+    <button on:click={ () => selectedTab = 1} class:oven-button-active={selectedTab === 1} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
+        Deposit
+    </button>
+    <button on:click={ () => selectedTab = 2} class:oven-button-active={selectedTab === 2} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
+        Withdraw
+    </button>
+  </div>
 
+  {#if selectedTab === 0}
+    <div class="flex justify-center py-4">
+      <Gauge value={BigNumber($balances[balanceKeyOven]).toFixed(4)} max={10} />
+    </div>
+    <table class="breakdown-table table-auto w-full mx-1">
+        <thead>
+          <tr>
+            <th class="font-thin border-b-2 px-4 py-2 text-left">Baked {pie.symbol}</th>
+            <th class="font-thin border-b-2 px-4 py-2">Block</th>
+            <th class="font-thin border-b-2 px-4 py-2">Tx</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each ovenData.logs as log}
+            <tr class="row-highlight">
+              <td class="pointer border border-gray-800 px-2 py-2 text-left">
+                {log.amount} {pie.symbol}
+              </td>
+              <td class="pointer border px-4 ml-8 py-2 font-thin text-center">
+                {log.blockNumber}
+              </td>
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                  <a href={`https://etherscan.io/tx/${log.tx}`} target="_blank">Etherscan</a>
+              </td>
+              
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+  {/if}
+  
   {#if selectedTab === 1}
       <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
           <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">

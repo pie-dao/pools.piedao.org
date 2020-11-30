@@ -1,17 +1,23 @@
 <script>
+  import { onMount } from 'svelte';
+  import { ethers } from 'ethers';
   import images from "../../config/images.json";
   import ProductBox from '../../components/elements/product-box.svelte';
   import poolsConfig from "../../config/pools.json";
-  import { pools } from '../../stores/eth.js';
+  import { pools, balances, balanceKey } from '../../stores/eth.js';
+  
   import {
     getTokenImage,
     formatFiat,
+    subscribeToBalance,
+    toFixed
   } from "../../components/helpers.js";
 
   import Modal from '../../components/elements/Modal.svelte';
   import LiquidityModal from '../../components/LiquidityModal.svelte';
-  
   import OvenModal from "../../components/OvenModal.svelte";
+
+  import Gauge from '../../components/charts/gauge.svelte';
 
   $: ovens = [
     {
@@ -38,10 +44,18 @@
   let modalAdd;
   let modalOption = {
     title: "Bake"
-  }
+  };
+
+  onMount(() => {
+    ovens.forEach(ov => {
+      subscribeToBalance(null, ov.addressOven);
+      ov.KeyEthBalance = balanceKey(ethers.constants.AddressZero, ov.addressOven);
+    });
+  });
+
+
 
 </script>
-
   <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
     <span slot="content">
       <OvenModal pieAddress={'0x8d1ce361eb68e9e05573443c407d4a3bed23b033'} ovenAddress={'0x1d616dad84dd0b3ce83e5fe518e90617c7ae3915'}/>
@@ -97,7 +111,7 @@
     <thead>
       <tr>
         <th class="font-thin border-b-2 px-4 py-2 text-left">Pie Name</th>
-        <th class="font-thin border-b-2 px-4 py-2">Bake Session Limit</th>
+        <th class="font-thin border-b-2 px-4 py-2">Bake Session</th>
         <th class="font-thin border-b-2 px-4 py-2">Oven state</th>
         <th class="font-thin border-b-2 px-4 py-2">Gas Savings</th>
       </tr>
@@ -116,7 +130,7 @@
           </td>
           <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
             <a href={`#/pie/${oven.baking.address}`}>
-              10 ETH
+              { toFixed($balances[oven.KeyEthBalance], 2) } / 10 ETH
             </a>
           </td>
           <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
