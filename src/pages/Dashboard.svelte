@@ -17,7 +17,7 @@
 
   import Change from '../components/Change.svelte'
 
-  $: pies = orderBy((poolsConfig.selectable.map(address => {
+  $: pies = (poolsConfig.selectable.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
       ...poolsConfig[address],
@@ -28,7 +28,7 @@
       change: change ? change : 0,
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
     };
-  }) || []), ['change'], ['desc']);
+  }) || []);
 
   
 </script>
