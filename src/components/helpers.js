@@ -325,17 +325,26 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
 
 export const fetchCalcToPie = async (pieAddress, poolAmount) => {
   validateIsAddress(pieAddress);
-  const recipe = await contract({
-    address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e',
-    abi: recipeAbi,
-  });
+
+  const { provider } = get(eth);
+
+  const recipe = new ethers.Contract('0x6cb4b8669e23295563d3b34df4a760c0cee993c7', recipeAbi, provider);
+
+  // const recipe = await contract({
+  //   address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e',
+  //   abi: recipeAbi,
+  // });
 
   const amount = ethers.BigNumber.from(
     BigNumber(poolAmount)
       .multipliedBy(10 ** 18)
       .toFixed(0),
   );
-  const amountEthNecessary = await recipe.calcToPie(pieAddress, amount);
+  const amountEthNecessary = await recipe.callStatic.calcToPie(
+    pieAddress, 
+    amount
+  );
+
   return {
     val: amountEthNecessary,
     label: ethers.utils.formatEther(amountEthNecessary),
