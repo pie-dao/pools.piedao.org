@@ -14,7 +14,6 @@ export const close = () => {
 }
 
 let modalIsOpen = false;
-console.log('backgroundColor', backgroundColor)
 </script>
 
 {#if modalIsOpen}

@@ -80,6 +80,7 @@
           <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
             <div class="py-1">
               <a href="#/pies" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Indexes</a>
+              <a href="#/oven" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Ovens</a>
               <a href="#/stake" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farms</a>
             </div>
             <div class="borderDiveder"></div>
@@ -120,7 +121,7 @@
     <div class="relative inline-block text-left block md:hidden">
       <div>
         <span class="shadow-sm">
-          <button class="hamburger" type="button" on:click={toggleMobileMenu}>
+          <button class="hamburger mr-5" type="button" on:click={toggleMobileMenu}>
             <img src={images.icons.hamburger} alt="hamburger icon" class="w-min-20px" />
           </button>
         </span>
@@ -132,6 +133,7 @@
             <div class="border-t border-gray-100"></div>
             <div class="py-1">
               <a href="#/pies" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Indexes</a>
+              <a href="#/oven" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Ovens</a>
               <a href="#/stake" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farms</a>
             </div>
             <div class="py-1">
