@@ -61,8 +61,8 @@ $: if($eth.address) {
 $: ethBalance = BigNumber($balances[ethKey]).toFixed(4);
 
 onMount(async () => {
-  const { provider } = get(eth);
-  instance = new ethers.Contract(ovenAddress, ovenABI, provider);
+  const { provider, signer } = get(eth);
+  instance = new ethers.Contract(ovenAddress, ovenABI, signer);
   // instance = await contract({ address: ovenAddress, abi: ovenABI });
   let bakeLogs = await instance.queryFilter(instance.filters.Bake(), 3604155, "latest");
   ovenData.logs = orderBy(bakeLogs.map( log => {
