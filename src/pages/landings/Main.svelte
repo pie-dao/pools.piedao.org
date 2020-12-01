@@ -1,8 +1,8 @@
 <script>
-  import images from "../config/images.json";
-  import ProductBox from '../components/elements/product-box.svelte';
-  import JoinPieDAO from '../components/JoinPieDAO.svelte';
-  import FeaturedIn from '../components/FeaturedIn.svelte';
+  import images from "../../config/images.json";
+  import ProductBox from '../../components/elements/product-box.svelte';
+  import JoinPieDAO from '../../components/JoinPieDAO.svelte';
+  import FeaturedIn from '../../components/FeaturedIn.svelte';
 </script>
   
 
@@ -29,19 +29,19 @@
       />
 
       <ProductBox 
+        link="#/pie/0xe4f726adc8e89c6a6017f01eada77865db22da14"
+        image={images.bcp}
+        title="BCP"
+        subTitle="Balanced Crypto Pie"
+        description="The best of crypto in one token."
+      />
+
+      <ProductBox 
         link="#/pie/0x8d1ce361eb68e9e05573443c407d4a3bed23b033"
         image={images.defiplusplus}
         title="DEFI++"
         subTitle="DeFi Index"
         description="The Most Diversified DeFi Index on the Market."
-      />
-
-      <ProductBox 
-        link="#/pie/0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
-        image={images.defipluss}
-        title="DEFI+S"
-        subTitle="DeFi Small Cap"
-        description="Small Cap Projects with Big Potential."
       />
   </div>
 

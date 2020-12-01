@@ -4,7 +4,7 @@ import pools from '../config/pools.json';
 
 import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
-import Guides from '../pages/Guides.svelte';
+import Main from '../pages/landings/Main.svelte';
 import Tokensswap from '../pages/Tokensswap.svelte';
 import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
@@ -17,7 +17,7 @@ import About from '../pages/landings/about.svelte';
 import Oven from '../pages/landings/oven.svelte';
 
 export const defaultRouteObj = {
-  page: Guides,
+  page: Main,
   params: {
     address: pools.default,
   },
@@ -60,8 +60,6 @@ const formatRoute = (route) => {
       return { page: PieLanding, params: { address } };
     case 'dough':
       return { page: Dough };
-    case 'guides':
-      return { page: Guides };
     case 'swap':
       return { page: Tokensswap };
     case 'migrate':

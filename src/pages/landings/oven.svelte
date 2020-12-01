@@ -56,7 +56,6 @@
       highlight: true,
       enabled: true,
     }
-
   ]
 
   let modal;
