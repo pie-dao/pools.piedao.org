@@ -236,19 +236,6 @@ const deposit = async () => {
         </div>
         <div class="font-bold">{ovenData.pieBalance} {pie.symbol}</div>
       </div>
-      <div class="p-0 mr-8">
-        <div class="">
-          Last Bake
-        </div>
-        <div class="font-bold">n/a</div>
-      </div>
-      <div class="flex flex-col justify-center p-0">
-        <div class="">
-          Next Bake
-        </div>
-        <div class="font-bold">n/a</div>
-      </div>
-  
     </div>
 
   </div>

@@ -4,7 +4,6 @@ import pools from '../config/pools.json';
 
 import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
-import OvenTest from '../pages/OvenTest.svelte';
 import Guides from '../pages/Guides.svelte';
 import Tokensswap from '../pages/Tokensswap.svelte';
 import Migration from '../pages/Migrations.svelte';
@@ -69,8 +68,6 @@ const formatRoute = (route) => {
       return { page: Migration, params: { address } };
     case 'oven':
       return { page: Oven };
-    case 'oven-test':
-        return { page: OvenTest };
     case 'stake':
       referral = route[1] || null;
 
