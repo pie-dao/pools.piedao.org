@@ -40,6 +40,16 @@
     token: null
   }
 
+  $: getNav =((token) => {
+    if(token === '0xe4f726adc8e89c6a6017f01eada77865db22da14') {
+      let nav = $pools[token+"-nav"];
+      nav += $pools["0x8d1ce361eb68e9e05573443c407d4a3bed23b033-nav"] * poolsConfig[token].composition[2].percentage / 100;
+      return formatFiat(nav ? nav : '')
+    }
+
+    return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
+  })
+
   
 </script>
 
@@ -107,11 +117,7 @@
               <Change value={pie.change} />
             </td>
             <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
-              {#if $piesMarketDataStore[pie.address] }
-                {formatFiat(get($piesMarketDataStore, `${pie.address}.market_data.current_price`, '-'))}
-              {:else}
-                {formatFiat(pie.nav)}
-              {/if}
+              {getNav(pie.address)}
             </td>
             <td class="border px-4 ml-8 py-2 font-thin text-center">
               {#if pie.useMintOverBuy}
