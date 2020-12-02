@@ -69,7 +69,7 @@ onMount(async () => {
       amount: (log.args.amount / 1e18).toFixed(2),
       price: log.args.price / 1e18,
       user: log.args.user,
-      tx: log.blockHash,
+      tx: log.transactionHash,
       blockNumber: log.blockNumber
     }
   }), ['blockNumber'], ['desc']);

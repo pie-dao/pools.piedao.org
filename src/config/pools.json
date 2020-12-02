@@ -21,6 +21,7 @@
     "useRecipe": false,
     "swapEnabled": false,
     "swapFees": "0.2",
+    "streamingFees": "0",
     "coingeckoId": "piedao-btc",
     "composition": [
       {
@@ -63,6 +64,7 @@
     "symbol": "USD++",
     "useRecipe": false,
     "swapEnabled": false,
+    "streamingFees": "0",
     "swapFees": "0",
     "coingeckoId": "piedao-usd",
     "tradingViewFormula": "(0.4722*KRAKEN:USDCUSD+0.2042*KRAKEN:DAIUSD+0.2858*BITTREX:TUSDUSD+0.0378*KUCOIN:SUSDUSDT)",
@@ -122,6 +124,7 @@
   "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": {
     "symbol": "DXY",
     "useRecipe": true,
+    "streamingFees": "0",
     "swapFees": "0.1",
     "swapEnabled": false,
     "composition": [
@@ -206,6 +209,7 @@
     "useRecipe": true,
     "coingeckoId": "piedao-defi-large-cap",
     "swapFees": "0.1",
+    "streamingFees": "0.7",
     "swapEnabled": true,
     "composition": [
       {
@@ -311,6 +315,7 @@
     "coingeckoId": "piedao-defi-small-cap",
     "bPool": "0x94743cfaa3fdc62e9693572314b5ee377eba5d11",
     "swapFees": "0",
+    "streamingFees": "0.7",
     "mapDynamicTradingViewFormula": {
       "0xba100000625a3754423978a60c9317c58a424e3D": "FTX:BALUSD",
       "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD": "BINANCE:LRCUSD",
@@ -384,6 +389,7 @@
     "useRecipe": true,
     "useMintOverBuy": true,
     "swapEnabled": true,
+    "streamingFees": "0.46",
     "swapFees": "1",
     "composition": [
         {

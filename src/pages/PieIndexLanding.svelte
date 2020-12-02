@@ -389,7 +389,7 @@
       <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
         <div class="top flex justify-between">
           <div class="titolo">Streaming Fees</div>
-          <div class="info font-thin mb-1">0.7%</div>
+          <div class="info font-thin mb-1">{poolsConfig[token].streamingFees}%</div>
         </div>
         <div class="bottom font-thin text-sm mb-2">paid out to the DAO linearly over time based on the entire market cap of the index</div>
       </div>
