@@ -125,6 +125,7 @@
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
     metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
+    console.log('metadata', metadata);
     initialized = true;
   })();
 

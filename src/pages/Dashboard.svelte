@@ -16,6 +16,8 @@
   } from "../components/helpers.js";
 
   import Change from '../components/Change.svelte'
+  import Modal from '../components/elements/Modal.svelte';
+  import LiquidityModal from "../components/LiquidityModal.svelte";
 
   $: pies = (poolsConfig.selectable.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
@@ -30,10 +32,28 @@
     };
   }) || []);
 
+  let modal;
+  let modalOption = {
+    method: "single",
+    poolAction: "add",
+    title: "Add Liquidity",
+    token: null
+  }
+
   
 </script>
 
 <div class="content flex flex-col spl">
+
+  <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
+    <span slot="content">
+      <LiquidityModal 
+        token={modalOption.token} 
+        method={modalOption.method} 
+        poolAction={modalOption.poolAction}
+      />
+    </span>
+  </Modal>
 
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
@@ -94,11 +114,21 @@
               {/if}
             </td>
             <td class="border px-4 ml-8 py-2 font-thin text-center">
-              <a target={pie.useMintOverBuy ? '' : "_blank"} href={ pie.useMintOverBuy ? `#/pools/${pie.address}` : `https://balancer.exchange/#/swap/ether/${pie.address}`}>
-                <button class="table-btn highlight-box min-w-70px">
+              {#if pie.useMintOverBuy}
+                <button on:click={() => {
+                  modalOption.token = pie.address;
+                  modal.open();
+                }} class="table-btn highlight-box min-w-70px">
                   {pie.symbol}
                 </button>
-              </a>
+              {:else}
+                <a target="_blank" href={`https://balancer.exchange/#/swap/ether/${pie.address}`}>
+                  <button class="table-btn highlight-box min-w-70px">
+                    {pie.symbol}
+                  </button>
+                </a>
+              {/if}
+              
             </td>
             
           </tr>

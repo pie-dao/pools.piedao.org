@@ -1,7 +1,7 @@
 
 <div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
   <div class="text-white bg-black rounded-4px py-6px px-8px mb-10px">JOIN PIEDAO</div>
-  <div class="font-huge">+1200<br/> Members</div>
+  <div class="font-huge">+1700<br/> Members</div>
     <div class="font-thin text-lg mt-10px mb-10px md:w-80pc">
       Join the community with $DOUGH. Participate in governance and be rewarded.
     </div>

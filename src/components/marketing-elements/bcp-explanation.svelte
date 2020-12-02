@@ -6,9 +6,9 @@
 
     <h1 class="mt-4">Objective:</h1>
     <div class="font-thin">
-        BCP is the result of months of community effort to provide a complete, risk-reduced cryptocurrency portfolio. We wanted to make a product for anyone who believes in the future of open finance, a diversified index of the most core permissionless digital assets.
+        BCP is the result of months of community effort to provide a complete and risk-reduced cryptocurrency portfolio. We wanted to make a product for anyone who believes in the future of open finance, a diversified index of the most core permissionless digital assets.
         <br/><br/>
-        BCP achieves this as an equal balance between the established market leader (BTC), the backbone asset of smart-contract infrastructure (ETH), and a basket of the most innovative permissionless  tools revolutionizing the finance industry (DEFI - DEFI++).
+        BCP achieves this as an equal balance between the established market leader (BTC), the backbone asset of smart-contract infrastructure (ETH), and a basket of the most innovative permissionless  tools revolutionizing finance (DEFI++).
         <br/><br/>
         Bitcoin and Ether are the clear market leaders at the top of their respective games, each with their own individual merits and long history of success. DeFi is a relatively new phenomenon, a broad ecosystem of projects transforming finance.
         <br/><br/>
@@ -20,18 +20,18 @@
     <div class="font-thin">
         The PieDAO community came to the consensus that BTC, ETH, and DEFI are the most valuable sectors of the cryptocurrency industry. 
         <br/><br/>
-        As a community we decided that the true balanced crypto portfolio would evenly spread exposure across these three assets. BCP is therefore composed of an even 33.33% distribution between BTC, ETH, and DEFI++.
+        As a community we decided that the true balanced crypto portfolio would evenly spread exposure across these three asset groups. BCP is therefore composed of an even 33.33% distribution between BTC, ETH, and DEFI++.
         <br/><br/>
-        DEFI++ is our most diversified DEFI index, a 70/30 balance of our large market cap (DEFI+L) and Small cap market cap (DEFI+S) DEFI products. Both these products follow a weight-based methodology, with higher allocation given to larger market cap assets. This is done in order to maximise the scalability of the pies, without the low liquidity of low cap (but high potential) assets becoming a bottleneck.
+        DEFI++ is our most diversified DEFI index, a 70/30 balance of our large market cap (DEFI+L) and small cap market cap (DEFI+S) DEFI products. Both these products follow a weight-based methodology, with higher allocation given to larger market cap assets. This is done in order to maximise the scalability of the pies, without the low liquidity of low cap (but high potential) assets becoming a bottleneck.
     </div>
 
     
     <h1 class="mt-4">Operation:</h1>
 
     <div class="font-thin">
-        BCP is constructed using a Balancer pool, automatically rebalancing to maintain the set allocation as market prices fluctuate. In this way the system constantly locks in profits and grows the underlying holdings.
+        BCP is constructed using a Balancer smart pool, automatically rebalancing to maintain the set allocation as market prices fluctuate. In this way the system constantly locks in profits and grows the underlying holdings.
         <br/><br/>
-        A user can easily issue BCP tokens with ETH (sourcing the tokens from Uniswap and other markets) or with the underlying assets in their wallet. In this way BCP tokens are fully backed by the assets they represent, safely stored in our treasury and instantly redeemable at any time.
+        A user can easily issue BCP tokens with ETH (sourcing the tokens from Uniswap and other markets) or with the underlying assets in their wallet. In this way BCP tokens are fully backed by the assets they represent, safely stored in our non-custodial treasury and instantly redeemable at any time.
     </div>
     
 </div>

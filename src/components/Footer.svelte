@@ -32,8 +32,8 @@
         Block: {$eth.currentBlockNumber}
       </a>
     {/if}
-    <a href="mailto:piedao@protonmail.org" class="footer-link">
-      piedao@protonmail.org
+    <a href="mailto:piedao@protonmail.com" class="footer-link">
+      piedao@protonmail.com
     </a>
     
 
