@@ -643,6 +643,7 @@ export const subscribeToPoolWeights = async (poolAddress) => {
 };
 
 export const toFixed = function (num = 0, fixed) {
+  if(num < 0.000000001) return '0';
   const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
   const arr = num.toString().match(re);
   if (arr && arr.length > 0) {

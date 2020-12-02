@@ -26,7 +26,8 @@ import {
   fetchEthBalance,
   fetchCalcToPie,
   formatFiat,
-  subscribeToBalance
+  subscribeToBalance,
+  toFixed
 } from "../components/helpers.js";
 
 import Gauge from '../components/charts/gauge.svelte';
@@ -52,10 +53,6 @@ $: pie = poolsConfig[pieAddress];
 $: if($eth.address) {
   fetchEthBalance($eth.address);
   ethKey = balanceKey(ethers.constants.AddressZero, $eth.address);
-
-  if(!initialized) {
-    fetch();
-  }
 }
 
 $: ethBalance = BigNumber($balances[ethKey]).toFixed(4);
@@ -63,7 +60,9 @@ $: ethBalance = BigNumber($balances[ethKey]).toFixed(4);
 onMount(async () => {
   const { provider, signer } = get(eth);
   instance = new ethers.Contract(ovenAddress, ovenABI, signer);
-  // instance = await contract({ address: ovenAddress, abi: ovenABI });
+  
+  await fetch();
+
   let bakeLogs = await instance.queryFilter(instance.filters.Bake(), 3604155, "latest");
   ovenData.logs = orderBy(bakeLogs.map( log => {
     return {
@@ -100,18 +99,18 @@ const withdrawPie = async () => {
       });
 
       const subscription = subject("blockNumber").subscribe({
-        next: () => {
+        next: async () => {
           displayNotification({
             autoDismiss: 15000,
-            message: `${requestedAmount.toFixed()} ${oven.baking.symbol} successfully withdrew from the Oven`,
+            message: `${oven.baking.symbol} successfully withdrew from the Oven`,
             type: "success",
           });
           dismiss();
+          await fetch();
           subscription.unsubscribe();
         },
       });
 
-      fetch();
       return {
         autoDismiss: 1,
         message: "Mined",
@@ -147,12 +146,13 @@ const withdrawEth = async () => {
       });
 
       const subscription = subject("blockNumber").subscribe({
-        next: () => {
+        next: async () => {
           displayNotification({
             autoDismiss: 15000,
             message: `${requestedAmount.toFixed()} ETH successfully withdrew from the Oven`,
             type: "success",
           });
+          await fetch();
           dismiss();
           subscription.unsubscribe();
         },
@@ -197,18 +197,18 @@ const deposit = async () => {
       });
 
       const subscription = subject("blockNumber").subscribe({
-        next: () => {
+        next: async () => {
           displayNotification({
             autoDismiss: 15000,
             message: `${requestedAmount.toFixed()} ETH successfully deposited in the Oven`,
             type: "success",
           });
+          await fetch();
           dismiss();
           subscription.unsubscribe();
         },
       });
 
-      fetch();
       return {
         autoDismiss: 1,
         message: "Mined",
@@ -228,13 +228,13 @@ const deposit = async () => {
         <div class="">
           Your ETH in the Oven
         </div>
-        <div class="font-bold">{ovenData.ethBalance} ETH</div>
+        <div class="font-bold">{toFixed(ovenData.ethBalance, 6)} ETH</div>
       </div>
       <div class="p-0 mr-8">
         <div class="">
           Pie Ready to Withdraw
         </div>
-        <div class="font-bold">{ovenData.pieBalance} {pie.symbol}</div>
+        <div class="font-bold">{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</div>
       </div>
     </div>
 
@@ -300,21 +300,6 @@ const deposit = async () => {
         </div>
       </div>
 
-    <!-- <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 mt-4 md:mx-4">
-        <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-          <div class="left float-left">You Get</div>
-          <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-          </div>
-        </div>
-        <div class="bottom  px-4 py-4 md:px-4 pb-4">
-          <input disabled type="number" class="font-thin text-base w-60pc md:w-75pc md:text-xl">
-          <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
-        align-middle justify-center items-center pointer mt-0 md:mt-14px">
-        <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={getTokenImage(pieAddress)} alt={`PieDAO ` + pie.symbol}>
-        <span class="py-2px px-4px">{pie.symbol}</span></div> 
-      </div>
-    </div> -->
-
     <div class="flex justify-center">
       <button on:click={deposit} class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Bake</button>
     </div>
@@ -347,7 +332,7 @@ const deposit = async () => {
       <div class="flex justify-between flex-col items-center  px-4 py-4 rounded-8px lg:flex-row">            
         <div class="input flex items-center h-97px bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mr-4 px-4 py-1 w-100pc md:px-4 lg:w-76pc">
           <img class="token-icon w-40px h-40px  my-4px mx-2px" src={getTokenImage(pieAddress)} alt={`PieDAO ` + pie.symbol}>
-          <span class="w-90pc lg:w-70pc md:w-70pc md:text-xl py-2px px-4px">{ovenData.pieBalance} {pie.symbol}</span>
+          <span class="w-90pc lg:w-70pc md:w-70pc md:text-xl py-2px px-4px">{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</span>
         </div>
         
         <div class="flex justify-center">
