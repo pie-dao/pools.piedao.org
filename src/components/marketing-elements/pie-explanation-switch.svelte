@@ -5,6 +5,8 @@ import DSP from './dsp-explanation.svelte'
 import BTC from './btcp-explanation.svelte'
 import USD from './usdp-explanation.svelte'
 import Meta from '../elements/meta.svelte';
+import BCP from './bcp-explanation.svelte';
+
 
 export let address;
 
@@ -29,5 +31,7 @@ export let address;
         <BTC />
     {:else if address === '0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e'}
         <USD />
+    {:else if address === '0xe4f726adc8e89c6a6017f01eada77865db22da14'}
+        <BCP />
     {/if}
 </div>

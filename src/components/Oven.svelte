@@ -119,31 +119,6 @@
     }
   };
 
-  const calcArb = () => {
-    const reserveA = BigNumber(3490);
-    const reserveB = BigNumber(890);
-    const truePriceTokenA = BigNumber(1);
-    const truePriceTokenB = BigNumber(2.4);
-
-    const aToB = BigNumber((BigNumber(amount).multipliedBy(truePriceTokenB)).dividedBy(reserveB)).isGreaterThan(truePriceTokenA);
-    // aToB = reserveA.mul(truePriceTokenB) / reserveB < truePriceTokenA;
-
-    const invariant = reserveA.multipliedBy(reserveB);
-
-    const leftSide = (invariant.multipliedBy(aToB ? truePriceTokenA : truePriceTokenB).multipliedBy(BigNumber(1000)).dividedBy(aToB ? truePriceTokenB : truePriceTokenA).multipliedBy(997)).sqrt();
-    // uint256 leftSide = Babylonian.sqrt(
-    //     invariant.mul(aToB ? truePriceTokenA : truePriceTokenB).mul(1000) /
-    //     uint256(aToB ? truePriceTokenB : truePriceTokenA).mul(997)
-    // );
-    const rightSide = (aToB ? reserveA.multipliedBy(BigNumber(1000)) : reserveB.multipliedBy(BigNumber(1000))).dividedBy(BigNumber(997));
-    // uint256 rightSide = (aToB ? reserveA.mul(1000) : reserveB.mul(1000)) / 997;
-
-    // // compute the amount that must be sent to move the price to the profit-maximizing price
-    const amountIn = leftSide.minus(rightSide);
-
-    console.log('amountIn', amountIn.toString())
-  }
-
   const mintFromRecipe = async () => {
     const requestedAmount = BigNumber(amount);
     const max = BigNumber(ethBalance).multipliedBy(10 ** 18).toFixed(0);
@@ -167,7 +142,7 @@
       return;
     }
 
-    const recipe = await contract({ address: '0xca9af520706a57cecde6f596852eabb5a0e6bb0e', abi: recipeAbi });
+    const recipe = await contract({ address: '0x6cb4b8669e23295563d3b34df4a760c0cee993c7', abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {

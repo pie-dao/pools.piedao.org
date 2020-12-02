@@ -16,8 +16,10 @@
   } from "../components/helpers.js";
 
   import Change from '../components/Change.svelte'
+  import Modal from '../components/elements/Modal.svelte';
+  import LiquidityModal from "../components/LiquidityModal.svelte";
 
-  $: pies = orderBy((poolsConfig.selectable.map(address => {
+  $: pies = (poolsConfig.selectable.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
       ...poolsConfig[address],
@@ -28,12 +30,40 @@
       change: change ? change : 0,
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
     };
-  }) || []), ['change'], ['desc']);
+  }) || []);
+
+  let modal;
+  let modalOption = {
+    method: "single",
+    poolAction: "add",
+    title: "Add Liquidity",
+    token: null
+  }
+
+  $: getNav =((token) => {
+    if(token === '0xe4f726adc8e89c6a6017f01eada77865db22da14') {
+      let nav = $pools[token+"-nav"];
+      nav += $pools["0x8d1ce361eb68e9e05573443c407d4a3bed23b033-nav"] * poolsConfig[token].composition[2].percentage / 100;
+      return formatFiat(nav ? nav : '')
+    }
+
+    return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
+  })
 
   
 </script>
 
 <div class="content flex flex-col spl">
+
+  <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
+    <span slot="content">
+      <LiquidityModal 
+        token={modalOption.token} 
+        method={modalOption.method} 
+        poolAction={modalOption.poolAction}
+      />
+    </span>
+  </Modal>
 
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
@@ -87,18 +117,24 @@
               <Change value={pie.change} />
             </td>
             <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
-              {#if $piesMarketDataStore[pie.address] }
-                {formatFiat(get($piesMarketDataStore, `${pie.address}.market_data.current_price`, '-'))}
-              {:else}
-                {formatFiat(pie.nav)}
-              {/if}
+              {getNav(pie.address)}
             </td>
             <td class="border px-4 ml-8 py-2 font-thin text-center">
-              <a target={pie.useMintOverBuy ? '' : "_blank"} href={ pie.useMintOverBuy ? `#/pools/${pie.address}` : `https://balancer.exchange/#/swap/ether/${pie.address}`}>
-                <button class="table-btn highlight-box min-w-70px">
+              {#if pie.useMintOverBuy}
+                <button on:click={() => {
+                  modalOption.token = pie.address;
+                  modal.open();
+                }} class="table-btn highlight-box min-w-70px">
                   {pie.symbol}
                 </button>
-              </a>
+              {:else}
+                <a target="_blank" href={`https://balancer.exchange/#/swap/ether/${pie.address}`}>
+                  <button class="table-btn highlight-box min-w-70px">
+                    {pie.symbol}
+                  </button>
+                </a>
+              {/if}
+              
             </td>
             
           </tr>

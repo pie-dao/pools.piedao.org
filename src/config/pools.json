@@ -4,14 +4,16 @@
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
+    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+    "0xe4f726adc8e89c6a6017f01eada77865db22da14"
   ],
   "selectable": [
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
+    "0xe4f726adc8e89c6a6017f01eada77865db22da14"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
@@ -19,6 +21,7 @@
     "useRecipe": false,
     "swapEnabled": false,
     "swapFees": "0.2",
+    "streamingFees": "0",
     "coingeckoId": "piedao-btc",
     "composition": [
       {
@@ -61,6 +64,7 @@
     "symbol": "USD++",
     "useRecipe": false,
     "swapEnabled": false,
+    "streamingFees": "0",
     "swapFees": "0",
     "coingeckoId": "piedao-usd",
     "tradingViewFormula": "(0.4722*KRAKEN:USDCUSD+0.2042*KRAKEN:DAIUSD+0.2858*BITTREX:TUSDUSD+0.0378*KUCOIN:SUSDUSDT)",
@@ -120,6 +124,7 @@
   "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": {
     "symbol": "DXY",
     "useRecipe": true,
+    "streamingFees": "0",
     "swapFees": "0.1",
     "swapEnabled": false,
     "composition": [
@@ -204,6 +209,7 @@
     "useRecipe": true,
     "coingeckoId": "piedao-defi-large-cap",
     "swapFees": "0.1",
+    "streamingFees": "0.7",
     "swapEnabled": true,
     "composition": [
       {
@@ -309,6 +315,7 @@
     "coingeckoId": "piedao-defi-small-cap",
     "bPool": "0x94743cfaa3fdc62e9693572314b5ee377eba5d11",
     "swapFees": "0",
+    "streamingFees": "0.7",
     "mapDynamicTradingViewFormula": {
       "0xba100000625a3754423978a60c9317c58a424e3D": "FTX:BALUSD",
       "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD": "BINANCE:LRCUSD",
@@ -376,6 +383,40 @@
         "url": "https://medium.com/piedao/announcing-defi-s-67ed53367364"
       }
     ]
+  },
+  "0xe4f726adc8e89c6a6017f01eada77865db22da14": {
+    "symbol": "BCP",
+    "useRecipe": true,
+    "useMintOverBuy": true,
+    "swapEnabled": true,
+    "streamingFees": "0.46",
+    "swapFees": "1",
+    "composition": [
+        {
+            "symbol": "WBTC",
+            "decimals": "8",
+            "coingeckoId": "wrapped-bitcoin",
+            "coingeckoImageId": 7598,
+            "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            "percentage": 33.33
+        },
+        {
+            "symbol": "WETH",
+            "decimals": "18",
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "percentage": 33.33,
+            "coingeckoId": "weth",
+            "coingeckoImageId": 279
+        },
+        {
+            "symbol": "DEFI++",
+            "decimals": "18",
+            "address": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+            "percentage": 33.34,
+            "isPie": true
+        }
+    ],
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
   },
   "0x8d1ce361eb68e9e05573443c407d4a3bed23b033": {
     "symbol": "DEFI++",

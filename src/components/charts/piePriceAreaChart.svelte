@@ -14,8 +14,6 @@ const resize = (node) => {
 
 ( async () => {
 
-console.log('coingeckoId', coingeckoId, chartId)
-
 const chartData = await fetchChartData(coingeckoId);
 
 chart = LightweightCharts.createChart(document.getElementById(chartId), {
