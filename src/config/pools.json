@@ -400,7 +400,7 @@
     "composition": [
         {
             "symbol": "WBTC",
-            "decimals": "8",
+            "decimals": 8,
             "coingeckoId": "wrapped-bitcoin",
             "coingeckoImageId": 7598,
             "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
@@ -408,7 +408,7 @@
         },
         {
             "symbol": "WETH",
-            "decimals": "18",
+            "decimals": 18,
             "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
             "percentage": 33.33,
             "coingeckoId": "weth",
@@ -416,7 +416,7 @@
         },
         {
             "symbol": "DEFI++",
-            "decimals": "18",
+            "decimals": 18,
             "address": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
             "percentage": 33.34,
             "isPie": true
