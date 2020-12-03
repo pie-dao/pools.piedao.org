@@ -97,13 +97,21 @@ const updatePoolWeight = async (poolAddress) => {
       if (marketData[token]) {
         price = marketData[token].market_data.current_price;
       } else {
-        price = 0;
+        if(token === '0x8d1ce361eb68e9e05573443c407d4a3bed23b033') {
+          let data = get(pools);
+          price = data["0x8d1ce361eb68e9e05573443c407d4a3bed23b033-nav"] || 0;
+        } else {
+          price = 0;
+        }
       }
     } catch (e) {
       console.error(e);
     }
+
+    
     const balance = BigNumber(poolCurrentBalances[token]);
     poolCurrentUSD[token] = balance.multipliedBy(price);
+    //console.log('--->', token, price, balance.toString(), poolCurrentUSD[token].toString());
     return sum.plus(poolCurrentUSD[token]);
   }, BigNumber(0));
 
@@ -301,8 +309,11 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   const data = {};
 
   res.tokens.forEach((token, index) => {
-    const tokenInfo = find(poolsConfig[pieAddress.toLowerCase()].composition, { address: token });
+    const tokenInfo = find(poolsConfig[pieAddress.toLowerCase()].composition, (o) => {
+      return token.toLowerCase() === o.address.toLowerCase();
+    });
     let d = tokenInfo && tokenInfo.decimals ? tokenInfo.decimals : 18;
+    console.log('token', token, d, tokenInfo, pieAddress)
 
     if (d < 18) {
       let adjustedAmount = BigNumber(res.amounts[index].toString()).multipliedBy(10 ** (18 - d));
