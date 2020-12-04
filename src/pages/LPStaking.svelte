@@ -32,9 +32,6 @@
     formatFiat,
     subscribeToBalance,
     subscribeToAllowance,
-    subscribeToStaking,
-    subscribeToStakingEarnings,
-    subscribeToStakingEarningsGeyser,
   } from "../components/helpers.js";
 
   import {
@@ -214,7 +211,7 @@
   const subscribeUserValuesForPool = async (p) => {
       try {    
           subscribeToBalance(p.addressTokenToStake, address, true);
-          subscribeToStaking(p.addressUniPoll, address, true);
+          // subscribeToStaking(p.addressUniPoll, address, true);
           subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
 
           p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
