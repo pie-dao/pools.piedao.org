@@ -31,6 +31,7 @@
     calculateAPRUniswap,
     formatFiat,
     subscribeToBalance,
+    subscribeToStaking,
     subscribeToAllowance,
   } from "../components/helpers.js";
 
@@ -211,7 +212,7 @@
   const subscribeUserValuesForPool = async (p, address) => {
       try {    
           subscribeToBalance(p.addressTokenToStake, address, true);
-          // subscribeToStaking(p.addressUniPoll, address, true);
+          subscribeToStaking(p.addressUniPoll, address, true);
           subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
 
           p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
@@ -705,7 +706,7 @@
                       {pool.KeyUnipoolEarnedBalance ? amountFormatter({ amount: $balances[pool.KeyUnipoolEarnedBalance], displayDecimals: 16}) : 0.0000} {pool.rewards_token}
                     </div>
 
-                    {#if pool.id === 0}
+                    {#if pool.contractType === 'escrewRewardsStakingPool'}
                       <div class="apy">
                         <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * pool.escrowPercentage, 3) } </strong> Escrowed / 
                         <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * (1-pool.escrowPercentage), 3) } </strong> Liquid
