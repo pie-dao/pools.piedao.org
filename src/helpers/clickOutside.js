@@ -9,11 +9,11 @@ export function clickOutside(node) {
     }
   };
 
-  document.addEventListener('mousedown', handleClick, true);
+  document.addEventListener('click', handleClick, true);
 
   return {
     destroy() {
-      document.removeEventListener('mousedown', handleClick, true);
+      document.removeEventListener('click', handleClick, true);
     },
   };
 }
