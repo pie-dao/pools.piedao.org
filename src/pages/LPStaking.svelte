@@ -32,9 +32,6 @@
     formatFiat,
     subscribeToBalance,
     subscribeToAllowance,
-    subscribeToStaking,
-    subscribeToStakingEarnings,
-    subscribeToStakingEarningsGeyser,
   } from "../components/helpers.js";
 
   import {
@@ -192,7 +189,7 @@
     incentivizedPools.forEach( async pool => {
         if(pool.contractType === 'escrewRewardsStakingPool') {
           const rewardEscrewContract = await contract({ address: pool.addressUniPoll, abi: escrewRewardsStakingPool });
-          pool.escrowPercentage = await rewardEscrewContract.escrowPercentage() / 1e18;
+          pool.escrowPercentage = (await rewardEscrewContract.escrowPercentage() / 1e18).toFixed(2);
         }
     });
     try {
@@ -201,6 +198,41 @@
       //console.log('estimateUnstake', e);
     }
   }, false);
+
+  const fetchRewardEscrewData = async () => {
+      const rewardEscrew = await contract({ address: '0x63cbd1858bd79de1a06c3c26462db360b834912d', abi: rewardEscrewABI });
+      const totalEscrewed = await rewardEscrew.totalEscrowedAccountBalance(address);
+      const numVestingEntries = await rewardEscrew.numVestingEntries(address);
+
+      rewardEscrewData.totalEscrewed = toNum(totalEscrewed).toFixed(2);
+      rewardEscrewData.numVestingEntries = numVestingEntries.toString();
+  }
+
+  const subscribeUserValuesForPool = async (p) => {
+      try {    
+          subscribeToBalance(p.addressTokenToStake, address, true);
+          // subscribeToStaking(p.addressUniPoll, address, true);
+          subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
+
+          p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
+          p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, address);
+
+          switch (p.contractType) {
+            case 'UniPool':
+            case 'escrewRewardsStakingPool':
+              p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
+              p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
+              break;
+            case 'Geyser':
+              p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
+              await estimateUnstake();
+            default:
+              break;
+          }
+        } catch (e) {
+          //console.log(e);
+        }
+  }
 
   $: if($eth.address) {
     if(isReady) {
@@ -218,49 +250,9 @@
 
     if(!intiated) {
       const address = $eth.address;
-
-      (async () => {
-        const rewardEscrew = await contract({ address: '0x63cbd1858bd79de1a06c3c26462db360b834912d', abi: rewardEscrewABI });
-        const totalEscrewed = await rewardEscrew.totalEscrowedAccountBalance(address);
-        // const nextVestingEntry = await rewardEscrew.getNextVestingEntry(address);
-        const numVestingEntries = await rewardEscrew.numVestingEntries(address);
-
-        rewardEscrewData.totalEscrewed = toNum(totalEscrewed).toFixed(2);
-        // rewardEscrewData.nextVestingWindow = nextVestingEntry;
-        rewardEscrewData.numVestingEntries = numVestingEntries.toString();
-      })();
+      fetchRewardEscrewData();
       
-      incentivizedPools.forEach( async p => {      
-        try {
-          
-          subscribeToBalance(p.addressTokenToStake, address, true);
-          subscribeToStaking(p.addressUniPoll, address, true);
-          subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
-
-          p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
-          p.KeyAddressTokenToStake = balanceKey(p.addressTokenToStake, address);
-
-          if(p.contractType === "UniPool" || p.contractType === 'escrewRewardsStakingPool') {
-            subscribeToStakingEarnings(p.addressUniPoll, address, true);
-            p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
-            p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
-
-            if(p.contractType === 'escrewRewardsStakingPool') {
-              const rewardEscrewContract = await contract({ address: p.addressUniPoll, abi: escrewRewardsStakingPool });
-              p.escrowPercentage = await rewardEscrewContract.escrowPercentage() / 1e18;
-              console.log('p.escrowPercentage', p.escrowPercentage)
-            }
-          } else {
-            console.log("Getting staked balance from geyser");
-            console.log(p.addressUniPoll, "address");
-            p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
-            await estimateUnstake();
-          }
-        } catch (e) {
-          //console.log(e);
-        }
-        
-      });
+      incentivizedPools.forEach(subscribeUserValuesForPool);
       intiated = true;
       bumpLifecycle();
     }
@@ -546,7 +538,7 @@
               {#if ammPool.highlight }
                 <div class="highlight-box farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
                   <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
-                    <div class="title text-lg"> <a href={ammPool.poolLink} target="_blank"> {ammPool.name} </a></div>
+                    <div class="title text-lg"> {ammPool.name} </div>
                     <div class="subtitle font-thin">{ammPool.description}</div>
                     <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
                     <div class="apy"> <a href={ammPool.poolLink} target="_blank"> {ammPool.platform} </a></div>
@@ -566,7 +558,7 @@
               {:else}
                 <div class="farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
                   <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
-                    <div class="title text-lg"> <a href={ammPool.poolLink} target="_blank"> {ammPool.name} </a></div>
+                    <div class="title text-lg"> {ammPool.name} </div>
                     <div class="subtitle font-thin">{ammPool.description}</div>
                     <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
                     <div class="apy">{ammPool.platform}</div>
@@ -607,11 +599,11 @@
         </div>
 
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">⚠️ Deprecated pools</h1>
-        <div class="flex flex-col w-full justify-center md:flex-row">
+        <div class="flex flex-col w-full flex-wrap justify-center md:flex-row">
           {#each filter(incentivizedPools, { deprecated: true }) as ammPool}
             <div class="farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">
               <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
-                <div class="title text-lg"> <a href={ammPool.poolLink} target="_blank"> {ammPool.name} </a></div>
+                <div class="title text-lg"> {ammPool.name} </div>
                 <div class="subtitle font-thin">{ammPool.description}</div>
                 <div class="apy">{ammPool.platform}</div>
 
@@ -761,21 +753,15 @@
               {/if}
             </div>
             <div class="info-box">
-              {#if pool.id === 2}
-                  <p>ℹ️ <strong>DEFI++</strong> Staking Rewards are subject to 52 weeks vesting from the moment they will be claimed.</p>
-              {/if}
-              {#if $farming[pool.addressUniPoll] !== undefined}
 
-                {#if pool.id === 0}
-                  <p>ℹ️ <strong>DOUGH/ETH</strong> Staking Rewards - the pool will keep receiving 90,000 DOUGH as nominal weekly reward distributed to LPs, of which
-                      {(1-pool.escrowPercentage)*100}% distributed liquid along the week
-                      {pool.escrowPercentage*100}% escrowed within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
+              {#if pool.contractType === 'escrewRewardsStakingPool'}
+                  <p>ℹ️ <strong>{pool.name}</strong> Staking Rewards - the pool will keep receiving {pool.weeklyRewards} DOUGH as nominal weekly reward distributed to LPs, of which
+                      {((1-pool.escrowPercentage)*100).toFixed(0)}% distributed liquid along the week
+                      {(pool.escrowPercentage*100).toFixed(0)}% escrowed within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
                   </p>
-                {/if}
+              {/if}
 
-                {#if pool.id === 2}
-                  <p>ℹ️ <strong>DEFI++</strong> Staking Rewards are subject to 52 weeks vesting from the moment they will be claimed.</p>
-                {/if}
+              {#if $farming[pool.addressUniPoll] !== undefined}
                 <br/><br/>
                 
                 <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
