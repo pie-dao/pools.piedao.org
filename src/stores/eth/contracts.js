@@ -211,7 +211,7 @@ export const observableContract = async ({ abi, address }) => {
   }
 
   const { provider, signer } = get(eth);
-  let contract = new ethers.Contract(address, contractAbi, provider);
+  let contract;
 
   if (signer) {
     contract = new ethers.Contract(address, contractAbi, signer);
