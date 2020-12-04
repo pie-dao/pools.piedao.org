@@ -199,7 +199,7 @@
     }
   }, false);
 
-  const fetchRewardEscrewData = async () => {
+  const fetchRewardEscrewData = async (address) => {
       const rewardEscrew = await contract({ address: '0x63cbd1858bd79de1a06c3c26462db360b834912d', abi: rewardEscrewABI });
       const totalEscrewed = await rewardEscrew.totalEscrowedAccountBalance(address);
       const numVestingEntries = await rewardEscrew.numVestingEntries(address);
@@ -208,7 +208,7 @@
       rewardEscrewData.numVestingEntries = numVestingEntries.toString();
   }
 
-  const subscribeUserValuesForPool = async (p) => {
+  const subscribeUserValuesForPool = async (p, address) => {
       try {    
           subscribeToBalance(p.addressTokenToStake, address, true);
           // subscribeToStaking(p.addressUniPoll, address, true);
@@ -250,9 +250,9 @@
 
     if(!intiated) {
       const address = $eth.address;
-      fetchRewardEscrewData();
+      fetchRewardEscrewData(address);
       
-      incentivizedPools.forEach(subscribeUserValuesForPool);
+      incentivizedPools.forEach( (p) => subscribeUserValuesForPool(p, address));
       intiated = true;
       bumpLifecycle();
     }
