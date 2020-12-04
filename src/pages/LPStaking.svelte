@@ -198,7 +198,7 @@
     try {
       await estimateUnstake();  
     } catch(e){
-      console.log('estimateUnstake', e);
+      //console.log('estimateUnstake', e);
     }
   }, false);
 
@@ -206,8 +206,12 @@
     if(isReady) {
       incentivizedPools.forEach( async pool => {
         if( pool.type === 'Balancer' && pool.contractType === 'Geyser') {
-          await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-          await estimateUnstake();
+          try {
+            await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+            await estimateUnstake();
+          } catch (e) {
+
+          }
         }
       });      
     }
@@ -253,7 +257,7 @@
             await estimateUnstake();
           }
         } catch (e) {
-          console.log(e);
+          //console.log(e);
         }
         
       });
@@ -275,6 +279,7 @@
     }
 
     const { addressTokenToStake, addressUniPoll } = pool;
+    console.log('pool', pool);
 
     if (actionType === "unlock") {
       console.log('calling', addressTokenToStake, addressUniPoll);
