@@ -6,7 +6,7 @@
   import { _ } from "svelte-i18n";
   import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
-  
+  import orderBy from 'lodash/orderBy';
   import filter from 'lodash/filter';
   import isNaN from 'lodash/isNaN';
   import rewardEscrewABI from '../config/rewardEscrowABI.json';
@@ -514,21 +514,6 @@
                           </p>
                         </div>
                       </div>
-                      <!-- Card -->
-                      <!-- <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
-                        <div class="p-3 mr-4 text-green-500 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-500">
-                          ⏳
-                        </div>
-                        <div>
-                          <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                              Next Vesting time
-                          </p>
-                          <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                          {formatFiat(rewardEscrewData.nextVestingWindow)}
-                          </p>
-                        </div>
-                      </div> -->
-                      <!-- Card -->
                       <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
                           <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
                               🧮
@@ -551,7 +536,7 @@
 
         {#if !pool}
         <h1 class="mt-8 mb-1 px-2 text-center text-lg md:text-xl">Select a pool</h1>
-        <div class="flex flex-col w-full justify-center md:flex-row">
+        <div class="flex flex-col w-full flex-wrap justify-center md:flex-row">
             {#each filter(incentivizedPools, { deprecated: false }) as ammPool}
               {#if ammPool.highlight }
                 <div class="highlight-box farming-card flex flex-col justify-center align-center items-center text-center mx-2 my-2 md:m-2 border border-gray border-opacity-50 border-solid rounded-sm p-6">

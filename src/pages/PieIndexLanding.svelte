@@ -71,6 +71,7 @@
   $: links = (poolsConfig[token] || {}).landingLinks || [];
 
   $: symbol = (poolsConfig[token] || {}).symbol;
+  $: name = (poolsConfig[token] || {}).name;
   $: swapFees = (poolsConfig[token] || {}).swapFees;
   $: tokenLogo = images.logos[token];
   $: change24H = get(
@@ -178,6 +179,7 @@
         <div class="mx-3 flex flex-col justify-center">
           <a href={`#/pools/${token}`}>
             <h1 class="text-xl leading-none font-black">{symbol}</h1>
+            <h2 class="text-md leading-none font-black">{name}</h2>
           </a>
           {#if tokenPrice}
             <h5 class="text-xl leading-none font-thin relative">{formatFiat(tokenPrice)} <span class="text-lg absolute font-black" style="top: 5px; right: -100px;"><Change value={change24H} /></span></h5>
@@ -280,7 +282,7 @@
                   {/if}
                 </div>
                 {#if pooledToken.percentage < 7}
-                  <div class="float-left mt-1 ml-2 percentage-bar-extra-num">
+                  <div class="float-left hidden md:block mt-1 ml-2 percentage-bar-extra-num">
                     {amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%
                   </div>
                 {/if}
@@ -349,7 +351,7 @@
       <Quantstamp token={$currentRoute.params.address} />
     </div>
     <div class="p-0 mt-2 md:w-1/4">
-      <AddMetamaskBanner pie={poolsConfig[token]} />
+      <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />
     </div>
   </div>
 </div>
