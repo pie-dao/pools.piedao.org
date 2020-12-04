@@ -6,7 +6,7 @@
   import { _ } from "svelte-i18n";
   import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
-  
+  import orderBy from 'lodash/orderBy';
   import filter from 'lodash/filter';
   import isNaN from 'lodash/isNaN';
   import rewardEscrewABI from '../config/rewardEscrowABI.json';

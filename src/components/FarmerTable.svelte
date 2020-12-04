@@ -3,7 +3,6 @@
   import isNull from 'lodash/isNull';
   import filter from 'lodash/filter';
   import sortBy from 'lodash/sortBy';
-  sortBy
   import {
     getTokenImage,
     formatFiat,
