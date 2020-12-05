@@ -33,6 +33,7 @@
     subscribeToBalance,
     subscribeToStaking,
     subscribeToAllowance,
+    subscribeToStakingEarnings,
   } from "../components/helpers.js";
 
   import {
@@ -221,6 +222,7 @@
           switch (p.contractType) {
             case 'UniPool':
             case 'escrewRewardsStakingPool':
+              subscribeToStakingEarnings(p.addressUniPoll, address, true);
               p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
               p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
               break;

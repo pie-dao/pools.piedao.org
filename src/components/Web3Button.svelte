@@ -8,7 +8,7 @@
 
   $: ( async () => {
     if(window.localStorage.getItem('address')) {
-      // await connectWeb3Cached();
+      //await connectWeb3Cached();
     }
   })()
   
