@@ -194,6 +194,7 @@ const overrideWrapped = (prop, contract) => (...passedArgs) => {
 export const observableContract = async ({ abi, address }) => {
   validateIsAddress(address);
 
+  // TODO check for signert
   if (contracts[address] && !abi) {
     return contracts[address];
   }
