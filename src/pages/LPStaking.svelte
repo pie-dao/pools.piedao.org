@@ -31,7 +31,9 @@
     calculateAPRUniswap,
     formatFiat,
     subscribeToBalance,
+    subscribeToStaking,
     subscribeToAllowance,
+    subscribeToStakingEarnings,
   } from "../components/helpers.js";
 
   import {
@@ -211,7 +213,7 @@
   const subscribeUserValuesForPool = async (p, address) => {
       try {    
           subscribeToBalance(p.addressTokenToStake, address, true);
-          // subscribeToStaking(p.addressUniPoll, address, true);
+          subscribeToStaking(p.addressUniPoll, address, true);
           subscribeToAllowance(p.addressTokenToStake, address, p.addressUniPoll);
 
           p.allowanceKey = functionKey(p.addressTokenToStake, 'allowance', [address, p.addressUniPoll]);
@@ -220,6 +222,7 @@
           switch (p.contractType) {
             case 'UniPool':
             case 'escrewRewardsStakingPool':
+              subscribeToStakingEarnings(p.addressUniPoll, address, true);
               p.KeyUnipoolBalance = balanceKey(p.addressUniPoll, address);
               p.KeyUnipoolEarnedBalance = balanceKey(p.addressUniPoll, address, '.earned');
               break;
@@ -481,6 +484,15 @@
     });
   }
 
+const selectPool = (_pool) => {
+  if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+  }
+  pool = _pool;
+}
+
 </script>
 
 
@@ -550,7 +562,7 @@
                       {/if}
                     </div>
                     {#if ammPool.enabled}
-                      <button on:click={() => pool = ammPool } class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
+                      <button on:click={() => selectPool(ammPool) } class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
                     {:else}
                       <button disabled class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Oct 3rd, 6:00pm UTC</button>
                     {/if}
@@ -589,7 +601,7 @@
                     {/if}
 
                     {#if ammPool.enabled}
-                      <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
+                      <button on:click={() => selectPool(ammPool) } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
                     {:else}
                       <button disabled class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Oct 3rd, 6:00pm UTC</button>
                     {/if}
@@ -608,7 +620,7 @@
                 <div class="apy">{ammPool.platform}</div>
 
                 {#if ammPool.enabled}
-                  <button on:click={() => pool = ammPool } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
+                  <button on:click={() => selectPool(ammPool) } class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</button>
                 {:else}
                   <button disabled class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Oct 3rd, 6:00pm UTC</button>
                 {/if}
@@ -705,7 +717,7 @@
                       {pool.KeyUnipoolEarnedBalance ? amountFormatter({ amount: $balances[pool.KeyUnipoolEarnedBalance], displayDecimals: 16}) : 0.0000} {pool.rewards_token}
                     </div>
 
-                    {#if pool.id === 0}
+                    {#if pool.contractType === 'escrewRewardsStakingPool'}
                       <div class="apy">
                         <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * pool.escrowPercentage, 3) } </strong> Escrowed / 
                         <strong>{toFixed($balances[pool.KeyUnipoolEarnedBalance] * (1-pool.escrowPercentage), 3) } </strong> Liquid

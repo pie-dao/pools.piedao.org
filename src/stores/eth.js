@@ -72,7 +72,6 @@ export const connectWeb3 = async () => {
     }
 
     console.log('CONNECTED', web3);
-
     registerConnection(web3);
   } catch (e) {
     console.error('ERROR CONNECTION TO WEB3', e);
@@ -110,7 +109,7 @@ export const trackGasPrice = async () => subject('gasPrice');
 // Shortcuts
 
 export const approve = async (address, spender, amount) => {
-  const erc20Contract = await contract({ address });
+  const erc20Contract = await contract({ address, abi: erc20 });
   const { hash } = await erc20Contract['approve(address,uint256)'](spender, amount);
 
   const { emitter } = displayNotification({ hash });
