@@ -35,10 +35,10 @@
         "coingeckoImageId": 10702
       },
       {
-        "address": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+        "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
         "color": "#fd6761",
         "percentage": 25,
-        "symbol": "wBTC",
+        "symbol": "WBTC",
         "coingeckoId": "wrapped-bitcoin",
         "coingeckoImageId": 7598
       },
@@ -431,8 +431,10 @@
     "symbol": "DEFI++",
     "name": "DeFi Index Pie ",
     "useRecipe": true,
+    "streamingFees": "0",
     "useMintOverBuy": true,
     "swapEnabled": true,
+    "coingeckoId": "piedao-defi",
     "swapFees": "1",
     "composition": [
       {
