@@ -224,10 +224,10 @@
     </div>
 
     <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
+      <div class="font-bold text-md md:text-md text-pink">
         36.5%
       </div>
-      <div class="font-thin text-xs md:text-base">Tot APY</div>
+      <div class="font-bold text-pink text-xs md:text-base">Tot APY</div>
     </div>
 
     <div class="p-0 flex-initial self-start mr-6">
