@@ -62,7 +62,7 @@
             <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
               <a class="flex items-center px-2 py-2" href={`#/pie/${pie.address}`}>
                 <img
-                  class="inline icon ml-2 mr-2"
+                  class="inline icon ml-2 mr-2 w-30px"
                   src={pie.icon}
                   alt={pie.symbol} />
                   <span class="md:block">{pie.symbol}</span>

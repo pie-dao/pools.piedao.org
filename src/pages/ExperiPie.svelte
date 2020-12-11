@@ -16,6 +16,7 @@
   import Quantstamp from "../components/Quantstamp.svelte";
   import LiquidityModal from "../components/LiquidityModal.svelte";
   import SnapshotModal from "../components/SnapshotModal.svelte"; 
+  import SingleAssetModal from "../components/SingleAssetModal.svelte"; 
   import SnapshotBanner from "../components/SnapshotBanner.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
   import KeyFacts from "../components/KeyFacts.svelte";
@@ -42,6 +43,7 @@
   import Apy from '../components/Apy.svelte'
   import StrategyInUse from '../components/StrategyInUse.svelte'
   import Modal from '../components/elements/Modal.svelte';
+  import ModalBig from '../components/elements/ModalBig.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import Snapshot from '../components/Snapshot.svelte';
 
@@ -164,16 +166,17 @@
 </script>
 <SnapshotBanner />
 
-<Modal title="New Active Vote" backgroundColor="#f3f3f3" bind:this="{modal}">
+<ModalBig title="Yearn Finance" backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
     <!-- <LiquidityModal 
       token={token} 
       method={modalOption.method} 
       poolAction={modalOption.poolAction}
     /> -->
-    <SnapshotModal />
+    <!-- <SnapshotModal /> -->
+    <SingleAssetModal />
   </span>
-</Modal>
+</ModalBig>
 
 
 <div class="content flex flex-col spl">
@@ -331,7 +334,7 @@
 
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Open Proposals</h1>
 
-  <Snapshot />
+  <!-- <Snapshot /> -->
 
 
 
