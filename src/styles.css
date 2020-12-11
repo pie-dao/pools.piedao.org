@@ -40,6 +40,10 @@
   background-color: #00D395;
 }
 
+.bg-genericbanner {
+  background-color: #fdfdfd;
+}
+
 
 
 
@@ -1150,4 +1154,23 @@ button.svelte-1nn74u2 {border: none!important; padding: 1rem 0rem!important;}
 .borderDiveder {
   margin: 0 10px;
   border-bottom: solid 0.5px #b9b9b9;
+}
+
+.genericbanner {
+  position: fixed;
+  left: 40px;
+  top: 40px;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  border-radius: 10px;
+  width: fit-content;
+  height: fit-content;
+  border: 1px solid #d53a9d;
+}
+
+@media screen and (max-width: 641px) {
+  .genericbanner{
+    display: none;
+  }
 }

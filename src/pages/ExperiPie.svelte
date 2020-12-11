@@ -15,7 +15,8 @@
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
   import LiquidityModal from "../components/LiquidityModal.svelte";
-  import SnapshotModal from "../components/SnapshotModal.svelte";
+  import SnapshotModal from "../components/SnapshotModal.svelte"; 
+  import SnapshotBanner from "../components/SnapshotBanner.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
   import KeyFacts from "../components/KeyFacts.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
@@ -161,7 +162,7 @@
 
 
 </script>
-
+<SnapshotBanner />
 
 <Modal title="New Active Vote" backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
@@ -173,6 +174,8 @@
     <SnapshotModal />
   </span>
 </Modal>
+
+
 <div class="content flex flex-col spl">
   
   <div class="flex flex-wrap w-full">
@@ -228,6 +231,13 @@
         36.5%
       </div>
       <div class="font-bold text-pink text-xs md:text-base">Tot APY</div>
+    </div>
+
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        Meta-Governance
+      </div>
+      <div class="font-thin text-xs md:text-base">Enabled</div>
     </div>
 
     <div class="p-0 flex-initial self-start mr-6">
