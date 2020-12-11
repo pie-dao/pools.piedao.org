@@ -12596,6 +12596,11 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
+svelte-accessible-accordion@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/svelte-accessible-accordion/-/svelte-accessible-accordion-0.3.0.tgz#2e014582fac993c9fd86f1bcd0b0f3db9af49e81"
+  integrity sha512-y/SOo4t7Qdf2EjrgHHTIaM7Hcxyjh8ceYJ0GbGFoU/4lrB1U5ZtMgqBYDumyu+xP6gcyAN8eJP6zuYGUx900Tg==
+
 svelte-apollo@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/svelte-apollo/-/svelte-apollo-0.3.0.tgz#8d0f60a5cd9cfbc15c42afdf5b2158da3c56e0ad"

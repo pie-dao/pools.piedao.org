@@ -27,6 +27,13 @@
   color: #EC1EA0;
 }
 
+.text-cream {
+  color: #afa3ff;
+}
+.text-yearn {
+  color: #2f80ed;
+}
+
 .percentage-bar {
   font-size: 12px;
   color: white;
@@ -1105,6 +1112,8 @@ constructed stylesheet
 /* purgecss end ignore */
 
 .keyborder { border-bottom: solid 1px #a2a2a2; }
+
+button.svelte-1nn74u2 {border: none!important; padding: 1rem 0rem!important;}
 
 .genericmodal {
   position: fixed;

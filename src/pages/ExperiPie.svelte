@@ -15,6 +15,7 @@
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
   import LiquidityModal from "../components/LiquidityModal.svelte";
+  import SnapshotModal from "../components/SnapshotModal.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
   import KeyFacts from "../components/KeyFacts.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
@@ -23,6 +24,7 @@
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { fetchPooledTokens, pooledTokenAmountRequired, fetchCalcTokensForAmounts } from '../components/helpers.js';
   import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
+  import Accordion, { AccordionItem } from "svelte-accessible-accordion";
   import {
     pools,
     balanceKey,
@@ -36,8 +38,12 @@
 
   import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
   import Change from '../components/Change.svelte'
+  import Apy from '../components/Apy.svelte'
+  import ProtocolInUse from '../components/ProtocolInUse.svelte'
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
+  import Snapshot from '../components/Snapshot.svelte';
+
 
 
   export let params;
@@ -152,14 +158,19 @@
     }
 }
 
+
+
 </script>
-<Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
+
+
+<Modal title="New Active Vote" backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
-    <LiquidityModal 
+    <!-- <LiquidityModal 
       token={token} 
       method={modalOption.method} 
       poolAction={modalOption.poolAction}
-    />
+    /> -->
+    <SnapshotModal />
   </span>
 </Modal>
 <div class="content flex flex-col spl">
@@ -212,6 +223,13 @@
       <div class="font-bold text-xs md:text-base text-pink">NAV</div>
     </div>
 
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        36.5%
+      </div>
+      <div class="font-thin text-xs md:text-base">Tot APY</div>
+    </div>
+
     <div class="p-0 flex-initial self-start mr-6">
       <div class="text-md md:text-md font-black">
         {#if poolsConfig[token].swapEnabled}
@@ -256,6 +274,8 @@
           {/if}
           <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
           <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
+          <th class="font-thin border-b-2 px-4 py-2">APY</th>
+          <th class="font-thin border-b-2 px-4 py-2">Protocol</th>
         </tr>
       </thead>
       <tbody>
@@ -304,7 +324,6 @@
               <Change value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
             </td>
 
-
             <!-- <td class="border text-center px-4 py-2">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.total_volume`, '-'))}
             </td> -->
@@ -316,11 +335,26 @@
                 src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
                 style="margin: auto;" />
             </td>
+
+            <td class="border text-center px-4 py-2">
+              <Apy value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
+            </td>
+
+            <td class="border text-center px-4 py-2">
+              <ProtocolInUse value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
+            </td>
+
           </tr>
         {/each}
       </tbody>
     </table>
   </div>
+
+  <h1 class="mt-8 mb-4 text-base md:text-3xl">Open Proposals</h1>
+
+  <Snapshot />
+
+
 
   {#if pieOfPies }
     <div class="font-thin w-full px-4 py-2 text-left">
@@ -349,6 +383,15 @@
     </div>
   </div>
 </div>
+
+<div class="container mt-4">
+  <h1 class="text-xl leading-none font-black text-center mb-5">FAQ</h1>
+</div>
+<Accordion class="container px-5 py-0 spl flex flex-col">
+  <AccordionItem class="border-none keyborder text-left w-100pc py-4" title="What is Meta-Governance?"><p class="font-thin text-sm">Content 1 </p></AccordionItem>
+  <AccordionItem class="border-none keyborder text-left w-100pc py-4" title="How do we calculate tot APY?"><p class="font-thin text-sm">Content 1 </p></AccordionItem>
+  <AccordionItem class="border-none keyborder text-left w-100pc py-4" title="How to exercise your voting rights?"><p class="font-thin text-sm">Content 1 </p></AccordionItem>
+</Accordion>
 
 <div class="content mt-4">
   <PieExplanation address={token} />
@@ -424,6 +467,7 @@
     </div>    
   </div>
 {/if}
-
 </div>
+
+
 
