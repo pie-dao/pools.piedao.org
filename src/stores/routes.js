@@ -15,6 +15,7 @@ import Markets from '../pages/Markets.svelte';
 import DefiPie from '../pages/landings/defiPie.svelte';
 import About from '../pages/landings/about.svelte';
 import Oven from '../pages/landings/oven.svelte';
+import Experipie from '../pages/ExperiPie.svelte';
 
 export const defaultRouteObj = {
   page: Main,
@@ -55,6 +56,9 @@ const formatRoute = (route) => {
       return { page: Markets };
     case 'pies':
       return { page: Dashboard };
+    case 'exp':
+      address = (route[1] || '0x78f225869c08d478c34e5f645d07a87d3fe8eb78').toLowerCase();
+      return { page: Experipie, params: { address }  };
     case 'pie':
       address = (route[1] || '').toLowerCase();
       return { page: PieLanding, params: { address } };
