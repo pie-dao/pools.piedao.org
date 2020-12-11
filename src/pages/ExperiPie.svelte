@@ -39,7 +39,7 @@
   import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
   import Change from '../components/Change.svelte'
   import Apy from '../components/Apy.svelte'
-  import ProtocolInUse from '../components/ProtocolInUse.svelte'
+  import StrategyInUse from '../components/StrategyInUse.svelte'
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import Snapshot from '../components/Snapshot.svelte';
@@ -267,15 +267,8 @@
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Allocation</th>
           <th class="font-thin border-b-2 px-4 py-2">Price</th>
-          
-          {#if !pieOfPies }
-              <!-- <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th> -->
-              <th class="font-thin border-b-2 px-4 py-2">Balance</th>
-          {/if}
-          <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
-          <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
           <th class="font-thin border-b-2 px-4 py-2">APY</th>
-          <th class="font-thin border-b-2 px-4 py-2">Protocol</th>
+          <th class="font-thin border-b-2 px-4 py-2">Strategy</th>
         </tr>
       </thead>
       <tbody>
@@ -315,33 +308,9 @@
               <!-- <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td> -->
               <td class="border text-center px-4 py-2 font-thin">{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')}</td>
             {/if}
-            
-            <!-- <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.market_cap`, '-'))}
-            </td> -->
 
-            <td class="border text-center px-4 py-2">
-              <Change value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
-            </td>
-
-            <!-- <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.total_volume`, '-'))}
-            </td> -->
-
-            <td class="border text-center py-2 px-4 md:px-0">
-              <img
-                class="w-30 spark greyoutImage mx-0"
-                alt="Sparkline"
-                src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
-                style="margin: auto;" />
-            </td>
-
-            <td class="border text-center px-4 py-2">
-              <Apy value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
-            </td>
-
-            <td class="border text-center px-4 py-2">
-              <ProtocolInUse value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
+            <td class="flex items-center justify-center border text-center px-4 py-2">
+              <StrategyInUse value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
             </td>
 
           </tr>

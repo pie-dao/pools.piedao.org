@@ -27,11 +27,26 @@
   color: #EC1EA0;
 }
 
-.text-cream {
-  color: #afa3ff;
+
+.bg-cream {
+  background-color: #afa3ff;
 }
-.text-yearn {
-  color: #2f80ed;
+
+.bg-aave {
+  background-color: #6292B7;
+}
+
+.bg-compound {
+  background-color: #00D395;
+}
+
+
+
+
+.strategy-label {
+  border-radius: 8px;
+  padding: 4px 8px 4px 4px;
+  width: fit-content;
 }
 
 .percentage-bar {
