@@ -1,5 +1,5 @@
 <script>
-  import {getSubgraphMetadata, getPoolSwaps, getPoolMetrics} from '../helpers/subgraph.js'
+  import {getSubgraphMetadata, getPoolSwaps, getPoolMetrics, subgraphRequest} from '../helpers/subgraph.js'
   import { pieSmartPool } from '@pie-dao/abis';
   import { _ } from 'svelte-i18n';
   import moment from 'moment';
@@ -49,7 +49,7 @@
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import Snapshot from '../components/Snapshot.svelte';
 
-  import Experipie from '../experipie';
+  import Experipie, { getNormalizedNumber } from '../experipie';
 
 
 
@@ -81,11 +81,8 @@
     allow_symbol_change: false,
   };
 
-  $: links = (poolsConfig[token] || {}).landingLinks || [];
-
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: name = (poolsConfig[token] || {}).name;
-  $: swapFees = (poolsConfig[token] || {}).swapFees;
   $: tokenLogo = images.logos[token];
   $: change24H = get(
     $piesMarketDataStore,
@@ -98,7 +95,8 @@
     null,
   );
 
-  $: nav = 0;
+  $: nav = "n/a";
+  $: marketCap = "n/a";
 
   $: (() => {
     pieOfPies = false;
@@ -108,14 +106,26 @@
 
   $: metadata = {};
 
+  $: lendingData = {
+    compound: {},
+    aave: {}
+  };
+
+  $: loadings = {
+    compound: false,
+    defiSDK: false,
+  };
+
   $: if($eth.provider && !initialized) {
       initialize();
-      initialized = true;
   }
 
   const initialize = async () => {
+    const compoundData = await fetchCompoundData();
+    const aaveData = await fetchAaveData();
+    
     let x = new Experipie(token, $eth.provider);
-    await x.initialize();
+    await x.initialize($piesMarketDataStore);
     let res = [];
 
     x.composition.forEach( el => {
@@ -128,37 +138,80 @@
         res.push({
           ...tokenInfo,
           balance: el.balance,
+          price: el.price,
           productive: false,
+          percentage: el.percentage
         })
       } else {
         let tokenInfo = find(poolsConfig[token].composition, (o) => {
           return x.map[address].underlying.address === o.address.toLowerCase();
         });
+
+        let lendingInfo;
+        if(x.map[address].protocol.name === 'Aave') {
+          lendingInfo = find(aaveData, (o) => {
+            return x.map[address].underlying.address === o.underlyingAsset.toLowerCase();
+          });
+          lendingInfo.apy = (parseFloat(getNormalizedNumber(lendingInfo.liquidityRate, 27).toString()) * 100).toFixed(2);
+        }
+
+        if(x.map[address].protocol.name === 'Compound') {
+          lendingInfo = find(compoundData, (o) => {
+            if(!o.underlying_address) return false;
+            return x.map[address].underlying.address === o.underlying_address.toLowerCase();
+          });
+          lendingInfo.apy = (parseFloat(lendingInfo.supply_rate.value) * 100).toFixed(2);
+        }
+
         res.push({
           ...tokenInfo,
           balance: el.balance,
+          price: el.price,
           productive: true,
+          percentage: el.percentage,
           productiveAs: {
-            ...x.map[address]
+            ...x.map[address],
+            metadata: lendingInfo
           }
         })
       }
     })
 
     console.log('res', res);
+    nav = x.nav;
+    marketCap = x.marketCap;
     composition = res;
     initialized = true;
+    return initialized;
   }
 
-  $: getLiquidity = (() => {
-    if(poolsConfig[token].swapEnabled)
-      return metadata.liquidity;
-    return $pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : 0
-  })()
+  onMount( async () => {
+    initialize();
+  });
 
-  $: getNav =(() => {
-    return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
-  })()
+  const fetchAaveData = async () => {
+    const response = await subgraphRequest('https://api.thegraph.com/subgraphs/name/aave/protocol-multy-raw', {
+      "reserves": {
+        symbol: true,
+        name: true,
+        underlyingAsset: true,
+        liquidityRate: true,
+      }
+    })
+
+    lendingData.aave = response.reserves;
+    loadings.aave = true;
+    return response.reserves;
+  }
+
+  const fetchCompoundData = async () => {
+    const response = await fetch('https://api.compound.finance/api/v2/ctoken');
+    const result = await response.json();
+    lendingData.compound = result.cToken;
+    loadings.compound = true;
+    return result.cToken
+  }
+
 </script>
 <!-- <SnapshotBanner /> -->
 
@@ -210,9 +263,6 @@
           modal.open()
         }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Issue</button>
         
-        <!-- <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
-          <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
-        </a> -->
       </div>
     </div>
   </div>
@@ -220,7 +270,7 @@
   <div class="flex w-full mt-2 md:mt-8">
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black text-pink">
-        {getNav}
+        {nav}
       </div>
       <div class="font-bold text-xs md:text-base text-pink">NAV</div>
     </div>
@@ -241,11 +291,7 @@
 
     <div class="p-0 flex-initial self-start mr-6">
       <div class="text-md md:text-md font-black">
-        {#if poolsConfig[token].swapEnabled}
-          {formatFiat(metadata.liquidity)}
-        {:else}
-          {formatFiat($pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : '')}
-        {/if}
+        {marketCap}
       </div>
       <div class="font-thin text-xs md:text-base">Market Cap</div>
     </div>
@@ -277,12 +323,13 @@
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Allocation</th>
           <th class="font-thin border-b-2 px-4 py-2">Price</th>
+          <th class="font-thin border-b-2 px-4 py-2">Balance</th>
           <th class="font-thin border-b-2 px-4 py-2">APY</th>
           <th class="font-thin border-b-2 px-4 py-2">Strategy</th>
         </tr>
       </thead>
       <tbody>
-        {#each composition as pooledToken}
+        {#each orderBy(composition,['percentage'], ['desc']) as pooledToken}
           <tr>
             <td class="border border-gray-800 px-2 py-2 text-left">
               <img
@@ -313,10 +360,17 @@
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
             
-
             {#if !pieOfPies }
-              <td class="border text-center px-4 py-2 font-thin">{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')}</td>
+              <td class="border text-center px-4 py-2 font-thin">{formatFiat(pooledToken.balance ? pooledToken.balance.label : '0', ',', '.', '')}</td>
             {/if}
+
+            <td class="border text-center px-4 py-2 font-thin">
+              {#if pooledToken.productive}
+                {pooledToken.productiveAs.metadata.apy}%
+              {:else }
+                None
+              {/if}
+            </td>
 
             <td class="flex items-center justify-center border text-center px-4 py-2">
               {#if pooledToken.productive}
