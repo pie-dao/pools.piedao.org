@@ -4,6 +4,7 @@
   import { _ } from 'svelte-i18n';
   import moment from 'moment';
   import BigNumber from 'bignumber.js';
+  import find from 'lodash/find';
   import get from 'lodash/get';
   import first from 'lodash/first';
   import flattenDeep from 'lodash/flattenDeep';
@@ -29,6 +30,7 @@
   import Accordion, { AccordionItem } from "svelte-accessible-accordion";
   import {
     pools,
+    eth,
     balanceKey,
     contract,
     balances,
@@ -46,6 +48,8 @@
   import ModalBig from '../components/elements/ModalBig.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import Snapshot from '../components/Snapshot.svelte';
+
+  import Experipie from '../experipie';
 
 
 
@@ -100,71 +104,63 @@
     pieOfPies = false;
   })(token);
 
-  const getInternalWeights = (component, base) => {
-        return $pools[component.address].map((internal) => {
-          if (internal.isPie) {
-            let newbase = (base * internal.percentage/ 100)
-            return getInternalWeights(internal, newbase);
-          }
-
-          return {
-            ...internal,
-            percentage: (internal.percentage * base) / 100,
-          };
-        });
-  };
-
-  $: composition = flattenDeep(
-    $pools[token].map((component) => {
-      if (component.isPie) {
-        if(!pieOfPies) pieOfPies = [];
-        pieOfPies.push(component);
-        return getInternalWeights(component, component.percentage);
-      }
-      return component;
-    })
-  );
-
-  $: pieTokens = fetchPieTokens($balances);
+  $: composition = (poolsConfig[token] || []).composition;
 
   $: metadata = {};
 
-  $: (async () => {    
-    if(initialized) return;
+  $: if($eth.provider && !initialized) {
+      initialize();
+      initialized = true;
+  }
 
-    const poolContract = await contract({ address: token });
-    const bPoolAddress = await poolContract.getBPool();
-    metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
-    console.log('metadata', metadata);
+  const initialize = async () => {
+    let x = new Experipie(token, $eth.provider);
+    await x.initialize();
+    let res = [];
+
+    x.composition.forEach( el => {
+      let address = el.address.toLowerCase()
+      let tokenInfo = find(poolsConfig[token].composition, (o) => {
+        return address === o.address.toLowerCase();
+      });
+
+      if(tokenInfo) {
+        res.push({
+          ...tokenInfo,
+          balance: el.balance,
+          productive: false,
+        })
+      } else {
+        let tokenInfo = find(poolsConfig[token].composition, (o) => {
+          return x.map[address].underlying.address === o.address.toLowerCase();
+        });
+        res.push({
+          ...tokenInfo,
+          balance: el.balance,
+          productive: true,
+          productiveAs: {
+            ...x.map[address]
+          }
+        })
+      }
+    })
+
+    console.log('res', res);
+    composition = res;
     initialized = true;
-  })();
+  }
 
   $: getLiquidity = (() => {
     if(poolsConfig[token].swapEnabled)
       return metadata.liquidity;
-
     return $pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : 0
   })()
 
   $: getNav =(() => {
     return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
   })()
-
-  const renderWidget = async () => {
-    const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
-    if( formula === '') return;
-    const finalFormula = `${formula.slice(0, -1)}`;
-    options.symbol = finalFormula;
-    if(tradingViewWidgetComponent) {
-      initialized = true;
-      tradingViewWidgetComponent.initWidget(options)
-    }
-}
-
-
-
 </script>
-<SnapshotBanner />
+<!-- <SnapshotBanner /> -->
 
 <ModalBig title="Yearn Finance" backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
@@ -271,6 +267,7 @@
     <PriceChartArea coingeckoId={poolsConfig[token].coingeckoId}/>
   {/if}
 
+  {#if initialized}
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
 
   <div class="w-99pc m-4">
@@ -285,7 +282,7 @@
         </tr>
       </thead>
       <tbody>
-        {#each orderBy(composition,['percentage'], ['desc']) as pooledToken}
+        {#each composition as pooledToken}
           <tr>
             <td class="border border-gray-800 px-2 py-2 text-left">
               <img
@@ -318,12 +315,15 @@
             
 
             {#if !pieOfPies }
-              <!-- <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td> -->
               <td class="border text-center px-4 py-2 font-thin">{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')}</td>
             {/if}
 
             <td class="flex items-center justify-center border text-center px-4 py-2">
-              <StrategyInUse value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
+              {#if pooledToken.productive}
+                <StrategyInUse protocol={pooledToken.productiveAs.protocol.name} />
+              {:else }
+                None
+              {/if}
             </td>
 
           </tr>
@@ -331,6 +331,8 @@
       </tbody>
     </table>
   </div>
+
+  {/if}
 
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Open Proposals</h1>
 

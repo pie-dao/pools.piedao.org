@@ -57,7 +57,7 @@ const formatRoute = (route) => {
     case 'pies':
       return { page: Dashboard };
     case 'exp':
-      address = (route[1] || '0x78f225869c08d478c34e5f645d07a87d3fe8eb78').toLowerCase();
+      address = (route[1] || '0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5').toLowerCase();
       return { page: Experipie, params: { address }  };
     case 'pie':
       address = (route[1] || '').toLowerCase();
