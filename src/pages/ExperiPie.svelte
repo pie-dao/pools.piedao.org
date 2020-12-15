@@ -13,7 +13,7 @@
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
   
-  import LiquidityModal from "../components/modals/LiquidityModal.svelte";
+  import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
 
   import SingleAssetModal from "../components/modals/SingleAssetModal.svelte"; 
 
@@ -23,7 +23,7 @@
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
-  import { amountFormatter, getTokenImage, formatFiat } from '../components/helpers.js';
+  import { amountFormatter, getTokenImage, formatFiat, subscribeToBalance } from '../components/helpers.js';
   import Accordion, { AccordionItem } from "svelte-accessible-accordion";
 
   import {
@@ -52,6 +52,7 @@
 
   let pieOfPies = false;
   let initialized = false;
+  let Pie;
   
   $: options = {
     symbol: poolsConfig[token] ? poolsConfig[token].tradingViewFormula : '',
@@ -91,11 +92,15 @@
   };
 
   $: loadings = {
+    init: false,
     compound: false,
     defiSDK: false,
   };
 
-  $: if($eth.provider && !initialized) {
+  $: if($eth.provider && $eth.address && !loadings.init && !initialized) {
+      loadings.init = true;
+      console.log('$eth.address', $eth.address)
+      subscribeToBalance(token, $eth.address, true);
       initialize();
   }
 
@@ -103,11 +108,11 @@
     const compoundData = await fetchCompoundData();
     const aaveData = await fetchAaveData();
     
-    let x = new Experipie(token, $eth.provider);
-    await x.initialize($piesMarketDataStore);
+    Pie = new Experipie(token, $eth.provider);
+    await Pie.initialize($piesMarketDataStore);
     let res = [];
 
-    x.composition.forEach( el => {
+    Pie.composition.forEach( el => {
       let address = el.address.toLowerCase()
       let tokenInfo = find(poolsConfig[token].composition, (o) => {
         return address === o.address.toLowerCase();
@@ -123,21 +128,21 @@
         })
       } else {
         let tokenInfo = find(poolsConfig[token].composition, (o) => {
-          return x.map[address].underlying.address === o.address.toLowerCase();
+          return Pie.map[address].underlying.address === o.address.toLowerCase();
         });
 
         let lendingInfo;
-        if(x.map[address].protocol.name === 'Aave') {
+        if(Pie.map[address].protocol.name === 'Aave') {
           lendingInfo = find(aaveData, (o) => {
-            return x.map[address].underlying.address === o.underlyingAsset.toLowerCase();
+            return Pie.map[address].underlying.address === o.underlyingAsset.toLowerCase();
           });
           lendingInfo.apy = (parseFloat(getNormalizedNumber(lendingInfo.liquidityRate, 27).toString()) * 100).toFixed(2);
         }
 
-        if(x.map[address].protocol.name === 'Compound') {
+        if(Pie.map[address].protocol.name === 'Compound') {
           lendingInfo = find(compoundData, (o) => {
             if(!o.underlying_address) return false;
-            return x.map[address].underlying.address === o.underlying_address.toLowerCase();
+            return Pie.map[address].underlying.address === o.underlying_address.toLowerCase();
           });
           lendingInfo.apy = (parseFloat(lendingInfo.supply_rate.value) * 100).toFixed(2);
         }
@@ -149,7 +154,7 @@
           productive: true,
           percentage: el.percentage,
           productiveAs: {
-            ...x.map[address],
+            ...Pie.map[address],
             metadata: lendingInfo
           }
         })
@@ -157,10 +162,11 @@
     })
 
     console.log('res', res);
-    nav = x.nav;
-    marketCap = x.marketCap;
+    nav = Pie.nav;
+    marketCap = Pie.marketCap;
     composition = res;
     initialized = true;
+    loadings.init = false;
     return initialized;
   }
 
@@ -194,10 +200,10 @@
 </script>
 <!-- <SnapshotBanner /> -->
 
-<ModalBig title="Yearn Finance" backgroundColor="#f3f3f3" bind:this="{modal}">
+<ModalBig title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
     <LiquidityModal 
-      token={token} 
+      pie={Pie}
       method={modalOption.method} 
       poolAction={modalOption.poolAction}
     />
@@ -363,25 +369,18 @@
       </tbody>
     </table>
   </div>
-
+  {:else}
+    <div class="h-12px mx-50pc my-16px">
+          <div class="loadingio-spinner-wedges-meab1ddaeuq"><div class="ldio-qudhur211ps">
+          <div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div></div>
+          </div></div>
+    </div>
+    Loading
   {/if}
 
-  <h1 class="mt-8 mb-4 text-base md:text-3xl">Open Proposals</h1>
+  <!-- <h1 class="mt-8 mb-4 text-base md:text-3xl">Open Proposals</h1> -->
 
   <!-- <Snapshot /> -->
-
-
-
-  {#if pieOfPies }
-    <div class="font-thin w-full px-4 py-2 text-left">
-      <h4>*This allocation is composed of multiple pies, find below the exploded allocation.</h4>
-      <ul>
-        {#each pieOfPies as subPie}
-          <li><a class="font-bold" href="#/pie/{subPie.address}">{subPie.symbol}</a></li>
-        {/each}
-      </ul>
-    </div>
-  {/if}
   
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
     <div class="p-0 mt-2 md:w-1/4">

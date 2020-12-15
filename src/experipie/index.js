@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import ABI from '../config/experipieABI.json';
 import defiSdkABI from '../config/defiSdkABI.json';
+import tokenOracleABI from '../abis/tokenOracleABI.json';
 import get from 'lodash/get';
 import find from 'lodash/find';
 
@@ -17,6 +18,7 @@ const DeFiSdkAddress = '0x06FE76B2f432fdfEcAEf1a7d4f6C3d41B5861672';
 class Experipie {
 
     constructor(address, provider) {
+        this.provider = provider;
         this.address = address;
         this.instance = new ethers.Contract(address, ABI, provider);
         this.defiSdk = new ethers.Contract(DeFiSdkAddress, defiSdkABI, provider);
@@ -26,9 +28,7 @@ class Experipie {
 
     dump() {
         console.log('dump', this);
-    }
-
-    
+    }    
 
     async initialize(marketData = {}) {
       this.totalSupply = await this.instance.functions.totalSupply();
@@ -71,10 +71,13 @@ class Experipie {
           }
         }
       });
+
+      console.log('this.composition', this.composition);
       
       //Leave this here
       this.totalSupply = this.totalSupply / 1e18;
       await this.fetchLentAssets();
+      this.mergeInfo();
       this.calcNav();
       this.calcWeights();
     }
@@ -157,6 +160,17 @@ class Experipie {
 
       this.marketCap = totalUSD;
       this.nav = totalUSD / this.totalSupply;
+    }
+
+    async mergeInfo() {
+      this.composition.forEach( t => {
+        let mapped = this.map[t.address.toLowerCase()];
+        if(mapped.underlying) {
+          t.name = mapped.name;
+          t.decimals = mapped.decimals; 
+          t.symbol = mapped.symbol; 
+        }
+      })
     }
 
     async calcWeights() {

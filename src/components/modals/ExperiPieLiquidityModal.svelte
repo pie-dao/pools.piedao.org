@@ -41,9 +41,10 @@
 
   window.B = BigNumber;
 
-  export let token;
+  export let pie;
   export let poolAction;
   export let method; // NOTE: This really should be named poolAddress. Token is too generic.;
+  let token = pie.address;
 
   let tokenSelectModalOpen = false;
   const tokenSelectCallback = (token) => {
@@ -70,8 +71,7 @@
   $: tokenLogo = images.logos[token];
   $: type = poolsConfig[token].useRecipe === true ? method : 'multi';
 
-  $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
-  $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");
+  $: pooledTokens = pie.composition;
 
   $: if($eth.address) {
     fetchEthBalance($eth.address);
@@ -125,7 +125,6 @@
       evt.preventDefault();
     }
   };
-
 
   const mintFromRecipe = async () => {
     const requestedAmount = BigNumber(amount);
@@ -314,11 +313,9 @@
   };
 
   const setValuePercentage = percent => {
-    let max = maxAmount(token, pooledTokens);
-    if (approach === 'withdraw') {
-      const key = balanceKey(token, $eth.address);
-      max = $balances[key];
-    }
+    const key = balanceKey(token, $eth.address);
+    let max = $balances[key];
+    console.log('$balances', $balances, max);
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
     fetchAmounts();
@@ -380,7 +377,7 @@
 
 <div class="liquidity-container bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
 
-    {#if approach === 'add'}
+    <!-- {#if approach === 'add'}
     <div class="row flex font-thin">
       <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
       <div class="switch mx-4" on:click={() => {
@@ -401,7 +398,7 @@
       </div>
       <div class="flex-auto text-left">{$_('general.multi')} {$_('general.asset')}</div>
     </div>
-    {/if}
+    {/if} -->
 
     <p class="text-center font-thin my-4 mx-2">
 
@@ -465,15 +462,10 @@
           <input type="number" on:keyup="{ debounce(fetchAmounts, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
           <div
             class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
-            align-middle justify-center items-center pointer mt-0 md:mt-14px"
-            on:click={() => (tokenSelectModalOpen = true)}>
+            align-middle justify-center items-center pointer mt-0 md:mt-14px">
             <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
             <span class="py-2px px-4px">{tokenSymbol}</span>
           </div>
-          <TokenSelectModal
-            tokens={pieTokens}
-            open={tokenSelectModalOpen}
-            callback={tokenSelectCallback} />
         </div>
       </div>
     {/if}
@@ -542,17 +534,9 @@
     {#if type === 'multi'}
       {#each pooledTokens as pooledToken}
         <div class="token-summary overflow-x-scroll bg-white rounded-8px mx-0 md:mx-4 my-4px flex flex-start items-center">
-            <div class="min-w-22pc p-12px text-sm md:text-lg" style={`color: ${pooledToken.color}`}>
-              {amountFormatter({
-                amount: pooledToken.originalWeight,
-                approximatePrefix: '',
-                displayDecimals: 2,
-                rounding: 4,
-              })}%
-            </div>
             <img
               class="token-icon my-8px w-26px h-26px"
-              src={getTokenImage(pooledToken.address)}
+              src={getTokenImage(ethers.utils.getAddress(pooledToken.address))}
               alt={pooledToken.symbol} />
             <div
               class="token-symbol min-w-15pc md:min-w-10pc px-6px py-12px text-sm font-thin border-r-2 border-r-solid border-grey-243 align-middle md:leading-8">

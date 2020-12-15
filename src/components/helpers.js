@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
-import { pieSmartPool } from '@pie-dao/abis';
+import { pieSmartPool, erc20 } from '@pie-dao/abis';
 
 import find from 'lodash/find';
 import images from '../config/images.json';
@@ -588,6 +588,8 @@ export const subscribeToBalance = async (tokenAddress, address, shouldBump = tru
     token = ethers.constants.AddressZero;
   }
 
+  
+  if(!token || token === '') return;
   validateIsAddress(token);
   validateIsAddress(address);
 
@@ -603,7 +605,7 @@ export const subscribeToBalance = async (tokenAddress, address, shouldBump = tru
   let decimals = 18;
 
   if (token !== ethers.constants.AddressZero) {
-    const tokenContract = await contract({ address: token });
+    const tokenContract = await contract({ address: token, abi:erc20 });
     decimals = await tokenContract.decimals();
   }
 

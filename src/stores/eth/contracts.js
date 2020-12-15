@@ -205,8 +205,8 @@ export const observableContract = async ({ abi, address }) => {
     try {
       contractAbi = await findAbi(address);
     } catch (e) {
-      console.error(e);
-      console.warn("Falling back on default erc20 abi for", address);
+      // console.error(e);
+      // console.warn("Falling back on default erc20 abi for", address);
       contractAbi = erc20;
     }
   }
