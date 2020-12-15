@@ -165,14 +165,10 @@
       }
     })
 
-    console.log('res', res);
-    nav = Pie.nav;
-    marketCap = Pie.marketCap;
-    PieAPR = `${(globalAPR / 100).toFixed(2)}%`;
+    nav = formatFiat(Pie.nav.toFixed(2), 'n/a');
+    marketCap = formatFiat(Pie.marketCap.toFixed(2), 'n/a');
+    PieAPR = `${(globalAPR / 1000).toFixed(2)}%`;
     composition = res;
-    
-
-
     initialized = true;
     loadings.init = false;
     return initialized;
