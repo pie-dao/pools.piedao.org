@@ -82,6 +82,7 @@
   );
 
   $: nav = "n/a";
+  $: PieAPR = "n/a";
   $: marketCap = "n/a";
   $: composition = (poolsConfig[token] || []).composition;
   $: metadata = {};
@@ -111,6 +112,7 @@
     Pie = new Experipie(token, $eth.provider);
     await Pie.initialize($piesMarketDataStore);
     let res = [];
+    let globalAPR = 0;
 
     Pie.composition.forEach( el => {
       let address = el.address.toLowerCase()
@@ -137,6 +139,7 @@
             return Pie.map[address].underlying.address === o.underlyingAsset.toLowerCase();
           });
           lendingInfo.apy = (parseFloat(getNormalizedNumber(lendingInfo.liquidityRate, 27).toString()) * 100).toFixed(2);
+          globalAPR += lendingInfo.apy * el.percentage;
         }
 
         if(Pie.map[address].protocol.name === 'Compound') {
@@ -145,6 +148,7 @@
             return Pie.map[address].underlying.address === o.underlying_address.toLowerCase();
           });
           lendingInfo.apy = (parseFloat(lendingInfo.supply_rate.value) * 100).toFixed(2);
+          globalAPR += lendingInfo.apy * el.percentage;
         }
 
         res.push({
@@ -164,7 +168,11 @@
     console.log('res', res);
     nav = Pie.nav;
     marketCap = Pie.marketCap;
+    PieAPR = `${(globalAPR / 100).toFixed(2)}%`;
     composition = res;
+    
+
+
     initialized = true;
     loadings.init = false;
     return initialized;
@@ -261,7 +269,7 @@
 
     <div class="p-0 flex-initial self-start mr-8">
       <div class="font-bold text-md md:text-md text-pink">
-        36.5%
+        {PieAPR}
       </div>
       <div class="font-bold text-pink text-xs md:text-base">Tot APY</div>
     </div>

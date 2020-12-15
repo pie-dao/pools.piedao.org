@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import ABI from '../config/experipieABI.json';
 import defiSdkABI from '../config/defiSdkABI.json';
-import tokenOracleABI from '../abis/tokenOracleABI.json';
 import get from 'lodash/get';
 import find from 'lodash/find';
 
