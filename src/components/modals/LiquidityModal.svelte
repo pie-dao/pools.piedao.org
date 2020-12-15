@@ -8,11 +8,11 @@
   import { ethers } from "ethers";
   import { pieSmartPool, erc20 } from "@pie-dao/abis";
 
-  import images from "../config/images.json";
-  import poolsConfig from "../config/pools.json";
-  import recipeAbi from '../config/recipeABI.json';
+  import images from "../../config/images.json";
+  import poolsConfig from "../../config/pools.json";
+  import recipeAbi from '../../config/recipeABI.json';
 
-  import displayNotification from "../notifications.js";
+  import displayNotification from "../../notifications.js";
   import TokenSelectModal from "./TokenSelectModal.svelte";
 
   import {
@@ -27,7 +27,7 @@
     pools,
     bumpLifecycle,
     subject,
-  } from "../stores/eth.js";
+  } from "../../stores/eth.js";
   import {
     amountFormatter,
     fetchCalcTokensForAmounts,
@@ -37,7 +37,7 @@
     getTokenImage,
     fetchEthBalance,
     fetchCalcToPie,
-  } from "./helpers.js";
+  } from "../helpers.js";
 
   window.B = BigNumber;
 

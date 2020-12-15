@@ -15,7 +15,7 @@
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
-  import LiquidityModal from "../components/LiquidityModal.svelte";
+  import LiquidityModal from "../components/modals/LiquidityModal.svelte";
   import SnapshotModal from "../components/SnapshotModal.svelte"; 
   import SingleAssetModal from "../components/SingleAssetModal.svelte"; 
   import SnapshotBanner from "../components/SnapshotBanner.svelte";

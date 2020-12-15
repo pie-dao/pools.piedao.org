@@ -13,7 +13,7 @@
   import recipeAbi from '../config/recipeABI.json';
 
   import displayNotification from "../notifications.js";
-  import TokenSelectModal from "./TokenSelectModal.svelte";
+  import TokenSelectModal from "./modals/TokenSelectModal.svelte";
 
   import {
     allowances,

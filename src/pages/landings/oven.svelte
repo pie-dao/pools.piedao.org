@@ -14,7 +14,7 @@
   } from "../../components/helpers.js";
 
   import Modal from '../../components/elements/Modal.svelte';
-  import LiquidityModal from '../../components/LiquidityModal.svelte';
+  import LiquidityModal from '../../components/modals/LiquidityModal.svelte';
   import OvenModal from "../../components/modals/OvenModal.svelte";
 
   import Gauge from '../../components/charts/gauge.svelte';
