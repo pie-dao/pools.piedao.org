@@ -8,8 +8,6 @@ import queries from './queries.json';
 const subgraphUrl = 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer';
 const { jsonToGraphQLQuery } = _jsonToGraphQLQuery.default;
 
-console.log('jsonToGraphQLQuery', jsonToGraphQLQuery);
-
 export async function request(key, _jsonQuery) {
   const jsonQuery = key ? merge(cloneDeep(queries[key]), cloneDeep(_jsonQuery)) : _jsonQuery;
 

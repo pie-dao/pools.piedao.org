@@ -41,12 +41,6 @@
   }
 
   $: getNav =((token) => {
-    if(token === '0xe4f726adc8e89c6a6017f01eada77865db22da14') {
-      let nav = $pools[token+"-nav"];
-      nav += $pools["0x8d1ce361eb68e9e05573443c407d4a3bed23b033-nav"] * poolsConfig[token].composition[2].percentage / 100;
-      return formatFiat(nav ? nav : '')
-    }
-
     return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
   })
 

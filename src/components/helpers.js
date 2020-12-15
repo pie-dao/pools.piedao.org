@@ -828,6 +828,13 @@ export const calculateAPRBalancer = async (
   const $assetOnePerBPT = DOUGHperBPT * DOUGHPrice;
   const $assetTwoPerBPT = WETHperBPT * ETHPrice;
 
+  if( DOUGH === '0x8d1ce361eb68e9e05573443c407d4a3bed23b033') {
+    console.log('---->', {
+      DOUGHPrice,
+      ETHPrice
+    })
+  }
+
   const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
   const totalLiquidity = BPTPrice * totalBPTAmount;
 

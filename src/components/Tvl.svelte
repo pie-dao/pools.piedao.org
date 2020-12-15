@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import BigNumber from 'bignumber.js';
   import orderBy from 'lodash/orderBy';
   import { get } from 'svelte/store';
@@ -8,6 +9,8 @@
   import { farming } from '../stores/eth/writables.js';
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import confetti from '../components/Confetti.js';
+
+  import { fetchNav } from '../helpers/tvl.js';
 
   import {
     calculateAPRBalancer,
@@ -40,6 +43,7 @@
     };
   }) || []), ['totalLiquidityNum'], ['desc']);
 
+
   $: pieLiquidity = (() => {
       let total = 0;
       pies.forEach(el => {
@@ -70,15 +74,6 @@
             total += partialTotal
         }
       });
-
-      // Staked DEFI++ ONLY
-      // const defiplus = await contract({ address: '0x59706d38f1452f387563f06b632af7302456fe66' });
-      // const defiplusTotSupply = await defiplus.totalSupply();
-      // const amountDefippBN = BigNumber(defiplusTotSupply.toString()).dividedBy(10 ** 18).toNumber();
-
-      // const defis = marketData['0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c'].market_data.current_price;
-      // const defil = marketData['0x78f225869c08d478c34e5f645d07a87d3fe8eb78'].market_data.current_price;
-      // const defiplusDollarValue = ((amountDefippBN * 0.7) * defil) + ((amountDefippBN * 0.3) * defis);
 
       return total;
   };
@@ -112,6 +107,10 @@
         triggerConfetti();
     }
   }, false);
+
+  onMount( async () => {
+    //await fetchNav();
+  });
 
   </script>
 

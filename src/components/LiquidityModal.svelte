@@ -310,7 +310,7 @@
   const enoughPieToRedeem = () => {
     const key = balanceKey(token, $eth.address);
     let max = $balances[key];
-    withdrawDisabled = amount > max;
+    withdrawDisabled = BigNumber(amount).isGreaterThan(max);
   };
 
   const setValuePercentage = percent => {

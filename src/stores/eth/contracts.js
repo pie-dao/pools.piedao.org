@@ -194,6 +194,7 @@ const overrideWrapped = (prop, contract) => (...passedArgs) => {
 export const observableContract = async ({ abi, address }) => {
   validateIsAddress(address);
 
+  // TODO check for signert
   if (contracts[address] && !abi) {
     return contracts[address];
   }
@@ -211,7 +212,7 @@ export const observableContract = async ({ abi, address }) => {
   }
 
   const { provider, signer } = get(eth);
-  let contract = new ethers.Contract(address, contractAbi, provider);
+  let contract;
 
   if (signer) {
     contract = new ethers.Contract(address, contractAbi, signer);
