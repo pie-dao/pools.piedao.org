@@ -8,17 +8,17 @@ import { _ } from "svelte-i18n";
 import debounce from "lodash/debounce";
 import BigNumber from "bignumber.js";
 import { ethers } from "ethers";
-import images from "../config/images.json";
-import poolsConfig from "../config/pools.json";
-import ovenABI from '../config/ovenABI.json';
-import displayNotification from "../notifications.js";
+import images from "../../config/images.json";
+import poolsConfig from "../../config/pools.json";
+import ovenABI from '../../config/ovenABI.json';
+import displayNotification from "../../notifications.js";
 import {
     balanceKey,
     balances,
     subject,
     contract,
     eth
-} from "../stores/eth.js";
+} from "../../stores/eth.js";
 
 import {
   maxAmount,
@@ -28,9 +28,9 @@ import {
   formatFiat,
   subscribeToBalance,
   toFixed
-} from "../components/helpers.js";
+} from "../../components/helpers.js";
 
-import Gauge from '../components/charts/gauge.svelte';
+import Gauge from '../../components/charts/gauge.svelte';
 
 export let ovenAddress;
 export let pieAddress;

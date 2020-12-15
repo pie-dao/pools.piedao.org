@@ -217,13 +217,12 @@
 
 <ModalBig title="Yearn Finance" backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
-    <!-- <LiquidityModal 
+    <LiquidityModal 
       token={token} 
       method={modalOption.method} 
       poolAction={modalOption.poolAction}
-    /> -->
-    <!-- <SnapshotModal /> -->
-    <SingleAssetModal />
+    />
+    <!-- <SingleAssetModal /> -->
   </span>
 </ModalBig>
 
