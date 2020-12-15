@@ -1,6 +1,6 @@
 <script>
-  import images from '../config/images.json';
-  import Snapshot from '../components/Snapshot.svelte';
+  import images from '../../config/images.json';
+  import Snapshot from '../../components/Snapshot.svelte';
 
 
 </script>

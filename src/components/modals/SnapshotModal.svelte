@@ -1,5 +1,5 @@
 <script>
-  import images from '../config/images.json';
+  import images from '../../config/images.json';
 
 
 </script>

@@ -1,13 +1,10 @@
 <script>
-  import {getSubgraphMetadata, getPoolSwaps, getPoolMetrics, subgraphRequest} from '../helpers/subgraph.js'
-  import { pieSmartPool } from '@pie-dao/abis';
+  import {subgraphRequest} from '../helpers/subgraph.js'
   import { _ } from 'svelte-i18n';
   import moment from 'moment';
   import BigNumber from 'bignumber.js';
   import find from 'lodash/find';
   import get from 'lodash/get';
-  import first from 'lodash/first';
-  import flattenDeep from 'lodash/flattenDeep';
   import orderBy from 'lodash/orderBy';
   import { onMount } from "svelte";
   import { currentRoute } from "../stores/routes.js";
@@ -15,43 +12,32 @@
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
+  
   import LiquidityModal from "../components/modals/LiquidityModal.svelte";
-  import SnapshotModal from "../components/SnapshotModal.svelte"; 
-  import SingleAssetModal from "../components/SingleAssetModal.svelte"; 
+
+  import SingleAssetModal from "../components/modals/SingleAssetModal.svelte"; 
+
   import SnapshotBanner from "../components/SnapshotBanner.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
-  import KeyFacts from "../components/KeyFacts.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
-  import { fetchPooledTokens, pooledTokenAmountRequired, fetchCalcTokensForAmounts } from '../components/helpers.js';
-  import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
+  import { amountFormatter, getTokenImage, formatFiat } from '../components/helpers.js';
   import Accordion, { AccordionItem } from "svelte-accessible-accordion";
-  import {
-    pools,
-    eth,
-    balanceKey,
-    contract,
-    balances,
-  } from "../stores/eth.js";
 
   import {
-    buildFormulaNative
-  } from '../helpers/tradingView.js'
+    eth,
+  } from "../stores/eth.js";
 
   import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
   import Change from '../components/Change.svelte'
   import Apy from '../components/Apy.svelte'
   import StrategyInUse from '../components/StrategyInUse.svelte'
-  import Modal from '../components/elements/Modal.svelte';
   import ModalBig from '../components/elements/ModalBig.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import Snapshot from '../components/Snapshot.svelte';
-
   import Experipie, { getNormalizedNumber } from '../experipie';
-
-
 
   export let params;
 
@@ -65,7 +51,6 @@
   $: token = params.address;
 
   let pieOfPies = false;
-  let tradingViewWidgetComponent;
   let initialized = false;
   
   $: options = {
@@ -97,13 +82,7 @@
 
   $: nav = "n/a";
   $: marketCap = "n/a";
-
-  $: (() => {
-    pieOfPies = false;
-  })(token);
-
   $: composition = (poolsConfig[token] || []).composition;
-
   $: metadata = {};
 
   $: lendingData = {
