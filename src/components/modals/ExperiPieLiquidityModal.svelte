@@ -42,6 +42,7 @@
   window.B = BigNumber;
 
   export let pie;
+  export let composition;
   export let poolAction;
   export let method; // NOTE: This really should be named poolAddress. Token is too generic.;
   let token = pie.address;
@@ -71,7 +72,8 @@
   $: tokenLogo = images.logos[token];
   $: type = poolsConfig[token].useRecipe === true ? method : 'multi';
 
-  $: pooledTokens = pie.composition;
+  $: pooledTokens = composition.map( o => o.productiveAs ? o.productiveAs : o);
+
 
   $: if($eth.address) {
     fetchEthBalance($eth.address);
@@ -191,6 +193,9 @@
   };
 
   const areTokensEnough = () => {
+      if(!$eth.address || $eth.address === '') {
+        return;
+      }
       let errors = [];
       Object.keys(amountsRequired).forEach( token => {
         let key = balanceKey(token, $eth.address);
@@ -307,6 +312,10 @@
   }
 
   const enoughPieToRedeem = () => {
+    if(!$eth.address || $eth.address === '') {
+      withdrawDisabled = true;
+      return;
+    }
     const key = balanceKey(token, $eth.address);
     let max = $balances[key];
     withdrawDisabled = BigNumber(amount).isGreaterThan(max);
@@ -535,8 +544,8 @@
       {#each pooledTokens as pooledToken}
         <div class="token-summary overflow-x-scroll bg-white rounded-8px mx-0 md:mx-4 my-4px flex flex-start items-center">
             <img
-              class="token-icon my-8px w-26px h-26px"
-              src={getTokenImage(ethers.utils.getAddress(pooledToken.address))}
+              class="token-icon my-8px ml-8px w-26px h-26px"
+              src={getTokenImage(ethers.utils.getAddress(pooledToken.underlying ? pooledToken.underlying.address : pooledToken.address ))}
               alt={pooledToken.symbol} />
             <div
               class="token-symbol min-w-15pc md:min-w-10pc px-6px py-12px text-sm font-thin border-r-2 border-r-solid border-grey-243 align-middle md:leading-8">

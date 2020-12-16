@@ -13,7 +13,6 @@ class cToken {
     const BLOCKS_PER_YEAR = 2102400;
     const APR = ((expRate * BLOCKS_PER_YEAR) / 1e18) * 100;
     this.apr = APR.toFixed(2);
-    console.log('this.apr', this.apr);
     return this.apr;
   }
 

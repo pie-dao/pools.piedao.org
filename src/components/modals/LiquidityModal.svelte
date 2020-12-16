@@ -192,6 +192,9 @@
   };
 
   const areTokensEnough = () => {
+      if(!$eth.address || $eth.address === '') {
+        return;
+      }
       let errors = [];
       Object.keys(amountsRequired).forEach( token => {
         let key = balanceKey(token, $eth.address);
@@ -308,6 +311,10 @@
   }
 
   const enoughPieToRedeem = () => {
+    if(!$eth.address || $eth.address === '') {
+      withdrawDisabled = true;
+      return;
+    }
     const key = balanceKey(token, $eth.address);
     let max = $balances[key];
     withdrawDisabled = BigNumber(amount).isGreaterThan(max);

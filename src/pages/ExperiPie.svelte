@@ -225,6 +225,7 @@
   <span slot="content">
     <LiquidityModal 
       pie={Pie}
+      composition={composition}
       method={modalOption.method} 
       poolAction={modalOption.poolAction}
     />
@@ -254,14 +255,14 @@
       </div>
 
       <div class="w-100pc sm:w-full md:w-2/3 flex flex-row-reverse">
-        <button on:click={() => {
+        <button disabled={!initialized} on:click={() => {
           modalOption.method = "multi";
           modalOption.poolAction = "withdraw";
           modalOption.title = "Redeem";
           modal.open()
         }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Redeem</button>
 
-        <button on:click={() => {
+        <button disabled={!initialized} on:click={() => {
           modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
           modalOption.poolAction = "add";
           modalOption.title = "Add Liquidity";
