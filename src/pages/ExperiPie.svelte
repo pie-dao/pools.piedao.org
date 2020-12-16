@@ -11,7 +11,7 @@
   import TradingViewWidget from "../components/TradingViewWidget.svelte";
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
-  import Quantstamp from "../components/Quantstamp.svelte";
+  import MixBytes from "../components/MixBytes.svelte";
   
   import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
 
@@ -413,7 +413,7 @@
     </div>
 
     <div class="p-0 mt-2 md:w-1/4">
-      <Quantstamp token={$currentRoute.params.address} />
+      <MixBytes token={$currentRoute.params.address} />
     </div>
     <div class="p-0 mt-2 md:w-1/4">
       <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />

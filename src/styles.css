@@ -386,7 +386,7 @@ border-radius: 6px;
 }
 
 .header-container .left {
-  @apply flex flex-grow items-center;
+  @apply flex  items-center;
 }
 
 .header-container .left img {
