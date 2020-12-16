@@ -37,7 +37,8 @@
   import ModalBig from '../components/elements/ModalBig.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import Snapshot from '../components/Snapshot.svelte';
-  import Experipie, { getNormalizedNumber } from '../experipie';
+  import Experipie, { getNormalizedNumber } from '../classes/Experipie.js';
+  import cToken from '../classes/CToken.js';
 
   export let params;
 
@@ -106,19 +107,18 @@
   }
 
   const initialize = async () => {
+    let res = [];
+    let globalAPR = 0;
     const compoundData = await fetchCompoundData();
     const aaveData = await fetchAaveData();
     
     Pie = new Experipie(token, $eth.provider);
     await Pie.initialize($piesMarketDataStore);
-    let res = [];
-    let globalAPR = 0;
 
-    Pie.composition.forEach( el => {
+    for (const el of Pie.composition) {
       let address = el.address.toLowerCase()
-      let tokenInfo = find(poolsConfig[token].composition, (o) => {
-        return address === o.address.toLowerCase();
-      });
+      const data = Pie.map[address];
+      let tokenInfo = find(poolsConfig[token].composition, (o) => address === o.address.toLowerCase());
 
       if(tokenInfo) {
         res.push({
@@ -129,27 +129,9 @@
           percentage: el.percentage
         })
       } else {
-        let tokenInfo = find(poolsConfig[token].composition, (o) => {
-          return Pie.map[address].underlying.address === o.address.toLowerCase();
-        });
-
-        let lendingInfo;
-        if(Pie.map[address].protocol.name === 'Aave') {
-          lendingInfo = find(aaveData, (o) => {
-            return Pie.map[address].underlying.address === o.underlyingAsset.toLowerCase();
-          });
-          lendingInfo.apy = (parseFloat(getNormalizedNumber(lendingInfo.liquidityRate, 27).toString()) * 100).toFixed(2);
-          globalAPR += lendingInfo.apy * el.percentage;
-        }
-
-        if(Pie.map[address].protocol.name === 'Compound') {
-          lendingInfo = find(compoundData, (o) => {
-            if(!o.underlying_address) return false;
-            return Pie.map[address].underlying.address === o.underlying_address.toLowerCase();
-          });
-          lendingInfo.apy = (parseFloat(lendingInfo.supply_rate.value) * 100).toFixed(2);
-          globalAPR += lendingInfo.apy * el.percentage;
-        }
+        let tokenInfo = find(poolsConfig[token].composition, (o) => Pie.map[address].underlying.address === o.address.toLowerCase());
+        let lendingInfo = await getLendingInfo(Pie.map, address, compoundData, aaveData);
+        globalAPR += lendingInfo.apy * el.percentage;
 
         res.push({
           ...tokenInfo,
@@ -163,15 +145,50 @@
           }
         })
       }
-    })
+    }
 
     nav = formatFiat(Pie.nav.toFixed(2), 'n/a');
     marketCap = formatFiat(Pie.marketCap.toFixed(2), 'n/a');
     PieAPR = `${(globalAPR / 1000).toFixed(2)}%`;
     composition = res;
+
+    console.log('res', res);
     initialized = true;
     loadings.init = false;
     return initialized;
+  }
+
+  const getLendingInfo = async(map, address, compoundData, aaveData) => {
+    let lendingInfo = {};
+    const protocolNamePie = map[address].protocol.name;
+    const underlyingAddress = map[address].underlying.address
+
+    switch (protocolNamePie) {
+      case 'Aave':
+        lendingInfo = find(aaveData, (o) => underlyingAddress === o.underlyingAsset.toLowerCase());
+        lendingInfo.apy = (parseFloat(getNormalizedNumber(lendingInfo.liquidityRate, 27).toString()) * 100).toFixed(2);
+        break;
+      
+      case 'Compound':
+        lendingInfo = find(compoundData, (o) => {
+          if(!o.underlying_address) return false;
+          return underlyingAddress === o.underlying_address.toLowerCase();
+        });
+        lendingInfo.apy = (parseFloat(lendingInfo.supply_rate.value) * 100).toFixed(2);
+        break;
+
+      case 'C.R.E.A.M.':
+        let creamToken = new cToken(address, $eth.provider);
+        await creamToken.initialize()
+        lendingInfo.apy = creamToken.apr;
+        break;
+    
+      default:
+        lendingInfo.apy = 0;
+        break;
+    }
+
+    return lendingInfo;
   }
 
   onMount( async () => {

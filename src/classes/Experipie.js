@@ -83,10 +83,13 @@ class Experipie {
 
     async fetchLentAssets() {
       let balancesOnSelectedProtocols = await this.defiSdk.getProtocolBalances(
-          this.address, ['Aave', 'Compound', 'Cream']
+          this.address, ['Aave', 'Compound', 'C.R.E.A.M.']
       );
 
+      console.log('balancesOnSelectedProtocols', balancesOnSelectedProtocols)
+
       balancesOnSelectedProtocols.forEach((protocol) => {
+          
           protocol.adapterBalances.forEach((protocolBalances) => {
               protocolBalances.balances.forEach((balance) => {
 
