@@ -14,7 +14,7 @@
   import uniswapLpZapABI from '../config/uniswapLpZapABI.json';
 
   import displayNotification from "../notifications.js";
-  import TokenSelectModal from "./TokenSelectModal.svelte";
+  import TokenSelectModal from "./modals/TokenSelectModal.svelte";
 
   import {
     allowances,

@@ -17,7 +17,7 @@
 
   import Change from '../components/Change.svelte'
   import Modal from '../components/elements/Modal.svelte';
-  import LiquidityModal from "../components/LiquidityModal.svelte";
+  import LiquidityModal from "../components/modals/LiquidityModal.svelte";
 
   $: pies = (poolsConfig.selectable.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)

@@ -36,9 +36,15 @@
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/DeFi%2B%2B.svg",
     "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": "https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png?1548822744",
     "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png",
-    "0xe4f726adc8e89c6a6017f01eada77865db22da14": "https://github.com/pie-dao/brand/blob/master/PIE%20Tokens/BCP.png?raw=true"
+    "0xe4f726adc8e89c6a6017f01eada77865db22da14": "https://github.com/pie-dao/brand/blob/master/PIE%20Tokens/BCP.png?raw=true",
+    "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": "https://github.com/pie-dao/brand/blob/master/PIE%20Tokens/BCP.png?raw=true"
   },
   "amazingrewards":"https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards2.png",
+  "votenow":"https://raw.githubusercontent.com/pie-dao/brand/master/misc/votenow.png",
+  "creamwhite":"https://raw.githubusercontent.com/pie-dao/brand/d477af71f1a94ddeb583267d2e8aa207d09f287d/misc/cream-logo-white.svg",
+  "aave":"https://yearn.finance/static/media/YFI-logo.cda8d5a4.png",
+  "aavewhite":"https://raw.githubusercontent.com/pie-dao/brand/6c82dfc9984c496018536055fa3deca6b32dec25/misc/aavewhite.svg",
+  "compoundwhite":"https://raw.githubusercontent.com/pie-dao/brand/6fada9cff28ef4d92b800860032b66d310d8d47f/misc/compoundwhite.svg",
   "banner": "https://github.com/pie-dao/brand/blob/master/misc/Banner.png?raw=true",
   "stake": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/stake.png",
   "claim": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/claim.png",

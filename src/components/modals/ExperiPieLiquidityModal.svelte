@@ -8,16 +8,17 @@
   import { ethers } from "ethers";
   import { pieSmartPool, erc20 } from "@pie-dao/abis";
 
-  import images from "../config/images.json";
-  import poolsConfig from "../config/pools.json";
-  import recipeAbi from '../config/recipeABI.json';
+  import images from "../../config/images.json";
+  import poolsConfig from "../../config/pools.json";
+  import recipeAbi from '../../config/recipeABI.json';
 
-  import displayNotification from "../notifications.js";
-  import TokenSelectModal from "./modals/TokenSelectModal.svelte";
+  import displayNotification from "../../notifications.js";
+  import TokenSelectModal from "./TokenSelectModal.svelte";
 
   import {
     allowances,
     approveMax,
+    functionKey,
     balanceKey,
     balances,
     connectWeb3,
@@ -26,7 +27,7 @@
     pools,
     bumpLifecycle,
     subject,
-  } from "../stores/eth.js";
+  } from "../../stores/eth.js";
   import {
     amountFormatter,
     fetchCalcTokensForAmounts,
@@ -36,13 +37,15 @@
     getTokenImage,
     fetchEthBalance,
     fetchCalcToPie,
-  } from "./helpers.js";
+  } from "../helpers.js";
 
   window.B = BigNumber;
 
-  export let token;
+  export let pie;
+  export let composition;
   export let poolAction;
   export let method; // NOTE: This really should be named poolAddress. Token is too generic.;
+  let token = pie.address;
 
   let tokenSelectModalOpen = false;
   const tokenSelectCallback = (token) => {
@@ -56,6 +59,7 @@
   let amount = "1.00000000";
   let approach = poolAction;
   let areTokensEnoughBool = true;
+  let withdrawDisabled = false;
   let ethKey;
   let ethBalance = 0;
   let ethNeededSingleEntry = { val: 0, label:'-'};
@@ -68,8 +72,8 @@
   $: tokenLogo = images.logos[token];
   $: type = poolsConfig[token].useRecipe === true ? method : 'multi';
 
-  $: pooledTokens = fetchPooledTokens(token, amount, $pools[token], $allowances, $balances);
-  $: lockedPoolTokens = pooledTokens.filter(({ actionBtnLabel }) => actionBtnLabel === "Unlock");
+  $: pooledTokens = composition.map( o => o.productiveAs ? o.productiveAs : o);
+
 
   $: if($eth.address) {
     fetchEthBalance($eth.address);
@@ -94,7 +98,12 @@
       const pieToMint = pieAddress || token;
       amountsRequired = (await fetchCalcTokensForAmounts(pieToMint, amount));
       isLoading = false;
-      areTokensEnough();
+
+      if(approach === 'add')
+        areTokensEnough();
+      else {
+        enoughPieToRedeem();
+      }
     } catch (e) { console.error(e)}
   }
 
@@ -136,7 +145,6 @@
 
     if (BigNumber(percentagePlus).isGreaterThan(BigNumber(max)) ) {
       const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
-      //TODO i18n
       const message = `Not enough ETH`;
       displayNotification({ message, type: "error", autoDismiss: 30000 });
       return;
@@ -146,7 +154,8 @@
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
-      value: percentagePlus
+      value: percentagePlus,
+      gasLimit: 3000000
     }
 
     console.log({
@@ -184,6 +193,9 @@
   };
 
   const areTokensEnough = () => {
+      if(!$eth.address || $eth.address === '') {
+        return;
+      }
       let errors = [];
       Object.keys(amountsRequired).forEach( token => {
         let key = balanceKey(token, $eth.address);
@@ -197,12 +209,10 @@
       if( errors.length > 0) {
         console.log('Missing tokens', errors);
         areTokensEnoughBool = false;
-        displayNotification({ message: 'Looks like you are missing some tokens!', type: "error", autoDismiss: 30000 });
         return false;
       }
 
       areTokensEnoughBool = true;
-
       return true;
   };
 
@@ -228,23 +238,32 @@
   }
 
   const mint = async () => {
+    const requestedAmount = BigNumber(amount);
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    if(!areTokensEnough()) {
+      displayNotification({ message: 'Looks like you are missing some tokens!', type: "error", autoDismiss: 30000 });
+      return;
+    }
+    
+    for (let i = 0; i < pooledTokens.length; i += 1) {
+      let allowanceKey = functionKey(pooledTokens[i].address, 'allowance', [$eth.address, token]);
+      let allowance = $allowances[allowanceKey];
+      console.log(`Allowance ${pooledTokens[i].symbol}: ${allowance}`);
+      if( new BigNumber(allowance).isLessThan(requestedAmount) ) {
+        console.log('Im asking for allowance')
+        askApproval(pooledTokens[i].address, token);
+      }
+    }
+
+    console.log('Allowance done');
+
     try {
-      const requestedAmount = BigNumber(amount);
-
-      if (!$eth.address || !$eth.signer) {
-        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
-        connectWeb3();
-        return;
-      }
-
-      if(!areTokensEnough()) {
-        return;
-      }
-
-      for (let i = 0; i < lockedPoolTokens.length; i += 1) {
-        askApproval(lockedPoolTokens[i].address, token);
-      }
-
       const tokenContract = await contract({ abi: pieSmartPool, address: token });
       const decimals = await tokenContract.decimals();
       const arg = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
@@ -292,12 +311,20 @@
     }
   }
 
-  const setValuePercentage = percent => {
-    let max = maxAmount(token, pooledTokens);
-    if (approach === 'withdraw') {
-      const key = balanceKey(token, $eth.address);
-      max = $balances[key];
+  const enoughPieToRedeem = () => {
+    if(!$eth.address || $eth.address === '') {
+      withdrawDisabled = true;
+      return;
     }
+    const key = balanceKey(token, $eth.address);
+    let max = $balances[key];
+    withdrawDisabled = BigNumber(amount).isGreaterThan(max);
+  };
+
+  const setValuePercentage = percent => {
+    const key = balanceKey(token, $eth.address);
+    let max = $balances[key];
+    console.log('$balances', $balances, max);
     const adjusted = max.multipliedBy(BigNumber(percent).dividedBy(100));
     amount = adjusted.toFixed(8, BigNumber.ROUND_DOWN);
     fetchAmounts();
@@ -356,113 +383,147 @@
   };
 </script>
 
-<div class="liquidity-container bg-grey-243 rounded-4px p-4 md:p-6 w-full">
-  <h1 class="text-center text-xl">
-Oven Liquidity
-  </h1>
 
+<div class="liquidity-container bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
 
-  <p class="text-center font-thin my-4 mx-2">
+    <!-- {#if approach === 'add'}
+    <div class="row flex font-thin">
+      <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
+      <div class="switch mx-4" on:click={() => {
+        if(!poolsConfig[token].useRecipe) {
+          alert($_('piedao.single.asset.coming.soon'));
+          return
+        }
 
-  {#if type === 'single'}
-    <div class="text-left md:my-16px md:mx-20px">
-      Minting is gas expensive, this is why we created <strong>Oven pools.</strong><br/>
-      Provide liquidity to this pool: when it will reach the cap if 10 ETH, we will mint the PIE for you. This way LP will share tha gas, reducing the cost significantly.
+        if(type === 'single'){
+          type = 'multi';
+        } else {
+          type = 'single';
+          approach = 'add';
+        }
+      }}>
+        <input type="checkbox" class="toggle-input" checked={type === 'multi'} />
+        <span class="toggle active border-grey" />
+      </div>
+      <div class="flex-auto text-left">{$_('general.multi')} {$_('general.asset')}</div>
     </div>
-  {/if}
+    {/if} -->
 
-  {#if type === 'multi'}
-    {#if approach === 'add'}
-      {$_('piedao.multi.asset.enables.minting')} 
-    {:else}
-      {$_('piedao.multi.asset.enables.withdraw')} 
+    <p class="text-center font-thin my-4 mx-2">
+
+    {#if type === 'single'}
+      <div class="text-left md:my-16px md:mx-20px">
+        Using Single asset Entry, you can use ETH to mint a Pie in one transaction.
+        <br> Single Asset Entry fetches the underlying assets for you from external markets like Uniswap, because of that slippage might apply.
+        <strong>5% more ETH</strong> are sent during the TX to avoid unxpected errors, any unused ETH is returned.
+      </div>
     {/if}
 
-    {tokenSymbol}
+    {#if type === 'multi'}
+      {#if approach === 'add'}
+        {$_('piedao.multi.asset.enables.minting')} 
+      {:else}
+        {$_('piedao.multi.asset.enables.withdraw')} 
+      {/if}
 
-    {#if approach === 'add'}
-      {$_('piedao.multi.asset.according.to.allocation')}
-    {:else}
-      {$_('piedao.multi.asset.all.underlying')}
+      {tokenSymbol}
+
+      {#if approach === 'add'}
+        {$_('piedao.multi.asset.according.to.allocation')}
+      {:else}
+        {$_('piedao.multi.asset.all.underlying')}
+      {/if}
     {/if}
-  {/if}
+      
+    </p>
+
+    {#if type === 'multi'}
+      <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+        <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
+          <div class="left float-left">{$_('general.amount')}</div>
+          {#if approach === "withdraw"}
+          <div
+            class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
+            <div
+              class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
+              on:click={() => setValuePercentage(25)}>
+              25%
+            </div>
+            <div
+              class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
+              on:click={() => setValuePercentage(50)}>
+              50%
+            </div>
+            <div
+              class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
+              on:click={() => setValuePercentage(75)}>
+              75%
+            </div>
+            <div
+              class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer"
+              on:click={() => setValuePercentage(100)}>
+              100%
+            </div>
+          </div>
+          {/if}
+        </div>
+        <div class="bottom  px-4 py-4 md:px-4 pb-4">
+          <input type="number" on:keyup="{ debounce(fetchAmounts, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
+          <div
+            class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
+            align-middle justify-center items-center pointer mt-0 md:mt-14px">
+            <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
+            <span class="py-2px px-4px">{tokenSymbol}</span>
+          </div>
+        </div>
+      </div>
+    {/if}
+
+    {#if type === 'single'}
+      <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+        <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
+          <div class="left float-left">{$_('general.amount')}</div>
+          <div class="right font-bold text-xs py-1px text-center align-right float-right rounded">
+            ⚠️ slippage might apply
+          </div>
+        </div>
+        <div class="bottom px-4 py-4 md:py-2">
+          <input type="number" on:keyup="{ debounce(fetchQuote, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
+          <div
+            class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
+            align-middle justify-center items-center pointer mt-0 md:mt-14px"
+            on:click={() => (tokenSelectModalOpen = true)}>
+            <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
+            <span class="py-2px px-4px">{tokenSymbol}</span>
+          </div>
+          <TokenSelectModal
+            tokens={pieTokens}
+            open={tokenSelectModalOpen}
+            callback={tokenSelectCallback} />
+        </div>
+      </div>
+    {/if}
     
-  </p>
 
-  {#if type === 'multi'}
-    <div class="row bg-white mx-0 md:mx-4 flex mb-32px font-thin pointer border border-solid rounded-sm overflow-hidden border-gray-400">
-      <div class="toggle-btn bg-grey-243 p-20px w-50pc text-center {approach === 'add' ? 'active' : ''}" on:click={() => approach = "add"}>{$_('general.add')} {$_('general.liquidity')}</div>
-      <div class="toggle-btn bg-grey-243 text-center p-20px w-50pc {approach === 'withdraw' ? 'active' : ''}" on:click={() => approach = "withdraw"}>{$_('general.withdraw')}</div>
-    </div>
-  {/if}
-
-  {#if type === 'multi'}
-  <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
-    <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-      <div class="left float-left">{$_('general.amount')}</div>
-      <div class="right font-bold text-xs py-1px text-center align-right float-right rounded">
-        ⚠️ slippage might apply
+    {#if isLoading === true}
+      <div class="h-12px mx-50pc my-16px">
+          <div class="loadingio-spinner-wedges-meab1ddaeuq"><div class="ldio-qudhur211ps">
+          <div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div></div>
+          </div></div>
       </div>
-    </div>
-    <div class="bottom px-4 py-4 md:py-2">
-      <input type="number" on:keyup="{ debounce(fetchQuote, 250)}" bind:value={amount} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
-      <div
-        class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
-        align-middle justify-center items-center pointer mt-0 md:mt-14px"
-        on:click={() => (tokenSelectModalOpen = true)}>
-        <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
-        <span class="py-2px px-4px">{tokenSymbol}</span>
+    {/if}
+    {#if type === 'multi' && isLoading != true}
+      <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
+    {/if}
+
+    {#if type === 'single'}
+      <div class="my-16px mx-20px">
+      Using this much ETH
       </div>
-      <TokenSelectModal
-        tokens={pieTokens}
-        open={tokenSelectModalOpen}
-        callback={tokenSelectCallback} />
-    </div>
-  </div>
-  {/if}
-
-  {#if type === 'single'}
-
-  {/if}
-  
-
-  {#if isLoading === true}
-    <div class="h-12px mx-50pc my-16px">
-        <div class="loadingio-spinner-wedges-meab1ddaeuq"><div class="ldio-qudhur211ps">
-        <div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div></div>
-        </div></div>
-    </div>
-  {/if}
-  {#if type === 'multi' && isLoading != true}
-    <img src={images.icons.downArrow} class="h-12px mx-50pc my-16px" alt="down arrow icon" />
-  {/if}
-
-  {#if type === 'single'}
-    <div class="my-16px mx-20px font-thin">
-    Pool: <strong>8.5</strong> of <strong>10 ETH</strong>
-    </div>
-  {/if}
+    {/if}
 
 
-  {#if type === 'single'}
-  <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
-    <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-      <div class="left float-left">{$_('general.amount')}</div>
-    </div>
-    <div class="bottom px-4 py-4 md:py-2">
-      <input type="text" disabled value={ethNeededSingleEntry.label} class="font-thin text-base w-60pc md:w-75pc md:text-xl" />
-      <div
-        class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
-        align-middle justify-center items-center pointer mt-0 md:mt-14px">
-        <img class="token-icon w-26px h-26px my-4px mx-2px" src={getTokenImage('eth')} alt="ETH" />
-        <span class="py-2px px-4px">ETH</span>
-      </div>
-    </div>
-  </div>
-  {/if}
-
-  {#if type === 'multi'}
-    {#each pooledTokens as pooledToken}
+    {#if type === 'single'}
     <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
       <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
         <div class="left float-left">{$_('general.amount')}</div>
@@ -477,20 +538,43 @@ Oven Liquidity
         </div>
       </div>
     </div>
-    {/each}
-  {/if}
-  
+    {/if}
 
-  <center>
-    <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+    {#if type === 'multi'}
+      {#each pooledTokens as pooledToken}
+        <div class="token-summary overflow-x-scroll bg-white rounded-8px mx-0 md:mx-4 my-4px flex flex-start items-center">
+            <img
+              class="token-icon my-8px ml-8px w-26px h-26px"
+              src={getTokenImage(ethers.utils.getAddress(pooledToken.underlying ? pooledToken.underlying.address : pooledToken.address ))}
+              alt={pooledToken.symbol} />
+            <div
+              class="token-symbol min-w-15pc md:min-w-10pc px-6px py-12px text-sm font-thin border-r-2 border-r-solid border-grey-243 align-middle md:leading-8">
+              {pooledToken.symbol}
+            </div>
+          {#if approach === "add"}
+            <div class="amount tex-sm px-20px py-12px w-150px">
+              {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
+            </div>
+          {:else}
+            <div class="amount tex-sm px-20px py-12px m-auto">
+            {(amountsRequired[pooledToken.address.toLowerCase()] ? amountsRequired[pooledToken.address.toLowerCase()].label : '-' )}
+            </div>
+          {/if}
+          <div class="hidden">{$eth.address}</div>
+        </div>
+      {/each}
+    {/if}
+    
+
+    <center>
       {#if approach === 'add'}
-        {$_('general.add')} {$_('general.liquidity')}
+        <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+            {$_('general.add')} {$_('general.liquidity')}
+        </button>
       {:else}
-        {$_('general.withdraw')}
+        <button disabled={withdrawDisabled} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
+            {$_('general.withdraw')}
+        </button>
       {/if}
-    </button>
-  </center>
-</div>
-
-
-
+    </center>
+  </div>

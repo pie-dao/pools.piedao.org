@@ -51,6 +51,7 @@ const storeAbi = (addy, abi) => {
   }
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export const findAbi = async (address) => {
   const existing = loadAbi(address);
 
@@ -69,8 +70,8 @@ export const findAbi = async (address) => {
   if (proxyAddressFunc) {
     // Proxy
     const { provider } = get(eth);
+    console.log('proxyAddressFunc', proxyAddressFunc)
     const contract = new ethers.Contract(address, abi, provider);
-    console.log("proxyAddressFunc", proxyAddressFunc);
     const proxy = await contract[proxyAddressFunc]();
 
     const response = await fetch(

@@ -1,44 +1,44 @@
 <script>
-  import {getSubgraphMetadata, getPoolSwaps, getPoolMetrics} from '../helpers/subgraph.js'
-  import { pieSmartPool } from '@pie-dao/abis';
+  import {subgraphRequest} from '../helpers/subgraph.js'
   import { _ } from 'svelte-i18n';
   import moment from 'moment';
   import BigNumber from 'bignumber.js';
+  import find from 'lodash/find';
   import get from 'lodash/get';
-  import first from 'lodash/first';
-  import flattenDeep from 'lodash/flattenDeep';
   import orderBy from 'lodash/orderBy';
   import { onMount } from "svelte";
   import { currentRoute } from "../stores/routes.js";
   import TradingViewWidget from "../components/TradingViewWidget.svelte";
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
-  import Quantstamp from "../components/Quantstamp.svelte";
-  import LiquidityModal from "../components/modals/LiquidityModal.svelte";
+  import MixBytes from "../components/MixBytes.svelte";
+  
+  import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
+
+  import SingleAssetModal from "../components/modals/SingleAssetModal.svelte"; 
+
+  import SnapshotBanner from "../components/SnapshotBanner.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
-  import KeyFacts from "../components/KeyFacts.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
-  import { fetchPooledTokens, pooledTokenAmountRequired, fetchCalcTokensForAmounts } from '../components/helpers.js';
-  import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
-  import {
-    pools,
-    balanceKey,
-    contract,
-    balances,
-  } from "../stores/eth.js";
+  import { amountFormatter, getTokenImage, formatFiat, subscribeToBalance } from '../components/helpers.js';
+  import Accordion, { AccordionItem } from "svelte-accessible-accordion";
 
   import {
-    buildFormulaNative
-  } from '../helpers/tradingView.js'
+    eth,
+  } from "../stores/eth.js";
 
   import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
   import Change from '../components/Change.svelte'
-  import Modal from '../components/elements/Modal.svelte';
+  import Apy from '../components/Apy.svelte'
+  import StrategyInUse from '../components/StrategyInUse.svelte'
+  import ModalBig from '../components/elements/ModalBig.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
-
+  import Snapshot from '../components/Snapshot.svelte';
+  import Experipie, { getNormalizedNumber } from '../classes/Experipie.js';
+  import cToken from '../classes/CToken.js';
 
   export let params;
 
@@ -52,8 +52,8 @@
   $: token = params.address;
 
   let pieOfPies = false;
-  let tradingViewWidgetComponent;
   let initialized = false;
+  let Pie;
   
   $: options = {
     symbol: poolsConfig[token] ? poolsConfig[token].tradingViewFormula : '',
@@ -68,11 +68,8 @@
     allow_symbol_change: false,
   };
 
-  $: links = (poolsConfig[token] || {}).landingLinks || [];
-
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: name = (poolsConfig[token] || {}).name;
-  $: swapFees = (poolsConfig[token] || {}).swapFees;
   $: tokenLogo = images.logos[token];
   $: change24H = get(
     $piesMarketDataStore,
@@ -85,83 +82,158 @@
     null,
   );
 
-  $: nav = 0;
-
-  $: (() => {
-    pieOfPies = false;
-  })(token);
-
-  const getInternalWeights = (component, base) => {
-        return $pools[component.address].map((internal) => {
-          if (internal.isPie) {
-            let newbase = (base * internal.percentage/ 100)
-            return getInternalWeights(internal, newbase);
-          }
-
-          return {
-            ...internal,
-            percentage: (internal.percentage * base) / 100,
-          };
-        });
-  };
-
-  $: composition = flattenDeep(
-    $pools[token].map((component) => {
-      if (component.isPie) {
-        if(!pieOfPies) pieOfPies = [];
-        pieOfPies.push(component);
-        return getInternalWeights(component, component.percentage);
-      }
-      return component;
-    })
-  );
-
-  $: pieTokens = fetchPieTokens($balances);
-
+  $: nav = "n/a";
+  $: PieAPR = "n/a";
+  $: marketCap = "n/a";
+  $: composition = (poolsConfig[token] || []).composition;
   $: metadata = {};
 
-  $: (async () => {    
-    if(initialized) return;
+  $: lendingData = {
+    compound: {},
+    aave: {}
+  };
 
-    const poolContract = await contract({ address: token });
-    const bPoolAddress = await poolContract.getBPool();
-    metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
-    console.log('metadata', metadata);
-    initialized = true;
-  })();
+  $: loadings = {
+    init: false,
+    compound: false,
+    defiSDK: false,
+  };
 
-  $: getLiquidity = (() => {
-    if(poolsConfig[token].swapEnabled)
-      return metadata.liquidity;
+  $: if($eth.provider && $eth.address && !loadings.init && !initialized) {
+      loadings.init = true;
+      console.log('$eth.address', $eth.address)
+      subscribeToBalance(token, $eth.address, true);
+      initialize();
+  }
 
-    return $pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : 0
-  })()
+  const initialize = async () => {
+    let res = [];
+    let globalAPR = 0;
+    const compoundData = await fetchCompoundData();
+    const aaveData = await fetchAaveData();
+    
+    Pie = new Experipie(token, $eth.provider);
+    await Pie.initialize($piesMarketDataStore);
 
-  $: getNav =(() => {
-    return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
-  })()
+    for (const el of Pie.composition) {
+      let address = el.address.toLowerCase()
+      const data = Pie.map[address];
+      let tokenInfo = find(poolsConfig[token].composition, (o) => address === o.address.toLowerCase());
 
-  const renderWidget = async () => {
-    const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
-    if( formula === '') return;
-    const finalFormula = `${formula.slice(0, -1)}`;
-    options.symbol = finalFormula;
-    if(tradingViewWidgetComponent) {
-      initialized = true;
-      tradingViewWidgetComponent.initWidget(options)
+      if(tokenInfo) {
+        res.push({
+          ...tokenInfo,
+          balance: el.balance,
+          price: el.price,
+          productive: false,
+          percentage: el.percentage
+        })
+      } else {
+        let tokenInfo = find(poolsConfig[token].composition, (o) => Pie.map[address].underlying.address === o.address.toLowerCase());
+        let lendingInfo = await getLendingInfo(Pie.map, address, compoundData, aaveData);
+        globalAPR += lendingInfo.apy * el.percentage;
+
+        res.push({
+          ...tokenInfo,
+          balance: el.balance,
+          price: el.price,
+          productive: true,
+          percentage: el.percentage,
+          productiveAs: {
+            ...Pie.map[address],
+            metadata: lendingInfo
+          }
+        })
+      }
     }
-}
+
+    nav = formatFiat(Pie.nav.toFixed(2), 'n/a');
+    marketCap = formatFiat(Pie.marketCap.toFixed(2), 'n/a');
+    PieAPR = `${(globalAPR / 1000).toFixed(2)}%`;
+    composition = res;
+
+    console.log('res', res);
+    initialized = true;
+    loadings.init = false;
+    return initialized;
+  }
+
+  const getLendingInfo = async(map, address, compoundData, aaveData) => {
+    let lendingInfo = {};
+    const protocolNamePie = map[address].protocol.name;
+    const underlyingAddress = map[address].underlying.address
+
+    switch (protocolNamePie) {
+      case 'Aave':
+        lendingInfo = find(aaveData, (o) => underlyingAddress === o.underlyingAsset.toLowerCase());
+        lendingInfo.apy = (parseFloat(getNormalizedNumber(lendingInfo.liquidityRate, 27).toString()) * 100).toFixed(2);
+        break;
+      
+      case 'Compound':
+        lendingInfo = find(compoundData, (o) => {
+          if(!o.underlying_address) return false;
+          return underlyingAddress === o.underlying_address.toLowerCase();
+        });
+        lendingInfo.apy = (parseFloat(lendingInfo.supply_rate.value) * 100).toFixed(2);
+        break;
+
+      case 'C.R.E.A.M.':
+        let creamToken = new cToken(address, $eth.provider);
+        await creamToken.initialize()
+        lendingInfo.apy = creamToken.apr;
+        break;
+    
+      default:
+        lendingInfo.apy = 0;
+        break;
+    }
+
+    return lendingInfo;
+  }
+
+  onMount( async () => {
+    initialize();
+  });
+
+  const fetchAaveData = async () => {
+    const response = await subgraphRequest('https://api.thegraph.com/subgraphs/name/aave/protocol-multy-raw', {
+      "reserves": {
+        symbol: true,
+        name: true,
+        underlyingAsset: true,
+        liquidityRate: true,
+      }
+    })
+
+    lendingData.aave = response.reserves;
+    loadings.aave = true;
+    return response.reserves;
+  }
+
+  const fetchCompoundData = async () => {
+    const response = await fetch('https://api.compound.finance/api/v2/ctoken');
+    const result = await response.json();
+    lendingData.compound = result.cToken;
+    loadings.compound = true;
+    return result.cToken
+  }
 
 </script>
-<Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
+<!-- <SnapshotBanner /> -->
+
+<ModalBig title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
     <LiquidityModal 
-      token={token} 
+      pie={Pie}
+      composition={composition}
       method={modalOption.method} 
       poolAction={modalOption.poolAction}
     />
+    <!-- <SingleAssetModal /> -->
   </span>
-</Modal>
+</ModalBig>
+
+
 <div class="content flex flex-col spl">
   
   <div class="flex flex-wrap w-full">
@@ -183,23 +255,20 @@
       </div>
 
       <div class="w-100pc sm:w-full md:w-2/3 flex flex-row-reverse">
-        <button on:click={() => {
+        <button disabled={!initialized} on:click={() => {
           modalOption.method = "multi";
           modalOption.poolAction = "withdraw";
           modalOption.title = "Redeem";
           modal.open()
         }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Redeem</button>
 
-        <button on:click={() => {
+        <button disabled={!initialized} on:click={() => {
           modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
           modalOption.poolAction = "add";
           modalOption.title = "Add Liquidity";
           modal.open()
         }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Issue</button>
         
-        <!-- <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
-          <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
-        </a> -->
       </div>
     </div>
   </div>
@@ -207,18 +276,28 @@
   <div class="flex w-full mt-2 md:mt-8">
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black text-pink">
-        {getNav}
+        {nav}
       </div>
       <div class="font-bold text-xs md:text-base text-pink">NAV</div>
     </div>
 
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="font-bold text-md md:text-md text-pink">
+        {PieAPR}
+      </div>
+      <div class="font-bold text-pink text-xs md:text-base">Tot APY</div>
+    </div>
+
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black">
+        Meta-Governance
+      </div>
+      <div class="font-thin text-xs md:text-base">Enabled</div>
+    </div>
+
     <div class="p-0 flex-initial self-start mr-6">
       <div class="text-md md:text-md font-black">
-        {#if poolsConfig[token].swapEnabled}
-          {formatFiat(metadata.liquidity)}
-        {:else}
-          {formatFiat($pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : '')}
-        {/if}
+        {marketCap}
       </div>
       <div class="font-thin text-xs md:text-base">Market Cap</div>
     </div>
@@ -240,6 +319,7 @@
     <PriceChartArea coingeckoId={poolsConfig[token].coingeckoId}/>
   {/if}
 
+  {#if initialized}
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
 
   <div class="w-99pc m-4">
@@ -249,13 +329,9 @@
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Allocation</th>
           <th class="font-thin border-b-2 px-4 py-2">Price</th>
-          
-          {#if !pieOfPies }
-              <!-- <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th> -->
-              <th class="font-thin border-b-2 px-4 py-2">Balance</th>
-          {/if}
-          <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
-          <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
+          <th class="font-thin border-b-2 px-4 py-2">Balance</th>
+          <th class="font-thin border-b-2 px-4 py-2">APY</th>
+          <th class="font-thin border-b-2 px-4 py-2">Strategy</th>
         </tr>
       </thead>
       <tbody>
@@ -290,48 +366,43 @@
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
             
-
             {#if !pieOfPies }
-              <!-- <td class="border text-center px-4 py-2">{amountFormatter({ amount: pooledToken.percentageUSD, displayDecimals: 2 })}%</td> -->
-              <td class="border text-center px-4 py-2 font-thin">{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')}</td>
+              <td class="border text-center px-4 py-2 font-thin">{formatFiat(pooledToken.balance ? pooledToken.balance.label : '0', ',', '.', '')}</td>
             {/if}
-            
-            <!-- <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.market_cap`, '-'))}
-            </td> -->
 
-            <td class="border text-center px-4 py-2">
-              <Change value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
+            <td class="border text-center px-4 py-2 font-thin">
+              {#if pooledToken.productive}
+                {pooledToken.productiveAs.metadata.apy}%
+              {:else }
+                None
+              {/if}
             </td>
 
-
-            <!-- <td class="border text-center px-4 py-2">
-              {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.total_volume`, '-'))}
-            </td> -->
-
-            <td class="border text-center py-2 px-4 md:px-0">
-              <img
-                class="w-30 spark greyoutImage mx-0"
-                alt="Sparkline"
-                src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
-                style="margin: auto;" />
+            <td class="flex items-center justify-center border text-center px-4 py-2">
+              {#if pooledToken.productive}
+                <StrategyInUse protocol={pooledToken.productiveAs.protocol.name} />
+              {:else }
+                None
+              {/if}
             </td>
+
           </tr>
         {/each}
       </tbody>
     </table>
   </div>
-
-  {#if pieOfPies }
-    <div class="font-thin w-full px-4 py-2 text-left">
-      <h4>*This allocation is composed of multiple pies, find below the exploded allocation.</h4>
-      <ul>
-        {#each pieOfPies as subPie}
-          <li><a class="font-bold" href="#/pie/{subPie.address}">{subPie.symbol}</a></li>
-        {/each}
-      </ul>
+  {:else}
+    <div class="h-12px mx-50pc my-16px">
+          <div class="loadingio-spinner-wedges-meab1ddaeuq"><div class="ldio-qudhur211ps">
+          <div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div></div>
+          </div></div>
     </div>
+    Loading
   {/if}
+
+  <!-- <h1 class="mt-8 mb-4 text-base md:text-3xl">Open Proposals</h1> -->
+
+  <!-- <Snapshot /> -->
   
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
     <div class="p-0 mt-2 md:w-1/4">
@@ -342,13 +413,22 @@
     </div>
 
     <div class="p-0 mt-2 md:w-1/4">
-      <Quantstamp token={$currentRoute.params.address} />
+      <MixBytes token={$currentRoute.params.address} />
     </div>
     <div class="p-0 mt-2 md:w-1/4">
       <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />
     </div>
   </div>
 </div>
+
+<div class="container mt-4">
+  <h1 class="text-xl leading-none font-black text-center mb-5">FAQ</h1>
+</div>
+<Accordion class="container px-5 py-0 spl flex flex-col">
+  <AccordionItem class="border-none keyborder text-left w-100pc py-4" title="What is Meta-Governance?"><p class="font-thin text-sm">Content 1 </p></AccordionItem>
+  <AccordionItem class="border-none keyborder text-left w-100pc py-4" title="How do we calculate tot APY?"><p class="font-thin text-sm">Content 1 </p></AccordionItem>
+  <AccordionItem class="border-none keyborder text-left w-100pc py-4" title="How to exercise your voting rights?"><p class="font-thin text-sm">Content 1 </p></AccordionItem>
+</Accordion>
 
 <div class="content mt-4">
   <PieExplanation address={token} />
@@ -424,6 +504,7 @@
     </div>    
   </div>
 {/if}
-
 </div>
+
+
 

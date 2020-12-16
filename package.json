@@ -59,6 +59,7 @@
     "rollup-plugin-svelte": "^5.2.3",
     "rollup-plugin-terser": "^6.1.0",
     "serve": "^11.3.2",
-    "snowpack": "^2.5.0"
+    "snowpack": "^2.5.0",
+    "svelte-accessible-accordion": "^0.3.0"
   }
 }

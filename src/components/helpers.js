@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
-import { pieSmartPool } from '@pie-dao/abis';
+import { pieSmartPool, erc20 } from '@pie-dao/abis';
 
 import find from 'lodash/find';
 import images from '../config/images.json';
@@ -297,6 +297,7 @@ export const fetchEthBalance = (address) => {
 
 export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   validateIsAddress(pieAddress);
+  const ethData = get(eth);
 
   const tokenContract = await contract({ abi: pieSmartPool, address: pieAddress });
   const amount = ethers.BigNumber.from(
@@ -308,15 +309,14 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   const res = await tokenContract.calcTokensForAmount(amount.toString());
   const data = {};
 
-  res.tokens.forEach((token, index) => {
-    const tokenInfo = find(poolsConfig[pieAddress.toLowerCase()].composition, (o) => {
-      return token.toLowerCase() === o.address.toLowerCase();
-    });
-    let d = tokenInfo && tokenInfo.decimals ? tokenInfo.decimals : 18;
-    console.log('token', token, d, tokenInfo, pieAddress)
-
+  for (const [index, token]  of res.tokens.entries() ) {
+    const tokenInstance = new ethers.Contract(token, erc20, ethData.provider);
+    const d = (await tokenInstance.functions.decimals())[0];
     if (d < 18) {
-      let adjustedAmount = BigNumber(res.amounts[index].toString()).multipliedBy(10 ** (18 - d));
+      
+      let adjustedAmount = BigNumber(res.amounts[index].toString())
+                            .multipliedBy(10 ** (18 - d))
+                            .toFixed(0);
       let bnAdjustedAmount = ethers.BigNumber.from(adjustedAmount.toString());
 
       data[token.toLowerCase()] = {
@@ -329,7 +329,8 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
         label: ethers.utils.formatEther(res.amounts[index]),
       };
     }
-  });
+
+  }
 
   return data;
 };
@@ -588,6 +589,8 @@ export const subscribeToBalance = async (tokenAddress, address, shouldBump = tru
     token = ethers.constants.AddressZero;
   }
 
+  
+  if(!token || token === '') return;
   validateIsAddress(token);
   validateIsAddress(address);
 
@@ -603,7 +606,7 @@ export const subscribeToBalance = async (tokenAddress, address, shouldBump = tru
   let decimals = 18;
 
   if (token !== ethers.constants.AddressZero) {
-    const tokenContract = await contract({ address: token });
+    const tokenContract = await contract({ address: token, abi:erc20 });
     decimals = await tokenContract.decimals();
   }
 
