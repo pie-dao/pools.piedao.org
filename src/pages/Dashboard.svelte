@@ -4,6 +4,7 @@
   import poolsConfig from "../config/pools.json";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
+  import ProductBox from '../components/elements/product-box.svelte';
 
   import {
     getTokenImage,
@@ -12,9 +13,9 @@
 
   import Change from '../components/Change.svelte'
   import Modal from '../components/elements/Modal.svelte';
-  import LiquidityModal from "../components/modals/LiquidityModal.svelte";
+  import LiquidityModal from "../components/modals/LiquidityModalSwitch.svelte";
 
-  $: pies = poolsConfig.selectable.map(address => {
+  $: pies = filter(poolsConfig.selectable.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
       ...poolsConfig[address],
@@ -25,7 +26,20 @@
       change: change ? change : 0,
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
     };
-  }) || [];
+  }), {isExperipie: false}) || [];
+
+  $: piVaults = filter(poolsConfig.selectable.map(address => {
+    let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
+    return {
+      ...poolsConfig[address],
+      address,
+      icon: getTokenImage(address),
+      totalLiquidity: $pools[`${address}-usd`] ? formatFiat( $pools[`${address}-usd`].toFixed(2).toString() ) : '-',
+      totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
+      change: change ? change : 0,
+      nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
+    };
+  }), {isExperipie: true}) || [];
 
   let modal;
   let modalOption = {
@@ -56,6 +70,22 @@
 
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
+
+  <div class="my-10">
+    <h1 class="text-lg">🆕 Pie Vaults</h1>
+    <p class="font-thin">Yield Bearing & Meta-Governance Enabled</p>
+  </div>
+
+  <div class="flex justify-around w-100pc content-center">
+    {#each piVaults as pie}
+      <ProductBox 
+        link={`#/pie/${pie.address}`}
+        image={pie.icon}
+        title={pie.symbol}
+        description="DeFi’s Blue Chips. Bigger is Better."
+      />
+    {/each}
+  </div>
 
   <div class="my-10">
     <h1 class="text-lg">🥧 Explore Pies</h1>
@@ -123,7 +153,6 @@
                   </button>
                 </a>
               {/if}
-              
             </td>
             
           </tr>
