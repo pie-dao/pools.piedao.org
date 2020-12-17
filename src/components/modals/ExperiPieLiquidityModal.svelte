@@ -32,7 +32,7 @@
     amountFormatter,
     fetchCalcTokensForAmounts,
     fetchPieTokens,
-    fetchPooledTokens,
+    subscribeToBalance,
     maxAmount,
     getTokenImage,
     fetchEthBalance,
@@ -78,6 +78,11 @@
   $: if($eth.address) {
     fetchEthBalance($eth.address);
     ethKey = balanceKey(ethers.constants.AddressZero, $eth.address);
+
+    pooledTokens.forEach( o => {
+      subscribeToBalance(o.address, $eth.address, true);
+    })
+    
   }
 
   $: ethBalance = BigNumber($balances[ethKey]).toString();
@@ -153,15 +158,22 @@
     const recipe = await contract({ address: '0x6cb4b8669e23295563d3b34df4a760c0cee993c7', abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
+    
+
     let overrides = {
-      value: percentagePlus,
-      gasLimit: 3000000
+      value: percentagePlus
     }
+
+    const gasEstimation = await recipe.estimateGas.toPie(token, amountWei, overrides);
+    const gasPercentagePlus = BigNumber(gasEstimation.toString()).multipliedBy(BigNumber(1.1)).toFixed(0);
+
+    overrides.gasLimit = gasPercentagePlus.toString()
 
     console.log({
       pie: token,
       amountWei,
-      value: ethNeededSingleEntry.val
+      value: ethNeededSingleEntry.val,
+      overrides
     })
 
     const { emitter } = displayNotification(await recipe.toPie(token, amountWei, overrides) );
@@ -386,7 +398,7 @@
 
 <div class="liquidity-container bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
 
-    <!-- {#if approach === 'add'}
+    {#if approach === 'add'}
     <div class="row flex font-thin">
       <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
       <div class="switch mx-4" on:click={() => {
@@ -407,7 +419,7 @@
       </div>
       <div class="flex-auto text-left">{$_('general.multi')} {$_('general.asset')}</div>
     </div>
-    {/if} -->
+    {/if}
 
     <p class="text-center font-thin my-4 mx-2">
 

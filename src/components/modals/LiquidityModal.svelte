@@ -153,14 +153,20 @@
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
-      value: percentagePlus,
-      gasLimit: 3000000
+      value: percentagePlus
     }
+
+    const gasEstimation = await recipe.estimateGas.toPie(token, amountWei, overrides);
+    const gasPercentagePlus = BigNumber(gasEstimation.toString()).multipliedBy(BigNumber(1.1)).toFixed(0);
+
+    overrides.gasLimit = gasPercentagePlus.toString()
+    
 
     console.log({
       pie: token,
       amountWei,
-      value: ethNeededSingleEntry.val
+      value: ethNeededSingleEntry.val,
+      overrides
     })
 
     const { emitter } = displayNotification(await recipe.toPie(token, amountWei, overrides) );
