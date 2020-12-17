@@ -5,7 +5,8 @@
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
+    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+    "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5"
   ],
   "selectable": [
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
@@ -13,11 +14,13 @@
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+    "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
     "symbol": "BTC++",
+    "isExperipie": false,
     "name": "Bitcoin Index Pie",
     "useRecipe": false,
     "swapEnabled": false,
@@ -63,6 +66,7 @@
   },
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
     "symbol": "USD++",
+    "isExperipie": false,
     "name": "USD Index Pie",
     "useRecipe": false,
     "swapEnabled": false,
@@ -126,8 +130,10 @@
   "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": {
     "symbol": "DXY",
     "name": "DeFi Index Yield",
+    "useMintOverBuy": true,
     "useRecipe": true,
     "streamingFees": "0",
+    "isExperipie": true,
     "swapFees": "0.1",
     "swapEnabled": false,
     "composition": [
@@ -200,6 +206,7 @@
   "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": {
     "symbol": "DEFI+L",
     "name": "DeFi Large Cap",
+    "isExperipie": false,
     "mapDynamicTradingViewFormula": {
       "0xc00e94Cb662C3520282E6f5717214004A7f26888": "KRAKEN:COMPUSD",
       "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": "GEMINI:AAVEUSD",
@@ -284,6 +291,7 @@
   },
   "0xb167f67353f71ca8b47d713878d69e8264a15ac0": {
     "symbol": "TDEFI+S",
+    "isExperipie": false,
     "composition": [
       {
         "symbol": "BAL",
@@ -314,6 +322,7 @@
   },
   "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": {
     "symbol": "DEFI+S",
+    "isExperipie": false,
     "name": "DeFi Small Cap",
     "useRecipe": true,
     "swapEnabled": false,
@@ -391,6 +400,7 @@
   },
   "0xe4f726adc8e89c6a6017f01eada77865db22da14": {
     "symbol": "BCP",
+    "isExperipie": false,
     "name": "Balanced Crypto Pie",
     "useRecipe": true,
     "useMintOverBuy": true,
@@ -429,6 +439,7 @@
   },
   "0x8d1ce361eb68e9e05573443c407d4a3bed23b033": {
     "symbol": "DEFI++",
+    "isExperipie": false,
     "name": "DeFi Index Pie ",
     "useRecipe": true,
     "streamingFees": "0",

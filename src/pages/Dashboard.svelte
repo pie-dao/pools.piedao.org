@@ -1,14 +1,9 @@
 <script>
-  import BigNumber from 'bignumber.js';
-  import orderBy from 'lodash/orderBy';
+	import filter from 'lodash/filter';
   import get from 'lodash/get';
-  import BalanceSmall from '../components/BalanceSmall.svelte';
-  import FarmerTable from '../components/FarmerTable.svelte';
-  import { currentRoute } from '../stores/routes.js';
   import poolsConfig from "../config/pools.json";
-  import { CoinGecko, piesMarketDataStore } from '../stores/coingecko.js';
+  import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
-  import images from "../config/images.json";
 
   import {
     getTokenImage,
@@ -19,7 +14,7 @@
   import Modal from '../components/elements/Modal.svelte';
   import LiquidityModal from "../components/modals/LiquidityModal.svelte";
 
-  $: pies = (poolsConfig.selectable.map(address => {
+  $: pies = poolsConfig.selectable.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
       ...poolsConfig[address],
@@ -30,7 +25,7 @@
       change: change ? change : 0,
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
     };
-  }) || []);
+  }) || [];
 
   let modal;
   let modalOption = {
@@ -62,10 +57,10 @@
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
 
-    <div class="my-10">
-      <h1 class="text-lg">🥧 Explore Pies</h1>
-      <p class="font-thin">An Entire Portfolio in a Single Token</p>
-    </div>
+  <div class="my-10">
+    <h1 class="text-lg">🥧 Explore Pies</h1>
+    <p class="font-thin">An Entire Portfolio in a Single Token</p>
+  </div>
 
 
   <div class="w-99pc">

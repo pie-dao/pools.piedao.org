@@ -16,6 +16,8 @@ import DefiPie from '../pages/landings/defiPie.svelte';
 import About from '../pages/landings/about.svelte';
 import Oven from '../pages/landings/oven.svelte';
 import Experipie from '../pages/ExperiPie.svelte';
+import PiePageSwitch from '../pages/PiePageSwitch.svelte';
+
 
 export const defaultRouteObj = {
   page: Main,
@@ -61,7 +63,7 @@ const formatRoute = (route) => {
       return { page: Experipie, params: { address }  };
     case 'pie':
       address = (route[1] || '').toLowerCase();
-      return { page: PieLanding, params: { address } };
+      return { page: PiePageSwitch, params: { address } };
     case 'dough':
       return { page: Dough };
     case 'swap':

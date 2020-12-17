@@ -24,7 +24,6 @@
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { amountFormatter, getTokenImage, formatFiat, subscribeToBalance } from '../components/helpers.js';
-  import Accordion, { AccordionItem } from "svelte-accessible-accordion";
 
   import {
     eth,
@@ -85,7 +84,7 @@
   $: nav = "n/a";
   $: PieAPR = "n/a";
   $: marketCap = "n/a";
-  $: composition = (poolsConfig[token] || []).composition;
+  $: composition = (poolsConfig[token] || {}).composition;
   $: metadata = {};
 
   $: lendingData = {
@@ -420,15 +419,6 @@
     </div>
   </div>
 </div>
-
-<div class="container mt-4">
-  <h1 class="text-xl leading-none font-black text-center mb-5">FAQ</h1>
-</div>
-<Accordion class="container px-5 py-0 spl flex flex-col">
-  <AccordionItem class="border-none keyborder text-left w-100pc py-4" title="What is Meta-Governance?"><p class="font-thin text-sm">Content 1 </p></AccordionItem>
-  <AccordionItem class="border-none keyborder text-left w-100pc py-4" title="How do we calculate tot APY?"><p class="font-thin text-sm">Content 1 </p></AccordionItem>
-  <AccordionItem class="border-none keyborder text-left w-100pc py-4" title="How to exercise your voting rights?"><p class="font-thin text-sm">Content 1 </p></AccordionItem>
-</Accordion>
 
 <div class="content mt-4">
   <PieExplanation address={token} />
