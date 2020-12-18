@@ -55,6 +55,24 @@
       },
       highlight: true,
       enabled: true,
+    },
+    {
+      addressOven: '0x4f08882c585dd58d7b9a6f2a7523e4a468c3cedb',
+      deprecated: false,
+      name: 'YPIE Oven',
+      description: 'Bakes YPIE at Zero cost',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0
+      },
+      baking: {
+          symbol: "YPIE",
+          address: "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31",
+          balance: '0',
+          icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31')
+      },
+      highlight: true,
+      enabled: true,
     }
   ]
 
@@ -157,7 +175,7 @@
             Deposits Open
           </td>
           <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
-            96%
+            97.5%
           </td>
           <td class="border px-4 ml-8 py-2 font-thin text-center">
               <button on:click={() => {
