@@ -130,6 +130,7 @@
       } else {
         let tokenInfo = find(poolsConfig[token].composition, (o) => Pie.map[address].underlying.address === o.address.toLowerCase());
         let lendingInfo = await getLendingInfo(Pie.map, address, compoundData, aaveData);
+        console.log(lendingInfo.apy, el.percentage, lendingInfo.apy * el.percentage)
         globalAPR += lendingInfo.apy * el.percentage;
 
         res.push({
@@ -146,9 +147,11 @@
       }
     }
 
+    console.log('globalAPR', globalAPR)
+
     nav = formatFiat(Pie.nav.toFixed(2), 'n/a');
     marketCap = formatFiat(Pie.marketCap.toFixed(2), 'n/a');
-    PieAPR = `${(globalAPR / 1000).toFixed(2)}%`;
+    PieAPR = `${(globalAPR / 100).toFixed(2)}%`;
     composition = res;
 
     console.log('res', res);
