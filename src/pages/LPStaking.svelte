@@ -20,19 +20,13 @@
   import { farming } from '../stores/eth/writables.js';
   import {
     amountFormatter,
-    fetchPieTokens,
-    fetchPooledTokens,
-    maxAmount,
-    getTokenImage,
-    fetchEthBalance,
-    fetchCalcToPie,
     toFixed,
     calculateAPRBalancer,
-    calculateAPRUniswap,
     formatFiat,
     subscribeToBalance,
     subscribeToStaking,
     subscribeToAllowance,
+    calculateAPRPie,
     subscribeToStakingEarnings,
   } from "../components/helpers.js";
 
@@ -193,6 +187,15 @@
           const rewardEscrewContract = await contract({ address: pool.addressUniPoll, abi: escrewRewardsStakingPool });
           pool.escrowPercentage = (await rewardEscrewContract.escrowPercentage() / 1e18).toFixed(2);
         }
+
+        if(pool.type === 'PieDAO') {
+          const nav = $pools[pool.addressTokenToStake+"-nav"] ? $pools[pool.addressTokenToStake+"-nav"] : 0;
+          console.log('nav', nav)
+          if(nav > 0) {
+            calculateAPRPie(pool.addressUniPoll, pool.addressTokenToStake, nav);
+          }
+        }
+        
     });
     try {
       await estimateUnstake();  
@@ -200,6 +203,19 @@
       //console.log('estimateUnstake', e);
     }
   }, false);
+
+
+  $: (() => {
+    incentivizedPools.forEach( async pool => {
+        if(pool.type === 'PieDAO') {
+          const nav = $pools[pool.addressTokenToStake+"-nav"] ? $pools[pool.addressTokenToStake+"-nav"] : 0;
+          if(nav > 0) {
+            calculateAPRPie(pool.addressUniPoll, pool.addressTokenToStake, nav);
+          }
+        } 
+    });
+
+  })()
 
   const fetchRewardEscrewData = async (address) => {
       const rewardEscrew = await contract({ address: '0x63cbd1858bd79de1a06c3c26462db360b834912d', abi: rewardEscrewABI });

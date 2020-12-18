@@ -71,21 +71,23 @@
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
 
-  <div class="my-10">
-    <h1 class="text-lg">🆕 Pie Vaults</h1>
-    <p class="font-thin">Yield Bearing & Meta-Governance Enabled</p>
-  </div>
+  {#if piVaults.length }
+    <div class="my-10">
+      <h1 class="text-lg">🆕 Pie Vaults</h1>
+      <p class="font-thin">Yield Bearing & Meta-Governance Enabled</p>
+    </div>
 
-  <div class="flex justify-around w-100pc content-center">
-    {#each piVaults as pie}
-      <ProductBox 
-        link={`#/pie/${pie.address}`}
-        image={pie.icon}
-        title={pie.symbol}
-        description="DeFi’s Blue Chips. Bigger is Better."
-      />
-    {/each}
-  </div>
+    <div class="flex justify-around w-100pc content-center">
+      {#each piVaults as pie}
+        <ProductBox 
+          link={`#/pie/${pie.address}`}
+          image={pie.icon}
+          title={pie.symbol}
+          description="DeFi’s Blue Chips. Bigger is Better."
+        />
+      {/each}
+    </div>
+  {/if}
 
   <div class="my-10">
     <h1 class="text-lg">🥧 Explore Pies</h1>

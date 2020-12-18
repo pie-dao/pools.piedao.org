@@ -940,3 +940,33 @@ export const calculateAPRBalancer = async (
   updates[addressStakingPool] = res;
   farming.set({ ...get(farming), ...updates });
 };
+
+export const calculateAPRPie = async (
+  addressStakingPool,
+  tokenToStake,
+  nav
+) => {
+  const marketData = get(piesMarketDataStore);
+  const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
+  const totalStakedBPTAmount = (await StakingPOOL.totalSupply()) / 1e18;
+
+  let res;
+  // Find out reward rate
+  const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
+  const rewardPerToken = weekly_reward / totalStakedBPTAmount;
+  const RewardTokenPrice = marketData[`0xad32A8e6220741182940c5aBF610bDE99E737b2D`].market_data.current_price;
+  const DOUGHWeeklyROI = (rewardPerToken * RewardTokenPrice * 100) / nav;
+
+  res = {
+    roi: DOUGHWeeklyROI,
+    weekly: `${toFixed(DOUGHWeeklyROI, 4)}%`,
+    apr: `${toFixed(DOUGHWeeklyROI * 52, 4)}%`,
+    totalStakedBPTAmount,
+    weekly_reward,
+    rewardPerToken,
+  };
+  const updates = {};
+  updates[addressStakingPool] = res;
+  farming.set({ ...get(farming), ...updates });
+
+};
