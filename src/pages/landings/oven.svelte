@@ -57,7 +57,7 @@
       enabled: true,
     },
     {
-      addressOven: '0x4f08882c585dd58d7b9a6f2a7523e4a468c3cedb',
+      addressOven: '0x925f860d1596cc6383c16294d8290f82bde172f7',
       deprecated: false,
       name: 'YPIE Oven',
       description: 'Bakes YPIE at Zero cost',
