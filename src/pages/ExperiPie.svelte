@@ -149,8 +149,8 @@
 
     console.log('globalAPR', globalAPR)
 
-    nav = formatFiat(Pie.nav.toFixed(2), 'n/a');
-    marketCap = formatFiat(Pie.marketCap.toFixed(2), 'n/a');
+    nav = formatFiat(Pie.nav.toFixed(2));
+    marketCap = formatFiat(Pie.marketCap.toFixed(2));
     PieAPR = `${(globalAPR / 100).toFixed(2)}%`;
     composition = res;
 
