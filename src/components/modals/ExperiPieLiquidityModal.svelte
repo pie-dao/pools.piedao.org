@@ -82,7 +82,7 @@
 
     pooledTokens.forEach( o => {
       subscribeToBalance(o.address, $eth.address, true);
-      subscribeToAllowance(o.address, $eth.address, true);
+      subscribeToAllowance(o.address, $eth.address, token);
     })
     
   }
@@ -265,10 +265,12 @@
       return;
     }
     
+    console.log("$allowances", token);
     for (let i = 0; i < pooledTokens.length; i += 1) {
-      let allowanceKey = functionKey(pooledTokens[i].address, 'allowance', [$eth.address, token]);
+      let allowanceKey = functionKey(pooledTokens[i].address, 'allowance', [$eth.address, pie.address]);
+      
       let allowance = $allowances[allowanceKey];
-      console.log(`Allowance ${pooledTokens[i].symbol}: ${allowance}`);
+      console.log(`Allowance ${pooledTokens[i].symbol} / ${pooledTokens[i].address} : ${allowance}`);
       if( new BigNumber(allowance).isLessThan(requestedAmount) ) {
         console.log('Im asking for allowance')
         askApproval(pooledTokens[i].address, token);
