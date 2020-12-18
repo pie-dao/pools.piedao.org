@@ -33,6 +33,7 @@
     fetchCalcTokensForAmounts,
     fetchPieTokens,
     subscribeToBalance,
+    subscribeToAllowance,
     maxAmount,
     getTokenImage,
     fetchEthBalance,
@@ -81,7 +82,7 @@
 
     pooledTokens.forEach( o => {
       subscribeToBalance(o.address, $eth.address, true);
-      subscribeToBalance(o.address, $eth.address, true);
+      subscribeToAllowance(o.address, $eth.address, true);
     })
     
   }
