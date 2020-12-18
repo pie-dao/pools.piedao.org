@@ -297,7 +297,7 @@
       <div class="font-thin text-xs md:text-base">Market Cap</div>
     </div>
 
-    <div class="p-0 flex-initial self-start mr-8">
+    <!-- <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
         {#if metadata.createTime}
           {moment(moment.unix(metadata.createTime)).format('MMMM Do YYYY')}
@@ -306,8 +306,7 @@
         {/if}
       </div>
       <div class="font-thin text-xs md:text-base">Inception date</div>
-    </div>
-
+    </div> -->
   </div>
 
   {#if poolsConfig[token].coingeckoId}
@@ -324,7 +323,7 @@
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Allocation</th>
           <th class="font-thin border-b-2 px-4 py-2">Price</th>
-          <th class="font-thin border-b-2 px-4 py-2">Balance</th>
+          <!-- <th class="font-thin border-b-2 px-4 py-2">Balance</th> -->
           <th class="font-thin border-b-2 px-4 py-2">APY</th>
           <th class="font-thin border-b-2 px-4 py-2">Strategy</th>
         </tr>
@@ -361,9 +360,9 @@
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
             
-            {#if !pieOfPies }
+            <!-- {#if !pieOfPies }
               <td class="border text-center px-4 py-2 font-thin">{formatFiat(pooledToken.balance ? pooledToken.balance.label : '0', ',', '.', '')}</td>
-            {/if}
+            {/if} -->
 
             <td class="border text-center px-4 py-2 font-thin">
               {#if pooledToken.productive}

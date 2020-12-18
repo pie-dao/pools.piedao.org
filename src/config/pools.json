@@ -6,7 +6,7 @@
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-    "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5"
+    "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31"
   ],
   "selectable": [
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
@@ -15,7 +15,7 @@
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5"
+    "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
@@ -127,6 +127,85 @@
       }
     ]
   },
+
+  "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31": {
+    "symbol": "YPIE",
+    "name": "Yearn Ecosystem Pie",
+    "useMintOverBuy": true,
+    "useRecipe": true,
+    "streamingFees": "0",
+    "isExperipie": true,
+    "swapFees": "0.1",
+    "swapEnabled": false,
+    "composition": [
+      {
+        "symbol": "YFI",
+        "color": "#0171F5",
+        "coingeckoImageId": 11849,
+        "coingeckoId": "yearn-finance",
+        "address": "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e",
+        "percentage": 18.35,
+        "decimals": 18
+      },
+      {
+        "symbol": "SUSHI",
+        "color": "#0171F5",
+        "coingeckoImageId": 12271,
+        "coingeckoId": "sushi",
+        "address": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+        "percentage": 18.35,
+        "decimals": 18
+      },
+      {
+        "symbol": "KP3R",
+        "color": "#0171F5",
+        "coingeckoImageId": 12966,
+        "coingeckoId": "keep3rv1",
+        "address": "0x1ceb5cb57c4d4e2b2433641b95dd330a33185a44",
+        "percentage": 18.35,
+        "decimals": 18
+      },
+      {
+        "symbol": "AKRO",
+        "color": "#0171F5",
+        "coingeckoImageId": 3328,
+        "coingeckoId": "akropolis",
+        "address": "0x8ab7404063ec4dbcfd4598215992dc3f8ec853d7",
+        "percentage": 18.35,
+        "decimals": 18
+      },
+      {
+        "symbol": "COVER",
+        "color": "#0171F5",
+        "coingeckoImageId": 13167,
+        "coingeckoId": "cover-protocol",
+        "address": "0x5d8d9f5b96f4438195be9b99eee6118ed4304286",
+        "percentage": 18.35,
+        "decimals": 18
+      },
+      {
+        "symbol": "CREAM",
+        "color": "#0171F5",
+        "coingeckoImageId": 13167,
+        "coingeckoId": "cream-2",
+        "address": "0x2ba592f78db6436527729929aaf6c908497cb200",
+        "percentage": 18.35,
+        "decimals": 18
+      },
+      {
+        "symbol": "PICKLE",
+        "color": "#0171F5",
+        "coingeckoImageId": 13167,
+        "coingeckoId": "pickle-finance",
+        "address": "0x429881672B9AE42b8EbA0E26cD9C73711b891Ca5",
+        "percentage": 18.35,
+        "decimals": 18
+      }
+    ],
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
+  },
+
+
   "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": {
     "symbol": "DXY",
     "name": "DeFi Index Yield",

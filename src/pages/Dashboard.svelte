@@ -83,7 +83,7 @@
           link={`#/pie/${pie.address}`}
           image={pie.icon}
           title={pie.symbol}
-          description="DeFi’s Blue Chips. Bigger is Better."
+          description="Yearn Ecosystem Pie"
         />
       {/each}
     </div>

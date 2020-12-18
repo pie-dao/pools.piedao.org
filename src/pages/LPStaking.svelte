@@ -190,7 +190,6 @@
 
         if(pool.type === 'PieDAO') {
           const nav = $pools[pool.addressTokenToStake+"-nav"] ? $pools[pool.addressTokenToStake+"-nav"] : 0;
-          console.log('nav', nav)
           if(nav > 0) {
             calculateAPRPie(pool.addressUniPoll, pool.addressTokenToStake, nav);
           }
