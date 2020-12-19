@@ -788,7 +788,7 @@ const selectPool = (_pool) => {
                   </p>
               {/if}
 
-              {#if $farming[pool.addressUniPoll] !== undefined}
+              {#if $farming[pool.addressUniPoll] !== undefined && pool.addressTokenToStake !== "0xe4f726adc8e89c6a6017f01eada77865db22da14"}
                 <br/><br/>
                 
                 <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
