@@ -62,7 +62,13 @@ export const registerConnection = async (newWeb3) => {
   window.localStorage.setItem('address', address);
 
   const shortAddress = shortenAddress(address);
-  const icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
+  let icon;
+  try {
+    icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
+  } catch {
+    icon = "";
+  }
+  
 
   const ens = await provider.lookupAddress(address);
 
