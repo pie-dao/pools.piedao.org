@@ -57,8 +57,27 @@
       enabled: true,
     },
     {
-      addressOven: '0x925f860d1596cc6383c16294d8290f82bde172f7',
+      addressOven: '0xAedec86DeDe3DEd9562FB00AdA623c0e9bEEb951',
       deprecated: false,
+      name: 'YPIE Oven',
+      description: 'Bakes YPIE at Zero cost',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0
+      },
+      baking: {
+          symbol: "YPIE",
+          address: "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31",
+          balance: '0',
+          icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31')
+      },
+      highlight: true,
+      enabled: true,
+    },
+
+    {
+      addressOven: '0x925f860d1596cc6383c16294d8290f82bde172f7',
+      deprecated: true,
       name: 'YPIE Oven',
       description: 'Bakes YPIE at Zero cost',
       data: {
@@ -172,7 +191,11 @@
             </a>
           </td>
           <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
-            Deposits Open
+            {#if !oven.deprecated}
+              Deposits Open
+            {:else}
+              Withdraw-only
+            {/if}
           </td>
           <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
             97.5%
@@ -183,7 +206,11 @@
                 modal.ovenAddress = oven.addressOven;
                 modal.open()
               }} class="table-btn highlight-box min-w-70px">
-                Bake
+                {#if !oven.deprecated}
+                  Bake
+                {:else}
+                  Withdraw
+                {/if}
               </button>
           </td>
           
