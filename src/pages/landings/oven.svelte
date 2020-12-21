@@ -115,7 +115,7 @@
 </script>
   <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
     <span slot="content">
-      <OvenModal pieAddress={modal.pieAddress} ovenAddress={modal.ovenAddress} />
+      <OvenModal deprecated={modal.deprecated} pieAddress={modal.pieAddress} ovenAddress={modal.ovenAddress} />
     </span>
   </Modal>
 
@@ -204,6 +204,7 @@
               <button on:click={() => {
                 modal.pieAddress = oven.baking.address;
                 modal.ovenAddress = oven.addressOven;
+                modal.deprecated = oven.deprecated;
                 modal.open()
               }} class="table-btn highlight-box min-w-70px">
                 {#if !oven.deprecated}

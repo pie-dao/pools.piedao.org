@@ -16,17 +16,12 @@ import {
     balanceKey,
     balances,
     subject,
-    contract,
     eth
 } from "../../stores/eth.js";
 
 import {
-  maxAmount,
   getTokenImage,
   fetchEthBalance,
-  fetchCalcToPie,
-  formatFiat,
-  subscribeToBalance,
   toFixed
 } from "../../components/helpers.js";
 
@@ -34,6 +29,7 @@ import Gauge from '../../components/charts/gauge.svelte';
 
 export let ovenAddress;
 export let pieAddress;
+export let deprecated;
 
 let initialized = false;
 let amount = 0;
@@ -41,7 +37,7 @@ let instance;
 let ethKey;
 
 $: balanceKeyOven = balanceKey(ethers.constants.AddressZero, ovenAddress);
-$: selectedTab = 1;
+$: selectedTab = deprecated ? 2 : 1;
 $: ovenData = {
   ethBalance: 0,
   pieBalance: 0,
@@ -244,9 +240,11 @@ const deposit = async () => {
     <button on:click={ () => selectedTab = 0} class:oven-button-active={selectedTab === 0} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
         Status
     </button>
+    {#if !deprecated}
     <button on:click={ () => selectedTab = 1} class:oven-button-active={selectedTab === 1} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
         Deposit
     </button>
+    {/if}
     <button on:click={ () => selectedTab = 2} class:oven-button-active={selectedTab === 2} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
         Withdraw
     </button>
