@@ -35,7 +35,7 @@
   colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
 };
 
-  $: pies = orderBy((poolsConfig.selectable.map(address => {
+  $: pies = orderBy((poolsConfig.available.map(address => {
     return {
       ...poolsConfig[address],
       address,

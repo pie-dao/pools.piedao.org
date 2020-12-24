@@ -3,12 +3,10 @@
   import { ethers } from 'ethers';
   import images from "../../config/images.json";
   import ProductBox from '../../components/elements/product-box.svelte';
-  import poolsConfig from "../../config/pools.json";
-  import { pools, balances, balanceKey } from '../../stores/eth.js';
+  import { balances, balanceKey } from '../../stores/eth.js';
   
   import {
     getTokenImage,
-    formatFiat,
     subscribeToBalance,
     toFixed
   } from "../../components/helpers.js";
@@ -16,8 +14,6 @@
   import Modal from '../../components/elements/Modal.svelte';
   import LiquidityModal from '../../components/modals/LiquidityModal.svelte';
   import OvenModal from "../../components/modals/OvenModal.svelte";
-
-  import Gauge from '../../components/charts/gauge.svelte';
 
   $: ovens = [
     {
@@ -56,24 +52,43 @@
       highlight: true,
       enabled: true,
     },
-    // {
-    //   addressOven: '0x925f860d1596cc6383c16294d8290f82bde172f7',
-    //   deprecated: false,
-    //   name: 'YPIE Oven',
-    //   description: 'Bakes YPIE at Zero cost',
-    //   data: {
-    //     ethBalance: 0,
-    //     pieBalance: 0
-    //   },
-    //   baking: {
-    //       symbol: "YPIE",
-    //       address: "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31",
-    //       balance: '0',
-    //       icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31')
-    //   },
-    //   highlight: true,
-    //   enabled: true,
-    // }
+    {
+      addressOven: '0xAedec86DeDe3DEd9562FB00AdA623c0e9bEEb951',
+      deprecated: false,
+      name: 'YPIE Oven',
+      description: 'Bakes YPIE at Zero cost',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0
+      },
+      baking: {
+          symbol: "YPIE",
+          address: "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31",
+          balance: '0',
+          icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31')
+      },
+      highlight: true,
+      enabled: true,
+    },
+
+    {
+      addressOven: '0x925f860d1596cc6383c16294d8290f82bde172f7',
+      deprecated: true,
+      name: 'YPIE Oven',
+      description: 'Bakes YPIE at Zero cost',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0
+      },
+      baking: {
+          symbol: "YPIE",
+          address: "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31",
+          balance: '0',
+          icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31')
+      },
+      highlight: true,
+      enabled: true,
+    }
   ]
 
   let modal;
@@ -96,7 +111,7 @@
 </script>
   <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
     <span slot="content">
-      <OvenModal pieAddress={modal.pieAddress} ovenAddress={modal.ovenAddress} />
+      <OvenModal deprecated={modal.deprecated} pieAddress={modal.pieAddress} ovenAddress={modal.ovenAddress} />
     </span>
   </Modal>
 
@@ -172,7 +187,11 @@
             </a>
           </td>
           <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
-            Deposits Open
+            {#if !oven.deprecated}
+              Deposits Open
+            {:else}
+              Withdraw-only
+            {/if}
           </td>
           <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
             97.5%
@@ -181,9 +200,14 @@
               <button on:click={() => {
                 modal.pieAddress = oven.baking.address;
                 modal.ovenAddress = oven.addressOven;
+                modal.deprecated = oven.deprecated;
                 modal.open()
               }} class="table-btn highlight-box min-w-70px">
-                Bake
+                {#if !oven.deprecated}
+                  Bake
+                {:else}
+                  Withdraw
+                {/if}
               </button>
           </td>
           

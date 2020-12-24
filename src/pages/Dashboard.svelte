@@ -15,7 +15,7 @@
   import Modal from '../components/elements/Modal.svelte';
   import LiquidityModal from "../components/modals/LiquidityModalSwitch.svelte";
 
-  $: pies = filter(poolsConfig.selectable.map(address => {
+  $: pies = filter(poolsConfig.available.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
       ...poolsConfig[address],
@@ -28,7 +28,7 @@
     };
   }), {isExperipie: false}) || [];
 
-  $: piVaults = filter(poolsConfig.selectable.map(address => {
+  $: piVaults = filter(poolsConfig.available.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
       ...poolsConfig[address],

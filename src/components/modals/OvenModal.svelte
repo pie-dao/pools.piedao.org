@@ -2,13 +2,10 @@
 import { onMount } from 'svelte';
 import { get } from "svelte/store";
 import orderBy from 'lodash/orderBy';
-import groupBy from 'lodash/groupBy';
 
 import { _ } from "svelte-i18n";
-import debounce from "lodash/debounce";
 import BigNumber from "bignumber.js";
 import { ethers } from "ethers";
-import images from "../../config/images.json";
 import poolsConfig from "../../config/pools.json";
 import ovenABI from '../../config/ovenABI.json';
 import displayNotification from "../../notifications.js";
@@ -16,17 +13,12 @@ import {
     balanceKey,
     balances,
     subject,
-    contract,
     eth
 } from "../../stores/eth.js";
 
 import {
-  maxAmount,
   getTokenImage,
   fetchEthBalance,
-  fetchCalcToPie,
-  formatFiat,
-  subscribeToBalance,
   toFixed
 } from "../../components/helpers.js";
 
@@ -34,14 +26,14 @@ import Gauge from '../../components/charts/gauge.svelte';
 
 export let ovenAddress;
 export let pieAddress;
+export let deprecated;
 
-let initialized = false;
 let amount = 0;
 let instance;
 let ethKey;
 
 $: balanceKeyOven = balanceKey(ethers.constants.AddressZero, ovenAddress);
-$: selectedTab = 1;
+$: selectedTab = deprecated ? 2 : 1;
 $: ovenData = {
   ethBalance: 0,
   pieBalance: 0,
@@ -177,7 +169,6 @@ const deposit = async () => {
     }
 
     if (BigNumber(requestedAmount).isGreaterThan(BigNumber(max)) ) {
-      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
       const message = `Not enough ETH`;
       displayNotification({ message, type: "error", autoDismiss: 30000 });
       return;
@@ -244,9 +235,11 @@ const deposit = async () => {
     <button on:click={ () => selectedTab = 0} class:oven-button-active={selectedTab === 0} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
         Status
     </button>
+    {#if !deprecated}
     <button on:click={ () => selectedTab = 1} class:oven-button-active={selectedTab === 1} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
         Deposit
     </button>
+    {/if}
     <button on:click={ () => selectedTab = 2} class:oven-button-active={selectedTab === 2} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
         Withdraw
     </button>
