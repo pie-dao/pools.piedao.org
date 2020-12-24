@@ -36,6 +36,7 @@ let pies = [
   '0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd',
   // BCP
   '0xe4f726adc8e89c6a6017f01eada77865db22da14',
+  '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'
 ];
 
 pies = pies.map((pie) => pie.toLowerCase());
@@ -199,6 +200,7 @@ export async function fetchNav() {
     const tokenAmount = tokenAmounts[tokenAddress];
 
     nav += tokenAmount.amount * tokenAmount.price;
+    console.log(tokenAddress, nav)
   }
   return nav;
 }
