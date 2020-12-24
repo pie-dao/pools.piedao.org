@@ -242,10 +242,20 @@
     weeklySushyApy = Math.pow(1 + weeklySushiApyRate, 52) - 1;
     weeklySushyApy = weeklySushyApy * 100;
     weeklySushyApy = weeklySushyApy.toFixed(2);
-    
-    console.log('weeklySushyApy', weeklySushyApy);
+
+    let APR = ((dailyFees / xSushiSuply) * 365) / (xSushiRatio * sushiPrice)
+    let APY = ( 1 + (APR / 365))^365 - 1
+
+    console.log('SUSHI', {
+      weeklySushyApy,
+      dailySushiApy,
+      APR,
+      APY
+    })
     //APY = (1 + Periodic Rate)Number of periods – 1
-    return weeklySushyApy;
+    
+    
+    return `24H / ${dailySushiApy}`;
 }
 
   onMount( async () => {
