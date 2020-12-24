@@ -2,13 +2,10 @@
 import { onMount } from 'svelte';
 import { get } from "svelte/store";
 import orderBy from 'lodash/orderBy';
-import groupBy from 'lodash/groupBy';
 
 import { _ } from "svelte-i18n";
-import debounce from "lodash/debounce";
 import BigNumber from "bignumber.js";
 import { ethers } from "ethers";
-import images from "../../config/images.json";
 import poolsConfig from "../../config/pools.json";
 import ovenABI from '../../config/ovenABI.json';
 import displayNotification from "../../notifications.js";
@@ -31,7 +28,6 @@ export let ovenAddress;
 export let pieAddress;
 export let deprecated;
 
-let initialized = false;
 let amount = 0;
 let instance;
 let ethKey;
@@ -173,7 +169,6 @@ const deposit = async () => {
     }
 
     if (BigNumber(requestedAmount).isGreaterThan(BigNumber(max)) ) {
-      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
       const message = `Not enough ETH`;
       displayNotification({ message, type: "error", autoDismiss: 30000 });
       return;

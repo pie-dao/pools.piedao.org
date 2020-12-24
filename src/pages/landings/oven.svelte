@@ -3,12 +3,10 @@
   import { ethers } from 'ethers';
   import images from "../../config/images.json";
   import ProductBox from '../../components/elements/product-box.svelte';
-  import poolsConfig from "../../config/pools.json";
-  import { pools, balances, balanceKey } from '../../stores/eth.js';
+  import { balances, balanceKey } from '../../stores/eth.js';
   
   import {
     getTokenImage,
-    formatFiat,
     subscribeToBalance,
     toFixed
   } from "../../components/helpers.js";
@@ -16,8 +14,6 @@
   import Modal from '../../components/elements/Modal.svelte';
   import LiquidityModal from '../../components/modals/LiquidityModal.svelte';
   import OvenModal from "../../components/modals/OvenModal.svelte";
-
-  import Gauge from '../../components/charts/gauge.svelte';
 
   $: ovens = [
     {
