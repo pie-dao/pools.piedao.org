@@ -4,20 +4,11 @@ import DXP from './dxp-explanation.svelte'
 import DSP from './dsp-explanation.svelte'
 import BTC from './btcp-explanation.svelte'
 import USD from './usdp-explanation.svelte'
-import Meta from '../elements/meta.svelte';
 import BCP from './bcp-explanation.svelte';
+import YPIE from './ypie-explanation.svelte';
 
 
 export let address;
-
-	
-// const metadata = {
-//     title: 'Test',
-//     description: 'It really is!',
-//     image: 'https://svelte.dev/images/twitter-card.png',
-//     imageAlt: 'Svelte svelte.dev',
-//     url:'svelte.dev'
-// }
 </script>
 
 <div>
@@ -33,5 +24,7 @@ export let address;
         <USD />
     {:else if address === '0xe4f726adc8e89c6a6017f01eada77865db22da14'}
         <BCP />
+    {:else if address === '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'}
+        <YPIE />
     {/if}
 </div>
