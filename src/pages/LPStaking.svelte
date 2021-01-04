@@ -520,13 +520,13 @@ const selectPool = (_pool) => {
         <!-- component -->
         {#if $eth.address}
         <div class="py-5">
-          <main class="h-full overflow-y-auto">
-              <div class="container flex flex-row items-center justify-center ">
-                    <!-- Cards -->
-                    <div class="flex flex-row items-center">
+          <main class="h-full">
+              <div class="flex flex-col md:flex-row lg:flex-row items-center justify-center ">
+                    <!-- Cards Container -->
+                    <div class="flex flex-col md:flex-row lg:flex-row items-center w-100pc px-2">
                       <!-- Card -->
-                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
-                        <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
+                      <div class="flex p-6 mx-4 my-2 bg-white rounded-sm shadow-xs dark:bg-gray-800 w-100pc md:w-auto lg:w-auto">
+                        <div class="p-3 mr-4 text-xl">
                           💰
                         </div>
                         <div>
@@ -538,13 +538,14 @@ const selectPool = (_pool) => {
                           </p>
                         </div>
                       </div>
-                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
-                          <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
+                      <!-- Card -->
+                      <div class="flex p-6 mx-4 my-2 bg-white rounded-sm shadow-xs dark:bg-gray-800 w-100pc md:w-auto lg:w-auto">
+                          <div class="p-3 mr-4 text-xl">
                               🧮
                             </div>
                         <div>
                           <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                            Vesting entries
+                            Vesting Entries
                           </p>
                           <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
                             {rewardEscrewData.numVestingEntries ? rewardEscrewData.numVestingEntries : 'n/a'}
