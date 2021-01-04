@@ -168,11 +168,11 @@
     <div class="flex flex-row content-between justify-between flex-wrap w-full">
       <div class="flex flex-row sm:w-full md:w-1/3">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
-        <div class="mx-3 flex flex-col justify-center">
+        <div class="mx-3 flex flex-col">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
           <h2 class="text-md leading-none font-black">{name}</h2>
           {#if tokenPrice}
-            <h5 class="text-xl leading-none font-thin relative">{formatFiat(tokenPrice)} <span class="text-lg absolute font-black" style="top: 5px; right: -100px;"><Change value={change24H} /></span></h5>
+            <div class="flex items-center mincontent"><div class="text-xl leading-none font-thin whitespace-nowrap mincontent">{formatFiat(tokenPrice)} </div><span class="text-base whitespace-nowrap font-black mincontent ml-2"><Change value={change24H} /></span></div>
           {/if}
           
         </div>
