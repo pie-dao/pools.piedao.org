@@ -84,9 +84,9 @@
     <strong>DOUGH</strong> is the PieDAO governance token. Owning DOUGH makes you a member of PieDAO. Holders are capable of participating in the DAO’s governance votes and proposing votes of their own. <br/>
    </div>
 
-   <div class="flex justify-around my-2">
-      <div class="bg-black text-white p-2 rounded-sm text-center">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
-      <div class="bg-black text-white p-2 mx-5 rounded-sm text-center">Staked: <strong>{formatFiat(doughStaked, ',', '.', '')} DOUGH</strong></div>
+   <div class="flex flex-col justify-between my-2 lg:flex-row md:flex-row">
+      <div class="flex justify-center items-center bg-black text-white py-4 px-4 mx-2 my-2 rounded-sm text-center lg:w-1/2 md:w-1/2 md:my-0 lg:my-0">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
+      <div class="flex justify-center items-center bg-black text-white py-4 px-4 mx-2 my-2 rounded-sm text-center lg:w-1/2 md:w-1/2 md:my-0 lg:my-0">Staked: &nbsp;<strong>{formatFiat(doughStaked, ',', '.', '')} DOUGH</strong></div>
     </div>
 
    <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-4">
