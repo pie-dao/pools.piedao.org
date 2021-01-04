@@ -123,7 +123,7 @@
     </div>
   </div>
 
-  <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
+  <a class="singleTag font-bold my-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
 
   
   <SectionImageTop title="Token Migration" image={images.tokenmigration}>
@@ -134,7 +134,7 @@
   </SectionImageTop>
 
 
-  <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/piedao-token-migration-d2e9cd5d1a16`}>DOUGH Migration on Medium</a>
+  <a class="singleTag font-bold my-4" target="_blank" href={`https://medium.com/piedao/piedao-token-migration-d2e9cd5d1a16`}>DOUGH Migration on Medium</a>
   
   <SectionImageRight title="Vesting Period" image={images.vestingperiod} isGrey={true}>
     <span slot="content">
