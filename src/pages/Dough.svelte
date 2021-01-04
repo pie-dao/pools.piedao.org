@@ -104,22 +104,22 @@
 
  
 
-   <div class="bg-grey-243 rounded-sm pt-8 pb-8 flex justify-between flex-wrap w-full mt-4 md:mt-8">
+   <div class="bg-grey-243 rounded-sm px-4 py-8 flex justify-between flex-wrap w-full mt-4 md:mt-8">
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">PieDAO</div>
-      <div class="text-center text-2xl md:text-xl font-black">Governance</div>
+      <div class="text-center text-xs md:text-xl font-black">Governance</div>
     </div>
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">Value accrual</div>
-      <div class="text-center text-2xl md:text-xl font-black">Fees</div>
+      <div class="text-center text-xs md:text-xl font-black">Fees</div>
     </div>
     <div class="p-0 md:w-1/4">
         <div class="text-center font-thin text-xs md:text-base">Liquidity</div>
-        <div class="text-center text-2xl md:text-xl font-black">Mining</div>
+        <div class="text-center text-xs md:text-xl font-black">Mining</div>
       </div>
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">DAOs Meta</div>
-      <div class="text-center text-2xl md:text-xl font-black">Governance</div>
+      <div class="text-center text-xs md:text-xl font-black">Governance</div>
     </div>
   </div>
 
