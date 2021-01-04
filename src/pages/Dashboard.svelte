@@ -72,7 +72,7 @@
   <div class="w-99pc m-4">
 
   {#if piVaults.length }
-    <div class="my-4 md:my-6 lg:my-8">
+    <div class="my-0 md:my-4 lg:my-6">
       <h1 class="text-lg">🆕 Pie Vaults</h1>
       <p class="font-thin">Yield Bearing & Meta-Governance Enabled</p>
     </div>
