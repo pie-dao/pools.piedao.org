@@ -606,11 +606,11 @@ border-radius: 6px;
 }
 
 .toggle-input:checked + .toggle {
-  background-color: #aefd72;
+  background-color: #8ce647;
 }
 
 .toggle-input:focus + .toggle {
-  box-shadow: 0 0 1px #aefd72;
+  box-shadow: 0 0 1px #8ce647;
 }
 
 .toggle-input:checked + .toggle:before {
@@ -1178,4 +1178,10 @@ button.svelte-1nn74u2 {border: none!important; padding: 1rem 0rem!important;}
 
 .mincontent {
   width:fit-content;
+}
+
+.sticky {
+  position: sticky;
+  position: absolute;
+  position: -webkit-sticky;
 }
