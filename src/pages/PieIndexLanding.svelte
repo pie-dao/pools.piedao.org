@@ -356,10 +356,10 @@
 
   
 {#if poolsConfig[token].swapEnabled}
-<div class="container mt-4">
+<div class="container mt-4 px-2 lg:px-0">
   <h1 class="text-xl leading-none font-black text-center mb-5">Key Facts</h1>
 
-    <div class="flex flex-col justify-between mt-4  lg:flex-row">
+    <div class="flex flex-col justify-between lg:mt-4  lg:flex-row">
       <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
         <div class="top flex justify-between">
             <div class="titolo">Fees to LPs</div>
@@ -377,7 +377,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col justify-between mt-4  lg:flex-row">
+    <div class="flex flex-col justify-between lg:mt-4  lg:flex-row">
       <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
         <div class="top flex justify-between">
           <div class="titolo">Streaming Fees</div>
@@ -395,7 +395,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col justify-between mt-4  lg:flex-row">
+    <div class="flex flex-col justify-between lg:mt-4  lg:flex-row">
       <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
         <div class="top flex justify-between">
           <div class="titolo">All Time Low</div>
