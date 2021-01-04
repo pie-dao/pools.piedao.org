@@ -1144,6 +1144,7 @@ button.svelte-1nn74u2 {border: none!important; padding: 1rem 0rem!important;}
   background-color: rgba(35, 30, 34, 0.9);
   background: rgba(35, 30, 34, 0.9);
   color: rgba(35, 30, 34, 0.9);
+  max-width: 100vw;
 }
 
 .modalcontent{
