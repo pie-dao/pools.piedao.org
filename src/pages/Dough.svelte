@@ -80,7 +80,7 @@
    <img class="w-100pc h-auto md:w-100pc h-auto"src={images.herodough} alt="PieDAO Hero" />
 
 
-   <div class="text-center font-thin text-base mt-8 md:mt-20 md:text-lg lg:text-lg">
+   <div class="text-center font-thin text-base mt-8 p-2 md:mt-20 md:text-lg lg:text-lg md:p-8 lg:p-8">
     <strong>DOUGH</strong> is the PieDAO governance token. Owning DOUGH makes you a member of PieDAO. Holders are capable of participating in the DAO’s governance votes and proposing votes of their own. <br/>
    </div>
 

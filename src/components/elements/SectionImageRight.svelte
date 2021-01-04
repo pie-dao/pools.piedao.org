@@ -4,7 +4,7 @@
 export let isGrey;
 </script>
 
-<div class:bg-grey-243={isGrey === true} class=" rounded-sm p-8 flex justify-between flex-wrap w-full">
+<div class:bg-grey-243={isGrey === true} class=" rounded-sm p-2 flex justify-between flex-wrap w-full md:p-8 lg:p-8">
     <div class="p-4 flex justify-center items-center content-center flex-wrap md:w-2/3">
         <h1 class="text-lg md:text-xl">
             {title}
