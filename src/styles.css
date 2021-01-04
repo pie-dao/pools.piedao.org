@@ -157,7 +157,14 @@ border-radius: 6px;
   /* border: 1px solid #000;
   border-radius: 1rem;
   background-clip: padding-box; */
+}
 
+.btn:disabled {
+  background: #634659 !important;
+  pointer-events: none;
+  transition: none !important;
+  color: #ffffff;
+  opacity: 0.6;
 }
 
 .thinborder {
