@@ -124,15 +124,15 @@
       />
     </span>
   </Modal>
-  <section class="pt-12 px-4 text-center">
+  <section class="pt-4 px-4 text-center md:pt-8 lg:pt-12">
     <div class="w-full max-w-2xl mx-auto">
       <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Baking Together</h2>
       <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">The PieDAO Oven pools ETH to issue pies in batches, giving users access to our index products gas-free. This design makes getting involved affordable and convenient, opening participation to everyone. Don't forget, the Oven won't activate until it's full!</p>
     </div>
   </section>
 
-  <div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
-    <div class="flex flex-col justify-around w-100pc content-center lg:flex-row">
+  <div class="content flex flex-col justify-between spl text-center">
+    <div class="flex flex-col justify-between content-center lg:flex-row">
       <ProductBox 
         image={images.depositeth}
         title="Deposit ETH"
@@ -204,7 +204,7 @@
                 modal.open()
               }} class="table-btn highlight-box min-w-70px">
                 {#if !oven.deprecated}
-                  Bake
+                  Bake / Withdraw
                 {:else}
                   Withdraw
                 {/if}
