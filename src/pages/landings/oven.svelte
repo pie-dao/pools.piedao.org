@@ -160,7 +160,7 @@
 </section>
 
 <div class="flex flex-col w-96pc place-content-center spl">
-  <table class="breakdown-table table-auto w-full mx-6">
+  <table class="breakdown-table table-auto w-full ml-2 md:mx-6 lg:mx-6">
     <thead>
       <tr>
         <th class="font-thin border-b-2 px-4 py-2 text-left">Pie Name</th>
