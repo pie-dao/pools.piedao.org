@@ -132,6 +132,7 @@
       } else {
 
         let tokenInfo = find(poolsConfig[token].composition, (o) => Pie.map[address].underlying.address === o.address.toLowerCase());
+        console.log('tokenInfo', tokenInfo)
         let lendingInfo = await getLendingInfo(Pie.map, address, compoundData, aaveData);
         console.log(lendingInfo.apy, el.percentage, lendingInfo.apy * el.percentage)
         globalAPR += lendingInfo.apy * el.percentage;
@@ -190,7 +191,7 @@
         break;
       
       case 'SushiBar':
-        lendingInfo.apy = await doXSusi();
+        lendingInfo.apy = await doXSusi(map[address].underlying.price);
         break;
       
       case 'yGOV':
@@ -206,7 +207,7 @@
   }
 
 
-  async function doXSusi() {
+  async function doXSusi(price) {
     let sushiDailyVolume = 0;
     let sushiWeeklyVolume = 0;
     let stakedSushiValue = 0;
@@ -214,7 +215,10 @@
     let weeklySushyApy = 0;
     let xSushiSuply = 0;
     let xSushiRatio = 0;
-    let sushiPrice = 3;
+
+    let sushiPrice = price;
+
+    console.log('price', price)
 
     let r = await sushiData.exchange.dayData(8)
     
@@ -255,7 +259,7 @@
     //APY = (1 + Periodic Rate)Number of periods – 1
     
     
-    return `24H / ${dailySushiApy}`;
+    return dailySushiApy;
 }
 
   onMount( async () => {

@@ -1,9 +1,11 @@
 /* eslint-disable */
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
+import { erc20 } from "@pie-dao/abis";
 import ABI from '../config/experipieABI.json';
 import defiSdkABI from '../config/defiSdkABI.json';
 import yVaultABI from '../abis/yVaultABI.json';
+import xSUSHIABI from '../abis/xSUSHIAbi.json';
 import get from 'lodash/get';
 import find from 'lodash/find';
 
@@ -87,6 +89,15 @@ class Experipie {
       const xsushi = "0x8798249c2e607446efb7ad49ec89dd1865ff4272".toLowerCase();
       const sushi = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2".toLowerCase();
 
+      const xsushiContract = new ethers.Contract(xsushi, xSUSHIABI, this.provider);
+      
+      const sushiContract = new ethers.Contract(sushi, erc20, this.provider);
+
+      let totalShares = await xsushiContract.totalSupply();
+      let balanceXsushi = await sushiContract.balanceOf(xsushi);
+      let share = this.map[xsushi].balance.bn;
+      const sushiBalance = share.mul(balanceXsushi).div(totalShares);    
+
       let price = get(find(this.marketData, (o) => {
         return o.address === sushi;
       }), 'market_data.current_price', 0);
@@ -115,8 +126,8 @@ class Experipie {
               name: "SushiBar",
             },
             balance: {
-              bn: BigNumber(5),
-              label: "2.3"
+              bn: sushiBalance,
+              label: getNormalizedNumber(sushiBalance.toString(), 18).toString()
             }
           }
         }
@@ -168,8 +179,6 @@ class Experipie {
       let balancesOnSelectedProtocols = await this.defiSdk.getProtocolBalances(
           this.address, ['Aave', 'Compound', 'C.R.E.A.M.']
       );
-
-      console.log('balancesOnSelectedProtocols', balancesOnSelectedProtocols)
 
       await this.applyPatches();
 
