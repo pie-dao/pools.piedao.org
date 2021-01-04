@@ -9,7 +9,7 @@ export let isGrey;
         <h1 class="text-lg md:text-xl">
             {title}
         </h1>
-        <div class="font-thin text-xs mt-2 md:mt-4 md:text-base">
+        <div class="font-thin text-base mt-2 md:mt-4 md:text-lg lg:text-lg">
             <slot name="content">
                 
             </slot>
