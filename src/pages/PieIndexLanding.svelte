@@ -172,7 +172,7 @@
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
           <h2 class="text-md leading-none font-black">{name}</h2>
           {#if tokenPrice}
-            <div class="flex items-center mincontent"><div class="text-xl leading-none font-thin whitespace-nowrap mincontent">{formatFiat(tokenPrice)} </div><span class="text-base whitespace-nowrap font-black mincontent ml-2"><Change value={change24H} /></span></div>
+            <div class="flex items-center mincontent"><div class="text-xl leading-none font-thin whitespace-nowrap mincontent">{formatFiat(tokenPrice)} </div><span class="text-base whitespace-nowrap font-black mincontent ml-2"><Change showLabel={true} value={change24H} /></span></div>
           {/if}
           
         </div>
