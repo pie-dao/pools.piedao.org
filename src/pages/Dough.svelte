@@ -80,17 +80,17 @@
    <img class="w-100pc h-auto md:w-100pc h-auto"src={images.herodough} alt="PieDAO Hero" />
 
 
-   <div class="text-center font-thin text-xs mt-8 md:mt-20 md:text-lg">
+   <div class="text-center font-thin text-base mt-8 p-2 md:mt-20 md:text-lg lg:text-lg md:p-8 lg:p-8">
     <strong>DOUGH</strong> is the PieDAO governance token. Owning DOUGH makes you a member of PieDAO. Holders are capable of participating in the DAO’s governance votes and proposing votes of their own. <br/>
    </div>
 
-   <div class="flex justify-around my-2">
-      <div class="bg-black text-white p-2 rounded-sm text-center">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
-      <div class="bg-black text-white p-2 mx-5 rounded-sm text-center">Staked: <strong>{formatFiat(doughStaked, ',', '.', '')} DOUGH</strong></div>
+   <div class="flex flex-col justify-between my-2 lg:flex-row md:flex-row">
+      <div class="flex justify-center items-center bg-black text-white py-4 px-4 mx-2 my-2 rounded-sm text-center lg:w-1/2 md:w-1/2 md:my-0 lg:my-0">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
+      <div class="flex justify-center items-center bg-black text-white py-4 px-4 mx-2 my-2 rounded-sm text-center lg:w-1/2 md:w-1/2 md:my-0 lg:my-0">Staked: &nbsp;<strong>{formatFiat(doughStaked, ',', '.', '')} DOUGH</strong></div>
     </div>
 
    <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-4">
-     <div class="text-center p-4 text-2xl md:text-xl">Price: <strong>{price}$ / DOUGH</strong></div>
+     <div class="text-center p-4 text-xl md:text-xl">1 DOUGH = <strong>{price}$</strong></div>
      <a href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
       <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
         Buy
@@ -104,26 +104,26 @@
 
  
 
-   <div class="bg-grey-243 rounded-sm pt-8 pb-8 flex justify-between flex-wrap w-full mt-4 md:mt-8">
+   <div class="bg-grey-243 rounded-sm px-4 py-8 flex justify-between flex-wrap w-full mt-4 md:mt-8">
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">PieDAO</div>
-      <div class="text-center text-2xl md:text-xl font-black">Governance</div>
+      <div class="text-center text-xs md:text-xl font-black">Governance</div>
     </div>
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">Value accrual</div>
-      <div class="text-center text-2xl md:text-xl font-black">Fees</div>
+      <div class="text-center text-xs md:text-xl font-black">Fees</div>
     </div>
     <div class="p-0 md:w-1/4">
         <div class="text-center font-thin text-xs md:text-base">Liquidity</div>
-        <div class="text-center text-2xl md:text-xl font-black">Mining</div>
+        <div class="text-center text-xs md:text-xl font-black">Mining</div>
       </div>
     <div class="p-0 md:w-1/4">
       <div class="text-center font-thin text-xs md:text-base">DAOs Meta</div>
-      <div class="text-center text-2xl md:text-xl font-black">Governance</div>
+      <div class="text-center text-xs md:text-xl font-black">Governance</div>
     </div>
   </div>
 
-  <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
+  <a class="singleTag font-bold my-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
 
   
   <SectionImageTop title="Token Migration" image={images.tokenmigration}>
@@ -134,7 +134,7 @@
   </SectionImageTop>
 
 
-  <a class="singleTag font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/piedao-token-migration-d2e9cd5d1a16`}>DOUGH Migration on Medium</a>
+  <a class="singleTag font-bold my-4" target="_blank" href={`https://medium.com/piedao/piedao-token-migration-d2e9cd5d1a16`}>DOUGH Migration on Medium</a>
   
   <SectionImageRight title="Vesting Period" image={images.vestingperiod} isGrey={true}>
     <span slot="content">

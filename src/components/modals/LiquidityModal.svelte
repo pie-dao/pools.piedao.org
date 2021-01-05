@@ -554,8 +554,8 @@
 
     {#if type === 'multi'}
       {#each pooledTokens as pooledToken}
-        <div class="token-summary overflow-x-scroll bg-white rounded-8px mx-0 md:mx-4 my-4px flex flex-start items-center">
-            <div class="min-w-22pc p-12px text-sm md:text-lg" style={`color: ${pooledToken.color}`}>
+        <div class="token-summary bg-white rounded-8px mx-0 md:mx-4 my-4px flex flex-start items-center overflow-x-scroll">
+            <div class="w-22pc p-12px text-sm md:text-lg" style={`color: ${pooledToken.color}`}>
               {amountFormatter({
                 amount: pooledToken.originalWeight,
                 approximatePrefix: '',
@@ -568,7 +568,7 @@
               src={getTokenImage(pooledToken.address)}
               alt={pooledToken.symbol} />
             <div
-              class="token-symbol min-w-15pc md:min-w-10pc px-6px py-12px text-sm font-thin border-r-2 border-r-solid border-grey-243 align-middle md:leading-8">
+              class="token-symbol min-w-62px w-62px px-6px py-12px text-sm font-thin border-r-2 border-r-solid border-grey-243 align-middle md:leading-8">
               {pooledToken.symbol}
             </div>
           {#if approach === "add"}

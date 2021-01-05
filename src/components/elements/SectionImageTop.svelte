@@ -10,7 +10,7 @@
     </div>
     
     <h1 class="text-center text-lg  mt-8 md:text-xl md:mt-12">{title}</h1>
-    <div class="text-left font-thin text-xs mt-2 md:mt-4 md:text-lg">
+    <div class="text-left font-thin text-base mt-2 p-2 md:mt-4 md:text-lg lg:text-lg md:p-8 lg:p-8">
         <slot name="content">
                 
         </slot>

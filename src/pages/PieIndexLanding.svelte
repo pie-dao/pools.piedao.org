@@ -168,11 +168,11 @@
     <div class="flex flex-row content-between justify-between flex-wrap w-full">
       <div class="flex flex-row sm:w-full md:w-1/3">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
-        <div class="mx-3 flex flex-col justify-center">
+        <div class="mx-3 flex flex-col">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
           <h2 class="text-md leading-none font-black">{name}</h2>
           {#if tokenPrice}
-            <h5 class="text-xl leading-none font-thin relative">{formatFiat(tokenPrice)} <span class="text-lg absolute font-black" style="top: 5px; right: -100px;"><Change value={change24H} /></span></h5>
+            <div class="flex items-center mincontent"><div class="text-xl leading-none font-thin whitespace-nowrap mincontent">{formatFiat(tokenPrice)} </div><span class="text-base whitespace-nowrap font-black mincontent ml-2"><Change showLabel={true} value={change24H} /></span></div>
           {/if}
           
         </div>
@@ -352,14 +352,12 @@
 
 <div class="content spl">
 
-
-
   
 {#if poolsConfig[token].swapEnabled}
-<div class="container mt-4">
+<div class="container mt-4 px-2 lg:px-0">
   <h1 class="text-xl leading-none font-black text-center mb-5">Key Facts</h1>
 
-    <div class="flex flex-col justify-between mt-4  lg:flex-row">
+    <div class="flex flex-col justify-between lg:mt-4  lg:flex-row">
       <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
         <div class="top flex justify-between">
             <div class="titolo">Fees to LPs</div>
@@ -377,7 +375,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col justify-between mt-4  lg:flex-row">
+    <div class="flex flex-col justify-between lg:mt-4  lg:flex-row">
       <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
         <div class="top flex justify-between">
           <div class="titolo">Streaming Fees</div>
@@ -395,7 +393,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col justify-between mt-4  lg:flex-row">
+    <div class="flex flex-col justify-between lg:mt-4  lg:flex-row">
       <div class="left flex-col justify-between keyborder mt-2 mb-2 lg:w-1/2 lg:mr-20px lg:flex-row">
         <div class="top flex justify-between">
           <div class="titolo">All Time Low</div>

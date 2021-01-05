@@ -12,7 +12,7 @@
 
 <div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
 
-    <div class="font-thin text-lg mt-10px mb-10px md:w-80pc">
+    <div class="font-thin text-lg mt-10px mb-10px mx-2 md:w-80pc">
       Automated Portfolio Rebalancing<br/>
       Diversification Minimizes Risk<br/>
       Community Governed ETFs
@@ -46,20 +46,20 @@
   </div>
 
   <div class="content flex flex-col w-100pc justify-between spl lg:flex-row">
-    <div class="flex w-7/12 flex-col mt-10 p-5">
-      <div class="text-xl">
+    <div class="flex w-full flex-col mt-10 p-5 lg:w-7/12">
+      <div class="text-lg lg:text-xl">
         Tokenized ETFs <br/>
         governed by a DAO
       </div>
         <img class="w-100pc h-auto md:w-100pc h-auto"src={images.etflike} alt="PieDAO Hero" />
       </div>
-    <div class="flex w-5/12 flex-col mt-10 p-5">
+    <div class="flex w-full lg:w-5/12 flex-col mt-2 lg:mt-10 p-5">
       <div class="font-bold text-lg">Convenient</div>
-      <div class="font-thin mb-50px">Broad DeFi exposure at the tap of a button.</div>
+      <div class="font-thin mb-20px lg:mb-50px">Broad DeFi exposure at the tap of a button.</div>
       <div class="font-bold text-lg">Safe</div>
-      <div class="font-thin mb-50px">Diversification is the safest strategy. Fully audited and non-custodial.</div>
+      <div class="font-thin mb-20px lg:mb-50px">Diversification is the safest strategy. Fully audited and non-custodial.</div>
       <div class="font-bold text-lg">Transparent</div>
-      <div class="font-thin mb-50px">Built by the community for the community and fully open-source.</div>
+      <div class="font-thin mb-20px lg:mb-50px">Built by the community for the community and fully open-source.</div>
     </div>
   </div>
 

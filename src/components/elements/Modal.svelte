@@ -17,9 +17,9 @@ let modalIsOpen = false;
 </script>
 
 {#if modalIsOpen}
-    <div class="genericmodal flex  justify-center items-center">
+    <div class="genericmodal flex justify-center items-center">
         <div style={ backgroundColor ? `background-color: ${backgroundColor} !important` : "#fff"} 
-             class="flex flex-col justify-start py-4 modalcontent w-100pc min-h-100pc overflow-x-hidden overflow-y-auto lg:max-w-50pc lg:min-w-30pc lg:max-h-80pc lg:h-80pc lg:min-h-50pc" use:mousedownOutside on:click_outside={() => modalIsOpen = false}>
+             class="flex flex-col justify-start modalcontent w-100pc min-h-100pc p-2 overflow-x-hidden overflow-y-auto lg:max-w-50pc lg:min-w-30pc lg:max-h-80pc lg:h-80pc lg:min-h-50pc" use:mousedownOutside on:click_outside={() => modalIsOpen = false}>
             <div class="flex">
              {#if title}
                 <h1 class="pl-50px text-center text-xl w-100pc"> {title} </h1>

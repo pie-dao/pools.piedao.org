@@ -520,13 +520,13 @@ const selectPool = (_pool) => {
         <!-- component -->
         {#if $eth.address}
         <div class="py-5">
-          <main class="h-full overflow-y-auto">
-              <div class="container flex flex-row items-center justify-center ">
-                    <!-- Cards -->
-                    <div class="flex flex-row items-center">
+          <main class="h-full">
+              <div class="flex flex-col md:flex-row lg:flex-row items-center justify-center ">
+                    <!-- Cards Container -->
+                    <div class="flex flex-col md:flex-row lg:flex-row items-center w-100pc px-2">
                       <!-- Card -->
-                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
-                        <div class="p-3 mr-4 text-orange-500 bg-orange-100 rounded-full dark:text-orange-100 dark:bg-orange-500">
+                      <div class="flex p-6 mx-4 my-2 bg-white rounded-sm shadow-xs dark:bg-gray-800 w-100pc md:w-auto lg:w-auto">
+                        <div class="p-3 mr-4 text-xl">
                           💰
                         </div>
                         <div>
@@ -538,13 +538,14 @@ const selectPool = (_pool) => {
                           </p>
                         </div>
                       </div>
-                      <div class="flex p-4 mx-4 bg-white rounded-xs shadow-xs dark:bg-gray-800">
-                          <div class="p-3 mr-4 text-teal-500 bg-teal-100 rounded-full dark:text-teal-100 dark:bg-teal-500">
+                      <!-- Card -->
+                      <div class="flex p-6 mx-4 my-2 bg-white rounded-sm shadow-xs dark:bg-gray-800 w-100pc md:w-auto lg:w-auto">
+                          <div class="p-3 mr-4 text-xl">
                               🧮
                             </div>
                         <div>
                           <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-                            Vesting entries
+                            Vesting Entries
                           </p>
                           <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
                             {rewardEscrewData.numVestingEntries ? rewardEscrewData.numVestingEntries : 'n/a'}
@@ -653,7 +654,7 @@ const selectPool = (_pool) => {
 
             <div class="flex flex-col w-full justify-around md:flex-row">
               <!-- UNSTAKE BOX -->
-              <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
+              <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm p-4">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.withdraw} alt="PieDAO logo" />
                     <div class="title text-lg">UNSTAKE {#if pool.contractType === "Geyser"} and CLAIM {/if}</div>
                     <div class="apy">
@@ -662,7 +663,7 @@ const selectPool = (_pool) => {
                     <div class="subtitle font-thin">STAKED BALANCE</div>
                     
                     <div class="apy text-sm">{pool.toStakeDesc}</div>
-                    <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+                    <div class="w-100pc input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="left float-left">{$_('general.amount')} to unstake</div>
                         </div>
@@ -687,7 +688,7 @@ const selectPool = (_pool) => {
               </div>
 
               <!-- STAKE BOX -->
-              <div class="farming-card highlight-box flex flex-col justify-center align-center items-center mx-1 my-4  border border-grey border-opacity-50 border-solid rounded-sm py-2">
+              <div class="farming-card highlight-box flex flex-col justify-center align-center items-center mx-1 my-4  border border-grey border-opacity-50 border-solid rounded-sm p-4">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.stake} alt="PieDAO logo" />
                     <div class="title text-lg"> STAKE</div>
                     <div class="apy">
@@ -695,7 +696,7 @@ const selectPool = (_pool) => {
                     </div>
                     <div class="subtitle font-thin">BALANCE</div>
                     <div class="apy text-sm">{pool.toStakeDesc}</div>
-                    <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+                    <div class="w-100pc input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="text-black left black float-left">{$_('general.amount')} to stake</div>
                         </div>
@@ -724,7 +725,7 @@ const selectPool = (_pool) => {
 
               <!-- CLAIM BOX -->
               {#if pool.contractType === "UniPool" || pool.contractType === 'escrewRewardsStakingPool'}
-              <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm py-2">
+              <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm p-4">
                     <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.claim} alt="PieDAO logo" />
                     <div class="title text-lg">REWARDS AVAILABLE</div>
                     <div class="subtitle font-thin">{pool.rewards_token} TO CLAIM</div>
@@ -740,7 +741,7 @@ const selectPool = (_pool) => {
                     {/if}
 
                     
-                    <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+                    <div class="w-100pc input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="left float-left">{$_('general.amount')} to claim</div>
                         </div>
@@ -768,7 +769,7 @@ const selectPool = (_pool) => {
                     <div class="apy">
                       {geyserApy.earnedOptimistic} {pool.rewards_token}
                     </div>
-                    <div class="w-80 input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+                    <div class="w-100pc input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                         <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                             <div class="left float-left">{$_('general.amount')} accrued</div>
                         </div>

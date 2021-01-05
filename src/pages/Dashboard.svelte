@@ -72,14 +72,15 @@
   <div class="w-99pc m-4">
 
   {#if piVaults.length }
-    <div class="my-10">
+    <div class="my-0 md:my-4 lg:my-6">
       <h1 class="text-lg">🆕 Pie Vaults</h1>
       <p class="font-thin">Yield Bearing & Meta-Governance Enabled</p>
     </div>
 
-    <div class="flex justify-around w-100pc content-center">
+    <div class="flex w-100pc">
       {#each piVaults as pie}
         <ProductBox 
+          class="w-100pc"
           link={`#/pie/${pie.address}`}
           image={pie.icon}
           title={pie.symbol}
