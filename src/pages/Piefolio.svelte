@@ -94,7 +94,7 @@
   <button class="table-btn-outline font-thin min-w-70px max-w-200px">Show all Assets</button> 
 
 
-  <h2 class="w-full text-xl text-center mt-0 mb-0 leading-tight font-heading md:text-left md:mt-2 md:mb-0">Oven</h2>
+  <h2 class="w-full text-xl text-center mt-0 mb-4 leading-tight font-heading md:text-left md:mt-2 md:mb-4">Oven</h2>
      
   <!-- Oven Banner -->
   <div class="flex w-full flex-col items-center justify-center oven-card-bg text-white rounded-30 justify-between py-8">
@@ -136,26 +136,127 @@
             <td class="border text-center font-thin font-green px-4 py-2">
               659.40 BCP
             </td>
+
+            <td class="border text-center font-thin font-green px-4 py-2">
+              <button class="table-btn-outline font-thin min-w-70px max-w-200px">
+                Open Oven
+              </button>
+            </td>
+
           </tr>
       </tbody>
     </table>
   </div>
 
 
-  <h2 class="w-full text-xl text-center mt-0 mb-0 leading-tight font-heading md:text-left md:mt-2 md:mb-0">Farming & Rewards</h2>
+  <h2 class="w-full text-xl text-center mt-0 mb-4 md:mb-8 leading-tight font-heading md:text-left md:mt-2 md:mb-0">Farming & Rewards</h2>
 
   <!-- Farming Cards -->
   <div class="w-full flex flex-col justify-between mb-4 md:mb-6 md:flex-row lg:flex-row">
       <!-- Card -->
-      <div class="flex w-full md:w-1/2 bg-lightgrey p-8 rounded-sm">
+      <div class="flex w-full md:w-1/2 bg-lightgrey p-8 mb-2 rounded-sm md:mr-2 md:mb-0">
         <div class="w-5/7"><img width="80px" height="auto" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/money-bag_1f4b0.png" alt="buy YPIE" /></div>
-        <div class="w-2/7 ml-4">
+        <div class="w-2/7 ml-8">
           <div class="font-thin text-base">DOUGH in Escrow</div>
           <div class="text-xl">2.454,40</div>
         </div>
       </div>
-
+      <!-- Card -->
+      <div class="flex w-full md:w-1/2 bg-lightgrey p-8 rounded-sm md:ml-2">
+        <div class="w-5/7"><img width="80px" height="auto" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/abacus_1f9ee.png" alt="buy YPIE" /></div>
+        <div class="w-2/7 ml-8">
+          <div class="font-thin text-base">Vesting Entries</div>
+          <div class="text-xl">2.454,40</div>
+        </div>
+      </div>
   </div>
+
+    <!-- Farm Table -->
+    <div class="w-99pc m-4">
+      <table class="breakdown-table table-auto w-full">
+        <thead>
+          <tr>
+            <th class="font-thin border-b-2 px-4 py-2 text-left">Pool name</th>
+            <th class="font-thin border-b-2 px-4 py-2 text-left">Amount Staked</th>
+            <th class="font-thin border-b-2 px-4 py-2">APY</th>
+            <th class="font-thin border-b-2 px-4 py-2">Rewards Available</th>
+            <th class="font-thin border-b-2 px-4 py-2"></th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td class="border border-gray-800 px-2 py-2 text-left">
+                <img
+                  class="inline icon ml-2 mr-2"
+                  src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
+                  alt="token" />
+                  DEFI+S / ETH
+              </td>
+  
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                87.50%
+              </td>
+
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                8342 BPT
+              </td>
+  
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                3.159,90 DOUGH
+              </td>
+              
+              <td class="border text-center font-thin font-green px-4 py-2">
+                <a href="oven">
+                  <button class="table-btn highlight-box min-w-70px">
+                    Claim
+                  </button>
+                </a>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <h2 class="w-full text-xl text-center mt-0 mb-0 md:mb-0 leading-tight font-heading md:text-left md:mt-2 md:mb-0">Governance</h2>
+
+     <!-- Governance Table -->
+     <div class="w-99pc m-4">
+      <table class="breakdown-table table-auto w-full">
+        <thead>
+          <tr>
+            <th class="font-thin border-b-2 px-4 py-2 text-left">Pool name</th>
+            <th class="font-thin border-b-2 px-4 py-2 text-left">Start</th>
+            <th class="font-thin border-b-2 px-4 py-2">End</th>
+            <th class="font-thin border-b-2 px-4 py-2"></th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td class="border border-gray-800 px-2 py-2 text-left truncate w-200px">
+                <div class="w-70px percentage-bar float-left bg-black font-bold h-6 roundedxs"><span>Snapshot</span></div>
+                &nbsp; PIP-37 Enable SUSHI/ YFI Staking on YPIE
+              </td>
+  
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                Dec 14, 10:00 AM
+              </td>
+
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                Dec 15, 02:00 PM
+              </td>
+              
+              <td class="border text-center font-thin font-green px-4 py-2">
+                <a href="vote">
+                  <button class="table-btn highlight-box min-w-70px">
+                    Vote
+                  </button>
+                </a>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
 
 
 
