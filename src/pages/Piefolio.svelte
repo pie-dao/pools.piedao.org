@@ -185,7 +185,7 @@
         </thead>
         <tbody>
             <tr>
-              <td class="border border-gray-800 px-2 py-2 text-left">
+              <td class="w-200px border border-gray-800 px-2 py-2 text-left">
                 <img
                   class="inline icon ml-2 mr-2"
                   src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
