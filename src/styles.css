@@ -637,6 +637,18 @@ right: 0px;
   padding: 8px;
 }
 
+.table-btn-black {
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 200;
+  border: none;
+  padding: 8px;
+  background-color: black;
+  color: white;
+  font-weight: 400;
+
+}
+
 .table-btn.highlight-box {
   font-weight: 400;
 }
@@ -1736,3 +1748,14 @@ outline: none;
   background-size: cover;
   position: relative;
 }
+
+.oven-card-bg {
+  background-image: url("https://raw.githubusercontent.com/pie-dao/brand/master/misc/oven-banner-bg.png");
+  background-color: #D48EFF;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+
