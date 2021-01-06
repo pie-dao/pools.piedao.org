@@ -34,8 +34,7 @@
 
   <h2 class="w-full text-xl text-center mt-0 mb-0 leading-tight font-heading md:text-left md:mt-2 md:mb-0">Your Holdings</h2>
 
-
-
+   <!-- Holdings table -->
   <div class="w-99pc m-4">
     <table class="breakdown-table table-auto w-full">
       <thead>
@@ -95,8 +94,68 @@
   <button class="table-btn-outline font-thin min-w-70px max-w-200px">Show all Assets</button> 
 
 
+  <h2 class="w-full text-xl text-center mt-0 mb-0 leading-tight font-heading md:text-left md:mt-2 md:mb-0">Oven</h2>
+     
+  <!-- Oven Banner -->
+  <div class="flex w-full flex-col items-center justify-center oven-card-bg text-white rounded-30 justify-between py-8">
+      <img class="mb-2" width="40px" height="40px" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/timer-clock_23f2-fe0f.png" alt="buy YPIE" />
+      <div class="w-full font-thin text-center leading-4 mb-2">Freshly baked Pies, almost Gas Free</div>
+      <button class="table-btn-black min-w-70px max-w-200px">Bake now</button> 
+  </div>
 
 
+  <!-- Oven Table -->
+  <div class="w-99pc m-4">
+    <table class="breakdown-table table-auto w-full">
+      <thead>
+        <tr>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">Oven name</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">Baking Session</th>
+          <th class="font-thin border-b-2 px-4 py-2">Your ETH in the Oven</th>
+          <th class="font-thin border-b-2 px-4 py-2">Pie ready to Withdraw</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr>
+            <td class="border border-gray-800 px-2 py-2 text-left">
+              <img
+                class="inline icon ml-2 mr-2"
+                src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
+                alt="token" />
+                BCP
+            </td>
+
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              6.5 / 10 ETH
+            </td>
+
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              0.5 ETH
+            </td>
+            
+            <td class="border text-center font-thin font-green px-4 py-2">
+              659.40 BCP
+            </td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <h2 class="w-full text-xl text-center mt-0 mb-0 leading-tight font-heading md:text-left md:mt-2 md:mb-0">Farming & Rewards</h2>
+
+  <!-- Farming Cards -->
+  <div class="w-full flex flex-col justify-between mb-4 md:mb-6 md:flex-row lg:flex-row">
+      <!-- Card -->
+      <div class="flex w-full md:w-1/2 bg-lightgrey p-8 rounded-sm">
+        <div class="w-5/7"><img width="80px" height="auto" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/money-bag_1f4b0.png" alt="buy YPIE" /></div>
+        <div class="w-2/7 ml-4">
+          <div class="font-thin text-base">DOUGH in Escrow</div>
+          <div class="text-xl">2.454,40</div>
+        </div>
+      </div>
+
+  </div>
 
 
 
