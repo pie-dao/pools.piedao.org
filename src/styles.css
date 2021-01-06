@@ -510,6 +510,14 @@ border-radius: 6px;
   min-width: 150px!important;
 }
 
+.table-btn-outline {
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 200;
+  border: 1px solid #2b2b2b;
+  padding: 8px;
+}
+
 .table-btn {
   border-radius: 6px;
   font-size: 14px;
