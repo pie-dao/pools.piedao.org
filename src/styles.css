@@ -77,6 +77,10 @@ flex: 1 1 0;
   color: #EC1EA0;
 }
 
+.bg-main {
+  background-color: #EC1EA0;
+}
+
 
 .bg-cream {
   background-color: #afa3ff;
@@ -109,6 +113,11 @@ flex: 1 1 0;
     -moz-box-shadow:    0px -8px 8px 0px rgba(50, 50, 50, 0.08);
     box-shadow:         0px -8px 8px 0px rgba(50, 50, 50, 0.08);
     }
+.rounded-30 {
+  border-radius: 30px;
+}
+
+
 
 .sticky-dropdown {
 position: absolute;
@@ -1689,3 +1698,35 @@ outline: none;
   filter: invert(1);
 }
 
+
+.balance-card-bg {
+  background-image: url("https://raw.githubusercontent.com/pie-dao/brand/master/misc/bal-card-bg.png");
+  background-color: #EC1EA0;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.text-vertical {
+  /* writing-mode: vertical-rl;
+  text-orientation: mixed; */
+  transform: rotate(-90deg);
+  margin-bottom: 2rem;
+}
+
+.foliobars {
+  border-radius: 10px 10px 0 0;
+  min-height: 5rem;
+  display: flex;
+  align-items: flex-end;
+}
+
+.buy-YPIE-bg {
+  background-image: url("https://raw.githubusercontent.com/pie-dao/brand/master/misc/hands-bg.png");
+  background-color: black;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
