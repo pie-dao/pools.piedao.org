@@ -131,6 +131,7 @@
   "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31": {
     "symbol": "YPIE",
     "name": "Yearn Ecosystem Pie",
+    "coingeckoId": "piedao-yearn-ecosystem-pie",
     "useMintOverBuy": true,
     "useRecipe": true,
     "streamingFees": "0",
@@ -489,6 +490,7 @@
   "0xe4f726adc8e89c6a6017f01eada77865db22da14": {
     "symbol": "BCP",
     "isExperipie": false,
+    "coingeckoId": "piedao-balanced-crypto-pie",
     "name": "Balanced Crypto Pie",
     "useRecipe": true,
     "useMintOverBuy": true,
