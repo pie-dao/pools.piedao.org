@@ -21,15 +21,36 @@ export { subject } from './eth/observables.js';
 
 const Web3Modal = window.Web3Modal.default;
 const providerOptions = {
-  walletconnect: {
-    package: WalletConnectProvider, // required
-    options: {
-      infuraId: 'e106b2b27c0f4941be1f2c183a20b3ea', // required
-    },
-  },
+  // walletconnect: {
+  //   package: WalletConnectProvider, // required
+  //   options: {
+  //     infuraId: 'e106b2b27c0f4941be1f2c183a20b3ea', // required
+  //   },
+  // },
+  // injected: {
+  //   package: null,
+  // },
+  // Example with injected providers
   injected: {
-    package: null,
+    display: {
+      // logo: "data:image/gif;base64,INSERT_BASE64_STRING",
+      name: "MetaMask",
+      description: "Connect with the provider in your Browser"
+    },
+    package: null
   },
+  // Example with WalletConnect provider
+  walletconnect: {
+    display: {
+      // logo: "data:image/gif;base64,INSERT_BASE64_STRING",
+      name: "WalletConnect",
+      description: "Scan qrcode with your mobile wallet"
+    },
+    package: WalletConnectProvider,
+    options: {
+      infuraId: "e106b2b27c0f4941be1f2c183a20b3ea" // required
+    }
+  }
 };
 
 const web3Modal = new Web3Modal({
