@@ -49,9 +49,126 @@
       </thead>
       <tbody>
           <tr>
-            <td class="border border-gray-800 px-2 py-2 text-left">
+            <td class="border border-gray-800 px-2 py-2 text-left min-w-120px">
               <img
-                class="inline icon ml-2 mr-2"
+                class="inline icon ml-2 mr-2 w-40px"
+                src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
+                alt="token" />
+                YFI
+            </td>
+
+            <td class="border text-center px-4 py-2 font-thin relative w-50">
+                <div class="w-100px percentage-bar float-left bg-pink h-6 roundedxs hidden md:block">
+                  <span>12%</span>
+                </div>
+
+                <div class="block md:hidden">
+                  12%
+                </div>
+            </td>
+
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              324 YFI
+            </td>
+
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              1.245,30 USD
+            </td>
+            
+            <td class="border text-center font-thin font-green px-4 py-2">
+              23% 24h
+            </td>
+
+            <td class="border text-center py-2 px-4 md:px-0">
+              <img
+                class="w-30 spark greyoutImage mx-0"
+                alt="Sparkline"
+                src="https://www.coingecko.com/coins/877/sparkline" 
+                style="margin: auto;" />
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-gray-800 px-2 py-2 text-left min-w-120px">
+              <img
+                class="inline icon ml-2 mr-2 w-40px"
+                src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
+                alt="token" />
+                YFI
+            </td>
+
+            <td class="border text-center px-4 py-2 font-thin relative w-50">
+                <div class="w-100px percentage-bar float-left bg-pink h-6 roundedxs hidden md:block">
+                  <span>12%</span>
+                </div>
+
+                <div class="block md:hidden">
+                  12%
+                </div>
+            </td>
+
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              324 YFI
+            </td>
+
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              1.245,30 USD
+            </td>
+            
+            <td class="border text-center font-thin font-green px-4 py-2">
+              23% 24h
+            </td>
+
+            <td class="border text-center py-2 px-4 md:px-0">
+              <img
+                class="w-30 spark greyoutImage mx-0"
+                alt="Sparkline"
+                src="https://www.coingecko.com/coins/877/sparkline" 
+                style="margin: auto;" />
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-gray-800 px-2 py-2 text-left min-w-120px">
+              <img
+                class="inline icon ml-2 mr-2 w-40px"
+                src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
+                alt="token" />
+                YFI
+            </td>
+
+            <td class="border text-center px-4 py-2 font-thin relative w-50">
+                <div class="w-100px percentage-bar float-left bg-pink h-6 roundedxs hidden md:block">
+                  <span>12%</span>
+                </div>
+
+                <div class="block md:hidden">
+                  12%
+                </div>
+            </td>
+
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              324 YFI
+            </td>
+
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              1.245,30 USD
+            </td>
+            
+            <td class="border text-center font-thin font-green px-4 py-2">
+              23% 24h
+            </td>
+
+            <td class="border text-center py-2 px-4 md:px-0">
+              <img
+                class="w-30 spark greyoutImage mx-0"
+                alt="Sparkline"
+                src="https://www.coingecko.com/coins/877/sparkline" 
+                style="margin: auto;" />
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-gray-800 px-2 py-2 text-left min-w-120px">
+              <img
+                class="inline icon ml-2 mr-2 w-40px"
                 src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
                 alt="token" />
                 YFI
@@ -117,14 +234,13 @@
       </thead>
       <tbody>
           <tr>
-            <td class="border border-gray-800 px-2 py-2 text-left">
+            <td class="border border-gray-800 px-2 py-2 text-left min-w-120px">
               <img
-                class="inline icon ml-2 mr-2"
+                class="inline icon ml-2 mr-2 w-40px"
                 src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
                 alt="token" />
                 BCP
             </td>
-
             <td class="border px-4 ml-8 py-2 font-thin text-center">
               6.5 / 10 ETH
             </td>
@@ -142,7 +258,58 @@
                 Open Oven
               </button>
             </td>
+          </tr>
+          <tr>
+            <td class="border border-gray-800 px-2 py-2 text-left min-w-120px">
+              <img
+                class="inline icon ml-2 mr-2 w-40px"
+                src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
+                alt="token" />
+                BCP
+            </td>
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              6.5 / 10 ETH
+            </td>
 
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              0.5 ETH
+            </td>
+            
+            <td class="border text-center font-thin font-green px-4 py-2">
+              659.40 BCP
+            </td>
+
+            <td class="border text-center font-thin font-green px-4 py-2">
+              <button class="table-btn-outline font-thin min-w-70px max-w-200px">
+                Open Oven
+              </button>
+            </td>
+          </tr>
+          <tr>
+            <td class="border border-gray-800 px-2 py-2 text-left min-w-120px">
+              <img
+                class="inline icon ml-2 mr-2 w-40px"
+                src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
+                alt="token" />
+                BCP
+            </td>
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              6.5 / 10 ETH
+            </td>
+
+            <td class="border px-4 ml-8 py-2 font-thin text-center">
+              0.5 ETH
+            </td>
+            
+            <td class="border text-center font-thin font-green px-4 py-2">
+              659.40 BCP
+            </td>
+
+            <td class="border text-center font-thin font-green px-4 py-2">
+              <button class="table-btn-outline font-thin min-w-70px max-w-200px">
+                Open Oven
+              </button>
+            </td>
           </tr>
       </tbody>
     </table>
@@ -185,9 +352,67 @@
         </thead>
         <tbody>
             <tr>
-              <td class="w-200px border border-gray-800 px-2 py-2 text-left">
+              <td class="w-200px border border-gray-800 px-2 py-2 text-left min-w-200px">
                 <img
-                  class="inline icon ml-2 mr-2"
+                  class="inline icon ml-2 mr-2 w-40px"
+                  src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
+                  alt="token" />
+                  DEFI+S / ETH
+              </td>
+  
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                87.50%
+              </td>
+
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                8342 BPT
+              </td>
+  
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                3.159,90 DOUGH
+              </td>
+              
+              <td class="border text-center font-thin font-green px-4 py-2">
+                <a href="oven">
+                  <button class="table-btn highlight-box min-w-70px">
+                    Claim
+                  </button>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td class="w-200px border border-gray-800 px-2 py-2 text-left min-w-200px">
+                <img
+                  class="inline icon ml-2 mr-2 w-40px"
+                  src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
+                  alt="token" />
+                  DEFI+S / ETH
+              </td>
+  
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                87.50%
+              </td>
+
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                8342 BPT
+              </td>
+  
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                3.159,90 DOUGH
+              </td>
+              
+              <td class="border text-center font-thin font-green px-4 py-2">
+                <a href="oven">
+                  <button class="table-btn highlight-box min-w-70px">
+                    Claim
+                  </button>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td class="w-200px border border-gray-800 px-2 py-2 text-left min-w-200px">
+                <img
+                  class="inline icon ml-2 mr-2 w-40px"
                   src="https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330"
                   alt="token" />
                   DEFI+S / ETH
@@ -232,6 +457,50 @@
           </tr>
         </thead>
         <tbody>
+            <tr>
+              <td class="border border-gray-800 px-2 py-2 text-left truncate w-200px">
+                <div class="w-70px percentage-bar float-left bg-black font-bold h-6 roundedxs"><span>Snapshot</span></div>
+                &nbsp; PIP-37 Enable SUSHI/ YFI Staking on YPIE
+              </td>
+  
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                Dec 14, 10:00 AM
+              </td>
+
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                Dec 15, 02:00 PM
+              </td>
+              
+              <td class="border text-center font-thin font-green px-4 py-2">
+                <a href="vote">
+                  <button class="table-btn highlight-box min-w-70px">
+                    Vote
+                  </button>
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-gray-800 px-2 py-2 text-left truncate w-200px">
+                <div class="w-70px percentage-bar float-left bg-black font-bold h-6 roundedxs"><span>Snapshot</span></div>
+                &nbsp; PIP-37 Enable SUSHI/ YFI Staking on YPIE
+              </td>
+  
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                Dec 14, 10:00 AM
+              </td>
+
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                Dec 15, 02:00 PM
+              </td>
+              
+              <td class="border text-center font-thin font-green px-4 py-2">
+                <a href="vote">
+                  <button class="table-btn highlight-box min-w-70px">
+                    Vote
+                  </button>
+                </a>
+              </td>
+            </tr>
             <tr>
               <td class="border border-gray-800 px-2 py-2 text-left truncate w-200px">
                 <div class="w-70px percentage-bar float-left bg-black font-bold h-6 roundedxs"><span>Snapshot</span></div>
