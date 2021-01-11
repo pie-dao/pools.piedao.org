@@ -31,10 +31,10 @@
 
       <ProductBox 
         link="#/pie/0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
-        image={images.defiplusl}
-        title="DEFI+L"
-        subTitle="DeFi Large Cap"
-        description="DeFi’s Blue Chips. Bigger is Better."
+        image={images.ypietoken}
+        title="YPIE"
+        subTitle="Yearn Ecosystem Pie"
+        description="Metagovernance, staking and lending strategies. "
       />
 
       <ProductBox 
