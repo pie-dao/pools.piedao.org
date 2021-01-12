@@ -918,6 +918,15 @@ opacity: 0.6;
 @media screen and (max-width: 1200px) {
   .breakdown-table {
     display: block;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .breakdown-table {
+    display: block;
     overflow-x: scroll;
     overflow-y: hidden;
     white-space: nowrap;
