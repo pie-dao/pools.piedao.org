@@ -1867,9 +1867,8 @@ font-weight: 100!important;
     transform: translateY(calc(100% - 4px));
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(60deg, #743ad5 0%, #d53a9d 100%);
+    background-image: linear-gradient(60deg, #000000 0%, #000000 100%);
     transition: transform .25s ease-out;
-    border-radius: 6px;
  }
  
  .learn-link:hover { 
@@ -1878,6 +1877,10 @@ font-weight: 100!important;
  .learn-link:hover::before {
     transform: translateY(0);
     transition: transform .25s ease-out;
+    background-image: linear-gradient(60deg, #743ad5 0%, #d53a9d 100%);
+    border-radius: 6px;
+
+
  }
 
  .fit-content {
