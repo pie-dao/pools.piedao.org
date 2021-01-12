@@ -11,7 +11,7 @@
       href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">Inside the
       Bakery: How We Build Pies
     </a>
-    <p class="learn-description font-thin text-base mb-8">
+    <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px mt-1 ml-5px">
       PieDAO employs an open and responsive process for the modeling of its different Pies through
       discourse. This approach maximises feedback input from the Community, with DAO governance
       eventually giving the green-light to launch a pie.
@@ -23,7 +23,7 @@
       href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">
       How to Mint Pies Gas-Free With Oven
     </a>
-    <p class="learn-description font-thin text-base mb-8">
+    <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
       It’s time to formally announce Oven, a new feature from PieDAO providing gas-free pie minting.
     </p>
 
@@ -33,7 +33,7 @@
       href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">
     How to maximise yield with PieDAO Farming opportunities
     </a>
-    <p class="learn-description font-thin text-base mb-8">
+    <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
       We believe the future of finance is passive and are committed to building products that make investing easy and minimise risk.
     </p>
 
@@ -42,7 +42,7 @@
       target="_blank"
       href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">Pie Valults
     </a>
-    <p class="learn-description font-thin text-base mb-8">
+    <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
       YPIE is PieDAO’s first PieVault and the industry’s first index to support native staking, as well as lending and meta-governance.
     </p>
 
@@ -57,7 +57,7 @@
     href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">Inside the
     Bakery: How We Build Pies
   </a>
-  <p class="learn-description font-thin text-base mb-8">
+  <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
     PieDAO employs an open and responsive process for the modeling of its different Pies through
     discourse. This approach maximises feedback input from the Community, with DAO governance
     eventually giving the green-light to launch a pie.
@@ -69,7 +69,7 @@
     href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">
     How to Mint Pies Gas-Free With Oven
   </a>
-  <p class="learn-description font-thin text-base mb-8">
+  <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
     It’s time to formally announce Oven, a new feature from PieDAO providing gas-free pie minting.
   </p>
 
@@ -79,7 +79,7 @@
     href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">
   How to maximise yield with PieDAO Farming opportunities
   </a>
-  <p class="learn-description font-thin text-base mb-8">
+  <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
     We believe the future of finance is passive and are committed to building products that make investing easy and minimise risk.
   </p>
 
@@ -88,7 +88,7 @@
     target="_blank"
     href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">Pie Valults
   </a>
-  <p class="learn-description font-thin text-base mb-8">
+  <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
     YPIE is PieDAO’s first PieVault and the industry’s first index to support native staking, as well as lending and meta-governance.
   </p>
 
@@ -104,7 +104,7 @@
     href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">Inside the
     Bakery: How We Build Pies
   </a>
-  <p class="learn-description font-thin text-base mb-8">
+  <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
     PieDAO employs an open and responsive process for the modeling of its different Pies through
     discourse. This approach maximises feedback input from the Community, with DAO governance
     eventually giving the green-light to launch a pie.
@@ -116,7 +116,7 @@
     href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">
     How to Mint Pies Gas-Free With Oven
   </a>
-  <p class="learn-description font-thin text-base mb-8">
+  <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
     It’s time to formally announce Oven, a new feature from PieDAO providing gas-free pie minting.
   </p>
 
@@ -126,7 +126,7 @@
     href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">
   How to maximise yield with PieDAO Farming opportunities
   </a>
-  <p class="learn-description font-thin text-base mb-8">
+  <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
     We believe the future of finance is passive and are committed to building products that make investing easy and minimise risk.
   </p>
 
@@ -135,7 +135,7 @@
     target="_blank"
     href="https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf">Pie Valults
   </a>
-  <p class="learn-description font-thin text-base mb-8">
+  <p class="learn-description font-thin text-base mb-8 mt-1 ml-5px">
     YPIE is PieDAO’s first PieVault and the industry’s first index to support native staking, as well as lending and meta-governance.
   </p>
 
