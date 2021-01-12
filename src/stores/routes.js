@@ -18,6 +18,8 @@ import Oven from '../pages/landings/oven.svelte';
 import Experipie from '../pages/ExperiPie.svelte';
 import PiePageSwitch from '../pages/PiePageSwitch.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
+import Learn from '../pages/Learn.svelte';
+
 
 
 
@@ -70,6 +72,8 @@ const formatRoute = (route) => {
       return { page: Dough };
     case 'piefolio':
       return { page: Piefolio };
+      case 'learn':
+        return { page: Learn };
     case 'swap':
       return { page: Tokensswap };
     case 'migrate':
