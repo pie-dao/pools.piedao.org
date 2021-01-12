@@ -215,9 +215,10 @@
      
   <!-- Oven Banner -->
   <div class="flex w-full flex-col items-center justify-center oven-card-bg text-white rounded-30 justify-between py-8">
-      <img class="mb-2" width="40px" height="40px" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/timer-clock_23f2-fe0f.png" alt="buy YPIE" />
-      <div class="w-full font-thin text-center leading-4 mb-2">Freshly baked Pies, almost Gas Free</div>
-      <button class="table-btn-black min-w-70px max-w-200px">Bake now</button> 
+      <img class="" width="60px" height="60px" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/timer-clock_23f2-fe0f.png" alt="buy YPIE" />
+      <div class="w-full font-2 text-bold text-center leading-4 my-4">Freshly baked Pies,<br />almost Gas Free</div>
+      <!-- <button class="table-btn-black min-w-70px max-w-200px">Bake now</button>  -->
+      <button class="btn-black bg-black min-w-70px max-w-200px">Bake now</button> 
   </div>
 
 
@@ -459,7 +460,7 @@
         <tbody>
             <tr>
               <td class="border border-gray-800 px-2 py-2 text-left truncate w-200px">
-                <div class="w-70px percentage-bar float-left bg-black font-bold h-6 roundedxs"><span>Snapshot</span></div>
+                <div class="w-70px percentage-bar float-left bg-snapshot font-bold h-6 roundedxs"><span>Snapshot</span></div>
                 &nbsp; PIP-37 Enable SUSHI/ YFI Staking on YPIE
               </td>
   
@@ -481,7 +482,7 @@
             </tr>
             <tr>
               <td class="border border-gray-800 px-2 py-2 text-left truncate w-200px">
-                <div class="w-70px percentage-bar float-left bg-black font-bold h-6 roundedxs"><span>Snapshot</span></div>
+                <div class="w-70px percentage-bar float-left bg-snapshot font-bold h-6 roundedxs"><span>Snapshot</span></div>
                 &nbsp; PIP-37 Enable SUSHI/ YFI Staking on YPIE
               </td>
   
@@ -503,7 +504,7 @@
             </tr>
             <tr>
               <td class="border border-gray-800 px-2 py-2 text-left truncate w-200px">
-                <div class="w-70px percentage-bar float-left bg-black font-bold h-6 roundedxs"><span>Snapshot</span></div>
+                <div class="w-70px percentage-bar float-left bg-snapshot font-bold h-6 roundedxs"><span>Snapshot</span></div>
                 &nbsp; PIP-37 Enable SUSHI/ YFI Staking on YPIE
               </td>
   
