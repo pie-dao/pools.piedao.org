@@ -101,6 +101,10 @@ flex: 1 1 0;
 .text-l {
   font-size: 1.2rem;
 }
+.bg-snapshot {
+  background-color: #6f42c1;
+}
+
 
 .drowpdown-shadow {
   -webkit-box-shadow: -12px 0px 29px 0px rgba(0,0,0,0.16); 
@@ -117,6 +121,8 @@ flex: 1 1 0;
   border-radius: 30px;
 }
 
+
+#
 
 
 .sticky-dropdown {
@@ -230,12 +236,36 @@ right: 0px;
   line-height: 5rem;
 }
 
+.font-2 {
+  font-size: 2.2rem;
+  line-height: 2.2rem;
+}
+
+.roundedxs {
+border-radius: 6px;
+}
 
 /* .toggle-btn .active {
   background: white;
   font-weight: bold;
   color: #EC1EA0;
 } */
+
+.btn-black{
+  background: black;
+  border-radius: 5px;
+  border-style: none;
+  color: #ffffff;
+  font-family: Rubik, sans-serif;
+  font-weight: 500;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  min-width: 150px;
+  padding: 20px;
+  text-align: center;
+  transition-duration: 0.3s;
+  transition-property: background-color, color;
+}
 
 .toggle-btn.bg-grey-243.p-20px.w-50pc.text-center.active {
   background: white;
