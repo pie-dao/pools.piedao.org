@@ -103,9 +103,6 @@
 
     await Promise.all(promises);
     stakedLiquidity = await calcStakedLiquidity();
-    if(pieLiquidity+stakedLiquidity > 10000000 && pieLiquidity+stakedLiquidity < 11000000) {
-        triggerConfetti();
-    }
   }, false);
 
   onMount( async () => {

@@ -114,6 +114,11 @@ export const currentRoute = writable({ ...formatRoute(route) });
 
 window.addEventListener('hashchange', () => {
   const newRoute = deriveRoute();
+  const trackPath = '/' + newRoute.join('/');
+
+  window.gtag('event', 'page_view', {
+    page_path: trackPath
+  })
   currentRoute.set({ ...formatRoute(newRoute) });
   window.scrollTo({
     top: 0,
