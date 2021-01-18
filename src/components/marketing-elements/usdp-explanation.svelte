@@ -1,3 +1,13 @@
+<script>
+    import Meta from '../elements/meta.svelte';
+</script>
+
+<Meta 
+    metadata={{
+        title: "USD++ - PieDAO, stablecoin index on Ethereum",
+        description: "Overiview of PieDAO's USD stablecoin pie, containing USDC, TUSD, DAI and sUSD. A breakdown of market performance, methodology, and objective of the DEFI index."
+    }}
+/>
 <div>
     <h1 class="font-lg">Summary:</h1>
     <span class="font-thin">

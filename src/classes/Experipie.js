@@ -1,8 +1,11 @@
 /* eslint-disable */
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
+import { erc20 } from "@pie-dao/abis";
 import ABI from '../config/experipieABI.json';
 import defiSdkABI from '../config/defiSdkABI.json';
+import yVaultABI from '../abis/yVaultABI.json';
+import xSUSHIABI from '../abis/xSUSHIAbi.json';
 import get from 'lodash/get';
 import find from 'lodash/find';
 
@@ -81,12 +84,103 @@ class Experipie {
       this.calcWeights();
     }
 
+    async applyPatches() {
+
+      const xsushi = "0x8798249c2e607446efb7ad49ec89dd1865ff4272".toLowerCase();
+      const sushi = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2".toLowerCase();
+
+      let price = get(find(this.marketData, (o) => {
+        return o.address === sushi;
+      }), 'market_data.current_price', 0);
+
+      if(this.map[xsushi]) {
+        const xsushiContract = new ethers.Contract(xsushi, xSUSHIABI, this.provider);
+        const sushiContract = new ethers.Contract(sushi, erc20, this.provider);
+
+        let totalShares = await xsushiContract.totalSupply();
+        let balanceXsushi = await sushiContract.balanceOf(xsushi);
+        let share = this.map[xsushi].balance.bn;
+        const sushiBalance = share.mul(balanceXsushi).div(totalShares);    
+
+        
+        this.map[xsushi] = {
+          ...this.map[xsushi],
+          address: xsushi,
+          decimals: 18,
+          name: "SushiBar",
+          symbol: "xSUSHI",
+          protocol: {
+            description: "",
+            iconURL: "",
+            name: "SushiBar",
+          },
+          underlying: {
+            price,
+            address: sushi,
+            decimals: 18,
+            name: "Sushi",
+            symbol: "SUSHI",
+            protocol: {
+              description: "",
+              iconURL: "",
+              name: "SushiBar",
+            },
+            balance: {
+              bn: sushiBalance,
+              label: getNormalizedNumber(sushiBalance.toString(), 18).toString()
+            }
+          }
+        }
+      }
+
+      const yfi = "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e".toLowerCase();
+      const yYFI = "0xba2e7fed597fd0e3e70f5130bcdbbfe06bb94fe1".toLowerCase();
+
+      
+
+      price = get(find(this.marketData, (o) => {
+        return o.address === yfi;
+      }), 'market_data.current_price', 0);
+
+      // const yYFIContract = new ethers.Contract(yYFI, yVaultABI, this.provider);
+      // let priceFullShare = await yYFIContract.getPricePerFullShare();
+      // let yfiUnderBalance = priceFullShare.mul(this.map[yYFI].balance.bn);
+
+      if(this.map[yYFI]) {
+        this.map[yYFI] = {
+          ...this.map[yYFI],
+          address: yYFI,
+          decimals: 18,
+          name: "yGOV",
+          symbol: "yGOV",
+          protocol: {
+            description: "",
+            iconURL: "",
+            name: "yGOV",
+          },
+          underlying: {
+            price,
+            address: yfi,
+            decimals: 18,
+            name: "YFI",
+            symbol: "YFI",
+            protocol: {
+              description: "",
+              iconURL: "",
+              name: "yGOV",
+            },
+            balance: this.map[yYFI].balance
+          }
+        }
+      }
+    }
+
     async fetchLentAssets() {
       let balancesOnSelectedProtocols = await this.defiSdk.getProtocolBalances(
           this.address, ['Aave', 'Compound', 'C.R.E.A.M.']
       );
 
-      console.log('balancesOnSelectedProtocols', balancesOnSelectedProtocols)
+      await this.applyPatches();
 
       balancesOnSelectedProtocols.forEach((protocol) => {
           

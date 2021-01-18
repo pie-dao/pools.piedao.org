@@ -38,6 +38,7 @@
   import Snapshot from '../components/Snapshot.svelte';
   import Experipie, { getNormalizedNumber } from '../classes/Experipie.js';
   import cToken from '../classes/CToken.js';
+  import sushiData from '@sushiswap/sushi-data';
 
   export let params;
 
@@ -110,13 +111,14 @@
     let globalAPR = 0;
     const compoundData = await fetchCompoundData();
     const aaveData = await fetchAaveData();
+
+    
     
     Pie = new Experipie(token, $eth.provider);
     await Pie.initialize($piesMarketDataStore);
 
     for (const el of Pie.composition) {
       let address = el.address.toLowerCase()
-      const data = Pie.map[address];
       let tokenInfo = find(poolsConfig[token].composition, (o) => address === o.address.toLowerCase());
 
       if(tokenInfo) {
@@ -128,7 +130,9 @@
           percentage: el.percentage
         })
       } else {
+
         let tokenInfo = find(poolsConfig[token].composition, (o) => Pie.map[address].underlying.address === o.address.toLowerCase());
+        console.log('tokenInfo', tokenInfo)
         let lendingInfo = await getLendingInfo(Pie.map, address, compoundData, aaveData);
         console.log(lendingInfo.apy, el.percentage, lendingInfo.apy * el.percentage)
         globalAPR += lendingInfo.apy * el.percentage;
@@ -164,7 +168,8 @@
     let lendingInfo = {};
     const protocolNamePie = map[address].protocol.name;
     const underlyingAddress = map[address].underlying.address
-
+    
+    console.log('---> ', protocolNamePie)
     switch (protocolNamePie) {
       case 'Aave':
         lendingInfo = find(aaveData, (o) => underlyingAddress === o.underlyingAsset.toLowerCase());
@@ -184,6 +189,14 @@
         await creamToken.initialize()
         lendingInfo.apy = creamToken.apr;
         break;
+      
+      case 'SushiBar':
+        lendingInfo.apy = await doXSusi(map[address].underlying.price);
+        break;
+      
+      case 'yGOV':
+        lendingInfo.apy = 0.36;
+        break;
     
       default:
         lendingInfo.apy = 0;
@@ -192,6 +205,62 @@
 
     return lendingInfo;
   }
+
+
+  async function doXSusi(price) {
+    let sushiDailyVolume = 0;
+    let sushiWeeklyVolume = 0;
+    let stakedSushiValue = 0;
+    let dailySushiApy = 0;
+    let weeklySushyApy = 0;
+    let xSushiSuply = 0;
+    let xSushiRatio = 0;
+
+    let sushiPrice = price;
+
+    console.log('price', price)
+
+    let r = await sushiData.exchange.dayData(8)
+    
+    for (var i = 0; i < 7; i++) {
+        sushiWeeklyVolume += r[i + 1].volumeUSD;
+    }
+
+    r = await sushiData.exchange.dayData(2)
+    sushiDailyVolume = r[1].volumeUSD;
+
+
+    let info = await sushiData.bar.info();
+
+    xSushiSuply = info.totalSupply;
+    xSushiRatio = info.ratio;
+    stakedSushiValue = xSushiSuply * xSushiRatio * sushiPrice;
+
+    let dailyFees = sushiDailyVolume * 0.05 * 0.01;
+    let weeklyFees = sushiWeeklyVolume * 0.05 * 0.01;
+    let dailySushiApyRate = dailyFees / stakedSushiValue;
+    dailySushiApy = Math.pow(1 + dailySushiApyRate, 365) - 1;
+    dailySushiApy = dailySushiApy * 100;
+    dailySushiApy = dailySushiApy.toFixed(2);
+    let weeklySushiApyRate = weeklyFees / stakedSushiValue;
+    weeklySushyApy = Math.pow(1 + weeklySushiApyRate, 52) - 1;
+    weeklySushyApy = weeklySushyApy * 100;
+    weeklySushyApy = weeklySushyApy.toFixed(2);
+
+    let APR = ((dailyFees / xSushiSuply) * 365) / (xSushiRatio * sushiPrice)
+    let APY = ( 1 + (APR / 365))^365 - 1
+
+    console.log('SUSHI', {
+      weeklySushyApy,
+      dailySushiApy,
+      APR,
+      APY
+    })
+    //APY = (1 + Periodic Rate)Number of periods – 1
+    
+    
+    return dailySushiApy;
+}
 
   onMount( async () => {
     initialize();

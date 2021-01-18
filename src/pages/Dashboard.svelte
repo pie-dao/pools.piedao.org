@@ -5,6 +5,7 @@
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
   import ProductBox from '../components/elements/product-box.svelte';
+  import Meta from '../components/elements/meta.svelte';
 
   import {
     getTokenImage,
@@ -15,7 +16,7 @@
   import Modal from '../components/elements/Modal.svelte';
   import LiquidityModal from "../components/modals/LiquidityModalSwitch.svelte";
 
-  $: pies = filter(poolsConfig.selectable.map(address => {
+  $: pies = filter(poolsConfig.available.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
       ...poolsConfig[address],
@@ -28,7 +29,7 @@
     };
   }), {isExperipie: false}) || [];
 
-  $: piVaults = filter(poolsConfig.selectable.map(address => {
+  $: piVaults = filter(poolsConfig.available.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
       ...poolsConfig[address],
@@ -56,6 +57,13 @@
   
 </script>
 
+<Meta 
+  metadata={{
+    title: "PieDAO Products Page, DEFI index and yield aggregators",
+    description: "An overview of the PieDAO's products, including Pies and PieVaults DEFI index. BCP, DEFI++, DEFI+L, DEFI+S, BTC++, USD++, YPIE.",
+  }}
+/>
+
 <div class="content flex flex-col spl">
 
   <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
@@ -72,14 +80,15 @@
   <div class="w-99pc m-4">
 
   {#if piVaults.length }
-    <div class="my-10">
+    <div class="my-0 md:my-4 lg:my-6">
       <h1 class="text-lg">🆕 Pie Vaults</h1>
       <p class="font-thin">Yield Bearing & Meta-Governance Enabled</p>
     </div>
 
-    <div class="flex justify-around w-100pc content-center">
+    <div class="flex w-100pc">
       {#each piVaults as pie}
         <ProductBox 
+          class="w-100pc"
           link={`#/pie/${pie.address}`}
           image={pie.icon}
           title={pie.symbol}

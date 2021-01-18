@@ -1,3 +1,14 @@
+<script>
+    import Meta from '../elements/meta.svelte';
+</script>
+
+<Meta 
+    metadata={{
+        title: "BTC++ - PieDAO, BTC index on Ethereum",
+        description: "Overview of BTC++, PieDAO diversified tokenized BTC index. A breakdown of the underlying assets imBTC, WBTC, pBTC, sBTC, market performance, motivation, metholodology and operations."
+    }}
+/>
+
 <div>
     <h1 class="font-lg">Summary:</h1>
     <span class="font-thin">

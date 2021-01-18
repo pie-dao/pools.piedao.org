@@ -35,7 +35,7 @@
   colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
 };
 
-  $: pies = orderBy((poolsConfig.selectable.map(address => {
+  $: pies = orderBy((poolsConfig.available.map(address => {
     return {
       ...poolsConfig[address],
       address,
@@ -103,9 +103,6 @@
 
     await Promise.all(promises);
     stakedLiquidity = await calcStakedLiquidity();
-    if(pieLiquidity+stakedLiquidity > 10000000 && pieLiquidity+stakedLiquidity < 11000000) {
-        triggerConfetti();
-    }
   }, false);
 
   onMount( async () => {

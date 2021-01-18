@@ -15,4 +15,16 @@
     <div class="flex justify-center items-center strategy-label bg-cream text-white"><img class="w-20px h-20px mr-10px" alt="strategy icon" src={images.creamwhite} />
         <span>Lending</span>
     </div>
+{:else if protocol === 'SushiBar'}
+    <div class="flex justify-center items-center strategy-label bg-cream text-white">
+        <span class="w-20px h-20px mr-10px" alt="strategy icon">🍣</span>
+        <span>Staking</span>
+    </div>
+{:else if protocol === 'yGOV'}
+    <div class="flex justify-center items-center strategy-label bg-cream text-white">
+        <span class="w-20px h-20px mr-10px" alt="strategy icon">😏</span>
+        <span>Staking</span>
+    </div>
 {/if}
+
+

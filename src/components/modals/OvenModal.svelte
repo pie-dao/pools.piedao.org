@@ -2,13 +2,10 @@
 import { onMount } from 'svelte';
 import { get } from "svelte/store";
 import orderBy from 'lodash/orderBy';
-import groupBy from 'lodash/groupBy';
 
 import { _ } from "svelte-i18n";
-import debounce from "lodash/debounce";
 import BigNumber from "bignumber.js";
 import { ethers } from "ethers";
-import images from "../../config/images.json";
 import poolsConfig from "../../config/pools.json";
 import ovenABI from '../../config/ovenABI.json';
 import displayNotification from "../../notifications.js";
@@ -31,7 +28,6 @@ export let ovenAddress;
 export let pieAddress;
 export let deprecated;
 
-let initialized = false;
 let amount = 0;
 let instance;
 let ethKey;
@@ -173,7 +169,6 @@ const deposit = async () => {
     }
 
     if (BigNumber(requestedAmount).isGreaterThan(BigNumber(max)) ) {
-      const maxFormatted = amountFormatter({ amount: max, displayDecimals: 8 });
       const message = `Not enough ETH`;
       displayNotification({ message, type: "error", autoDismiss: 30000 });
       return;
@@ -216,17 +211,17 @@ const deposit = async () => {
 </script>
 
 
-<div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
+<div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:p-4">
   <div class="flex justify-center font-thin mb-2">
 
-    <div class="flex w-full text-black text-center text-xs md:text-xs lg:text-base justify-around mt-2 md:mt-0">
-      <div class="p-0 mr-8 ">
+    <div class="flex w-100pc text-black text-center text-xs md:text-xs lg:text-base justify-around mt-2 md:mt-0">
+      <div class="p-2">
         <div class="">
           Your ETH in the Oven
         </div>
         <div class="font-bold">{toFixed(ovenData.ethBalance, 6)} ETH</div>
       </div>
-      <div class="p-0 mr-8">
+      <div class="p-2">
         <div class="">
           Pie Ready to Withdraw
         </div>
@@ -282,7 +277,7 @@ const deposit = async () => {
   {/if}
   
   {#if selectedTab === 1}
-      <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
+      <div class="input bg-white border border-solid rounded-8px border-grey-204">
           <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
             <div class="left float-left">You Deposit</div>
             <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
@@ -306,35 +301,37 @@ const deposit = async () => {
 
 
     {#if selectedTab === 2}
-      <div class="flex justify-between flex-col items-center  px-4 py-4 rounded-8px lg:flex-row">            
-        <div class="input bg-white border border-solid rounded-8px border-grey-204 mx-0 w-100pc md:mr-4">
+      <div class="flex justify-between flex-col items-center rounded-8px ">            
+        <div class="input bg-white border border-solid rounded-8px border-grey-204 w-100pc">
             <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
               <div class="left float-left">Amount</div>
               <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-                <button on:click={() => amount = ovenData.ethBalance} class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">MAX</button>
+                <button on:click={() => amount = ovenData.ethBalance} class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">100%</button>
               </div>
             </div>
-            <div class="bottom  px-4 py-1 md:px-4">
-              <input bind:value={amount} type="number" class="font-thin text-base w-90pc lg:w-70pc md:w-70pc md:text-xl">
+            <div class="bottom  px-4 py-4 md:px-4 pb-4">
+              <input bind:value={amount} type="number" class="font-thin text-base w-60pc md:w-75pc md:text-xl">
               <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
             align-middle justify-center items-center pointer mt-0 md:mt-14px">
-            <img class="token-icon w-20px mb-2 h-20px md:h-26px md:w-26px my-4px mx-2px " src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
+            <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
             <span class="py-2px px-4px">ETH</span></div> 
           </div>
         </div>
+        
         <div class="flex justify-center">
-          <button disabled={ovenData.ethBalance === 0} on:click={withdrawEth} class="btn m-0 mt-4 rounded-8px px-56px py-24px lg:mt-0" >Withdraw ETH</button>
+          <button disabled={ovenData.ethBalance === 0} on:click={withdrawEth} class="btn m-0 mt-4 rounded-8px px-20px py-15px" >Withdraw ETH</button>
         </div>
       </div>
 
-      <div class="flex justify-between flex-col items-center  px-4 py-4 rounded-8px lg:flex-row">            
-        <div class="input flex items-center h-97px bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mr-4 px-4 py-1 w-100pc md:px-4 lg:w-76pc">
+      <div class="flex justify-between flex-col items-center py-4 rounded-8px ">
+                    
+        <div class="input flex items-center h-97px bg-white border border-solid rounded-8px border-grey-204 mx-0 px-4 py-1 w-100pc md:px-4">
           <img class="token-icon w-40px h-40px  my-4px mx-2px" src={getTokenImage(pieAddress)} alt={`PieDAO ` + pie.symbol}>
           <span class="w-90pc lg:w-70pc md:w-70pc md:text-xl py-2px px-4px">{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</span>
         </div>
         
         <div class="flex justify-center">
-          <button disabled={ovenData.pieBalance === 0} on:click={withdrawPie} class="btn m-0 mt-4 rounded-8px px-56px py-24px lg:mt-0" >Withdraw Pie</button>
+          <button disabled={ovenData.pieBalance === 0} on:click={withdrawPie} class="btn m-0 mt-4 rounded-8px px-20px py-15px" >Withdraw Pie</button>
         </div>
       </div>
     {/if}

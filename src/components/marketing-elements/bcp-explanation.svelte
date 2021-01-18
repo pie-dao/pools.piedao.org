@@ -1,3 +1,13 @@
+<script>
+    import Meta from '../elements/meta.svelte';
+</script>
+
+<Meta 
+metadata={{
+    title: "BCP Page - PieDAO, the leading BTC index containing ETH and our DEFI index DEFI++.",
+    description: "What is BCP, Balanced Crypto Pie from PieDAO. Including BTC, ETH, and DEFI++, performance, and the methodology and motivation for the pie.",
+}}
+/>
 <div>
     <h1 class="font-lg">Summary:</h1>
     <span class="font-thin">
