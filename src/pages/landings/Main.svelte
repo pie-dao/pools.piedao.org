@@ -3,8 +3,17 @@
   import ProductBox from '../../components/elements/product-box.svelte';
   import JoinPieDAO from '../../components/JoinPieDAO.svelte';
   import FeaturedIn from '../../components/FeaturedIn.svelte';
+  import Meta from '../../components/elements/meta.svelte';
 </script>
-  
+
+<Meta 
+  metadata={{
+    title: "PieDAO, the asset allocation DAO governing tokenized ETF products.",
+    description: "An overview of the PieDAO mission and core products, including BCP, DEFI+L and DEFI++ DEFI index. ",
+    image: images.defimadesimple,
+    imageAlt: "Investors examine spreadsheets and DEFI index opportunities"
+  }}
+/>
 
 <div class="content flex flex-col spl">
   <img class="w-100pc h-auto md:w-100pc h-auto"src={images.defimadesimple} alt="PieDAO Hero" />

@@ -1,7 +1,6 @@
 <script>
   import BigNumber from "bignumber.js";
   import images from "../config/images.json";
-  import FarmerTable from '../components/FarmerTable.svelte';
   import { farming } from '../stores/eth/writables.js';
 
   import SectionImageTop from "../components/elements/SectionImageTop.svelte"
@@ -10,9 +9,10 @@
   
   import {
     formatFiat,
-    toFixed,
     subscribeToBalance,
   } from "../components/helpers.js";
+
+  import Meta from '../components/elements/meta.svelte';
    
    import {
     balanceKey,
@@ -76,6 +76,16 @@
     }
   })()
 </script>
+
+<Meta 
+    metadata={{
+        title: "PieDAO DOUGH, the DAO governance token, managing DEFI index products and high APR staking rewards",
+        description: "An overview of PieDAO's governance token DOUGH, the voting system, and the incentives mechanism.",
+        image: images.herodough,
+        imageAlt: "Ready to diversify and logo, invest in a DEFI index and earn high yield today."
+    }}
+/>
+
   <div class="content flex flex-col spl">
    <img class="w-100pc h-auto md:w-100pc h-auto"src={images.herodough} alt="PieDAO Hero" />
 

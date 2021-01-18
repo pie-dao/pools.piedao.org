@@ -5,6 +5,7 @@
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
   import ProductBox from '../components/elements/product-box.svelte';
+  import Meta from '../components/elements/meta.svelte';
 
   import {
     getTokenImage,
@@ -55,6 +56,13 @@
 
   
 </script>
+
+<Meta 
+  metadata={{
+    title: "PieDAO Products Page, DEFI index and yield aggregators",
+    description: "An overview of the PieDAO's products, including Pies and PieVaults DEFI index. BCP, DEFI++, DEFI+L, DEFI+S, BTC++, USD++, YPIE.",
+  }}
+/>
 
 <div class="content flex flex-col spl">
 

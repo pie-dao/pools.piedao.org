@@ -1,3 +1,17 @@
+<script>
+    import images from '../../config/images.json';
+    import Meta from '../elements/meta.svelte';
+</script>
+
+<Meta 
+    metadata={{
+        title: "DEFI+L - PieDAO, DEFI index containing SNX, UNI, AAVE, MKR, LINK and YFI.",
+        description: "Overview of DEFI+L, PieDAO large cap DEFI index. A breakdown of the underlying assets, motivation for the product, operations, performance and methodology. LINK, YFI, SNX, MKR, UNI, COMP, AAVE.",
+        image: images.defil_social,
+        imageAlt: "DEFI+L, our large cap DEFI index containing YFI, AAVE, SNX, COMP, MKR, UNI and LINK"
+    }}
+/>
+
 <div>
     <h1 class="font-lg">Summary:</h1>
     <span class="font-thin">

@@ -6,7 +6,6 @@
   import Header from "./components/Header.svelte";
 
   import { currentRoute } from "./stores/routes.js";
-  console.log(global);
 </script>
 
 <section id="App">

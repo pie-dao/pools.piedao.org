@@ -115,7 +115,9 @@
   <Meta 
     metadata={{
       title: "Oven Page - PieDAO",
-      description: "The PieDAO Oven pools ETH to issue pies in batches, giving users access to our index products gas-free. This design makes getting involved affordable and convenient, opening participation to everyone. Don't forget, the Oven won't activate until it's full!"
+      description: "The PieDAO Oven pools ETH to issue pies in batches, giving users access to our index products gas-free. This design makes getting involved affordable and convenient, opening participation to everyone. Don't forget, the Oven won't activate until it's full!",
+      image: images.oven_social,
+      imageAlt: 'How the Oven makes minting pies gas-free.'
     }}
   />
 
