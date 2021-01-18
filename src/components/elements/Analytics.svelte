@@ -13,11 +13,15 @@
     }
     $: {
         if (typeof gtag !== "undefined"){
-            console.log('PATH', window.location.href)
-            
-            window.gtag("config", id, {
-                page_path: window.location.href,
-            });
+            if(window.location.origin !== 'http://localhost:8080') {
+                window.gtag("config", id, {
+                    page_path: window.location.href,
+                });
+            } else {
+                console.log('Analytics DEV:', {
+                    page_path: window.location.href
+                })
+            }
         }
     }
 </script>
