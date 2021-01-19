@@ -955,7 +955,7 @@ opacity: 0.6;
   border-color: white;
 }
 
-.btn {
+/* .btn {
   background: linear-gradient(-60deg, #cb1a8f, #fc02a7);
   border-radius: 5px;
   border-style: none;
@@ -969,7 +969,7 @@ opacity: 0.6;
   text-align: center;
   transition-duration: 0.3s;
   transition-property: background-color, color;
-}
+} */
 
 .bg-gradient-purple {
   background: linear-gradient(-60deg, #A20ED3, #6C5DFE);
@@ -1328,6 +1328,26 @@ button.svelte-1nn74u2 {border: none!important; padding: 1rem 0rem!important;}
   text-decoration: none;
 }
 
-.max13 {
-max-width: 33.333333%!important;
+.max300 {
+max-width: 32%!important;
+min-width: 31%!important;
 }
+
+
+@media screen and (max-width: 1015px) {
+  .max300 {
+    max-width: 45%!important;
+    min-width: 40%!important;
+    }  }
+
+    @media screen and (max-width: 800px) {
+      .max300 {
+        max-width: 70%!important;
+        min-width: 70%!important;
+        }  }
+
+        @media screen and (max-width: 600px) {
+          .max300 {
+            max-width: 98%!important;
+            min-width: 98%!important;
+            }  }

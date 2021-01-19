@@ -231,15 +231,13 @@ import TooltipButton from '../../components/elements/TooltipButton.svelte';
 </div> -->
 
 
-<div class="content flex flex-col content-center flex-wrap lg:flex-row">
+<div class="content spl flex flex-col justify-center justify-items-center content-center flex-wrap md:flex-row lg:flex-row">
 {#each ovens as oven}
-<div class="w-full md:w-1/3 max13 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
-    <div class="flex justify-start mb-4 items-center">
-        <a href={`#/pie/${oven.baking.address}`}>
-            <img class="w-50px h-auto md:w-50px h-auto" src={oven.baking.icon} alt={oven.baking.symbol} />
-            <span class="font-bold text-xl text-right ml-2">{oven.baking.symbol}</span>
-        <div/>
-    </div>
+<div class="max300 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
+    <a class="flex justify-start mb-4 items-center" href={`#/pie/${oven.baking.address}`}>
+        <img class="w-50px h-auto md:w-50px h-auto" src={oven.baking.icon} alt={oven.baking.symbol}/>
+        <span class="font-bold text-xl text-right ml-2">{oven.baking.symbol}</span>
+    </a>
     <div class="flex justify-between my-2">
       <div class="flex items-center "><span class="font-thin text-left mr-2">Minimum reached</span><TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated"><div class="infolink"></div></TooltipButton></div>
       <div class="font-bold text-right rounded-sm bg-black w-40pc">
