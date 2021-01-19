@@ -94,7 +94,7 @@
   let modal;
   let modalAdd;
   let modalOption = {
-    title: 'Bake',
+    title: "Bake",
     pieAddress: null,
     ovenAddress: null,
   };

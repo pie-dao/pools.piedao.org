@@ -279,7 +279,7 @@ const deposit = async () => {
   {#if selectedTab === 1}
       <div class="input bg-white border border-solid rounded-8px border-grey-204">
           <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-            <div class="left float-left">You Deposit</div>
+            <div class="left float-left">Amount to Deposit (min 0.1 ETH)</div>
             <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
               <button on:click={() => amount = ethBalance} class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">100%</button>
             </div>
