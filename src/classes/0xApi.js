@@ -9,8 +9,9 @@ export default class ApiOx {
         let response = await fetch(callUrl)
         console.log('response', response);
         if (response.status !== 200) {
-            console.error('The server responded with an unexpected status.', response.status);
-            return false;
+            console.error('The server responded with an unexpected status.', response);
+            //TODO Handle errors
+            return response.json();
         }
     
         const result = await response.json();

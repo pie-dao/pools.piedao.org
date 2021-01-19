@@ -74,6 +74,7 @@
   $: needAllowance = true;
   $: allowances = {};
   $: balances = {};
+  $: error = null;
 
   $: if($eth.address) {
     fetchOnchainData();
@@ -108,11 +109,19 @@
 
   async function fetchQuote() {
     if(amount === 0) return;
-    quote = await api.getQuote(sellToken.address, buyToken.address, amount);
-    console.log('quote', quote);
-    if(quote === false) {
-      console.log('Show Error');
+    const res = await api.getQuote(sellToken.address, buyToken.address, amount);
+    console.log('quote', res);
+    
+    if(res.validationErrors) {
+      switch(res.validationErrors[0].code) {
+        case 1004:
+          error = `Could not find a path to exchange.` 
+          break;
+      }
+
+      return;
     }
+    quote = res;
     receivedAmount = amount*parseFloat(quote.price);
   }
 
@@ -191,6 +200,13 @@
         </button>
       </div>
     </div>
+    
+    {#if error}
+      <div class="flex items-center w-100pc px-16px justify-between">
+        <div class="flex nowrap intems-center p-1 font-thin">Error:</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">{error}</div>
+      </div>
+    {/if}
 
     {#if quote}
       <div class="flex items-center w-100pc pt-16px px-16px justify-between">
