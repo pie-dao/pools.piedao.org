@@ -294,7 +294,7 @@ const deposit = async () => {
       </div>
 
     <div class="flex justify-center">
-      <button on:click={deposit} class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Bake</button>
+      <button on:click={deposit} class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Deposit</button>
     </div>
     {/if}
 
