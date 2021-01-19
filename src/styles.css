@@ -802,6 +802,13 @@ opacity: 0.6;
   -webkit-box-sizing: border-box;
 }
 
+.white-card {
+  border: 2px solid #fff;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
 /* LOADING GIF */
 @keyframes ldio-qudhur211ps {
   0% { transform: rotate(0deg) }
@@ -1364,7 +1371,7 @@ min-width: 31%!important;
   border: none;
   margin-top: 5px;
   font: inherit;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   line-height: inherit;
   color: inherit;
   cursor: pointer;
@@ -1381,7 +1388,7 @@ outline: none;
 
 [data-accordion-item] [role="region"] {
   font-size: 1rem;
-  padding: 0.2rem 2rem 2rem 2rem;
+  padding: 0.2rem 1rem 2rem 1rem;
   font-weight: 100;
   margin-top: -12px;
   text-align: left;

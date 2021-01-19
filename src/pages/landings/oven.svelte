@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { ethers } from 'ethers';
   import images from '../../config/images.json';
-  import ProductBox from '../../components/elements/product-box.svelte';
+  import WhiteBox from '../../components/elements/WhiteBox.svelte';
 
   import Meta from '../../components/elements/meta.svelte';
   import { balances, balanceKey } from '../../stores/eth.js';
@@ -139,17 +139,17 @@
 
 <div class="content flex flex-col justify-between spl text-center">
   <div class="flex flex-col justify-between content-center lg:flex-row">
-    <ProductBox class="bg-white"
+    <WhiteBox class="bg-white"
       image={images.depositeth}
       title="Deposit ETH"
       description="When at least 10 ETH is deposited the Oven can begin" />
 
-    <ProductBox
+    <WhiteBox
       image={images.waitoven}
       title="Wait"
       description="Oven will bake when gas prices are affordable, saving everyone money" />
 
-    <ProductBox
+    <WhiteBox
       image={images.sharegascost}
       title="Withdraw Your Pie"
       description="Once the Pie is baked you can withdraw it to your wallet" />
@@ -267,7 +267,7 @@
   {/each}
 </div>
 
-<section class="pt-12 px-4 text-center">
+<section class="py-12 px-4 text-center">
   <div class="w-full max-w-2xl mx-auto">
     <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Can't wait?</h2>
     <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">
