@@ -230,14 +230,15 @@ import TooltipButton from '../../components/elements/TooltipButton.svelte';
   </table>
 </div> -->
 
-<!-- OVEN CARDS CONTAINER-->
-<div class="content flex flex-col justify-between content-center lg:flex-row">
 
-  <!-- OVEN CARD-->
-  <div class="w-full md:w-1/3 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
+<div class="content flex flex-col content-center flex-wrap lg:flex-row">
+{#each ovens as oven}
+<div class="w-full md:w-1/3 max13 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
     <div class="flex justify-start mb-4 items-center">
-      <img class="w-50px h-auto md:w-50px h-auto"src={images.defiplusplus} alt="PieDAO Hero" />
-      <span class="font-bold text-xl text-right ml-2">DEFI++</span>
+        <a href={`#/pie/${oven.baking.address}`}>
+            <img class="w-50px h-auto md:w-50px h-auto" src={oven.baking.icon} alt={oven.baking.symbol} />
+            <span class="font-bold text-xl text-right ml-2">{oven.baking.symbol}</span>
+        <div/>
     </div>
     <div class="flex justify-between my-2">
       <div class="flex items-center "><span class="font-thin text-left mr-2">Minimum reached</span><TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated"><div class="infolink"></div></TooltipButton></div>
@@ -253,60 +254,16 @@ import TooltipButton from '../../components/elements/TooltipButton.svelte';
       <span class="font-thin text-left">Pie ready</span>
       <span class="font-bold text-right">134.50 DEFI++</span>
     </div>
-    <button on:click={modalAdd.open} class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
+    <button on:click={() => {
+        modal.pieAddress = oven.baking.address;
+        modal.ovenAddress = oven.addressOven;
+        modal.deprecated = oven.deprecated;
+        modal.open()
+      }}  class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
       Select your Pie
     </button>
   </div>
-  <!-- OVEN CARD-->
-  <div class="w-full md:w-1/3 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
-    <div class="flex justify-start mb-4 items-center">
-      <img class="w-50px h-auto md:w-50px h-auto"src={images.bcp} alt="PieDAO Hero" />
-      <span class="font-bold text-xl text-right ml-2">BCP</span>
-    </div>
-    <div class="flex justify-between my-2">
-      <div class="flex items-center "><span class="font-thin text-left mr-2">Minimum reached</span><TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated"><div class="infolink"></div></TooltipButton></div>
-      <div class="font-bold text-right rounded-sm bg-black w-40pc">
-        <div class="px-2 py-1 rounded-sm text-xs text-left fit-content text-white">0%</div>
-      </div>
-    </div>
-    <div class="flex justify-between my-2">
-      <span class="font-thin text-left">Your ETH in the Oven</span>
-      <span class="font-bold text-right">0.75 ETH</span>
-    </div>
-    <div class="flex justify-between my-2">
-      <span class="font-thin text-left">Pie ready</span>
-      <span class="font-bold text-right">134.50 BCP</span>
-    </div>
-    <button on:click={modalAdd.open} class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
-      Select your Pie
-    </button>
-  </div>
-
-    <!-- OVEN CARD-->
-    <div class="w-full md:w-1/3 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
-      <div class="flex justify-start mb-4 items-center">
-        <img class="w-50px h-auto md:w-50px h-auto"src={images.ypietoken} alt="PieDAO Hero" />
-        <span class="font-bold text-xl text-right ml-2">YPIE</span>
-      </div>
-      <div class="flex justify-between my-2">
-        <div class="flex items-center "><span class="font-thin text-left mr-2">Minimum reached</span><TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated"><div class="infolink"></div></TooltipButton></div>
-        <div class="font-bold text-right rounded-sm bg-black w-40pc">
-          <div class="px-2 py-1 rounded-sm text-xs bg-gradient-purple text-center text-white w-full">waiting gas price</div>
-        </div>
-      </div>
-      <div class="flex justify-between my-2">
-        <span class="font-thin text-left">Your ETH in the Oven</span>
-        <span class="font-bold text-right">0.75 ETH</span>
-      </div>
-      <div class="flex justify-between my-2">
-        <span class="font-thin text-left">Pie ready</span>
-        <span class="font-bold text-right">134.50 YPIE</span>
-      </div>
-      <button on:click={modalAdd.open} class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
-        Select your Pie
-      </button>
-    </div>
-
+{/each}
 </div>
 
 
