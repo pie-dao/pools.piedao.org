@@ -138,8 +138,8 @@
   </Modal>
   <section class="pt-4 px-4 text-center md:pt-8 lg:pt-12">
     <div class="w-full max-w-2xl mx-auto">
-      <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Baking Together</h2>
-      <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">The PieDAO Oven pools ETH to issue pies in batches, giving users access to our index products gas-free. This design makes getting involved affordable and convenient, opening participation to everyone. Don't forget, the Oven won't activate until it's full!</p>
+      <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Bake Together, save 97% Gas.</h2>
+      <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">Get hold of your pie almost gas-free by sharing the cost.<br/>Turn your ETH into delicious pie in three easy steps.</p>
     </div>
   </section>
 
@@ -148,19 +148,19 @@
       <ProductBox 
         image={images.depositeth}
         title="Deposit ETH"
-        description="Add the ETH you wish to use to issue your chosen pie."
+        description="When at least 10 ETH is deposited the Oven can begin"
       />
       
       <ProductBox 
         image={images.waitoven}
-        title="Wait For It To Fill"
-        description="Oven won't activate and issue everyone's pie until the threshold is reached."
+        title="Wait"
+        description="Oven will bake when gas prices are affordable, saving everyone money"
       />
 
       <ProductBox 
       image={images.sharegascost}
-      title="Enjoy Your Pie"
-      description="Once activated Oven will bake your pie, entirely gas-free."
+      title="Withdraw Your Pie"
+      description="Once the Pie is baked you can withdraw it to your wallet"
     />
     </div>
 </div>
@@ -171,7 +171,7 @@
   </div>
 </section>
 
-<div class="flex flex-col w-96pc place-content-center spl">
+<!-- <div class="flex flex-col w-96pc place-content-center spl">
   <table class="breakdown-table table-auto w-full ml-2 md:mx-6 lg:mx-6">
     <thead>
       <tr>
@@ -227,18 +227,96 @@
       {/each}
     </tbody>
   </table>
-</div>
+</div> -->
 
+<!-- OVEN CARDS CONTAINER-->
+<div class="content flex flex-col justify-between content-center lg:flex-row">
+
+  <!-- OVEN CARD-->
+  <div class="w-full md:w-1/3 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
+    <div class="flex justify-start mb-4 items-center">
+      <img class="w-50px h-auto md:w-50px h-auto"src={images.defiplusplus} alt="PieDAO Hero" />
+      <span class="font-bold text-xl text-right ml-2">DEFI++</span>
+    </div>
+    <div class="flex justify-between my-2">
+      <span class="font-thin text-left">Minimum reached</span>
+      <div class="font-bold text-right rounded-sm bg-black w-40pc">
+        <div class="px-2 py-1 rounded-sm text-xs bg-gradient-purple text-left text-white fit-content">65%</div>
+      </div>
+    </div>
+    <div class="flex justify-between my-2">
+      <span class="font-thin text-left">Your ETH in the Oven</span>
+      <span class="font-bold text-right">0.75 ETH</span>
+    </div>
+    <div class="flex justify-between my-2">
+      <span class="font-thin text-left">Pie ready</span>
+      <span class="font-bold text-right">134.50 DEFI++</span>
+    </div>
+    <button on:click={modalAdd.open} class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
+      Select your Pie
+    </button>
+  </div>
+  <!-- OVEN CARD-->
+  <div class="w-full md:w-1/3 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
+    <div class="flex justify-start mb-4 items-center">
+      <img class="w-50px h-auto md:w-50px h-auto"src={images.bcp} alt="PieDAO Hero" />
+      <span class="font-bold text-xl text-right ml-2">BCP</span>
+    </div>
+    <div class="flex justify-between my-2">
+      <span class="font-thin text-left">Minimum reached</span>
+      <div class="font-bold text-right rounded-sm bg-black w-40pc">
+        <div class="px-2 py-1 rounded-sm text-xs text-left fit-content text-white">0%</div>
+      </div>
+    </div>
+    <div class="flex justify-between my-2">
+      <span class="font-thin text-left">Your ETH in the Oven</span>
+      <span class="font-bold text-right">0.75 ETH</span>
+    </div>
+    <div class="flex justify-between my-2">
+      <span class="font-thin text-left">Pie ready</span>
+      <span class="font-bold text-right">134.50 BCP</span>
+    </div>
+    <button on:click={modalAdd.open} class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
+      Select your Pie
+    </button>
+  </div>
+
+    <!-- OVEN CARD-->
+    <div class="w-full md:w-1/3 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
+      <div class="flex justify-start mb-4 items-center">
+        <img class="w-50px h-auto md:w-50px h-auto"src={images.ypietoken} alt="PieDAO Hero" />
+        <span class="font-bold text-xl text-right ml-2">YPIE</span>
+      </div>
+      <div class="flex justify-between my-2">
+        <span class="font-thin text-left">Minimum reached</span>
+        <div class="font-bold text-right rounded-sm bg-black w-40pc">
+          <div class="px-2 py-1 rounded-sm text-xs bg-gradient-purple text-center text-white w-full">waiting gas price</div>
+        </div>
+      </div>
+      <div class="flex justify-between my-2">
+        <span class="font-thin text-left">Your ETH in the Oven</span>
+        <span class="font-bold text-right">0.75 ETH</span>
+      </div>
+      <div class="flex justify-between my-2">
+        <span class="font-thin text-left">Pie ready</span>
+        <span class="font-bold text-right">134.50 YPIE</span>
+      </div>
+      <button on:click={modalAdd.open} class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
+        Select your Pie
+      </button>
+    </div>
+
+</div>
 
 
 
 <section class="pt-12 px-4 text-center">
   <div class="w-full max-w-2xl mx-auto">
-    <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">In a Rush?</h2>
-    <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">You can always issue your own pie instantly from our Index page.</p>
+    <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Can't wait?</h2>
+    <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">You can always <strong>Buy or Issue</strong> your Pie instantly from the the Pie Page</p>
   </div>
   <button on:click={modalAdd.open} class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
-    Issue liquidity
+    Select your Pie
   </button>
 </section>
 

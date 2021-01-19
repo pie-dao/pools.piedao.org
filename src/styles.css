@@ -13,6 +13,9 @@
 
 .border-half {border: 0.5px;}
 
+.border-thin {border: solid 0.5px grey;}
+
+
 #confetti {
   position: absolute;
   left:50%;
@@ -21,6 +24,10 @@
 #App {
   max-width: 1200px!important;
   margin: 0 auto;
+}
+
+.fit-content {
+  width: fit-content;
 }
 
 .text-pink {
@@ -74,6 +81,10 @@
 
 .rounded {
   border-radius: 1rem;
+}
+
+.rounded-sm {
+  border-radius: 0.5rem;
 }
 
 .bg-pink {
@@ -923,6 +934,45 @@ opacity: 0.6;
   cursor: pointer;
   user-select: none;
   border: none;
+}
+
+.main-cta-ghost {
+  background-color: white;
+  border-radius: 5px;
+  border-style: none;
+  color: black;
+  font-family: Rubik, sans-serif;
+  font-weight: 500;
+  min-width: 150px;
+  padding: 20px;
+  text-align: center;
+  border: 0.5px solid grey;
+}
+
+.main-cta-ghost:hover {
+  color: white;
+  background: linear-gradient(-60deg, #cb1a8f, #fc02a7);
+  border-color: white;
+}
+
+.btn {
+  background: linear-gradient(-60deg, #cb1a8f, #fc02a7);
+  border-radius: 5px;
+  border-style: none;
+  color: #ffffff;
+  font-family: Rubik, sans-serif;
+  font-weight: 500;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  min-width: 150px;
+  padding: 20px;
+  text-align: center;
+  transition-duration: 0.3s;
+  transition-property: background-color, color;
+}
+
+.bg-gradient-purple {
+  background: linear-gradient(-60deg, #A20ED3, #6C5DFE);
 }
 
 
