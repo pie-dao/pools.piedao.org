@@ -24,6 +24,12 @@
       }
     }
   }
+
+  function getBalance(obj) {
+    if(obj && obj.label) return obj.label;
+    if(obj) return obj;
+    return '-';
+  }
 </script>
 
 {#if open}
@@ -54,7 +60,7 @@
                 {/if}
                 <span class="leading-32px pl-2 text-md">{token.symbol}</span>
               </td>
-              <td class="text-right py-4px text-md font-thin">{token.balance ? token.balance : '-'}</td>
+              <td class="text-right py-4px text-md font-thin">{getBalance(token.balance)}</td>
             </tr>
           {/each}
         </tbody>

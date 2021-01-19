@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { Interface } from '@ethersproject/abi';
 import { Contract } from '@ethersproject/contracts';
 import multicallAbi from '../config/Multicall.json';
@@ -18,6 +19,45 @@ export const MULTICALL = {
   '1337': '0x566131e85d46cc7BBd0ce5C6587E9912Dc27cDAc',
   wanchain: '0xba5934ab3056fca1fa458d30fbb3810c3eb5145f'
 };
+
+export function getNormalizedNumber(number, decimals) {
+  return new BigNumber(number).dividedBy(
+      new BigNumber(10).pow(decimals)
+  );
+}
+
+const abi = [
+  {
+    constant: true,
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address'
+      }
+    ],
+    name: 'balanceOf',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
+      }
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function'
+  }
+];
 
 export async function multicall(
   provider,
@@ -40,4 +80,36 @@ export async function multicall(
   } catch (e) {
     return Promise.reject(e);
   }
+}
+
+export async function fetchBalances(tokensList, walletAddress, provider) {
+  const queries = [];
+
+  tokensList.forEach( token => {
+    const balanceQuery = [
+      token.address,
+      'balanceOf',
+      [walletAddress]
+    ];
+    queries.push(balanceQuery);
+  })
+
+  const response = await multicall(
+    provider,
+    abi,
+    queries,
+    { blockTag: 'latest' }
+  );
+
+  let idx = 0;
+  tokensList.forEach( token => {
+    token.balance = {
+      bn: response[idx][0],
+      label: (parseFloat(getNormalizedNumber(response[idx][0].toString(), 18).toString()).toFixed(2)).toString()
+    };
+    
+    idx++;
+  })
+
+  return tokensList;
 }

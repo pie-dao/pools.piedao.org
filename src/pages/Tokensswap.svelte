@@ -6,17 +6,14 @@
   import poolsConfig from '../config/pools.json';
   import TokenSelectModal from "../components/modals/TokenSelectModal.svelte";
   import {
-    allowances,
     functionKey,
     approveMax,
-    balanceKey,
-    balances,
     connectWeb3,
     eth,
   } from "../stores/eth.js";
 
   import {
-    multicall
+    fetchBalances
   } from '../helpers/multicall';
 
   import {
@@ -25,11 +22,11 @@
   } from "../components/helpers";
 
   $: listed = [
-    {
-      address: '0x0000000000000000000000000000000000000000',
-      symbol: 'ETH',
-      icon: getTokenImage('eth')
-    },
+    // {
+    //   address: '0x0000000000000000000000000000000000000000',
+    //   symbol: 'ETH',
+    //   icon: getTokenImage('eth')
+    // },
     {
       address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
       symbol: 'USDC',
@@ -75,85 +72,39 @@
   $: receivedAmount = 0;
   $: quote = null;
   $: needAllowance = true;
+  $: allowances = {};
+  $: balances = {};
 
   $: if($eth.address) {
-    // Fetch balances
-    // Fetch Allowances
-    //needAllowance = needApproval(pool, ($allowances[pool.allowanceKey] || BigNumber(0)));
+    fetchOnchainData();
   }
+
+
 
   onMount(async () => {
     setupListedToken();
     console.log('listed', listed)
+    sellToken = listed[0];
+    buyToken = listed[1];
     fetchQuote();
-
-    if(!$eth.provider) {
-      return;
-    }
-
-    const addresses = [
-            "0x66827bcd635f2bb1779d68c46aeb16541bca6ba8",
-            "0x635b230c3fdf6a466bb6dc3b9b51a8ceb0659b67"
-    ];
-
-    const doughv2Query = addresses.map((address) => [
-      '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
-      'balanceOf',
-      [address]
-    ]);
-
-    const eDOUGHQuery = addresses.map((address) => [
-      '0x63cbd1858bd79de1a06c3c26462db360b834912d',
-      'balanceOf',
-      [address]
-    ]);
-
-
-    const abi = [
-      {
-        constant: true,
-        inputs: [
-          {
-            internalType: 'address',
-            name: 'account',
-            type: 'address'
-          }
-        ],
-        name: 'balanceOf',
-        outputs: [
-          {
-            internalType: 'uint256',
-            name: '',
-            type: 'uint256'
-          }
-        ],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function'
-      },
-      {
-        constant: true,
-        inputs: [],
-        name: 'totalSupply',
-        outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-        payable: false,
-        stateMutability: 'view',
-        type: 'function'
-      }
-    ];
-
-    const response = await multicall(
-      $eth.provider,
-      abi,
-      [
-        ...doughv2Query,
-        ...eDOUGHQuery
-      ],
-      { blockTag: 'latest' }
-    );
-
-    console.log('response', response)
   });
+
+  async function fetchOnchainData() {
+    // Fetch balances
+
+    listed = await fetchBalances(
+      listed,
+      $eth.address,
+      $eth.provider
+    )
+
+    listed.forEach( token => {
+      balances[token.address] = token.balance;
+    })
+
+    // Fetch Allowances
+    //needAllowance = needApproval(pool, ($allowances[pool.allowanceKey] || BigNumber(0)));
+  }
 
   async function fetchQuote() {
     if(amount === 0) return;
@@ -176,10 +127,6 @@
     }
   }
 
-
-
-
-
 </script>
   
 <TokenSelectModal
@@ -198,7 +145,16 @@
     <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
       <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">From</div>
-      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">Balance: 1.55489</div>
+      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
+        {#if balances[sellToken.address]}
+          <div on:click={() => {
+            amount = balances[sellToken.address].label
+          }}>
+            Max balance: {balances[sellToken.address].label}
+          </div>
+        {/if}
+        
+      </div>
     </div>
       <div class="flex nowrap items-center p-1">
         <input class="swap-input-from" on:focus={() => {amount = amount=== 0 ? '' : amount}} on:keyup="{ debounce(fetchQuote, 250)}" bind:value={amount} inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
@@ -220,7 +176,6 @@
     <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
       <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">To (estimated)</div>
-      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">Balance: 1.55489</div>
     </div>
       <div class="flex nowrap items-center p-1">
         <input class="swap-input-from" bind:value={receivedAmount} disabled inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
