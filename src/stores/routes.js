@@ -69,7 +69,7 @@ const formatRoute = (route) => {
   let method;
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
-  changeUrl(route)
+  //changeUrl(route);
 
   switch (route[0] || 'root') {
     case 'about':
