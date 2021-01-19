@@ -250,7 +250,7 @@
         <span class="font-bold text-right">0.75 ETH</span>
       </div>
       <div class="flex justify-between my-2">
-        <span class="font-thin text-left">Pie ready</span>
+        <span class="font-thin text-left">Your Pie ready</span>
         <span class="font-bold text-right">134.50 DEFI++</span>
       </div>
       <button
