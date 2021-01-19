@@ -16,6 +16,10 @@
   } from "../stores/eth.js";
 
   import {
+    multicall
+  } from '../helpers/multicall';
+
+  import {
     getTokenImage,
     fetchEthBalance,
   } from "../components/helpers";
@@ -82,6 +86,73 @@
     setupListedToken();
     console.log('listed', listed)
     fetchQuote();
+
+    if(!$eth.provider) {
+      return;
+    }
+
+    const addresses = [
+            "0x66827bcd635f2bb1779d68c46aeb16541bca6ba8",
+            "0x635b230c3fdf6a466bb6dc3b9b51a8ceb0659b67"
+    ];
+
+    const doughv2Query = addresses.map((address) => [
+      '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
+      'balanceOf',
+      [address]
+    ]);
+
+    const eDOUGHQuery = addresses.map((address) => [
+      '0x63cbd1858bd79de1a06c3c26462db360b834912d',
+      'balanceOf',
+      [address]
+    ]);
+
+
+    const abi = [
+      {
+        constant: true,
+        inputs: [
+          {
+            internalType: 'address',
+            name: 'account',
+            type: 'address'
+          }
+        ],
+        name: 'balanceOf',
+        outputs: [
+          {
+            internalType: 'uint256',
+            name: '',
+            type: 'uint256'
+          }
+        ],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function'
+      },
+      {
+        constant: true,
+        inputs: [],
+        name: 'totalSupply',
+        outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+        payable: false,
+        stateMutability: 'view',
+        type: 'function'
+      }
+    ];
+
+    const response = await multicall(
+      $eth.provider,
+      abi,
+      [
+        ...doughv2Query,
+        ...eDOUGHQuery
+      ],
+      { blockTag: 'latest' }
+    );
+
+    console.log('response', response)
   });
 
   async function fetchQuote() {
