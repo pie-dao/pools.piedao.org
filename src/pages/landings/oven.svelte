@@ -16,6 +16,7 @@
   import Modal from '../../components/elements/Modal.svelte';
   import LiquidityModal from '../../components/modals/LiquidityModal.svelte';
   import OvenModal from "../../components/modals/OvenModal.svelte";
+import TooltipButton from '../../components/elements/TooltipButton.svelte';
 
   $: ovens = [
     {
@@ -239,7 +240,7 @@
       <span class="font-bold text-xl text-right ml-2">DEFI++</span>
     </div>
     <div class="flex justify-between my-2">
-      <span class="font-thin text-left">Minimum reached</span>
+      <div class="flex items-center "><span class="font-thin text-left mr-2">Minimum reached</span><TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated"><div class="infolink"></div></TooltipButton></div>
       <div class="font-bold text-right rounded-sm bg-black w-40pc">
         <div class="px-2 py-1 rounded-sm text-xs bg-gradient-purple text-left text-white fit-content">65%</div>
       </div>
@@ -263,7 +264,7 @@
       <span class="font-bold text-xl text-right ml-2">BCP</span>
     </div>
     <div class="flex justify-between my-2">
-      <span class="font-thin text-left">Minimum reached</span>
+      <div class="flex items-center "><span class="font-thin text-left mr-2">Minimum reached</span><TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated"><div class="infolink"></div></TooltipButton></div>
       <div class="font-bold text-right rounded-sm bg-black w-40pc">
         <div class="px-2 py-1 rounded-sm text-xs text-left fit-content text-white">0%</div>
       </div>
@@ -288,7 +289,7 @@
         <span class="font-bold text-xl text-right ml-2">YPIE</span>
       </div>
       <div class="flex justify-between my-2">
-        <span class="font-thin text-left">Minimum reached</span>
+        <div class="flex items-center "><span class="font-thin text-left mr-2">Minimum reached</span><TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated"><div class="infolink"></div></TooltipButton></div>
         <div class="font-bold text-right rounded-sm bg-black w-40pc">
           <div class="px-2 py-1 rounded-sm text-xs bg-gradient-purple text-center text-white w-full">waiting gas price</div>
         </div>
