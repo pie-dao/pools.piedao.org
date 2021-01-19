@@ -1333,7 +1333,6 @@ max-width: 32%!important;
 min-width: 31%!important;
 }
 
-
 @media screen and (max-width: 1015px) {
   .max300 {
     max-width: 45%!important;
@@ -1351,3 +1350,44 @@ min-width: 31%!important;
             max-width: 98%!important;
             min-width: 98%!important;
             }  }
+
+
+/* ACCORDION */
+
+[data-accordion] {
+  list-style: none;
+  width: 96%;
+}
+
+[data-accordion-item] button {
+  background-color:#f2f2f2;
+  border: none;
+  margin-top: 5px;
+  font: inherit;
+  font-size: 1.5rem;
+  line-height: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: 2rem 1rem;
+  width: 100%;
+  text-align: left;
+  outline: none;
+  border-radius: 10px;
+}
+
+[data-accordion-item] button:focus {
+outline: none;
+}
+
+[data-accordion-item] [role="region"] {
+  font-size: 1rem;
+  padding: 0.2rem 2rem 2rem 2rem;
+  font-weight: 100;
+  margin-top: -12px;
+  text-align: left;
+  background-color:#f2f2f2;
+  border-radius: 10px;
+
+
+  /* border-bottom: solid 0.5px black; */
+}
