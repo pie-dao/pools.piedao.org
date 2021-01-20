@@ -211,9 +211,11 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
   // Let's put eth back
   newTokenList.push({
     ...tokensList[0],
+    decimals: 18,
     balance: {
       bn: ethBalance,
-      label: (parseFloat(getNormalizedNumber(ethBalance.toString(), 18).toString()).toFixed(2)).toString()
+      label: (parseFloat(getNormalizedNumber(ethBalance.toString(), 18).toString()).toFixed(2)).toString(),
+      number: parseFloat(getNormalizedNumber(ethBalance.toString(), 18).toString()).toFixed(2)
     }
   })
 
@@ -230,7 +232,8 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
       allowance,
       balance: {
         bn: balance,
-        label: (parseFloat(getNormalizedNumber(balance.toString(), decimal).toString()).toFixed(2)).toString()
+        label: (parseFloat(getNormalizedNumber(balance.toString(), decimal).toString()).toFixed(2)).toString(),
+        number: parseFloat(getNormalizedNumber(balance.toString(), decimal).toString())
       }
     })
   }

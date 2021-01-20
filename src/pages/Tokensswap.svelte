@@ -2,9 +2,13 @@
   import debounce from "lodash/debounce";
   import BigNumber from "bignumber.js";
   import { onMount } from 'svelte';
+  import orderBy from 'lodash/orderBy';
+  import find from 'lodash/find';
+
   import ApiOx from "../classes/0xApi";
   import poolsConfig from '../config/pools.json';
   import TokenSelectModal from "../components/modals/TokenSelectModal.svelte";
+  
   import {
     functionKey,
     approveMax,
@@ -13,11 +17,12 @@
   } from "../stores/eth.js";
 
   import {
-    fetchBalances
+    fetchBalances,
   } from '../helpers/multicall';
 
   import {
     getTokenImage,
+    formatFiat
   } from "../components/helpers";
 
   $: listed = [
@@ -27,18 +32,18 @@
       icon: getTokenImage('eth')
     },
     {
-      address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-      symbol: 'USDC',
-      icon: getTokenImage('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
+      address: '0x6b175474e89094c44da98b954eedeac495271d0f',
+      symbol: 'DAI',
+      icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
     }
   ];
 
   let targetModal = 'sell';
 
   let defaultTokenSell = {
-    address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-    symbol: 'USDC',
-    icon: getTokenImage('0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48')
+    address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    symbol: 'ETH',
+    icon: getTokenImage('ETH')
   }
 
   let defaultTokenBuy = {
@@ -88,14 +93,15 @@
   onMount(async () => {
     setupListedToken();
     console.log('listed', listed)
-    sellToken = listed[0];
-    buyToken = listed[1];
+
+    
+    sellToken = find(listed, ['address', defaultTokenSell.address]);
+    buyToken = find(listed, ['address', defaultTokenBuy.address]);
     fetchQuote();
   });
 
   async function fetchOnchainData() {
-    // Fetch balances
-
+    // Fetch balances, allowance and decimals
     listed = await fetchBalances(
       listed,
       $eth.address,
@@ -105,15 +111,14 @@
     listed.forEach( token => {
       balances[token.address] = token.balance;
     })
-
-    // Fetch Allowances
-    //needAllowance = needApproval(pool, ($allowances[pool.allowanceKey] || BigNumber(0)));
   }
 
   async function fetchQuote() {
     if(amount === 0) return;
     quote = null;
-    const res = await api.getQuote(sellToken.address, buyToken.address, amount);
+    receivedAmount = 0;
+    error = null;
+    const res = await api.getQuote(sellToken, buyToken, amount);
     console.log('quote', res);
     
     if(res.validationErrors) {
@@ -126,7 +131,7 @@
       return;
     }
     quote = res;
-    receivedAmount = amount*parseFloat(quote.price);
+    receivedAmount = toNum(quote.buyAmount);
   }
 
   function setupListedToken() {
@@ -143,7 +148,7 @@
 </script>
   
 <TokenSelectModal
-  tokens={listed}
+  tokens={orderBy(listed, ['balance.number'], ['desc'])}
   open={tokenSelectModalOpen}
   callback={tokenSelectCallback} />
 
@@ -196,6 +201,7 @@
         <button class="swap-button" on:click={() => {
           targetModal = 'buy';
           tokenSelectModalOpen = true;
+          console.log('efasdf', orderBy(listed, ['balance.number'], ['desc']))
         }}>
           <span class="sc-iybRtq gjVeBU">
             <img class="h-auto w-24px mr-5px" alt={`${buyToken.symbol} logo`} src={buyToken.icon}>
@@ -234,7 +240,8 @@
     
 
     <a class="w-100pc pt-10px" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
-      <button class="stake-button rounded-20px p-15px w-100pc">
+
+      <button disabled={error ? true : false} class="stake-button rounded-20px p-15px w-100pc">
         Swap
       </button>
     </a>
