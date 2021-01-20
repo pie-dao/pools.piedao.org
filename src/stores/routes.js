@@ -18,7 +18,6 @@ import Oven from '../pages/landings/oven.svelte';
 import Experipie from '../pages/ExperiPie.svelte';
 import PiePageSwitch from '../pages/PiePageSwitch.svelte';
 
-
 export const defaultRouteObj = {
   page: Main,
   params: {
@@ -28,6 +27,13 @@ export const defaultRouteObj = {
 
 const deriveRoute = () => {
   try {
+    if(window.location.hash == '') {
+      const normal = window.location.pathname.split('/');
+      let path = normal.filter((part) => part && part.length > 0);
+      if(path.length > 0)
+        return path;
+    }
+    
     const core = window.location.href.split('#')[1];
 
     if (!core) {
@@ -35,6 +41,7 @@ const deriveRoute = () => {
     }
 
     const parts = core.split('/').filter((part) => part && part.length > 0);
+    
 
     return parts;
   } catch (e) {
@@ -42,12 +49,27 @@ const deriveRoute = () => {
   }
 };
 
+function changeUrl(routes) {
+  if ("undefined" !== typeof history.pushState) {
+    let url = '/';
+    routes.forEach( part => {
+      url += `${part}/`;
+    })
+    window.history.pushState({}, '', url);
+  } else {
+    window.location.assign(url);
+  }
+}
+
+
 const formatRoute = (route) => {
   let address;
   let poolAction;
   let referral;
   let method;
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
+
+  //changeUrl(route);
 
   switch (route[0] || 'root') {
     case 'about':
@@ -114,6 +136,18 @@ export const currentRoute = writable({ ...formatRoute(route) });
 
 window.addEventListener('hashchange', () => {
   const newRoute = deriveRoute();
+  const trackPath = '/' + newRoute.join('/');
+
+  if(window.location.origin !== 'http://localhost:8080') {
+    window.gtag('event', 'page_view', {
+      page_path: trackPath
+    })
+  } else {
+      console.log('Analytics DEV', {
+        page_path: trackPath
+      })
+  }
+  
   currentRoute.set({ ...formatRoute(newRoute) });
   window.scrollTo({
     top: 0,

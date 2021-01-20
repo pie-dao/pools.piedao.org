@@ -1,7 +1,17 @@
 <script>
     import images from '../../config/images.json';
+    import Meta from '../elements/meta.svelte';
 </script>
 <div>
+
+    <Meta 
+        metadata={{
+            title: "YPIE Page, the Yearn Finance DEFI Index - PieDAO",
+            description: "Overview of YPIE PieVault DEFI index (Yearn Ecosystem Pie). Including performance, underlying assets, strategy, and the methodology and motivation for the pie.. YPIE contains SUSHI, YFI, CREAM,  KP3R, AKRO and PICKLE.",
+            image: images.ypie,
+            imageAlt: "YPIE DEFI index assets and their high APR yield-generating strategies."
+        }}
+    />
     
     <h1 class="font-lg">Summary:</h1>
     <span class="font-thin">

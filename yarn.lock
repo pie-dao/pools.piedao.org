@@ -2581,7 +2581,7 @@
     "is-module" "^1.0.0"
     "resolve" "^1.14.2"
 
-"@rollup/plugin-replace@^2.1.0":
+"@rollup/plugin-replace@^2.1.0", "@rollup/plugin-replace@^2.3.3":
   "integrity" "sha512-XPmVXZ7IlaoWaJLkSCDaa0Y6uVo5XQYHhiMFzOd5qSv5rE+t/UJToPIOE56flKIxBFQI27ONsxb7dqHnwSsjKQ=="
   "resolved" "https://registry.yarnpkg.com/@rollup/plugin-replace/-/plugin-replace-2.3.3.tgz"
   "version" "2.3.3"

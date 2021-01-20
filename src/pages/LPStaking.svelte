@@ -18,6 +18,7 @@
   import displayNotification from "../notifications.js";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { farming } from '../stores/eth/writables.js';
+  import Meta from '../components/elements/meta.svelte';
   import {
     amountFormatter,
     toFixed,
@@ -511,7 +512,12 @@ const selectPool = (_pool) => {
 </script>
 
 
-
+<Meta 
+    metadata={{
+        title: "PieDAO Farms, high yield DEFI farms to put your DEFI index to work",
+        description: "An overview of the PieDAO farms, allowing users to stake their Pies and earn DOUGH. DOUGH / ETH, BCP, DEFI+S / ETH, DEFI+L / ETH are all incentivized."
+    }}
+/>
 <div class="content flex flex-col">
     <img class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
     <img class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" />

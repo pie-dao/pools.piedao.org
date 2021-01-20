@@ -72,7 +72,6 @@
     "swapEnabled": false,
     "streamingFees": "0",
     "swapFees": "0",
-    "coingeckoId": "piedao-usd",
     "tradingViewFormula": "(0.4722*KRAKEN:USDCUSD+0.2042*KRAKEN:DAIUSD+0.2858*BITTREX:TUSDUSD+0.0378*KUCOIN:SUSDUSDT)",
     "mapDynamicTradingViewFormula": {
       "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": "KRAKEN:USDCUSD",

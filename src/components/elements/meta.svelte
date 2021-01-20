@@ -11,16 +11,16 @@
   {/if}
   
   {#if metadata.description}
-    <meta name="description" content="Page Description" />
-    <meta property="og:description" content="Page Description" />
-    <meta property="twitter:description" content="Page Description" />
+    <meta name="description" content={metadata.description} />
+    <meta property="og:description" content={metadata.description} />
+    <meta property="twitter:description" content={metadata.description} />
   {/if} 
   
   {#if metadata.image}
-    <meta property="og:image" content="example.com/path_to/thumbnail.jpg" />
+    <meta property="og:image" content={metadata.image} />
     <meta
       property="twitter:image"
-      content="https://example.com/path-to/thumbnail.jpg"
+      content={metadata.image}
     />
   {/if} 
   

@@ -1,3 +1,18 @@
+<script>
+    import images from '../../config/images.json';
+    import Meta from '../elements/meta.svelte';
+</script>
+
+<Meta 
+    metadata={{
+        title: "DEFI+S - PieDAO, small market cap DEFI index ",
+        description: "Overview of DEFI+S, PieDAO small cap DEFI Pie containing UMA, REN, PNT, LRC, BAL and MLN. A breakdown of performance, motivation for the product, methodology and operations.",
+        image: images.defis_social,
+        imageAlt: "DEFI+S, our small cap DEFI index containing PNT, UMO, BAL, and LRC."
+    }}
+/>
+
+
 <div>
     <h1 class="font-lg">Summary:</h1>
     <span class="font-thin">

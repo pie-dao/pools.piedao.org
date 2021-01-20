@@ -1,3 +1,16 @@
+<script>
+    import images from '../../config/images.json';
+    import Meta from '../elements/meta.svelte';
+</script>
+
+<Meta 
+    metadata={{
+        title: "DEFI++ - PieDAO, the most diversified DEFI index on the market",
+        description: "Overview of DEFI++, the most diversified DEFI index on the market. A balance of DEFI+L and DEFI+S. Breakdown of the underlying assets, LINK, YFI, AAVE, UNI, UMA, SNX, REN, COMP, MKR, LRC, BAL, PNT, MLN. A breakdown of the motivation behind the product, performance, operations and methodology.",
+        image: images.defipp_social,
+        imageAlt: "DEFI++ logo, the most diversified DEFI index on the market"
+    }}
+/>
 <div>
     <h1 class="font-lg">Summary:</h1>
     <div class="font-thin">
