@@ -18,7 +18,6 @@
 
   import {
     getTokenImage,
-    fetchEthBalance,
   } from "../components/helpers";
 
   $: listed = [
@@ -85,8 +84,6 @@
   $: if($eth.address) {
     fetchOnchainData();
   }
-
-
 
   onMount(async () => {
     setupListedToken();

@@ -56,7 +56,78 @@ const abi = [
     payable: false,
     stateMutability: 'view',
     type: 'function'
-  }
+  },
+  {
+    inputs:[],
+    name:"decimals",
+    "outputs":[
+       {
+          "internalType":"uint8",
+          "name":"",
+          "type":"uint8"
+       }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+ },
+ {
+  "constant":true,
+  "inputs":[
+     {
+        "name":"addr",
+        "type":"address"
+     }
+  ],
+  "name":"getEthBalance",
+  "outputs":[
+     {
+        "name":"balance",
+        "type":"uint256"
+     }
+  ],
+  "payable":false,
+  "stateMutability":"view",
+  "type":"function"
+},
+{
+  "inputs":[
+     
+  ],
+  "name":"symbol",
+  "outputs":[
+     {
+        "internalType":"string",
+        "name":"",
+        "type":"string"
+     }
+  ],
+  "stateMutability":"view",
+  "type":"function"
+},
+{
+  "inputs":[
+     {
+        "internalType":"address",
+        "name":"owner",
+        "type":"address"
+     },
+     {
+        "internalType":"address",
+        "name":"spender",
+        "type":"address"
+     }
+  ],
+  "name":"allowance",
+  "outputs":[
+     {
+        "internalType":"uint256",
+        "name":"",
+        "type":"uint256"
+     }
+  ],
+  "stateMutability":"view",
+  "type":"function"
+},
 ];
 
 export async function multicall(
@@ -82,43 +153,88 @@ export async function multicall(
   }
 }
 
-export async function fetchBalances(tokensList, walletAddress, provider) {
-  const queries = [];
+const chunk = (arr, size) =>
+  Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+    arr.slice(i * size, i * size + size)
+  );
 
-  tokensList.forEach( token => {
-    const balanceQuery = [
-      token.address,
-      'balanceOf',
-      [walletAddress]
-    ];
-    if(token.address !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee') {
-      queries.push(balanceQuery);
-    }
-  })
+/**
+ * Warning, token list has to contain eth at position [0]
+ * @param {*} tokensList 
+ * @param {*} walletAddress 
+ * @param {*} provider 
+ * @param {*} allowanceTarget default to 0x Contract
+ * 
+ */
+export async function fetchBalances(tokensList, walletAddress, provider, allowanceTarget='0xdef1c0ded9bec7f1a1670819833240f027b25eff') {
+  const tokensListWithoutEth = tokensList.slice(1);
+
+  const balanceQuery = tokensListWithoutEth.map((token) => [
+    token.address,
+    'balanceOf',
+    [walletAddress]
+  ]);
+
+  const decimalsQuery = tokensListWithoutEth.map((token) => [
+    token.address,
+    'decimals'
+  ]);
+
+  const allowanceQuery = tokensListWithoutEth.map((token) => [
+    token.address,
+    'allowance',
+    [walletAddress, allowanceTarget]
+  ]);
 
   const response = await multicall(
     provider,
     abi,
-    queries,
+    [
+      [MULTICALL['1'], 'getEthBalance', [walletAddress]],
+      ...balanceQuery,
+      ...decimalsQuery,
+      ...allowanceQuery
+    ],
+    
     { blockTag: 'latest' }
   );
 
-  let idx = 0;
-  tokensList.forEach( token => {
+  const ethBalance = response[0];
+  const responseClean = response.slice(1, response.length);
+  const chunks = chunk(responseClean, tokensListWithoutEth.length);
+  const balances = chunks[0];
+  const decimals = chunks[1];
+  const allowances = chunks[2];
+  
+  let newTokenList = [];
 
-    if(token.address !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee') {
-      token.balance = {
-        bn: response[idx][0],
-        label: (parseFloat(getNormalizedNumber(response[idx][0].toString(), 18).toString()).toFixed(2)).toString()
-      };
-      idx++;
-    } else {
-      token.balance = {
-        bn: BigNumber(0),
-        label: '0'
-      }
+  // Let's put eth back
+  newTokenList.push({
+    ...tokensList[0],
+    balance: {
+      bn: ethBalance,
+      label: (parseFloat(getNormalizedNumber(ethBalance.toString(), 18).toString()).toFixed(2)).toString()
     }
   })
 
-  return tokensList;
+  // We loop across all tokens
+  for (let index = 0; index < tokensListWithoutEth.length; index++) {
+    const balance = balances[index][0];
+    const decimal = decimals[index][0];
+    const allowance = allowances[index][0];
+    
+
+    newTokenList.push({
+      ...tokensListWithoutEth[index],
+      decimals: decimal,
+      allowance,
+      balance: {
+        bn: balance,
+        label: (parseFloat(getNormalizedNumber(balance.toString(), decimal).toString()).toFixed(2)).toString()
+      }
+    })
+  }
+
+  //console.log('newTokenList', newTokenList);
+  return newTokenList;
 }
