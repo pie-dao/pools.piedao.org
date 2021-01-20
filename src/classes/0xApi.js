@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 export default class ApiOx {
 
     constructor() {
@@ -5,7 +6,17 @@ export default class ApiOx {
     }
 
     async getQuote(addressOne, addressTwo, amount) {
-        const callUrl = `${this.baseUrl}quote?sellAmount=${amount}&buyToken=${addressTwo}&sellToken=${addressOne}`;
+        if(addressOne === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee') {
+            addressOne = 'ETH'
+        }
+        if(addressTwo === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee') {
+            addressTwo = 'ETH'
+        }
+
+        const weiAmount = (new BigNumber(amount).multipliedBy(10**18)).toFixed(0).toString();
+
+        const callUrl = `${this.baseUrl}quote?sellAmount=${weiAmount}&buyToken=${addressTwo}&sellToken=${addressOne}`;
+        console.log('callUrl', callUrl)
         let response = await fetch(callUrl)
         console.log('response', response);
         if (response.status !== 200) {

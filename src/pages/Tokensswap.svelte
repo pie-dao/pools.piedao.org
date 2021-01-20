@@ -22,11 +22,11 @@
   } from "../components/helpers";
 
   $: listed = [
-    // {
-    //   address: '0x0000000000000000000000000000000000000000',
-    //   symbol: 'ETH',
-    //   icon: getTokenImage('eth')
-    // },
+    {
+      address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+      symbol: 'ETH',
+      icon: getTokenImage('eth')
+    },
     {
       address: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
       symbol: 'USDC',
@@ -54,8 +54,14 @@
     if (token) {
       console.log('new token', token);
       if(targetModal === 'sell') {
+        if(token === buyToken) {
+          return;
+        }
         sellToken = token;
       } else if(targetModal === 'buy') {
+        if(token === sellToken) {
+          return;
+        }
         buyToken = token;
       }
       fetchQuote();
@@ -109,6 +115,7 @@
 
   async function fetchQuote() {
     if(amount === 0) return;
+    quote = null;
     const res = await api.getQuote(sellToken.address, buyToken.address, amount);
     console.log('quote', res);
     
@@ -157,7 +164,8 @@
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
         {#if balances[sellToken.address]}
           <div on:click={() => {
-            amount = balances[sellToken.address].label
+            amount = balances[sellToken.address].label;
+            fetchQuote();
           }}>
             Max balance: {balances[sellToken.address].label}
           </div>

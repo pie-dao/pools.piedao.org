@@ -3,7 +3,6 @@
 
   export let callback;
   export let tokens;
-
   export let open;
   /** Dispatch event on click outside of node */
   export function clickOutside(node) {

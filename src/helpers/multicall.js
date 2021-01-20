@@ -91,7 +91,9 @@ export async function fetchBalances(tokensList, walletAddress, provider) {
       'balanceOf',
       [walletAddress]
     ];
-    queries.push(balanceQuery);
+    if(token.address !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee') {
+      queries.push(balanceQuery);
+    }
   })
 
   const response = await multicall(
@@ -103,12 +105,19 @@ export async function fetchBalances(tokensList, walletAddress, provider) {
 
   let idx = 0;
   tokensList.forEach( token => {
-    token.balance = {
-      bn: response[idx][0],
-      label: (parseFloat(getNormalizedNumber(response[idx][0].toString(), 18).toString()).toFixed(2)).toString()
-    };
-    
-    idx++;
+
+    if(token.address !== '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee') {
+      token.balance = {
+        bn: response[idx][0],
+        label: (parseFloat(getNormalizedNumber(response[idx][0].toString(), 18).toString()).toFixed(2)).toString()
+      };
+      idx++;
+    } else {
+      token.balance = {
+        bn: BigNumber(0),
+        label: '0'
+      }
+    }
   })
 
   return tokensList;
