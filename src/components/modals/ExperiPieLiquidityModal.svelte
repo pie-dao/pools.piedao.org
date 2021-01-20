@@ -157,7 +157,7 @@
       return;
     }
 
-    const recipe = await contract({ address: '0x6cb4b8669e23295563d3b34df4a760c0cee993c7', abi: recipeAbi });
+    const recipe = await contract({ address: '0xE1F9E100cbF4aD6D546b196Af33E1129Dd0866b3', abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     
