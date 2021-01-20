@@ -269,8 +269,13 @@ border-radius: 4px;
 
 .etherscan-container,
 .quantstamp-container {
-  @apply bg-grey-243 pt-2 pb-4 px-4 mx-2;
+  @apply bg-grey-243 pt-2 pb-4 px-4;
   border-radius: 8px;
+  margin-right: 10px;
+  
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
 .etherscan-container span,

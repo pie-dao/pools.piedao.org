@@ -166,12 +166,12 @@
 <div class="content flex flex-col spl">
   
   <div class="flex flex-wrap w-full">
-    <div class="flex flex-row content-between justify-between flex-wrap w-full">
-      <div class="flex flex-row sm:w-full md:w-1/2">
+    <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
+      <div class="flex flex-row items-center sm:w-full md:w-1/2">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
         <div class="mx-3 flex flex-col">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
-          <h2 class="text-md leading-none font-black">{name}</h2>
+          <h2 class="text-md leading-none font-black mb-4px">{name}</h2>
           {#if tokenPrice}
             <div class="flex items-center mincontent"><div class="text-xl leading-none font-thin whitespace-nowrap mincontent">{formatFiat(tokenPrice)} </div><span class="text-base whitespace-nowrap font-black mincontent ml-2"><Change showLabel={true} value={change24H} /></span></div>
           {/if}
