@@ -16,6 +16,7 @@
   import Quantstamp from "../components/Quantstamp.svelte";
   import LiquidityModal from "../components/modals/LiquidityModal.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
+  import CoinGeckoBanner from "../components/CoinGeckoBanner.svelte";
   import KeyFacts from "../components/KeyFacts.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
   import images from '../config/images.json';
@@ -329,19 +330,22 @@
     </div>
   {/if}
   
-  <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
-    <div class="p-0 mt-2 md:w-1/4">
+  <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row md:flex-wrap">
+    <div class="p-0 mt-2 flexgrow min-w-230px">
       <Farming token={$currentRoute.params.address} />
     </div>  
-    <div class="p-0 mt-2 md:w-1/4">
+    <div class="p-0 mt-2 flexgrow	min-w-230px">
       <Etherscan token={$currentRoute.params.address} />
     </div>
 
-    <div class="p-0 mt-2 md:w-1/4">
+    <div class="p-0 mt-2 flexgrow	min-w-230px">
       <Quantstamp token={$currentRoute.params.address} />
     </div>
-    <div class="p-0 mt-2 md:w-1/4">
+    <div class="p-0 mt-2 flexgrow	min-w-230px">
       <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />
+    </div>
+    <div class="p-0 mt-2 flexgrow	min-w-230px">
+      <CoinGeckoBanner pie={poolsConfig[token]} pieAddress={token} />
     </div>
   </div>
 </div>
