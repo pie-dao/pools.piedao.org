@@ -11,6 +11,10 @@
 
 .half { width: 47%;}
 
+.fitcontent {
+  width: fit-content;
+}
+
 .border-half {border: 0.5px;}
 
 #confetti {

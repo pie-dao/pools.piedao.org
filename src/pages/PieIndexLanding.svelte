@@ -244,13 +244,13 @@
         <tr>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Allocation</th>
-          <th class="font-thin border-b-2 px-4 py-2">Price</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">Price</th>
           
           {#if !pieOfPies }
               <!-- <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th> -->
-              <th class="font-thin border-b-2 px-4 py-2">Balance</th>
+              <th class="font-thin border-b-2 px-4 py-2 text-left">Balance</th>
           {/if}
-          <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
           <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
         </tr>
       </thead>
@@ -282,7 +282,7 @@
                 </div>
             </td>
 
-            <td class="border px-4 ml-8 py-2 font-thin text-center">
+            <td class="border px-4 ml-8 py-2 font-thin text-left">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
             

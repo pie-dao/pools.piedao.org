@@ -2,7 +2,9 @@
   "icons": {
     "downArrow": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/downArrow.svg",
     "hamburger": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/hamburger.svg",
-    "timesLight": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/timesLight.svg"
+    "timesLight": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/timesLight.svg",
+    "ArrowUp": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/ArrowDown.png",
+    "ArrowDown": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/ArrowUp.png"
   },
   "logos": {
     "aragon": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/aragon.svg",
