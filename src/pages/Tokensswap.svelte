@@ -59,7 +59,6 @@
   const tokenSelectCallback = (token) => {
     tokenSelectModalOpen = false;
     if (token) {
-      console.log('new token', token);
       if(targetModal === 'sell') {
         if(token === buyToken) {
           return;
@@ -138,11 +137,12 @@
       return;
     }
 
+    const gasPercentagePlus = BigNumber(quote.gas.toString()).multipliedBy(BigNumber(1.1)).toFixed(0);
     const transaction = {
         to: quote.to,
         value: ethers.BigNumber.from(quote.value),
         data: quote.data,
-        gasLimit: ethers.BigNumber.from(quote.gas),
+        gasLimit: ethers.BigNumber.from(gasPercentagePlus),
     };
 
     const { emitter } = displayNotification(await $eth.signer.sendTransaction(transaction) );
@@ -160,6 +160,8 @@
             message: `${amount.toFixed()} ${sellToken.symbol} swapped successfully`,
             type: "success",
           });
+          fetchOnchainData();
+          amount = 0;
           dismiss();
           subscription.unsubscribe();
         },
@@ -286,7 +288,6 @@
         <button class="swap-button" on:click={() => {
           targetModal = 'buy';
           tokenSelectModalOpen = true;
-          console.log('efasdf', orderBy(listed, ['balance.number'], ['desc']))
         }}>
           <span class="sc-iybRtq gjVeBU">
             <img class="h-auto w-24px mr-5px" alt={`${buyToken.symbol} logo`} src={buyToken.icon}>
