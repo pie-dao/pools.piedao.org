@@ -167,7 +167,7 @@
   
   <div class="flex flex-wrap w-full">
     <div class="flex flex-row content-between justify-between flex-wrap w-full">
-      <div class="flex flex-row sm:w-full md:w-1/3">
+      <div class="flex flex-row sm:w-full md:w-1/2">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
         <div class="mx-3 flex flex-col">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
@@ -179,7 +179,7 @@
         </div>
       </div>
 
-      <div class="w-100pc sm:w-full md:w-2/3 flex flex-row-reverse">
+      <div class="w-100pc sm:w-full md:w-1/2 flex flex-row-reverse">
         <button on:click={() => {
           modalOption.method = "multi";
           modalOption.poolAction = "withdraw";
