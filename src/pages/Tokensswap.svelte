@@ -1,4 +1,5 @@
 <script>
+  import { _ } from "svelte-i18n";
   import debounce from "lodash/debounce";
   import BigNumber from "bignumber.js";
   import { onMount } from 'svelte';
@@ -8,9 +9,11 @@
   import ApiOx from "../classes/0xApi";
   import poolsConfig from '../config/pools.json';
   import TokenSelectModal from "../components/modals/TokenSelectModal.svelte";
+  import displayNotification from "../notifications";
+  import { ethers } from 'ethers';
   
   import {
-    functionKey,
+    subject,
     approveMax,
     connectWeb3,
     eth,
@@ -21,10 +24,10 @@
   } from '../helpers/multicall';
 
   import {
-    getTokenImage,
-    formatFiat
+    getTokenImage
   } from "../components/helpers";
 
+  const ZeroEx = '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
   $: listed = [
     {
       address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -81,24 +84,94 @@
   $: amount = 0;
   $: receivedAmount = 0;
   $: quote = null;
-  $: needAllowance = true;
+  $: needAllowance = false;
+  $: initialized = false;
   $: allowances = {};
   $: balances = {};
   $: error = null;
 
   $: if($eth.address) {
-    fetchOnchainData();
+    if(!initialized) {
+      fetchOnchainData();
+    }
+    
   }
 
   onMount(async () => {
-    setupListedToken();
-    console.log('listed', listed)
-
-    
+    setupListedToken();    
     sellToken = find(listed, ['address', defaultTokenSell.address]);
     buyToken = find(listed, ['address', defaultTokenBuy.address]);
     fetchQuote();
   });
+
+  function needApproval(allowance) {
+    if( allowance.isEqualTo(0) ) return true;
+    if( allowance.isGreaterThanOrEqualTo( BigNumber(amount)) ) return false;
+  }
+
+  async function approveToken() {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    const { emitter } = displayNotification(await approveMax(sellToken.address, ZeroEx));
+    
+    await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
+      resolve();
+      return { message: `${sellToken.symbol} unlocked`, type: 'success' };
+    }));
+
+    needAllowance = false;
+  }
+
+  async function swap() {
+    if(!quote) {
+      error = "You need a quote first."
+      return;
+    }
+
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    const transaction = {
+        to: quote.to,
+        value: ethers.BigNumber.from(quote.value),
+        data: quote.data,
+        gasLimit: ethers.BigNumber.from(quote.gas),
+    };
+
+    const { emitter } = displayNotification(await $eth.signer.sendTransaction(transaction) );
+
+    emitter.on("txConfirmed", ({ hash }) => {
+      const { dismiss } = displayNotification({
+        message: "Confirming...",
+        type: "pending",
+      });
+
+      const subscription = subject("blockNumber").subscribe({
+        next: () => {
+          displayNotification({
+            autoDismiss: 15000,
+            message: `${amount.toFixed()} ${sellToken.symbol} swapped successfully`,
+            type: "success",
+          });
+          dismiss();
+          subscription.unsubscribe();
+        },
+      });
+
+      return {
+        autoDismiss: 1,
+        message: "Mined",
+        type: "success",
+      };
+    });
+  }
 
   async function fetchOnchainData() {
     // Fetch balances, allowance and decimals
@@ -108,18 +181,29 @@
       $eth.provider
     )
 
+    initialized = true;
+    sellToken = find(listed, ['address', defaultTokenSell.address]);
+    buyToken = find(listed, ['address', defaultTokenBuy.address]);
+
+    listed.forEach( token => {
+      allowances[token.address] = token.allowance;
+    })
+
     listed.forEach( token => {
       balances[token.address] = token.balance;
     })
   }
 
-  async function fetchQuote() {
+  async function fetchQuote(selfRefresh=false) {
     if(amount === 0) return;
-    quote = null;
-    receivedAmount = 0;
-    error = null;
+
+    if(!selfRefresh) {
+      quote = null;
+      receivedAmount = 0;
+      error = null;
+    }
     const res = await api.getQuote(sellToken, buyToken, amount);
-    console.log('quote', res);
+    needAllowance = needApproval(sellToken.allowance);
     
     if(res.validationErrors) {
       switch(res.validationErrors[0].code) {
@@ -132,6 +216,7 @@
     }
     quote = res;
     receivedAmount = toNum(quote.buyAmount);
+    setTimeout(() => fetchQuote(true), 10000);
   }
 
   function setupListedToken() {
@@ -237,15 +322,15 @@
         <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">1%</div>
       </div>
     {/if}
-    
 
-    <a class="w-100pc pt-10px" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
-
-      <button disabled={error ? true : false} class="stake-button rounded-20px p-15px w-100pc">
+    {needAllowance}
+    {#if needAllowance }
+      <button on:click={approveToken} class="btn clear stake-button rounded-20px p-15px w-100pc">Approve</button>
+    {:else}
+      <button on:click={swap} disabled={error ? true : false} class="stake-button rounded-20px p-15px w-100pc">
         Swap
       </button>
-    </a>
-
+    {/if}
 
   </div>
 

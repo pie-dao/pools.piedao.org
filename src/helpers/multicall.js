@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 import { Interface } from '@ethersproject/abi';
 import { Contract } from '@ethersproject/contracts';
 import multicallAbi from '../config/Multicall.json';
@@ -212,6 +213,7 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
   newTokenList.push({
     ...tokensList[0],
     decimals: 18,
+    allowance: new BigNumber((ethers.constants.MaxUint256).toString()),
     balance: {
       bn: ethBalance,
       label: (parseFloat(getNormalizedNumber(ethBalance.toString(), 18).toString()).toFixed(2)).toString(),
@@ -229,7 +231,7 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
     newTokenList.push({
       ...tokensListWithoutEth[index],
       decimals: decimal,
-      allowance,
+      allowance: new BigNumber(allowance.toString()),
       balance: {
         bn: balance,
         label: (parseFloat(getNormalizedNumber(balance.toString(), decimal).toString()).toFixed(2)).toString(),
@@ -238,6 +240,5 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
     })
   }
 
-  //console.log('newTokenList', newTokenList);
   return newTokenList;
 }
