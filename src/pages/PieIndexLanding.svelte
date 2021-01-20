@@ -167,7 +167,7 @@
   
   <div class="flex flex-wrap w-full">
     <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
-      <div class="flex flex-row items-center sm:w-full md:w-1/2">
+      <div class="flex flex-row items-center sm:w-full md:w-40pc">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
         <div class="mx-3 flex flex-col">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
@@ -179,20 +179,48 @@
         </div>
       </div>
 
-      <div class="w-100pc sm:w-full md:w-1/2 flex flex-row-reverse">
-        <button on:click={() => {
-          modalOption.method = "multi";
-          modalOption.poolAction = "withdraw";
-          modalOption.title = "Redeem";
-          modal.open()
-        }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Redeem</button>
+      <div class="w-100pc sm:w-full md:w-60pc flex justify-end">
 
         <button on:click={() => {
           modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
           modalOption.poolAction = "add";
           modalOption.title = "Add Liquidity";
           modal.open()
+        }} class="flex w-1/2 btnbig text-white text-left ml-0 mr-1 py-2 px-2 md:ml-4">
+        <div class="mr-10px"><img class="h-40px inline" src={images.exchangeemoji} alt={symbol} /></div>
+        <div class="">
+          <div class="text-lg font-bold">Buy & Sell</div>
+          <div class="text-base font-thin">Instantly swap on Dexes</div>
+        </div>
+        </button>
+
+
+        <button on:click={() => {
+          modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
+          modalOption.poolAction = "add";
+          modalOption.title = "Add Liquidity";
+          modal.open()
+        }} class="flex w-1/2 btnbig text-white text-left ml-0 mr-1 py-2 px-2 md:ml-4">
+        <div class="mr-10px"><img class="h-50px inline" src={images.waitoven} alt={symbol} /></div>
+        <div class="">
+          <div class="text-lg font-bold">Bake your Pie</div>
+          <div class="text-base font-thin">Wait but save 97% gas</div>
+        </div>
+        </button>
+
+        <!-- <button on:click={() => {
+          modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
+          modalOption.poolAction = "add";
+          modalOption.title = "Add Liquidity";
+          modal.open()
         }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Issue</button>
+
+        <button on:click={() => {
+          modalOption.method = "multi";
+          modalOption.poolAction = "withdraw";
+          modalOption.title = "Redeem";
+          modal.open()
+        }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Redeem</button> -->
         
         <!-- <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
           <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>

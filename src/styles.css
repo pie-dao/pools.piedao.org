@@ -85,6 +85,16 @@ flex: 1 1 0;
   border-radius: 1rem;
 }
 
+.roundedl {
+  border-radius: 10px;
+}
+
+.roundedxs {
+  border-radius: 4px;
+  }
+
+
+
 .bg-pink {
   background-color: #ff2eb3;
 }
@@ -149,9 +159,6 @@ flex: 1 1 0;
   line-height: 5rem;
 }
 
-.roundedxs {
-border-radius: 4px;
-}
 
 /* .toggle-btn .active {
   background: white;
@@ -513,6 +520,13 @@ border-radius: 4px;
   font-weight: 200;
   /* width: 7rem; */
   min-width: 150px!important;
+}
+
+.btnbig {
+  cursor: pointer;
+  background-color: #ED1EA0;
+  border-radius: 10px;
+
 }
 
 .table-btn {
