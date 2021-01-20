@@ -174,7 +174,7 @@
           <span class="sc-iybRtq gjVeBU">
             <img class="h-auto w-24px mr-5px" alt={`${sellToken.symbol} logo`} src={sellToken.icon}>
             <span class="sc-kXeGPI jeVIZw token-symbol-container">{sellToken.symbol}</span>
-            <svg width="12" height="7" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj"><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#AEAEAE"></path></svg>
+            <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff"></path></svg>
           </span>
         </button>
       </div>
@@ -195,7 +195,7 @@
           <span class="sc-iybRtq gjVeBU">
             <img class="h-auto w-24px mr-5px" alt={`${buyToken.symbol} logo`} src={buyToken.icon}>
             <span class="sc-kXeGPI jeVIZw token-symbol-container">{buyToken.symbol}</span>
-            <svg width="12" height="7" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj"><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#AEAEAE"></path></svg>
+            <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff"></path></svg>
           </span>
         </button>
       </div>
