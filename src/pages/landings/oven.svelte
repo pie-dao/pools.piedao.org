@@ -303,11 +303,39 @@
 
 <div class="text-left content spl flex justify-center">
 <Accordion>
-  <AccordionItem title="How does the Oven make me save 97% gas?">How does the Oven make me save 97% gas?</AccordionItem>
-  <AccordionItem title="When will the Oven be triggered?">When will the Oven be triggered?</AccordionItem>
-  <AccordionItem title="Why does it say 100% but it is still not baking?">When will the Oven be triggered?</AccordionItem>
-  <AccordionItem title="How does it take usually to bake a Pie?">How does it take usually to bake a Pie?</AccordionItem>
-  <AccordionItem title="What happens if the ETH I put goes over 10 ETH?">What happens if the ETH I put goes over 10 ETH?</AccordionItem>
-  <AccordionItem title="Is there a time limit to withdraw?">Some serious answer about this question goes here. It can be short, it can be long, it really does not matter at all!</AccordionItem>
-</Accordion>
+
+
+  <AccordionItem title="How does Oven save me 97% gas?">
+    With the community Oven users bake their pies together. 
+    Normally baking can require as much as 73 separate transactions for each user, costing a large amount in gas. Oven bakes everyone’s pies together, reducing the total number of transactions needed and sharing the gas costs.
+  </AccordionItem>
+
+  <AccordionItem title="When will Oven be triggered?">
+    Oven goes through two checks every fifteen minutes. The first checks if more than ten ETH is ready to be baked. The second checks current gas prices to see if baking is cost-efficient.
+Once both conditions are met Oven will jump into action, baking everyones’ pies.
+  </AccordionItem>
+
+  <AccordionItem title="Why does it say 100% but is still not baking?">
+    At some points the Ethereum network can experience sustained high demand, causing prolonged high gas prices. This can cause a delay in baking. Oven will bake as soon as it is cost-effective, saving everyone money. If you are in a hurry you are always able to bake your pie independently.
+  </AccordionItem>
+
+  <AccordionItem title="How long does it usually take to bake a pie?">
+    The community Ovens usually bake multiple times a day. Once the minimum ETH and low gas conditions are met Oven will swing into action, and your pie will be ready to withdraw in just a few minutes.
+
+<br/>You can keep up to date with Oven through the PieDAO <a class="font-bold" about="_blank" href="https://discord.gg/yKkepdMmbz">Discord</a>.
+  </AccordionItem>
+
+  <AccordionItem title="Can I add more than 10 ETH?">
+    Absolutely! Feel free to add as much ETH as you would like to bake. One thing to remember however is that each baking session will use a maximum 30 ETH to reduce slippage.
+
+<br/>Any left over ETH will remain in the Oven and be baked in the next session.
+  </AccordionItem>
+
+  <AccordionItem title="Is there a time limit to withdraw my pie?">
+    None at all! But don’t forget, the sooner you withdraw your pie the sooner you can put it to work in our farms. We’re incentivizing pie liquidity providers with 150k of delicious DOUGH each week. <a class="font-bold" about="_blank" href="https://pools.piedao.org/#/stake">Check it out</a>.
+
+  </AccordionItem>
+
+
+  </Accordion>
 </div>
