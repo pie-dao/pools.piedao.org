@@ -647,8 +647,11 @@ border-radius: 6px;
 
 .token-select-container {
   z-index: 100;
-  left: 50%;
-  top: 10rem;
+  max-height: 80vh;
+  /* left: 50%;
+  top: 10rem; */
+  /* height: 96%;
+  max-height: 96%; */
 }
 
 .token-select-container td:first-child,
@@ -662,7 +665,7 @@ border-radius: 6px;
 }
 
 .token-select-container tr {
-  border-bottom: 1px solid #f3f3f3;
+  /* border-bottom: 1px solid #f3f3f3; */
 }
 
 /* Pool Description */
