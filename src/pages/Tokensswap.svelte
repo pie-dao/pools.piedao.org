@@ -94,7 +94,10 @@
   $: receivedAmount = 0;
   $: quote = null;
   $: needAllowance = false;
-  $: initialized = false;
+  $: initialized = {
+    onMount: false,
+    onChainData: false
+  };
   $: isLoading = false;
   $: allowances = {};
   $: balances = {};
@@ -103,19 +106,23 @@
   $: balanceError = false;
 
   $: if($eth.address) {
-    if(!initialized) {
+    if(!initialized.onChainData) {
       isLoading = true;
       fetchOnchainData();
       isLoading = false;
     }
-    
   }
 
   onMount(async () => {
     setupListedToken();    
     sellToken = find(listed, ['address', defaultTokenSell.address]);
     buyToken = find(listed, ['address', defaultTokenBuy.address]);
-    fetchQuote();
+    if($eth.address) {
+      await fetchOnchainData();
+      initialized.onChainData = true;
+    }
+    await fetchQuote();
+    initialized.onMount = true;
   });
 
   function showBalanceError() {
@@ -219,7 +226,6 @@
       $eth.provider
     )
 
-    initialized = true;
     sellToken = find(listed, ['address', defaultTokenSell.address]);
     buyToken = find(listed, ['address', defaultTokenBuy.address]);
 
@@ -310,8 +316,8 @@
           tokenSelectModalOpen = true;
         }}>
           <span class="sc-iybRtq gjVeBU">
-            <img class="h-auto w-24px mr-5px" alt={`${sellToken.symbol} logo`} src={sellToken.icon}>
-            <span class="sc-kXeGPI jeVIZw token-symbol-container">{sellToken.symbol}</span>
+            <img class="h-auto w-24px mr-5px" alt={sellToken ? `${sellToken.symbol} logo` : ''} src={sellToken ? sellToken.icon : ''}>
+            <span class="sc-kXeGPI jeVIZw token-symbol-container">{sellToken ? sellToken.symbol : ''}</span>
             <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff"></path></svg>
           </span>
         </button>
@@ -331,8 +337,8 @@
           tokenSelectModalOpen = true;
         }}>
           <span class="sc-iybRtq gjVeBU">
-            <img class="h-auto w-24px mr-5px" alt={`${buyToken.symbol} logo`} src={buyToken.icon}>
-            <span class="sc-kXeGPI jeVIZw token-symbol-container">{buyToken.symbol}</span>
+            <img class="h-auto w-24px mr-5px" alt={buyToken ? `${buyToken.symbol} logo` : ''} src={buyToken ? buyToken.icon : ''}>
+            <span class="sc-kXeGPI jeVIZw token-symbol-container">{buyToken ? buyToken.symbol : ''}</span>
             <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff"></path></svg>
           </span>
         </button>

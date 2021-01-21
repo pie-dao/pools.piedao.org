@@ -193,9 +193,13 @@
           modal.open()
         }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Issue</button>
         
-        <!-- <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
-          <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
-        </a> -->
+        <a href="#/oven">
+          <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Bake</button>
+        </a>
+
+        <a href="#/swap">
+          <button class="btn font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
+        </a>
       </div>
     </div>
   </div>
