@@ -17,8 +17,7 @@ export default class ApiOx {
             buyToken.address = 'ETH'
         }
 
-        const decimals = sellToken.decimals || 18;
-        const weiAmount = (new BigNumber(amount).multipliedBy(10**decimals)).toFixed(0).toString();
+        const weiAmount = amount.toFixed(0);
         const callUrl = `${this.baseUrl}quote?sellAmount=${weiAmount}&buyToken=${buyToken.address}&sellToken=${sellToken.address}`;
         let response = await fetch(callUrl)
         

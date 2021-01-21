@@ -55,6 +55,11 @@
     icon: getTokenImage('0xe4f726adc8e89c6a6017f01eada77865db22da14')
   };
 
+  const defaultAmount = {
+    bn: new BigNumber(0),
+    label: 0
+  };
+
   let tokenSelectModalOpen = false;
   const tokenSelectCallback = (token) => {
     tokenSelectModalOpen = false;
@@ -80,7 +85,7 @@
 
   $: sellToken = defaultTokenSell;
   $: buyToken = defaultTokenBuy;
-  $: amount = 0;
+  $: amount = defaultAmount;
   $: receivedAmount = 0;
   $: quote = null;
   $: needAllowance = false;
@@ -108,24 +113,15 @@
   });
 
   function showBalanceError() {
-    console.log('sellToken', sellToken)
-    console.log('balances', balances)
     if(!balances[sellToken.address]) return;
-    const decimals = sellToken.decimals || 18;
-    const weiAmount = (new BigNumber(amount).multipliedBy(10**decimals)).toFixed(0).toString();
-    console.log('weiAmount', weiAmount)
-    console.log('balances[sellToken.address]', balances[sellToken.address].bn.toFixed(0))
-    console.log('balances[sellToken.address]', balances[sellToken.address])
-
+    const weiAmount = amount.bn.toFixed(0);
     const shouldShowError = balances[sellToken.address].bn.isGreaterThanOrEqualTo(weiAmount) ? false : true;
-    console.log('shouldShowError', shouldShowError);
-    
     return shouldShowError;
   }
 
   function needApproval(allowance) {
     if( allowance.isEqualTo(0) ) return true;
-    if( allowance.isGreaterThanOrEqualTo( BigNumber(amount)) ) return false;
+    if( allowance.isGreaterThanOrEqualTo( amount.bn ) ) return false;
   }
 
   async function approveToken() {
@@ -143,6 +139,12 @@
     }));
 
     needAllowance = false;
+  }
+
+  function onAmountChange() {
+    const decimals = sellToken.decimals || 18;
+    amount.bn = new BigNumber(amount.label).multipliedBy(10**decimals);
+    fetchQuote()
   }
 
   async function swap() {
@@ -177,11 +179,11 @@
         next: () => {
           displayNotification({
             autoDismiss: 15000,
-            message: `${amount.toFixed()} ${sellToken.symbol} swapped successfully`,
+            message: `${amount.label.toFixed(2)} ${sellToken.symbol} swapped successfully`,
             type: "success",
           });
           fetchOnchainData();
-          amount = 0;
+          amount = defaultAmount;
           dismiss();
           subscription.unsubscribe();
         },
@@ -217,7 +219,7 @@
   }
 
   async function fetchQuote(selfRefresh=false) {
-    if(amount === 0) return;
+    if(amount.label === 0) return;
 
     balanceError = showBalanceError();
 
@@ -227,7 +229,7 @@
       receivedAmount = 0;
       error = null;
     }
-    const res = await api.getQuote(sellToken, buyToken, amount);
+    const res = await api.getQuote(sellToken, buyToken, amount.bn);
     needAllowance = needApproval(sellToken.allowance);
     
     if(res.validationErrors) {
@@ -277,7 +279,8 @@
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
         {#if balances[sellToken.address]}
           <div on:click={() => {
-            amount = balances[sellToken.address].number;
+            amount.label = balances[sellToken.address].number;
+            amount.bn = balances[sellToken.address].bn;
             fetchQuote();
           }}>
             Max balance: {balances[sellToken.address].label}
@@ -287,7 +290,7 @@
       </div>
     </div>
       <div class="flex nowrap items-center p-1">
-        <input class:error={balanceError} class="swap-input-from" on:focus={() => {amount = amount=== 0 ? '' : amount}} on:keyup="{ debounce(fetchQuote, 250)}" bind:value={amount} inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="number" pattern="^[0-9]*[.]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
+        <input class:error={balanceError} class="swap-input-from" on:focus={() => {amount.label = amount.label === 0 ? '' : amount.label}} on:keyup={debounce(onAmountChange, 250)} bind:value={amount.label} inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="number" pattern="^[0-9]*[.]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
         <button class="swap-button" on:click={() => {
           targetModal = 'sell';
           tokenSelectModalOpen = true;
@@ -333,10 +336,6 @@
       <div class="flex items-center w-100pc pt-16px px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Price {sellToken.symbol}/{buyToken.symbol}</div>
         <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">{quote.price}</div>
-      </div>
-      <div class="flex items-center w-100pc px-16px justify-between">
-        <div class="flex nowrap intems-center p-1 font-thin">Price: {buyToken.symbol}/{sellToken.symbol}</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">{(amount/(amount*parseFloat(quote.price)))}</div>
       </div>
       <div class="flex items-center w-100pc px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Guaranteed Price:</div>
