@@ -193,7 +193,7 @@
             </button>
           </div>
           {#if dropdownOpen}
-            <div class="origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
+            <div class="z-50 origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
               <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                 <div class="py-1">
                   <!-- svelte-ignore a11y-missing-attribute -->
