@@ -51,7 +51,7 @@
   let defaultTokenSell = {
     address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     symbol: 'ETH',
-    icon: getTokenImage('ETH')
+    icon: getTokenImage('eth')
   }
 
   let defaultTokenBuy = {
@@ -116,9 +116,9 @@
 
   onMount(async () => {
     isLoading = true;
+    console.log('onMount')
     setupListedToken();    
-    sellToken = find(listed, ['address', defaultTokenSell.address]);
-    buyToken = find(listed, ['address', defaultTokenBuy.address]);
+
     if($eth.address) {
       await fetchOnchainData();
       initialized.onChainData = true;
@@ -229,10 +229,18 @@
       $eth.provider
     )
 
-    if(sellToken && buyToken) {
-      sellToken = find(listed, ['address', sellToken.address]);
-      buyToken = find(listed, ['address', buyToken.address]);
+    if(sellToken) {
+      sellToken = find(listed, ['address', sellToken.address], defaultTokenSell);
+    } else {
+      sellToken = defaultTokenSell
     }
+
+    if(buyToken) {
+      buyToken = find(listed, ['address', buyToken.address], defaultTokenBuy);
+    } else {
+      buyToken = defaultTokenBuy
+    }
+      
     
 
     listed.forEach( token => {
@@ -282,11 +290,13 @@
   function setupListedToken() {
     for (let i = 0; i < poolsConfig.available.length; i++) {
       let pie = poolsConfig[poolsConfig.available[i]];
-      listed.push({
-        address: poolsConfig.available[i],
-        symbol: pie.symbol,
-        icon: getTokenImage(poolsConfig.available[i])
-      })
+      if(!pie.useMintOverBuy) {
+        listed.push({
+          address: poolsConfig.available[i],
+          symbol: pie.symbol,
+          icon: getTokenImage(poolsConfig.available[i])
+        })
+      }
     }
   }
 
