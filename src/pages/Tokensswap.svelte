@@ -2,7 +2,7 @@
   import { _ } from "svelte-i18n";
   import debounce from "lodash/debounce";
   import BigNumber from "bignumber.js";
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import orderBy from 'lodash/orderBy';
   import find from 'lodash/find';
 
@@ -47,6 +47,7 @@
   ];
 
   let targetModal = 'sell';
+  let timeout;
 
   let defaultTokenSell = {
     address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -113,6 +114,10 @@
       isLoading = false;
     }
   }
+
+  onDestroy(() => {
+    clearTimeout(timeout)
+  });
 
   onMount(async () => {
     isLoading = true;
@@ -285,7 +290,9 @@
     quote = res;
     receivedAmount = toNum(quote.buyAmount);
     isLoading = false;
-    setTimeout(() => fetchQuote(true), 30000);
+
+    clearTimeout(clearTimeout);
+    timeout = setTimeout(() => fetchQuote(true), 30000);
   }
 
   function setupListedToken() {
