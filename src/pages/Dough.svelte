@@ -101,7 +101,7 @@
 
    <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-4">
      <div class="text-center p-4 text-xl md:text-xl">1 DOUGH = <strong>{price}$</strong></div>
-     <a href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D" target="_blank">
+     <a href="#/swap">
       <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
         Buy
       </button>
