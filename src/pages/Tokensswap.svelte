@@ -136,6 +136,7 @@
   }
 
   function needApproval(allowance) {
+    if (!$eth.address || !$eth.signer) return false;
     if( allowance.isEqualTo(0) ) return true;
     if( allowance.isGreaterThanOrEqualTo( amount.bn ) ) return false;
   }
