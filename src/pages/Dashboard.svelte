@@ -158,7 +158,7 @@
                   {pie.symbol}
                 </button>
               {:else}
-                <a target="_blank" href={`https://balancer.exchange/#/swap/ether/${pie.address}`}>
+                <a href={`#/swap`}>
                   <button class="table-btn highlight-box min-w-70px">
                     {pie.symbol}
                   </button>

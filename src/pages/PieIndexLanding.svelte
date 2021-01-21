@@ -91,6 +91,13 @@
     pieOfPies = false;
   })(token);
 
+  let dropdownOpen = false;
+
+  const toggleDropdow = (event) => {
+    dropdownOpen = !dropdownOpen;
+    event.preventDefault();
+  };
+
   const getInternalWeights = (component, base) => {
         return $pools[component.address].map((internal) => {
           if (internal.isPie) {
@@ -179,23 +186,45 @@
       </div>
 
       <div class="w-100pc sm:w-full md:w-2/3 flex flex-row-reverse">
-        <button on:click={() => {
-          modalOption.method = "multi";
-          modalOption.poolAction = "withdraw";
-          modalOption.title = "Redeem";
-          modal.open()
-        }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Redeem</button>
-
-        <button on:click={() => {
-          modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
-          modalOption.poolAction = "add";
-          modalOption.title = "Add Liquidity";
-          modal.open()
-        }} class="w-1/2 btn text-white font-bold ml-0 mr-1 rounded md:w-1/4 md:ml-4 py-2 px-4">Issue</button>
+        <div class="relative inline-block text-left hidden md:block">
+          <div>
+            <button on:click={toggleDropdow}  type="button" class="inline-flex justify-center w-full py-2" id="options-menu" aria-haspopup="true" aria-expanded="true">
+              <img class="mt-15px h-6" src={images.more} alt="More options" />
+            </button>
+          </div>
+          {#if dropdownOpen}
+            <div class="origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
+              <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <div class="py-1">
+                  <!-- svelte-ignore a11y-missing-attribute -->
+                  <a on:click={() => {
+                    modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
+                    modalOption.poolAction = "add";
+                    modalOption.title = "Add Liquidity";
+                    modal.open()
+                    toggleDropdow();
+                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Issue</a>
+                  <!-- svelte-ignore a11y-missing-attribute -->
+                  <a on:click={() => {
+                    modalOption.method = "multi";
+                    modalOption.poolAction = "withdraw";
+                    modalOption.title = "Redeem";
+                    modal.open()
+                    toggleDropdow();
+                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Redeem</a>
+                </div>
+              </div>
+            </div>
+            {/if}
+        </div>
         
-        <!-- <a href={`https://1inch.exchange/#/r/0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0`}>
-          <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
-        </a> -->
+        <a href="#/oven">
+          <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Bake</button>
+        </a>
+
+        <a href="#/swap">
+          <button class="btn font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
+        </a>
       </div>
     </div>
   </div>
