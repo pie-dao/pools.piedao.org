@@ -86,7 +86,7 @@
 
   const api = new ApiOx();
 
-  const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toNumber();
+  const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toString();
 
   $: sellToken = defaultTokenSell;
   $: buyToken = defaultTokenBuy;
@@ -106,14 +106,16 @@
   $: balanceError = false;
 
   $: if($eth.address) {
-    if(!initialized.onChainData) {
+    if(!initialized.onChainData && !isLoading) {
       isLoading = true;
       fetchOnchainData();
+      initialized.onChainData = true;
       isLoading = false;
     }
   }
 
   onMount(async () => {
+    isLoading = true;
     setupListedToken();    
     sellToken = find(listed, ['address', defaultTokenSell.address]);
     buyToken = find(listed, ['address', defaultTokenBuy.address]);
@@ -123,6 +125,7 @@
     }
     await fetchQuote();
     initialized.onMount = true;
+    isLoading = false;
   });
 
   function showBalanceError() {
@@ -156,7 +159,7 @@
     
     await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
       resolve();
-      return { message: `${sellToken.symbol} unlocked`, type: 'success' };
+      return { message: `${sellToken.symbol} unlocked`, type: 'success', address:null };
     }));
 
     
@@ -226,8 +229,11 @@
       $eth.provider
     )
 
-    sellToken = find(listed, ['address', defaultTokenSell.address]);
-    buyToken = find(listed, ['address', defaultTokenBuy.address]);
+    if(sellToken && buyToken) {
+      sellToken = find(listed, ['address', sellToken.address]);
+      buyToken = find(listed, ['address', buyToken.address]);
+    }
+    
 
     listed.forEach( token => {
       allowances[token.address] = token.allowance;
@@ -239,7 +245,7 @@
   }
 
   async function fetchQuote(selfRefresh=false) {
-    if(amount.label === 0) return;
+    if(!amount.label || amount.label === 0 || amount.label === '' || isLoading === true) return;
 
     balanceError = showBalanceError();
 
@@ -248,6 +254,8 @@
       quote = null;
       receivedAmount = 0;
       error = null;
+    } else {
+      console.log('refreshing quote')
     }
     const res = await api.getQuote(sellToken, buyToken, amount.bn);
     needAllowance = needApproval(sellToken.allowance);
@@ -258,7 +266,11 @@
           error = `Swap Unavailable.` 
           break;
       }
-
+      isLoading = false;
+      return;
+    } else if(res.status === 500) {
+      error = `Swap Unavailable.`
+      isLoading = false;
       return;
     }
     quote = res;
@@ -310,7 +322,7 @@
       </div>
     </div>
       <div class="flex nowrap items-center p-1">
-        <input class:error={balanceError} class="swap-input-from" on:focus={() => {amount.label = amount.label === 0 ? '' : amount.label}} on:keyup={debounce(onAmountChange, 250)} bind:value={amount.label} inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="number" pattern="^[0-9]*[.]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
+        <input class:error={balanceError} class="swap-input-from" on:focus={() => {amount.label = amount.label === 0 ? '' : amount.label}} on:keyup={debounce(onAmountChange, 1000, {leading:false, trailing:true})} bind:value={amount.label} inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="number" pattern="^[0-9]*[.]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
         <button class="swap-button" on:click={() => {
           targetModal = 'sell';
           tokenSelectModalOpen = true;
@@ -378,17 +390,17 @@
       </div>
     </div>
 
-    {#if needAllowance }
-      <button on:click={approveToken} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button>
+    {#if error }
+      <button disabled={true} class="stake-button error rounded-20px mt-10px p-15px w-100pc">
+        {error}
+      </button>
     {:else}
-      {#if error }
-        <button disabled={true} class="stake-button error rounded-20px mt-10px p-15px w-100pc">
-          {error}
-        </button>
+      {#if needAllowance }
+        <button on:click={approveToken} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button>
       {:else}
-        <button class:error={error || isLoading || balanceError ? true : false} on:click={swap} disabled={error || isLoading || balanceError ? true : false} class="stake-button mt-10px rounded-20px p-15px w-100pc">
-          Swap
-        </button>
+          <button class:error={error || isLoading || balanceError ? true : false} on:click={swap} disabled={error || isLoading || balanceError ? true : false} class="stake-button mt-10px rounded-20px p-15px w-100pc">
+            Swap
+          </button>
       {/if}
     {/if}
 

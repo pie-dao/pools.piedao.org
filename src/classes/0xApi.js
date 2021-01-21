@@ -17,7 +17,8 @@ export default class ApiOx {
         }
 
         const weiAmount = amount.toFixed(0);
-        const callUrl = `${this.baseUrl}quote?sellAmount=${weiAmount}&buyToken=${buyToken.address}&sellToken=${sellToken.address}&slippagePercentage${this.slippage}`;
+        //Slippage: 0.01 = 1%
+        const callUrl = `${this.baseUrl}quote?sellAmount=${weiAmount}&buyToken=${buyToken.address}&sellToken=${sellToken.address}&slippagePercentage=${this.slippage/100}`;
         let response = await fetch(callUrl)
         
         if (response.status !== 200) {
@@ -27,6 +28,7 @@ export default class ApiOx {
         }
     
         const result = await response.json();
+        console.log('result', result)
         return result;
     }
 }
