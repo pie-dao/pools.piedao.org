@@ -311,7 +311,7 @@
 </script>
   
 <TokenSelectModal
-  tokens={$eth.address ? orderBy(listed, ['balance.number'], ['desc']) : listed}
+  tokens={orderBy(listed, ['balance.number'], ['desc'])}
   open={tokenSelectModalOpen}
   callback={tokenSelectCallback} />
 
