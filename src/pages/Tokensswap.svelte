@@ -85,13 +85,17 @@
   $: quote = null;
   $: needAllowance = false;
   $: initialized = false;
+  $: isLoading = false;
   $: allowances = {};
   $: balances = {};
   $: error = null;
+  $: balanceError = false;
 
   $: if($eth.address) {
     if(!initialized) {
+      isLoading = true;
       fetchOnchainData();
+      isLoading = false;
     }
     
   }
@@ -102,6 +106,22 @@
     buyToken = find(listed, ['address', defaultTokenBuy.address]);
     fetchQuote();
   });
+
+  function showBalanceError() {
+    console.log('sellToken', sellToken)
+    console.log('balances', balances)
+    if(!balances[sellToken.address]) return;
+    const decimals = sellToken.decimals || 18;
+    const weiAmount = (new BigNumber(amount).multipliedBy(10**decimals)).toFixed(0).toString();
+    console.log('weiAmount', weiAmount)
+    console.log('balances[sellToken.address]', balances[sellToken.address].bn.toFixed(0))
+    console.log('balances[sellToken.address]', balances[sellToken.address])
+
+    const shouldShowError = balances[sellToken.address].bn.isGreaterThanOrEqualTo(weiAmount) ? false : true;
+    console.log('shouldShowError', shouldShowError);
+    
+    return shouldShowError;
+  }
 
   function needApproval(allowance) {
     if( allowance.isEqualTo(0) ) return true;
@@ -199,7 +219,10 @@
   async function fetchQuote(selfRefresh=false) {
     if(amount === 0) return;
 
+    balanceError = showBalanceError();
+
     if(!selfRefresh) {
+      isLoading = true;
       quote = null;
       receivedAmount = 0;
       error = null;
@@ -210,7 +233,7 @@
     if(res.validationErrors) {
       switch(res.validationErrors[0].code) {
         case 1004:
-          error = `Could not find a path to exchange.` 
+          error = `Swap Unavailable.` 
           break;
       }
 
@@ -218,7 +241,8 @@
     }
     quote = res;
     receivedAmount = toNum(quote.buyAmount);
-    setTimeout(() => fetchQuote(true), 10000);
+    isLoading = false;
+    // setTimeout(() => fetchQuote(true), 30000);
   }
 
   function setupListedToken() {
@@ -253,7 +277,7 @@
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
         {#if balances[sellToken.address]}
           <div on:click={() => {
-            amount = balances[sellToken.address].label;
+            amount = balances[sellToken.address].number;
             fetchQuote();
           }}>
             Max balance: {balances[sellToken.address].label}
@@ -263,7 +287,7 @@
       </div>
     </div>
       <div class="flex nowrap items-center p-1">
-        <input class="swap-input-from" on:focus={() => {amount = amount=== 0 ? '' : amount}} on:keyup="{ debounce(fetchQuote, 250)}" bind:value={amount} inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="text" pattern="^[0-9]*[.,]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
+        <input class:error={balanceError} class="swap-input-from" on:focus={() => {amount = amount=== 0 ? '' : amount}} on:keyup="{ debounce(fetchQuote, 250)}" bind:value={amount} inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="number" pattern="^[0-9]*[.]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
         <button class="swap-button" on:click={() => {
           targetModal = 'sell';
           tokenSelectModalOpen = true;
@@ -298,10 +322,10 @@
       </div>
     </div>
     
-    {#if error}
+    {#if isLoading}
       <div class="flex items-center w-100pc px-16px justify-between">
-        <div class="flex nowrap intems-center p-1 font-thin">Error:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">{error}</div>
+        <div class="flex nowrap intems-center p-1 font-thin">Status:</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">Finding the best price...</div>
       </div>
     {/if}
 
@@ -324,13 +348,18 @@
       </div>
     {/if}
 
-    {needAllowance}
     {#if needAllowance }
-      <button on:click={approveToken} class="btn clear stake-button rounded-20px p-15px w-100pc">Approve</button>
+      <button on:click={approveToken} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button>
     {:else}
-      <button on:click={swap} disabled={error ? true : false} class="stake-button rounded-20px p-15px w-100pc">
-        Swap
-      </button>
+      {#if error }
+        <button disabled={true} class="stake-button error rounded-20px mt-10px p-15px w-100pc">
+          {error}
+        </button>
+      {:else}
+        <button on:click={swap} disabled={error || isLoading ? true : false} class="stake-button mt-10px rounded-20px p-15px w-100pc">
+          Swap
+        </button>
+      {/if}
     {/if}
 
   </div>

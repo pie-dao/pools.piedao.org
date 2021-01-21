@@ -7,6 +7,20 @@
 @tailwind media;
 
 /* Custom css */
+
+/* Hide arrows on input[type=number] on webkit*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide arrows on input[type=number] on Firefox*/
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
 /* purgecss start ignore */
 
 .half { width: 47%;}
@@ -885,6 +899,11 @@ opacity: 0.6;
   appearance: textfield;
 }
 
+.swap-input-from.error {
+  color: red;
+  border-color: red;
+}
+
 .swap-button {
   -webkit-box-align: center;
   align-items: center;
@@ -951,6 +970,11 @@ opacity: 0.6;
   font-size: 28px;
   font-weight: 200;
 }
+
+.stake-button.error {
+  opacity: 0.5;
+}
+
 
 .max-button {
   height: 28px;

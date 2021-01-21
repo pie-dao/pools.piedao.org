@@ -159,6 +159,11 @@ const chunk = (arr, size) =>
     arr.slice(i * size, i * size + size)
   );
 
+const roundDownLabel = (numberString) => {
+  const number = parseFloat(numberString);
+  return (Math.floor(number * 100) / 100).toString();
+}
+
 /**
  * Warning, token list has to contain eth at position [0]
  * @param {*} tokensList 
@@ -215,9 +220,9 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
     decimals: 18,
     allowance: new BigNumber((ethers.constants.MaxUint256).toString()),
     balance: {
-      bn: ethBalance,
-      label: (parseFloat(getNormalizedNumber(ethBalance.toString(), 18).toString()).toFixed(2)).toString(),
-      number: parseFloat(getNormalizedNumber(ethBalance.toString(), 18).toString()).toFixed(2)
+      bn:  new BigNumber(ethBalance.toString()),
+      label: roundDownLabel(getNormalizedNumber(ethBalance.toString(), 18).toString()),
+      number: parseFloat(getNormalizedNumber(ethBalance.toString(), 18).toString())
     }
   })
 
@@ -233,8 +238,8 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
       decimals: decimal,
       allowance: new BigNumber(allowance.toString()),
       balance: {
-        bn: balance,
-        label: (parseFloat(getNormalizedNumber(balance.toString(), decimal).toString()).toFixed(2)).toString(),
+        bn:  new BigNumber(balance.toString()),
+        label: roundDownLabel(getNormalizedNumber(balance.toString(), decimal).toString()),
         number: parseFloat(getNormalizedNumber(balance.toString(), decimal).toString())
       }
     })

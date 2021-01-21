@@ -6,7 +6,10 @@ export default class ApiOx {
         this.baseUrl = 'https://api.0x.org/swap/v1/'
     }
 
-    async getQuote(sellToken, buyToken, amount) {
+    async getQuote(_sellToken, _buyToken, amount) {
+        const sellToken = {..._sellToken};
+        const buyToken = {..._buyToken};
+
         if(sellToken.address === '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee') {
             sellToken.address = 'ETH'
         }
