@@ -20,6 +20,15 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+.slippageBtn{
+  background: white;
+  color: #fc02a7;
+}
+
+.slippageBtn.selected{
+  font-weight: bold;
+  color:black;
+}
 
 /* purgecss start ignore */
 

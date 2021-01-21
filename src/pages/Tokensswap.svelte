@@ -35,6 +35,11 @@
       icon: getTokenImage('eth')
     },
     {
+      address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
+      symbol: 'DOUGH',
+      icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
+    },
+    {
       address: '0x6b175474e89094c44da98b954eedeac495271d0f',
       symbol: 'DAI',
       icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
@@ -94,6 +99,7 @@
   $: allowances = {};
   $: balances = {};
   $: error = null;
+  $: showSlippageSettings = false;
   $: balanceError = false;
 
   $: if($eth.address) {
@@ -124,6 +130,12 @@
     if( allowance.isGreaterThanOrEqualTo( amount.bn ) ) return false;
   }
 
+  function changeSlippage(value) {
+    api.slippage  = value;
+    showSlippageSettings = false;
+    fetchQuote();
+  }
+
   async function approveToken() {
     if (!$eth.address || !$eth.signer) {
       displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
@@ -132,13 +144,15 @@
     }
 
     const { emitter } = displayNotification(await approveMax(sellToken.address, ZeroEx));
+    needAllowance = false;
+    await fetchOnchainData();
     
     await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
       resolve();
       return { message: `${sellToken.symbol} unlocked`, type: 'success' };
     }));
 
-    needAllowance = false;
+    
   }
 
   function onAmountChange() {
@@ -244,7 +258,7 @@
     quote = res;
     receivedAmount = toNum(quote.buyAmount);
     isLoading = false;
-    // setTimeout(() => fetchQuote(true), 30000);
+    setTimeout(() => fetchQuote(true), 30000);
   }
 
   function setupListedToken() {
@@ -341,11 +355,22 @@
         <div class="flex nowrap intems-center p-1 font-thin">Guaranteed Price:</div>
         <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">{quote.guaranteedPrice}</div>
       </div>
-      <div class="flex items-center w-100pc px-16px justify-between">
-        <div class="flex nowrap intems-center p-1 font-thin">Max Slippage:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">1%</div>
-      </div>
+      
     {/if}
+    <div class="flex items-center w-100pc px-16px justify-between mt-5px">
+      <div class="flex nowrap intems-center p-1 font-thin">Max Slippage:</div>
+      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
+        {#if showSlippageSettings }
+          <button on:click={() => changeSlippage(1)} class:selected={api.slippage === 1} class="slippageBtn rounded-10px p-2px w-1.5">1%</button>
+          <button on:click={() => changeSlippage(3)} class:selected={api.slippage === 3} class="slippageBtn rounded-10px p-2px w-1.5">3%</button>
+          <button on:click={() => changeSlippage(5)} class:selected={api.slippage === 5} class="slippageBtn rounded-10px p-2px w-1.5">5%</button>
+        {:else}
+          <div on:click={() => {
+            showSlippageSettings = true;
+          }}>{api.slippage}%</div>
+        {/if}
+      </div>
+    </div>
 
     {#if needAllowance }
       <button on:click={approveToken} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button>
@@ -355,7 +380,7 @@
           {error}
         </button>
       {:else}
-        <button on:click={swap} disabled={error || isLoading ? true : false} class="stake-button mt-10px rounded-20px p-15px w-100pc">
+        <button class:error={error || isLoading || balanceError ? true : false} on:click={swap} disabled={error || isLoading || balanceError ? true : false} class="stake-button mt-10px rounded-20px p-15px w-100pc">
           Swap
         </button>
       {/if}

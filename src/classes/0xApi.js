@@ -4,6 +4,7 @@ export default class ApiOx {
 
     constructor() {
         this.baseUrl = 'https://api.0x.org/swap/v1/'
+        this.slippage = 1;
     }
 
     async getQuote(_sellToken, _buyToken, amount) {
@@ -18,7 +19,7 @@ export default class ApiOx {
         }
 
         const weiAmount = amount.toFixed(0);
-        const callUrl = `${this.baseUrl}quote?sellAmount=${weiAmount}&buyToken=${buyToken.address}&sellToken=${sellToken.address}`;
+        const callUrl = `${this.baseUrl}quote?sellAmount=${weiAmount}&buyToken=${buyToken.address}&sellToken=${sellToken.address}&slippagePercentage${this.slippage}`;
         let response = await fetch(callUrl)
         
         if (response.status !== 200) {
