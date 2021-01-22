@@ -197,7 +197,7 @@
         </div>
         <div class="font-bold text-right rounded-sm bg-black w-40pc">
           <div
-            style={`width: ${getPercetageCompletion($balances[oven.KeyEthBalance])}%`}
+            style={`width: ${getPercetageCompletion($balances[oven.KeyEthBalance])}% !important`}
             class="px-2 py-1 rounded-sm text-xs bg-gradient-purple text-left text-white fit-content">
             {getPercetageCompletion($balances[oven.KeyEthBalance])}%
           </div>
