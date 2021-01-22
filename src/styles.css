@@ -1323,9 +1323,8 @@ button.svelte-1nn74u2 {border: none!important; padding: 1rem 0rem!important;}
 }
 
 .fit-content {
-width: fit-content!important;
-margin: 5px 5px;
-
+  width: fit-content!important;
+}
 /* TOOLTIP */
 
 [data-tooltip] {

@@ -117,7 +117,8 @@
   });
 
   function getPercetageCompletion(balance) {
-    return toFixed(( parseFloat(balance) / 10) * 100, 2); 
+    let percetage = ( parseFloat(balance) / 10) * 100;
+    return toFixed(percetage > 100 ? 100 : percetage, 2); 
   }
 </script>
 
