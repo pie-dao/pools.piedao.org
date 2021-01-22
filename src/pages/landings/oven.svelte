@@ -5,7 +5,7 @@
   import WhiteBox from '../../components/elements/WhiteBox.svelte';
 
   import Meta from '../../components/elements/meta.svelte';
-  import { balances, balanceKey } from '../../stores/eth.js';
+  import { balances, balanceKey, eth } from '../../stores/eth.js';
 
   import { getTokenImage, subscribeToBalance, toFixed } from '../../components/helpers.js';
 
@@ -14,6 +14,7 @@
   import OvenModal from '../../components/modals/OvenModal.svelte';
   import TooltipButton from '../../components/elements/TooltipButton.svelte';
   import { Accordion, AccordionItem } from 'svelte-accessible-accordion';
+  import { fetchOvensUserData } from '../../helpers/multicall';
 
   $: ovens = [
     {
@@ -70,34 +71,43 @@
       highlight: true,
       enabled: true,
     },
-
-    {
-      addressOven: '0x925f860d1596cc6383c16294d8290f82bde172f7',
-      deprecated: true,
-      name: 'YPIE Oven',
-      description: 'Bakes YPIE at Zero cost',
-      data: {
-        ethBalance: 0,
-        pieBalance: 0,
-      },
-      baking: {
-        symbol: 'YPIE',
-        address: '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31',
-        balance: '0',
-        icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'),
-      },
-      highlight: true,
-      enabled: true,
-    },
+    // {
+    //   addressOven: '0x925f860d1596cc6383c16294d8290f82bde172f7',
+    //   deprecated: true,
+    //   name: 'YPIE Oven',
+    //   description: 'Bakes YPIE at Zero cost',
+    //   data: {
+    //     ethBalance: 0,
+    //     pieBalance: 0,
+    //   },
+    //   baking: {
+    //     symbol: 'YPIE',
+    //     address: '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31',
+    //     balance: '0',
+    //     icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'),
+    //   },
+    //   highlight: true,
+    //   enabled: true,
+    // },
   ];
 
   let modal;
   let modalAdd;
+  let initialized = false;
   let modalOption = {
     title: "Bake",
     pieAddress: null,
     ovenAddress: null,
   };
+
+  $: ovenData = null;
+
+  $: (async () => {
+    if($eth.address && !initialized) {
+      ovenData = await fetchOvensUserData(ovens, $eth.address, $eth.provider);
+      initialized = true;
+    }
+  })()
 
   onMount(() => {
     ovens.forEach((ov) => {
@@ -105,6 +115,10 @@
       ov.KeyEthBalance = balanceKey(ethers.constants.AddressZero, ov.addressOven);
     });
   });
+
+  function getPercetageCompletion(balance) {
+    return toFixed(( parseFloat(balance) / 10) * 100, 2); 
+  }
 </script>
 
 <Meta
@@ -162,64 +176,6 @@
   </div>
 </section>
 
-<div class="flex flex-col w-96pc place-content-center spl">
-  <table class="breakdown-table table-auto w-full ml-2 md:mx-6 lg:mx-6">
-    <thead>
-      <tr>
-        <th class="font-thin border-b-2 px-4 py-2 text-left">Pie Name</th>
-        <th class="font-thin border-b-2 px-4 py-2">Bake Session</th>
-        <th class="font-thin border-b-2 px-4 py-2">Oven state</th>
-        <th class="font-thin border-b-2 px-4 py-2">Gas Savings</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each ovens as oven}
-        <tr class="row-highlight">
-          <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
-            <a class="flex items-center px-2 py-2" href={`#/pie/${oven.baking.address}`}>
-              <img
-                class="inline icon ml-2 mr-2"
-                src={oven.baking.icon}
-                alt={oven.baking.symbol} />
-                <span class="md:block">{oven.baking.symbol}</span>
-            </a>
-          </td>
-          <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
-            <a href={`#/pie/${oven.baking.address}`}>
-              { toFixed($balances[oven.KeyEthBalance], 2) } / 10 ETH
-            </a>
-          </td>
-          <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
-            {#if !oven.deprecated}
-              Deposits Open
-            {:else}
-              Withdraw-only
-            {/if}
-          </td>
-          <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${oven.baking.address}`}>
-            97.5%
-          </td>
-          <td class="border px-4 ml-8 py-2 font-thin text-center">
-              <button on:click={() => {
-                modal.pieAddress = oven.baking.address;
-                modal.ovenAddress = oven.addressOven;
-                modal.deprecated = oven.deprecated;
-                modal.open()
-              }} class="table-btn highlight-box min-w-70px">
-                {#if !oven.deprecated}
-                  Bake / Withdraw
-                {:else}
-                  Withdraw
-                {/if}
-              </button>
-          </td>
-          
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-</div>
-
 <div
   class="content spl flex flex-col justify-center justify-items-center content-center flex-wrap md:flex-row lg:flex-row">
   {#each ovens as oven}
@@ -240,19 +196,22 @@
         </div>
         <div class="font-bold text-right rounded-sm bg-black w-40pc">
           <div
+            style={`width: ${getPercetageCompletion($balances[oven.KeyEthBalance])}%`}
             class="px-2 py-1 rounded-sm text-xs bg-gradient-purple text-left text-white fit-content">
-            65%
+            {getPercetageCompletion($balances[oven.KeyEthBalance])}%
           </div>
         </div>
       </div>
+      {#if ovenData}
       <div class="flex justify-between my-2">
         <span class="font-thin text-left">Your ETH in the Oven</span>
-        <span class="font-bold text-right">0.75 ETH</span>
+        <span class="font-bold text-right">{ovenData[oven.addressOven].ethBalance.label} ETH</span>
       </div>
       <div class="flex justify-between my-2">
         <span class="font-thin text-left">Your Pie ready</span>
-        <span class="font-bold text-right">134.50 DEFI++</span>
+        <span class="font-bold text-right">{ovenData[oven.addressOven].pieBalance.label} {oven.baking.symbol}</span>
       </div>
+      {/if}
       <button
         on:click={() => {
           modal.pieAddress = oven.baking.address;

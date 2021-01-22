@@ -41,6 +41,7 @@ $: ovenData = {
 }
 
 $: pie = poolsConfig[pieAddress];
+$: initialized = false;
 
 $: if($eth.address) {
   fetchEthBalance($eth.address);
