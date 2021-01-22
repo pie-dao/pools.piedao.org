@@ -1505,9 +1505,9 @@
     chalk "^4.0.0"
 
 "@json-rpc-tools/types@^1.5.7":
-  version "1.5.7"
-  resolved "https://registry.yarnpkg.com/@json-rpc-tools/types/-/types-1.5.7.tgz#6bfce4db9bfe5a40123866c520351c454f8da195"
-  integrity sha512-IlcqmYjrwAQ3sexea/0CB0JVFRrjblpk7SzlbiqHCNtYczgWIT8wrezpfFVC6S1XfIvKm9fIhqg2zU4FUsfh6w==
+  version "1.5.8"
+  resolved "https://registry.yarnpkg.com/@json-rpc-tools/types/-/types-1.5.8.tgz#8e511dd9ecc354f6e2cad0859315904614745c12"
+  integrity sha512-PZj2TP/p0H7mFrsKoUwInh39b2bmFzv5boF0jX44QLWLW6bhhUzcBtKiEznTLjUdeGdMNaUncKI2VEIq/VXSDQ==
   dependencies:
     keyvaluestorage "^0.6.0"
 
@@ -5334,9 +5334,9 @@ es-to-primitive@^1.2.1:
     is-symbol "^1.0.2"
 
 esbuild@^0.8.7:
-  version "0.8.33"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.33.tgz#4e24ab4e780b08ff5527171bf5a684594c8b56e9"
-  integrity sha512-2ms/P6Y9zJfopR9dKo2vHzhXKfGSNlquVVoVOF8YnhjuzZVrvManMVBPadBsR/t7jzIkRnwqvxrs7d4f3C3eyg==
+  version "0.8.34"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.8.34.tgz#16b4ac58f74c821d2c5a8c2f0585ca96a38ab4e6"
+  integrity sha512-tnr0V1ooakYr1aRLXQLzCn2GVG1kBTW3FWpRyC+NgrR3ntsouVpJOlTOV0BS4YLATx3/c+x3h/uBq9lWJlUAtQ==
 
 escalade@^3.1.1:
   version "3.1.1"
@@ -11438,9 +11438,9 @@ rollup-plugin-svelte@^5.2.3:
     sourcemap-codec "^1.4.8"
 
 rollup-plugin-svelte@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte/-/rollup-plugin-svelte-7.0.0.tgz#8ececb9d1583c24e0edfbc96f8208b70b27af7a1"
-  integrity sha512-cw4yv/5v1NQV3nPbpOJtikgkB+9mfSJaqKUdq7x5fVQJnwLtcdc2JOszBs5pBY+SemTs5pmJbdEMseEavbUtjQ==
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-svelte/-/rollup-plugin-svelte-7.1.0.tgz#d45f2b92b1014be4eb46b55aa033fb9a9c65f04d"
+  integrity sha512-vopCUq3G+25sKjwF5VilIbiY6KCuMNHP1PFvx2Vr3REBNMDllKHFZN2B9jwwC+MqNc3UPKkjXnceLPEjTjXGXg==
   dependencies:
     require-relative "^0.8.7"
     rollup-pluginutils "^2.8.2"
@@ -12467,10 +12467,10 @@ supports-hyperlinks@^2.0.0:
     has-flag "^4.0.0"
     supports-color "^7.0.0"
 
-svelte-accessible-accordion@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/svelte-accessible-accordion/-/svelte-accessible-accordion-0.3.0.tgz#2e014582fac993c9fd86f1bcd0b0f3db9af49e81"
-  integrity sha512-y/SOo4t7Qdf2EjrgHHTIaM7Hcxyjh8ceYJ0GbGFoU/4lrB1U5ZtMgqBYDumyu+xP6gcyAN8eJP6zuYGUx900Tg==
+svelte-accessible-accordion@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/svelte-accessible-accordion/-/svelte-accessible-accordion-1.0.0.tgz#933aa45dcc1d3c75cb4b4fb1a896f1888c46e48b"
+  integrity sha512-k+6evIriYtd1qJDY/88GfQTe0Ojf/ChXW9wsiV/zahaZ0T/QH+Bw8waK/oHzxGx0wJFvM1t09OrE9Jltbj10YQ==
 
 svelte-apollo@^0.3.0:
   version "0.3.0"
@@ -12481,9 +12481,9 @@ svelte-apollo@^0.3.0:
     svelte-observable "^0.4.0"
 
 svelte-hmr@^0.12.1:
-  version "0.12.3"
-  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.12.3.tgz#7835996808763e426669dd62d3ccd46827fc44df"
-  integrity sha512-hyggTjuA6E/jWYltj8Q9B9sSumOqopBurwFcqwys4LUp7cCE0H0UC6uYyfvQlEdCCQokON/5E8bmHBOBDUUU9A==
+  version "0.12.4"
+  resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.12.4.tgz#751287e1fa74e99c75b795de651a26c122530167"
+  integrity sha512-txg3Gt9PPxioHN45UO88s5DtNQZ1V5DB9EDpXz29L7WX2HpqPj6w8leD9/eynC4PbTz87bMvxNLdDiR/xdg73g==
 
 svelte-i18n@^3.0.4:
   version "3.3.0"
@@ -12503,9 +12503,9 @@ svelte-observable@^0.4.0:
   integrity sha512-e8CfnkUfOZ/nAIpdFi+g63lS5oU+8J+KKhwkHpO0/reADeTBbIiVbcCqVrLsETp8+i+4ydQoawNCwMP/C8oMyA==
 
 svelte-preprocess@^4.6.0:
-  version "4.6.1"
-  resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-4.6.1.tgz#a7de4d91b32d5608b6637da960ee81e6089ae276"
-  integrity sha512-s7KdhR2pOsffyOzZIMEb315f6pfgeDnOWN47m6YKFeSEx3NMf/79Znc3vuG/Ai79SL/vsi86WDrjFPLGRfDesg==
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/svelte-preprocess/-/svelte-preprocess-4.6.3.tgz#0ae44fc61ac95901ac7152c70591d33b2375293f"
+  integrity sha512-VQRViCNBZi3Ni0W7aIyWJuhK+g7MSjd+s0sA9Q1rve9isz9/K0ZS3lDKnOtncjioGa2adZ10NnqtOQAGhKiZ5g==
   dependencies:
     "@types/pug" "^2.0.4"
     "@types/sass" "^1.16.0"

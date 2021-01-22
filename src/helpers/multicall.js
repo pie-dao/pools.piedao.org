@@ -164,6 +164,7 @@ const roundDownLabel = (numberString) => {
   return (Math.floor(number * 100) / 100).toString();
 }
 
+
 /**
  * Warning, token list has to contain eth at position [0]
  * @param {*} tokensList 
@@ -246,4 +247,148 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
   }
 
   return newTokenList;
+}
+
+export async function fetchEthBalances(addressList, provider) {
+  const balanceQuery = addressList.map((address) => [
+    MULTICALL['1'],
+    'getEthBalance',
+    [address]
+  ]);
+
+  const response = await multicall(
+    provider,
+    abi,
+    [
+      ...balanceQuery
+    ],
+    { blockTag: 'latest' }
+  );
+
+  let balances = {};
+  for (let index = 0; index < addressList.length; index++) {
+    balances[addressList[index]] = response[index][0];
+  }
+
+  return balances;
+}
+
+export async function fetchOvensUserData(ovensList, walletAddress, provider) {
+
+  const ovenAbi = [{
+    "inputs":[
+       {
+          "internalType":"address",
+          "name":"",
+          "type":"address"
+       }
+    ],
+    "name":"ethBalanceOf",
+    "outputs":[
+       {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+       }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+       {
+          "internalType":"address",
+          "name":"",
+          "type":"address"
+       }
+    ],
+    "name":"outputBalanceOf",
+    "outputs":[
+       {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+       }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"cap",
+    "outputs":[
+      {
+          "internalType":"uint256",
+          "name":"",
+          "type":"uint256"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  }]
+
+  const balanceEthQuery = ovensList.map((oven) => [
+    oven.addressOven,
+    'ethBalanceOf',
+    [walletAddress]
+  ]);
+
+  const balancePieQuery = ovensList.map((oven) => [
+    oven.addressOven,
+    'outputBalanceOf',
+    [walletAddress]
+  ]);
+
+  const capQuery = ovensList.map((oven) => [
+    oven.addressOven,
+    'cap'
+  ]);
+
+  const response = await multicall(
+    provider,
+    ovenAbi,
+    [
+      ...balanceEthQuery,
+      ...balancePieQuery,
+      ...capQuery
+    ],
+    
+    { blockTag: 'latest' }
+  );
+
+  const chunks = chunk(response, ovensList.length);
+  const balancesEth = chunks[0];
+  const balancesPie = chunks[1];
+  const caps = chunks[2];
+
+  let ovenData = {}
+  for (let index = 0; index < ovensList.length; index++) {
+    const balanceEth = balancesEth[index][0];
+    const cap = caps[index][0];
+    const pieBalance = balancesPie[index][0];
+  
+    ovenData[ovensList[index].addressOven] = {
+      ethBalance: {
+        bn:  new BigNumber(balanceEth.toString()),
+        label: roundDownLabel(getNormalizedNumber(balanceEth.toString(), 18).toString()),
+        number: parseFloat(getNormalizedNumber(balanceEth.toString(), 18).toString())
+      },
+      pieBalance: {
+        bn:  new BigNumber(pieBalance.toString()),
+        label: roundDownLabel(getNormalizedNumber(pieBalance.toString(), 18).toString()),
+        number: parseFloat(getNormalizedNumber(pieBalance.toString(), 18).toString())
+      },
+      cap: {
+        bn:  new BigNumber(cap.toString()),
+        label: roundDownLabel(getNormalizedNumber(cap.toString(), 18).toString()),
+        number: parseFloat(getNormalizedNumber(cap.toString(), 18).toString())
+      }
+    }
+  }
+
+  console.log('ovenData', ovenData)
+
+  return ovenData;  
 }
