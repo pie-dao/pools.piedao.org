@@ -372,17 +372,17 @@ export async function fetchOvensUserData(ovensList, walletAddress, provider) {
     ovenData[ovensList[index].addressOven] = {
       ethBalance: {
         bn:  new BigNumber(balanceEth.toString()),
-        label: roundDownLabel(getNormalizedNumber(balanceEth.toString(), 18).toString()),
+        label: parseFloat(getNormalizedNumber(balanceEth.toString(), 18).toString()).toFixed(4),
         number: parseFloat(getNormalizedNumber(balanceEth.toString(), 18).toString())
       },
       pieBalance: {
         bn:  new BigNumber(pieBalance.toString()),
-        label: roundDownLabel(getNormalizedNumber(pieBalance.toString(), 18).toString()),
+        label: parseFloat(getNormalizedNumber(pieBalance.toString(), 18).toString()).toFixed(4),
         number: parseFloat(getNormalizedNumber(pieBalance.toString(), 18).toString())
       },
       cap: {
         bn:  new BigNumber(cap.toString()),
-        label: roundDownLabel(getNormalizedNumber(cap.toString(), 18).toString()),
+        label: parseFloat(getNormalizedNumber(cap.toString(), 18).toString()).toFixed(4),
         number: parseFloat(getNormalizedNumber(cap.toString(), 18).toString())
       }
     }
