@@ -340,7 +340,7 @@ export const fetchCalcToPie = async (pieAddress, poolAmount) => {
 
   const { provider } = get(eth);
 
-  const recipe = new ethers.Contract('0x6cb4b8669e23295563d3b34df4a760c0cee993c7', recipeAbi, provider);
+  const recipe = new ethers.Contract('0xE1F9E100cbF4aD6D546b196Af33E1129Dd0866b3', recipeAbi, provider);
 
   const amount = ethers.BigNumber.from(
     BigNumber(poolAmount)

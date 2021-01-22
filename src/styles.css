@@ -7,6 +7,29 @@
 @tailwind media;
 
 /* Custom css */
+
+/* Hide arrows on input[type=number] on webkit*/
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide arrows on input[type=number] on Firefox*/
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.slippageBtn{
+  background: white;
+  color: #fc02a7;
+}
+
+.slippageBtn.selected{
+  font-weight: bold;
+  color:black;
+}
+
 /* purgecss start ignore */
 
 .half { width: 47%;}
@@ -658,8 +681,11 @@ border-radius: 6px;
 
 .token-select-container {
   z-index: 100;
-  left: 50%;
-  top: 10rem;
+  max-height: 80vh;
+  /* left: 50%;
+  top: 10rem; */
+  /* height: 96%;
+  max-height: 96%; */
 }
 
 .token-select-container td:first-child,
@@ -673,7 +699,7 @@ border-radius: 6px;
 }
 
 .token-select-container tr {
-  border-bottom: 1px solid #f3f3f3;
+  /* border-bottom: 1px solid #f3f3f3; */
 }
 
 /* Pool Description */
@@ -900,6 +926,11 @@ opacity: 0.6;
   appearance: textfield;
 }
 
+.swap-input-from.error {
+  color: red;
+  border-color: red;
+}
+
 .swap-button {
   -webkit-box-align: center;
   align-items: center;
@@ -1005,6 +1036,11 @@ opacity: 0.6;
   font-size: 28px;
   font-weight: 200;
 }
+
+.stake-button.error {
+  opacity: 0.5;
+}
+
 
 .max-button {
   height: 28px;
