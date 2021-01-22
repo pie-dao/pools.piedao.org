@@ -164,6 +164,7 @@ const roundDownLabel = (numberString) => {
   return (Math.floor(number * 100) / 100).toString();
 }
 
+
 /**
  * Warning, token list has to contain eth at position [0]
  * @param {*} tokensList 
@@ -246,4 +247,31 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
   }
 
   return newTokenList;
+}
+
+export async function fetchEthBalances(addressList, provider) {
+
+  console.log('addressList', addressList)
+
+  const balanceQuery = addressList.map((address) => [
+    MULTICALL['1'],
+    'getEthBalance',
+    [address]
+  ]);
+
+  const response = await multicall(
+    provider,
+    abi,
+    [
+      ...balanceQuery
+    ],
+    { blockTag: 'latest' }
+  );
+
+  let balances = {};
+  for (let index = 0; index < addressList.length; index++) {
+    balances[addressList[index]] = response[index][0];
+  }
+
+  return balances;
 }

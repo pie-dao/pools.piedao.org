@@ -162,7 +162,7 @@
   </div>
 </section>
 
-<!-- <div class="flex flex-col w-96pc place-content-center spl">
+<div class="flex flex-col w-96pc place-content-center spl">
   <table class="breakdown-table table-auto w-full ml-2 md:mx-6 lg:mx-6">
     <thead>
       <tr>
@@ -218,7 +218,7 @@
       {/each}
     </tbody>
   </table>
-</div> -->
+</div>
 
 <div
   class="content spl flex flex-col justify-center justify-items-center content-center flex-wrap md:flex-row lg:flex-row">
