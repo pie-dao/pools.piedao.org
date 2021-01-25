@@ -562,6 +562,13 @@ border-radius: 6px;
   font-size: 0.8rem;
 }
 
+img.oven-illustration {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 1657/918;
+}
+
 .spl h1 {
   @apply w-full;
   width: 100;

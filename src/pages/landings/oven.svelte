@@ -120,10 +120,13 @@
     let percetage = ( parseFloat(balance) / 10) * 100;
     return toFixed(percetage > 100 ? 100 : percetage, 2); 
   }
+  
 </script>
+
 
 <Meta
   metadata={{ title: 'Oven Page - PieDAO', description: "The PieDAO Oven pools ETH to issue pies in batches, giving users access to our index products gas-free. This design makes getting involved affordable and convenient, opening participation to everyone. Don't forget, the Oven won't activate until it's full!", image: images.oven_social, imageAlt: 'How the Oven makes minting pies gas-free.' }} />
+
 
 <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
@@ -249,8 +252,8 @@
   </div>
 </section>
 
-<div class="w-100pc flex justify-center">
-<img class="w-100pc h-auto md:w-80pc h-auto"src={images.oven_illustration} alt="Oven Illustration"/>
+<div class="w-100pc">
+<img class="oven-illustration" width="1657px" height="918px" src={images.oven_illustration} alt="Oven Illustration"/>
 </div>
 
 
