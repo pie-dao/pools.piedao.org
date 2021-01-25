@@ -277,7 +277,7 @@
           
           {#if !pieOfPies }
               <!-- <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th> -->
-              <th class="font-thin border-b-2 px-4 py-2 text-left">Balance</th>
+              <th class="font-thin border-b-2 px-4 py-2 text-center">Balance</th>
           {/if}
           <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
           <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
@@ -325,7 +325,7 @@
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.market_cap`, '-'))}
             </td> -->
 
-            <td class="border text-center px-4 py-2">
+            <td class="border text-center w-14pc px-4 py-2">
               <Change value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
             </td>
 
