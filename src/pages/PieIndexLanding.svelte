@@ -95,7 +95,6 @@
 
   const toggleDropdow = (event) => {
     dropdownOpen = !dropdownOpen;
-    event.preventDefault();
   };
 
   const getInternalWeights = (component, base) => {
