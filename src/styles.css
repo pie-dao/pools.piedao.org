@@ -84,6 +84,12 @@ flex: 1 1 0;
 }
 
 
+.drowpdown-shadow {
+  -webkit-box-shadow: -12px 0px 29px 0px rgba(0,0,0,0.16); 
+  box-shadow: -12px 0px 29px 0px rgba(0,0,0,0.16);
+  background: #FFFFFF;
+  }
+
 
 
 .strategy-label {
@@ -558,7 +564,7 @@ flex: 1 1 0;
   cursor: pointer;
   background-color: #ED1EA0;
   border-radius: 10px;
-
+  display: inline;
 }
 
 .table-btn {

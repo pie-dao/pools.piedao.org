@@ -96,7 +96,6 @@
 
   const toggleDropdow = (event) => {
     dropdownOpen = !dropdownOpen;
-    event.preventDefault();
   };
 
   const getInternalWeights = (component, base) => {
@@ -172,9 +171,9 @@
 </Modal>
 <div class="content flex flex-col spl">
   
-  <div class="flex flex-wrap w-full">
+  <div class="flex w-full items-center justify-between">
     <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
-      <div class="flex flex-row items-center sm:w-full md:w-40pc">
+      <div class="flex flex-row items-center">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
         <div class="mx-3 flex flex-col">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
@@ -186,17 +185,17 @@
         </div>
       </div>
 
-      <div class="w-100pc sm:w-full md:w-2/3 flex flex-row-reverse">
-        <div class="relative inline-block text-left hidden md:block">
+      <div class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0">
+        <div class="relative inline-block text-left md:block">
           <div>
-            <button on:click={toggleDropdow}  type="button" class="inline-flex justify-center w-full py-2" id="options-menu" aria-haspopup="true" aria-expanded="true">
-              <img class="mt-15px h-6" src={images.more} alt="More options" />
+            <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full py-2 focus:outline-none" id="options-menu" aria-haspopup="true" aria-expanded="true">
+              <img class="h-6" src={images.more} alt="More options" />
             </button>
           </div>
           {#if dropdownOpen}
-            <div class="z-50 origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
-              <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                <div class="py-1">
+            <div class="z-50 origin-top-right absolute right-0 mt-1 thinborder w-56 drowpdown-shadow roundedl">
+              <div class="bg-white roundedl" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <div class="py-1 roundedl">
                   <!-- svelte-ignore a11y-missing-attribute -->
                   <a on:click={() => {
                     modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
@@ -204,7 +203,7 @@
                     modalOption.title = "Add Liquidity";
                     modal.open()
                     toggleDropdow();
-                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Issue</a>
+                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 cursor-pointer hover:opacity-60" role="menuitem">Issue</a>
                   <!-- svelte-ignore a11y-missing-attribute -->
                   <a on:click={() => {
                     modalOption.method = "multi";
@@ -212,20 +211,28 @@
                     modalOption.title = "Redeem";
                     modal.open()
                     toggleDropdow();
-                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Redeem</a>
+                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 cursor-pointer hover:opacity-60" role="menuitem">Redeem</a>
                 </div>
               </div>
             </div>
             {/if}
         </div>
         
-        <a href="#/oven">
-          <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Bake</button>
-        </a>
+          <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-1 hover:opacity-80" onclick="location.href='#/oven'">
+            <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+            <div class="">
+              <div class="text-base font-bold leading-5">Bake your Pie</div>
+              <div class="text-sm font-thin">Wait and save 97% gas</div>
+            </div></button>
+   
 
-        <a href="#/swap">
-          <button class="btn font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
-        </a>
+          <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
+            <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+            <div class="">
+              <div class="text-base font-bold leading-5">Buy & Sell</div>
+              <div class="text-sm font-thin">Instantly swap on Dexes</div>
+            </div></button>        
+
       </div>
     </div>
   </div>
@@ -312,7 +319,7 @@
                 </div>
             </td>
 
-            <td class="border px-4 ml-8 py-2 font-thin text-left">
+            <td class="border px-4 ml-8 py-2 w-14pc font-thin text-left">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
             
@@ -326,7 +333,7 @@
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.market_cap`, '-'))}
             </td> -->
 
-            <td class="border text-center w-14pc px-4 py-2">
+            <td class="border text-center w-12pc px-4 py-2">
               <Change value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
             </td>
 
