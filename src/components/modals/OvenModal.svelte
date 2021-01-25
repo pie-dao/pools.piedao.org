@@ -265,18 +265,17 @@ const deposit = async () => {
   {/if}
   
   {#if selectedTab === 1}
-      <div class="input bg-white border border-solid rounded-8px border-grey-204">
-          <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-            <div class="left float-left">Amount to Deposit (min 0.1 ETH)</div>
+      <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white">
+          <div class="flex items-center justify-between">
+            <div class="flex nowrap intems-center p-1 font-thin">Amount to Deposit (min 0.1 ETH)</div>
             <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-              <button on:click={() => amount = ethBalance} class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">100%</button>
+              <button on:click={() => amount = ethBalance} class="oven-withdraw-button">100%</button>
             </div>
           </div>
-          <div class="bottom  px-4 py-4 md:px-4 pb-4">
-            <input bind:value={amount} type="number" class="font-thin text-base w-60pc md:w-75pc md:text-xl">
-            <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
-          align-middle justify-center items-center pointer mt-0 md:mt-14px">
-          <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
+          <div class="flex nowrap items-center p-1">
+            <input bind:value={amount} class="swap-input-from" inputmode="decimal" autocomplete="off" autocorrect="off" type="number" pattern="^[0-9]*[.]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
+            <div class="h-32px flex items-center pointer">
+          <img class="token-icon w-30px h-30px" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
           <span class="py-2px px-4px">ETH</span></div> 
         </div>
       </div>
