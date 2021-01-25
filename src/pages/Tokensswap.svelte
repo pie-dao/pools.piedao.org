@@ -317,8 +317,8 @@
 
 <div class="content flex flex-col pt-10pc justify-center spl">
 
-  <div class="font-huge text-center">Swap Tokens</div>
-  <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">Pies at the best rates.</div>
+  <div class="font-huge text-center">Exchange Tokens</div>
+  <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">Swap Pies at the best rates.</div>
 
 
   <div class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc">
@@ -354,7 +354,7 @@
       </div>
     </div>
 
-    <div class="my-20px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C3C5CB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg></div>
+    <div class="my-20px"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#cccccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg></div>
     
     <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
       <div class="flex items-center justify-between">
@@ -378,18 +378,18 @@
     {#if isLoading}
       <div class="flex items-center w-100pc px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Status:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">Finding the best price...</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">Finding the best price...</div>
       </div>
     {/if}
 
     {#if quote}
       <div class="flex items-center w-100pc pt-16px px-16px justify-between">
-        <div class="flex nowrap intems-center p-1 font-thin">Price {sellToken.symbol}/{buyToken.symbol}</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">{quote.price}</div>
+        <div class="flex nowrap intems-center p-1 font-thin">Price:</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} = {quote.price} {buyToken.symbol}</div>
       </div>
       <div class="flex items-center w-100pc px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Guaranteed Price:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">{quote.guaranteedPrice}</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{quote.guaranteedPrice}</div>
       </div>
       
     {/if}
