@@ -212,38 +212,25 @@ const deposit = async () => {
 </script>
 
 
-<div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:p-4">
+<div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:px-4 lg:pb-4">
   <div class="flex justify-center font-thin mb-2">
 
-    <div class="flex w-100pc text-black text-center text-xs md:text-xs lg:text-base justify-around mt-2 md:mt-0">
-      <div class="p-2">
-        <div class="">
-          Your ETH in the Oven
-        </div>
-        <div class="font-bold">{toFixed(ovenData.ethBalance, 6)} ETH</div>
-      </div>
-      <div class="p-2">
-        <div class="">
-          Pie Ready to Withdraw
-        </div>
-        <div class="font-bold">{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</div>
-      </div>
-    </div>
+
 
   </div>
 
   <div class="w-100pc flex justify-center justify-items-center content-center text-center">
-    <button on:click={ () => selectedTab = 0} class:oven-button-active={selectedTab === 0} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
+    <button on:click={ () => selectedTab = 0} class:oven-button-active={selectedTab === 0} class="oven-button m-0 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
         Status
     </button>
     {#if !deprecated}
-    <button on:click={ () => selectedTab = 1} class:oven-button-active={selectedTab === 1} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
+    <button on:click={ () => selectedTab = 1} class:oven-button-active={selectedTab === 1} class="oven-button m-0 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
         Deposit
     </button>
     {/if}
-    <button on:click={ () => selectedTab = 2} class:oven-button-active={selectedTab === 2} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
+    <!-- <button on:click={ () => selectedTab = 2} class:oven-button-active={selectedTab === 2} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
         Withdraw
-    </button>
+    </button> -->
   </div>
 
   {#if selectedTab === 0}
@@ -296,6 +283,30 @@ const deposit = async () => {
 
     <div class="flex justify-center">
       <button on:click={deposit} class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Deposit</button>
+    </div>
+
+    <div class="flex w-100pc bg-lightgrey-2 p-4 rounded mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
+     
+      <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
+        <div class="flex flex-col items-start">
+        <div class="font-thin text-base">
+          Your ETH in the Oven
+        </div>
+        <div class="font-bold text-base">{toFixed(ovenData.ethBalance, 6)} ETH</div>
+      </div>
+      <button disabled={ovenData.ethBalance === 0} on:click={withdrawEth} class="oven-withdraw-button">withdraw</button>
+      </div>
+
+      <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
+        <div class="flex flex-col items-start">
+        <div class="font-thin text-base">
+          Your Pie ready
+        </div>
+        <div class="font-bold text-base">{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</div>
+      </div>
+      <button disabled={ovenData.ethBalance === 0} on:click={withdrawEth} class="oven-withdraw-button ">withdraw</button>
+      </div>
+
     </div>
     {/if}
 

@@ -554,6 +554,14 @@ border-radius: 6px;
   width: 11rem;
 }
 
+.oven-withdraw-button {
+  background-color: black;
+  color: white;
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+}
+
 .spl h1 {
   @apply w-full;
   width: 100;
@@ -652,6 +660,22 @@ border-radius: 6px;
 
 .toggle-input:focus + .toggle {
   box-shadow: 0 0 1px #8ce647;
+}
+
+.oven-button:focus {
+  box-shadow:none;
+  border:none;
+  outline: none;
+}
+
+.oven-button:active {
+  box-shadow: none;
+  border: none;
+  outline: none;
+}
+
+.oven-withdraw-button:hover {
+  opacity: 0.7;
 }
 
 .toggle-input:checked + .toggle:before {
@@ -973,6 +997,7 @@ opacity: 0.6;
   user-select: none;
   border: none;
 }
+
 
 .main-cta-ghost {
   background-color: white;

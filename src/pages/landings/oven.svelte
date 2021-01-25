@@ -265,7 +265,7 @@
 <Accordion>
 
 
-  <AccordionItem title="How does Oven save me 97% gas?">
+  <AccordionItem expanded title="How does Oven save me 97% gas?">
     With the community Oven users bake their pies together. 
     Normally baking can require as much as 73 separate transactions for each user, costing a large amount in gas. Oven bakes everyone’s pies together, reducing the total number of transactions needed and sharing the gas costs.
   </AccordionItem>
