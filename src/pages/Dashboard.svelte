@@ -143,7 +143,7 @@
                 {pie.totalLiquidity}
               </a>
             </td>
-            <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+            <td class="border text-center w-12pc px-4 py-2" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
               <Change value={pie.change} />
             </td>
             <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
