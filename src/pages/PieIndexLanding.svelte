@@ -179,15 +179,15 @@
         </div>
       </div>
 
-      <div class="w-100pc sm:w-full md:w-60pc flex justify-end">
+      <div class="w-100pc sm:w-full mt-4 mb-4 md:mb-0 md:mt-0 md:w-60pc flex justify-end">
 
         <button on:click={() => {
           modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
           modalOption.poolAction = "add";
           modalOption.title = "Add Liquidity";
           modal.open()
-        }} class="flex w-1/2 btnbig text-white text-left ml-0 mr-1 py-2 px-2 md:ml-4">
-        <div class="mr-10px"><img class="h-40px inline" src={images.exchangeemoji} alt={symbol} /></div>
+        }} class="flex items-center w-1/2 btnbig text-white text-left ml-0 mr-1 py-2 px-2 md:ml-4">
+        <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div>
         <div class="">
           <div class="text-lg font-bold">Buy & Sell</div>
           <div class="text-base font-thin">Instantly swap on Dexes</div>
@@ -200,7 +200,7 @@
           modalOption.poolAction = "add";
           modalOption.title = "Add Liquidity";
           modal.open()
-        }} class="flex w-1/2 btnbig text-white text-left ml-0 mr-1 py-2 px-2 md:ml-4">
+        }} class="flex items-center  w-1/2 btnbig text-white text-left ml-0 mr-1 py-2 px-2 md:ml-4">
         <div class="mr-10px"><img class="h-50px inline" src={images.waitoven} alt={symbol} /></div>
         <div class="">
           <div class="text-lg font-bold">Bake your Pie</div>
