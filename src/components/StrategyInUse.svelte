@@ -25,6 +25,11 @@
         <span class="w-20px h-20px mr-10px" alt="strategy icon">😏</span>
         <span>Staking</span>
     </div>
+{:else if protocol === 'none'}
+    <div class="flex justify-center items-center strategy-label bg-grey text-white">
+        <span class="w-20px h-20px mr-10px pl-1" alt="strategy icon">💤</span>
+        <span class="pl-1">None</span>
+    </div>
 {/if}
 
 

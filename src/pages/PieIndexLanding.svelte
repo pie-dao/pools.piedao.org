@@ -1,32 +1,23 @@
 <script>
-  import {getSubgraphMetadata, getPoolSwaps, getPoolMetrics} from '../helpers/subgraph.js'
-  import { pieSmartPool } from '@pie-dao/abis';
+  import {getSubgraphMetadata} from '../helpers/subgraph.js'
   import { _ } from 'svelte-i18n';
   import moment from 'moment';
-  import BigNumber from 'bignumber.js';
   import get from 'lodash/get';
-  import first from 'lodash/first';
   import flattenDeep from 'lodash/flattenDeep';
   import orderBy from 'lodash/orderBy';
-  import { onMount } from "svelte";
   import { currentRoute } from "../stores/routes.js";
-  import TradingViewWidget from "../components/TradingViewWidget.svelte";
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
   import LiquidityModal from "../components/modals/LiquidityModal.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
   import CoinGeckoBanner from "../components/CoinGeckoBanner.svelte";
-  import KeyFacts from "../components/KeyFacts.svelte";
-  import PoolDescription from "../components/PoolDescription.svelte";
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
-  import { fetchPooledTokens, pooledTokenAmountRequired, fetchCalcTokensForAmounts } from '../components/helpers.js';
   import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
   import {
     pools,
-    balanceKey,
     contract,
     balances,
   } from "../stores/eth.js";
@@ -186,7 +177,7 @@
       </div>
 
       <div class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0">
-        <div class="relative inline-block text-left md:block">
+        <div class="relative inline-block text-left hidden md:block">
           <div>
             <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full py-2 focus:outline-none" id="options-menu" aria-haspopup="true" aria-expanded="true">
               <img class="h-6" src={images.more} alt="More options" />
@@ -223,15 +214,17 @@
             <div class="">
               <div class="text-base font-bold leading-5">Bake your Pie</div>
               <div class="text-sm font-thin">Wait and save 97% gas</div>
-            </div></button>
+            </div>
+          </button>
    
 
           <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
             <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
             <div class="">
               <div class="text-base font-bold leading-5">Buy & Sell</div>
-              <div class="text-sm font-thin">Instantly swap on Dexes</div>
-            </div></button>        
+              <div class="text-sm font-thin">Instant swap</div>
+            </div>
+          </button>        
 
       </div>
     </div>
@@ -380,9 +373,12 @@
     <div class="p-0 mt-2 flexgrow	min-w-230px">
       <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />
     </div>
-    <div class="p-0 mt-2 flexgrow	min-w-230px">
-      <CoinGeckoBanner pie={poolsConfig[token]} pieAddress={token} />
-    </div>
+    {#if poolsConfig[token].coingeckoId}
+      <div class="p-0 mt-2 flexgrow	min-w-230px">
+        <CoinGeckoBanner pie={poolsConfig[token]} />
+      </div>
+    {/if}
+    
   </div>
 </div>
 
