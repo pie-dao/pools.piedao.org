@@ -2,7 +2,9 @@
   "icons": {
     "downArrow": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/downArrow.svg",
     "hamburger": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/hamburger.svg",
-    "timesLight": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/timesLight.svg"
+    "timesLight": "https://raw.githubusercontent.com/pie-dao/assets/master/icons/timesLight.svg",
+    "ArrowUp": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/ArrowDown.png",
+    "ArrowDown": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/ArrowUp.png"
   },
   "logos": {
     "aragon": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/aragon.svg",
@@ -10,6 +12,7 @@
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/BTC%2B%2B.png",
     "0x6B175474E89094C44Da98b954EedeAC495271d0F": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/dai.svg",
     "etherscan": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/etherscan.svg",
+    "coingecko": "https://raw.githubusercontent.com/pie-dao/brand/f66a0f41cc186013fd9dab2a5f618da9c8f10a74/misc/coingecko.svg",
     "0x3212b29E33587A00FB1C83346f5dBFA69A458923": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/imbtc.png",
     "0x5228a22e72ccC52d415EcFd199F99D0665E7733b": "https://raw.githubusercontent.com/pie-dao/assets/master/logos/pBTC.svg",
     "piedao": "https://raw.githubusercontent.com/pie-dao/brand/master/PieDAO%20Logo/PieDAO%20Complete%20Black.png",
@@ -65,10 +68,13 @@
   "ready_to_diversify": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/ready_to_diversify.png",
   "defimadesimple": "images/defi-made-simple.png",
   "ypie": "images/ypie.png",
+  "ypietoken": "  https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/YPIE.png",
+  "more": "images/more.png",
   "defipp_social": "images/defipp-social.png",
   "defis_social": "images/defis-social.png",
   "defil_social": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/DEFI%2BL_banner.png",
   "oven_social": "oven_social.png",
+  "oven_illustration": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/oven-illustration.png",
   
   
   "koala": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/koala.png",
@@ -91,6 +97,7 @@
   "closebutton": "https://raw.githubusercontent.com/pie-dao/brand/4972f839cd2b0993afe45410d478b3f70f84398c/misc/close.svg",
   "depositeth": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/cook_1f9d1-200d-1f373.png",
   "waitoven": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/timer-clock_23f2-fe0f.png",
+  "exchangeemoji": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/exchangeicon.png",
   "sharegascost": " https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/pie_1f967.png"
  
   

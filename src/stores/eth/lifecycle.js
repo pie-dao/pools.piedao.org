@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
-
 import { eth } from "./writables.js";
 import { subject } from "./observables.js";
+import { fetchEthBalances } from '../../helpers/multicall';
 
 const trackedEthBalances = new Set();
 
@@ -18,8 +18,15 @@ subject("blockNumber").subscribe({
       subject("gasPrice").next((await ethData.signer.getGasPrice).toString());
     }
 
+    let arrWallets = [];
+    trackedEthBalances.forEach((walletAddress) => {
+      arrWallets.push(walletAddress);
+    })
+
+    const multiBalances = await fetchEthBalances(arrWallets, ethData.provider);
+
     trackedEthBalances.forEach(async (walletAddress) => {
-      subject(`ethBalanceOf${walletAddress}`).next((await ethData.provider.getBalance(walletAddress)).toString());
+      subject(`ethBalanceOf${walletAddress}`).next(multiBalances[walletAddress].toString());
     });
   },
 });
