@@ -47,6 +47,7 @@
   ];
 
   let targetModal = 'sell';
+  export let params;
   let timeout;
 
   let defaultTokenSell = {
@@ -90,7 +91,10 @@
   const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toString();
 
   $: sellToken = defaultTokenSell;
-  $: buyToken = defaultTokenBuy;
+
+  //$: token = params.address;
+
+  $: buyToken = params.toBuy || defaultTokenBuy;
   $: amount = defaultAmount;
   $: receivedAmount = 0;
   $: quote = null;
@@ -242,9 +246,9 @@
     }
 
     if(buyToken) {
-      buyToken = find(listed, ['address', buyToken.address], defaultTokenBuy);
+      buyToken = find(listed, ['address', buyToken.address], params.toBuy || defaultTokenBuy);
     } else {
-      buyToken = defaultTokenBuy
+      buyToken = params.toBuy || defaultTokenBuy
     }
       
     

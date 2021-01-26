@@ -30,6 +30,7 @@
   import Change from '../components/Change.svelte'
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
+  import {navigateSwap} from '../stores/routes';
 
 
   export let params;
@@ -150,6 +151,14 @@
     }
 }
 
+  function goSwap() {
+    navigateSwap({
+      address: token,
+      symbol,
+      icon: tokenLogo
+    })
+  }
+
 </script>
 <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
@@ -218,7 +227,9 @@
           </button>
    
 
-          <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
+          <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" 
+            on:click={goSwap}
+          >
             <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
             <div class="">
               <div class="text-base font-bold leading-5">Buy & Sell</div>

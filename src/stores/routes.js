@@ -138,6 +138,31 @@ const route = deriveRoute();
 
 export const currentRoute = writable({ ...formatRoute(route) });
 
+export const navigateSwap = (toBuy={}) => {
+  const newRoute = 'swap';
+  const trackPath = '/' + newRoute + '/';
+
+  console.log('toBuy', toBuy)
+
+  if(window.location.origin !== 'http://localhost:8080') {
+    window.gtag('event', 'page_view', {
+      page_path: trackPath
+    })
+  } else {
+      console.log('Analytics DEV', {
+        page_path: trackPath
+      })
+  }
+
+  
+  currentRoute.set({ page: Tokensswap, params: { toBuy: toBuy}});
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth',
+  });
+}
+
 window.addEventListener('hashchange', () => {
   const newRoute = deriveRoute();
   const trackPath = '/' + newRoute.join('/');
