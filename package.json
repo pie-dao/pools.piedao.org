@@ -36,7 +36,7 @@
     "moment": "^2.29.1",
     "rollup-plugin-node-polyfills": "^0.2.1",
     "rxjs": "^6.6.0",
-    "svelte": "^3.21.0",
+    "svelte": "^3.32.0",
     "svelte-apollo": "^0.3.0",
     "svelte-i18n": "^3.0.4",
     "svelte-tabs": "^1.1.0",
@@ -61,6 +61,7 @@
     "postcss-cli": "^7.1.1",
     "postcss-import": "^12.0.1",
     "prettier": "^2.0.5",
+    "renderless-svelte": "^1.5.0",
     "rollup": "^2.18.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
@@ -68,7 +69,6 @@
     "rollup-plugin-svelte": "^5.2.3",
     "rollup-plugin-terser": "^6.1.0",
     "serve": "^11.3.2",
-    "snowpack": "^2.5.0",
-    "svelte-accessible-accordion": "^1.0.0"
+    "snowpack": "^2.5.0"
   }
 }
