@@ -87,7 +87,7 @@
 
   const api = new ApiOx();
 
-  const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toString();
+  const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
 
   $: sellToken = defaultTokenSell;
   $: buyToken = defaultTokenBuy;
@@ -385,11 +385,11 @@
     {#if quote}
       <div class="flex items-center w-100pc pt-16px px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Price:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} = {quote.price} {buyToken.symbol}</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} = {parseFloat(quote.price).toFixed(6)} {buyToken.symbol}</div>
       </div>
       <div class="flex items-center w-100pc px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Guaranteed Price:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{quote.guaranteedPrice}</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{parseFloat(quote.guaranteedPrice).toFixed(6)}</div>
       </div>
       
     {/if}
