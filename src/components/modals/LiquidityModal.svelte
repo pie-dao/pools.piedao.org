@@ -49,7 +49,6 @@
   const tokenSelectCallback = (token) => {
     tokenSelectModalOpen = false;
     if (token) {
-      window.location.hash = `#/pools/${token.address}`;
       fetchQuote(null, token.address);
     }
   };
@@ -389,7 +388,10 @@
     });
   };
 </script>
-
+<TokenSelectModal
+    tokens={pieTokens}
+    open={tokenSelectModalOpen}
+    callback={tokenSelectCallback} />
 
 <div class="liquidity-container bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
 
@@ -479,14 +481,10 @@
           <div
             class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
             align-middle justify-center items-center pointer mt-0 md:mt-14px"
-            on:click={() => (tokenSelectModalOpen = true)}>
+            >
             <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
             <span class="py-2px px-4px">{tokenSymbol}</span>
           </div>
-          <TokenSelectModal
-            tokens={pieTokens}
-            open={tokenSelectModalOpen}
-            callback={tokenSelectCallback} />
         </div>
       </div>
     {/if}
@@ -504,14 +502,11 @@
           <div
             class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
             align-middle justify-center items-center pointer mt-0 md:mt-14px"
-            on:click={() => (tokenSelectModalOpen = true)}>
+            >
             <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src={tokenLogo} alt={tokenSymbol} />
             <span class="py-2px px-4px">{tokenSymbol}</span>
           </div>
-          <TokenSelectModal
-            tokens={pieTokens}
-            open={tokenSelectModalOpen}
-            callback={tokenSelectCallback} />
+          
         </div>
       </div>
     {/if}
