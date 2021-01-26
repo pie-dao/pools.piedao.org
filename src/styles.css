@@ -562,6 +562,10 @@ border-radius: 6px;
   font-size: 0.8rem;
 }
 
+.oven-withdraw-button:disabled {
+  opacity: 0.4;
+}
+
 img.oven-illustration {
   width: 100%;
   height: auto;

@@ -12860,11 +12860,6 @@
     "has-flag" "^4.0.0"
     "supports-color" "^7.0.0"
 
-"svelte-accessible-accordion@^1.0.0":
-  "integrity" "sha512-k+6evIriYtd1qJDY/88GfQTe0Ojf/ChXW9wsiV/zahaZ0T/QH+Bw8waK/oHzxGx0wJFvM1t09OrE9Jltbj10YQ=="
-  "resolved" "https://registry.npmjs.org/svelte-accessible-accordion/-/svelte-accessible-accordion-1.0.0.tgz"
-  "version" "1.0.0"
-
 "svelte-apollo@^0.3.0":
   "integrity" "sha512-Ef2roOGIqqJPaNOBx4uM9EvlM0yd0ixRnFGj3sf4jmvCbcdfFXzh267GdtjfQx8IAGKwbpe9TbyI32/J6bOFpA=="
   "resolved" "https://registry.yarnpkg.com/svelte-apollo/-/svelte-apollo-0.3.0.tgz"
@@ -12900,10 +12895,10 @@
   dependencies:
     "element-resize-detector" "^1.1"
 
-"svelte@*", "svelte@^3.0.0", "svelte@^3.14.1", "svelte@^3.21.0", "svelte@>= 3", "svelte@3.x":
-  "integrity" "sha512-hE8GeTM83YVR4GY6/6PeDEcGct4JS5aCi+IYbCAa76oaPSfuF7L85DQYULQxlTK/KPWzw3L1GRGmC3oPG/PQoA=="
-  "resolved" "https://registry.yarnpkg.com/svelte/-/svelte-3.23.2.tgz"
-  "version" "3.23.2"
+"svelte@*", "svelte@^3.0.0", "svelte@^3.14.1", "svelte@^3.21.0", "svelte@^3.32.0", "svelte@>= 3", "svelte@3.x":
+  "integrity" "sha512-+EA3qfKDG0uB16s7m1z9Nc1o01G7YC4eq1cnHOzCy+fKsvGAJrjhjBIM3zCW2eZUu639UbHQElaOPQWUjBN3Yw=="
+  "resolved" "https://registry.npmjs.org/svelte/-/svelte-3.32.0.tgz"
+  "version" "3.32.0"
 
 "svgo@^1.0.0", "svgo@^1.3.2":
   "integrity" "sha512-yhy/sQYxR5BkC98CY7o31VGsg014AKLEPxdfhora76l36hD9Rdy5NZA/Ocn6yayNPgSamYdtX2rFJdcv07AYVw=="

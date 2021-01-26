@@ -13,9 +13,9 @@
   import LiquidityModal from '../../components/modals/LiquidityModal.svelte';
   import OvenModal from '../../components/modals/OvenModal.svelte';
   import TooltipButton from '../../components/elements/TooltipButton.svelte';
-  // import { Accordion, AccordionItem } from 'svelte-accessible-accordion';
   import { fetchOvensUserData } from '../../helpers/multicall';
-  import { Accordion, AccordionGroup } from 'renderless-svelte'
+  import Accordion from '../../components/elements/Accordion.svelte'
+  import AccordionGroup from '../../components/elements/AccordionGroup.svelte'
 
 
   $: ovens = [
@@ -237,15 +237,16 @@
     <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Can't wait?</h2>
     <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">
       You can always
-      <strong>Buy or Issue</strong>
-      your Pie instantly from the the Pie Page
+      <strong>Buy </strong>
+      your Pie instantly from the exchange pie.
     </p>
   </div>
-  <button
-    on:click={modalAdd.open}
-    class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
-    Select your Pie
-  </button>
+  <a href="#/swap">
+    <button
+      class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
+      Select your Pie
+    </button>
+  </a>
 </section>
 
 <section class="pt-12 px-4 text-center">
