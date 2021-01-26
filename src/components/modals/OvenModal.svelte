@@ -303,7 +303,7 @@ const deposit = async () => {
         </div>
         <div class="font-bold text-base">{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</div>
       </div>
-      <button disabled={ovenData.ethBalance === 0} on:click={withdrawEth} class="oven-withdraw-button ">withdraw</button>
+      <button disabled={ovenData.pieBalance === 0} on:click={withdrawPie} class="oven-withdraw-button ">withdraw</button>
       </div>
 
     </div>
