@@ -970,10 +970,10 @@ opacity: 0.6;
   position: relative;
   max-width: 600px;
   width: 100%;
-  background: rgb(255, 255, 255);
-  box-shadow: rgba(0, 0, 0, 0.01) 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 4px 8px, rgba(0, 0, 0, 0.04) 0px 16px 24px, rgba(0, 0, 0, 0.01) 0px 24px 32px;
   border-radius: 30px;
   padding: 1rem;
+  -webkit-box-shadow: -12px 0px 29px 0px rgba(0,0,0,0.16); 
+  box-shadow: -12px 0px 29px 0px rgba(0,0,0,0.16);
 }
 
 .swap-input-from {
@@ -992,6 +992,19 @@ opacity: 0.6;
   padding: 0px;
   appearance: textfield;
 }
+
+.swap-input-from:disabled {
+  color: black;
+  appearance: textfield;
+}
+
+input {
+  -webkit-text-fill-color: black;
+opacity: 1;
+}
+
+
+
 
 .swap-input-from.error {
   color: red;
@@ -1014,6 +1027,8 @@ opacity: 0.6;
   border: none;
   padding: 0px 0.5rem;
 }
+
+
 
 .oven-button {
   -webkit-box-align: center;
@@ -1342,6 +1357,12 @@ button.svelte-1nn74u2 {border: none!important; padding: 1rem 0rem!important;}
   .genericbanner{
     display: none;
   }
+
+  .swap-container {
+    -webkit-box-shadow: none; 
+    box-shadow: none;
+  }
+
 }
 
 .mincontent {

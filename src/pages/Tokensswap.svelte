@@ -321,7 +321,7 @@
   <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">Swap Pies at the best rates.</div>
 
 
-  <div class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc">
+  <div class="swap-container flex flex-col items-center w-94pc p-60px bg-white mb-4 md:w-50pc h-50pc">
 
     <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
       <div class="flex items-center justify-between">
