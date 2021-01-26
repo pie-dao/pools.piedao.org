@@ -71,8 +71,12 @@ onMount(async () => {
 });
 
 const fetch = async () => {
-    ovenData.ethBalance = await instance.ethBalanceOf($eth.address) / 1e18;
-    ovenData.pieBalance = await instance.outputBalanceOf($eth.address) / 1e18;
+    const ethBal = await instance.ethBalanceOf($eth.address);
+    const pieBal = await instance.outputBalanceOf($eth.address);
+    ovenData.ethBalance = ethBal / 1e18;
+    ovenData.ethBalanceBn = ethBal;
+    ovenData.pieBalance = pieBal / 1e18;
+    ovenData.pieBalanceBn = pieBal;
     ovenData.cap = await instance.cap() / 1e18;
     initialized = true;  
 };
@@ -113,24 +117,13 @@ const withdrawPie = async () => {
 };
 
 const withdrawEth = async () => {
-    const requestedAmount = BigNumber(amount);
-    const max = BigNumber(ovenData.ethBalance).multipliedBy(10 ** 18).toFixed(0);
-
     if (!$eth.address || !$eth.signer) {
       displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
       connectWeb3();
       return;
     }
 
-    if (BigNumber(requestedAmount).isGreaterThan(BigNumber(max)) ) {
-      const message = `Not enough ETH in the Oven`;
-      displayNotification({ message, type: "error", autoDismiss: 30000 });
-      return;
-    }
-
-    const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
-
-    const { emitter } = displayNotification(await instance.withdrawETH(amountWei, $eth.address) );
+    const { emitter } = displayNotification(await instance.withdrawAllETH($eth.address) );
 
     emitter.on("txConfirmed", ({ hash }) => {
       const { dismiss } = displayNotification({
@@ -142,7 +135,7 @@ const withdrawEth = async () => {
         next: async () => {
           displayNotification({
             autoDismiss: 15000,
-            message: `${requestedAmount.toFixed()} ETH successfully withdrew from the Oven`,
+            message: `${ovenData.ethBalance.toFixed()} ETH successfully withdrew from the Oven`,
             type: "success",
           });
           await fetch();

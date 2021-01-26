@@ -238,7 +238,7 @@
     <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">
       You can always
       <strong>Buy </strong>
-      your Pie instantly from the exchange pie.
+      your Pie instantly from the exchange page.
     </p>
   </div>
   <a href="#/swap">
