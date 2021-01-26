@@ -1,31 +1,23 @@
 <script>
-  import {getSubgraphMetadata, getPoolSwaps, getPoolMetrics} from '../helpers/subgraph.js'
-  import { pieSmartPool } from '@pie-dao/abis';
+  import {getSubgraphMetadata} from '../helpers/subgraph.js'
   import { _ } from 'svelte-i18n';
   import moment from 'moment';
-  import BigNumber from 'bignumber.js';
   import get from 'lodash/get';
-  import first from 'lodash/first';
   import flattenDeep from 'lodash/flattenDeep';
   import orderBy from 'lodash/orderBy';
-  import { onMount } from "svelte";
   import { currentRoute } from "../stores/routes.js";
-  import TradingViewWidget from "../components/TradingViewWidget.svelte";
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
   import Quantstamp from "../components/Quantstamp.svelte";
   import LiquidityModal from "../components/modals/LiquidityModal.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
-  import KeyFacts from "../components/KeyFacts.svelte";
-  import PoolDescription from "../components/PoolDescription.svelte";
+  import CoinGeckoBanner from "../components/CoinGeckoBanner.svelte";
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
-  import { fetchPooledTokens, pooledTokenAmountRequired, fetchCalcTokensForAmounts } from '../components/helpers.js';
   import { amountFormatter, getTokenImage, formatFiat, fetchPieTokens } from '../components/helpers.js';
   import {
     pools,
-    balanceKey,
     contract,
     balances,
   } from "../stores/eth.js";
@@ -170,13 +162,13 @@
 </Modal>
 <div class="content flex flex-col spl">
   
-  <div class="flex flex-wrap w-full">
-    <div class="flex flex-row content-between justify-between flex-wrap w-full">
-      <div class="flex flex-row sm:w-full md:w-1/3">
+  <div class="flex w-full items-center justify-between">
+    <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
+      <div class="flex flex-row items-center">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
         <div class="mx-3 flex flex-col">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
-          <h2 class="text-md leading-none font-black">{name}</h2>
+          <h2 class="text-md leading-none font-black mb-4px">{name}</h2>
           {#if tokenPrice}
             <div class="flex items-center mincontent"><div class="text-xl leading-none font-thin whitespace-nowrap mincontent">{formatFiat(tokenPrice)} </div><span class="text-base whitespace-nowrap font-black mincontent ml-2"><Change showLabel={true} value={change24H} /></span></div>
           {/if}
@@ -184,17 +176,17 @@
         </div>
       </div>
 
-      <div class="w-100pc sm:w-full md:w-2/3 flex flex-row-reverse">
+      <div class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0">
         <div class="relative inline-block text-left hidden md:block">
           <div>
-            <button on:click={toggleDropdow}  type="button" class="inline-flex justify-center w-full py-2" id="options-menu" aria-haspopup="true" aria-expanded="true">
-              <img class="mt-15px h-6" src={images.more} alt="More options" />
+            <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full py-2 focus:outline-none" id="options-menu" aria-haspopup="true" aria-expanded="true">
+              <img class="h-6" src={images.more} alt="More options" />
             </button>
           </div>
           {#if dropdownOpen}
-            <div class="z-50 origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
-              <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                <div class="py-1">
+            <div class="z-50 origin-top-right absolute right-0 mt-1 thinborder w-56 drowpdown-shadow roundedl">
+              <div class="bg-white roundedl" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <div class="py-1 roundedl">
                   <!-- svelte-ignore a11y-missing-attribute -->
                   <a on:click={() => {
                     modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
@@ -202,7 +194,7 @@
                     modalOption.title = "Add Liquidity";
                     modal.open()
                     toggleDropdow();
-                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Issue</a>
+                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 cursor-pointer hover:opacity-60" role="menuitem">Issue</a>
                   <!-- svelte-ignore a11y-missing-attribute -->
                   <a on:click={() => {
                     modalOption.method = "multi";
@@ -210,20 +202,30 @@
                     modalOption.title = "Redeem";
                     modal.open()
                     toggleDropdow();
-                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Redeem</a>
+                  }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 cursor-pointer hover:opacity-60" role="menuitem">Redeem</a>
                 </div>
               </div>
             </div>
             {/if}
         </div>
         
-        <a href="#/oven">
-          <button class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Bake</button>
-        </a>
+          <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-1 hover:opacity-80" onclick="location.href='#/oven'">
+            <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+            <div class="">
+              <div class="text-base font-bold leading-5">Bake your Pie</div>
+              <div class="text-sm font-thin">Wait and save 97% gas</div>
+            </div>
+          </button>
+   
 
-        <a href="#/swap">
-          <button class="btn font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Buy</button>
-        </a>
+          <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
+            <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+            <div class="">
+              <div class="text-base font-bold leading-5">Buy & Sell</div>
+              <div class="text-sm font-thin">Instant swap</div>
+            </div>
+          </button>        
+
       </div>
     </div>
   </div>
@@ -272,13 +274,13 @@
         <tr>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Allocation</th>
-          <th class="font-thin border-b-2 px-4 py-2">Price</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">Price</th>
           
           {#if !pieOfPies }
               <!-- <th class="font-thin border-b-2 px-4 py-2">$ Adjusted</th> -->
-              <th class="font-thin border-b-2 px-4 py-2">Balance</th>
+              <th class="font-thin border-b-2 px-4 py-2 text-center">Balance</th>
           {/if}
-          <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
           <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
         </tr>
       </thead>
@@ -310,7 +312,7 @@
                 </div>
             </td>
 
-            <td class="border px-4 ml-8 py-2 font-thin text-center">
+            <td class="border px-4 ml-8 py-2 w-14pc font-thin text-left">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
             
@@ -324,7 +326,7 @@
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.market_cap`, '-'))}
             </td> -->
 
-            <td class="border text-center px-4 py-2">
+            <td class="border text-center w-12pc px-4 py-2">
               <Change value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} />
             </td>
 
@@ -357,20 +359,26 @@
     </div>
   {/if}
   
-  <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
-    <div class="p-0 mt-2 md:w-1/4">
+  <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row md:flex-wrap">
+    <div class="p-0 mt-2 flexgrow min-w-230px">
       <Farming token={$currentRoute.params.address} />
     </div>  
-    <div class="p-0 mt-2 md:w-1/4">
+    <div class="p-0 mt-2 flexgrow	min-w-230px">
       <Etherscan token={$currentRoute.params.address} />
     </div>
 
-    <div class="p-0 mt-2 md:w-1/4">
+    <div class="p-0 mt-2 flexgrow	min-w-230px">
       <Quantstamp token={$currentRoute.params.address} />
     </div>
-    <div class="p-0 mt-2 md:w-1/4">
+    <div class="p-0 mt-2 flexgrow	min-w-230px">
       <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />
     </div>
+    {#if poolsConfig[token].coingeckoId}
+      <div class="p-0 mt-2 flexgrow	min-w-230px">
+        <CoinGeckoBanner pie={poolsConfig[token]} />
+      </div>
+    {/if}
+    
   </div>
 </div>
 

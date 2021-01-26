@@ -34,6 +34,15 @@ input[type=number] {
 
 .half { width: 47%;}
 
+.fitcontent {
+  width: fit-content;
+}
+
+.flexgrow {
+flex: 1 1 0;
+}
+
+
 .border-half {border: 0.5px;}
 
 .border-thin {border: solid 0.5px grey;}
@@ -75,6 +84,12 @@ input[type=number] {
 }
 
 
+.drowpdown-shadow {
+  -webkit-box-shadow: -12px 0px 29px 0px rgba(0,0,0,0.16); 
+  box-shadow: -12px 0px 29px 0px rgba(0,0,0,0.16);
+  background: #FFFFFF;
+  }
+
 
 
 .strategy-label {
@@ -106,20 +121,28 @@ input[type=number] {
   border-radius: 1rem;
 }
 
+.roundedl {
+  border-radius: 10px;
+}
+
+.roundedxs {
+  border-radius: 4px;
+  }
+
 .rounded-sm {
   border-radius: 0.5rem;
 }
 
 .bg-pink {
-  background-color: #EC1EA0;
+  background-color: #ff2eb3;
 }
 
 .text-green {
-  color: #4eaf0a;
+  color: #24D897;
 }
 
 .text-red {
-  color: #e15241;
+  color: #FC4057;
 }
 
 .pointer {
@@ -174,9 +197,6 @@ input[type=number] {
   line-height: 5rem;
 }
 
-.roundedxs {
-border-radius: 6px;
-}
 
 /* .toggle-btn .active {
   background: white;
@@ -294,8 +314,13 @@ border-radius: 6px;
 
 .etherscan-container,
 .quantstamp-container {
-  @apply bg-grey-243 pt-2 pb-4 px-4 mx-2;
+  @apply bg-grey-243 pt-2 pb-4 px-4;
   border-radius: 8px;
+  margin-right: 10px;
+  
+  &:last-child {
+    margin-right: 0;
+  }
 }
 
 .etherscan-container span,
@@ -533,6 +558,13 @@ border-radius: 6px;
   font-weight: 200;
   /* width: 7rem; */
   min-width: 150px!important;
+}
+
+.btnbig {
+  cursor: pointer;
+  background-color: #ED1EA0;
+  border-radius: 10px;
+  display: inline;
 }
 
 .table-btn {
