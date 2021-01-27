@@ -216,20 +216,6 @@
     </div>
   </Accordion>
   
-  <Accordion class="flex flex-col">
-    <button class="accordionbutton flex flex-col" slot="header" let:toggle on:click={toggle}>Are you listing DOUGH on centralised exchanges?</button>
-    <div class="accordioncontent">
-      something
-    </div>
-  </Accordion>
-  
-  <Accordion class="flex flex-col">
-    <button class="accordionbutton flex flex-col" slot="header" let:toggle on:click={toggle}>Is DOUGH inlcuded in any of the pies?</button>
-    <div class="accordioncontent">
-      Is DOUGH inlcuded in any of the pies?
-    </div>
-  </Accordion>
-  
   </AccordionGroup>
   </div>
 
