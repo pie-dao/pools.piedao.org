@@ -71,9 +71,29 @@
       <div class="font-thin mb-20px lg:mb-50px">Built by the community for the community and fully open-source.</div>
     </div>
   </div>
-
 </div>
 
 <JoinPieDAO />
+
+<div class="videocontainer">
+  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video">
+    <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
+  </video>
+  <div class="content flex flex-col spl px-4">
+    <div class="text-lg font-bold md:text-xl text-center mb-1">Grab a slice of the pie</div>
+    <img src={images.doughcolorful} class="" alt="dough" />
+    <div class="text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving wealth creation machine</div>
+    <a href="#/dough">
+      <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" >
+        <div class="w-100pc flex items-center">
+          <div class="mr-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
+          <div class="">
+            <div class="text-base font-bold leading-5">Learn about DOUGH</div>
+          </div>
+        </div>
+      </button>
+    </a>
+  </div>
+</div>
 
 <FeaturedIn />
