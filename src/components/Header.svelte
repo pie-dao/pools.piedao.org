@@ -168,9 +168,12 @@
     </div>
 
     
+    <a class="pl-1 text-sm leading-5 font-medium text-gray-700 hidden md:block" href='#/dough' rel="noopener noreferrer">
+     | DOUGH
+    </a>
     
-    <a class="text-sm leading-5 font-medium text-gray-700 hidden md:block" href='#/learn' rel="noopener noreferrer">
-      Learn
+    <a class="pl-3 text-sm leading-5 font-medium text-gray-700 hidden md:block" href='#/learn' rel="noopener noreferrer">
+     | Learn
     </a>
     
     <div class="hidden md:block">
