@@ -798,8 +798,8 @@ const selectPool = (_pool) => {
               {#if $farming[pool.addressUniPoll] !== undefined && pool.addressTokenToStake !== "0xe4f726adc8e89c6a6017f01eada77865db22da14"}
                 <br/><br/>
                 
-                <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} BPT </strong>.</p>
-                <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} BPT</strong> staked in the Staking contract.</p>
+                <p>There are total of  : <strong>{toFixed($farming[pool.addressUniPoll].totalBPTAmount, 4)} {pool.toStakeSymbol} </strong>.</p>
+                <p>There are total   : <strong>{toFixed($farming[pool.addressUniPoll].totalStakedBPTAmount, 4)} {pool.toStakeSymbol}</strong> staked in the Staking contract.</p>
                 {#if pool.KeyAddressTokenToStake && $balances[pool.KeyUnipoolBalance]}
                   <p>You are staking   : <strong>{toFixed($balances[pool.KeyUnipoolBalance] * 100 / $farming[pool.addressUniPoll].totalStakedBPTAmount, 3) }% </strong> of the pool
                           = [{toFixed($farming[pool.addressUniPoll].DOUGHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)} {pool.containing[0].symbol}, {toFixed($farming[pool.addressUniPoll].WETHperBPT * $balances[pool.KeyUnipoolBalance].toNumber(), 2)}  {pool.containing[1].symbol}]
@@ -818,14 +818,10 @@ const selectPool = (_pool) => {
               {/if}
 
               <br/><br/>
-              <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a href={pool.poolLink}>HERE</a></p>
+              <p>You can add liquidity to the {pool.platform} pool to get {pool.toStakeSymbol} tokens <a target="_blank" href={pool.poolLink}>HERE</a></p>
               <p>Weekly rewards for this pool are <strong>{pool.weeklyRewards} {pool.rewards_token}</strong></p>
-              {#if pool.id != 2}
-                <p>Buy {pool.containing[0].symbol} on <a target="_blank" href="https://balancer.exchange/#/swap/ether/{pool.containing[0].address}">Balancer</a> or <a href="#/pools/{pool.containing[0].address}">mint now!</a></p>
-              {:else}
-                <p><a href="#/pools/{pool.containing[0].address}">Mint {pool.containing[0].symbol} now!</a></p>
-              {/if}
-              <p>Buy DOUGH on <a target="_blank" href="https://balancer.exchange/#/swap/ether/0xad32A8e6220741182940c5aBF610bDE99E737b2D">Balancer</a></p>
+              <p><a href="#/swap">Buy {pool.containing[0].symbol} !</a></p>
+              <p><a href="#/swap">Buy DOUGH!</a></p>
             </div>
         {/if}
     </div>
