@@ -574,7 +574,7 @@ const selectPool = (_pool) => {
                   <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
                     <div class="title text-lg"> {ammPool.name} </div>
                     <div class="subtitle font-thin">{ammPool.description}</div>
-                    <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
+                    <!-- <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div> -->
                     <div class="apy"> <a href={ammPool.poolLink} target="_blank"> {ammPool.platform} </a></div>
                     <div class="apy">
                       {#if $farming[ammPool.addressUniPoll] !== undefined}
@@ -594,7 +594,7 @@ const selectPool = (_pool) => {
                   <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.logos.piedao_clean} alt="PieDAO logo" />
                     <div class="title text-lg"> {ammPool.name} </div>
                     <div class="subtitle font-thin">{ammPool.description}</div>
-                    <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div>
+                    <!-- <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div> -->
                     <div class="apy">{ammPool.platform}</div>
                     
                     {#if ammPool.contractType === 'Geyser'}
