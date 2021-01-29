@@ -323,7 +323,7 @@ const incentivizedPools = [
     toStakeDesc: 'Uniswap: YPIE/ETH',
     platform: '🦄 Uniswap',
     description: 'Jan 29th - Feb 19th / 4pm UTC',
-    weeklyRewards: 0,
+    weeklyRewards: 20000,
     apy: 1.8,
     allowance: 0,
     allowanceKey: '',
