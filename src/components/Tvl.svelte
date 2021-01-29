@@ -111,6 +111,6 @@
 
   </script>
 
-  <button on:click={triggerConfetti} id="totalLiquidityButton" class="table-btn highlight-box">
+  <!-- <button on:click={triggerConfetti} id="totalLiquidityButton" class="table-btn highlight-box">
         TVL: {formatFiat((pieLiquidity+stakedLiquidity).toFixed(2).toString())}
-  </button>
+  </button> -->

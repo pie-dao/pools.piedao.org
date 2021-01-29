@@ -2,7 +2,7 @@ export default class ApiOx {
 
     constructor() {
         this.baseUrl = 'https://api.0x.org/swap/v1/'
-        this.slippage = 1;
+        this.slippage = 3;
     }
 
     async getQuote(_sellToken, _buyToken, amount) {
