@@ -46,6 +46,11 @@ flex: 1 1 0;
   visibility: hidden;
 }
 
+.crisp {
+  shape-rendering:crispEdges;
+  image-rendering: crisp-edges;
+}
+
 .border-half {border: 0.5px;}
 
 .border-thin {border: solid 0.5px grey;}
