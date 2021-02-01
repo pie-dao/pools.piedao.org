@@ -171,7 +171,7 @@
 }
 
 </script>
-<SpreadBanner />
+<!-- <SpreadBanner /> -->
 <Modal title="NAV vs Price" backgroundColor="#f3f3f3" bind:this="{modalinfo}">
   <span slot="content" class="p-4 font-thin">
     <strong>NAV</strong><br/>
