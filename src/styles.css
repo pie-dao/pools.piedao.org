@@ -231,6 +231,12 @@ flex: 1 1 0;
   border: solid 0.5px #d1d1d1;
 }
 
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .thinborder {
+    border: solid 1px #d1d1d1;
+  }
+}
+
 .thinborderight {
   border-right: solid 0.5px #d1d1d1;
 }
