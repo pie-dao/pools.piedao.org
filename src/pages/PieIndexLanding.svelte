@@ -127,7 +127,6 @@
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
     metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
-    console.log('metadata', metadata);
     initialized = true;
   })();
 
@@ -140,6 +139,24 @@
 
   $: getNav =(() => {
     return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
+  })()
+
+  $: getSpread = ( () => {
+    let nav = parseFloat($pools[token+"-nav"]);
+    let price = parseFloat(tokenPrice);
+
+    if(!nav || !price) {
+      return {
+        label: 'Spread',
+        number: `n/a`
+      };
+    }
+
+    let spread = (price - nav) / price * 100;
+    return {
+      label: spread > 0 ? 'Premium' : 'Discount',
+      number: `${spread.toFixed(2)}%`
+    };
   })()
 
   const renderWidget = async () => {
@@ -264,10 +281,10 @@
 
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black text-black">
-        -$ 0.11
+        {getSpread.number}
       </div>
       <TooltipButton tooltip="Difference between NAV and the Pie current price on exchanges">
-      <div class="font-thin text-xs md:text-base text-black">Spread</div>
+      <div class="font-thin text-xs md:text-base text-black">{getSpread.label}</div>
       </TooltipButton>
     </div>
 
