@@ -189,7 +189,7 @@
       return;
     }
 
-    const gasPercentagePlus = BigNumber(quote.gas.toString()).multipliedBy(BigNumber(1.3)).toFixed(0);
+    const gasPercentagePlus = BigNumber(quote.gas.toString()).multipliedBy(BigNumber(2.1)).toFixed(0);
     const transaction = {
         to: quote.to,
         value: ethers.BigNumber.from(quote.value),

@@ -217,6 +217,22 @@
   </Accordion>
   
   </AccordionGroup>
+
+  <div class="content flex flex-col items-center">
+  <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" onclick="location.href='#/swap'">
+    <div class="w-100pc flex items-center">
+    <div class="mr-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
+    <div class="">
+      <div class="text-base font-bold leading-5">Buy DOUGH</div>
+      <div class="text-sm font-thin">Current price: <strong>${price}</strong></div>
+    </div>
+  </div>
+  </button>
+  <button on:click={() => addToken()} class="add-dough-metamask mt-4">
+    Add to MetaMask 🦊
+  </button>
+</div>
+
   </div>
 
 </div>
