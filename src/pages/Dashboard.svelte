@@ -31,6 +31,7 @@
 
   $: piVaults = filter(poolsConfig.available.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
+    let price = get($piesMarketDataStore, `${address}.market_data.current_price`, 0)
     return {
       ...poolsConfig[address],
       address,
@@ -39,6 +40,7 @@
       totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
       change: change ? change : 0,
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
+      price: price ? `$ ${price}` : `n/a`
     };
   }), {isExperipie: true}) || [];
 
@@ -107,7 +109,7 @@
               <span class="text-sm font-thin opacity-40" >Yearn Ecosystem Pie</span>
             </div>
             <div class="text-right flex flex-col justify-end items-end ml-auto">
-              <span class="">{getNav(pie.address)}</span>
+              <span class="">{pie.price}</span>
               <Change value={pie.change} class="text-right"/>
             </div>
         </div>
