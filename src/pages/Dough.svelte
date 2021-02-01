@@ -91,7 +91,7 @@
   </video>
   <div class="content flex flex-col spl px-4">
     <div class="text-lg font-bold md:text-xl text-center mb-1">Grab a slice of the pie</div>
-    <img src={images.doughcolorful} class="" alt="dough" />
+    <img src={images.doughcolorful} class="crisp" alt="dough" />
     <div class="text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving wealth creation machine</div>
     <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" onclick="location.href='#/swap'">
       <div class="w-100pc flex items-center">
