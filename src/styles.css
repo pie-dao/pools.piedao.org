@@ -1636,8 +1636,19 @@ outline: none;
   }
 }
 
-
-
 .videocontainer div {
   z-index: 1;
+}
+
+
+.SpreadBanner {
+  background-image: url(https://www.dexwallet.io/img/piebg.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: rgb(0 0 0 / 15%) 0px 10px 10px 0px;
+}
+
+.invertcolor {
+  filter: invert(1);
 }

@@ -12,6 +12,7 @@
   import LiquidityModal from "../components/modals/LiquidityModal.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
   import CoinGeckoBanner from "../components/CoinGeckoBanner.svelte";
+  import SpreadBanner from "../components/SpreadBanner.svelte";
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
@@ -153,6 +154,7 @@
 }
 
 </script>
+<SpreadBanner />
 <Modal title="NAV vs Price" backgroundColor="#f3f3f3" bind:this="{modalinfo}">
   <span slot="content" class="p-4 font-thin">
     <strong>NAV</strong><br/>
