@@ -250,11 +250,14 @@
       <div class="text-md md:text-md font-black text-pink">
         {getNav}
       </div>
-      <div class="font-bold text-xs md:text-base text-pink">
-        <a on:click={() => {
-          modalinfo.open()
-        }} class="cursor-pointer hover:opacity-60" role="menuitem">NAV</a>
+      <a on:click={() => {
+        modalinfo.open()
+      }} class="cursor-pointer hover:opacity-60" role="menuitem">
+      <div class="flex items-center font-bold text-xs md:text-base text-pink">
+        NAV
+            <img src={images.InfoIcon} class="ml-1" alt="info" width="16px" />
       </div>
+    </a>
     </div>
 
     <div class="p-0 flex-initial self-start mr-8">
