@@ -15,8 +15,8 @@
   }}
 />
 
-<div class="">
-  <div class="w-100pc flex flex-col items-center justify-center gradientanimation py-8 px-6">
+  <div class="w-100pc gradientanimation m-0 p-0 flex justify-center">
+    <div class="max-w-1200px flex flex-col items-center justify-center py-8 px-6">
     <img class="w-80pc md:w-70pc ld:w-60pc block md:hidden"  src={images.herolanding} alt="PieDAO Hero" />
     <img class="w-80pc md:w-70pc ld:w-60pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
     <div class="text-white font-bold text-center font-hero">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
@@ -43,8 +43,8 @@
 
 <div class="content font-huge text-left md:text-center px-6">A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection.</div>
 
-<div class="content gradientbglight rounded py-8 px-6">
-  <div class="flex flex-col md:flex-row">
+<div class="gradientbglight py-12 px-6 flex items-center justify-center">
+  <div class="flex flex-col md:flex-row max-w-1200px">
 <div class="font-huge text-left w-100pc md:w-1/2">Pies are diversified portfolios of top performing crypto assets</div>
 <ul class="text-left font-thin text-base w-100pc md:w-1/2 md:pl-4 list-none md:list-disc">
   <li class="mt-4 md:mt-0">Carefully handpicked by a decentralised community of economically incentivised talent</li>

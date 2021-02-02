@@ -62,7 +62,7 @@ flex: 1 1 0;
 }
 
 #App {
-  max-width: 1200px!important;
+  /* max-width: 1200px!important; */
   margin: 0 auto;
 }
 
@@ -1734,7 +1734,7 @@ outline: none;
 
 
 .gradientanimation {
-  background: linear-gradient(270deg, #ff8932, #fc019f, #a50bce, #1fa6e0, #47d482);
+  background: linear-gradient(270deg, #ff8932, #a50bce, #1fa6e0, #47d482);
   background-size: 1000% 1000%;
   -webkit-animation: AnimationName 20s ease infinite;
   -moz-animation: AnimationName 20s ease infinite;
