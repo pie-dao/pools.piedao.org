@@ -15,80 +15,50 @@
   }}
 />
 
-<div class="content flex flex-col spl">
-  <img class="w-100pc h-auto md:w-100pc h-auto"src={images.defimadesimple} alt="PieDAO Hero" />
-</div>
-
-<div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
-
-    <div class="font-thin text-lg mt-10px mb-10px mx-2 md:w-80pc">
-      Automated Portfolio Rebalancing<br/>
-      Diversification Minimizes Risk<br/>
-      Community Governed ETFs
-    </div>
-
-    <div class="flex flex-col justify-around w-100pc content-center lg:flex-row">
-
-      <ProductBox 
-        link="#/pie/0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
-        image={images.defiplusl}
-        title="DEFI+L"
-        subTitle="DeFi Large Cap"
-        description="DeFi’s Blue Chips. Bigger is Better."
-      />
-
-      <ProductBox 
-        link="#/pie/0xe4f726adc8e89c6a6017f01eada77865db22da14"
-        image={images.bcp}
-        title="BCP"
-        subTitle="Balanced Crypto Pie"
-        description="The best of crypto in one token."
-      />
-
-      <ProductBox 
-        link="#/pie/0x8d1ce361eb68e9e05573443c407d4a3bed23b033"
-        image={images.defiplusplus}
-        title="DEFI++"
-        subTitle="DeFi Index"
-        description="The Most Diversified DeFi Index on the Market."
-      />
-  </div>
-
-  <div class="content flex flex-col w-100pc justify-between spl lg:flex-row">
-    <div class="flex w-full flex-col mt-10 p-5 lg:w-7/12">
-      <div class="text-lg lg:text-xl">
-        Tokenized ETFs <br/>
-        governed by a DAO
+<div class="content p-top">
+  <div class="w-100pc flex flex-col items-center justify-center gradientanimation rounded py-8 px-6">
+    <img class="w-80pc md:w-70pc ld:w-60pc"  src={images.herolanding} alt="PieDAO Hero" />
+    <div class="text-white font-bold text-center font-hero">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
+    <div class="text-lg text-white font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
+    <a href="#/pies"><button class="btnwhite m-0 mt-8 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">Select your Pie</button></a>
+    <div class="w-100pc flex flex-col items-start md:flex-row text-left mt-6 mb-2 md:mt-10 mb-6 text-white font-bold text-base">
+      <div class="flex w-100pc justify-start items-center md:justify-center mt-4 md:mt-0 md:w-1/3">
+        <img class="w-40px" src={images.heroicon1} alt="PieDAO Hero" />
+        <span class="ml-4">Diversified exposure to<br class="hidden md:block" />creme-de-la-creme in crypto</span>  
       </div>
-        <img class="w-100pc h-auto md:w-100pc h-auto"src={images.etflike} alt="PieDAO Hero" />
+      <div class="flex w-100pc justify-start items-center md:justify-center mt-4 md:mt-0 md:w-1/3">
+        <img class="w-40px" src={images.heroicon2} alt="PieDAO Hero" />
+        <span class="ml-4">Set and forget strategies<br class="hidden md:block" />for maximum returns</span>
       </div>
-    <div class="flex w-full lg:w-5/12 flex-col mt-2 lg:mt-10 p-5">
-      <div class="font-bold text-lg">Convenient</div>
-      <div class="font-thin mb-20px lg:mb-50px">Broad DeFi exposure at the tap of a button.</div>
-      <div class="font-bold text-lg">Safe</div>
-      <div class="font-thin mb-20px lg:mb-50px">Diversification is the safest strategy. Fully audited and non-custodial.</div>
-      <div class="font-bold text-lg">Transparent</div>
-      <div class="font-thin mb-20px lg:mb-50px">Built by the community for the community and fully open-source.</div>
+      <div class="flex w-100pc justify-start items-center md:justify-center mt-4 md:mt-0 md:w-1/3">
+        <img class="w-40px" src={images.heroicon3} alt="PieDAO Hero" />
+        <span class="ml-4">Secure, transparent,<br class="hidden md:block" />and open-source</span>
+      </div>
     </div>
   </div>
 </div>
 
-<JoinPieDAO />
+
+
+<div class="content font-huge text-center px-6">A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection.</div>
+
+<div class="content font-huge text-left">Pies are diversified portfolios of top performing crypto assets</div>
+<div class="content"></div>
 
 <div class="videocontainer">
   <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video">
     <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
   </video>
   <div class="content flex flex-col spl px-4">
-    <div class="text-lg font-bold md:text-xl text-center mb-1">Grab a slice of the pie</div>
+    <div class="text-lg font-bold md:text-xl text-center mb-1">Want a slice of the pie?</div>
     <img src={images.doughcolorful} class="" alt="dough" />
-    <div class="text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving wealth creation machine</div>
+    <div class="text-base md:text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving wealth creation machine</div>
     <a href="#/dough">
       <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" >
         <div class="w-100pc flex items-center">
           <div class="mr-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
           <div class="">
-            <div class="text-base font-bold leading-5">Learn about DOUGH</div>
+            <div class="text-base font-bold leading-5">Learn more</div>
           </div>
         </div>
       </button>

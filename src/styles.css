@@ -200,12 +200,27 @@ flex: 1 1 0;
 
 .font-huge {
   font-size: 3rem;
-  line-height: 3.6rem;
+  line-height: 3.5rem;
 }
 
 .font-veryhuge {
   font-size: 4rem;
-  line-height: 5rem;
+}
+
+.font-hero {
+  font-size: 6rem;
+  line-height: 6rem;
+}
+
+@media (max-width: 768px) {
+  .font-hero {
+    font-size: 3rem;
+    line-height: 3rem;
+  }
+  .font-huge {
+    font-size: 2rem;
+    line-height: 2.2rem;
+  }
 }
 
 
@@ -272,7 +287,7 @@ flex: 1 1 0;
 }
 
 .allocation-breakdown-container .left {
-  @apply flex-1 mr-8;
+  @apply flex-1 mr-8 items-center;
 }
 
 .allocation-breakdown-container .right {
@@ -587,6 +602,32 @@ flex: 1 1 0;
   background-color: black;
   border-radius: 10px;
   display: inline;
+}
+
+.btnwhite {
+  cursor: pointer;
+  color: #ED1EA0 ;
+  background-color: white;
+  border-radius: 10px;
+  display: inline;
+}
+
+.btnwhiteghost {
+  cursor: pointer;
+  color: white ;
+  background-color: none;
+  border-radius: 10px;
+  display: inline;
+  border: solid 1px white;
+}
+
+.btnwhiteghost:hover {
+  cursor: pointer;
+  color: #ED1EA0 ;
+  background-color: white;
+  border-radius: 10px;
+  display: inline;
+  border: solid 1px white;
 }
 
 .add-dough-metamask {
@@ -1639,6 +1680,9 @@ outline: none;
     top: 50%;
     min-width: 180%;
   }
+  .p-top {
+    padding-top: 10px!important;
+  }
 }
 
 .videocontainer div {
@@ -1656,4 +1700,41 @@ outline: none;
 
 .invertcolor {
   filter: invert(1);
+}
+
+/* background: linear-gradient(270deg, #ff8932, #fc019f, #a50bce, #1fa6e0, #60e98e); */
+
+.gradientanimation {
+  background: linear-gradient(270deg, #ff8932, #a50bce, #1fa6e0, #60e98e);
+  background-size: 1000% 1000%;
+  -webkit-animation: AnimationName 20s ease infinite;
+  -moz-animation: AnimationName 20s ease infinite;
+  -o-animation: AnimationName 20s ease infinite;
+  animation: AnimationName 20s ease infinite;
+}
+
+@-webkit-keyframes AnimationName {
+  0%{background-position:0% 26%}
+  50%{background-position:100% 75%}
+  100%{background-position:0% 26%}
+}
+@-moz-keyframes AnimationName {
+  0%{background-position:0% 26%}
+  50%{background-position:100% 75%}
+  100%{background-position:0% 26%}
+}
+@-o-keyframes AnimationName {
+  0%{background-position:0% 26%}
+  50%{background-position:100% 75%}
+  100%{background-position:0% 26%}
+}
+@keyframes AnimationName {
+  0%{background-position:0% 26%}
+  50%{background-position:100% 75%}
+  100%{background-position:0% 26%}
+}
+
+
+.cursor-pie {
+  cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>🥧</text></svg>") 16 0,auto;
 }

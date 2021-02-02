@@ -50,13 +50,13 @@
   };
 
 </script>
-<div class="header-container">
+<div class="header-container" style="padding-bottom:0!important; padding-top:10px!important;">
   <div class="left">
     <a href="#/">
       <img src={images.logos.piedao} alt={$_('general.logo')} />
     </a>
   </div>
-  <div class="left ml-5px text-grey-200 text-sm">
+  <div class="left ml-5px text-grey-200 text-sm opacity-20 cursor-pie">
     (beta)
   </div>
   <div class="right">
@@ -125,7 +125,7 @@
     <div class="relative inline-block text-left block md:hidden focus:outline-none">
       <div>
         <span class="">
-          <button class="hamburger mr-5" type="button" on:click={toggleMobileMenu}>
+          <button class="hamburger" type="button" on:click={toggleMobileMenu}>
             <img src={images.icons.hamburger} alt="hamburger icon" class="w-min-20px" />
           </button>
         </span>
