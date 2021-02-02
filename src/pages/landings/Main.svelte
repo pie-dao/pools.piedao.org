@@ -40,21 +40,31 @@
 
 
 
-<div class="content font-huge text-center px-6">A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection.</div>
+<div class="content font-huge text-left md:text-center px-6">A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection.</div>
 
-<div class="content font-huge text-left">Pies are diversified portfolios of top performing crypto assets</div>
-<div class="content"></div>
+<div class="content gradientbglight rounded py-8 px-6">
+  <div class="flex flex-col md:flex-row">
+<div class="font-huge text-left w-100pc md:w-1/2">Pies are diversified portfolios of top performing crypto assets</div>
+<ul class="text-left font-thin text-base w-100pc md:w-1/2 md:pl-4 list-none md:list-disc">
+  <li class="mt-4 md:mt-0">Carefully handpicked by a decentralised community of economically incentivised talent</li>
+  <li class="mt-4">Maximised returns through latest-trend active strategies like staking, lending, and yield-farming - completely automated</li>
+  <li class="mt-4">Low-cost onboarding, saving you 97% of Ethereum gas fees</li>
+  <li class="mt-4">Architecture that enhances security & minimises risk </li>
+</ul>
 
-<div class="videocontainer">
-  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video">
+</div>
+</div>
+
+<div class="videocontainer-landing my-6">
+  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video-landing">
     <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
   </video>
-  <div class="content flex flex-col spl px-4">
-    <div class="text-lg font-bold md:text-xl text-center mb-1">Want a slice of the pie?</div>
-    <img src={images.doughcolorful} class="" alt="dough" />
-    <div class="text-base md:text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving wealth creation machine</div>
+  <div class="content flex flex-col spl px-4 z-50">
+    <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div>
+    <img src={images.doughcolorful} class="w-50pc" alt="dough" />
+    <div class="text-base md:text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
     <a href="#/dough">
-      <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" >
+      <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80 mb-6" >
         <div class="w-100pc flex items-center">
           <div class="mr-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
           <div class="">
