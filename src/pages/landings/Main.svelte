@@ -15,22 +15,23 @@
   }}
 />
 
-<div class="content p-top">
-  <div class="w-100pc flex flex-col items-center justify-center gradientanimation rounded py-8 px-6">
-    <img class="w-80pc md:w-70pc ld:w-60pc"  src={images.herolanding} alt="PieDAO Hero" />
+<div class="">
+  <div class="w-100pc flex flex-col items-center justify-center gradientanimation py-8 px-6">
+    <img class="w-80pc md:w-70pc ld:w-60pc block md:hidden"  src={images.herolanding} alt="PieDAO Hero" />
+    <img class="w-80pc md:w-70pc ld:w-60pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
     <div class="text-white font-bold text-center font-hero">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
     <div class="text-lg text-white font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
-    <a href="#/pies"><button class="btnwhite m-0 mt-8 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">Select your Pie</button></a>
-    <div class="w-100pc flex flex-col items-start md:flex-row text-left mt-6 mb-2 md:mt-10 mb-6 text-white font-bold text-base">
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-4 md:mt-0 md:w-1/3">
-        <img class="w-40px" src={images.heroicon1} alt="PieDAO Hero" />
-        <span class="ml-4">Diversified exposure to<br class="hidden md:block" />creme-de-la-creme in crypto</span>  
-      </div>
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-4 md:mt-0 md:w-1/3">
+    <a href="#/pies"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">Select your Pie</button></a>
+    <div class="w-100pc flex flex-col md:flex-row items-stretch text-left mt-6 mb-0 md:mt-10 md:mb-6 text-white font-bold text-base">
+      <div class="flex w-100pc justify-start items-center md:justify-center mt-4 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
         <img class="w-40px" src={images.heroicon2} alt="PieDAO Hero" />
         <span class="ml-4">Set and forget strategies<br class="hidden md:block" />for maximum returns</span>
       </div>
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-4 md:mt-0 md:w-1/3">
+      <div class="flex w-100pc justify-start items-center md:justify-center mt-4 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
+        <img class="w-40px" src={images.heroicon1} alt="PieDAO Hero" />
+        <span class="ml-4">Diversified exposure to<br class="hidden md:block" />crème de la crème in crypto</span>  
+      </div>
+      <div class="flex w-100pc justify-start items-center md:justify-center mt-4 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
         <img class="w-40px" src={images.heroicon3} alt="PieDAO Hero" />
         <span class="ml-4">Secure, transparent,<br class="hidden md:block" />and open-source</span>
       </div>

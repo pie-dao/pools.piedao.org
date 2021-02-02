@@ -50,7 +50,7 @@
   };
 
 </script>
-<div class="header-container" style="padding-bottom:0!important; padding-top:10px!important;">
+<div class="header-container">
   <div class="left">
     <a href="#/">
       <img src={images.logos.piedao} alt={$_('general.logo')} />

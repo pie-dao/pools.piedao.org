@@ -612,6 +612,15 @@ flex: 1 1 0;
   display: inline;
 }
 
+.btnblack {
+  cursor: pointer;
+  color: white ;
+  background-color: black;
+  border-radius: 10px;
+  display: inline;
+  padding: 20px 0;
+}
+
 .btnwhiteghost {
   cursor: pointer;
   color: white ;
@@ -1721,10 +1730,11 @@ outline: none;
   filter: invert(1);
 }
 
-/* background: linear-gradient(270deg, #ff8932, #fc019f, #a50bce, #1fa6e0, #60e98e); */
+/* background: linear-gradient(270deg, #ff8932, #a50bce, #1fa6e0, #60e98e); */
+
 
 .gradientanimation {
-  background: linear-gradient(270deg, #ff8932, #a50bce, #1fa6e0, #60e98e);
+  background: linear-gradient(270deg, #ff8932, #fc019f, #a50bce, #1fa6e0, #47d482);
   background-size: 1000% 1000%;
   -webkit-animation: AnimationName 20s ease infinite;
   -moz-animation: AnimationName 20s ease infinite;
@@ -1763,4 +1773,13 @@ outline: none;
 
 .cursor-pie {
   cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg'  width='40' height='48' viewport='0 0 100 100' style='fill:black;font-size:24px;'><text y='50%'>🥧</text></svg>") 16 0,auto;
+}
+
+.bg-black-alpha {
+  background-color:rgba(0, 0, 0, 0.15);
+  background-blend-mode: multiply;
+}
+
+.shrink {
+  flex-shrink: 3;
 }
