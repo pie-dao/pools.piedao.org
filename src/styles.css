@@ -46,6 +46,11 @@ flex: 1 1 0;
   visibility: hidden;
 }
 
+.crisp {
+  shape-rendering:crispEdges;
+  image-rendering: crisp-edges;
+}
+
 .border-half {border: 0.5px;}
 
 .border-thin {border: solid 0.5px grey;}
@@ -244,7 +249,7 @@ flex: 1 1 0;
 }
 
 .bg-lightgrey {
-  background-color: #f2f2f2;
+  background-color: #f7f7f7;
 }
 
 .bg-lightgrey-2 {
@@ -1488,18 +1493,19 @@ button.svelte-1nn74u2 {border: none!important; padding: 1rem 0rem!important;}
 .infolink:before {
   content: '?';
   display: inline-block;
-  font-family: sans-serif;
-  font-weight: bold;
+  font-family: Rubik, sans-serif;
+  font-weight: 400;
   text-align: center;
-  width: 18px;
-  height: 18px;
-  font-size: 14px;
-  line-height: 15px;
+  width: 15px;
+  height: 15px;
+  font-size: 11px;
+  line-height: 13px;
   border-radius: 18px;
   padding: 1px;
-  color: black;
-  background: white;
-  border: 1px solid black;
+  color: white;
+  background: black;
+  /* border: 1px solid black; */
+  border: none;
   text-decoration: none;
 }
 
@@ -1635,8 +1641,19 @@ outline: none;
   }
 }
 
-
-
 .videocontainer div {
   z-index: 1;
+}
+
+
+.SpreadBanner {
+  background-image: url(https://www.dexwallet.io/img/piebg.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: rgb(0 0 0 / 15%) 0px 10px 10px 0px;
+}
+
+.invertcolor {
+  filter: invert(1);
 }
