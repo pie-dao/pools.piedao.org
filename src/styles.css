@@ -1646,3 +1646,7 @@ outline: none;
 .videocontainer div {
   z-index: 1;
 }
+
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
