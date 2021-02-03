@@ -64,6 +64,10 @@
   "heroicon1": "https://raw.githubusercontent.com/pie-dao/brand/2a03eabde74891814e1b44b736ca6a43a9696747/misc/hero-icon-1.svg",
   "heroicon2": "https://raw.githubusercontent.com/pie-dao/brand/2a03eabde74891814e1b44b736ca6a43a9696747/misc/hero-icon-2.svg",
   "heroicon3": "https://raw.githubusercontent.com/pie-dao/brand/2a03eabde74891814e1b44b736ca6a43a9696747/misc/hero-icon-3.svg",
+  "cardplusplus": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/cardplusplus.png",
+  "cardbcp": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/cardbcp.png",
+  "cardplusl": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/carddefil.png",
+
   "tokenmigration": "https://i.ibb.co/tY41vvx/migra.png",
   "liquiditymining": "https://i.ibb.co/3YyvfzX/farming.png",
   "vestingperiod": "https://i.ibb.co/VSyRLBY/astro.png",

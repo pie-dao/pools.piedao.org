@@ -40,10 +40,79 @@
 </div>
 
 
+<div class="content font-huge text-left md:text-center">
+  <span class="mt-6 mb-4 px-6">A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection.</span>
+</div>
 
-<div class="content font-huge text-left md:text-center px-6">A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection.</div>
 
-<div class="gradientbglight py-12 px-6 flex items-center justify-center">
+<!-- <div class="w-100pc m-0 p-0 flex justify-center">
+  <div class="max-w-1200px flex flex-col md:flex-row items-start justify-center py-8 px-6">
+  <a href="ciao" class="w-100pc md:w-1/3 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+    <div class="w-100pc flex justify-center py-16 gradientbglightpurple rounded-top">
+    <img class="w-40pc" src="{images.defiplusplus}" alt="card" />
+  </div>
+      <div class="p-4 flex flex-col">
+      <span class="text-lg">DeFi++</span>
+      <span class="font-thin text.base">Capturing the best performing token of DeFi both small and large cap</span>
+      </div>
+    </a>
+    <a href="ciao" class="w-100pc md:w-1/3 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+      <div class="w-100pc flex justify-center py-16 gradientbglightorange rounded-top">
+      <img class="w-40pc" src="{images.bcp}" alt="card" />
+    </div>
+        <div class="p-4 flex flex-col">
+        <span class="text-lg">BCP</span>
+        <span class="font-thin text.base">The most diversified, peace of mind exposure to crypto</span>
+        </div>
+    </a>
+      <a href="ciao" class="w-100pc md:w-1/3 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+        <div class="w-100pc flex justify-center py-16 gradientbglightblue rounded-top">
+        <img class="w-40pc" src="{images.defiplusl}" alt="card" />
+      </div>
+          <div class="p-4 flex flex-col">
+          <span class="text-lg">DeFi+L</span>
+          <span class="font-thin text.base">All the top cap awesome DeFi project you were dreaming of</span>
+          </div>
+      </a>
+</div>
+</div> -->
+
+<div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll">
+  <div class="md:max-w-1200px flex items-start justify-start py-8 px-6">
+
+  <a href="ciao" class="min-w-60pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mr-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+    <div class="w-100pc flex justify-center py-16 gradientbglightpurple rounded-top">
+    <img class="w-40pc" src="{images.defiplusplus}" alt="card" />
+  </div>
+      <div class="p-4 flex flex-col">
+      <span class="text-lg">DeFi++</span>
+      <span class="font-thin text.base">Capturing the best performing token of DeFi both small and large cap</span>
+      </div>
+    </a>
+    <a href="ciao" class="min-w-60pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+      <div class="w-100pc flex justify-center py-16 gradientbglightorange rounded-top">
+      <img class="w-40pc" src="{images.bcp}" alt="card" />
+    </div>
+        <div class="p-4 flex flex-col">
+        <span class="text-lg">BCP</span>
+        <span class="font-thin text.base">The most diversified, peace of mind exposure to crypto</span>
+        </div>
+    </a>
+    <a href="ciao" class="min-w-60pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+      <div class="w-100pc flex justify-center py-16 gradientbglightblue rounded-top">
+        <img class="w-40pc" src="{images.defiplusl}" alt="card" />
+      </div>
+          <div class="p-4 flex flex-col">
+          <span class="text-lg">DeFi+L</span>
+          <span class="font-thin text.base">All the top cap awesome DeFi project you were dreaming of</span>
+          </div>
+      </a>
+
+</div>
+</div>
+
+
+<div class="gradientbglightgreen py-12 px-6 flex items-center justify-center">
   <div class="flex flex-col md:flex-row max-w-1200px">
 <div class="font-huge text-left w-100pc md:w-1/2">Pies are diversified portfolios of top performing crypto assets</div>
 <ul class="text-left font-thin text-base w-100pc md:w-1/2 md:pl-4 list-none md:list-disc">
