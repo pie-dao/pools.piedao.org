@@ -203,8 +203,8 @@ flex: 1 1 0;
 }
 
 .font-huge {
-  font-size: 3rem;
-  line-height: 3.5rem;
+  font-size: 2.8rem;
+  line-height: 3.2rem;
 }
 
 .font-veryhuge {
@@ -1099,6 +1099,20 @@ opacity: 0.6;
   border: none;
   padding: 0px 0.5rem;
 }
+
+.newsletter-input-from {
+  color: black;
+  font-weight: 500;
+  outline: none;
+  border: 1px solid black;
+  background-color: white;
+  font-size: 24px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  appearance: textfield;
+}
+
 
 .oven-button {
   -webkit-box-align: center;
