@@ -1674,6 +1674,7 @@ outline: none;
 .videocontainer-landing {
   width: 100%;
   height: 100%;
+  height: 50vh;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -1683,6 +1684,8 @@ outline: none;
   position: absolute;
   left: 50%;
   top: 50%;
+  min-width: 120%;
+  min-height: 120%;
   -webkit-transform: translate(-50%,-55%);
   -moz-transform: translate(-50%,-55%);
   -ms-transform: translate(-50%,-55%);
@@ -1813,3 +1816,20 @@ outline: none;
 
 .scale { transition: all .2s ease-in-out; }
 .scale:hover { transform: scale(1.05); }
+
+.single-line {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: pre;
+}
+
+.hidescrollbar::-webkit-scrollbar {
+display: none;
+width: 0px;  /* Remove scrollbar space */
+background: transparent;  /* Optional: just make scrollbar invisible */
+scrollbar-width: none;  /* Firefox */
+}
+.hidescrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
