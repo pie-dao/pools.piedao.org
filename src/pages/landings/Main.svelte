@@ -17,8 +17,8 @@
 
   <div class="w-100pc gradientanimation m-0 p-0 flex justify-center">
     <div class="max-w-1200px flex flex-col items-center justify-center py-8 px-6">
-    <img class="w-80pc md:w-70pc ld:w-60pc block md:hidden"  src={images.herolandingmobile} alt="PieDAO Hero" />
-    <img class="w-80pc md:w-70pc ld:w-60pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
+    <img class="w-90pc block md:hidden mb-2"  src={images.herolandingmobile} alt="PieDAO Hero" />
+    <img class="md:w-70pc lg:w-60pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
     <div class="text-white font-bold text-center font-hero">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
     <div class="text-lg text-white font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
     <a href="#/pies"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">Select your Pie</button></a>
