@@ -48,7 +48,7 @@
 <div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll">
   <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-8 px-6">
 
-  <a href="ciao" class="min-w-60pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mr-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+  <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mr-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
     <div class="w-100pc flex justify-center py-16 gradientbglightpurple rounded-top">
     <img class="w-40pc h-40pc" src="{images.defiplusplus}" alt="card" />
   </div>
@@ -57,7 +57,7 @@
       <span class="font-thin text.base">Capturing the best performing token of DeFi both small and large cap</span>
       </div>
     </a>
-    <a href="ciao" class="min-w-60pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+    <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
       <div class="w-100pc flex justify-center py-16 gradientbglightorange rounded-top">
       <img class="w-40pc h-40pc" src="{images.bcp}" alt="card" />
     </div>
@@ -66,7 +66,7 @@
         <span class="font-thin text.base">The most diversified, peace of mind exposure to crypto</span>
         </div>
     </a>
-    <a href="ciao" class="min-w-60pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+    <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
       <div class="w-100pc flex justify-center py-16 gradientbglightblue rounded-top">
         <img class="w-40pc h-40pc" src="{images.defiplusl}" alt="card" />
       </div>
