@@ -17,7 +17,7 @@
 
   <div class="w-100pc gradientanimation m-0 p-0 flex justify-center">
     <div class="max-w-1200px flex flex-col items-center justify-center py-8 px-6">
-    <img class="w-80pc md:w-70pc ld:w-60pc block md:hidden"  src={images.herolanding} alt="PieDAO Hero" />
+    <img class="w-80pc md:w-70pc ld:w-60pc block md:hidden"  src={images.herolandingmobile} alt="PieDAO Hero" />
     <img class="w-80pc md:w-70pc ld:w-60pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
     <div class="text-white font-bold text-center font-hero">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
     <div class="text-lg text-white font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
@@ -40,49 +40,17 @@
 </div>
 
 
-<div class="content font-huge text-left md:text-center">
-  <span class="mt-6 mb-4 px-6">A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection.</span>
+<div class="content font-huge text-left md:text-center" style="padding-bottom: 0!important;">
+  <span class="mt-6 mb-0 md:mb-4 px-6">A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection.</span>
 </div>
 
-
-<!-- <div class="w-100pc m-0 p-0 flex justify-center">
-  <div class="max-w-1200px flex flex-col md:flex-row items-start justify-center py-8 px-6">
-  <a href="ciao" class="w-100pc md:w-1/3 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-    <div class="w-100pc flex justify-center py-16 gradientbglightpurple rounded-top">
-    <img class="w-40pc" src="{images.defiplusplus}" alt="card" />
-  </div>
-      <div class="p-4 flex flex-col">
-      <span class="text-lg">DeFi++</span>
-      <span class="font-thin text.base">Capturing the best performing token of DeFi both small and large cap</span>
-      </div>
-    </a>
-    <a href="ciao" class="w-100pc md:w-1/3 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-      <div class="w-100pc flex justify-center py-16 gradientbglightorange rounded-top">
-      <img class="w-40pc" src="{images.bcp}" alt="card" />
-    </div>
-        <div class="p-4 flex flex-col">
-        <span class="text-lg">BCP</span>
-        <span class="font-thin text.base">The most diversified, peace of mind exposure to crypto</span>
-        </div>
-    </a>
-      <a href="ciao" class="w-100pc md:w-1/3 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-        <div class="w-100pc flex justify-center py-16 gradientbglightblue rounded-top">
-        <img class="w-40pc" src="{images.defiplusl}" alt="card" />
-      </div>
-          <div class="p-4 flex flex-col">
-          <span class="text-lg">DeFi+L</span>
-          <span class="font-thin text.base">All the top cap awesome DeFi project you were dreaming of</span>
-          </div>
-      </a>
-</div>
-</div> -->
 
 <div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll">
-  <div class="md:max-w-1200px flex items-start justify-start py-8 px-6">
+  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-8 px-6">
 
   <a href="ciao" class="min-w-60pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mr-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
     <div class="w-100pc flex justify-center py-16 gradientbglightpurple rounded-top">
-    <img class="w-40pc" src="{images.defiplusplus}" alt="card" />
+    <img class="w-40pc h-40pc" src="{images.defiplusplus}" alt="card" />
   </div>
       <div class="p-4 flex flex-col">
       <span class="text-lg">DeFi++</span>
@@ -91,7 +59,7 @@
     </a>
     <a href="ciao" class="min-w-60pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
       <div class="w-100pc flex justify-center py-16 gradientbglightorange rounded-top">
-      <img class="w-40pc" src="{images.bcp}" alt="card" />
+      <img class="w-40pc h-40pc" src="{images.bcp}" alt="card" />
     </div>
         <div class="p-4 flex flex-col">
         <span class="text-lg">BCP</span>
@@ -100,13 +68,14 @@
     </a>
     <a href="ciao" class="min-w-60pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
       <div class="w-100pc flex justify-center py-16 gradientbglightblue rounded-top">
-        <img class="w-40pc" src="{images.defiplusl}" alt="card" />
+        <img class="w-40pc h-40pc" src="{images.defiplusl}" alt="card" />
       </div>
           <div class="p-4 flex flex-col">
           <span class="text-lg">DeFi+L</span>
           <span class="font-thin text.base">All the top cap awesome DeFi project you were dreaming of</span>
           </div>
       </a>
+      <div class="block inline-block md:hidden" style="margin-right:2rem!important;">&nbsp;</div>
 
 </div>
 </div>
