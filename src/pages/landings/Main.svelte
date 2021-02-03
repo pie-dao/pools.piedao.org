@@ -1,9 +1,52 @@
 <script>
-  import images from "../../config/images.json";
-  import ProductBox from '../../components/elements/product-box.svelte';
-  import JoinPieDAO from '../../components/JoinPieDAO.svelte';
-  import FeaturedIn from '../../components/FeaturedIn.svelte';
+	import filter from 'lodash/filter';
+  import get from 'lodash/get';
+  import poolsConfig from "../../config/pools.json";
+  import { piesMarketDataStore } from '../../stores/coingecko.js';
+  import { pools } from '../../stores/eth.js';
   import Meta from '../../components/elements/meta.svelte';
+  import images from "../../config/images.json";
+  import FeaturedIn from '../../components/FeaturedIn.svelte';
+  import Change from '../../components/Change.svelte'
+  import Modal from '../../components/elements/Modal.svelte';
+  import LiquidityModal from "../../components/modals/LiquidityModalSwitch.svelte";
+
+  import {
+    getTokenImage,
+    formatFiat,
+  } from "../../components/helpers.js";
+
+  $: pies = filter(poolsConfig.available.map(address => {
+    let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
+    return {
+      ...poolsConfig[address],
+      address,
+      icon: getTokenImage(address),
+      totalLiquidity: $pools[`${address}-usd`] ? formatFiat( $pools[`${address}-usd`].toFixed(2).toString() ) : '-',
+      totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
+      change: change ? change : 0,
+      nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
+    };
+  }), {isExperipie: false}) || [];
+
+  $: piVaults = filter(poolsConfig.available.map(address => {
+    let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
+    let price = get($piesMarketDataStore, `${address}.market_data.current_price`, 0)
+    return {
+      ...poolsConfig[address],
+      address,
+      icon: getTokenImage(address),
+      totalLiquidity: $pools[`${address}-usd`] ? formatFiat( $pools[`${address}-usd`].toFixed(2).toString() ) : '-',
+      totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
+      change: change ? change : 0,
+      nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
+      price: price ? `$ ${price}` : `n/a`
+    };
+  }), {isExperipie: true}) || [];
+
+  $: getNav =((token) => {
+    return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
+  })
 </script>
 
 <Meta 
@@ -21,7 +64,7 @@
     <img class="md:w-70pc lg:w-60pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
     <div class="text-white font-bold text-center font-hero">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
     <div class="text-lg text-white font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
-    <a href="#/pies"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">Select your Pie</button></a>
+    <a href="#/pies w-100pc"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
     <div class="w-100pc flex flex-col md:flex-row items-stretch text-left mt-6 mb-0 md:mt-10 md:mb-6 text-white font-bold text-base">
       <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
         <img class="w-40px" src={images.heroicon2} alt="PieDAO Hero" />
@@ -45,79 +88,27 @@
 </div>
 
 
-<div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll hidescrollbar">
-  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-8 px-6 hidescrollbar">
 
-  <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mr-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-    <div class="w-100pc flex justify-center py-16 gradientbglightpurple rounded-top">
-    <img class="w-40pc h-40pc" src="{images.defiplusplus}" alt="card" />
-  </div>
-      <div class="p-4 flex flex-col">
-      <span class="text-lg">DeFi++</span>
-      <span class="font-thin text.base">Capturing the best performing token of DeFi both small and large cap</span>
-      </div>
-    </a>
-    <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-      <div class="w-100pc flex justify-center py-16 gradientbglightorange rounded-top">
-      <img class="w-40pc h-40pc" src="{images.bcp}" alt="card" />
+
+<div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll hidescrollbar">
+  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-8 px-6 hidescrollbar">  
+  {#each pies as pie}
+    <a href={`#/pie/${pie.address}`} class="min-w-80pc md:min-w-31pc mr-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+      <div class="w-100pc flex justify-center py-16 gradientbglightgreen rounded-top">
+      <img class="w-40pc h-40pc" src={pie.icon} alt={pie.symbol} />
     </div>
         <div class="p-4 flex flex-col">
-        <span class="text-lg">BCP</span>
-        <span class="font-thin text.base">The most diversified, peace of mind exposure to crypto</span>
+        <span class="flex items-center"><span class="text-lg">{pie.symbol}</span><span class="text-lg font-thin mx-2">{getNav(pie.address)}</span><Change value={pie.change} /></span>
+        <span class="font-thin text.base">Exposure to lower marketcap projects that have incredible potential for future growth</span>
         </div>
-    </a>
-    <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-      <div class="w-100pc flex justify-center py-16 gradientbglightblue rounded-top">
-        <img class="w-40pc h-40pc" src="{images.defiplusl}" alt="card" />
-      </div>
-          <div class="p-4 flex flex-col">
-          <span class="text-lg">DeFi+L</span>
-          <span class="font-thin text.base">All the top cap awesome DeFi project you were dreaming of</span>
-          </div>
       </a>
-      <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-        <div class="w-100pc flex justify-center py-16 gradientbglightgreen rounded-top">
-          <img class="w-40pc h-40pc" src="{images.ypietoken}" alt="card" />
-        </div>
-            <div class="p-4 flex flex-col">
-            <span class="text-lg">YPIE</span>
-            <span class="font-thin text.base">Lending and staking strategies on the Yearn Ecosystem</span>
-            </div>
-        </a>
-        <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-          <div class="w-100pc flex justify-center py-16 gradientbglightblue rounded-top">
-            <img class="w-40pc h-40pc" src="{images.defipluss}" alt="card" />
-          </div>
-              <div class="p-4 flex flex-col">
-              <span class="text-lg">DeFi+S</span>
-              <span class="font-thin text.base">Exposure to lower marketcap projects that have incredible potential for future growth</span>
-              </div>
-          </a>
-          <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-            <div class="w-100pc flex justify-center py-16 gradientbglightorange rounded-top">
-              <img class="w-40pc h-40pc" src="{images.usdplus}" alt="card" />
-            </div>
-                <div class="p-4 flex flex-col">
-                <span class="text-lg">USD++</span>
-                <span class="font-thin text.base">A range of centralized and decentralized services produce tokenized US dollars</span>
-                </div>
-            </a>
-            <a href="ciao" class="min-w-80pc md:min-w-31pc md:w-1/3 md:max-w-1/3 mx-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
-              <div class="w-100pc flex justify-center py-16 gradientbglightpurple rounded-top">
-                <img class="w-40pc h-40pc" src="{images.btcplusplus}" alt="card" />
-              </div>
-                  <div class="p-4 flex flex-col">
-                  <span class="text-lg">BTC++</span>
-                  <span class="font-thin text.base">All the benefits of BTC on Ethereum, in the safest way</span>
-                  </div>
-              </a>
-      <div class="block inline-block md:hidden" style="margin-right:2rem!important;">&nbsp;</div>
-
+  {/each}
+    <div class="block inline-block md:hidden" style="margin-right:2rem!important;">&nbsp;</div>
 </div>
 </div>
 
 
-<div class="flex rounded gradientbglightgreen py-6 md:py-12 px-4 md:px-6 mx-6 md:mx-40 flex items-center justify-center">
+<div class="flex rounded gradientbglightblue py-6 md:py-12 px-4 md:px-6 mx-6 md:mx-40 flex items-center justify-center">
   <div class="flex flex-col md:flex-row max-w-1200px px-2 md:px-8">
     <img class="w-70px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" />
     <div class="font-huge text-left w-100pc md:w-1/2">Pies are diversified portfolios of top performing crypto assets</div>
@@ -141,24 +132,15 @@
 </div>
 
 
-<div class="videocontainer-landing my-6">
+<div class="videocontainer my-6">
   <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video-landing">
     <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
   </video>
   <div class="content flex flex-col spl px-4 z-50">
     <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div>
-    <img src={images.doughcolorful} class="w-50pc" alt="dough" />
+    <img src={images.doughcolorful} class="w-100pc md:w-30pc" alt="dough" />
     <div class="text-base md:text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
-    <a href="#/dough">
-      <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80 mb-6" >
-        <div class="w-100pc flex items-center">
-          <div class="mr-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
-          <div class="">
-            <div class="text-base font-bold leading-5">Learn more</div>
-          </div>
-        </div>
-      </button>
-    </a>
+    <a href="#/dough w-100pc"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
   </div>
 </div>
 

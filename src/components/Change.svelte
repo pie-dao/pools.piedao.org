@@ -17,8 +17,8 @@
     </div>
   {:else if value == 0}
   <div class="flex justify-around items-center fitcontent text-black">
-  <div class="ml-2px font-thin">{value.toFixed(2)} %</div>
-  <div class="font-thin">{#if displayLabel} 24h{/if}</div>
+  <!-- <div class="ml-2px font-thin">{value.toFixed(2)} %</div>
+  <div class="font-thin">{#if displayLabel} 24h{/if}</div> -->
   </div>
 
   {:else}
