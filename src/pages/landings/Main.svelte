@@ -7,6 +7,7 @@
   import Meta from '../../components/elements/meta.svelte';
   import images from "../../config/images.json";
   import FeaturedIn from '../../components/FeaturedIn.svelte';
+  import Newsletter from '../../components/Newsletter.svelte';
   import Change from '../../components/Change.svelte'
   import Modal from '../../components/elements/Modal.svelte';
   import LiquidityModal from "../../components/modals/LiquidityModalSwitch.svelte";
@@ -64,7 +65,7 @@
     <img class="md:w-70pc lg:w-60pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
     <div class="text-white font-bold text-center font-hero">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
     <div class="text-lg text-white font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
-    <a href="#/pies w-100pc"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
+    <a href="#/pies"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
     <div class="w-100pc flex flex-col md:flex-row items-stretch text-left mt-6 mb-0 md:mt-10 md:mb-6 text-white font-bold text-base">
       <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
         <img class="w-40px" src={images.heroicon2} alt="PieDAO Hero" />
@@ -88,8 +89,6 @@
 </div>
 
 
-
-
 <div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll hidescrollbar">
   <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-8 px-6 hidescrollbar">  
   {#each pies as pie}
@@ -107,11 +106,14 @@
 </div>
 </div>
 
+<Newsletter />
+
 
 <div class="flex rounded gradientbglightblue py-6 md:py-12 px-4 md:px-6 mx-6 md:mx-40 flex items-center justify-center">
   <div class="flex flex-col md:flex-row max-w-1200px px-2 md:px-8">
     <img class="w-70px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" />
-    <div class="font-huge text-left w-100pc md:w-1/2">Pies are diversified portfolios of top performing crypto assets</div>
+    <div class="text-lg text-left w-100pc block md:hidden leading-8">Pies are diversified portfolios of top performing crypto assets</div>
+    <div class="font-huge text-left w-1/2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
     <ul class="text-left font-thin text-base w-100pc md:w-1/2 md:pl-4 list-outside list-none">
       <li class="mt-4 md:mt-0">✔️ Carefully handpicked by a decentralised community of economically incentivised talent</li>
       <li class="mt-4">✔️ Maximised returns through latest-trend active strategies like staking, lending, and yield-farming - completely automated</li>
@@ -121,15 +123,7 @@
   </div>
 </div>
 
-<div class="flex rounded py-6 md:py-12 px-4 md:px-6 mx-6 md:mx-40 flex items-center justify-center">
-  <div class="flex flex-col max-w-1200px px-2 md:px-8">
-    <div class="font-huge text-left md:text-center w-100pc">Subscribe to The Bakery for latest performance updates and community news</div>
-    <div class="flex flex-col md:flex-row nowrap md:items-stretch justify-center mt-4">
-      <input class="newsletter-input-from rounded p-3 w-100pc md:w-2/5" autocomplete="off" autocorrect="off" type="mail"  placeholder="youre@mail.here" minlength="1" maxlength="79" spellcheck="false">
-      <a href="#/pies" class="w-100pc md:w-1/5 md:ml-4 mt-4 md:mt-0"><button class="btnblack m-0 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Subscribe</button></a>
-    </div>
-    </div>
-</div>
+
 
 
 <div class="videocontainer my-6">
@@ -140,7 +134,7 @@
     <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div>
     <img src={images.doughcolorful} class="w-100pc md:w-30pc" alt="dough" />
     <div class="text-base md:text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
-    <a href="#/dough w-100pc"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
+    <a href="#/dough"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
   </div>
 </div>
 
