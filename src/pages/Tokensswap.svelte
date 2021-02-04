@@ -1,4 +1,5 @@
 <script>
+	import { Timeout, quoteRefreshSeconds } from './../classes/Timer.js';
   import { _ } from "svelte-i18n";
   import debounce from "lodash/debounce";
   import BigNumber from "bignumber.js";
@@ -9,6 +10,8 @@
   import ApiOx from "../classes/0xApi";
   import poolsConfig from '../config/pools.json';
   import TokenSelectModal from "../components/modals/TokenSelectModal.svelte";
+  import Modal from '../components/elements/Modal.svelte';
+  import ReviewQuoteModal from '../components/modals/ReviewQuoteModal.svelte';
   import displayNotification from "../notifications";
   import { ethers } from 'ethers';
   
@@ -46,8 +49,16 @@
     }
   ];
 
+  let modal;
+  let modalOption = {
+    title: "Review Quote",
+    pieAddress: null,
+    ovenAddress: null,
+  };
+
   let targetModal = 'sell';
   let timeout;
+  
 
   let defaultTokenSell = {
     address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -85,6 +96,10 @@
     }
   };
 
+  const Timer = new Timeout(30000, () => {
+    frozeQuote = null;
+    fetchQuote(true) 
+  });
   const api = new ApiOx();
 
   const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
@@ -94,6 +109,7 @@
   $: amount = defaultAmount;
   $: receivedAmount = 0;
   $: quote = null;
+  $: frozeQuote = null;
   $: needAllowance = false;
   $: initialized = {
     onMount: false,
@@ -117,12 +133,13 @@
 
   onDestroy(() => {
     clearTimeout(timeout)
+    Timer.stop();
   });
 
   onMount(async () => {
     isLoading = true;
     console.log('onMount')
-    setupListedToken();    
+    setupListedToken();
 
     if($eth.address) {
       await fetchOnchainData();
@@ -246,8 +263,6 @@
     } else {
       buyToken = defaultTokenBuy
     }
-      
-    
 
     listed.forEach( token => {
       allowances[token.address] = token.allowance;
@@ -258,8 +273,11 @@
     })
   }
 
-  async function fetchQuote(selfRefresh=false) {
-    if(!amount.label || amount.label === 0 || amount.label === '' || isLoading === true) return;
+  async function fetchQuote(selfRefresh=false, freeze=false) {
+    if(!amount.label || amount.label === 0 || amount.label === '' || isLoading === true) {
+      Timer.stop();
+      return;
+    };
 
     balanceError = showBalanceError();
 
@@ -291,8 +309,11 @@
     receivedAmount = toNum(quote.buyAmount);
     isLoading = false;
 
-    clearTimeout(clearTimeout);
-    timeout = setTimeout(() => fetchQuote(true), 30000);
+    Timer.start();
+
+    if(freeze) {
+      frozeQuote = quote;
+    }
   }
 
   function setupListedToken() {
@@ -315,11 +336,24 @@
   open={tokenSelectModalOpen}
   callback={tokenSelectCallback} />
 
-<div class="content flex flex-col pt-10pc justify-center spl">
+<Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this={modal}>
+  <span slot="content">
+    <ReviewQuoteModal 
+      fetchQuote={fetchQuote}
+      quote={quote}
+      buyToken={buyToken}
+      close={modal.close}
+      sellToken={sellToken}
+      frozeQuote={frozeQuote}
+      confirm={swap}
+      isLoading={isLoading}
+    />
+  </span>
+</Modal>
 
+<div class="content flex flex-col pt-10pc justify-center spl">
   <div class="font-huge text-center">Exchange Tokens</div>
   <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">Swap Pies at the best rates.</div>
-
 
   <div class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc">
 
@@ -385,11 +419,11 @@
     {#if quote}
       <div class="flex items-center w-100pc pt-16px px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Price:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} = {parseFloat(quote.price).toFixed(6)} {buyToken.symbol}</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} @ {parseFloat(quote.price).toFixed(6)} {buyToken.symbol}</div>
       </div>
       <div class="flex items-center w-100pc px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Guaranteed Price:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{parseFloat(quote.guaranteedPrice).toFixed(6)}</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} @ {parseFloat(quote.guaranteedPrice).toFixed(6)} {buyToken.symbol}</div>
       </div>
       
     {/if}
@@ -416,8 +450,11 @@
       {#if needAllowance }
         <button on:click={approveToken} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button>
       {:else}
-          <button class:error={error || isLoading || balanceError ? true : false} on:click={swap} disabled={error || isLoading || balanceError ? true : false} class="stake-button mt-10px rounded-20px p-15px w-100pc">
-            Swap
+          <button class:error={error || isLoading || balanceError ? true : false} on:click={() => {
+            frozeQuote = quote;
+            modal.open();
+          }} disabled={error || isLoading || balanceError ? true : false} class="stake-button mt-10px rounded-20px p-15px w-100pc">
+            Review Order
           </button>
       {/if}
     {/if}
