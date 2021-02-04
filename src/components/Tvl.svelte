@@ -53,6 +53,7 @@
           }
           
       });
+      console.log('pieLiquidity', total);
       return total;
   })();
 
@@ -103,6 +104,7 @@
 
     await Promise.all(promises);
     stakedLiquidity = await calcStakedLiquidity();
+    console.log('stakedLiquidity', stakedLiquidity);
   }, false);
 
   onMount( async () => {

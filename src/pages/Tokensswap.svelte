@@ -1,4 +1,5 @@
 <script>
+	import { Timeout, quoteRefreshSeconds } from './../classes/Timer.js';
   import { _ } from "svelte-i18n";
   import debounce from "lodash/debounce";
   import BigNumber from "bignumber.js";
@@ -9,6 +10,8 @@
   import ApiOx from "../classes/0xApi";
   import poolsConfig from '../config/pools.json';
   import TokenSelectModal from "../components/modals/TokenSelectModal.svelte";
+  import Modal from '../components/elements/Modal.svelte';
+  import ReviewQuoteModal from '../components/modals/ReviewQuoteModal.svelte';
   import displayNotification from "../notifications";
   import { ethers } from 'ethers';
   
@@ -26,6 +29,7 @@
   import {
     getTokenImage
   } from "../components/helpers";
+import { module } from 'lodash/_freeGlobal';
 
   const ZeroEx = '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
   $: listed = [
@@ -46,8 +50,16 @@
     }
   ];
 
+  let modal;
+  let modalOption = {
+    title: "Review Quote",
+    pieAddress: null,
+    ovenAddress: null,
+  };
+
   let targetModal = 'sell';
   let timeout;
+  
 
   let defaultTokenSell = {
     address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
@@ -85,6 +97,10 @@
     }
   };
 
+  const Timer = new Timeout(10000, () => {
+    frozeQuote = null;
+    fetchQuote(true) 
+  });
   const api = new ApiOx();
 
   const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
@@ -94,6 +110,7 @@
   $: amount = defaultAmount;
   $: receivedAmount = 0;
   $: quote = null;
+  $: frozeQuote = null;
   $: needAllowance = false;
   $: initialized = {
     onMount: false,
@@ -117,12 +134,13 @@
 
   onDestroy(() => {
     clearTimeout(timeout)
+    Timer.stop();
   });
 
   onMount(async () => {
     isLoading = true;
     console.log('onMount')
-    setupListedToken();    
+    setupListedToken();
 
     if($eth.address) {
       await fetchOnchainData();
@@ -246,8 +264,6 @@
     } else {
       buyToken = defaultTokenBuy
     }
-      
-    
 
     listed.forEach( token => {
       allowances[token.address] = token.allowance;
@@ -259,7 +275,10 @@
   }
 
   async function fetchQuote(selfRefresh=false) {
-    if(!amount.label || amount.label === 0 || amount.label === '' || isLoading === true) return;
+    if(!amount.label || amount.label === 0 || amount.label === '' || isLoading === true) {
+      Timer.stop();
+      return;
+    };
 
     balanceError = showBalanceError();
 
@@ -291,8 +310,10 @@
     receivedAmount = toNum(quote.buyAmount);
     isLoading = false;
 
-    clearTimeout(clearTimeout);
-    timeout = setTimeout(() => fetchQuote(true), 30000);
+    Timer.start();
+
+    // clearTimeout(clearTimeout);
+    // timeout = setTimeout(() => fetchQuote(true), 30000);
   }
 
   function setupListedToken() {
@@ -315,8 +336,23 @@
   open={tokenSelectModalOpen}
   callback={tokenSelectCallback} />
 
-<div class="content flex flex-col pt-10pc justify-center spl">
+<Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this={modal}>
+  <span slot="content">
+    <ReviewQuoteModal 
+      fetchQuote={fetchQuote}
+      quote={quote}
+      buyToken={buyToken}
+      clone={module.close}
+      sellToken={sellToken}
+      frozeQuote={frozeQuote}
+      confirm={swap}
+      isLoading={isLoading}
+    />
+  </span>
+</Modal>
 
+<div class="content flex flex-col pt-10pc justify-center spl">
+  {$quoteRefreshSeconds}
   <div class="font-huge text-center">Exchange Tokens</div>
   <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">Swap Pies at the best rates.</div>
 
@@ -416,8 +452,11 @@
       {#if needAllowance }
         <button on:click={approveToken} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button>
       {:else}
-          <button class:error={error || isLoading || balanceError ? true : false} on:click={swap} disabled={error || isLoading || balanceError ? true : false} class="stake-button mt-10px rounded-20px p-15px w-100pc">
-            Swap
+          <button class:error={error || isLoading || balanceError ? true : false} on:click={() => {
+            frozeQuote = quote;
+            modal.open();
+          }} disabled={error || isLoading || balanceError ? true : false} class="stake-button mt-10px rounded-20px p-15px w-100pc">
+            Review Order
           </button>
       {/if}
     {/if}
