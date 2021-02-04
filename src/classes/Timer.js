@@ -21,7 +21,6 @@ export class Timeout {
         this.time = this.timeout / 1000;
         quoteRefreshSeconds.set(this.time);
         this.interval = setInterval(function() {
-            console.log('this.time', this.time)
             this.time = this.time - 1
             quoteRefreshSeconds.set(this.time);
             if (this.time === 0) {
