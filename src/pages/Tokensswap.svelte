@@ -29,7 +29,6 @@
   import {
     getTokenImage
   } from "../components/helpers";
-import { module } from 'lodash/_freeGlobal';
 
   const ZeroEx = '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
   $: listed = [
@@ -97,7 +96,7 @@ import { module } from 'lodash/_freeGlobal';
     }
   };
 
-  const Timer = new Timeout(10000, () => {
+  const Timer = new Timeout(30000, () => {
     frozeQuote = null;
     fetchQuote(true) 
   });
@@ -274,7 +273,7 @@ import { module } from 'lodash/_freeGlobal';
     })
   }
 
-  async function fetchQuote(selfRefresh=false) {
+  async function fetchQuote(selfRefresh=false, freeze=false) {
     if(!amount.label || amount.label === 0 || amount.label === '' || isLoading === true) {
       Timer.stop();
       return;
@@ -312,8 +311,9 @@ import { module } from 'lodash/_freeGlobal';
 
     Timer.start();
 
-    // clearTimeout(clearTimeout);
-    // timeout = setTimeout(() => fetchQuote(true), 30000);
+    if(freeze) {
+      frozeQuote = quote;
+    }
   }
 
   function setupListedToken() {
@@ -342,7 +342,7 @@ import { module } from 'lodash/_freeGlobal';
       fetchQuote={fetchQuote}
       quote={quote}
       buyToken={buyToken}
-      clone={module.close}
+      close={modal.close}
       sellToken={sellToken}
       frozeQuote={frozeQuote}
       confirm={swap}
@@ -352,10 +352,8 @@ import { module } from 'lodash/_freeGlobal';
 </Modal>
 
 <div class="content flex flex-col pt-10pc justify-center spl">
-  {$quoteRefreshSeconds}
   <div class="font-huge text-center">Exchange Tokens</div>
   <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">Swap Pies at the best rates.</div>
-
 
   <div class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc">
 
@@ -421,11 +419,11 @@ import { module } from 'lodash/_freeGlobal';
     {#if quote}
       <div class="flex items-center w-100pc pt-16px px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Price:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} = {parseFloat(quote.price).toFixed(6)} {buyToken.symbol}</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} @ {parseFloat(quote.price).toFixed(6)} {buyToken.symbol}</div>
       </div>
       <div class="flex items-center w-100pc px-16px justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Guaranteed Price:</div>
-        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{parseFloat(quote.guaranteedPrice).toFixed(6)}</div>
+        <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} @ {parseFloat(quote.guaranteedPrice).toFixed(6)} {buyToken.symbol}</div>
       </div>
       
     {/if}
