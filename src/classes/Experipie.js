@@ -50,9 +50,15 @@ class Experipie {
 
       response[2].tokens.forEach((el, i) => {
 
+        let info = find(this.marketData, (o) => {
+          return o.address === el.toLowerCase();
+        });
+
         let price = get(find(this.marketData, (o) => {
           return o.address === el.toLowerCase();
         }), 'market_data.current_price', 0);
+
+        let decimal = info.decimals || 18;
 
         this.composition.push(
           {
@@ -60,7 +66,7 @@ class Experipie {
             price,
             balance: {
               bn: response[2].amounts[i],
-              label: getNormalizedNumber(response[2].amounts[i].toString(), 18).toString()
+              label: getNormalizedNumber(response[2].amounts[i].toString(), decimal).toString()
             },
           }
         )
@@ -69,12 +75,10 @@ class Experipie {
           price,
           balance: {
             bn: response[2].amounts[i],
-            label: getNormalizedNumber(response[2].amounts[i].toString(), 18).toString()
+            label: getNormalizedNumber(response[2].amounts[i].toString(), decimal).toString()
           }
         }
       });
-
-      console.log('this.composition', this.composition);
       
       //Leave this here
       this.totalSupply = this.totalSupply / 1e18;

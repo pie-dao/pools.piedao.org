@@ -87,10 +87,10 @@
       <p class="font-thin">Yield Bearing & Meta-Governance Enabled</p>
     </div>
 
-    <div class="flex w-100pc hidden md:block lg:block">
+    <div class="flex flex-col justify-around w-100pc content-center lg:flex-row hidden md:flex lg:flex">
       {#each piVaults as pie}
         <ProductBox 
-          class="w-100pc"
+          class=""
           link={`#/pie/${pie.address}`}
           image={pie.icon}
           title={pie.symbol}
