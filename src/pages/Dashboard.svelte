@@ -94,7 +94,7 @@
           link={`#/pie/${pie.address}`}
           image={pie.icon}
           title={pie.symbol}
-          description="Yearn Ecosystem Pie"
+          description={pie.name}
         />
       {/each}
     </div>
