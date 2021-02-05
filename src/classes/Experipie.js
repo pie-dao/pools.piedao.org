@@ -58,7 +58,7 @@ class Experipie {
           return o.address === el.toLowerCase();
         }), 'market_data.current_price', 0);
 
-        let decimal = info.decimals || 18;
+        let decimal = info && info.decimals ? info.decimals : 18;
 
         this.composition.push(
           {
