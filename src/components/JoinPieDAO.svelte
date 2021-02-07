@@ -1,7 +1,7 @@
 
 <div class="content flex flex-col w-100pc justify-between spl text-center md:w-80pc">
   <div class="text-white bg-black rounded-4px py-6px px-8px mb-10px">JOIN PIEDAO</div>
-  <div class="font-huge">+1700<br/> Members</div>
+  <div class="font-huge">+2000<br/> Members</div>
     <div class="font-thin text-lg mt-10px mb-10px md:w-80pc">
       Join the community with $DOUGH. Participate in governance and be rewarded.
     </div>
@@ -33,9 +33,9 @@
       
     </div>
     
-    <a href="#/dough">
+    <!-- <a href="#/dough">
       <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
         Learn more
       </button>
-    </a>
+    </a> -->
 </div>

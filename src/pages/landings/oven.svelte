@@ -197,7 +197,7 @@
         <div class="flex items-center ">
           <span class="font-thin text-left mr-2">Minimum reached</span>
           <TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated">
-            <div class="infolink" />
+            <img src={images.InfoIcon} class="" alt="info" width="16px" />
           </TooltipButton>
         </div>
         <div class="font-bold text-right rounded-sm bg-black w-40pc">

@@ -3,9 +3,8 @@
   import images from "../config/images.json";
   import { farming } from '../stores/eth/writables.js';
 
-  import SectionImageTop from "../components/elements/SectionImageTop.svelte"
-  import SectionImageLeft from "../components/elements/SectionImageLeft.svelte"
-  import SectionImageRight from "../components/elements/SectionImageRight.svelte"
+  import Accordion from '../components/elements/Accordion.svelte'
+  import AccordionGroup from '../components/elements/AccordionGroup.svelte'
   
   import {
     formatFiat,
@@ -86,90 +85,123 @@
     }}
 />
 
-  <div class="content flex flex-col spl">
-   <img class="w-100pc h-auto md:w-100pc h-auto"src={images.herodough} alt="PieDAO Hero" />
-
-
-   <div class="text-center font-thin text-base mt-8 p-2 md:mt-20 md:text-lg lg:text-lg md:p-8 lg:p-8">
-    <strong>DOUGH</strong> is the PieDAO governance token. Owning DOUGH makes you a member of PieDAO. Holders are capable of participating in the DAO’s governance votes and proposing votes of their own. <br/>
-   </div>
-
-   <div class="flex flex-col justify-between my-2 lg:flex-row md:flex-row">
-      <div class="flex justify-center items-center bg-black text-white py-4 px-4 mx-2 my-2 rounded-sm text-center lg:w-1/2 md:w-1/2 md:my-0 lg:my-0">Circulating supply: <strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong></div>
-      <div class="flex justify-center items-center bg-black text-white py-4 px-4 mx-2 my-2 rounded-sm text-center lg:w-1/2 md:w-1/2 md:my-0 lg:my-0">Staked: &nbsp;<strong>{formatFiat(doughStaked, ',', '.', '')} DOUGH</strong></div>
+<div class="videocontainer">
+  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video">
+    <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
+  </video>
+  <div class="content flex flex-col spl px-4">
+    <div class="text-lg font-bold md:text-xl text-center mb-1">Grab a slice of the pie</div>
+    <img src={images.doughcolorful} class="crisp" alt="dough" />
+    <div class="text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving wealth creation machine</div>
+    <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" onclick="location.href='#/swap'">
+      <div class="w-100pc flex items-center">
+      <div class="mr-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
+      <div class="">
+        <div class="text-base font-bold leading-5">Buy DOUGH</div>
+        <div class="text-sm font-thin">Current price: <strong>${price}</strong></div>
+      </div>
     </div>
-
-   <div class="rounded-sm p-8 flex flex-col justify-between content-center items-center flex-wrap mt-4 md:mt-4">
-     <div class="text-center p-4 text-xl md:text-xl">1 DOUGH = <strong>{price}$</strong></div>
-     <a href="#/swap">
-      <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
-        Buy
-      </button>
-    </a>
-
-    <button on:click={() => addToken()} class="table-btn mt-4">
+    </button>
+    <button on:click={() => addToken()} class="add-dough-metamask mt-4">
       Add to MetaMask 🦊
     </button>
-   </div>
-
- 
-
-   <div class="bg-grey-243 rounded-sm px-4 py-8 flex justify-between flex-wrap w-full mt-4 md:mt-8">
-    <div class="p-0 md:w-1/4">
-      <div class="text-center font-thin text-xs md:text-base">PieDAO</div>
-      <div class="text-center text-xs md:text-xl font-black">Governance</div>
-    </div>
-    <div class="p-0 md:w-1/4">
-      <div class="text-center font-thin text-xs md:text-base">Value accrual</div>
-      <div class="text-center text-xs md:text-xl font-black">Fees</div>
-    </div>
-    <div class="p-0 md:w-1/4">
-        <div class="text-center font-thin text-xs md:text-base">Liquidity</div>
-        <div class="text-center text-xs md:text-xl font-black">Mining</div>
-      </div>
-    <div class="p-0 md:w-1/4">
-      <div class="text-center font-thin text-xs md:text-base">DAOs Meta</div>
-      <div class="text-center text-xs md:text-xl font-black">Governance</div>
-    </div>
   </div>
+</div>
 
-  <a class="singleTag font-bold my-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn more on Medium</a>
+<div class="content flex flex-col spl">
 
+
+<div class="content flex flex-col w-100pc justify-between spl lg:flex-row-reverse">
+  <div class="flex w-full flex-col mt-0 md:mt-10 p-4 lg:w-3/7">
+      <img class="w-100pc h-auto md:w-100pc h-auto" src={images.discuss} alt="Discuss" />
+    </div>
+  <div class="flex w-full lg:w-4/7 flex-col lg:pr-4">
+    <div class="text-xl leading-10 mb-4">
+     Govern: driving a DAO
+    </div>
+    <div class="font-thin text-l mb-20px lg:mb-50px">
+      $DOUGH enables its holders to take control of their financial future, driving the decisions of PieDAO: from new products to asset rebalancing, strategies, and integrations. <br/>
+      Every action taken by the organisation comes from a community vote using DOUGH. <br/>
+      A bank where every customer has the right to be a board member.<br/>
+      Take control of your financial future.
+      <br/><br/>
+      <!-- Circulating supply: &nbsp;<br/><strong>{formatFiat(circulatingSupply, ',', '.', '')} DOUGH</strong><br/><br/> -->
+      Staked: &nbsp;<br/><strong>{formatFiat(doughStaked, ',', '.', '')} DOUGH</strong>
+      </div>
+    </div>
+</div>
+
+
+
+<div class="content flex flex-col w-100pc justify-between spl lg:flex-row">
+  <div class="flex w-full flex-col mt-4 md:mt-10 p-4 lg:w-3/7">
+      <img class="w-100pc h-auto md:w-100pc h-auto" src={images.earntogether} alt="Discuss" />
+    </div>
+  <div class="flex w-full lg:w-4/7 flex-col lg:pr-4">
+    <div class="text-xl leading-10 mb-4">
+     Grow and earn together.
+    </div>
+    <div class="font-thin text-l mb-20px lg:mb-50px">
+      Governing a DAO is no easy task. Its members plan together, make decisions together, and build together.<br/>
+      It’s only fair that they share the benefits together too.<br/>
+      To reward their work, DOUGH holders share the revenue generated by PieDAO’s products.<br/>
+      The bigger the Pies grow, the more they earn.<br/>
+      With DOUGH there’s a piece of the pie for everyone.<br/>
+      <a class="font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-tokens-d2479c7ea608`}>Learn about DOUGH token economics</a><br/>
+      </div>
+    </div>
+</div>
+
+
+<div class="content flex flex-col w-100pc justify-between spl lg:flex-row-reverse">
+  <div class="flex w-full flex-col mt-4 md:mt-10 p-4 lg:w-3/7">
+      <img class="w-100pc h-auto md:w-100pc h-auto" src={images.metavote} alt="Discuss" />
+    </div>
+  <div class="flex w-full lg:w-4/7 flex-col lg:pr-4">
+      <div class="text-xl leading-10 mb-4">
+      Meta-Govern: a home for DeFi
+      </div>
+      <div class="font-thin text-l mb-20px lg:mb-50px">
+        DOUGH isn’t just about PieDAO.<br/>
+        It’s a governance passport for the entire DeFi ecosystem. DOUGH lowers the barrier to wider governance participation in unprecedented ways.<br/>
+        Any asset with governance power held in a PieVault will be automatically delegated to PieDAO, enabling DOUGH holders to vote in that protocol’s governance decisions.<br/>
+        <strong>One DOUGH to govern them all.</strong>
+      </div>
+    </div>
+</div>
+
+
+  <section class="pt-12 pb-6 px-4 text-center">
+    <div class="w-full max-w-2xl mx-auto">
+      <h2 class="text-xl mt-6 mb-3 leading-tight font-heading">Got more questions?</h2>
+    </div>
+  </section>
   
-  <SectionImageTop title="Token Migration" image={images.tokenmigration}>
-    <span slot="content">
-      PieDAO is entering the next phase of its mission to democratize the access to wealth allocation strategies by migrating the currently non-transferable token (DOUGHv1) to a transferable one (DOUGHv2).<br/>
-    To further develop the community and to incentivize early adopters through the liquidity mining program the community believes the time is right to start the migration of DOUGH to DOUGH v2.<br/>
-    </span>
-  </SectionImageTop>
-
-
-  <a class="singleTag font-bold my-4" target="_blank" href={`https://medium.com/piedao/piedao-token-migration-d2e9cd5d1a16`}>DOUGH Migration on Medium</a>
   
-  <SectionImageRight title="Vesting Period" image={images.vestingperiod} isGrey={true}>
-    <span slot="content">
-      To align incentives early token requests were accepted at a lower rate then later ones but are subject to longer vesting periods. DOUGH holders are subject to the following vesting schedules:<br/>
-      <ul class="list-disc list-inside mt-2 md:mt-4">
-          <li>Contribution on Epoch 1 (from block to block) 1.5y vesting</li>
-          <li>Contribution on Epoch 2 (from block to block) 1y vesting</li>
-          <li>Summoners 3y vesting</li>
-          <li>Bounties, no vesting applied</li>
-      </ul>
-    </span>
-  </SectionImageRight>
-
-  <SectionImageLeft title="How to Migrate" image={images.howtomigrate} isGrey={true}>
-    <span slot="content">
+  <div class="w-100pc px-2 md:px-8">
+  <AccordionGroup>
+  
+    <Accordion class="flex flex-col">
+      <button class="accordionbutton flex flex-col" slot="header" let:toggle on:click={toggle}>How does meta-governance work?</button>
+      <div class="accordioncontent">
+        With meta-governance users can participate in governance across the DeFi ecosystem with just one ERC-20, our governance token DOUGH. This occurs gas-free via Snapshot, with DOUGH holders signalling their support for a proposal and the DAO enacting their will using all the held funds.
+      </div>
+  </Accordion>
+  
+  <Accordion class="flex flex-col">
+    <button class="accordionbutton flex flex-col" slot="header" let:toggle on:click={toggle}>Can I still migrate my tokens?</button>
+    <div class="accordioncontent">
       To make the process as simple as possible an Aragon app will be installed which allows you to migrate your tokens.<br/>
       By visiting the Aragon interface of PieDAO and opening the migration app you can easily migrate your already vested tokens to DOUGH v2.
       The interface will automatically fill in the maximum amount you are able to migrate.<br/>
       <a class="font-bold mt-4 md:mt-4" target="_blank" href={`https://medium.com/piedao/dough-farming-season-7329ea5e84dd`}>Migration Tutorial</a><br/>
       <a class="font-bold mt-4 md:mt-4" target="_blank" href={`https://client.aragon.org/?#/piedao/0x968986e7ab9d05b4f6334efdc6c4c5efd89d4119/`}>Migrate Now</a>
-    </span>
-  </SectionImageLeft>
-
-  <SectionImageTop title="Liquidity Mining" image={images.liquiditymining}>
-    <span slot="content">
+      </div>
+  </Accordion>
+  
+  <Accordion class="flex flex-col">
+    <button class="accordionbutton flex flex-col" slot="header" let:toggle on:click={toggle}>How long is the vesting period?</button>
+    <div class="accordioncontent">
       <div class="mt-2 md:mt-4">
         With the imminent migration to the DOUGH v2 governance token and the launch of the DOUGH / ETH liquidity pool on Balancer, PieDAO will also open its DOUGH farming season!
       </div>
@@ -180,10 +212,31 @@
 
       <div class="mt-2 md:mt-4">
         <strong>Eligibility: </strong>All Liquidity Providers to selected pools will be eligible for these incentive programs by staking their LP tokens to PieDAO staking contract.
-      </div>      
-    </span>
-  </SectionImageTop>
+      </div>  
+    </div>
+  </Accordion>
+  
+  </AccordionGroup>
+
+  <div class="content flex flex-col items-center">
+  <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" onclick="location.href='#/swap'">
+    <div class="w-100pc flex items-center">
+    <div class="mr-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
+    <div class="">
+      <div class="text-base font-bold leading-5">Buy DOUGH</div>
+      <div class="text-sm font-thin">Current price: <strong>${price}</strong></div>
+    </div>
+  </div>
+  </button>
+  <button on:click={() => addToken()} class="add-dough-metamask mt-4">
+    Add to MetaMask 🦊
+  </button>
 </div>
+
+  </div>
+
+</div>
+
 
 
 

@@ -12,6 +12,7 @@
   import LiquidityModal from "../components/modals/LiquidityModal.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
   import CoinGeckoBanner from "../components/CoinGeckoBanner.svelte";
+  import SpreadBanner from "../components/SpreadBanner.svelte";
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
@@ -30,10 +31,12 @@
   import Change from '../components/Change.svelte'
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
+  import TooltipButton from '../components/elements/TooltipButton.svelte';
 
 
   export let params;
-
+  
+  let modalinfo;
   let modal;
   let modalOption = {
     method: "single",
@@ -124,7 +127,6 @@
     const poolContract = await contract({ address: token });
     const bPoolAddress = await poolContract.getBPool();
     metadata = await getSubgraphMetadata(bPoolAddress.toLowerCase());
-    console.log('metadata', metadata);
     initialized = true;
   })();
 
@@ -139,6 +141,24 @@
     return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
   })()
 
+  $: getSpread = ( () => {
+    let nav = parseFloat($pools[token+"-nav"]);
+    let price = parseFloat(tokenPrice);
+
+    if(!nav || !price) {
+      return {
+        label: 'Spread',
+        number: `n/a`
+      };
+    }
+
+    let spread = (price - nav) / price * 100;
+    return {
+      label: spread > 0 ? 'Premium' : 'Discount',
+      number: `${spread.toFixed(2)}%`
+    };
+  })()
+
   const renderWidget = async () => {
     const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
     if( formula === '') return;
@@ -151,6 +171,20 @@
 }
 
 </script>
+<!-- <SpreadBanner /> -->
+<Modal title="NAV vs Price" backgroundColor="#f3f3f3" bind:this="{modalinfo}">
+  <span slot="content" class="p-4 font-thin">
+    <strong>NAV</strong><br/>
+    The net asset value (NAV) of a Pie represents the market value of each share’s portion of the Pie's underlying assets.<br/>
+    The NAV is determined by adding up the value of all assets in the Pie and then dividing that value by the number of outstanding shares in the Pie.<br/><br/>
+
+    <strong>Price</strong><br/>
+    The Pie's market price is the price at which shares in the Pies can be bought or sold on the exchanges.<br/>
+    The market price can fluctuate throughout the day as buyers and sellers interact with one another and trade.<br/>
+    For this reason, at times the price can differ from the NAV, making it more convenient to buy or mint according to market fluctuations.
+  </span>
+</Modal>
+
 <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
     <LiquidityModal 
@@ -235,7 +269,23 @@
       <div class="text-md md:text-md font-black text-pink">
         {getNav}
       </div>
-      <div class="font-bold text-xs md:text-base text-pink">NAV</div>
+      <a on:click={() => {
+        modalinfo.open()
+      }} class="cursor-pointer hover:opacity-60" role="menuitem">
+      <div class="flex items-center font-bold text-xs md:text-base text-pink">
+        NAV
+            <img src={images.InfoIcon} class="ml-1" alt="info" width="16px" />
+      </div>
+    </a>
+    </div>
+
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black text-black">
+        {getSpread.number}
+      </div>
+      <TooltipButton tooltip="Difference between NAV and the Pie current price on exchanges">
+      <div class="font-thin text-xs md:text-base text-black">{getSpread.label}</div>
+      </TooltipButton>
     </div>
 
     <div class="p-0 flex-initial self-start mr-6">
@@ -252,7 +302,7 @@
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
         {#if metadata.createTime}
-          {moment(moment.unix(metadata.createTime)).format('MMMM Do YYYY')}
+          {moment(moment.unix(metadata.createTime)).format('MMM Do YYYY')}
         {:else}
           n/a
         {/if}

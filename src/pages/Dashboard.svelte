@@ -31,6 +31,7 @@
 
   $: piVaults = filter(poolsConfig.available.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
+    let price = get($piesMarketDataStore, `${address}.market_data.current_price`, 0)
     return {
       ...poolsConfig[address],
       address,
@@ -39,6 +40,7 @@
       totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
       change: change ? change : 0,
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
+      price: price ? `$ ${price}` : `n/a`
     };
   }), {isExperipie: true}) || [];
 
@@ -80,31 +82,69 @@
   <div class="w-99pc m-4">
 
   {#if piVaults.length }
-    <div class="my-0 md:my-4 lg:my-6">
+    <div class="mt-0 mb-4 md:my-4 lg:my-6">
       <h1 class="text-lg">🆕 Pie Vaults</h1>
       <p class="font-thin">Yield Bearing & Meta-Governance Enabled</p>
     </div>
 
-    <div class="flex w-100pc">
+    <div class="flex flex-col justify-around w-100pc content-center lg:flex-row hidden md:flex lg:flex">
       {#each piVaults as pie}
         <ProductBox 
-          class="w-100pc"
+          class=""
           link={`#/pie/${pie.address}`}
           image={pie.icon}
           title={pie.symbol}
-          description="Yearn Ecosystem Pie"
+          description={pie.name}
         />
       {/each}
     </div>
+
+    <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
+      {#each piVaults as pie}
+      <a class="mx-4 thinborderbottom" href={`#/pie/${pie.address}`}>
+        <div class="flex items-center w-100pc py-4">
+              <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
+            <div class="flex flex-col justify-around">
+              <span class="text-lg leading-6">{pie.symbol}</span>
+              <span class="text-sm font-thin opacity-40" >Yearn Ecosystem Pie</span>
+            </div>
+            <div class="text-right flex flex-col justify-end items-end ml-auto">
+              <span class="">{pie.price}</span>
+              <Change value={pie.change} class="text-right"/>
+            </div>
+        </div>
+      </a>
+      {/each}
+    </div>
+
   {/if}
 
-  <div class="my-10">
+  <div class="mt-10 mb-4 md:mb-0 lg:mb-0">
     <h1 class="text-lg">🥧 Explore Pies</h1>
     <p class="font-thin">An Entire Portfolio in a Single Token</p>
   </div>
 
 
-  <div class="w-99pc">
+  <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
+    {#each pies as pie}
+    <a class="mx-4 thinborderbottom" href={`#/pie/${pie.address}`}>
+      <div class="flex items-center w-100pc py-4">
+            <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
+          <div class="flex flex-col justify-around">
+            <span class="text-lg leading-6">{pie.symbol}</span>
+            <span class="text-sm font-thin opacity-40" >{pie.totalLiquidity}</span>
+          </div>
+          <div class="text-right flex flex-col justify-end items-end ml-auto">
+            <span class="">{getNav(pie.address)}</span>
+            <Change value={pie.change} class="text-right"/>
+          </div>
+      </div>
+    </a>
+    {/each}
+  </div>
+
+
+  <div class="w-99pc hidden md:block lg:block mt-6">
     <table class="breakdown-table table-auto w-full">
       <thead>
         <tr>
@@ -177,9 +217,6 @@
       <p class="font-thin">Add liquidity to earn fees and DOUGH incentives.</p>
       <p class="font-thin">ℹ️ APR does not account for gains or losses from holding liquidity tokens.</p>
     </div> -->
-
-    
-  </div>
-  
+  </div>  
 </div>
 <!-- <FarmerTable /> -->

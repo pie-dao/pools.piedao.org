@@ -10,7 +10,7 @@
   import Farming from "../components/Farming.svelte";
   import MixBytes from "../components/MixBytes.svelte";
   import CoinGeckoBanner from "../components/CoinGeckoBanner.svelte";
-  
+  import TooltipButton from '../components/elements/TooltipButton.svelte';
   import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
 
   import SingleAssetModal from "../components/modals/SingleAssetModal.svelte"; 
@@ -18,6 +18,7 @@
   import SnapshotBanner from "../components/SnapshotBanner.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
   import PoolDescription from "../components/PoolDescription.svelte";
+  import Modal from '../components/elements/Modal.svelte';
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import { piesMarketDataStore } from '../stores/coingecko.js';
@@ -41,6 +42,7 @@
   export let params;
 
   let modal;
+  let modalinfo;
   let modalOption = {
     method: "single",
     poolAction: "add",
@@ -109,6 +111,29 @@
       subscribeToBalance(token, $eth.address, true);
       initialize();
   }
+
+  $: getSpread = ( () => {
+    if(!nav || !tokenPrice || !Pie || !Pie.nav) {
+      return {
+        label: 'Spread',
+        number: `n/a`
+      };
+    }
+    
+    let _nav = parseFloat(Pie.nav);
+    let price = parseFloat(tokenPrice);
+
+    console.log('_nav', _nav)
+    console.log('price', price)
+
+    
+
+    let spread = (price - _nav) / price * 100;
+    return {
+      label: spread > 0 ? 'Premium' : 'Discount',
+      number: `${spread.toFixed(2)}%`
+    };
+  })()
 
   const initialize = async () => {
     let res = [];
@@ -308,6 +333,18 @@
   </span>
 </ModalBig>
 
+<Modal title="NAV vs Price" backgroundColor="#f3f3f3" bind:this="{modalinfo}">
+  <span slot="content" class="p-4 font-thin">
+    <strong>NAV</strong><br/>
+    The net asset value (NAV) of a Pie represents the market value of each share’s portion of the Pie's underlying assets.<br/>
+    The NAV is determined by adding up the value of all assets in the Pie and then dividing that value by the number of outstanding shares in the Pie.<br/><br/>
+
+    <strong>Price</strong><br/>
+    The Pie's market price is the price at which shares in the Pies can be bought or sold on the exchanges.<br/>
+    The market price can fluctuate throughout the day as buyers and sellers interact with one another and trade.<br/>
+    For this reason, at times the price can differ from the NAV, making it more convenient to buy or mint according to market fluctuations.
+  </span>
+</Modal>
 
 <div class="content flex flex-col spl">
   
@@ -382,7 +419,22 @@
       <div class="text-md md:text-md font-black text-pink">
         {nav}
       </div>
-      <div class="font-bold text-xs md:text-base text-pink">NAV</div>
+      <a on:click={() => {
+        modalinfo.open()
+      }} class="cursor-pointer hover:opacity-60" role="menuitem">
+      <div class="flex items-center font-bold text-xs md:text-base text-pink">
+        NAV
+            <img src={images.InfoIcon} class="ml-1" alt="info" width="16px" />
+      </div>
+    </div>
+
+    <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black text-black">
+        {getSpread.number}
+      </div>
+      <TooltipButton tooltip="Difference between NAV and the Pie current price on exchanges">
+      <div class="font-thin text-xs md:text-base text-black">{getSpread.label}</div>
+      </TooltipButton>
     </div>
 
     <div class="p-0 flex-initial self-start mr-8">
@@ -392,12 +444,12 @@
       <div class="font-bold text-pink text-xs md:text-base">Tot APY</div>
     </div>
 
-    <div class="p-0 flex-initial self-start mr-8">
+    <!-- <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
         Meta-Governance
       </div>
       <div class="font-thin text-xs md:text-base">Enabled</div>
-    </div>
+    </div> -->
 
     <div class="p-0 flex-initial self-start mr-6">
       <div class="text-md md:text-md font-black">

@@ -79,18 +79,18 @@
         </span>
       </div>
       {#if dropdownOpen}
-        <div class="z-50 origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
-          <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            <div class="py-1">
-              <a href="#/pies" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Indices</a>
+        <div class="z-50 origin-top-right absolute right-0 mt-1 thinborder w-56 drowpdown-shadow roundedl">
+          <div class="bg-white roundedl" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <div class="py-1 roundedl">
+              <a href="#/pies" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Indices (PIEs)</a>
               <a href="#/swap" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Exchange</a>
-              <a href="#/oven" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Ovens</a>
+              <a href="#/oven" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Ovens (Buy Gas Free)</a>
               <a href="#/stake" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farms</a>
             </div>
             <div class="borderDiveder"></div>
             <div class="py-1">
               <a href="#/dough" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
-                $DOUGH
+                <img src={images.doughcolorful} width="80px" class="crisp" alt="dough" />
               </a>
             </div>
           </div>
@@ -110,9 +110,9 @@
         </span>
       </div>
       {#if dropdownOpen2}
-        <div class="z-50 origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
-          <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            <div class="py-1">
+        <div class="z-50 origin-top-right absolute right-0 mt-1 thinborder w-56 drowpdown-shadow roundedl">
+          <div class="bg-white roundedl" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <div class="py-1 roundedl">
               <a href="http://forum.piedao.org/" target="_blank" on:click={toggleDropdow2} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Forum</a>
               <a href="https://client.aragon.org/?#/piedao" target="_blank" on:click={toggleDropdow2} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Aragon DAO</a>
               <a href="https://snapshot.page/#/piedao" target="_blank" on:click={toggleDropdow2} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Snapshot</a>
@@ -122,43 +122,43 @@
       {/if}
     </div>
 
-    <div class="relative inline-block text-left block md:hidden">
+    <div class="relative inline-block text-left block md:hidden focus:outline-none">
       <div>
-        <span class="shadow-sm">
+        <span class="">
           <button class="hamburger mr-5" type="button" on:click={toggleMobileMenu}>
             <img src={images.icons.hamburger} alt="hamburger icon" class="w-min-20px" />
           </button>
         </span>
       </div>
       {#if mobileMenuVisible}
-        <div class="z-50 origin-top-right absolute right-0 mt-2 w-56 shadow-lg z-100">
-          <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            <div class="inline-flex justify-center w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150">Products:</div>
-            <div class="border-t border-gray-100"></div>
-            <div class="py-1">
-              <a href="#/pies" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Indices</a>
-              <a href="#/swap" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Exchange</a>
-              <a href="#/oven" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Ovens</a>
+        <div class="z-50 origin-top-right absolute right-0 mt-1 thinborder w-56 drowpdown-shadow roundedl">
+          <div class="bg-white roundedl" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+            <div class="inline-flex roundedl w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150 text-left font-bold">Products:</div>
+            <div class="thinborderbottom"></div>
+            <div class="py-1 roundedl">
+              <a href="#/pies" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Indices (PIEs)</a>
+              <a href="#/swap" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Exchange</a>
+              <a href="#/oven" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Ovens (Buy Gas Free)</a>
               <a href="#/stake" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farms</a>
             </div>
             <div class="py-1">
               <a href="#/dough" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
-                $DOUGH
+                <img src={images.doughcolorful} width="130px" class="crisp" alt="dough" />
               </a>
             </div>
-            <div class="inline-flex justify-center w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150">Governance:</div>
-            <div class="border-t border-gray-100"></div>
+            <div class="inline-flex w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150 text-left font-bold">Governance:</div>
+            <div class="thinborderbottom"></div>
             <div class="py-1">
               <a href="http://forum.piedao.org/" target="_blank" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Forum</a>
               <a href="https://client.aragon.org/?#/piedao" target="_blank" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Aragon DAO</a>
               <a href="https://snapshot.page/#/piedao" target="_blank" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Snapshot</a>
             </div>
-            <div class="inline-flex justify-center w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150">Misc:</div>
-            <div class="border-t border-gray-100"></div>
+            <div class="inline-flex w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150 text-left font-bold">Misc:</div>
+            <div class="thinborderbottom"></div>
             <div class="py-1">
-              <a href={links.docs} target="_blank" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Docs</a>
+              <a href='#/learn' on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Learn</a>
             </div>
-            <div class="border-t border-gray-100"></div>
+            <div class="thinborderbottom"></div>
             <div class="py-1 mx-25pc">
               <Web3Button />
             </div>
@@ -168,9 +168,12 @@
     </div>
 
     
+    <a class="pl-1 text-sm leading-5 font-medium text-gray-700 hidden md:block" href='#/dough' rel="noopener noreferrer">
+      <img src={images.doughcolorful} width="80px" class="crisp" alt="dough" />
+    </a>
     
-    <a class="text-sm leading-5 font-medium text-gray-700 hidden md:block" href={links.docs} target="_blank" rel="noopener noreferrer">
-      {$_('general.docs')}
+    <a class="pl-3 ml-4 text-sm leading-5 font-medium text-gray-700 hidden md:block" href='#/learn' rel="noopener noreferrer">
+     Learn
     </a>
     
     <div class="hidden md:block">
