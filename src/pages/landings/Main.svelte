@@ -59,13 +59,13 @@
   }}
 />
 
-  <div class="w-100pc gradientanimation m-0 p-0 flex justify-center">
-    <div class="max-w-1200px flex flex-col items-center justify-center py-8 px-6">
+  <div class="w-100pc m-0 p-0 flex justify-center">
+    <div class="max-w-1200px flex flex-col items-center justify-center py-0 md:py-8 px-6">
     <img class="w-90pc block md:hidden mb-2"  src={images.herolandingmobile} alt="PieDAO Hero" />
-    <img class="md:w-70pc lg:w-60pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
-    <div class="text-white font-bold text-center font-hero">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
-    <div class="text-lg text-white font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
-    <a href="#/pies"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
+    <img class="md:w-90pc lg:w-80pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
+    <div class="text-black font-bold text-center font-hero linear-wipe">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
+    <div class="text-lg text-black font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
+    <a href="#/pies"><button class="btnbig text-white m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
     <div class="w-100pc flex flex-col md:flex-row items-stretch text-left mt-6 mb-0 md:mt-10 md:mb-6 text-white font-bold text-base">
       <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
         <img class="w-40px" src={images.heroicon2} alt="PieDAO Hero" />

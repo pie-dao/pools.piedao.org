@@ -212,8 +212,10 @@ flex: 1 1 0;
 }
 
 .font-hero {
-  font-size: 6rem;
-  line-height: 6rem;
+  font-size: 7rem;
+  line-height: 6.5rem;
+  letter-spacing: -0.2rem;
+  font-weight: bolder;
 }
 
 @media (max-width: 768px) {
@@ -1815,6 +1817,14 @@ outline: none;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#e8ffdb",endColorstr="#b4f6ff",GradientType=1);
 }
 
+.gradientbglighthero{
+  background: rgb(254,254,246);
+  background: -moz-linear-gradient(73deg, rgba(254,254,246,1) 0%, rgba(238,243,244,1) 100%);
+  background: -webkit-linear-gradient(73deg, rgba(254,254,246,1) 0%, rgba(238,243,244,1) 100%);
+  background: linear-gradient(73deg, rgba(254,254,246,1) 0%, rgba(238,243,244,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#fefef6",endColorstr="#eef3f4",GradientType=1);
+}
+
 .gradientbglightblue:nth-of-type(2){
   background-color: green;
 }
@@ -1850,4 +1860,21 @@ scrollbar-width: none;  /* Firefox */
 .hidescrollbar {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
+}
+
+.linear-wipe {
+  text-align: center;
+  background: linear-gradient(to right, #a50bce 20%, #1fa6e0 40%, #47d482 60%, #b31fe0 80%);
+  background-size: 300% auto;
+  color: #000;
+  background-clip: text;
+  text-fill-color: transparent;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: flow 20s ease-in-out infinite alternate;
+  }
+  @keyframes flow {
+    to {
+      background-position: 200% center;
+    }
 }
