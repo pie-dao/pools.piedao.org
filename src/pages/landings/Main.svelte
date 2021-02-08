@@ -96,14 +96,14 @@
   <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 drowpdown-shadow rounded flex flex-col pointer scale">
     <a class="" target="_blank" href={`#/pie/${pie.address}`}>
     <div class="w-100pc p-4 min-w-100pc h-auto md:h-200px flex flex-col items-center mb-1 rounded-top gradientbglightgreen">
-      <div class="w-100pc text-right"><span class="text-xs font-bold text-white multiply roundedxs px-2 py-1">Medium risk</span></div>
+      <div class="w-100pc text-left"><span class="text-xs font-bold text-white multiply roundedxs px-2 py-1">Medium risk</span></div>
       <img class="w-40pc" src={pie.icon} alt={pie.symbol} />
     </div>
     <div class="px-4 py-2 flex flex-col">
       <span class="flex items-center"><span class="text-lg">{pie.symbol}&nbsp;</span><span class="text-lg font-thin">{getNav(pie.address)}&nbsp;</span><Change value={pie.change} /></span>
+      <div class="text-left mt-1 mb-2 flex"><span class="text-xs font-thin text-black bg-white  flex items-center">🔥 to date <strong class="text-base ml-2 text-black">+520,43%</strong></span></div>
       <span class="font-thin text-base mb-1">Exposure to lower market cap tokens that have incredible potential for future growth</span>
-      <a href={`#/swap`}>      <div class="text-left mt-1 mb-2 flex"><span class="text-xs font-thin text-black bg-white  flex items-center">🔥 to date <strong class="text-base ml-2 text-black">+520,43%</strong></span></div>
-        <button class="table-btn highlight-box min-w-70px mt-2 mb-2">Buy</button>
+      <a href={`#/swap`}><button class="table-btn highlight-box min-w-70px mt-2 mb-2">Buy</button>
       </div>
     </a>
   </div>
