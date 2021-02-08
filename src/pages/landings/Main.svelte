@@ -89,10 +89,10 @@
 </div>
 
 
-<div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll hidescrollbar">
-  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-8 px-6 hidescrollbar">  
+<div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll md:overflow-x-hidden hidescrollbar">
+  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-8 px-6 hidescrollbar md:flex-wrap">  
   {#each pies as pie}
-    <a href={`#/pie/${pie.address}`} class="min-w-80pc md:min-w-31pc mr-4 md:mx-4 my-2 md:my-0 drowpdown-shadow rounded flex flex-col pointer scale">
+    <a href={`#/pie/${pie.address}`} class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 drowpdown-shadow rounded flex flex-col pointer scale">
       <div class="w-100pc flex justify-center py-16 gradientbglightgreen rounded-top">
       <img class="w-40pc h-40pc" src={pie.icon} alt={pie.symbol} />
     </div>

@@ -1843,7 +1843,7 @@ outline: none;
 }
 
 .scale { transition: all .2s ease-in-out; }
-.scale:hover { transform: scale(1.05); }
+.scale:hover { transform: scale(1.02); }
 
 .single-line {
   text-overflow: ellipsis;
