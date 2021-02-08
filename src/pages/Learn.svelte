@@ -1,10 +1,13 @@
 <script>
   import images from "../config/images.json";
   </script>
+
+<h1 class="content text-lg md:text-xl text-left">👨🏽‍🎓 Hello fellow PieDAO students!</h1>
+
   
   <div class="content">
     <div class="justify-start items-start flex-col text-left">
-      <h1 class="text-lg">Basics of Pies</h1>
+      <h2 class="text-lg">Basics of Pies</h2>
       <p class="font-thin">If you are looking for the definitive Pie 101, look no more.</p>
     </div>
   </div>
@@ -66,8 +69,8 @@
 
 
   <div class="content">
-    <div class="justify-start items-start flex-col text-left">
-      <h1 class="text-lg">Dig into the tech</h1>
+    <div class="justify-start items-start flex-col text-left  mt-8">
+      <h2 class="text-lg">Dig into the tech</h2>
       <p class="font-thin">If you are looking for the definitive tech 101, look no more.</p>
     </div>
   </div>
