@@ -84,13 +84,14 @@
 </div>
 
 
-<div class="content font-huge text-left md:text-center" style="padding-bottom: 0!important;">
-  <span class="mt-6 md:mt-12 mb-0 md:mb-4 px-6 italic">"A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
+<div class="content text-left md:text-center" style="padding-bottom: 0!important;">
+  <span class="mt-6 mb-0 px-8 italic text-lg block md:hidden leading-7">"A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
+  <span class="mt-12 mb-4 px-8 italic font-huge hidden md:block">"A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
 </div>
 
 
 <div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll md:overflow-x-hidden hidescrollbar">
-  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-8 px-6 hidescrollbar md:flex-wrap">  
+  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-4 px-6 hidescrollbar md:flex-wrap">  
 
   {#each pies as pie}
   <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 drowpdown-shadow rounded-xl flex flex-col pointer scale">
@@ -122,8 +123,8 @@
 <div class="content">
   <div class="flex flex-col md:flex-row max-w-1200px p-10 mx-4 md:mx-0 rounded gradientbglightblue">
     <img class="w-60px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" />
-    <div class="text-lg text-left w-100pc block md:hidden leading-8">Pies are diversified portfolios of top performing crypto assets</div>
-    <div class="font-huge text-left w-1/2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
+    <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-2">Pies are diversified portfolios of top performing crypto assets</div>
+    <div class="font-huge text-left w-1/2 pr-2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
     <ul class="text-left font-thin text-base w-100pc md:w-1/2 md:pl-4 list-outside list-none">
       <li class="mt-4 md:mt-0">✔️ Carefully handpicked by a decentralised community of economically incentivised talent</li>
       <li class="mt-4">✔️ Maximised returns through latest-trend active strategies like staking, lending, and yield-farming - completely automated</li>
