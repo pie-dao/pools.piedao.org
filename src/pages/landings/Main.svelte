@@ -119,9 +119,9 @@
 <Newsletter />
 
 
-<div class="flex rounded gradientbglightblue py-6 md:py-12 px-4 md:px-6 mx-6 md:mx-40 flex items-center justify-center">
-  <div class="flex flex-col md:flex-row max-w-1200px px-2 md:px-8">
-    <img class="w-70px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" />
+<div class="content">
+  <div class="flex flex-col md:flex-row max-w-1200px p-10 mx-4 md:mx-0 rounded gradientbglightblue">
+    <img class="w-60px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" />
     <div class="text-lg text-left w-100pc block md:hidden leading-8">Pies are diversified portfolios of top performing crypto assets</div>
     <div class="font-huge text-left w-1/2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
     <ul class="text-left font-thin text-base w-100pc md:w-1/2 md:pl-4 list-outside list-none">
