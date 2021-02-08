@@ -1138,11 +1138,25 @@ opacity: 0.6;
   outline: none;
   border: 1px solid black;
   background-color: white;
-  font-size: 24px;
+  font-size: 18px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   appearance: textfield;
+  border-radius: 10px;
+}
+
+.newsletter-input-from::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+font-weight: 300;
+}
+.newsletter-input-from::-moz-placeholder { /* Firefox 19+ */
+  font-weight: 300;
+}
+.newsletter-input-from:-ms-input-placeholder { /* IE 10+ */
+  font-weight: 300;
+}
+.newsletter-input-from:-moz-placeholder { /* Firefox 18- */
+  font-weight: 300;
 }
 
 
