@@ -91,19 +91,27 @@
 
 <div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll md:overflow-x-hidden hidescrollbar">
   <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-8 px-6 hidescrollbar md:flex-wrap">  
+
   {#each pies as pie}
-    <a href={`#/pie/${pie.address}`} class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 drowpdown-shadow rounded flex flex-col pointer scale">
-      <div class="w-100pc flex justify-center py-16 gradientbglightgreen rounded-top">
-      <img class="w-40pc h-40pc" src={pie.icon} alt={pie.symbol} />
+  <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 drowpdown-shadow rounded flex flex-col pointer scale">
+    <a class="" target="_blank" href={`#/pie/${pie.address}`}>
+    <div class="w-100pc p-4 min-w-100pc h-auto md:h-200px flex flex-col items-center mb-1 rounded-top gradientbglightgreen">
+      <div class="w-100pc text-right"><span class="text-xs font-bold text-white multiply roundedxs px-2 py-1">Medium risk</span></div>
+      <img class="w-40pc" src={pie.icon} alt={pie.symbol} />
     </div>
-        <div class="p-4 flex flex-col">
-        <span class="flex items-center"><span class="text-lg">{pie.symbol}</span><span class="text-lg font-thin mx-2">{getNav(pie.address)}</span><Change value={pie.change} /></span>
-        <span class="font-thin text.base">Exposure to lower marketcap projects that have incredible potential for future growth</span>
-        </div>
-      </a>
+    <div class="px-4 py-2 flex flex-col">
+      <span class="flex items-center"><span class="text-lg">{pie.symbol}&nbsp;</span><span class="text-lg font-thin">{getNav(pie.address)}&nbsp;</span><Change value={pie.change} /></span>
+      <span class="font-thin text-base mb-1">Exposure to lower market cap tokens that have incredible potential for future growth</span>
+      <a href={`#/swap`}>      <div class="text-left mt-1 mb-2 flex"><span class="text-xs font-thin text-black bg-white  flex items-center">🔥 to date <strong class="text-base ml-2 text-black">+520,43%</strong></span></div>
+        <button class="table-btn highlight-box min-w-70px mt-2 mb-2">Buy</button>
+      </div>
+    </a>
+  </div>
   {/each}
+
     <div class="block inline-block md:hidden" style="margin-right:2rem!important;">&nbsp;</div>
-</div>
+
+  </div>
 </div>
 
 <Newsletter />

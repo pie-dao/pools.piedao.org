@@ -55,6 +55,9 @@ flex: 1 1 0;
 
 .border-thin {border: solid 0.5px grey;}
 
+.border-thin-pink {border: solid 0.5px EC1EA0;}
+
+
 
 #confetti {
   position: absolute;
@@ -643,6 +646,15 @@ flex: 1 1 0;
   border-radius: 10px;
   display: inline;
   border: solid 1px white;
+}
+
+.btnblackghost {
+  cursor: pointer;
+  color: black ;
+  background-color: none;
+  border-radius: 10px;
+  display: inline;
+  border: solid 1px black;
 }
 
 .add-dough-metamask {
@@ -1835,6 +1847,11 @@ outline: none;
 
 .bg-black-alpha {
   background-color:rgba(0, 0, 0, 0.04);
+  background-blend-mode: multiply;
+}
+
+.multiply {
+  background-color:rgba(0, 0, 0, 0.6);
   background-blend-mode: multiply;
 }
 
