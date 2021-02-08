@@ -55,6 +55,9 @@ flex: 1 1 0;
 
 .border-thin {border: solid 0.5px grey;}
 
+.border-thin-top {border-top: solid 0.5px rgb(206, 206, 206);}
+
+
 .border-thin-pink {border: solid 0.5px EC1EA0;}
 
 
@@ -149,6 +152,14 @@ flex: 1 1 0;
 
 .rounded-sm {
   border-radius: 0.5rem;
+}
+
+.rounded-xl {
+  border-radius: 1.6rem;
+}
+
+.rounded-xl-top {
+  border-radius: 1.6rem 1.6rem 0 0;
 }
 
 .bg-pink {
@@ -610,6 +621,13 @@ flex: 1 1 0;
   cursor: pointer;
   background-color: black;
   border-radius: 10px;
+  display: inline;
+}
+
+.btn-text-pink {
+  color: #ED1EA0 ;
+  cursor: pointer;
+  background-color:none;
   display: inline;
 }
 
@@ -1860,7 +1878,7 @@ outline: none;
 }
 
 .scale { transition: all .2s ease-in-out; }
-.scale:hover { transform: scale(1.02); }
+.scale:hover { transform: scale(1.05); }
 
 .single-line {
   text-overflow: ellipsis;
