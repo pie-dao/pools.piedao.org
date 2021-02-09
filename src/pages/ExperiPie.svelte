@@ -477,7 +477,25 @@
   {#if initialized}
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
 
-  <div class="w-99pc m-4">
+  <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
+    {#each orderBy(composition,['percentage'], ['desc']) as pooledToken}
+<a class="mx-4 thinborderbottom" href="ciao">
+  <div class="flex items-center w-100pc py-4">
+        <img width="50px" height="50px" class="mr-4" src={getTokenImage(pooledToken.address)} alt={pooledToken.symbol} />
+      <div class="flex flex-col justify-around">
+        <span class="text-lg leading-6">{pooledToken.symbol}</span>
+        <span class="text-sm font-thin opacity-40" >{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')} <span> ({amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%)</span></span>
+      </div>
+      <div class="text-right flex flex-col justify-end items-end ml-auto">
+        <span class="">{formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}</span>
+        <Change value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} class="text-right" />
+      </div>
+  </div>
+</a>
+{/each}
+</div>
+
+  <div class="w-99pc m-4 hidden md:block lg:block">
     <table class="breakdown-table table-auto w-full">
       <thead>
         <tr>

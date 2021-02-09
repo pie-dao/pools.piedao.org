@@ -326,7 +326,7 @@
             <img width="50px" height="50px" class="mr-4" src={getTokenImage(pooledToken.address)} alt={pooledToken.symbol} />
           <div class="flex flex-col justify-around">
             <span class="text-lg leading-6">{pooledToken.symbol}</span>
-            <span class="text-sm font-thin opacity-40" >{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')}</span>
+            <span class="text-sm font-thin opacity-40" >{formatFiat(pooledToken.balance ? pooledToken.balance : '0', ',', '.', '')} <span> ({amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%)</span></span>
           </div>
           <div class="text-right flex flex-col justify-end items-end ml-auto">
             <span class="">{formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}</span>
