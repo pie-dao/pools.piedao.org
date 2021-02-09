@@ -167,7 +167,7 @@
     <WhiteBox
       image={images.waitoven}
       title="Wait"
-      description="Oven will bake when gas prices are affordable, saving everyone money" />
+      description="Oven will bake when Gas Price is below 100 Gwei, saving everyone money" />
 
     <WhiteBox
       image={images.sharegascost}
@@ -196,7 +196,7 @@
       <div class="flex justify-between my-2">
         <div class="flex items-center ">
           <span class="font-thin text-left mr-2">Minimum reached</span>
-          <TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated">
+          <TooltipButton tooltip="Oven needs 10 ETH and Gas Price < 100 Gwei to be activated">
             <img src={images.InfoIcon} class="" alt="info" width="16px" />
           </TooltipButton>
         </div>
