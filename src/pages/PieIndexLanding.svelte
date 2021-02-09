@@ -210,11 +210,11 @@
         </div>
       </div>
 
-      <div class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0">
-        <div class="relative inline-block text-left hidden md:block">
+      <div class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0 mr-1 md:mr-0">
+        <div class="relative inline-block text-left block">
           <div>
-            <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full py-2 focus:outline-none" id="options-menu" aria-haspopup="true" aria-expanded="true">
-              <img class="h-6" src={images.more} alt="More options" />
+            <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full focus:outline-none min-w-5px" id="options-menu" aria-haspopup="true" aria-expanded="true">
+              <img width="5px" src={images.more} alt="More options" />
             </button>
           </div>
           {#if dropdownOpen}
@@ -243,16 +243,17 @@
             {/if}
         </div>
         
-          <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-1 hover:opacity-80" onclick="location.href='#/oven'">
+          <button class="flex min-w-47pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3  md:mr-2 hover:opacity-80" onclick="location.href='#/oven'">
             <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
             <div class="">
               <div class="text-base font-bold leading-5">Bake your Pie</div>
-              <div class="text-sm font-thin">Wait and save 97% gas</div>
+              <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
+              <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
             </div>
           </button>
    
 
-          <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
+          <button class="flex min-w-47pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3  md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
             <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
             <div class="">
               <div class="text-base font-bold leading-5">Buy & Sell</div>
