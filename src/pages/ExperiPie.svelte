@@ -438,10 +438,10 @@
     </div>
 
     <div class="p-0 flex-initial self-start mr-8">
-      <div class="font-bold text-md md:text-md text-pink">
+      <div class="font-bold text-md md:text-md text-black">
         {PieAPR}
       </div>
-      <div class="font-bold text-pink text-xs md:text-base">Tot APY</div>
+      <div class="font-thin text-black text-xs md:text-base">Tot APY 🔥</div>
     </div>
 
     <!-- <div class="p-0 flex-initial self-start mr-8">
