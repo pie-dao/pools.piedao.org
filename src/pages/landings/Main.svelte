@@ -7,10 +7,9 @@
   import Meta from '../../components/elements/meta.svelte';
   import images from "../../config/images.json";
   import FeaturedIn from '../../components/FeaturedIn.svelte';
+  import Contributors from '../../components/Contributors.svelte';
   import Newsletter from '../../components/Newsletter.svelte';
   import Change from '../../components/Change.svelte'
-  import Modal from '../../components/elements/Modal.svelte';
-  import LiquidityModal from "../../components/modals/LiquidityModalSwitch.svelte";
 
   import {
     getTokenImage,
@@ -150,3 +149,4 @@
 </div>
 
 <FeaturedIn />
+<Contributors />
