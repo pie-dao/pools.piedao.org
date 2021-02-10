@@ -279,6 +279,15 @@ flex: 1 1 0;
   border-bottom: solid 0.5px #d1d1d1;
 }
 
+.border-gradient {
+  border: 10px solid;
+  border-image-slice: 1;
+  border-width: 5px;
+}
+.border-gradient-purple {
+  border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
+}
+
 .negativetop {
   margin-top: -1px;
 }
@@ -1159,6 +1168,40 @@ font-weight: 300;
   font-weight: 300;
 }
 
+.substack .embed-page {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: auto!important;
+  height: 100vh;
+  width: 100vw;
+  max-width: 1200px!important;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.substack .publication-logo {
+  display: none!important;
+}
+
+.substack .publication-name {
+display: none!important;
+}
+
+.substack .publication-tagline {
+  display: none!important;
+}
+
+.substack .sideBySideWrap {
+width: 400px!important;
+}
+
+.substack .embed-page-inner {
+max-width: 100%;
+}
 
 .oven-button {
   -webkit-box-align: center;
@@ -1926,4 +1969,12 @@ scrollbar-width: none;  /* Firefox */
     to {
       background-position: 200% center;
     }
+}
+
+.circle {
+  border-radius: 100%;
+}
+
+.max-content {
+  min-width: max-content;
 }

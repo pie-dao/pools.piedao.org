@@ -119,6 +119,7 @@
 <Newsletter />
 
 
+
 <div class="content">
   <div class="flex flex-col md:flex-row max-w-1200px p-10 mx-4 md:mx-0 rounded gradientbglightblue">
     <img class="w-60px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" />
