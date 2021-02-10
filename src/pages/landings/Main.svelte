@@ -84,7 +84,7 @@
 
 
 <div class="content text-left md:text-center" style="padding-bottom: 0!important;">
-  <span class="mt-6 mb-0 px-8 italic text-lg block md:hidden leading-7">"A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
+  <span class="mt-6 mb-0 px-6 md:px-8 italic text-lg block md:hidden leading-7">"A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
   <span class="mt-12 mb-4 px-8 italic font-huge hidden md:block">"A decentralised asset manager for tokenised portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
 </div>
 
@@ -125,11 +125,11 @@
     <img class="w-60px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" />
     <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-2">Pies are diversified portfolios of top performing crypto assets</div>
     <div class="font-huge text-left w-1/2 pr-2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
-    <ul class="text-left font-thin text-base w-100pc md:w-1/2 md:pl-4 list-outside list-none">
-      <li class="mt-4 md:mt-0">✔️ Carefully handpicked by a decentralised community of economically incentivised talent</li>
-      <li class="mt-4">✔️ Maximised returns through latest-trend active strategies like staking, lending, and yield-farming - completely automated</li>
-      <li class="mt-4">✔️ Low-cost onboarding, saving you 97% of Ethereum gas fees</li>
-      <li class="mt-4">✔️ Architecture that enhances security & minimises risk </li>
+    <ul class="text-left font-thin font-base w-100pc md:w-1/2 md:pl-4 list-outside list-none">
+      <li class="mt-3 md:mt-0">✔️ Carefully handpicked by a decentralised community of economically incentivised talent</li>
+      <li class="mt-3">✔️ Maximised returns through latest-trend active strategies like staking, lending, and yield-farming - completely automated</li>
+      <li class="mt-3">✔️ Low-cost onboarding, saving you 97% of Ethereum gas fees</li>
+      <li class="mt-3">✔️ Architecture that enhances security & minimises risk </li>
     </ul>
   </div>
 </div>
