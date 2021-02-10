@@ -93,7 +93,7 @@
   <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-4 px-6 hidescrollbar md:flex-wrap">  
 
   {#each pies as pie}
-  <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 drowpdown-shadow rounded-xl flex flex-col pointer scale">
+  <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 drowpdown-shadow-light rounded-xl flex flex-col pointer scale">
     <a class="" target="_blank" href={`#/pie/${pie.address}`}>
       <div class="w-100pc p-4 min-w-100pc h-auto md:h-200px flex flex-col items-center mb-1 rounded-xl-top gradientbglightgreen">
         <div class="w-100pc text-left invisible"><span class="text-xs font-bold text-white multiply roundedxs px-2 py-1">Medium risk</span></div>
@@ -149,6 +149,6 @@
   </div>
 </div>
 
-<Contributors />
+<Contributors class="mb-8" />
 <FeaturedIn />
 

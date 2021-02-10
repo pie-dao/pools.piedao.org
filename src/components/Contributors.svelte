@@ -60,7 +60,7 @@
 
   </div>
 
-  <div class="flex max-w-1200px px-2 md:px-8 mt-2 md:mt-4 overflow-hidden flex-nowrap justify-between self-center">
+  <div class="flex max-w-1200px px-2 md:px-8 mt-2 md:mt-8 overflow-hidden flex-nowrap justify-between self-center">
 
       <a href="https://twitter.com/Alexintosh" target="_blank">
         <div class="w-60px h-60px circle mr-2" style="background: url(https://pbs.twimg.com/profile_images/1225182358955069443/iDGzgOTY_400x400.jpg) no-repeat center center; background-size: cover!important;"></div>
