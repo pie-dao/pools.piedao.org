@@ -240,8 +240,8 @@ flex: 1 1 0;
 
 @media (max-width: 768px) {
   .font-hero {
-    font-size: 3rem;
-    line-height: 3rem;
+    font-size: 15vw;
+    line-height: 3.5rem;
   }
   .font-huge {
     font-size: 2rem;

@@ -60,7 +60,7 @@
 
   <div class="w-100pc m-0 p-0 flex justify-center">
     <div class="max-w-1200px flex flex-col items-center justify-center py-0 md:py-8 px-6">
-    <img class="w-90pc block md:hidden mb-2"  src={images.herolandingmobile} alt="PieDAO Hero" />
+    <!-- <img class="w-90pc block md:hidden mb-2"  src={images.herolandingmobile} alt="PieDAO Hero" /> -->
     <img class="md:w-90pc lg:w-80pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
     <div class="text-black font-bold text-center font-hero linear-wipe">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
     <div class="text-lg text-black font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
@@ -148,6 +148,10 @@
     <a href="#/dough"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
   </div>
 </div>
+
+
+
+
 
 <Contributors />
 <FeaturedIn />
