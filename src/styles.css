@@ -271,6 +271,10 @@ flex: 1 1 0;
   border: solid 0.5px #d1d1d1;
 }
 
+.thinborder-purple {
+  border: solid 0.5px #ce0ce7;
+}
+
 .thinborderight {
   border-right: solid 0.5px #d1d1d1;
 }
@@ -279,14 +283,6 @@ flex: 1 1 0;
   border-bottom: solid 0.5px #d1d1d1;
 }
 
-.border-gradient {
-  border: 10px solid;
-  border-image-slice: 1;
-  border-width: 5px;
-}
-.border-gradient-purple {
-  border-image-source: linear-gradient(to left, #743ad5, #d53a9d);
-}
 
 .negativetop {
   margin-top: -1px;

@@ -137,7 +137,7 @@
 
 
 
-<div class="videocontainer my-6">
+<div class="videocontainer my-2 md:my-6">
   <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video-landing">
     <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
   </video>
@@ -149,5 +149,6 @@
   </div>
 </div>
 
-<FeaturedIn />
 <Contributors />
+<FeaturedIn />
+
