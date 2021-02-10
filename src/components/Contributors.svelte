@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <div class="flex max-w-100pc md:max-w-1200px px-2 md:px-8 mt-4 flex-wrap justify-start self-center">
+  <div class="flex max-w-100pc md:max-w-1200px px-2 md:px-8 mt-4 flex-wrap justify-center self-center">
       
     <a href="https://twitter.com/kaiynne" target="_blank" class="md:min-w-200px md:w-200px w-100pc flex items-center bg-lightgrey thinborder rounded p-2 thinborder-purple pointer mr-2 md:mt-2 hidden md:flex md:visible">
         <div class="w-60px h-60px circle" style="background: url(https://pbs.twimg.com/profile_images/1170881713926365184/gI59qCJT_400x400.jpg) no-repeat center center; background-size: cover!important;"></div>
