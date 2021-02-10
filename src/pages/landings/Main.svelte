@@ -121,7 +121,7 @@
 
 
 <div class="content">
-  <div class="flex flex-col md:flex-row max-w-1200px p-10 mx-4 md:mx-0 rounded gradientbglightblue">
+  <div class="flex flex-col md:flex-row p-10 mx-4 md:mx-0 rounded gradientbglightblue">
     <img class="w-60px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" />
     <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-2">Pies are diversified portfolios of top performing crypto assets</div>
     <div class="font-huge text-left w-1/2 pr-2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
@@ -142,13 +142,13 @@
     <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
   </video>
   <div class="content flex flex-col spl px-4 z-50">
-    <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div>
+    <!-- <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div> -->
     <img src={images.doughcolorful} class="w-100pc md:w-30pc" alt="dough" />
-    <div class="text-base md:text-lg font-thin text-center mt-2">$DOUGH is the engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
+    <div class="text-base md:text-lg font-thin text-center mt-2">The engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
     <a href="#/dough"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
   </div>
 </div>
 
-<Contributors class="mb-8" />
+<Contributors />
 <FeaturedIn />
 
