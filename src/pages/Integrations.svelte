@@ -225,7 +225,7 @@
       <a
         class="text-center font-thin mt-4 hover:opacity-70"
         target="_blank"
-        href={`https://1inclh.exchange/#/`}
+        href={`https://1inch.exchange/#/`}
         >Learn more
       </a>
     </div>
