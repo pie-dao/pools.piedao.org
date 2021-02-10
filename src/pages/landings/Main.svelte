@@ -47,6 +47,8 @@
   $: getNav =((token) => {
     return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
   })
+
+  
 </script>
 
 <Meta 
@@ -135,22 +137,17 @@
 </div>
 
 
-
-
-<div class="videocontainer my-2 md:my-6">
-  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video-landing">
-    <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
+<div class="videocontainer-landing my-2 md:my-6 py-20 md:py-30">
+  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video-landing hidden md:block">
+    <source class="hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
   </video>
   <div class="content flex flex-col spl px-4 z-50">
     <!-- <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div> -->
-    <img src={images.doughcolorful} class="w-100pc md:w-30pc" alt="dough" />
+    <img src={images.doughcolorful} class="w-60pc md:w-30pc" alt="dough" />
     <div class="text-base md:text-lg font-thin text-center mt-2">The engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
     <a href="#/dough"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
   </div>
 </div>
-
-
-
 
 
 <Contributors />
