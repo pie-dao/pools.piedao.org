@@ -116,14 +116,14 @@
 
 
 <div class="w-100pc flex justify-center">
-  <div class="flex flex-col md:max-w-1200px p-0 p-2 md:p-6 mx-4 md:mx-0 items-center">
+  <div class="flex flex-col md:max-w-1200px p-0 p-2 md:p-6 mx-4 md:mx-0 mb-4 items-center">
     <div>
       <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-4">Bake Together, save 97% Gas. <a href="#/oven" class="underline"> Use the oven ></a></div>
       <div class="font-huge text-center w-100pc pr-2 hidden md:block">Bake Together, save 97% Gas.</div>
     </div>
     <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
 
-        <div class="white-card flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white my-0 lg:m-10px p-0 md:p-20px rounded-sm">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white my-0 lg:m-10px p-0 md:p-20px">
           <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.depositeth} alt="deposit eth" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
               <div class="text-lg">Deposit ETH</div>
@@ -131,7 +131,7 @@
           </div>
         </div>
 
-        <div class="white-card flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-2 md:my-0 lg:m-10px p-0 md:p-20px rounded-sm">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-2 md:my-0 lg:m-10px p-0 md:p-20px">
           <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.waitoven} alt="wait oven" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
               <div class="text-lg">Wait</div>
@@ -139,8 +139,8 @@
           </div>
         </div>
 
-        <div class="white-card flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-2 md:my-0 lg:m-10px p-0 md:p-20px rounded-sm">
-          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.sharegascost} alt="share gas cost" />
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-2 md:my-0 lg:m-10px p-0 md:p-20px">
+          <img class="w-50px md:w-80px mr-4 md:mr-0 mb-2 md:mb-0" src={images.sharegascost} alt="share gas cost" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
             <div class="text-lg">Withdraw Your Pie</div>
             <div class="font-thin mt-1 md:mt-2">Once the Pie is baked you can withdraw it to your wallet</div>
@@ -154,8 +154,8 @@
 
 
 <div class="content">
-  <div class="flex flex-col md:flex-row p-10 mx-4 md:mx-0 rounded gradientbglightblue">
-    <img class="w-60px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" />
+  <div class="flex flex-col md:flex-row p-4 md:p-10 mx-4 md:mx-0 rounded gradientbglightblue">
+    <!-- <img class="w-60px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" /> -->
     <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-2">Pies are diversified portfolios of top performing crypto assets</div>
     <div class="font-huge text-left w-1/2 pr-2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
     <ul class="text-left font-thin font-base w-100pc md:w-1/2 md:pl-4 list-outside list-none">

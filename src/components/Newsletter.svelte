@@ -21,8 +21,9 @@
 
 <div class="flex rounded py-4 md:py-6 px-4 md:px-6 md:mx-40 flex items-center justify-center">
 <div class="flex flex-col max-w-1200px px-2 md:px-8">
-  <div class="text-lg text-center w-100pc block md:hidden leading-7">Subscribe to our newsletter for latest performance updates and community news</div>
-  <div class="text-lg text-center w-100pc hidden md:block leading-7">Subscribe to our newsletter for latest<br />performance updates and community news</div>
+  <div class="text-lg text-center w-100pc block md:hidden leading-7">Inside the bakery</div>
+  <div class="text-lg text-center w-100pc hidden md:block leading-7">Inside the bakery</div>
+  <div class="text-base font-thin text-center w-100pc ">Subscribe to our newsletter for latest performance updates and community news</div>
 <iframe src="https://insidethebakery.substack.com/embed" class="substack" style="border:none; background:transparent;" frameborder="0" scrolling="no" title="subsribe to the newsletter"></iframe>
 </div>
 </div>
