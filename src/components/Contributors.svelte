@@ -43,7 +43,7 @@
         <div class="w-60px h-60px circle" style="background: url(https://pbs.twimg.com/profile_images/845097986912731136/VSF3gqwv_400x400.jpg) no-repeat center center; background-size: cover!important;"></div>
         <div class="ml-2 flex flex-col items-start">
           <span class="text-left font-bold text-base">Thatgirl.eth</span>
-          <span class="text-left text-sm font-thin">Go go go ethereum</span>
+          <span class="text-left text-sm font-thin">Go ethereum</span>
         </div>
       </a>
 
