@@ -108,7 +108,7 @@
       </div>
     </div>
         <span class="font-thin text-sm mb-1 opacity-70">Exposure to lower market cap tokens that have incredible potential for future growth</span>
-        <div class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top"><span class="block md:hidden">🔥 </span><span class="flex items-center font-thin text-sm opacity-70 leading-4"><span class="hidden md:block">🔥 </span>Since inception <strong class="ml-2 text-black">+520,43%</strong></span><a href={`#/swap`}><button class="btn-text-pink min-w-70px mt-2 mb-2 text-right">BUY</button>
+        <div class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top"><span class="block md:hidden mr-1">🔥 </span><span class="flex items-center font-thin text-sm opacity-70 leading-4"><span class="hidden md:block">🔥 </span>Since inception <strong class="ml-2 text-black">+520,43%</strong></span><a href={`#/swap`}><button class="btn-text-pink min-w-70px mt-2 mb-2 text-right">BUY</button>
       </div>
     </a>
   </div>
