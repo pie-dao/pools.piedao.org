@@ -65,8 +65,8 @@
     <div class="max-w-1200px flex flex-col items-center justify-center py-0 md:py-8 px-6">
     <!-- <img class="w-90pc block md:hidden mb-2"  src={images.herolandingmobile} alt="PieDAO Hero" /> -->
     <img class="md:w-90pc lg:w-80pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
-    <div class="text-black font-bold text-center font-hero linear-wipe">Wealth creation,<br class="hidden md:block lg:block"/> automated.</div>
-    <div class="text-lg text-black font-thin italic text-center mt-1">“The latest hack in Decentralised Finance”</div>
+    <div class="text-black font-bold text-center font-hero linear-wipe">Automated<br class="hidden md:block lg:block"/>  wealth creation</div>
+    <div class="text-lg text-black font-thin italic text-center mt-1">“Decentralized Finance Made Easy”</div>
     <a href="#/pies"><button class="btnbig text-white m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
     <div class="w-100pc flex flex-col md:flex-row items-stretch text-left mt-6 mb-0 md:mt-10 md:mb-6 text-black font-bold text-base">
       <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
@@ -93,7 +93,7 @@
 
 
 <div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll md:overflow-x-hidden hidescrollbar">
-  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start py-4 px-6 hidescrollbar md:flex-wrap">  
+  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start pt-4 pb-0 md:py-4 px-6 hidescrollbar md:flex-wrap">  
 
   {#each pies as pie}
   <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 drowpdown-shadow-light rounded-xl flex flex-col pointer scale">
@@ -110,38 +110,45 @@
     </a>
   </div>
   {/each}
-
-
-
-
     <div class="block inline-block md:hidden" style="margin-right:2rem!important;">&nbsp;</div>
-
   </div>
 </div>
 
+
 <div class="w-100pc flex justify-center">
-  <div class="flex flex-col md:max-w-1200px p-6 mx-4 md:mx-0 items-center">
+  <div class="flex flex-col md:max-w-1200px p-0 p-2 md:p-6 mx-4 md:mx-0 items-center">
     <div>
-      <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-2">Bake Together, save 97% Gas.</div>
+      <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-4">Bake Together, save 97% Gas. <a href="#/oven" class="underline"> Use the oven ></a></div>
       <div class="font-huge text-center w-100pc pr-2 hidden md:block">Bake Together, save 97% Gas.</div>
     </div>
-    <div class="flex flex-col justify-between content-center lg:flex-row">
-      <WhiteBox class="bg-white"
-        image={images.depositeth}
-        title="Deposit ETH"
-        description="When at least 10 ETH is deposited the Oven can begin" />
-  
-      <WhiteBox
-        image={images.waitoven}
-        title="Wait"
-        description="Oven will bake when gas prices are affordable, saving everyone money" />
-  
-      <WhiteBox
-        image={images.sharegascost}
-        title="Withdraw Your Pie"
-        description="Once the Pie is baked you can withdraw it to your wallet" />
+    <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
+
+        <div class="white-card flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white my-0 lg:m-10px p-0 md:p-20px rounded-sm">
+          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.depositeth} alt="deposit eth" />
+          <div class="flex flex-col text-left md:text-center md:mt-3">
+              <div class="text-lg">Deposit ETH</div>
+              <div class="font-thin mt-1 md:mt-2">When at least 10 ETH is deposited the Oven can begin</div>
+          </div>
+        </div>
+
+        <div class="white-card flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-2 md:my-0 lg:m-10px p-0 md:p-20px rounded-sm">
+          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.waitoven} alt="wait oven" />
+          <div class="flex flex-col text-left md:text-center md:mt-3">
+              <div class="text-lg">Wait</div>
+              <div class="font-thin mt-1 md:mt-2">Oven will bake when gas prices are affordable, saving everyone money</div>
+          </div>
+        </div>
+
+        <div class="white-card flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-2 md:my-0 lg:m-10px p-0 md:p-20px rounded-sm">
+          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.sharegascost} alt="share gas cost" />
+          <div class="flex flex-col text-left md:text-center md:mt-3">
+            <div class="text-lg">Withdraw Your Pie</div>
+            <div class="font-thin mt-1 md:mt-2">Once the Pie is baked you can withdraw it to your wallet</div>
+          </div>
+        </div>
+
     </div>
-    <a href="#/oven"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Oven</button></a>
+    <a href="#/oven" class="hidden md:block"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Oven</button></a>
   </div>
 </div>
 
