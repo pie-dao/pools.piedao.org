@@ -62,7 +62,7 @@
 />
 
   <div class="w-100pc m-0 p-0 flex justify-center">
-    <div class="max-w-1200px flex flex-col items-center justify-center py-0 md:py-8 px-6">
+    <div class="max-w-1200px flex flex-col items-center justify-center py-0 md:py-8 px-2">
     <!-- <img class="w-90pc block md:hidden mb-2"  src={images.herolandingmobile} alt="PieDAO Hero" /> -->
     <img class="md:w-90pc lg:w-80pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
     <div class="text-black font-bold text-center font-hero linear-wipe">Automated<br class="hidden md:block lg:block"/> wealth creation</div>
@@ -115,40 +115,44 @@
 </div>
 
 
+<section class="pt-8 px-4 text-center md:pt-8 lg:pt-12">
+  <div class="w-full max-w-2xl mx-auto">
+    <div class="text-lg text-center w-100pc block md:hidden leading-7 mb-6">Bake Together, save 97% Gas.<br /><a href="#/oven" class="underline"> Use the oven ></a></div>
+    <div class="font-huge text-center w-100pc pr-2 hidden md:block">Bake Together, save 97% Gas.</div>
+  </div>
+</section>
+
 <div class="w-100pc flex justify-center">
-  <div class="flex flex-col md:max-w-1200px p-0 p-2 md:p-6 mx-4 md:mx-0 mb-4 items-center">
-    <div>
-      <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-6">Bake Together, save 97% Gas. <a href="#/oven" class="underline"> Use the oven ></a></div>
-      <div class="font-huge text-center w-100pc pr-2 hidden md:block">Bake Together, save 97% Gas.</div>
-    </div>
+  <div class="flex flex-col md:max-w-1200px p-0 p-4 md:p-6 mx-4 md:mx-0 mb-4 items-center bg-lightgrey md:bg-white rounded">
     <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
 
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white my-0 lg:m-10px p-0 md:p-20px">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center my-0 lg:m-10px p-0 md:p-20px">
           <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.depositeth} alt="deposit eth" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
               <div class="text-lg">Deposit ETH</div>
-              <div class="font-thin mt-1 md:mt-2">When at least 10 ETH is deposited the Oven can begin</div>
+              <div class="font-thin mt-1 md:mt-2">When at least 10 ETH is deposited the Oven can begin.</div>
           </div>
         </div>
 
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
           <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.waitoven} alt="wait oven" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
               <div class="text-lg">Wait</div>
-              <div class="font-thin mt-1 md:mt-2">Oven will bake when gas prices are affordable, saving everyone money</div>
+              <div class="font-thin mt-1 md:mt-2">Oven will bake when gas price is below 100 gwei, saving everyone money.</div>
           </div>
         </div>
 
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
           <img class="w-50px md:w-80px mr-4 md:mr-0 mb-2 md:mb-0" src={images.sharegascost} alt="share gas cost" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
             <div class="text-lg">Withdraw Your Pie</div>
-            <div class="font-thin mt-1 md:mt-2">Once the Pie is baked you can withdraw it to your wallet</div>
+            <div class="font-thin mt-1 md:mt-2">Once the Pie is baked you can withdraw it to your wallet.</div>
           </div>
         </div>
 
     </div>
     <a href="#/oven" class="hidden md:block"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Oven</button></a>
+
   </div>
 </div>
 
