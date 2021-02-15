@@ -530,6 +530,7 @@
 
   {#if poolsConfig[token].coingeckoId}
     <PriceChartArea coingeckoId={poolsConfig[token].coingeckoId}/>
+    <div class="w-100pc px-2 text-sm font-thin text-left">*Prices from CoinGecko</div>
   {/if}
 
   {#if initialized}
