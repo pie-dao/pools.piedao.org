@@ -118,7 +118,7 @@
 <div class="w-100pc flex justify-center">
   <div class="flex flex-col md:max-w-1200px p-0 p-2 md:p-6 mx-4 md:mx-0 mb-4 items-center">
     <div>
-      <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-4">Bake Together, save 97% Gas. <a href="#/oven" class="underline"> Use the oven ></a></div>
+      <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-6">Bake Together, save 97% Gas. <a href="#/oven" class="underline"> Use the oven ></a></div>
       <div class="font-huge text-center w-100pc pr-2 hidden md:block">Bake Together, save 97% Gas.</div>
     </div>
     <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
@@ -131,7 +131,7 @@
           </div>
         </div>
 
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-2 md:my-0 lg:m-10px p-0 md:p-20px">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
           <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.waitoven} alt="wait oven" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
               <div class="text-lg">Wait</div>
@@ -139,7 +139,7 @@
           </div>
         </div>
 
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-2 md:my-0 lg:m-10px p-0 md:p-20px">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center bg-white mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
           <img class="w-50px md:w-80px mr-4 md:mr-0 mb-2 md:mb-0" src={images.sharegascost} alt="share gas cost" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
             <div class="text-lg">Withdraw Your Pie</div>
