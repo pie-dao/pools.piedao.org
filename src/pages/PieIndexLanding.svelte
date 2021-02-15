@@ -319,7 +319,7 @@
     </div>
   </div>
   
-  <div class="flex w-full mt-2 md:mt-8">
+  <div class="flex w-full mt-2 md:mt-8 hidden md:flex">
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black text-pink">
         {getNav}
@@ -365,6 +365,35 @@
       <div class="font-thin text-xs md:text-base">Inception date</div>
     </div>
 
+  </div>
+
+  <div class="md:hidden w-100pc text-sm flex flex-col rounded-sm border-grey my-2 p-2">
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-bold text-left text-pink"><a on:click={() => { modalinfo.open() }} class="cursor-pointer flex" role="menuitem"><span>NAV </span><img src={images.InfoIcon} class="ml-1" alt="info" width="16px" /></div>
+        <div class="font-bold text-right">{nav}</div>
+    </div>
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-thin text-left">{getSpread.label}</div>
+      <div class="font-bold text-right">{getSpread.number}</div>
+    </div>
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-thin text-left">Market Cap</div>
+      <div class="font-bold text-right">
+        {#if poolsConfig[token].swapEnabled}
+        {formatFiat(metadata.liquidity)}
+      {:else}
+        {formatFiat($pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : '')}
+      {/if}</div>
+    </div>
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-thin text-left">Inception date</div>
+      <div class="font-bold text-right">
+        {#if metadata.createTime}
+        {moment(moment.unix(metadata.createTime)).format('MMM Do YYYY')}
+      {:else}
+        n/a
+      {/if}</div>
+    </div>
   </div>
 
   {#if poolsConfig[token].coingeckoId}

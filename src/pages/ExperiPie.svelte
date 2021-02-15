@@ -321,7 +321,7 @@
 </script>
 
   <!-- mobile stycky buttons-->
-  <div class="w-100pc flex items-center flex-row-reverse flex-grow justify-between mr-0 px-2pc pt-2 pb-4 md:hidden sticky-pie-buttons">
+  <div class="w-100pc flex items-center flex-row-reverse flex-grow justify-between mr-0 px-2pc pt-2 pb- md:hidden sticky-pie-buttons">
     <div class="relative inline-block text-left block">
       <div>
         <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full focus:outline-none min-w-6px pl-1 pr-2" id="options-menu" aria-haspopup="true" aria-expanded="true">
@@ -472,7 +472,7 @@
     </div>
   </div>
   
-  <div class="flex w-full mt-2 md:mt-8">
+  <div class="flex w-full mt-2 md:mt-8 hidden md:flex">
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black text-pink">
         {nav}
@@ -502,30 +502,31 @@
       <div class="font-thin text-black text-xs md:text-base">Tot APY 🔥</div>
     </div>
 
-    <!-- <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
-        Meta-Governance
-      </div>
-      <div class="font-thin text-xs md:text-base">Enabled</div>
-    </div> -->
-
     <div class="p-0 flex-initial self-start mr-6">
       <div class="text-md md:text-md font-black">
         {marketCap}
       </div>
       <div class="font-thin text-xs md:text-base">Market Cap</div>
     </div>
+  </div>
 
-    <!-- <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black">
-        {#if metadata.createTime}
-          {moment(moment.unix(metadata.createTime)).format('MMMM Do YYYY')}
-        {:else}
-          n/a
-        {/if}
-      </div>
-      <div class="font-thin text-xs md:text-base">Inception date</div>
-    </div> -->
+  <div class="md:hidden w-100pc text-sm flex flex-col rounded-sm border-grey my-2 p-2">
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-bold text-left text-pink"><a on:click={() => { modalinfo.open() }} class="cursor-pointer flex" role="menuitem"><span>NAV </span><img src={images.InfoIcon} class="ml-1" alt="info" width="16px" /></div>
+      <div class="font-bold text-right">{nav}</div>
+    </div>
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-thin text-left">{getSpread.label}</div>
+      <div class="font-bold text-right">{getSpread.number}</div>
+    </div>
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-thin text-left">Tot APY 🔥</div>
+      <div class="font-bold text-right">{PieAPR}</div>
+    </div>
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-thin text-left">Market Cap</div>
+      <div class="font-bold text-right">{marketCap}</div>
+    </div>
   </div>
 
   {#if poolsConfig[token].coingeckoId}

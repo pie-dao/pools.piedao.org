@@ -55,6 +55,9 @@ flex: 1 1 0;
 
 .border-thin {border: solid 0.5px grey;}
 
+.border-grey {border: solid 1px #cecece;}
+
+
 
 #confetti {
   position: absolute;
