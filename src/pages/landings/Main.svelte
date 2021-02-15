@@ -9,7 +9,8 @@
   import FeaturedIn from '../../components/FeaturedIn.svelte';
   import Contributors from '../../components/Contributors.svelte';
   import Newsletter from '../../components/Newsletter.svelte';
-  import Change from '../../components/Change.svelte'
+  import Change from '../../components/Change.svelte';
+  import WhiteBox from '../../components/elements/WhiteBox.svelte';
 
   import {
     getTokenImage,
@@ -118,8 +119,31 @@
   </div>
 </div>
 
-<Newsletter />
-
+<div class="w-100pc flex justify-center">
+  <div class="flex flex-col md:max-w-1200px p-6 mx-4 md:mx-0 items-center">
+    <div>
+      <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-2">Bake Together, save 97% Gas.</div>
+      <div class="font-huge text-center w-100pc pr-2 hidden md:block">Bake Together, save 97% Gas.</div>
+    </div>
+    <div class="flex flex-col justify-between content-center lg:flex-row">
+      <WhiteBox class="bg-white"
+        image={images.depositeth}
+        title="Deposit ETH"
+        description="When at least 10 ETH is deposited the Oven can begin" />
+  
+      <WhiteBox
+        image={images.waitoven}
+        title="Wait"
+        description="Oven will bake when gas prices are affordable, saving everyone money" />
+  
+      <WhiteBox
+        image={images.sharegascost}
+        title="Withdraw Your Pie"
+        description="Once the Pie is baked you can withdraw it to your wallet" />
+    </div>
+    <a href="#/oven"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Oven</button></a>
+  </div>
+</div>
 
 
 <div class="content">
@@ -151,5 +175,6 @@
 
 
 <Contributors />
+<Newsletter />
 <FeaturedIn />
 
