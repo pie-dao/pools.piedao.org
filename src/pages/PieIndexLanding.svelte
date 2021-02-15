@@ -403,7 +403,7 @@
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
 
 
-  <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
+  <div class="w-full block md:hidden lg:hidden flex flex-col bg-white rounded border-grey">
     {#each orderBy(composition,['percentage'], ['desc']) as pooledToken}
 <div class="mx-4 thinborderbottom">
   <div class="flex items-center w-100pc py-4">
@@ -515,21 +515,21 @@
   {/if}
   
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row md:flex-wrap">
-    <div class="p-0 mt-2 flexgrow min-w-230px">
+    <div class="p-0 mt-2 flexgrow min-w-230px md:mr-10px">
       <Farming token={$currentRoute.params.address} />
     </div>  
-    <div class="p-0 mt-2 flexgrow	min-w-230px">
+    <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
       <Etherscan token={$currentRoute.params.address} />
     </div>
 
-    <div class="p-0 mt-2 flexgrow	min-w-230px">
+    <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
       <Quantstamp token={$currentRoute.params.address} />
     </div>
-    <div class="p-0 mt-2 flexgrow	min-w-230px">
+    <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
       <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />
     </div>
     {#if poolsConfig[token].coingeckoId}
-      <div class="p-0 mt-2 flexgrow	min-w-230px">
+      <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
         <CoinGeckoBanner pie={poolsConfig[token]} />
       </div>
     {/if}

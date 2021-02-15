@@ -249,7 +249,11 @@ flex: 1 1 0;
 }
 
 .thinborderbottom {
-  border-bottom: solid 0.5px #d1d1d1;
+  border-bottom: solid 0.5px #8d8d8d;
+}
+
+.thinborderbottom:last-child {
+  border-bottom: 0;
 }
 
 .negativetop {
@@ -339,7 +343,6 @@ flex: 1 1 0;
 .quantstamp-container {
   @apply bg-grey-243 pt-2 pb-4 px-4;
   border-radius: 8px;
-  margin-right: 10px;
   
   &:last-child {
     margin-right: 0;
