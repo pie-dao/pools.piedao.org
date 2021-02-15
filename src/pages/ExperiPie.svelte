@@ -510,7 +510,7 @@
     </div>
   </div>
 
-  <div class="md:hidden w-100pc text-sm flex flex-col rounded-sm border-grey my-2 p-2">
+  <div class="md:hidden w-100pc flex flex-col rounded-sm border-grey my-2 p-2">
     <div class="w-100pc flex justify-between items-center">
       <div class="font-bold text-left text-pink"><a on:click={() => { modalinfo.open() }} class="cursor-pointer flex" role="menuitem"><span>NAV </span><img src={images.InfoIcon} class="ml-1" alt="info" width="16px" /></div>
       <div class="font-bold text-right">{nav}</div>
