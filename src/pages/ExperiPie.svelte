@@ -319,9 +319,8 @@
   }
 
 </script>
-
   <!-- mobile stycky buttons-->
-  <div class="w-100pc flex items-center flex-row-reverse flex-grow justify-between mr-0 px-2pc pt-2 pb- md:hidden sticky-pie-buttons">
+  <div class="w-100pc flex items-center flex-row-reverse flex-grow justify-between mr-0 px-2pc pt-2 pb-4 md:hidden sticky-pie-buttons">
     <div class="relative inline-block text-left block">
       <div>
         <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full focus:outline-none min-w-6px pl-1 pr-2" id="options-menu" aria-haspopup="true" aria-expanded="true">
