@@ -23,7 +23,7 @@
 <div class="flex flex-col max-w-1200px px-2 md:px-8">
   <div class="text-lg text-center w-100pc block md:hidden leading-7">Inside the bakery</div>
   <div class="text-lg text-center w-100pc hidden md:block leading-7">Inside the bakery</div>
-  <div class="text-base font-thin text-center w-100pc ">Subscribe to our newsletter for latest performance updates and community news</div>
+  <div class="font-base font-thin text-center w-100pc ">Subscribe to our newsletter for latest performance updates and community news</div>
 <iframe src="https://insidethebakery.substack.com/embed" class="substack" style="border:none; background:transparent;" frameborder="0" scrolling="no" title="subsribe to the newsletter"></iframe>
 </div>
 </div>

@@ -9,7 +9,7 @@
     <div class="font-huge text-center w-100pc hidden md:block">If you want to go fast, go alone.<br/>If you want to go far, DAO it together.</div>
     <div class="flex flex-col md:flex-row items-center justify-between mt-2 md:mt-8 self-center">
       <div class="font-base font-thin text-left w-100pc ">Our fast growing community inlcudes top founders and developers of DeFi, join us!</div>
-      <a target="_blank" href="http://discord.link/PieDAO"><div class="bg-lightgrey text-xs font-bold max-content py-2 px-4 rounded-xl thinborder-purple pointer flex ml-4 mt-2 md:mt-0">+ 4682 <span class="font-thin ml-2">members</span></div></a>
+      <a target="_blank" href="http://discord.link/PieDAO"><div class="bg-lightgrey text-xs font-bold max-content py-2 px-4 rounded-xl thinborder-purple pointer flex ml-0 md:ml-4 mt-2 md:mt-0">+ 4682 <span class="font-thin ml-2">members</span></div></a>
     </div>
   </div>
 

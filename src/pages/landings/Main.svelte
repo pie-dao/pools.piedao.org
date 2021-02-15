@@ -86,30 +86,34 @@
 </div>
 
 
-<div class="content text-left md:text-center" style="padding-bottom: 0!important;">
-  <span class="mt-6 mb-0 px-6 md:px-8 italic text-lg block md:hidden leading-7">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
+<div class="content text-center" style="padding-bottom: 0!important;">
+  <span class="mt-6 mb-0 px-2 md:px-8 italic text-lg block md:hidden leading-7 font-thin">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
   <span class="mt-12 mb-4 px-8 italic font-huge hidden md:block">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
 </div>
 
 
 <div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll md:overflow-x-hidden hidescrollbar">
-  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start pt-4 pb-0 md:py-4 px-6 hidescrollbar md:flex-wrap">  
+  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start pt-4 pb-0 md:py-4 px-4 hidescrollbar md:flex-wrap">  
 
   {#each pies as pie}
-  <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 drowpdown-shadow-light rounded-xl flex flex-col pointer scale">
+  <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 rounded-xl flex pointer scale cardbordergradient">
     <a class="" target="_blank" href={`#/pie/${pie.address}`}>
-      <div class="w-100pc p-4 min-w-100pc h-auto md:h-200px flex flex-col items-center mb-1 rounded-xl-top gradientbglightgreen">
-        <div class="w-100pc text-left invisible"><span class="text-xs font-bold text-white multiply roundedxs px-2 py-1">Medium risk</span></div>
-        <img class="w-40pc" src={pie.icon} alt={pie.symbol} />
-      </div>
+
       <div class="px-4 py-2 flex flex-col">
-        <span class="flex items-center"><span class="text-lg">{pie.symbol}&nbsp;</span><span class="text-lg font-thin">{getNav(pie.address)}&nbsp;</span><Change value={pie.change} /></span>
+        <div class="flex items-center">
+        <img class="mt-2 mb-4 w-60px h-60px mr-3" src={pie.icon} alt={pie.symbol} />
+        <div class="flex flex-col">
+        <span class="text-lg leading-6">{pie.symbol}</span>
+        <span class="flex items-center font-base font-thin text-sm">{getNav(pie.address)}&nbsp; &nbsp;<Change class="text-sm" value={pie.change} /></span>
+      </div>
+    </div>
         <span class="font-thin text-sm mb-1 opacity-70">Exposure to lower market cap tokens that have incredible potential for future growth</span>
-        <div class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top"><span class="text-xs font-thin text-black bg-white  flex items-center">🔥 Since inception <strong class="text-base ml-2 text-black">+520,43%</strong></span><a href={`#/swap`}><button class="btn-text-pink min-w-70px mt-2 mb-2 text-base">BUY</button>
+        <div class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top"><span class="block md:hidden">🔥 </span><span class="flex items-center font-thin text-sm opacity-70 leading-4"><span class="hidden md:block">🔥 </span>Since inception <strong class="ml-2 text-black">+520,43%</strong></span><a href={`#/swap`}><button class="btn-text-pink min-w-70px mt-2 mb-2 text-right">BUY</button>
       </div>
     </a>
   </div>
   {/each}
+
     <div class="block inline-block md:hidden" style="margin-right:2rem!important;">&nbsp;</div>
   </div>
 </div>
@@ -123,7 +127,7 @@
 </section>
 
 <div class="w-100pc flex justify-center">
-  <div class="flex flex-col md:max-w-1200px p-0 p-4 md:p-6 mx-4 md:mx-0 mb-4 items-center bg-lightgrey md:bg-white rounded">
+  <div class="flex flex-col md:max-w-1200px p-0 p-4 md:p-6 mx-4 md:mx-0 mb-0 md:mb-4 items-center bg-lightgrey md:bg-white rounded">
     <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
 
         <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center my-0 lg:m-10px p-0 md:p-20px">
@@ -158,7 +162,7 @@
 
 
 <div class="content">
-  <div class="flex flex-col md:flex-row p-4 md:p-10 mx-4 md:mx-0 rounded gradientbglightblue">
+  <div class="flex flex-col md:flex-row p-4 md:p-10 mx-2 md:mx-4 md:mx-0 rounded gradientbglightblue">
     <!-- <img class="w-60px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" /> -->
     <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-2">Pies are diversified portfolios of top performing crypto assets</div>
     <div class="font-huge text-left w-1/2 pr-2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
@@ -172,7 +176,7 @@
 </div>
 
 
-<div class="videocontainer-landing my-2 md:my-6 py-20 md:py-30">
+<div class="videocontainer-landing mt-2 mb-6 md:my-6 py-20 md:py-30">
   <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video-landing hidden md:block">
     <source class="hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
   </video>
@@ -180,7 +184,7 @@
     <!-- <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div> -->
     <img src={images.doughcolorful} class="w-60pc md:w-30pc" alt="dough" />
     <div class="text-base md:text-lg font-thin text-center mt-2">The engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
-    <a href="#/dough"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
+    <a href="#/dough"><button class="btnblack m-0 mt-4 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
   </div>
 </div>
 
