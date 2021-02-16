@@ -118,7 +118,6 @@ right: 0px;
 }
 
 .strategy-label {
-# .strategy-label {
   border-radius: 8px;
   padding: 4px 8px 4px 4px;
   width: fit-content;
@@ -154,7 +153,6 @@ right: 0px;
 .roundedxs {
   border-radius: 4px;
   }
-
 .rounded-sm {
   border-radius: 0.5rem;
 }
@@ -207,9 +205,6 @@ right: 0px;
 
 .leading-32px {
   line-height: 32px;
-}
-
-.toggle-btn {
 }
 
 .font-huge {
@@ -635,6 +630,8 @@ right: 0px;
   border: none;
   padding: 8px;
   color: #000;
+}
+
 .table-btn-outline {
   border-radius: 6px;
   font-size: 14px;
@@ -850,10 +847,6 @@ img.oven-illustration {
 .token-select-container td:nth-child(2),
 .token-select-container th:nth-child(2) {
   @apply pr-20px;
-}
-
-.token-select-container tr {
-  /* border-bottom: 1px solid #f3f3f3; */
 }
 
 /* Pool Description */
@@ -1885,7 +1878,7 @@ font-weight: 100!important;
 
  .fit-content {
  width: fit-content!important;
- margins: 5px 5px;
+ margin: 5px 5px;
 }
 
 
