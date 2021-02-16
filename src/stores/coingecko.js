@@ -77,10 +77,12 @@ export class CoinGecko {
 
 
   static async fetchAssetPrices() {
-    let idQueryString = 'piedao-dough-v2%2Cweth%2C';
+    let idQueryString = 'piedao-dough-v2%2Cweth%2Cethereum%2C';
+
     const idToSymbolMap = {
       'piedao-dough-v2': { address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D' },
       weth: { address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
+      ethereum: { address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' },
     };
 
     poolsConfig.available.forEach((pieAddress) => {
@@ -120,6 +122,7 @@ export class CoinGecko {
       prices.forEach((coin) => {
         idToSymbolMap[coin.id].market_data = coin;
         newState[idToSymbolMap[coin.id].address] = idToSymbolMap[coin.id];
+        newState[idToSymbolMap[coin.id].address.toLowerCase()] = idToSymbolMap[coin.id];
       });
       return newState;
     });

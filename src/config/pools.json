@@ -67,7 +67,7 @@
   },
   "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
     "symbol": "USD++",
-    "isExperipie": false,
+    "isExperipie": true,
     "useMintOverBuy": true,
     "name": "USD Index Pie",
     "useRecipe": false,

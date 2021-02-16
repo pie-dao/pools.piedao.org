@@ -362,11 +362,11 @@
         </div>
       </div>
 
-      <div class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0">
-        <div class="relative inline-block text-left hidden md:block">
+      <div class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0 mr-1 md:mr-0">
+        <div class="relative inline-block text-left block">
           <div>
-            <button on:click={toggleDropdow}  type="button" class="inline-flex justify-center w-full py-2" id="options-menu" aria-haspopup="true" aria-expanded="true">
-              <img class="mt-15px h-6" src={images.more} alt="More options" />
+            <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full focus:outline-none min-w-5px" id="options-menu" aria-haspopup="true" aria-expanded="true">
+              <img width="5px" src={images.more} alt="More options" />
             </button>
           </div>
           {#if dropdownOpen}
@@ -395,21 +395,24 @@
             {/if}
         </div>
         
-        <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-1 hover:opacity-80" onclick="location.href='#/oven'">
+        <button class="flex min-w-47pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3  md:mr-2 hover:opacity-80" onclick="location.href='#/oven'">
           <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
           <div class="">
             <div class="text-base font-bold leading-5">Bake your Pie</div>
-            <div class="text-sm font-thin">Wait and save 97% gas</div>
+            <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
+            <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
           </div>
         </button>
+ 
 
-        <button class="flex min-w-46pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
+        <button class="flex min-w-47pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3  md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
           <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
           <div class="">
             <div class="text-base font-bold leading-5">Buy & Sell</div>
             <div class="text-sm font-thin">Instant swap</div>
           </div>
         </button>
+
       </div>
     </div>
   </div>
@@ -438,18 +441,27 @@
     </div>
 
     <div class="p-0 flex-initial self-start mr-8">
-      <div class="font-bold text-md md:text-md text-pink">
-        {PieAPR}
+      <div class="text-md md:text-md font-black text-black">
+        {getSpread.number}
       </div>
-      <div class="font-bold text-pink text-xs md:text-base">Tot APY</div>
+      <TooltipButton tooltip="Difference between NAV and the Pie current price on exchanges">
+      <div class="font-thin text-xs md:text-base text-black">{getSpread.label}</div>
+      </TooltipButton>
     </div>
 
     <div class="p-0 flex-initial self-start mr-8">
+      <div class="font-bold text-md md:text-md text-black">
+        {PieAPR}
+      </div>
+      <div class="font-thin text-black text-xs md:text-base">Tot APY 🔥</div>
+    </div>
+
+    <!-- <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
         Meta-Governance
       </div>
       <div class="font-thin text-xs md:text-base">Enabled</div>
-    </div>
+    </div> -->
 
     <div class="p-0 flex-initial self-start mr-6">
       <div class="text-md md:text-md font-black">
@@ -477,7 +489,27 @@
   {#if initialized}
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
 
-  <div class="w-99pc m-4">
+  <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
+    {#each orderBy(composition,['percentage'], ['desc']) as pooledToken}
+<div class="mx-4 thinborderbottom">
+  <div class="flex items-center w-100pc py-4">
+        <img width="50px" height="50px" class="mr-4" src={getTokenImage(pooledToken.address)} alt={pooledToken.symbol} />
+      <div class="flex flex-col justify-around">
+        <span class="text-lg leading-6">{pooledToken.symbol}</span>
+        <div style={`width: ${15 * (pooledToken.percentage/100)}rem`} class="flex items-center bg-pink roundedxs min-w-50px">
+          <span class="text-xs text-white px-1">{amountFormatter({ amount: pooledToken.percentage, displayDecimals: 2 })}%</span>
+        </div>
+      </div>
+      <div class="text-right flex flex-col justify-end items-end ml-auto">
+        <span class="">{formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}</span>
+        <Change value={get($piesMarketDataStore, `${pooledToken.address}.market_data.price_change_percentage_24h`, '-')} class="text-right" />
+      </div>
+  </div>
+</div>
+{/each}
+</div>
+
+  <div class="w-99pc m-4 hidden md:block lg:block">
     <table class="breakdown-table table-auto w-full">
       <thead>
         <tr>
