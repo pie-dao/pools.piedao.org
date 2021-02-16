@@ -444,12 +444,12 @@
       <div class="font-bold text-pink text-xs md:text-base">Tot APY</div>
     </div>
 
-    <div class="p-0 flex-initial self-start mr-8">
+    <!-- <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black">
         Meta-Governance
       </div>
       <div class="font-thin text-xs md:text-base">Enabled</div>
-    </div>
+    </div> -->
 
     <div class="p-0 flex-initial self-start mr-6">
       <div class="text-md md:text-md font-black">

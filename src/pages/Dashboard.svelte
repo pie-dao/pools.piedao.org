@@ -90,11 +90,11 @@
     <div class="flex w-100pc hidden md:block lg:block">
       {#each piVaults as pie}
         <ProductBox 
-          class="w-100pc"
+          class=""
           link={`#/pie/${pie.address}`}
           image={pie.icon}
           title={pie.symbol}
-          description="Yearn Ecosystem Pie"
+          description={pie.name}
         />
       {/each}
     </div>
