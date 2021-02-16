@@ -249,6 +249,12 @@ right: 0px;
   border: solid 0.5px #d1d1d1;
 }
 
+@media (-webkit-min-device-pixel-ratio: 2) {
+  .thinborder {
+    border: solid 1px #d1d1d1;
+  }
+}
+
 .thinborderight {
   border-right: solid 0.5px #d1d1d1;
 }
@@ -1676,7 +1682,6 @@ outline: none;
   z-index: 1;
 }
 
-
 .SpreadBanner {
   background-image: url(https://www.dexwallet.io/img/piebg.jpg);
   background-position: center center;
@@ -1687,4 +1692,11 @@ outline: none;
 
 .invertcolor {
   filter: invert(1);
+}
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
+
+.border-pink {
+  border: 1px solid #fc02a7;
 }
