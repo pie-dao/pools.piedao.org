@@ -171,6 +171,8 @@
 }
 
 </script>
+ 
+
 <!-- <SpreadBanner /> -->
 <Modal title="NAV vs Price" backgroundColor="#f3f3f3" bind:this="{modalinfo}">
   <span slot="content" class="p-4 font-thin">
@@ -210,10 +212,10 @@
         </div>
       </div>
 
-      <div class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0 mr-1 md:mr-0">
+      <div class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0 mr-0 hidden md:flex">
         <div class="relative inline-block text-left block">
           <div>
-            <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full focus:outline-none min-w-5px" id="options-menu" aria-haspopup="true" aria-expanded="true">
+            <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full focus:outline-none min-w-6px px-2" id="options-menu" aria-haspopup="true" aria-expanded="true">
               <img width="5px" src={images.more} alt="More options" />
             </button>
           </div>
@@ -243,8 +245,8 @@
             {/if}
         </div>
         
-          <button class="flex min-w-47pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3  md:mr-2 hover:opacity-80" onclick="location.href='#/oven'">
-            <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+        <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 md:mr-2 hover:opacity-80" onclick="location.href='#/oven'">
+          <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
             <div class="">
               <div class="text-base font-bold leading-5">Bake your Pie</div>
               <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
@@ -253,7 +255,7 @@
           </button>
    
 
-          <button class="flex min-w-47pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3  md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
+          <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
             <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
             <div class="">
               <div class="text-base font-bold leading-5">Buy & Sell</div>
@@ -265,7 +267,7 @@
     </div>
   </div>
   
-  <div class="flex w-full mt-2 md:mt-8">
+  <div class="flex w-full mt-2 md:mt-8 hidden md:flex">
     <div class="p-0 flex-initial self-start mr-8">
       <div class="text-md md:text-md font-black text-pink">
         {getNav}
@@ -313,14 +315,44 @@
 
   </div>
 
+  <div class="md:hidden w-100pc flex flex-col rounded-sm border-grey my-2 p-2">
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-bold text-left text-pink"><a on:click={() => { modalinfo.open() }} class="cursor-pointer flex" role="menuitem"><span>NAV </span><img src={images.InfoIcon} class="ml-1" alt="info" width="16px" /></div>
+        <div class="font-bold text-right">{nav}</div>
+    </div>
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-thin text-left">{getSpread.label}</div>
+      <div class="font-bold text-right">{getSpread.number}</div>
+    </div>
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-thin text-left">Market Cap</div>
+      <div class="font-bold text-right">
+        {#if poolsConfig[token].swapEnabled}
+        {formatFiat(metadata.liquidity)}
+      {:else}
+        {formatFiat($pools[token+"-usd"] ? $pools[token+"-usd"].toFixed(2) : '')}
+      {/if}</div>
+    </div>
+    <div class="w-100pc flex justify-between items-center">
+      <div class="font-thin text-left">Inception date</div>
+      <div class="font-bold text-right">
+        {#if metadata.createTime}
+        {moment(moment.unix(metadata.createTime)).format('MMM Do YYYY')}
+      {:else}
+        n/a
+      {/if}</div>
+    </div>
+  </div>
+
   {#if poolsConfig[token].coingeckoId}
     <PriceChartArea coingeckoId={poolsConfig[token].coingeckoId}/>
+    <div class="w-100pc px-2 text-sm font-thin text-left">*Prices from CoinGecko</div>
   {/if}
 
   <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
 
 
-  <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
+  <div class="w-full block md:hidden lg:hidden flex flex-col bg-white rounded border-grey">
     {#each orderBy(composition,['percentage'], ['desc']) as pooledToken}
 <div class="mx-4 thinborderbottom">
   <div class="flex items-center w-100pc py-4">
@@ -432,21 +464,21 @@
   {/if}
   
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row md:flex-wrap">
-    <div class="p-0 mt-2 flexgrow min-w-230px">
+    <div class="p-0 mt-2 flexgrow min-w-230px md:mr-10px">
       <Farming token={$currentRoute.params.address} />
     </div>  
-    <div class="p-0 mt-2 flexgrow	min-w-230px">
+    <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
       <Etherscan token={$currentRoute.params.address} />
     </div>
 
-    <div class="p-0 mt-2 flexgrow	min-w-230px">
+    <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
       <Quantstamp token={$currentRoute.params.address} />
     </div>
-    <div class="p-0 mt-2 flexgrow	min-w-230px">
+    <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
       <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />
     </div>
     {#if poolsConfig[token].coingeckoId}
-      <div class="p-0 mt-2 flexgrow	min-w-230px">
+      <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
         <CoinGeckoBanner pie={poolsConfig[token]} />
       </div>
     {/if}
@@ -529,3 +561,58 @@
 
 </div>
 
+
+
+ <!-- mobile stycky buttons-->
+ <div class="w-100pc flex items-center flex-row-reverse flex-grow justify-between mr-0 px-2pc pt-3 pb-3 md:hidden sticky-pie-buttons bg-gradient-white-transparent drowpdown-shadow-top">
+  <div class="relative inline-block text-left block">
+    <div>
+      <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full focus:outline-none min-w-6px pl-1 pr-1" id="options-menu" aria-haspopup="true" aria-expanded="true">
+        <img width="5px" src={images.more} alt="More options" />
+      </button>
+    </div>
+    {#if dropdownOpen}
+      <div class="z-50 origin-top-right sticky-dropdown mt-2 w-56 shadow-lg">
+        <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+          <div class="py-1">
+            <!-- svelte-ignore a11y-missing-attribute -->
+            <a on:click={() => {
+              modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
+              modalOption.poolAction = "add";
+              modalOption.title = "Add Liquidity";
+              modal.open()
+              toggleDropdow();
+            }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Issue</a>
+            <!-- svelte-ignore a11y-missing-attribute -->
+            <a on:click={() => {
+              modalOption.method = "multi";
+              modalOption.poolAction = "withdraw";
+              modalOption.title = "Redeem";
+              modal.open()
+              toggleDropdow();
+            }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Redeem</a>
+          </div>
+        </div>
+      </div>
+      {/if}
+  </div>
+  
+  <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3" onclick="location.href='#/oven'">
+    <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+    <div class="">
+      <div class="text-base font-bold leading-5">Bake your Pie</div>
+      <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
+      <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
+    </div>
+  </button>
+
+
+  <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc" onclick="location.href='#/swap'">
+    <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+    <div class="">
+      <div class="text-base font-bold leading-5">Buy & Sell</div>
+      <div class="text-sm font-thin">Instant swap</div>
+    </div>
+  </button>
+
+</div>
