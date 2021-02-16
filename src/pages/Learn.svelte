@@ -14,7 +14,7 @@
   
   <div class="100pc max-w-1200px flex flex-wrap">
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://www.piedao.org/#/dough`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://raw.githubusercontent.com/pie-dao/brand/master/misc/metavote2.png) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">DOUGH</span></div>
@@ -24,7 +24,7 @@
       </a>
     </div>
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://medium.com/piedao/inside-the-bakery-how-we-build-pies-e8932718beaf`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://miro.medium.com/max/1400/1*ydCeYEcSSUiYxfHI-_ivag.jpeg) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">PIEs</span></div>
@@ -34,7 +34,7 @@
       </a>
     </div>
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://medium.com/piedao/how-to-mint-pies-gas-free-with-oven-1d11e902fab8`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://miro.medium.com/max/1400/1*5mzKpLdFqzEVNR0TLNOWIw.png) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">Oven</span></div>
@@ -45,7 +45,7 @@
       </a>
     </div>
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://www.piedao.org/#/stake`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">Farming</span></div>
@@ -55,7 +55,7 @@
         We’re incentivizing liquidity for our products with 150k of DOUGH available to earn each week and as much as 150% APR. Check out our farms to see the latest opportunities.      </a>
     </div>
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://medium.com/piedao/announcing-pievaults-19e2fa4c734e`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://miro.medium.com/max/1400/1*KABX967U0nJRoD3y5JLF4g.png) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">Vaults</span></div>
@@ -77,9 +77,9 @@
     </div>
   </div>
   
-  <div class="100pc max-w-1200px flex flex-wrap">
+  <div class="content flex flex-wrap">
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://medium.com/piedao/announcing-balanced-crypto-pie-bcp-btc-eth-and-defi-7a2423c5d94e?source=collection_home---6------7-----------------------`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://miro.medium.com/max/1400/0*bzsou8y11D4bhnaH) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">BCP</span></div>
@@ -89,7 +89,7 @@
         The most risk-minimised cryptocurrency portfolio, Balanced Crypto Pie is all you need. BCP gives equal Bitcoin, Ether, and DeFi exposure in one easy to access ERC20 token. The underlying assets in BCP are constantly taking profits and growing your holdings as it automatically rebalances to maintain the set allocation.      </a>
     </div>
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://medium.com/piedao/announcing-ypie-pievault-and-sushiswap-collaboration-a89b102e81e7`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://miro.medium.com/max/1400/1*FCMyDdToTcNI4hyq-lFE2g.png) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">YPIE</span></div>
@@ -100,7 +100,7 @@
       </a>
     </div>
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://medium.com/piedao/announcing-defi-and-a-comparative-index-performance-analysis-9f63e251120d`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://miro.medium.com/max/1400/0*fUHAQEzhGg_o0uYI.png) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">DEFI++</span></div>
@@ -111,7 +111,7 @@
       </a>
     </div>
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://docs.piedao.org/current-pies/defi+l`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">DEFI+L</span></div>
@@ -121,7 +121,7 @@
         Blue chips only. DEFI+L represents DeFi’s biggest and best. Like all our pies DEFI+L actively rebalances, constantly locking in profits as market prices fluctuate.      </a>
     </div>
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://medium.com/piedao/announcing-defi-s-67ed53367364`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://miro.medium.com/max/1400/1*m6QRyhTSsF-C99QF2VSAAg.png) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">DEFI+S</span></div>
@@ -144,7 +144,7 @@
   
   <div class="100pc max-w-1200px flex flex-wrap">
 
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://docs.piedao.org/`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://gblobscdn.gitbook.com/assets%2F-M156s4roA8TRygFfSW8%2F-M1B59WcVd6oNyBAt8S1%2F-M1BE5jwQsMnghWTZEtB%2FScreenshot%20from%202020-02-28%2016-37-59.png?alt=media&token=60169b8e-9f2a-4c52-9b0e-94bd4312ef49) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">DOCS</span></div>
