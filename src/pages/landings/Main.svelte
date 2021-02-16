@@ -92,7 +92,7 @@
 
 
 <div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll md:overflow-x-hidden hidescrollbar">
-  <div class="w-100pc md:max-w-1200px flex items-start justify-start justify-items-start pt-4 pb-0 md:py-4 px-4 hidescrollbar md:flex-wrap">  
+  <div class="w-100pc md:max-w-1200px flex items-start justify-start md:justify-center self-center pt-4 pb-0 md:py-4 px-4 hidescrollbar md:flex-wrap">  
 
   {#each pies as pie}
   {#if pie.address !== '0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd'}
