@@ -51,16 +51,18 @@
 
   </div>
 
-  <div class="flex max-w-1200px px-2 md:px-8 mt-2 md:mt-8 overflow-hidden flex-nowrap justify-between self-center">
+</div>
 
-      {#each secondRow as member}
-        <a href="https://twitter.com/{member.username}" target="_blank">
-          <div class="w-60px h-60px circle mr-2" style="background: url({member.img}) no-repeat center center; background-size: cover!important;"></div>
-        </a>
-      {/each}
-    
-  </div>
+<div class="flex w-100pc justify-center self-center">
+<div class="flex max-w-100pc md:max-w-1200px px-2 md:px-8 mt-2 md:mt-8 overflow-hidden flex-nowrap justify-between self-center overflow-x-scroll md:overflow-x-hidden hidescrollbar">
 
+  {#each secondRow as member}
+    <a href="https://twitter.com/{member.username}" target="_blank">
+      <div class="w-60px h-60px circle mr-2" style="background: url({member.img}) no-repeat center center; background-size: cover!important;"></div>
+    </a>
+  {/each}
+
+</div>
 </div>
 
 

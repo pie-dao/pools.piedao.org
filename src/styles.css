@@ -2034,3 +2034,7 @@ scrollbar-width: none;  /* Firefox */
 .max-content {
   min-width: max-content;
 }
+
+.max-w-100vw {
+max-width: 100vw;
+}
