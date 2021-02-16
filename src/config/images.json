@@ -60,6 +60,15 @@
   "claim": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/claim.png",
   "withdraw": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/withdraw.png",
   "herodough": "https://raw.githubusercontent.com/pie-dao/brand/master/dough_hero.png",
+  "herolanding": "https://raw.githubusercontent.com/pie-dao/brand/d9481f58ba0550a9e7f5455cb93760783651f4e2/misc/hero-8.svg",
+  "herolandingmobile": "https://raw.githubusercontent.com/pie-dao/brand/8c311b7cc2ab5002d6cef9562bc4ff37b022e5dc/misc/hero-8-mobile.svg",
+  "heroicon1": "https://raw.githubusercontent.com/pie-dao/brand/2b47cee4fcc0fd814ff54e78ab9251345a521541/misc/hero-icon-1-black.svg",
+  "heroicon2": "https://raw.githubusercontent.com/pie-dao/brand/2b47cee4fcc0fd814ff54e78ab9251345a521541/misc/hero-icon-2-black.svg",
+  "heroicon3": "https://raw.githubusercontent.com/pie-dao/brand/2b47cee4fcc0fd814ff54e78ab9251345a521541/misc/hero-icon-3-black.svg",
+  "cardplusplus": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/cardplusplus.png",
+  "cardbcp": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/cardbcp.png",
+  "cardplusl": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/carddefil.png",
+
   "tokenmigration": "https://i.ibb.co/tY41vvx/migra.png",
   "liquiditymining": "https://i.ibb.co/3YyvfzX/farming.png",
   "vestingperiod": "https://i.ibb.co/VSyRLBY/astro.png",
@@ -75,6 +84,7 @@
   "defil_social": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/DEFI%2BL_banner.png",
   "oven_social": "oven_social.png",
   "oven_illustration": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/oven-illustration.png",
+  "piechart_illustration": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/pichartillustration.png",
   
   
   "koala": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/koala.png",
@@ -93,7 +103,8 @@
   "defiplusplus": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/defiplusplustoken.png",
   "defiplusd": "https://raw.githubusercontent.com/pie-dao/brand/b16cd7ac19a38b55e272df4e5552138f91c9d412/misc/defiplusd.svg",
   "doughtoken": "https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png",
-  "press": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/press.png",
+  "press": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/integrations-desktop.png",
+  "pressmobile": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/integrations-mobile.png",
   "closebutton": "https://raw.githubusercontent.com/pie-dao/brand/4972f839cd2b0993afe45410d478b3f70f84398c/misc/close.svg",
   "depositeth": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/cook_1f9d1-200d-1f373.png",
   "waitoven": "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/271/timer-clock_23f2-fe0f.png",
