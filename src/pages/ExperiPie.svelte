@@ -319,59 +319,6 @@
   }
 
 </script>
-  <!-- mobile stycky buttons-->
-  <div class="w-100pc flex items-center flex-row-reverse flex-grow justify-between mr-0 px-2pc pt-2 pb-4 md:hidden sticky-pie-buttons">
-    <div class="relative inline-block text-left block">
-      <div>
-        <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full focus:outline-none min-w-6px pl-1 pr-2" id="options-menu" aria-haspopup="true" aria-expanded="true">
-          <img width="5px" src={images.more} alt="More options" />
-        </button>
-      </div>
-      {#if dropdownOpen}
-        <div class="z-50 origin-top-right absolute right-0 mt-2 w-56 shadow-lg">
-          <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-            <div class="py-1">
-              <!-- svelte-ignore a11y-missing-attribute -->
-              <a on:click={() => {
-                modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
-                modalOption.poolAction = "add";
-                modalOption.title = "Add Liquidity";
-                modal.open()
-                toggleDropdow();
-              }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Issue</a>
-              <!-- svelte-ignore a11y-missing-attribute -->
-              <a on:click={() => {
-                modalOption.method = "multi";
-                modalOption.poolAction = "withdraw";
-                modalOption.title = "Redeem";
-                modal.open()
-                toggleDropdow();
-              }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Redeem</a>
-            </div>
-          </div>
-        </div>
-        {/if}
-    </div>
-    
-    <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3" onclick="location.href='#/oven'">
-      <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
-      <div class="">
-        <div class="text-base font-bold leading-5">Bake your Pie</div>
-        <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
-        <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
-      </div>
-    </button>
-
-
-    <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 mr-1pc" onclick="location.href='#/swap'">
-      <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
-      <div class="">
-        <div class="text-base font-bold leading-5">Buy & Sell</div>
-        <div class="text-sm font-thin">Instant swap</div>
-      </div>
-    </button>
-
-  </div>
 
 <!-- <SnapshotBanner /> -->
 
@@ -736,5 +683,57 @@
 {/if}
 </div>
 
+<!-- mobile stycky buttons-->
+<div class="w-100pc flex items-center flex-row-reverse flex-grow justify-between mr-0 px-2pc pt-3 pb-3 md:hidden sticky-pie-buttons bg-gradient-white-transparent drowpdown-shadow-top">
+  <div class="relative inline-block text-left block">
+    <div>
+      <button on:click={toggleDropdow}  type="button" class="flex items-center justify-center w-full focus:outline-none min-w-6px pl-1 pr-1" id="options-menu" aria-haspopup="true" aria-expanded="true">
+        <img width="5px" src={images.more} alt="More options" />
+      </button>
+    </div>
+    {#if dropdownOpen}
+      <div class="z-50 origin-top-right sticky-dropdown mt-2 w-56 shadow-lg">
+        <div class=" bg-white shadow-xs" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+          <div class="py-1">
+            <!-- svelte-ignore a11y-missing-attribute -->
+            <a on:click={() => {
+              modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
+              modalOption.poolAction = "add";
+              modalOption.title = "Add Liquidity";
+              modal.open()
+              toggleDropdow();
+            }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Issue</a>
+            <!-- svelte-ignore a11y-missing-attribute -->
+            <a on:click={() => {
+              modalOption.method = "multi";
+              modalOption.poolAction = "withdraw";
+              modalOption.title = "Redeem";
+              modal.open()
+              toggleDropdow();
+            }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Redeem</a>
+          </div>
+        </div>
+      </div>
+      {/if}
+  </div>
+  
+  <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3" onclick="location.href='#/oven'">
+    <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+    <div class="">
+      <div class="text-base font-bold leading-5">Bake your Pie</div>
+      <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
+      <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
+    </div>
+  </button>
 
+
+  <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc" onclick="location.href='#/swap'">
+    <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+    <div class="">
+      <div class="text-base font-bold leading-5">Buy & Sell</div>
+      <div class="text-sm font-thin">Instant swap</div>
+    </div>
+  </button>
+
+</div>
 
