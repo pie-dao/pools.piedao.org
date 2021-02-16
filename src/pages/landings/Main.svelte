@@ -48,7 +48,6 @@
   $: getNav =((token) => {
     return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
   })
-
   
 </script>
 
