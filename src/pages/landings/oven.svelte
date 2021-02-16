@@ -149,36 +149,49 @@
 </Modal>
 <section class="pt-4 px-4 text-center md:pt-8 lg:pt-12">
   <div class="w-full max-w-2xl mx-auto">
-    <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Bake Together, save 97% Gas.</h2>
-    <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">
-      Get hold of your pie almost gas-free by sharing the cost.<br />Turn your ETH into delicious
+    <h2 class="text-xl mt-2 mb-2 leading-tight font-heading">Bake Together, save 97% Gas.</h2>
+    <p class="mb-4 text-gray-500 font-thin text-md leading-6">
+      Get hold of your pie almost gas-free by sharing the cost. <br class="hidden md:block" /> Turn your ETH into delicious
       pie in three easy steps.
     </p>
   </div>
 </section>
 
-<div class="content flex flex-col justify-between spl text-center">
-  <div class="flex flex-col justify-between content-center lg:flex-row">
-    <WhiteBox class="bg-white"
-      image={images.depositeth}
-      title="Deposit ETH"
-      description="When at least 10 ETH is deposited the Oven can begin" />
+<div class="w-100pc flex justify-center">
+  <div class="flex flex-col md:max-w-1200px p-0 p-4 md:p-6 mx-4 md:mx-0 mb-4 items-center bg-lightgrey md:bg-white rounded">
+    <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
 
-    <WhiteBox
-      image={images.waitoven}
-      title="Wait"
-      description="Oven will bake when Gas Price is below 100 Gwei, saving everyone money" />
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center my-0 lg:m-10px p-0 md:p-20px">
+          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.depositeth} alt="deposit eth" />
+          <div class="flex flex-col text-left md:text-center md:mt-3">
+              <div class="text-lg">Deposit ETH</div>
+              <div class="font-thin mt-1 md:mt-2">When at least 10 ETH is deposited the Oven can begin.</div>
+          </div>
+        </div>
 
-    <WhiteBox
-      image={images.sharegascost}
-      title="Withdraw Your Pie"
-      description="Once the Pie is baked you can withdraw it to your wallet" />
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
+          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.waitoven} alt="wait oven" />
+          <div class="flex flex-col text-left md:text-center md:mt-3">
+              <div class="text-lg">Wait</div>
+              <div class="font-thin mt-1 md:mt-2">Oven will bake when gas price is below 100 gwei, saving everyone money.</div>
+          </div>
+        </div>
+
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
+          <img class="w-50px md:w-80px mr-4 md:mr-0 mb-2 md:mb-0" src={images.sharegascost} alt="share gas cost" />
+          <div class="flex flex-col text-left md:text-center md:mt-3">
+            <div class="text-lg">Withdraw Your Pie</div>
+            <div class="font-thin mt-1 md:mt-2">Once the Pie is baked you can withdraw it to your wallet.</div>
+          </div>
+        </div>
+
+    </div>
   </div>
 </div>
 
-<section class="pt-12 px-4 text-center">
+<section class="pt-6 pb-2 text-center">
   <div class="w-full max-w-2xl mx-auto">
-    <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Select Your Pie</h2>
+    <h2 class="text-lg mt-2 mb-0 leading-tight font-heading">Select Your Pie</h2>
   </div>
 </section>
 
@@ -196,7 +209,7 @@
       <div class="flex justify-between my-2">
         <div class="flex items-center ">
           <span class="font-thin text-left mr-2">Minimum reached</span>
-          <TooltipButton tooltip="Oven needs 10 ETH and Gas Price < 100 Gwei to be activated">
+          <TooltipButton tooltip="Oven needs 10 ETH and low Gas Price to be activated">
             <img src={images.InfoIcon} class="" alt="info" width="16px" />
           </TooltipButton>
         </div>
