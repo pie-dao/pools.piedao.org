@@ -297,7 +297,7 @@
   "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": {
     "symbol": "DEFI+L",
     "name": "DeFi Large Cap",
-    "description": "DEFI's biggest and best. Premium selection of Blue chips only tokens.",
+    "description": "Large market cap projects. A premium selection of blue chip only tokens.",
     "isExperipie": false,
     "mapDynamicTradingViewFormula": {
       "0xc00e94Cb662C3520282E6f5717214004A7f26888": "KRAKEN:COMPUSD",
