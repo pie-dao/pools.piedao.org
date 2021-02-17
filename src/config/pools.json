@@ -132,6 +132,7 @@
   "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31": {
     "symbol": "YPIE",
     "name": "Yearn Ecosystem Pie",
+    "description": "Complete exposure to the growing Yearn network.",
     "coingeckoId": "piedao-yearn-ecosystem-pie",
     "useMintOverBuy": false,
     "useRecipe": true,
@@ -296,6 +297,7 @@
   "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": {
     "symbol": "DEFI+L",
     "name": "DeFi Large Cap",
+    "description": "Large market cap projects. A premium selection of blue chip only tokens.",
     "isExperipie": false,
     "mapDynamicTradingViewFormula": {
       "0xc00e94Cb662C3520282E6f5717214004A7f26888": "KRAKEN:COMPUSD",
@@ -414,6 +416,7 @@
     "symbol": "DEFI+S",
     "isExperipie": false,
     "name": "DeFi Small Cap",
+    "description": "Lower market cap projects that have incredible potential for growth.",
     "useRecipe": true,
     "swapEnabled": false,
     "coingeckoId": "piedao-defi-small-cap",
@@ -493,6 +496,7 @@
     "isExperipie": false,
     "coingeckoId": "piedao-balanced-crypto-pie",
     "name": "Balanced Crypto Pie",
+    "description": "Balanced Crypto Pie. An even split between BTC, ETH, and the best of DEFI.",
     "useRecipe": true,
     "useMintOverBuy": false,
     "swapEnabled": true,
@@ -530,6 +534,7 @@
   },
   "0x8d1ce361eb68e9e05573443c407d4a3bed23b033": {
     "symbol": "DEFI++",
+    "description": "The most diversified DEFI index on the market. Both large and small market caps.",
     "isExperipie": false,
     "name": "DeFi Index Pie ",
     "useRecipe": true,
