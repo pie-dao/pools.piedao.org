@@ -12,7 +12,7 @@
     </div>
   </div>
   
-  <div class="100pc max-w-1200px flex flex-wrap">
+  <div class="content flex flex-wrap">
 
     <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://www.piedao.org/#/dough`}>
@@ -142,7 +142,7 @@
     </div>
   </div>
   
-  <div class="100pc max-w-1200px flex flex-wrap">
+  <div class="content flex flex-wrap">
 
     <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://docs.piedao.org/`}>
