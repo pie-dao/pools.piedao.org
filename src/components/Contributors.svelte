@@ -27,8 +27,8 @@
 </script>
 
 
-<div class="flex flex-col rounded md:py-10 px-4 md:px-6 mx-2 md:mx-40 flex justify-center">
-  <div class="flex flex-col max-w-1200px px-2 md:px-8">
+<div class="flex-col rounded md:py-10 px-4 md:px-6 mx-2 md:mx-40 flex justify-center">
+  <div class="content flex-col max-w-1200px px-2 md:px-8">
     <div class="text-lg text-center w-100pc block md:hidden leading-7 mb-2">If you want to go fast, go alone. If you want to go far, DAO it together.</div>
     <div class="font-huge text-center w-100pc hidden md:block">If you want to go fast, go alone.<br/>If you want to go far, DAO it together.</div>
     <div class="flex flex-col md:flex-row items-center justify-between mt-2 md:mt-8 self-center">
