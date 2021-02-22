@@ -3,35 +3,40 @@
 </script>
 
 <span class="-mt-20px">
-  <a class="" href="#/oven"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a>
+  <a class="" href="https://snapshot.page/#/piedao" target="_blank"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a>
 
-  <div class="bg-lightpink rounded-xl text-black py-8 px-6 mt-8">
+  <div class="bg-lightpink rounded-xl text-black py-8 px-6">
     <div class="font-huge text-center">Governance</div>
     
-    <div class="w-100pc rounded-xl bg-white p-6 mt-6">
-      <div class="flex justify-between my-2 h-28px">
-        <span class="font-thin text-left">Oven name</span>
-        <span class="font-bold text-right flex items-center"><img width="28px" height="28px" class="mr-2" src={images.bcp} alt="token name" />BCP</span>
+    <a href="link" target="_blank">
+      <div class="w-100pc rounded-xl bg-white p-6 mt-6">
+        <div class="font-bold leading-5 block break-all">PIP-36 Formalize budget for operational marketing activities</div>
+        <span class="flex items-center mt-1">
+          <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs mr-2">Snapshot</span>
+          <span class="text-base leading-6 font-thin opacity-60">Ends Dec 5, 10:00am</span>
+        </span>
       </div>
-      <div class="flex justify-between my-2 h-28px">
-        <div class="flex items-center ">
-          <span class="font-thin text-left mr-2">Minimum reached</span>
-        </div>
-        <div class="font-bold text-right rounded-sm bg-black w-40pc h-24px">
-          <div class="px-2 h-24px flex items-center rounded-sm text-xs bg-gradient-purple text-left text-white fit-content">
-            <span>12%</span>
-          </div>
-        </div>
+    </a>
+
+    <a href="link" target="_blank">
+      <div class="w-100pc rounded-xl bg-white p-6 mt-4">
+        <div class="font-bold leading-5 block break-all">DeFi+S rebalancing - IPFS</div>
+        <span class="flex items-center mt-1">
+          <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs mr-2">Aragon</span>
+          <span class="text-base leading-6 font-thin opacity-60">Ends Dec 7, 12:00am</span>
+        </span>
       </div>
-      <div class="flex justify-between my-2 h-28px">
-        <span class="font-thin text-left">Your ETH in the Oven</span>
-        <span class="font-bold text-right">1.2 ETH</span>
+    </a>
+
+    <a href="link" target="_blank">
+      <div class="w-100pc rounded-xl bg-white p-6 mt-4">
+        <div class="font-bold leading-5 block break-all">PIP-37 FEnable SUSHI / YFI staking on YPIE</div>
+        <span class="flex items-center mt-1">
+          <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs mr-2">Snapshot</span>
+          <span class="text-base leading-6 font-thin opacity-60">Ends Dec 7, 09:00am</span>
+        </span>
       </div>
-      <div class="flex justify-between my-2 h-28px">
-        <span class="font-thin text-left">Your Pie ready</span>
-        <span class="font-bold text-right">123 BCP</span>
-      </div>
-    </div>
+    </a>
     
   </div>
 </span>
