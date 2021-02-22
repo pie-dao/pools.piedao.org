@@ -187,6 +187,14 @@ right: 0px;
   background-color: #8B60F8;
 }
 
+.bg-darkpurple {
+  background-color: #403857;
+}
+
+.bg-lightyellow {
+  background-color: #FBF393;
+}
+
 .text-green {
   color: #24D897;
 }
