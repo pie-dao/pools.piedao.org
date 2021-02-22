@@ -28,7 +28,7 @@
     </a>
 
     <a href="link" target="_blank">
-      <div class="flex items-center rounded-xl bg-white p-6 mt-6">
+      <div class="flex items-center rounded-xl bg-white p-6 mt-4">
         <div class="flex items-center mr-4">
           <img class="z-10" width="40px" height="40px" src={images.defiplusl} alt="token name" />
           <img class="-ml-20px" width="40px" height="40px" src={images.usdplus} alt="token name" />
