@@ -4,6 +4,8 @@
   import Allocation from "../components/piefolio/Allocation.svelte";
   import Oven from "../components/piefolio/Oven.svelte";
   import Governance from "../components/piefolio/Governance.svelte";
+  import Farming from "../components/piefolio/Farming.svelte";
+  import Banner from "../components/piefolio/Banner.svelte";
 
 </script>
 
@@ -17,8 +19,10 @@
 
 
   <div class="flex flex-col w-38pc">
+    <Banner />
     <Oven />
     <Governance />
+    <Farming />
   </div>
 
 </div>

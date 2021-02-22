@@ -8,7 +8,7 @@
     <div class="w-100pc font-huge text-left">Portfolio Allocation</div>
     
     <a class="flex mt-8 w-100pc" href="token">
-      <img width="60px" height="60px" class="mr-2" src={images.doughtoken} alt="token name" />
+      <img width="60px" height="60px" class="mr-4" src={images.doughtoken} alt="token name" />
       <div class="flex flex-col justify-around">
         <span class="flex items-center"><span class="text-lg leading-6">DOUGH</span><span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30%</span></span>
         <span class="text-sm font-thin">1,450.20 DOUGH • $12,823.92</span>
@@ -20,7 +20,7 @@
     </a>
 
     <a class="flex mt-8 w-100pc" href="token">
-      <img width="60px" height="60px" class="mr-2" src={images.doughtoken} alt="token name" />
+      <img width="60px" height="60px" class="mr-4" src={images.doughtoken} alt="token name" />
       <div class="flex flex-col justify-around">
         <span class="flex items-center"><span class="text-lg leading-6">DOUGH</span><span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30%</span></span>
         <span class="text-sm font-thin">1,450.20 DOUGH • $12,823.92</span>
@@ -32,7 +32,7 @@
     </a>
 
     <a class="flex mt-8 w-100pc" href="token">
-      <img width="60px" height="60px" class="mr-2" src={images.doughtoken} alt="token name" />
+      <img width="60px" height="60px" class="mr-4" src={images.doughtoken} alt="token name" />
       <div class="flex flex-col justify-around">
         <span class="flex items-center"><span class="text-lg leading-6">DOUGH</span><span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30%</span></span>
         <span class="text-sm font-thin">1,450.20 DOUGH • $12,823.92</span>
@@ -44,7 +44,7 @@
     </a>
 
     <a class="flex mt-8 w-100pc" href="token">
-      <img width="60px" height="60px" class="mr-2" src={images.doughtoken} alt="token name" />
+      <img width="60px" height="60px" class="mr-4" src={images.doughtoken} alt="token name" />
       <div class="flex flex-col justify-around">
         <span class="flex items-center"><span class="text-lg leading-6">DOUGH</span><span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30%</span></span>
         <span class="text-sm font-thin">1,450.20 DOUGH • $12,823.92</span>
@@ -56,7 +56,7 @@
     </a>
 
     <a class="flex mt-8 w-100pc" href="token">
-      <img width="60px" height="60px" class="mr-2" src={images.doughtoken} alt="token name" />
+      <img width="60px" height="60px" class="mr-4" src={images.doughtoken} alt="token name" />
       <div class="flex flex-col justify-around">
         <span class="flex items-center"><span class="text-lg leading-6">DOUGH</span><span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30%</span></span>
         <span class="text-sm font-thin">1,450.20 DOUGH • $12,823.92</span>
@@ -68,7 +68,7 @@
     </a>
 
     <a class="flex mt-8 w-100pc" href="token">
-      <img width="60px" height="60px" class="mr-2" src={images.doughtoken} alt="token name" />
+      <img width="60px" height="60px" class="mr-4" src={images.doughtoken} alt="token name" />
       <div class="flex flex-col justify-around">
         <span class="flex items-center"><span class="text-lg leading-6">DOUGH</span><span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30%</span></span>
         <span class="text-sm font-thin">1,450.20 DOUGH • $12,823.92</span>
@@ -80,7 +80,7 @@
     </a>
 
     <a class="flex mt-8 w-100pc" href="token">
-      <img width="60px" height="60px" class="mr-2" src={images.doughtoken} alt="token name" />
+      <img width="60px" height="60px" class="mr-4" src={images.doughtoken} alt="token name" />
       <div class="flex flex-col justify-around">
         <span class="flex items-center"><span class="text-lg leading-6">DOUGH</span><span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30%</span></span>
         <span class="text-sm font-thin">1,450.20 DOUGH • $12,823.92</span>
