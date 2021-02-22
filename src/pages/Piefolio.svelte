@@ -3,6 +3,7 @@
   import Holdings from "../components/piefolio/Holdings.svelte";
   import Allocation from "../components/piefolio/Allocation.svelte";
   import Oven from "../components/piefolio/Oven.svelte";
+  import Governance from "../components/piefolio/Governance.svelte";
 
 </script>
 
@@ -17,6 +18,7 @@
 
   <div class="flex flex-col w-38pc">
     <Oven />
+    <Governance />
   </div>
 
 </div>
