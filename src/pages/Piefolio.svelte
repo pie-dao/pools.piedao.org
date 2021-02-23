@@ -32,10 +32,10 @@
   <span class="mb-2"><Banner /></span>
   <span class="mb-2"><Holdings /></span>
   <span class="mb-2"><Allocation /></span>
-  <span class="mb-2"><Oven /></span>
-  <span class="mb-2"><Governance /></span>
-  <span class="mb-2"><Farming /></span>
-  <span class=""><Exchange /></span>
+  <span class="-mt-20px mb-2"><Oven /></span>
+  <span class="-mt-20px mb-2"><Governance /></span>
+  <span class="-mt-20px mb-2"><Farming /></span>
+  <span class="-mt-20px"><Exchange /></span>
 
 </div>
 

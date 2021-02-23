@@ -6,7 +6,7 @@
   <div class="font-huge">Your holdings</div>
   
   <a class="flex mt-8" href="token">
-    <img width="60px" height="60px" class="mr-4" src={images.doughtoken} alt="token name" />
+    <div class="mr-4 w-60px max-w-60px h-60px max-h-60px"><img width="60px" height="60px" src={images.doughtoken} alt="token name" /></div>
     <div class="flex flex-col justify-around">
       <span class="flex items-center"><span class="text-lg leading-6">DOUGH</span><span class="bg-black opacity-60 px-5px py-1px roundedxs text-xs ml-2">55.30%</span></span>
       <span class="text-sm font-thin">1,450.20 DOUGH • $12,823.92</span>
@@ -18,7 +18,7 @@
   </a>
 
   <a class="flex mt-8" href="token">
-    <img width="60px" height="60px" class="mr-4" src={images.bcp} alt="token name" />
+    <div class="mr-4 w-60px max-w-60px h-60px max-h-60px"><img width="60px" height="60px" src={images.bcp} alt="token name" /></div>
     <div class="flex flex-col justify-around">
       <span class="flex items-center"><span class="text-lg leading-6">BCP</span><span class="bg-black opacity-60 px-5px py-1px roundedxs text-xs ml-2">27.00%</span></span>
       <span class="text-sm font-thin">1,450.20 BCP • $5,748.21</span>
@@ -30,7 +30,7 @@
   </a>
 
   <a class="flex mt-8" href="token">
-    <img width="60px" height="60px" class="mr-4" src={images.defiplusl} alt="token name" />
+    <div class="mr-4 w-60px max-w-60px h-60px max-h-60px"><img width="60px" height="60px" src={images.defiplusl} alt="token name" /></div>
     <div class="flex flex-col justify-around">
       <span class="flex items-center"><span class="text-lg leading-6">DEFI+L</span><span class="bg-black opacity-60 px-5px py-1px roundedxs text-xs ml-2">22.70%</span></span>
       <span class="text-sm font-thin">1,450.20 DEFI+L • $3,564.28</span>
