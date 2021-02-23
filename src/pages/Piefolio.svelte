@@ -6,6 +6,8 @@
   import Governance from "../components/piefolio/Governance.svelte";
   import Farming from "../components/piefolio/Farming.svelte";
   import Banner from "../components/piefolio/Banner.svelte";
+  import Exchange from "../components/piefolio/Exchange.svelte";
+
 
 </script>
 
@@ -20,6 +22,7 @@
 
   <div class="flex flex-col w-38pc">
     <Banner />
+    <Exchange />
     <Oven />
     <Governance />
     <Farming />
