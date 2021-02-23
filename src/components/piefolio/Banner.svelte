@@ -2,13 +2,11 @@
   import images from "../../config/images.json";
 </script>
 
-<span class="mb-8">
   <a class="" href="#/dough">
     <div class="rounded-xl">
       <img width="100%" height="auto" class="rounded-xl" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/buydough-banner.png" alt="external link icon" />
     </div>
   </a>
-</span>
 
 
 

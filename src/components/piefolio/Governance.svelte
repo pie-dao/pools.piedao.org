@@ -2,7 +2,7 @@
   import images from "../../config/images.json";
 </script>
 
-<span class="-mt-20px mb-8">
+<span class="-mt-20px">
   <a class="" href="https://snapshot.page/#/piedao" target="_blank"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a>
 
   <div class="bg-lightpink rounded-xl text-black py-8 px-6">

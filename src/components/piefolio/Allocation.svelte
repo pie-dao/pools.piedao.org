@@ -2,8 +2,8 @@
   import images from "../../config/images.json";
 </script>
 
-<div class="flex flex-col cardbordergradient mt-8">
-  <div class="bg-lightgrey rounded-xl text-black py-8 px-6 flex flex-col items-center">
+<div class="w-100pc flex flex-col cardbordergradient">
+  <div class="w-100pc bg-lightgrey rounded-xl text-black py-8 px-6 flex flex-col items-center">
 
     <div class="w-100pc font-huge text-left">Portfolio Allocation</div>
     

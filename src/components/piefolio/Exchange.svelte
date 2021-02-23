@@ -352,7 +352,7 @@
   </span>
 </Modal>
 
-<span class="-mt-20px mb-8">
+<span class="-mt-20px">
   <a class="" href="#/swap" target="_blank"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a>
 
   <div class="bg-lightblu rounded-xl text-black py-8 px-6 flex flex-col items-center">
