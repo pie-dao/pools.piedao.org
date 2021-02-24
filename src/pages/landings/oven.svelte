@@ -149,15 +149,15 @@
 </Modal>
 <section class="pt-4 px-4 text-center md:pt-8 lg:pt-12">
   <div class="w-full max-w-2xl mx-auto">
-    <h2 class="text-xl mt-2 mb-2 leading-tight font-heading">Bake Together, save 97% Gas.</h2>
-    <p class="mb-4 text-gray-500 font-thin text-md leading-6">
+    <h2 class="text-xl mt-2 mb-2 leading-tight font-heading" data-aos="fade-up" data-aos-delay="50">Bake Together, save 97% Gas.</h2>
+    <p class="mb-4 text-gray-500 font-thin text-md leading-6" data-aos="fade-up" data-aos-delay="100">
       Get hold of your pie almost gas-free by sharing the cost. <br class="hidden md:block" /> Turn your ETH into delicious
       pie in three easy steps.
     </p>
   </div>
 </section>
 
-<div class="w-100pc flex justify-center">
+<div class="w-100pc flex justify-center" data-aos="fade-up" data-aos-delay="150">
   <div class="flex flex-col md:max-w-1200px p-0 p-4 md:p-6 mx-4 md:mx-0 mb-4 items-center bg-lightgrey md:bg-white rounded">
     <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
 
@@ -189,7 +189,7 @@
   </div>
 </div>
 
-<section class="pt-6 pb-2 text-center">
+<section class="pt-6 pb-2 text-center" data-aos="fade-up" data-aos-delay="200">
   <div class="w-full max-w-2xl mx-auto">
     <h2 class="text-lg mt-2 mb-0 leading-tight font-heading">Select Your Pie</h2>
   </div>
@@ -198,7 +198,7 @@
 <div
   class="content spl flex flex-col justify-center justify-items-center content-center flex-wrap md:flex-row lg:flex-row">
   {#each ovens as oven}
-    <div class="max300 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin">
+    <div class="max300 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin" data-aos="fade-up" data-aos-delay="250">
       <a class="flex justify-start mb-4 items-center" href={`#/pie/${oven.baking.address}`}>
         <img
           class="w-50px h-auto md:w-50px h-auto"
@@ -247,14 +247,14 @@
 
 <section class="py-12 px-4 text-center">
   <div class="w-full max-w-2xl mx-auto">
-    <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Can't wait?</h2>
-    <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed">
+    <h2 class="text-xl mt-2 mb-6 leading-tight font-heading" data-aos="fade-up" data-aos-delay="0">Can't wait?</h2>
+    <p class="mb-4 text-gray-500 font-thin text-md leading-relaxed" data-aos="fade-up" data-aos-delay="50">
       You can always
       <strong>Buy </strong>
       your Pie instantly from the exchange page.
     </p>
   </div>
-  <a href="#/swap">
+  <a href="#/swap" data-aos="fade-up" data-aos-delay="100">
     <button
       class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-96pc lg:w-200px lg:min-w-200px">
       Select your Pie
@@ -262,26 +262,26 @@
   </a>
 </section>
 
-<section class="pt-12 px-4 text-center">
+<section class="pt-12 px-4 text-center" data-aos="fade-up" data-aos-delay="0">
   <div class="w-full max-w-2xl mx-auto">
     <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">How does the Oven work?</h2>
   </div>
 </section>
 
-<div class="w-100pc">
+<div class="content" data-aos="fade-up" data-aos-delay="50">
 <img class="oven-illustration" width="1657px" height="918px" src={images.oven_illustration} alt="Oven Illustration"/>
 </div>
 
 
 
-<section class="pt-12 pb-6 px-4 text-center">
+<section class="pt-12 pb-6 px-4 text-center" data-aos="fade-up" data-aos-delay="0">
   <div class="w-full max-w-2xl mx-auto">
     <h2 class="text-xl mt-6 mb-3 leading-tight font-heading">Got more questions?</h2>
   </div>
 </section>
 
 
-<div class="px-4 md:px-8">
+<div class="px-4 md:px-8" data-aos="fade-up" data-aos-delay="0">
 <AccordionGroup>
 
   <Accordion class="flex flex-col">
