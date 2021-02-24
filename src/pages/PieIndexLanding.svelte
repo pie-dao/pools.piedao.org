@@ -159,6 +159,25 @@
     };
   })()
 
+  $: getSpread = ( () => {
+    let nav = parseFloat($pools[token+"-nav"]);
+    let price = parseFloat(tokenPrice);
+
+    if(!nav || !price) {
+      return {
+        label: 'Spread',
+        number: `n/a`
+      };
+    }    
+
+    let spread = (price - nav);
+    let spreadPercentage = Math.abs( spread / price * 100 );
+    return {
+      label: price > nav ? 'Premium' : 'Discount',
+      number: `${+spreadPercentage.toFixed(2)}%`
+    };
+  })()
+
   const renderWidget = async () => {
     const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
     if( formula === '') return;
