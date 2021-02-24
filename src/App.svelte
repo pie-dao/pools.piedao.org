@@ -7,7 +7,9 @@
   import Header from "./components/Header.svelte";
   import { currentRoute } from "./stores/routes.js";
 
-  AOS.init();
+  AOS.init({
+  once: true
+});
 </script>
 
 <section id="App">
