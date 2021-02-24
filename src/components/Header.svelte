@@ -7,7 +7,8 @@
   import {clickOutside} from '../helpers/clickOutside.js';
 
   import Web3Button from "./Web3Button.svelte";
-  import TVL from "./Tvl.svelte";
+  import KeyMetrics from "./KeyMetrics.svelte";
+
 
   let mobileMenuVisible = false;
   let dropdownOpen = false;
@@ -50,20 +51,20 @@
   };
 
 </script>
+<KeyMetrics />
+
 <div class="header-container">
   <div class="left">
     <a href="#/">
       <img src={images.logos.piedao} alt={$_('general.logo')} />
     </a>
   </div>
-  <div class="left ml-5px text-grey-200 text-sm opacity-20 cursor-pie">
+  <div class="left ml-5px text-grey-200 text-sm opacity-10 cursor-pie">
     (beta)
   </div>
   <div class="right">
 
-    <div class="hidden md:block">
-      <TVL/>
-    </div>
+
     
 
     <div class="relative inline-block text-left hidden md:block">
