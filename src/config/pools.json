@@ -298,7 +298,7 @@
     "symbol": "DEFI+L",
     "name": "DeFi Large Cap",
     "description": "Large market cap projects. A premium selection of blue chip only tokens.",
-    "isExperipie": false,
+    "isExperipie": true,
     "mapDynamicTradingViewFormula": {
       "0xc00e94Cb662C3520282E6f5717214004A7f26888": "KRAKEN:COMPUSD",
       "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": "GEMINI:AAVEUSD",
@@ -313,7 +313,7 @@
     "coingeckoId": "piedao-defi-large-cap",
     "swapFees": "0.1",
     "streamingFees": "0.7",
-    "swapEnabled": true,
+    "swapEnabled": false,
     "composition": [
       {
         "symbol": "COMP",
