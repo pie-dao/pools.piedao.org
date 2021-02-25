@@ -88,7 +88,66 @@
     </div>
 
     <div class="flex flex-col justify-around w-100pc content-center lg:flex-row hidden md:flex lg:flex">
-      {#each piVaults as pie}
+      <table class="breakdown-table table-auto w-full">
+        <thead>
+          <tr>
+            <th class="font-thin border-b-2 px-4 py-2 text-left">Index</th>
+            <th class="font-thin border-b-2 px-4 py-2">Assets</th>
+            <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
+            <th class="font-thin border-b-2 px-4 py-2">Current Price</th>
+            <th class="font-thin border-b-2 px-4 py-2">Buy</th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each piVaults as pie}
+            <tr class="row-highlight">
+              <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+                <a class="flex items-center px-2 py-2" href={`#/pie/${pie.address}`}>
+                  <img
+                    class="inline icon ml-2 mr-2"
+                    src={pie.icon}
+                    alt={pie.symbol} />
+                    <span class="md:block">{pie.symbol}</span>
+                </a>
+              </td>
+              <td class="pointer border px-4 ml-8 py-2 font-thin text-center min-w-200px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+                <a class="" href={`#/pie/${pie.address}`}>
+                  {#each pie.composition as coin}
+                    <img
+                      class="close-icons inline icon"
+                      src={getTokenImage(coin.address)}
+                      alt={coin.symbol} />
+                  {/each}
+                </a>
+              </td>
+              <td class="border text-center w-12pc px-4 py-2" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+                <Change value={pie.change} />
+              </td>
+              <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+                {pie.price}
+              </td>
+              <td class="border px-4 ml-8 py-2 font-thin text-center">
+                {#if pie.useMintOverBuy}
+                  <button on:click={() => {
+                    modalOption.token = pie.address;
+                    modal.open();
+                  }} class="table-btn highlight-box min-w-70px">
+                    {pie.symbol}
+                  </button>
+                {:else}
+                  <a href={`#/swap`}>
+                    <button class="table-btn highlight-box min-w-70px">
+                      {pie.symbol}
+                    </button>
+                  </a>
+                {/if}
+              </td>
+              
+            </tr>
+          {/each}
+        </tbody>
+      </table>
+      <!-- {#each piVaults as pie}
         <ProductBox 
           class=""
           link={`#/pie/${pie.address}`}
@@ -96,7 +155,7 @@
           title={pie.symbol}
           description={pie.name}
         />
-      {/each}
+      {/each} -->
     </div>
 
     <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
@@ -150,7 +209,7 @@
         <tr>
           <th class="font-thin border-b-2 px-4 py-2 text-left">Index</th>
           <th class="font-thin border-b-2 px-4 py-2">Assets</th>
-          <th class="font-thin border-b-2 px-4 py-2">Market Cap</th>
+          <!-- <th class="font-thin border-b-2 px-4 py-2">Market Cap</th> -->
           <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
           <th class="font-thin border-b-2 px-4 py-2">Current Price</th>
           <th class="font-thin border-b-2 px-4 py-2">Buy</th>
@@ -178,11 +237,11 @@
                 {/each}
               </a>
             </td>
-            <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+            <!-- <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
               <a href={`#/pie/${pie.address}`}>
                 {pie.totalLiquidity}
               </a>
-            </td>
+            </td> -->
             <td class="border text-center w-12pc px-4 py-2" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
               <Change value={pie.change} />
             </td>
