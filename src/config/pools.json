@@ -317,6 +317,15 @@
     "swapEnabled": false,
     "composition": [
       {
+        "symbol": "SUSHI",
+        "color": "#0171F5",
+        "coingeckoImageId": 12271,
+        "coingeckoId": "sushi",
+        "address": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+        "percentage": 18.35,
+        "decimals": 18
+      },
+      {
         "symbol": "COMP",
         "decimals": 18,
         "color": "#01D395",
