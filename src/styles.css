@@ -1344,6 +1344,19 @@ max-width: 100%;
   font-weight: 200;
 }
 
+.farm-button-ghost {
+  background: white;
+  color: black;
+  font-size: 28px;
+  font-weight: 200;
+}
+
+.farm-button-ghost:hover {
+  background: black;
+  color: white;
+
+}
+
 .stake-button.error {
   opacity: 0.5;
 }
