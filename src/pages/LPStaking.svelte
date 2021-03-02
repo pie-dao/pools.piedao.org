@@ -558,7 +558,7 @@
 <ModalFarm bind:this={modalinfo}>
 
 
-  <span slot="content" class="py-0 px-12 font-thin">
+  <span slot="content" class="py-0 px-4 md:px-12 font-thin">
     <span class="flex mt-4 w-100pc">
       <div class="mr-4 flex items-center">
         <img class="z-10" width="60px" height="60px" src={images.doughtoken} alt="token name" />
@@ -572,7 +572,7 @@
         >
         <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
       </div>
-      <div class="flex flex-col justify-around text-right ml-auto font-thin">
+      <div class="hidden md:flex flex-col justify-around text-right ml-auto font-thin">
         <span class="text-lg leading-6">Balancer</span>
         <span class="text-sm px-1 text-grey">Tot 166.345 BPT Staked</span>
       </div>
@@ -615,8 +615,8 @@
       <button class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Stake</button>
     </span>
 
-    <span class="flex mt-4 justify-between">
-      <span class="mr-1 w-1/2">
+    <span class="flex flex-col md:flex-row mt-4 justify-between">
+      <span class="w-100pc md:mr-1 md:w-1/2">
         <div
           class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white"
         >
@@ -654,7 +654,7 @@
         <button class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey">Claim</button>
       </span>
 
-      <span class="ml-1 w-1/2">
+      <span class="w-100pc mt-8 md:mt-0 md:mr-1 md:w-1/2">
         <div
           class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white"
         >
@@ -724,8 +724,8 @@
 </ModalFarm>
 
 <div class="content">
-  <div class="flex items-start px-20px w-100pc max-w-1280px">
-    <div class="flex flex-col w-60pc mr-2pc">
+  <div class="flex-col md:flex-row items-start px-20px w-100pc max-w-1280px">
+    <div class="flex flex-col w-100pc md:w-60pc mr-2pc">
       <span class="mt-1 mb-2">
         <div class="w-100pc flex flex-col cardbordergradient">
           <div
@@ -863,7 +863,7 @@
         </div>
       </span>
     </div>
-    <div class="flex flex-col w-38pc">
+    <div class="flex flex-col w-100pc md:w-38pc">
       <span class="-mt-4 mb-1"><Farming /></span>
     </div>
   </div>
