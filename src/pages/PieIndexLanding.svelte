@@ -111,7 +111,7 @@
       if (component.isPie) {
         if(!pieOfPies) pieOfPies = [];
         pieOfPies.push(component);
-        return getInternalWeights(component, component.percentage);
+        // return getInternalWeights(component, component.percentage);
       }
       return component;
     })
@@ -404,7 +404,9 @@
               <th class="font-thin border-b-2 px-4 py-2 text-center">Balance</th>
           {/if}
           <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
-          <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
+          {#if !pieOfPies }
+            <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
+          {/if}
         </tr>
       </thead>
       <tbody>
@@ -459,11 +461,19 @@
             </td> -->
 
             <td class="border text-center py-2 px-4 md:px-0">
-              <img
-                class="w-30 spark greyoutImage mx-0"
-                alt="Sparkline"
-                src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
-                style="margin: auto;" />
+              {#if pooledToken.isPie }
+                <a href={`#/pie/${pooledToken.address}`}>
+                  <button class="table-btn highlight-box min-w-70px">
+                    Visit
+                  </button>
+                </a>
+              {:else}
+                <img
+                  class="w-30 spark greyoutImage mx-0"
+                  alt="Sparkline"
+                  src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
+                  style="margin: auto;" />
+                {/if}
             </td>
           </tr>
         {/each}
