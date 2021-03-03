@@ -462,7 +462,11 @@
 
             <td class="border text-center py-2 px-4 md:px-0">
               {#if pooledToken.isPie }
-                <a href={`#/pie/${pooledToken.address}`}>
+                <a on:click={() => {
+                  initialized = false;
+                  window.location.hash = `#/pie/${pooledToken.address}`;
+                  window.location.reload();
+                }}>
                   <button class="table-btn highlight-box min-w-70px">
                     Visit
                   </button>
