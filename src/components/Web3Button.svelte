@@ -16,7 +16,14 @@
 
 <button
   class="btn connect-button-container"
-  on:click={connectWeb3}
+  on:click={() => {
+    if ($eth.address) {
+      window.location.hash = '#/piefolio';
+      return;
+    }
+
+    connectWeb3();
+  }}
   role="button"
   tabIndex="-100"
 >

@@ -159,7 +159,7 @@ const chunk = (arr, size) =>
     arr.slice(i * size, i * size + size)
   );
 
-const roundDownLabel = (numberString) => {
+export const roundDownLabel = (numberString) => {
   const number = parseFloat(numberString);
   return (Math.floor(number * 100) / 100).toString();
 }

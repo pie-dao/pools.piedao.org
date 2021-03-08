@@ -1,13 +1,18 @@
 <script>
-  import { onMount } from 'svelte';
+	import orderBy from 'lodash/orderBy';
+  import BigNumber from 'bignumber.js';
   import io from 'socket.io-client';
   import get from 'lodash/get';
+  import find from 'lodash/find';
+  import filter from 'lodash/filter';
   import poolsConfig from "../config/pools.json";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools, eth } from '../stores/eth.js';
 
   import {
     fetchBalances,
+    getNormalizedNumber,
+    roundDownLabel
   } from '../helpers/multicall';
 
   import {
@@ -31,6 +36,8 @@
     onChainData: false
   };
 
+  $: portfolioUSD = 0;
+
   $: pies = poolsConfig.available.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
@@ -43,13 +50,17 @@
   }) || [];
 
   $: featured = [];
+  $: tokens = [];
 
   $: if($eth.address) {
     if(!initialized.onChainData && !isLoading) {
-      isLoading = true;
-      fetchOnchainData();
-      initialized.onChainData = true;
-      isLoading = false;
+      (async () => {
+        isLoading = true;
+        await fetchOnchainData();
+        await fetchTokenList($eth.address);
+        initialized.onChainData = true;
+        isLoading = false;
+      })()
     }
   }
 
@@ -68,18 +79,51 @@
       $eth.provider
     )
 
-    featured = res.slice(1);
-    console.log('listed', featured)
-    
+    featured = orderBy(res.slice(1).map(t => {
+      const usdValue = t.market_data ? t.balance.number * t.market_data.current_price : 0;
+      portfolioUSD += usdValue;
+      return {
+        ...t,
+        usdValue
+      }
+    }), ['usdValue'], ['desc']);
+    console.log('featured', featured)
   }
 
-  onMount(async () => {
-    // const newAddressSocket = createSocket('address');
-    // listenOnAddressMessages(newAddressSocket)
-    // newAddressSocket.on(messages.CONNECT, () => {
-    //   console.log('I\'m connected!');
-    // });
-  });
+  async function fetchTokenList(address) {
+    const response = await fetch(`https://api.ethplorer.io/getAddressInfo/${address}?apiKey=scwf7425sUxrtI106`)
+    const result = await response.json();
+    if (!result.tokens) return [];
+
+    const allTokens = result.tokens.map( t => {
+      const decimal = parseInt(t.tokenInfo.decimals, 10)
+      const balanceNumber = parseFloat(getNormalizedNumber(t.balance, decimal).toString());
+      const usdValue = t.tokenInfo.price ? balanceNumber * t.tokenInfo.price.rate : 0;
+      portfolioUSD += usdValue;
+      return {
+        symbol: t.tokenInfo.symbol,
+        name: t.tokenInfo.name,
+        decimals: decimal,
+        info: t.tokenInfo,
+        usdValue,
+        icon: getTokenImage(t.tokenInfo.address.toLowerCase()),
+        balance: {
+          bn:  new BigNumber(t.balance),
+          label: roundDownLabel(getNormalizedNumber(t.balance, decimal).toString()),
+          number: balanceNumber
+        }
+      };
+    });
+
+    const filtered = filter(allTokens, (t) => {
+      if(t.info.holdersCount === 0) return false;
+      if(t.name.includes('www') || t.name.includes('WWW')) return false;
+      if(find(featured, (o) => o.address.toLowerCase() === t.info.address.toLowerCase())) return false;
+      return true;
+    })
+
+    tokens = orderBy(filtered, ['usdValue'], ['desc']);
+  }
 
 </script>
 
@@ -88,12 +132,12 @@
   <div class="flex items-start mx-4 md:max-w-1280px">
     <div class="flex flex-col w-60pc mr-2pc">
       <span class="mb-4"><Holdings tokenList={featured} /></span>
-      <span class="mt-2 mb-2"><Allocation /></span>
+      <span class="mt-2 mb-2"><Allocation totalVal={portfolioUSD} tokenList={tokens}/></span>
     </div>
     <div class="flex flex-col w-38pc">
       <span class="mb-1"><Banner /></span>
       <span class="mt-1 mb-1"><Oven /></span>
-      <span class="mt-1 mb-1"><Farming /></span>
+      <!-- <span class="mt-1 mb-1"><Farming /></span> -->
       <!-- <span class="mt-1 mb-1"><Exchange /></span> -->
       <span class="mt-1 mb-1"><Governance /></span>
     </div>
@@ -106,8 +150,8 @@
   <span class="mb-2"><Allocation /></span>
   <span class="-mt-20px mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>
-  <span class="-mt-20px mb-2"><Farming /></span>
-  <span class="-mt-20px"><Exchange /></span>
+  <!-- <span class="-mt-20px mb-2"><Farming /></span> -->
+  <!-- <span class="-mt-20px"><Exchange /></span> -->
 
 </div>
 
