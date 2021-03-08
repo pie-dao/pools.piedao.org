@@ -63,20 +63,20 @@
   <div class="w-100pc m-0 p-0 flex justify-center">
     <div class="max-w-1200px flex flex-col items-center justify-center py-0 md:py-8 px-2">
     <!-- <img class="w-90pc block md:hidden mb-2"  src={images.herolandingmobile} alt="PieDAO Hero" /> -->
-    <img class="md:w-90pc lg:w-80pc hidden md:block"  src={images.herolanding} alt="PieDAO Hero" />
-    <div class="text-black font-bold text-center font-hero linear-wipe">Wealth creation<br class="hidden md:block lg:block"/> automated</div>
-    <div class="text-lg text-black font-thin italic text-center mt-1">Your path to <br class="block md:hidden lg:hidden"/>financial freedom</div>
-    <a href="#/swap"><button class="btnbig text-white m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get your pie</button></a>
+    <img class="md:w-90pc lg:w-80pc hidden md:block" src={images.herolanding} alt="PieDAO Hero" />
+    <div class="text-black font-bold text-center font-hero linear-wipe" >Wealth creation<br class="hidden md:block lg:block"/> automated</div>
+    <div class="text-lg text-black font-thin italic text-center mt-1" >Your path to <br class="block md:hidden lg:hidden"/>financial freedom</div>
+    <a href="#/swap" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get your pie</button></a>
     <div class="w-100pc flex flex-col md:flex-row items-stretch text-left mt-6 mb-0 md:mt-10 md:mb-6 text-black font-bold text-base">
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
+      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4" data-aos="fade-up" data-aos-delay="200" >
         <img class="w-40px" src={images.heroicon2} alt="PieDAO Hero" />
         <span class="ml-4 leading-5">Set and forget strategies, <br class="hidden md:block" />maximum returns</span>
       </div>
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
+      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4" data-aos="fade-down" data-aos-delay="100" >
         <img class="w-40px" src={images.heroicon1} alt="PieDAO Hero" />
         <span class="ml-4 leading-5">Diversified exposure to <br class="hidden md:block" />the best of crypto</span>  
       </div>
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4">
+      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4" data-aos="fade-up" data-aos-delay="200" >
         <img class="w-40px" src={images.heroicon3} alt="PieDAO Hero" />
         <span class="ml-4 leading-5">Secure, transparent, <br class="hidden md:block" />and open-source</span>
       </div>
@@ -87,7 +87,7 @@
 
 <div class="content text-center" style="padding-bottom: 0!important;">
   <span class="mt-6 mb-0 px-2 md:px-8 italic text-lg block md:hidden leading-7 font-thin">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
-  <span class="mt-12 mb-4 px-8 italic font-huge hidden md:block">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
+  <span class="mt-12 mb-4 px-8 italic font-huge hidden md:block" data-aos="fade-up" data-aos-delay="500">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
 </div>
 
 
@@ -120,7 +120,7 @@
 </div>
 
 
-<section class="pt-8 px-4 text-center md:pt-8 lg:pt-12">
+<section class="pt-8 px-4 text-center md:pt-8 lg:pt-12" data-aos="fade-up" data-aos-delay="0">
   <div class="w-full max-w-2xl mx-auto">
     <div class="text-lg text-center w-100pc block md:hidden leading-7 mb-6">Bake Together, save 97% Gas.<br /><a href="#/oven" class="underline"> Use the oven ></a></div>
     <div class="font-huge text-center w-100pc pr-2 hidden md:block">Bake Together, save 97% Gas.</div>
@@ -131,7 +131,7 @@
   <div class="flex flex-col md:max-w-1200px p-0 p-4 md:p-6 mx-4 md:mx-0 mb-0 md:mb-4 items-center bg-lightgrey md:bg-white rounded">
     <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
 
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center my-0 lg:m-10px p-0 md:p-20px">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center my-0 lg:m-10px p-0 md:p-20px" data-aos="fade-up" data-aos-delay="500">
           <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.depositeth} alt="deposit eth" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
               <div class="text-lg">Deposit ETH</div>
@@ -139,7 +139,7 @@
           </div>
         </div>
 
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px" data-aos="fade-up" data-aos-delay="500">
           <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.waitoven} alt="wait oven" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
               <div class="text-lg">Wait</div>
@@ -147,7 +147,7 @@
           </div>
         </div>
 
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px">
+        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px" data-aos="fade-up" data-aos-delay="500">
           <img class="w-50px md:w-80px mr-4 md:mr-0 mb-2 md:mb-0" src={images.sharegascost} alt="share gas cost" />
           <div class="flex flex-col text-left md:text-center md:mt-3">
             <div class="text-lg">Withdraw Your Pie</div>
@@ -156,7 +156,7 @@
         </div>
 
     </div>
-    <a href="#/oven" class="hidden md:block"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Oven</button></a>
+    <a href="#/oven" class="hidden md:block" data-aos="fade-up" data-aos-delay="700"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Oven</button></a>
 
   </div>
 </div>
@@ -179,13 +179,13 @@
 
 <div class="videocontainer-landing mt-2 mb-6 md:my-6 py-20 md:py-30">
   <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video-landing hidden md:block">
-    <source class="hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4">
+    <source class="hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4" data-aos="fade-up" data-aos-delay="500">
   </video>
   <div class="content flex flex-col spl px-4 z-50">
     <!-- <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div> -->
-    <img src={images.doughcolorful} class="w-60pc md:w-30pc" alt="dough" />
-    <div class="text-base md:text-lg font-thin text-center mt-2">The engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
-    <a href="#/dough"><button class="btnblack m-0 mt-4 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
+    <img src={images.doughcolorful} class="w-60pc md:w-30pc" alt="dough" data-aos="fade-up" data-aos-delay="200"/>
+    <div class="text-base md:text-lg font-thin text-center mt-2" data-aos="fade-up" data-aos-delay="400">The engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
+    <a href="#/dough" data-aos="fade-up" data-aos-delay="600"><button class="btnblack m-0 mt-4 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
   </div>
 </div>
 

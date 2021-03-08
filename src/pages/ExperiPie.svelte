@@ -122,16 +122,12 @@
     
     let _nav = parseFloat(Pie.nav);
     let price = parseFloat(tokenPrice);
-
-    console.log('_nav', _nav)
-    console.log('price', price)
-
     
-
-    let spread = (price - _nav) / price * 100;
+    let spread = (price - _nav);
+    let spreadPercentage = Math.abs( spread / price * 100 );
     return {
-      label: spread > 0 ? 'Premium' : 'Discount',
-      number: `${spread.toFixed(2)}%`
+      label: price > _nav ? 'Premium' : 'Discount',
+      number: `${spreadPercentage.toFixed(2)}%`
     };
   })()
 
@@ -430,15 +426,6 @@
         NAV
             <img src={images.InfoIcon} class="ml-1" alt="info" width="16px" />
       </div>
-    </div>
-
-    <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black text-black">
-        {getSpread.number}
-      </div>
-      <TooltipButton tooltip="Difference between NAV and the Pie current price on exchanges">
-      <div class="font-thin text-xs md:text-base text-black">{getSpread.label}</div>
-      </TooltipButton>
     </div>
 
     <div class="p-0 flex-initial self-start mr-8">

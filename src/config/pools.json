@@ -3,10 +3,11 @@
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
+    "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
-    "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31"
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
+    
     
   ],
   "selectable": [
@@ -298,7 +299,7 @@
     "symbol": "DEFI+L",
     "name": "DeFi Large Cap",
     "description": "Large market cap projects. A premium selection of blue chip only tokens.",
-    "isExperipie": false,
+    "isExperipie": true,
     "mapDynamicTradingViewFormula": {
       "0xc00e94Cb662C3520282E6f5717214004A7f26888": "KRAKEN:COMPUSD",
       "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": "GEMINI:AAVEUSD",
@@ -313,8 +314,17 @@
     "coingeckoId": "piedao-defi-large-cap",
     "swapFees": "0.1",
     "streamingFees": "0.7",
-    "swapEnabled": true,
+    "swapEnabled": false,
     "composition": [
+      {
+        "symbol": "SUSHI",
+        "color": "#0171F5",
+        "coingeckoImageId": 12271,
+        "coingeckoId": "sushi",
+        "address": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
+        "percentage": 18.35,
+        "decimals": 18
+      },
       {
         "symbol": "COMP",
         "decimals": 18,
