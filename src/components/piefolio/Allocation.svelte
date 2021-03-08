@@ -1,15 +1,19 @@
 <script>
+  import {afterUpdate} from "svelte";
   import { formatFiat } from "../helpers.js";
   export let tokenList;
-  export let portfolioUSD;
   $: tokens = tokenList || [];
-  $: totalVal = portfolioUSD || 0;
+  $: totalVal = 0;
+
+  afterUpdate(() => {
+    totalVal = $$restProps.totalVal;
+  });
 </script>
 
 <div class="w-100pc flex flex-col cardbordergradient">
   <div class="w-100pc bg-lightgrey rounded-xl text-black py-8 px-6 flex flex-col items-center">
 
-    <div class="w-100pc font-huge text-left">Portfolio Allocation</div>
+    <div class="w-100pc font-huge text-left">Portfolio Allocation - {formatFiat(totalVal)}</div>
     
     {#each tokens as t }
       <a class="flex mt-8 w-100pc" href="#">
@@ -21,7 +25,7 @@
             <span class="text-lg leading-6">{t.symbol}</span>
             {#if t.info.price}
               <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">
-                {(totalVal * t.usdValue/ 100)}%
+                {((t.usdValue * 100) / totalVal).toFixed(2)}%
               </span>
             {/if}
           </span>

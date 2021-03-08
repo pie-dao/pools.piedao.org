@@ -131,7 +131,8 @@
 <div class="hidden md:flex w-100pc py-20px flex flex-col items-center">
   <div class="flex items-start mx-4 md:max-w-1280px">
     <div class="flex flex-col w-60pc mr-2pc">
-      <span class="mb-4"><Holdings tokenList={featured} /></span>
+      {portfolioUSD}
+      <span class="mb-4"><Holdings totalVal={portfolioUSD} tokenList={featured} /></span>
       <span class="mt-2 mb-2"><Allocation totalVal={portfolioUSD} tokenList={tokens}/></span>
     </div>
     <div class="flex flex-col w-38pc">

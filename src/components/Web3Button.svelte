@@ -11,19 +11,20 @@
       await connectWeb3Cached();
     }
   })()
+
+  const handleClick = () => {
+    connectWeb3();
+    if ($eth.address) {
+      window.location.hash = '#/piefolio';
+      return;
+    }
+  }
   
 </script>
 
 <button
   class="btn connect-button-container"
-  on:click={() => {
-    if ($eth.address) {
-      window.location.hash = '#/piefolio';
-      return;
-    }
-
-    connectWeb3();
-  }}
+  on:click={handleClick}
   role="button"
   tabIndex="-100"
 >
