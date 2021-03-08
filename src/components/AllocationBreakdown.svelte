@@ -1,8 +1,6 @@
 <script>
   import { _ } from 'svelte-i18n';
 
-  import { onMount } from 'svelte';
-
   import AllocationChart from './AllocationChart.svelte';
   import poolsConfig from '../config/pools.json';
 

@@ -177,7 +177,9 @@
     </a>
     
     <div class="hidden md:block">
-      <Web3Button />
+      <a href="#/piefolio">
+        <Web3Button />
+      </a>
     </div>
 
   </div>

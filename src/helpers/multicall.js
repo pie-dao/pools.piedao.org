@@ -164,6 +164,23 @@ const roundDownLabel = (numberString) => {
   return (Math.floor(number * 100) / 100).toString();
 }
 
+const getBalanceQuery = (tokensList, wallet) => tokensList.map((token) => [
+  token.address,
+  'balanceOf',
+  [wallet]
+]);
+
+const getDecimalsQuery = tokenList => tokenList.map((token) => [
+  token.address,
+  'decimals'
+]);
+
+const getAllowanceQuery = (tokensList, wallet, allowanceTarget) => tokensList.map((token) => [
+  token.address,
+  'allowance',
+  [wallet, allowanceTarget]
+]);
+
 
 /**
  * Warning, token list has to contain eth at position [0]
@@ -176,22 +193,9 @@ const roundDownLabel = (numberString) => {
 export async function fetchBalances(tokensList, walletAddress, provider, allowanceTarget='0xdef1c0ded9bec7f1a1670819833240f027b25eff') {
   const tokensListWithoutEth = tokensList.slice(1);
 
-  const balanceQuery = tokensListWithoutEth.map((token) => [
-    token.address,
-    'balanceOf',
-    [walletAddress]
-  ]);
-
-  const decimalsQuery = tokensListWithoutEth.map((token) => [
-    token.address,
-    'decimals'
-  ]);
-
-  const allowanceQuery = tokensListWithoutEth.map((token) => [
-    token.address,
-    'allowance',
-    [walletAddress, allowanceTarget]
-  ]);
+  const balanceQuery = getBalanceQuery(tokensListWithoutEth, walletAddress);
+  const decimalsQuery = getDecimalsQuery(tokensListWithoutEth);
+  const allowanceQuery = getAllowanceQuery(tokensListWithoutEth, walletAddress, allowanceTarget)
 
   const response = await multicall(
     provider,
@@ -358,6 +362,7 @@ export async function fetchOvensUserData(ovensList, walletAddress, provider) {
     { blockTag: 'latest' }
   );
 
+  let userHasPosition = false;
   const chunks = chunk(response, ovensList.length);
   const balancesEth = chunks[0];
   const balancesPie = chunks[1];
@@ -386,7 +391,13 @@ export async function fetchOvensUserData(ovensList, walletAddress, provider) {
         number: parseFloat(getNormalizedNumber(cap.toString(), 18).toString())
       }
     }
+
+    if( parseFloat(getNormalizedNumber(balanceEth.toString(), 18).toString()) > 0) {
+      userHasPosition = true;
+    }
   }
+
+  ovenData.userHasPosition = userHasPosition;
 
   console.log('ovenData', ovenData)
 

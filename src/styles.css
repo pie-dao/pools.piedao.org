@@ -1273,6 +1273,19 @@ max-width: 100%;
 }
 
 
+
+.small-cta {
+  border-radius: 5px;
+  border-style: none;
+  color: black;
+  font-family: Rubik, sans-serif;
+  font-weight: 500;
+  min-width: 150px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid grey;
+}
+
 .main-cta-ghost {
   background-color: white;
   border-radius: 5px;

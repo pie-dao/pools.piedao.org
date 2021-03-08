@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { ethers } from 'ethers';
   import images from '../../config/images.json';
-  import WhiteBox from '../../components/elements/WhiteBox.svelte';
+  import ovens from '../../config/ovensConf';
 
   import Meta from '../../components/elements/meta.svelte';
   import { balances, balanceKey, eth } from '../../stores/eth.js';
@@ -15,83 +15,7 @@
   import TooltipButton from '../../components/elements/TooltipButton.svelte';
   import { fetchOvensUserData } from '../../helpers/multicall';
   import Accordion from '../../components/elements/Accordion.svelte'
-  import AccordionGroup from '../../components/elements/AccordionGroup.svelte'
-
-
-  $: ovens = [
-    {
-      addressOven: '0x1d616dad84dd0b3ce83e5fe518e90617c7ae3915',
-      deprecated: false,
-      name: 'DEFI++ Oven',
-      description: 'Bakes DEFI++ at Zero cost',
-      data: {
-        ethBalance: 0,
-        pieBalance: 0,
-      },
-      baking: {
-        symbol: 'DEFI++',
-        address: '0x8d1ce361eb68e9e05573443c407d4a3bed23b033',
-        balance: '0',
-        icon: getTokenImage('0x8d1ce361eb68e9e05573443c407d4a3bed23b033'),
-      },
-      highlight: true,
-      enabled: true,
-    },
-    {
-      addressOven: '0xE3d74Df89163A8fA1cBa540FF6B339d13D322F61',
-      deprecated: false,
-      name: 'BCP Oven',
-      description: 'Bakes BCP at Zero cost',
-      data: {
-        ethBalance: 0,
-        pieBalance: 0,
-      },
-      baking: {
-        symbol: 'BCP',
-        address: '0xe4f726adc8e89c6a6017f01eada77865db22da14',
-        balance: '0',
-        icon: getTokenImage('0xe4f726adc8e89c6a6017f01eada77865db22da14'),
-      },
-      highlight: true,
-      enabled: true,
-    },
-    {
-      addressOven: '0xAedec86DeDe3DEd9562FB00AdA623c0e9bEEb951',
-      deprecated: false,
-      name: 'YPIE Oven',
-      description: 'Bakes YPIE at Zero cost',
-      data: {
-        ethBalance: 0,
-        pieBalance: 0,
-      },
-      baking: {
-        symbol: 'YPIE',
-        address: '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31',
-        balance: '0',
-        icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'),
-      },
-      highlight: true,
-      enabled: true,
-    },
-    // {
-    //   addressOven: '0x925f860d1596cc6383c16294d8290f82bde172f7',
-    //   deprecated: true,
-    //   name: 'YPIE Oven',
-    //   description: 'Bakes YPIE at Zero cost',
-    //   data: {
-    //     ethBalance: 0,
-    //     pieBalance: 0,
-    //   },
-    //   baking: {
-    //     symbol: 'YPIE',
-    //     address: '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31',
-    //     balance: '0',
-    //     icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'),
-    //   },
-    //   highlight: true,
-    //   enabled: true,
-    // },
-  ];
+  import AccordionGroup from '../../components/elements/AccordionGroup.svelte';
 
   let modal;
   let modalAdd;
