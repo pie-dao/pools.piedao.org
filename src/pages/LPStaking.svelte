@@ -724,17 +724,17 @@
 </ModalFarm>
 
 <div class="content">
-  <div class="flex flex-col md:flex-row items-start px-20px w-100pc max-w-1280px">
+  <div class="flex flex-col md:flex-row items-start px-0 md:px-20px w-100pc max-w-1280px">
     <div class="flex flex-col w-100pc md:w-60pc mr-2pc">
       <span class="mt-1 mb-2">
         <div class="w-100pc flex flex-col cardbordergradient">
           <div
-            class="w-100pc bg-lightgrey rounded-xl text-black py-8 px-6 flex flex-col items-center"
+            class="w-100pc bg-lightgrey rounded-xl text-black py-8 px-2 md:px-6 flex flex-col items-center"
           >
             <div class="w-100pc font-huge text-left">Farm Pools</div>
 
             <a
-              class="flex mt-4 w-100pc rounded-xl bg-white p-4 pointer"
+              class="flex mt-4 w-100pc rounded-xl bg-white p-2 md:p-4 pointer"
               on:click={() => {
                 modalinfo.open();
               }}
@@ -757,7 +757,7 @@
               </div>
               <div class="flex flex-col justify-around">
                 <span class="flex items-center"
-                  ><span class="text-lg leading-6">DOUGH / ETH</span><span
+                  ><span class="text-sm md:text-lg leading-6">DOUGH / ETH</span><span
                     class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2"
                     >55.30% APY</span
                   ></span
@@ -770,7 +770,7 @@
               </div>
             </a>
 
-            <a class="flex mt-4 w-100pc rounded-xl bg-white p-4" href="token">
+            <a class="flex mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
               <div class="mr-4 flex items-center">
                 <img class="z-10" width="60px" height="60px" src={images.bcp} alt="token name" />
                 <img
@@ -796,7 +796,7 @@
               </div>
             </a>
 
-            <a class="flex mt-4 w-100pc rounded-xl bg-white p-4" href="token">
+            <a class="flex mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
               <div class="mr-4 flex items-center">
                 <img
                   class="z-10"
@@ -828,7 +828,7 @@
               </div>
             </a>
 
-            <a class="flex mt-4 w-100pc rounded-xl bg-white p-4" href="token">
+            <a class="flex mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
               <div class="mr-4 flex items-center">
                 <img
                   class="z-10"
