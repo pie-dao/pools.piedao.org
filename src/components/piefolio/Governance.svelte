@@ -35,16 +35,20 @@
 </script>
 
 <span class="-mt-20px">
+  {#if !initialized}
+  Loading...
+{:else if initialized && proposals.length === 0}
+<a class="" href="#/dough">
+  <div class="rounded-xl">
+    <img width="100%" height="auto" class="rounded-xl" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/oven-little-banner.png" alt="external link icon" />
+  </div>
+</a>
+{:else}
   <a class="" href="https://snapshot.page/#/piedao" target="_blank"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a>
 
   
   <div class="bg-lightpink rounded-xl text-black py-8 px-6">
-    {#if !initialized}
-      Loading...
-    {:else if initialized && proposals.length === 0}
-      <div class="font-huge text-center">Governance</div>
-      No active proposals at the moment.
-    {:else}
+
       <div class="font-huge text-center">Governance</div>
       
       {#each proposals as p}
@@ -58,9 +62,9 @@
           </div>
         </a>
       {/each}
+    </div>
     {/if}
     
-  </div>
 </span>
 
 
