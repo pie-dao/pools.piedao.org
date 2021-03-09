@@ -724,7 +724,7 @@
 </ModalFarm>
 
 <div class="content">
-  <div class="flex-col md:flex-row items-start px-20px w-100pc max-w-1280px">
+  <div class="flex flex-col md:flex-row items-start px-20px w-100pc max-w-1280px">
     <div class="flex flex-col w-100pc md:w-60pc mr-2pc">
       <span class="mt-1 mb-2">
         <div class="w-100pc flex flex-col cardbordergradient">
@@ -935,6 +935,8 @@
   </div>
 </div>
 
+
+<!--
 <div class="content flex flex-col">
   <img
     class="banner-desktop"
@@ -948,14 +950,11 @@
   <div
     class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full"
   >
-    <!-- component -->
     {#if $eth.address}
       <div class="py-5">
         <main class="h-full">
           <div class="flex flex-col md:flex-row lg:flex-row items-center justify-center ">
-            <!-- Cards Container -->
             <div class="flex flex-col md:flex-row lg:flex-row items-center w-100pc px-2">
-              <!-- Card -->
               <div
                 class="flex p-6 mx-4 my-2 bg-white rounded-sm shadow-xs dark:bg-gray-800 w-100pc md:w-auto lg:w-auto"
               >
@@ -969,7 +968,6 @@
                   </p>
                 </div>
               </div>
-              <!-- Card -->
               <div
                 class="flex p-6 mx-4 my-2 bg-white rounded-sm shadow-xs dark:bg-gray-800 w-100pc md:w-auto lg:w-auto"
               >
@@ -1006,7 +1004,6 @@
               />
               <div class="title text-lg">{ammPool.name}</div>
               <div class="subtitle font-thin">{ammPool.description}</div>
-              <!-- <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div> -->
               <div class="apy">
                 <a href={ammPool.poolLink} target="_blank"> {ammPool.platform} </a>
               </div>
@@ -1042,7 +1039,6 @@
               />
               <div class="title text-lg">{ammPool.name}</div>
               <div class="subtitle font-thin">{ammPool.description}</div>
-              <!-- <div class="apy">{ammPool.weeklyRewards} {ammPool.rewards_token}</div> -->
               <div class="apy">{ammPool.platform}</div>
 
               {#if ammPool.contractType === 'Geyser'}
@@ -1138,7 +1134,6 @@
       </div>
 
       <div class="flex flex-col w-full justify-around md:flex-row">
-        <!-- UNSTAKE BOX -->
         <div
           class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm p-4"
         >
@@ -1201,7 +1196,6 @@
           {/if}
         </div>
 
-        <!-- STAKE BOX -->
         <div
           class="farming-card highlight-box flex flex-col justify-center align-center items-center mx-1 my-4  border border-grey border-opacity-50 border-solid rounded-sm p-4"
         >
@@ -1271,7 +1265,6 @@
           {/if}
         </div>
 
-        <!-- CLAIM BOX -->
         {#if pool.contractType === 'UniPool' || pool.contractType === 'escrewRewardsStakingPool'}
           <div
             class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm p-4"
@@ -1470,3 +1463,4 @@
     {/if}
   </div>
 </div>
+-->
