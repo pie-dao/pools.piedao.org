@@ -13,7 +13,7 @@
 <div class="w-100pc flex flex-col cardbordergradient">
   <div class="w-100pc bg-lightgrey rounded-xl text-black py-8 px-6 flex flex-col items-center">
 
-    <div class="w-100pc font-huge text-left">Portfolio Allocation - {formatFiat(totalVal)}</div>
+    <div class="w-100pc font-huge text-left">Wallet Allocation - {formatFiat(totalVal)}</div>
     
     {#each tokens as t }
       <a class="flex mt-8 w-100pc" href="#">

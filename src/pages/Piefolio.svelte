@@ -99,7 +99,6 @@
       const decimal = parseInt(t.tokenInfo.decimals, 10)
       const balanceNumber = parseFloat(getNormalizedNumber(t.balance, decimal).toString());
       const usdValue = t.tokenInfo.price ? balanceNumber * t.tokenInfo.price.rate : 0;
-      portfolioUSD += usdValue;
       return {
         symbol: t.tokenInfo.symbol,
         name: t.tokenInfo.name,
@@ -119,6 +118,7 @@
       if(t.info.holdersCount === 0) return false;
       if(t.name.includes('www') || t.name.includes('WWW')) return false;
       if(find(featured, (o) => o.address.toLowerCase() === t.info.address.toLowerCase())) return false;
+      portfolioUSD += t.usdValue;
       return true;
     })
 
@@ -131,7 +131,6 @@
 <div class="hidden md:flex w-100pc py-20px flex flex-col items-center">
   <div class="flex items-start mx-4 md:max-w-1280px">
     <div class="flex flex-col w-60pc mr-2pc">
-      {portfolioUSD}
       <span class="mb-4"><Holdings totalVal={portfolioUSD} tokenList={featured} /></span>
       <span class="mt-2 mb-2"><Allocation totalVal={portfolioUSD} tokenList={tokens}/></span>
     </div>
