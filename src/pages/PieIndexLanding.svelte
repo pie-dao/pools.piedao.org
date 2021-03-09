@@ -111,7 +111,7 @@
       if (component.isPie) {
         if(!pieOfPies) pieOfPies = [];
         pieOfPies.push(component);
-        return getInternalWeights(component, component.percentage);
+        // return getInternalWeights(component, component.percentage);
       }
       return component;
     })
@@ -156,6 +156,25 @@
     return {
       label: spread > 0 ? 'Premium' : 'Discount',
       number: `${spread.toFixed(2)}%`
+    };
+  })()
+
+  $: getSpread = ( () => {
+    let nav = parseFloat($pools[token+"-nav"]);
+    let price = parseFloat(tokenPrice);
+
+    if(!nav || !price) {
+      return {
+        label: 'Spread',
+        number: `n/a`
+      };
+    }    
+
+    let spread = (price - nav);
+    let spreadPercentage = Math.abs( spread / price * 100 );
+    return {
+      label: price > nav ? 'Premium' : 'Discount',
+      number: `${+spreadPercentage.toFixed(2)}%`
     };
   })()
 
@@ -318,7 +337,7 @@
   <div class="md:hidden w-100pc flex flex-col rounded-sm border-grey my-2 p-2">
     <div class="w-100pc flex justify-between items-center">
       <div class="font-bold text-left text-pink"><a on:click={() => { modalinfo.open() }} class="cursor-pointer flex" role="menuitem"><span>NAV </span><img src={images.InfoIcon} class="ml-1" alt="info" width="16px" /></div>
-        <div class="font-bold text-right">{nav}</div>
+        <div class="font-bold text-right">{getNav}</div>
     </div>
     <div class="w-100pc flex justify-between items-center">
       <div class="font-thin text-left">{getSpread.label}</div>
@@ -385,7 +404,9 @@
               <th class="font-thin border-b-2 px-4 py-2 text-center">Balance</th>
           {/if}
           <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
-          <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
+          {#if !pieOfPies }
+            <th class="font-thin border-b-2 px-4 py-2">Sparkline</th>
+          {/if}
         </tr>
       </thead>
       <tbody>
@@ -440,11 +461,23 @@
             </td> -->
 
             <td class="border text-center py-2 px-4 md:px-0">
-              <img
-                class="w-30 spark greyoutImage mx-0"
-                alt="Sparkline"
-                src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
-                style="margin: auto;" />
+              {#if pooledToken.isPie }
+                <a on:click={() => {
+                  initialized = false;
+                  window.location.hash = `#/pie/${pooledToken.address}`;
+                  window.location.reload();
+                }}>
+                  <button class="table-btn highlight-box min-w-70px">
+                    Visit
+                  </button>
+                </a>
+              {:else}
+                <img
+                  class="w-30 spark greyoutImage mx-0"
+                  alt="Sparkline"
+                  src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline" 
+                  style="margin: auto;" />
+                {/if}
             </td>
           </tr>
         {/each}

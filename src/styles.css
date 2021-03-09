@@ -183,6 +183,30 @@ right: 0px;
   background-color: #ff2eb3;
 }
 
+.bg-lightpink {
+  background-color: #F0E5F6;
+}
+
+.bg-lightgreen {
+  background-color: #B7F1E2;
+}
+
+.bg-purple {
+  background-color: #8B60F8;
+}
+
+.bg-darkpurple {
+  background-color: #403857;
+}
+
+.bg-lightyellow {
+  background-color: #FBF393;
+}
+
+.bg-lightblu {
+  background-color: #D3E8FF;
+}
+
 .text-green {
   color: #24D897;
 }
@@ -1247,6 +1271,19 @@ max-width: 100%;
   border: none;
 }
 
+
+
+.small-cta {
+  border-radius: 5px;
+  border-style: none;
+  color: black;
+  font-family: Rubik, sans-serif;
+  font-weight: 500;
+  min-width: 150px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid grey;
+}
 
 .main-cta-ghost {
   background-color: white;

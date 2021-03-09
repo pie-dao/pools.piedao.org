@@ -177,7 +177,7 @@
     </a>
     
     <div class="hidden md:block">
-      <Web3Button />
+        <Web3Button />
     </div>
 
   </div>

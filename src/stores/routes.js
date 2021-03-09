@@ -19,6 +19,8 @@ import Experipie from '../pages/ExperiPie.svelte';
 import PiePageSwitch from '../pages/PiePageSwitch.svelte';
 import Learn from '../pages/Learn.svelte';
 import Integrations from '../pages/Integrations.svelte';
+import Piefolio from '../pages/Piefolio.svelte';
+
 
 
 
@@ -102,6 +104,8 @@ const formatRoute = (route) => {
       return { page: Migration, params: { address } };
     case 'oven':
       return { page: Oven };
+      case 'piefolio':
+        return { page: Piefolio };
     case 'stake':
       referral = route[1] || null;
 

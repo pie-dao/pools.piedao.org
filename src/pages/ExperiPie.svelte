@@ -122,16 +122,12 @@
     
     let _nav = parseFloat(Pie.nav);
     let price = parseFloat(tokenPrice);
-
-    console.log('_nav', _nav)
-    console.log('price', price)
-
     
-
-    let spread = (price - _nav) / price * 100;
+    let spread = (price - _nav);
+    let spreadPercentage = Math.abs( spread / price * 100 );
     return {
-      label: spread > 0 ? 'Premium' : 'Discount',
-      number: `${spread.toFixed(2)}%`
+      label: price > _nav ? 'Premium' : 'Discount',
+      number: `${spreadPercentage.toFixed(2)}%`
     };
   })()
 
