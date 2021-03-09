@@ -5,7 +5,7 @@
 <span class="-mt-20px">
   <a class="" href="https://snapshot.page/#/piedao" target="_blank"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a>
 
-  <div class="bg-lightgreen rounded-xl text-black py-4 md:py-8 px-2 md:px-6">
+  <div class="bg-lightgreen rounded-xl text-black py-8 px-2 md:px-6">
     <div class="font-huge text-center">Farm Positions</div>
 
     <div class="flex">

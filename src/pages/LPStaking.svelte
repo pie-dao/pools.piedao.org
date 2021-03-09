@@ -559,10 +559,10 @@
 
 
   <span slot="content" class="py-0 px-4 md:px-12 font-thin">
-    <span class="flex mt-4 w-100pc">
+    <span class="flex mt-0 md:mt-4 w-100pc">
       <div class="mr-4 flex items-center">
-        <img class="z-10" width="60px" height="60px" src={images.doughtoken} alt="token name" />
-        <img class="-ml-30px" width="60px" height="60px" src={images.logos.eth} alt="token name" />
+        <img class="z-10" width="40px" height="40px" src={images.doughtoken} alt="token name" />
+        <img class="-ml-20px" width="60px" height="60px" src={images.logos.eth} alt="token name" />
       </div>
       <div class="flex flex-col justify-around">
         <span class="flex items-center"
@@ -726,12 +726,12 @@
 <div class="content">
   <div class="flex flex-col md:flex-row items-start px-0 md:px-20px w-100pc max-w-1280px">
     <div class="flex flex-col w-100pc md:w-60pc mr-2pc">
-      <span class="mt-1 mb-2">
+      <span class="mt-0 md:mt-1 mb-2">
         <div class="w-100pc flex flex-col cardbordergradient">
           <div
             class="w-100pc bg-lightgrey rounded-xl text-black py-8 px-2 md:px-6 flex flex-col items-center"
           >
-            <div class="w-100pc font-huge text-left">Farm Pools</div>
+            <div class="w-100pc font-huge text-center md:text-left">Farm Pools</div>
 
             <a
               class="flex mt-4 w-100pc rounded-xl bg-white p-2 md:p-4 pointer"
@@ -742,15 +742,15 @@
               <div class="mr-4 flex items-center">
                 <img
                   class="z-10"
-                  width="60px"
-                  height="60px"
+                  width="40px"
+                  height="40px"
                   src={images.doughtoken}
                   alt="token name"
                 />
                 <img
-                  class="-ml-30px"
-                  width="60px"
-                  height="60px"
+                  class="-ml-20px"
+                  width="40px"
+                  height="40px"
                   src={images.logos.eth}
                   alt="token name"
                 />
@@ -765,25 +765,25 @@
                 <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
               </div>
               <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                <span class="text-lg leading-6">Balancer</span>
-                <span class="text-sm px-1 text-grey">Tot 166.345 BPT Staked</span>
+                <span class="text-sm md:text-lg leading-6 hidden md:block">Balancer</span>
+                <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span>
               </div>
             </a>
 
-            <a class="flex mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
+            <a class="flex mt-2 md:mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
               <div class="mr-4 flex items-center">
-                <img class="z-10" width="60px" height="60px" src={images.bcp} alt="token name" />
+                <img class="z-10" width="40px" height="40px" src={images.bcp} alt="token name" />
                 <img
-                  class="-ml-30px invisible"
-                  width="60px"
-                  height="60px"
+                  class="-ml-20px invisible"
+                  width="40px"
+                  height="40px"
                   src={images.bcp}
                   alt="token name"
                 />
               </div>
               <div class="flex flex-col justify-around">
                 <span class="flex items-center"
-                  ><span class="text-lg leading-6">BCP</span><span
+                  ><span class="text-sm md:text-lg leading-6">BCP</span><span
                     class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2"
                     >55.30% APY</span
                   ></span
@@ -791,31 +791,31 @@
                 <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
               </div>
               <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                <span class="text-lg leading-6">PieDAO</span>
-                <span class="text-sm px-1 text-grey">Tot 166.345 BPT Staked</span>
+                <span class="text-sm md:text-lg leading-6 hidden md:block">PieDAO</span>
+                <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span>
               </div>
             </a>
 
-            <a class="flex mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
+            <a class="flex mt-2 md:mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
               <div class="mr-4 flex items-center">
                 <img
                   class="z-10"
-                  width="60px"
-                  height="60px"
+                  width="40px"
+                  height="40px"
                   src={images.defipluss}
                   alt="token name"
                 />
                 <img
-                  class="-ml-30px"
-                  width="60px"
-                  height="60px"
+                  class="-ml-20px"
+                  width="40px"
+                  height="40px"
                   src={images.logos.eth}
                   alt="token name"
                 />
               </div>
               <div class="flex flex-col justify-around">
                 <span class="flex items-center"
-                  ><span class="text-lg leading-6">DEFI+S / ETH</span><span
+                  ><span class="text-sm md:text-lg leading-6">DEFI+S / ETH</span><span
                     class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2"
                     >55.30% APY</span
                   ></span
@@ -823,31 +823,31 @@
                 <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
               </div>
               <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                <span class="text-lg leading-6">Balancer</span>
-                <span class="text-sm px-1 text-grey">Tot 166.345 BPT Staked</span>
+                <span class="text-sm md:text-lg leading-6 hidden md:block">Balancer</span>
+                <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span>
               </div>
             </a>
 
-            <a class="flex mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
+            <a class="flex mt-2 md:mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
               <div class="mr-4 flex items-center">
                 <img
                   class="z-10"
-                  width="60px"
-                  height="60px"
+                  width="40px"
+                  height="40px"
                   src={images.defiplusl}
                   alt="token name"
                 />
                 <img
-                  class="-ml-30px"
-                  width="60px"
-                  height="60px"
+                  class="-ml-20px"
+                  width="40px"
+                  height="40px"
                   src={images.logos.eth}
                   alt="token name"
                 />
               </div>
               <div class="flex flex-col justify-around">
                 <span class="flex items-center"
-                  ><span class="text-lg leading-6">DEFI+L ETH</span><span
+                  ><span class="text-sm md:text-lg leading-6">DEFI+L ETH</span><span
                     class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2"
                     >55.30% APY</span
                   ></span
@@ -855,8 +855,8 @@
                 <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
               </div>
               <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                <span class="text-lg leading-6">Balancer</span>
-                <span class="text-sm px-1 text-grey">Tot 166.345 BPT Staked</span>
+                <span class="text-sm md:text-lg leading-6 hidden md:block">Balancer</span>
+                <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span>
               </div>
             </a>
           </div>
@@ -864,13 +864,13 @@
       </span>
     </div>
     <div class="flex flex-col w-100pc md:w-38pc">
-      <span class="-mt-4 mb-1"><Farming /></span>
+      <span class="-mt-4 mb-0 md:mb-1"><Farming /></span>
     </div>
   </div>
 </div>
 
 <div class="content">
-  <div class="flex flex-col items-start mx-4 w-100pc md:max-w-1280px">
+  <div class="flex flex-col items-start mx-0 md:mx-4 w-100pc md:max-w-1280px">
     <AccordionGroup>
       <Accordion class="flex flex-col">
         <button class="accordionbutton flex flex-col" slot="header" let:toggle on:click={toggle}
