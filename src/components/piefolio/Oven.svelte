@@ -126,15 +126,19 @@
 </Modal>
 
 <span class="-mt-20px">
-  <a class="" href="#/oven"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a>
-  <div class="bg-lightyellow rounded-xl text-black py-8 px-6">
 
     {#if !ovenData}
       Ovens Loading...
     {:else if !ovenData.userHasPosition}
-      Bake with us!
+    <a class="" href="#/dough">
+      <div class="rounded-xl">
+        <img width="100%" height="auto" class="rounded-xl" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/oven-little-banner.png" alt="external link icon" />
+      </div>
+    </a>
     {:else}
-    <div class="font-huge text-center">Oven</div>
+    <div class="bg-lightyellow rounded-xl text-black py-8 px-6">
+      <a class="" href="#/oven"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a>
+      <div class="font-huge text-center">Oven</div>
       {#each ovens as oven}
         {#if ovenData[oven.addressOven].ethBalance.number > 0 || ovenData[oven.addressOven].pieBalance.number > 0}
           <div class="w-100pc rounded-xl bg-white p-6 mt-6">
@@ -176,9 +180,10 @@
           </div>
         {/if}
       {/each}
+    </div>
+
     {/if}
 
-  </div>
 </span>
 
 

@@ -18,7 +18,7 @@
     {#each tokens as t }
       <a class="flex mt-8 w-100pc" href="#">
         <div class="mr-4 w-60px max-w-60px h-60px max-h-60px">
-          <img width="60px" height="60px" on:error={(e) => e.target.src = "http://i.giphy.com/9J7tdYltWyXIY.gif" } src={t.icon} alt={t.symbol} />
+          <img width="60px" height="60px" on:error={(e) => e.target.src = "https://raw.githubusercontent.com/pie-dao/brand/329c5f1b348cd47a68eec12a71f06727398e789e/misc/generic-token.svg" } src={t.icon} alt={t.symbol} />
         </div>
         <div class="flex flex-col justify-around">
           <span class="flex items-center">
