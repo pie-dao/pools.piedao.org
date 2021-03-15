@@ -729,7 +729,7 @@
       <span class="mt-0 md:mt-1 mb-2">
         <div class="w-100pc flex flex-col cardbordergradient">
           <div
-            class="w-100pc bg-lightgrey rounded-xl text-black pt-8 pb-2 md:py-8 px-2 md:px-6 flex flex-col items-center"
+            class="w-100pc bg-lightgrey rounded-xl text-black pt-8 pb-2 md:pt-8 pb-6 px-2 md:px-6 flex flex-col items-center"
           >
             <div class="w-100pc font-huge text-center md:text-left">Farm Pools</div>
 
