@@ -729,12 +729,12 @@
       <span class="mt-0 md:mt-1 mb-2">
         <div class="w-100pc flex flex-col cardbordergradient">
           <div
-            class="w-100pc bg-lightgrey rounded-xl text-black py-8 px-2 md:px-6 flex flex-col items-center"
+            class="w-100pc bg-lightgrey rounded-xl text-black pt-8 pb-2 md:py-8 px-2 md:px-6 flex flex-col items-center"
           >
             <div class="w-100pc font-huge text-center md:text-left">Farm Pools</div>
 
             <a
-              class="flex mt-4 w-100pc rounded-xl bg-white p-2 md:p-4 pointer"
+              class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer"
               on:click={() => {
                 modalinfo.open();
               }}
@@ -770,7 +770,7 @@
               </div>
             </a>
 
-            <a class="flex mt-2 md:mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
+            <a class="flex mt-2 md:mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4" href="token">
               <div class="mr-4 flex items-center">
                 <img class="z-10" width="40px" height="40px" src={images.bcp} alt="token name" />
                 <img
@@ -796,7 +796,7 @@
               </div>
             </a>
 
-            <a class="flex mt-2 md:mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
+            <a class="flex mt-2 md:mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4" href="token">
               <div class="mr-4 flex items-center">
                 <img
                   class="z-10"
@@ -828,7 +828,7 @@
               </div>
             </a>
 
-            <a class="flex mt-2 md:mt-4 w-100pc rounded-xl bg-white p-2 md:p-4" href="token">
+            <a class="flex mt-2 md:mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4" href="token">
               <div class="mr-4 flex items-center">
                 <img
                   class="z-10"
@@ -871,6 +871,8 @@
 
 <div class="content">
   <div class="flex flex-col items-start mx-0 md:mx-4 w-100pc md:max-w-1280px">
+    <div class="w-100pc font-huge text-center mb-4">Got questions?</div>
+
     <AccordionGroup>
       <Accordion class="flex flex-col">
         <button class="accordionbutton flex flex-col" slot="header" let:toggle on:click={toggle}
