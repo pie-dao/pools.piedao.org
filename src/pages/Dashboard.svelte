@@ -78,6 +78,9 @@
     </span>
   </Modal>
 
+  <img class="h-100pc inline rounded" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/PLAY_banner%20thin.png" alt="PLAY banner" />
+
+
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
 
