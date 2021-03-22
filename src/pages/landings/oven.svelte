@@ -12,6 +12,8 @@
   import Modal from '../../components/elements/Modal.svelte';
   import LiquidityModal from '../../components/modals/LiquidityModal.svelte';
   import OvenModal from '../../components/modals/OvenModal.svelte';
+  import Oven2Modal from '../../components/modals/Oven2Modal.svelte';
+  
   import TooltipButton from '../../components/elements/TooltipButton.svelte';
   import { fetchOvensUserData } from '../../helpers/multicall';
   import Accordion from '../../components/elements/Accordion.svelte'
@@ -20,6 +22,7 @@
 
   $: ovens = [
     {
+      version: 2,
       addressOven: '0x1d616dad84dd0b3ce83e5fe518e90617c7ae3915',
       deprecated: false,
       name: 'DEFI++ Oven',
@@ -94,6 +97,7 @@
   ];
 
   let modal;
+  let modalV2;
   let modalAdd;
   let initialized = false;
   let modalOption = {
@@ -125,7 +129,6 @@
   
 </script>
 
-
 <Meta
   metadata={{ title: 'Oven Page - PieDAO', description: "The PieDAO Oven pools ETH to issue pies in batches, giving users access to our index products gas-free. This design makes getting involved affordable and convenient, opening participation to everyone. Don't forget, the Oven won't activate until it's full!", image: images.oven_social, imageAlt: 'How the Oven makes minting pies gas-free.' }} />
 
@@ -133,6 +136,15 @@
 <Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
     <OvenModal
+      deprecated={modal.deprecated}
+      pieAddress={modal.pieAddress}
+      ovenAddress={modal.ovenAddress} />
+  </span>
+</Modal>
+
+<Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this={modalV2}>
+  <span slot="content">
+    <Oven2Modal
       deprecated={modal.deprecated}
       pieAddress={modal.pieAddress}
       ovenAddress={modal.ovenAddress} />
@@ -233,10 +245,18 @@
       {/if}
       <button
         on:click={() => {
-          modal.pieAddress = oven.baking.address;
-          modal.ovenAddress = oven.addressOven;
-          modal.deprecated = oven.deprecated;
-          modal.open();
+          if(oven.version === 2) {
+            modalV2.pieAddress = oven.baking.address;
+            modalV2.ovenAddress = oven.addressOven;
+            modalV2.deprecated = oven.deprecated;
+            modalV2.open();
+          } else {
+            modal.pieAddress = oven.baking.address;
+            modal.ovenAddress = oven.addressOven;
+            modal.deprecated = oven.deprecated;
+            modal.open();
+          }
+          
         }}
         class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
         Deposit / Withdraw
