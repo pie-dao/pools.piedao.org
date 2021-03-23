@@ -313,9 +313,9 @@
           <button on:click={deposit} class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Deposit</button>
         </div>
     
-        <div class="flex w-100pc bg-lightgrey-2 p-4 rounded mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
+        <!-- <div class="flex w-100pc bg-lightgrey-2 p-4 rounded mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around"> -->
          
-          <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
+          <!-- <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
             <div class="flex flex-col items-start">
             <div class="font-thin text-base">
               Your ETH in the Oven
@@ -333,6 +333,24 @@
             <div class="font-bold text-base">{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</div>
           </div>
           <button disabled={ovenData.pieBalance === 0} on:click={withdrawPie} class="oven-withdraw-button ">withdraw</button>
+          </div> -->
+
+          <div class="flex w-100pc mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
+
+
+          <div class="flex flex-col w-full rounded-sm bg-white">
+            <div class="flex w-full justify-between items-center p-2">
+              <span class="font-thin">Your ETH in the Oven</span>
+              <span>{toFixed(ovenData.ethBalance, 6)} ETH</span>
+            </div>
+            <div class="flex w-full justify-between items-center p-2">
+              <span class="font-thin">Your Pie ready</span>
+              <span>{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</span>
+            </div>
+          </div>
+
+          <div class="flex justify-center">
+            <button disabled={ovenData.pieBalance === 0} on:click={withdrawPie} class="btn m-0 mt-4 rounded-8px px-36px py-15px" >Withdraw All</button>
           </div>
     
         </div>
