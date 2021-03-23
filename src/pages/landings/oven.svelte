@@ -2,8 +2,6 @@
   import { onMount } from 'svelte';
   import { ethers } from 'ethers';
   import images from '../../config/images.json';
-  import ovens from '../../config/ovensConf';
-
   import Meta from '../../components/elements/meta.svelte';
   import { balances, balanceKey, eth } from '../../stores/eth.js';
 
@@ -12,12 +10,110 @@
   import Modal from '../../components/elements/Modal.svelte';
   import LiquidityModal from '../../components/modals/LiquidityModal.svelte';
   import OvenModal from '../../components/modals/OvenModal.svelte';
+  import Oven2Modal from '../../components/modals/Oven2Modal.svelte';
+  
   import TooltipButton from '../../components/elements/TooltipButton.svelte';
   import { fetchOvensUserData } from '../../helpers/multicall';
   import Accordion from '../../components/elements/Accordion.svelte'
   import AccordionGroup from '../../components/elements/AccordionGroup.svelte';
 
+
+  $: ovens = [
+    {
+      version: 2,
+      addressOven: '0xb9Eef048dcc5F9CC453029cC2ed21f4a558ad0E8',
+      deprecated: false,
+      name: 'PLAY Oven',
+      description: 'Bakes PLAY with ETH',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0,
+      },
+      baking: {
+        symbol: 'PLAY',
+        address: '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4',
+        balance: '0',
+        icon: getTokenImage('0x33e18a092a93ff21ad04746c7da12e35d34dc7c4'),
+      },
+      highlight: true,
+      enabled: true,
+    },
+    {
+      addressOven: '0x1d616dad84dd0b3ce83e5fe518e90617c7ae3915',
+      deprecated: false,
+      name: 'DEFI++ Oven',
+      description: 'Bakes DEFI++ at Zero cost',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0,
+      },
+      baking: {
+        symbol: 'DEFI++',
+        address: '0x8d1ce361eb68e9e05573443c407d4a3bed23b033',
+        balance: '0',
+        icon: getTokenImage('0x8d1ce361eb68e9e05573443c407d4a3bed23b033'),
+      },
+      highlight: true,
+      enabled: true,
+    },
+    {
+      addressOven: '0xE3d74Df89163A8fA1cBa540FF6B339d13D322F61',
+      deprecated: false,
+      name: 'BCP Oven',
+      description: 'Bakes BCP at Zero cost',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0,
+      },
+      baking: {
+        symbol: 'BCP',
+        address: '0xe4f726adc8e89c6a6017f01eada77865db22da14',
+        balance: '0',
+        icon: getTokenImage('0xe4f726adc8e89c6a6017f01eada77865db22da14'),
+      },
+      highlight: true,
+      enabled: true,
+    },
+    {
+      addressOven: '0xAedec86DeDe3DEd9562FB00AdA623c0e9bEEb951',
+      deprecated: false,
+      name: 'YPIE Oven',
+      description: 'Bakes YPIE at Zero cost',
+      data: {
+        ethBalance: 0,
+        pieBalance: 0,
+      },
+      baking: {
+        symbol: 'YPIE',
+        address: '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31',
+        balance: '0',
+        icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'),
+      },
+      highlight: true,
+      enabled: true,
+    },
+    // {
+    //   addressOven: '0x925f860d1596cc6383c16294d8290f82bde172f7',
+    //   deprecated: true,
+    //   name: 'YPIE Oven',
+    //   description: 'Bakes YPIE at Zero cost',
+    //   data: {
+    //     ethBalance: 0,
+    //     pieBalance: 0,
+    //   },
+    //   baking: {
+    //     symbol: 'YPIE',
+    //     address: '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31',
+    //     balance: '0',
+    //     icon: getTokenImage('0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'),
+    //   },
+    //   highlight: true,
+    //   enabled: true,
+    // },
+  ];
+
   let modal;
+  let modalV2;
   let modalAdd;
   let initialized = false;
   let modalOption = {
@@ -37,8 +133,13 @@
 
   onMount(() => {
     ovens.forEach((ov) => {
-      subscribeToBalance(null, ov.addressOven);
-      ov.KeyEthBalance = balanceKey(ethers.constants.AddressZero, ov.addressOven);
+      if(ov.version === 2){
+        subscribeToBalance("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", ov.addressOven);
+        ov.keyBalance = balanceKey("0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2", ov.addressOven);
+      } else {
+        subscribeToBalance(null, ov.addressOven);
+        ov.keyBalance = balanceKey(ethers.constants.AddressZero, ov.addressOven);
+      }
     });
   });
 
@@ -49,7 +150,6 @@
   
 </script>
 
-
 <Meta
   metadata={{ title: 'Oven Page - PieDAO', description: "The PieDAO Oven pools ETH to issue pies in batches, giving users access to our index products gas-free. This design makes getting involved affordable and convenient, opening participation to everyone. Don't forget, the Oven won't activate until it's full!", image: images.oven_social, imageAlt: 'How the Oven makes minting pies gas-free.' }} />
 
@@ -59,7 +159,18 @@
     <OvenModal
       deprecated={modal.deprecated}
       pieAddress={modal.pieAddress}
+      keyBalance={modal.keyBalance}
       ovenAddress={modal.ovenAddress} />
+  </span>
+</Modal>
+
+<Modal title={modalOption.title} backgroundColor="#f3f3f3" bind:this={modalV2}>
+  <span slot="content">
+    <Oven2Modal
+      deprecated={modalV2.deprecated}
+      pieAddress={modalV2.pieAddress}
+      keyBalance={modalV2.keyBalance}
+      ovenAddress={modalV2.ovenAddress} />
   </span>
 </Modal>
 
@@ -139,9 +250,9 @@
         </div>
         <div class="font-bold text-right rounded-sm bg-black w-40pc">
           <div
-            style={`width: ${getPercetageCompletion($balances[oven.KeyEthBalance])}% !important`}
+            style={`width: ${getPercetageCompletion($balances[oven.keyBalance])}% !important`}
             class="px-2 py-1 rounded-sm text-xs bg-gradient-purple text-left text-white fit-content">
-            {getPercetageCompletion($balances[oven.KeyEthBalance])}%
+            {getPercetageCompletion($balances[oven.keyBalance])}%
           </div>
         </div>
       </div>
@@ -157,10 +268,20 @@
       {/if}
       <button
         on:click={() => {
-          modal.pieAddress = oven.baking.address;
-          modal.ovenAddress = oven.addressOven;
-          modal.deprecated = oven.deprecated;
-          modal.open();
+          if(oven.version === 2) {
+            modalV2.pieAddress = oven.baking.address;
+            modalV2.ovenAddress = oven.addressOven;
+            modalV2.deprecated = oven.deprecated;
+            modalV2.keyBalance = oven.keyBalance;
+            modalV2.open();
+          } else {
+            modal.pieAddress = oven.baking.address;
+            modal.ovenAddress = oven.addressOven;
+            modal.deprecated = oven.deprecated;
+            modalV2.keyBalance = oven.keyBalance;
+            modal.open();
+          }
+          
         }}
         class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
         Deposit / Withdraw
