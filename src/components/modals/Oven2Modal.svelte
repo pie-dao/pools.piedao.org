@@ -215,8 +215,8 @@
         With Oven V2, all the other pies are getting added, including DEFI+S, DEFI+L, USD++, and more upcoming Pies.<br/><br/>
 
         <strong>Small fees</strong><br/>
-        With Oven V2, while sharing the cost of the gas, we ask users to chip in a 2% baking round fee that is paid according to the deposit size.<br/>
-        This will help PieDAO to cover the high cost of minting the Pie.
+        With Oven V2, while sharing the cost of the gas, we ask users to chip in in the cost of the baking round with a small fee that is paid according to the deposit size.<br/>
+        This will help PieDAO to cover the high cost of minting the Pie. The fee will change over time according to the gas market and the gas price the community find reasonable to mint at.
         <br/><br/>
     
         <strong>More deposit assets</strong><br/>
@@ -306,7 +306,7 @@
           </div>
           
           <TooltipButton tooltip="The fee is going to be shared by all participants according to deposit size">
-            <span class="font-thin ml-2">*Baking round fee: 2%</span>
+            <span class="font-thin ml-2">*Max Baking round fee: 2%</span>
           </TooltipButton>
     
         <div class="flex justify-center">
