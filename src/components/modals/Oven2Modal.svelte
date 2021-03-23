@@ -9,6 +9,10 @@
     import poolsConfig from "../../config/pools.json";
     import ovenABI from '../../config/OvenV2ABI.json';
     import displayNotification from "../../notifications.js";
+    import Modal from '../../components/elements/Modal.svelte';
+    import images from '../../config/images.json';
+
+
     import {
         balanceKey,
         balances,
@@ -202,14 +206,41 @@
           };
         });
       };
-    
+      let modalinfo;
     </script>
     
+    <Modal title="Oven V.2" backgroundColor="#f3f3f3" bind:this="{modalinfo}">
+      <span slot="content" class="p-4 font-thin">
+        <strong>Expanding range</strong><br/>
+        With Oven V2, all the other pies are getting added, including DEFI+S, DEFI+L, USD++, and more upcoming Pies.<br/><br/>
+
+        <strong>Small fees</strong><br/>
+        With Oven V2, while sharing the cost of the gas, we ask users to chip in a 2% baking round fee that is paid according to the deposit size.<br/>
+        This will help PieDAO to cover the high cost of minting the Pie.
+        <br/><br/>
+    
+        <strong>More deposit assets</strong><br/>
+        Oven V2 users will be able to choose between a range of input assets, with specific Ovens for ETH, DAI, USDC and more!<br/><br/>
+
+        <strong>Provide Liquidity Together</strong><br/>
+        The new architecture allows to easily build Ovens for community members to share the costs of adding liquidity together, handling everything on the back end.<br/><br/>
+
+        <strong>Arbitrage Together</strong><br/>
+        When the NAV and pie price differ this is an opportunity for arbitragers to either buy and redeem, or mint and sell and pocket that difference. This arbitrage opportunity means the pie price consistently moves towards the NAV peg.<br/><br/>
+    </Modal>
     
     <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:px-4 lg:pb-4">
       <div class="flex justify-center font-thin mb-2">
     
-            OVEN 2
+            
+            <a on:click={() => {
+              modalinfo.open()
+            }} class="cursor-pointer hover:opacity-60" role="menuitem">
+            <div class="flex items-center font-bold text-xs md:text-base">
+              OVEN 2
+                  <img src={images.InfoIcon} class="ml-1" alt="info" width="16px" />
+            </div>
+          </a>
     
       </div>
     
