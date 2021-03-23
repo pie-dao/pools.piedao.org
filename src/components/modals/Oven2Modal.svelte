@@ -350,7 +350,7 @@
           </div>
 
           <div class="flex justify-center">
-            <button disabled={ovenData.pieBalance === 0} on:click={withdrawPie} class="btn m-0 mt-4 rounded-8px px-36px py-15px" >Withdraw All</button>
+            <button on:click={withdrawPie} class="btn m-0 mt-4 rounded-8px px-36px py-15px" >Withdraw All</button>
           </div>
     
         </div>
