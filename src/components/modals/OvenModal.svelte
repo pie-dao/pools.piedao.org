@@ -207,9 +207,6 @@ const deposit = async () => {
 
 <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:px-4 lg:pb-4">
   <div class="flex justify-center font-thin mb-2">
-
-
-
   </div>
 
   <div class="w-100pc flex justify-center justify-items-center content-center text-center">

@@ -78,6 +78,13 @@
     </span>
   </Modal>
 
+  <a class="h-100pc" href="#/pie/0x33e18a092a93ff21ad04746c7da12e35d34dc7c4">
+    <img class="inline rounded hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/PLAY_banner%20thin.png" alt="PLAY banner" />
+    <img class="inline rounded block md:hidden" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/PLAY_banner%20mobile.png" alt="PLAY banner" />
+
+  </a>
+
+
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
 

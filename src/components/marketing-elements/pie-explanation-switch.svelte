@@ -6,6 +6,7 @@ import BTC from './btcp-explanation.svelte'
 import USD from './usdp-explanation.svelte'
 import BCP from './bcp-explanation.svelte';
 import YPIE from './ypie-explanation.svelte';
+import PLAY from './play-explanation.svelte';
 
 
 export let address;
@@ -26,5 +27,7 @@ export let address;
         <BCP />
     {:else if address === '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'}
         <YPIE />
+    {:else if address === '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4'}
+        <PLAY />
     {/if}
 </div>

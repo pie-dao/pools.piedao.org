@@ -90,6 +90,7 @@ class Experipie {
 
     async applyPatches() {
 
+      // ---- SUSHI ---- //
       const xsushi = "0x8798249c2e607446efb7ad49ec89dd1865ff4272".toLowerCase();
       const sushi = "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2".toLowerCase();
 
@@ -136,6 +137,52 @@ class Experipie {
           }
         }
       }
+
+      // ----- ATRI -------
+      const wATRI = "0xf037f37f58110933834ca64545e4ffd169736561".toLowerCase();
+      const ATRI = "0xdacd69347de42babfaecd09dc88958378780fb62".toLowerCase();
+
+      price = get(find(this.marketData, (o) => {
+        return o.address === ATRI;
+      }), 'market_data.current_price', 0);
+
+      if(this.map[wATRI]) {
+        let share = this.map[wATRI].balance.bn;
+        console.log('share', share.toString())
+        // const atriBalance = share.div(10**18);
+
+        
+        this.map[wATRI] = {
+          ...this.map[wATRI],
+          address: wATRI,
+          decimals: 18,
+          name: "Wrapper Atri",
+          symbol: "wATRI",
+          protocol: {
+            description: "",
+            iconURL: "",
+            name: "PieDAO",
+          },
+          underlying: {
+            price,
+            address: ATRI,
+            decimals: 0,
+            name: "Atari",
+            symbol: "ATRI",
+            protocol: {
+              description: "",
+              iconURL: "",
+              name: "PieDAO",
+            },
+            balance: {
+              bn: share,
+              label: getNormalizedNumber(share.toString(), 18).toString()
+            }
+          }
+        }
+      }
+
+      // ----- YFI ----
 
       const yfi = "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e".toLowerCase();
       const yYFI = "0xba2e7fed597fd0e3e70f5130bcdbbfe06bb94fe1".toLowerCase();
