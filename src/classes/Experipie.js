@@ -60,8 +60,6 @@ class Experipie {
 
         let decimal = info && info.decimals ? info.decimals : 18;
 
-        console.log('info', info)
-
         this.composition.push(
           {
             address: el.toLowerCase(),
