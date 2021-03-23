@@ -11,9 +11,11 @@ export const open = () => {
 
 export const close = () => {
     modalIsOpen = false;
+    localStorage.setItem('show-modal-play', false);
 }
 
-let modalIsOpen = true;
+
+let modalIsOpen = localStorage.getItem('show-modal-play') === 'false' ? false : true;
 </script>
 
 {#if modalIsOpen}
