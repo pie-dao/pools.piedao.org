@@ -33,9 +33,7 @@
     <h1 class="mt-4">Methodology:</h1>
 
     <div class="font-thin">
-        Once we had reached consensus on the core assets to best represent this ecosystem we applied our established market-cap derived methodology.        <br/><br/>
-        Following this design a larger percentage allocation is given to YFI and SUSHI, the two assets with large market capitalizations, and a smaller percentage to the remaining assets.
-        <br/><br/>
+        Once we had reached consensus on the core assets to best represent this ecosystem we applied our established market-cap derived methodology.<br/><br/>    
         Computing the 30 day market cap we weighted PLAY accordingly, giving a larger share to more established assets. This robust procedure allows our pies to scale to the largest possible size, without smaller projects with less liquidity limiting potential growth. A sentiment score assessing each project’s innovation, community ecosystem & growth potential provided micro-adjustments to this benchmark.    </div>
 
     
