@@ -39,7 +39,8 @@ const balanceSubscriptions = new Set();
 export const getTokenImage = (tokenAddress) =>
   images.logos[tokenAddress]
     ? images.logos[tokenAddress]
-    : `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
+    : `https://s3.amazonaws.com/token-icons/${tokenAddress.toLowerCase()}.png`;
+    //: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
 
 const enqueueWeightUpdate = (poolAddress) => {
   clearTimeout(poolUpdatePids[poolAddress]);
