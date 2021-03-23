@@ -11,7 +11,7 @@
     import displayNotification from "../../notifications.js";
     import Modal from '../../components/elements/Modal.svelte';
     import images from '../../config/images.json';
-
+    import TooltipButton from '../../components/elements/TooltipButton.svelte';
 
     import {
         balanceKey,
@@ -237,8 +237,8 @@
               modalinfo.open()
             }} class="cursor-pointer hover:opacity-60" role="menuitem">
             <div class="flex items-center font-bold text-xs md:text-base">
-              OVEN 2
-                  <img src={images.InfoIcon} class="ml-1" alt="info" width="16px" />
+              OVEN V.2
+                  <img src={images.InfoIcon} class="ml-1" alt="info" width="15px" />
             </div>
           </a>
     
@@ -304,6 +304,10 @@
               <span class="py-2px px-4px">ETH</span></div> 
             </div>
           </div>
+          
+          <TooltipButton tooltip="The fee is going to be shared by all participants according to deposit size">
+            <span class="font-thin ml-2">*Baking round fee: 2%</span>
+          </TooltipButton>
     
         <div class="flex justify-center">
           <button on:click={deposit} class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Deposit</button>
