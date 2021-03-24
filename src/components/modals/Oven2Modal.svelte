@@ -244,7 +244,12 @@
     
       </div>
     
-      <div class="w-100pc flex justify-center justify-items-center content-center text-center">
+      <div class="w-100pc">
+        We have noticed a potential misfunction on the Oven V2 functionality, while investiganting the deposit and withdraw has been disabled. <br><br>
+        <strong>Funds are SAFE and they will be returned as soon the issue is resolved.</strong><br><br>
+        Thanks for your patience 🙏.
+      </div>
+      <!-- <div class="w-100pc flex justify-center justify-items-center content-center text-center">
         <button on:click={ () => selectedTab = 0} class:oven-button-active={selectedTab === 0} class="oven-button m-0 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
             Status
         </button>
@@ -253,9 +258,6 @@
             Deposit
         </button>
         {/if}
-        <!-- <button on:click={ () => selectedTab = 2} class:oven-button-active={selectedTab === 2} class="oven-button m-0 mt-4 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
-            Withdraw
-        </button> -->
       </div>
     
       {#if selectedTab === 0}
@@ -312,28 +314,6 @@
         <div class="flex justify-center">
           <button on:click={deposit} class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Deposit</button>
         </div>
-    
-        <!-- <div class="flex w-100pc bg-lightgrey-2 p-4 rounded mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around"> -->
-         
-          <!-- <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
-            <div class="flex flex-col items-start">
-            <div class="font-thin text-base">
-              Your ETH in the Oven
-            </div>
-            <div class="font-bold text-base">{toFixed(ovenData.ethBalance, 6)} ETH</div>
-          </div>
-          <button disabled={ovenData.ethBalance === 0} on:click={withdrawEth} class="oven-withdraw-button">withdraw</button>
-          </div>
-    
-          <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
-            <div class="flex flex-col items-start">
-            <div class="font-thin text-base">
-              Your Pie ready
-            </div>
-            <div class="font-bold text-base">{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</div>
-          </div>
-          <button disabled={ovenData.pieBalance === 0} on:click={withdrawPie} class="oven-withdraw-button ">withdraw</button>
-          </div> -->
 
           <div class="flex w-100pc mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
 
@@ -392,6 +372,6 @@
               <button disabled={ovenData.pieBalance === 0} on:click={withdrawPie} class="btn m-0 mt-4 rounded-8px px-20px py-15px" >Withdraw Pie</button>
             </div>
           </div>
-        {/if}
+        {/if} -->
 
     </div>
