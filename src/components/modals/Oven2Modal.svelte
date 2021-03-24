@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { get } from "svelte/store";
     import orderBy from 'lodash/orderBy';
-    
+    import { erc20 } from "@pie-dao/abis";    
     import { _ } from "svelte-i18n";
     import BigNumber from "bignumber.js";
     import { ethers } from "ethers";
@@ -23,7 +23,8 @@
     import {
       getTokenImage,
       fetchEthBalance,
-      toFixed
+      toFixed,
+      subscribeToBalance
     } from "../../components/helpers.js";
     
     import Gauge from '../../components/charts/gauge.svelte';
@@ -36,6 +37,8 @@
     let amount = 0;
     let instance;
     let ethKey;
+    let wethKey;
+    const WETH_ADDRESS = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2";
     
     $: balanceKeyOven = keyBalance;
     $: selectedTab = deprecated ? 2 : 1;
@@ -51,28 +54,19 @@
     $: if($eth.address) {
       fetchEthBalance($eth.address);
       ethKey = balanceKey(ethers.constants.AddressZero, $eth.address);
+      wethKey = balanceKey(WETH_ADDRESS, $eth.address);
+      subscribeToBalance(WETH_ADDRESS, $eth.address);
     }
     
     $: ethBalance = BigNumber($balances[ethKey]).toFixed(4);
+    $: wethBalance = BigNumber($balances[wethKey]).toFixed(4);
     
     onMount(async () => {
       const { provider, signer } = get(eth);
       instance = new ethers.Contract(ovenAddress, ovenABI, signer);
       
       await fetch();
-    
-      let bakeLogs = await instance.queryFilter(instance.filters.Bake(), 3604155, "latest");
-      ovenData.logs = orderBy(bakeLogs.map( log => {
-        return {
-          amount: (log.args.amount / 1e18).toFixed(2),
-          price: log.args.price / 1e18,
-          user: log.args.user,
-          tx: log.transactionHash,
-          blockNumber: log.blockNumber
-        }
-      }), ['blockNumber'], ['desc']);
-    
-      console.log('bakeLogs', bakeLogs);
+      ovenData.logs = []
     });
     
     const fetch = async () => {
@@ -82,7 +76,6 @@
         ovenData.ethBalanceBn = ethBal;
         ovenData.pieBalance = pieBal / 1e18;
         ovenData.pieBalanceBn = pieBal;
-        ovenData.cap = await instance.cap() / 1e18;
         initialized = true;  
     };
     
@@ -104,7 +97,7 @@
             next: async () => {
               displayNotification({
                 autoDismiss: 15000,
-                message: `${oven.baking.symbol} successfully withdrew from the Oven`,
+                message: `Pie successfully withdrew from the Oven`,
                 type: "success",
               });
               dismiss();
@@ -140,7 +133,7 @@
             next: async () => {
               displayNotification({
                 autoDismiss: 15000,
-                message: `${ovenData.ethBalance.toFixed()} ETH successfully withdrew from the Oven`,
+                message: `WETH successfully withdrew from the Oven`,
                 type: "success",
               });
               await fetch();
@@ -156,6 +149,97 @@
           };
         });
     };
+
+    const askApproval = async (address, spender) => {
+      if (!$eth.address || !$eth.signer) {
+        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+        connectWeb3();
+        return;
+      }
+
+      let erc20Contract = new ethers.Contract(address, erc20, $eth.signer);
+
+      const { hash } = await erc20Contract['approve(address,uint256)'](spender, ethers.constants.MaxUint256);
+      const { emitter } = displayNotification({ hash });
+      const symbol = await erc20Contract.symbol();
+      
+      await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
+        resolve();
+        return { message: `${symbol} unlocked`, type: 'success' };
+      }));
+    }
+
+    const depositWETH = async () => {
+        const underlying = new ethers.Contract(WETH_ADDRESS, erc20, $eth.signer); 
+        const decimals = await underlying.decimals();
+        const requestedAmount = BigNumber(amount);
+        const requestedAmountWei = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
+
+        const max = BigNumber(wethBalance).multipliedBy(10 ** decimals).toFixed(0);
+        let allowance = await underlying['allowance(address,address)']($eth.address, ovenAddress);
+        
+        console.log('allowance', allowance, allowance.toString(), decimals);
+        console.log('max', max.toString());
+        console.log('requestedAmountWei', requestedAmountWei.toString());
+        
+    
+        if (!$eth.address || !$eth.signer) {
+          displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+          connectWeb3();
+          return;
+        }
+    
+        if (BigNumber(requestedAmount).isGreaterThan(BigNumber(max)) ) {
+          const message = `Not enough token`;
+          displayNotification({ message, type: "error", autoDismiss: 30000 });
+          return;
+        }
+
+
+        let needAllowance = BigNumber( allowance.toString() ).isLessThan( BigNumber(requestedAmountWei) );
+        console.log('needAllowance', needAllowance)
+        
+        if( needAllowance ) {
+          console.log('Im asking for allowance')
+          await askApproval(WETH_ADDRESS, ovenAddress);
+        }
+
+        console.log('Allowance done');
+    
+        try {
+          const { emitter } = displayNotification(await instance.deposit(requestedAmountWei.toString()) );
+    
+          emitter.on("txConfirmed", ({ hash }) => {
+            const { dismiss } = displayNotification({
+              message: "Confirming...",
+              type: "pending",
+            });
+
+            const subscription = subject("blockNumber").subscribe({
+              next: async () => {
+                displayNotification({
+                  autoDismiss: 15000,
+                  message: `${requestedAmount.toFixed()} WETH successfully deposited in the Oven`,
+                  type: "success",
+                });
+                await fetch();
+                amount = 0;
+                dismiss();
+                subscription.unsubscribe();
+              },
+            });
+
+            return {
+              autoDismiss: 1,
+              message: "Mined",
+              type: "success",
+            };
+          });
+        } catch(e) {
+          displayNotification({ message: e.message, type: "error", autoDismiss: 30000 });
+        }
+        
+      };
     
     const deposit = async () => {
         const requestedAmount = BigNumber(amount);
@@ -193,6 +277,7 @@
                 message: `${requestedAmount.toFixed()} ETH successfully deposited in the Oven`,
                 type: "success",
               });
+              amount = 0;
               await fetch();
               dismiss();
               subscription.unsubscribe();
@@ -207,6 +292,8 @@
         });
       };
       let modalinfo;
+    
+    
     </script>
     
     <Modal title="Oven V.2" backgroundColor="#f3f3f3" bind:this="{modalinfo}">
@@ -244,59 +331,35 @@
     
       </div>
     
-      <div class="w-100pc">
+      <!-- <div class="w-100pc">
         We have noticed a potential misfunction on the Oven V2 functionality, while investiganting the deposit and withdraw has been disabled. <br><br>
         <strong>Funds are SAFE and they will be returned as soon the issue is resolved.</strong><br><br>
         Thanks for your patience 🙏.
-      </div>
-      <!-- <div class="w-100pc flex justify-center justify-items-center content-center text-center">
+      </div> -->
+      <div class="w-100pc flex justify-center justify-items-center content-center text-center">
         <button on:click={ () => selectedTab = 0} class:oven-button-active={selectedTab === 0} class="oven-button m-0 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
             Status
         </button>
-        {#if !deprecated}
         <button on:click={ () => selectedTab = 1} class:oven-button-active={selectedTab === 1} class="oven-button m-0 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
-            Deposit
+            Deposit ETH
         </button>
-        {/if}
+        <button on:click={ () => selectedTab = 2} class:oven-button-active={selectedTab === 2} class="oven-button ml-2 m-0 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
+          Deposit WETH
+      </button>
       </div>
     
       {#if selectedTab === 0}
         <div class="flex justify-center py-4">
           <Gauge value={BigNumber($balances[balanceKeyOven]).toFixed(4)} max={10} />
         </div>
-        <table class="breakdown-table table-auto w-full mx-1">
-            <thead>
-              <tr>
-                <th class="font-thin border-b-2 px-4 py-2 text-left">Baked {pie.symbol}</th>
-                <th class="font-thin border-b-2 px-4 py-2">Block</th>
-                <th class="font-thin border-b-2 px-4 py-2">Tx</th>
-              </tr>
-            </thead>
-            <tbody>
-              {#each ovenData.logs as log}
-                <tr class="row-highlight">
-                  <td class="pointer border border-gray-800 px-2 py-2 text-left">
-                    {log.amount} {pie.symbol}
-                  </td>
-                  <td class="pointer border px-4 ml-8 py-2 font-thin text-center">
-                    {log.blockNumber}
-                  </td>
-                  <td class="border px-4 ml-8 py-2 font-thin text-center">
-                      <a href={`https://etherscan.io/tx/${log.tx}`} target="_blank">Etherscan</a>
-                  </td>
-                  
-                </tr>
-              {/each}
-            </tbody>
-          </table>
       {/if}
       
       {#if selectedTab === 1}
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white">
               <div class="flex items-center justify-between">
-                <div class="flex nowrap intems-center p-1 font-thin">Amount to Deposit (min 0.1 ETH)</div>
+                <div class="flex nowrap intems-center p-1 font-thin">Amount to Deposit</div>
                 <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-                  <button on:click={() => amount = ethBalance} class="oven-withdraw-button">100%</button>
+                  <button on:click={() => amount = ethBalance-0.1} class="oven-withdraw-button">100%</button>
                 </div>
               </div>
               <div class="flex nowrap items-center p-1">
@@ -338,40 +401,49 @@
     
     
     
-        {#if selectedTab === 2}
-          <div class="flex justify-between flex-col items-center rounded-8px ">            
-            <div class="input bg-white border border-solid rounded-8px border-grey-204 w-100pc">
-                <div class="top h-32px text-sm font-thin px-4 py-4 md:py-2">
-                  <div class="left float-left">Amount</div>
-                  <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
-                    <button on:click={() => amount = ovenData.ethBalance} class="percentage-btn inline-block rounded-20px h-20px bg-black w-50px cursor-pointer">100%</button>
-                  </div>
-                </div>
-                <div class="bottom  px-4 py-4 md:px-4 pb-4">
-                  <input bind:value={amount} type="number" class="font-thin text-base w-60pc md:w-75pc md:text-xl">
-                  <div class="asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex
-                align-middle justify-center items-center pointer mt-0 md:mt-14px">
-                <img class="token-icon w-20px h-20px md:h-26px md:w-26px my-4px mx-2px" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
-                <span class="py-2px px-4px">ETH</span></div> 
+      {#if selectedTab === 2}
+        <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white">
+            <div class="flex items-center justify-between">
+              <div class="flex nowrap intems-center p-1 font-thin">Amount to Deposit </div>
+              <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
+                <button on:click={() => amount = wethBalance} class="oven-withdraw-button">100%</button>
               </div>
             </div>
-            
-            <div class="flex justify-center">
-              <button disabled={ovenData.ethBalance === 0} on:click={withdrawEth} class="btn m-0 mt-4 rounded-8px px-20px py-15px" >Withdraw ETH</button>
-            </div>
+            <div class="flex nowrap items-center p-1">
+              <input bind:value={amount} class="swap-input-from" inputmode="decimal" autocomplete="off" autocorrect="off" type="number" pattern="^[0-9]*[.]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
+              <div class="h-32px flex items-center pointer">
+            <img class="token-icon w-30px h-30px" src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png" alt="ETH">
+            <span class="py-2px px-4px">WETH</span></div> 
           </div>
-    
-          <div class="flex justify-between flex-col items-center py-4 rounded-8px ">
-                        
-            <div class="input flex items-center h-97px bg-white border border-solid rounded-8px border-grey-204 mx-0 px-4 py-1 w-100pc md:px-4">
-              <img class="token-icon w-40px h-40px  my-4px mx-2px" src={getTokenImage(pieAddress)} alt={`PieDAO ` + pie.symbol}>
-              <span class="w-90pc lg:w-70pc md:w-70pc md:text-xl py-2px px-4px">{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</span>
-            </div>
-            
-            <div class="flex justify-center">
-              <button disabled={ovenData.pieBalance === 0} on:click={withdrawPie} class="btn m-0 mt-4 rounded-8px px-20px py-15px" >Withdraw Pie</button>
-            </div>
+        </div>
+        
+        <TooltipButton tooltip="The fee is going to be shared by all participants according to deposit size">
+          <span class="font-thin ml-2">*Max Baking round fee: 2%</span>
+        </TooltipButton>
+
+      <div class="flex justify-center">
+        <button on:click={depositWETH} class="btn m-0 mt-4 rounded-8px px-56px py-15px" >Deposit WETH</button>
+      </div>
+
+        <div class="flex w-100pc mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
+
+
+        <div class="flex flex-col w-full rounded-sm bg-white">
+          <div class="flex w-full justify-between items-center p-2">
+            <span class="font-thin">Your ETH in the Oven</span>
+            <span>{toFixed(ovenData.ethBalance, 6)} WETH</span>
           </div>
-        {/if} -->
+          <div class="flex w-full justify-between items-center p-2">
+            <span class="font-thin">Your Pie ready</span>
+            <span>{toFixed(ovenData.pieBalance, 2)} {pie.symbol}</span>
+          </div>
+        </div>
+
+        <div class="flex justify-center">
+          <button on:click={withdrawPie} class="btn m-0 mt-4 rounded-8px px-36px py-15px" >Withdraw All</button>
+        </div>
+
+      </div>
+      {/if}
 
     </div>

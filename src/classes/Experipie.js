@@ -161,7 +161,7 @@ class Experipie {
           protocol: {
             description: "",
             iconURL: "",
-            name: "PieDAO",
+            name: "Standard",
           },
           underlying: {
             price,
@@ -172,7 +172,7 @@ class Experipie {
             protocol: {
               description: "",
               iconURL: "",
-              name: "PieDAO",
+              name: "Standard",
             },
             balance: {
               bn: share,
