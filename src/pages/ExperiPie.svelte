@@ -566,7 +566,7 @@
 
             <td class="flex items-center justify-center border text-center px-4 py-2">
               {#if pooledToken.productive}
-                <StrategyInUse protocol={pooledToken.productiveAs.protocol.name} />
+                <StrategyInUse token={pooledToken} protocol={pooledToken.productiveAs.protocol.name} />
               {:else }
               <StrategyInUse protocol={'none'} />
               {/if}
