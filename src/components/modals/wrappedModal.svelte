@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { _ } from "svelte-i18n";
     import { get } from "svelte/store";
+    import { erc20 } from "@pie-dao/abis";
     import BigNumber from "bignumber.js";
     import { ethers } from "ethers";
     import displayNotification from "../../notifications.js";
@@ -30,14 +31,12 @@
     $: selectedTab = 0;
     $: initialized = false;
 
-    console.log('token', token)
     let allowanceKeyUnderlying = functionKey(token.productiveAs.address, 'allowance', [$eth.address, token.address]);
     let balanceKeyUnderlying = balanceKey(token.address, $eth.address);
     let balanceKeyWrapped = balanceKey(token.productiveAs.address, $eth.address);
     
     
     $: if($eth.address) {
-        console.log('subscribing')
         subscribeToBalance(token.address, $eth.address);
         subscribeToBalance(token.productiveAs.address, $eth.address);
         subscribeToAllowance(token.productiveAs.address, $eth.address, token.address);
@@ -82,11 +81,43 @@
           };
         });
     };
+    
+    const askApproval = async (address, spender) => {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+      connectWeb3();
+      return;
+    }
+
+    let erc20Contract = new ethers.Contract(address, erc20, $eth.signer);
+
+    const { hash } = await erc20Contract['approve(address,uint256)'](spender, ethers.constants.MaxUint256);
+    const { emitter } = displayNotification({ hash });
+    const symbol = await erc20Contract.symbol();
+    
+    await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
+      currentBlockNumber = blockNumber;
+      resolve();
+      return { message: `${symbol} unlocked`, type: 'success' };
+    }));
+  }
 
     
     const deposit = async () => {
+        const underlying = new ethers.Contract(token.address, erc20, $eth.signer); 
+        const decimals = await underlying.decimals();
         const requestedAmount = BigNumber(amount);
-        const max = BigNumber($balances[balanceKeyUnderlying]).toFixed(0);
+        const requestedAmountWei = requestedAmount.multipliedBy(10 ** decimals).toFixed(0);
+
+        const max = BigNumber($balances[balanceKeyUnderlying]).multipliedBy(10 ** decimals).toFixed(0);
+        
+
+        let allowance = await underlying['allowance(address,address)']($eth.address, token.productiveAs.address);
+        
+        const arg = requestedAmount.dividedBy(10 ** decimals).toFixed(0);
+        console.log('allowance', allowance.toString(), decimals, arg);
+        console.log('max', max.toString());
+        
     
         if (!$eth.address || !$eth.signer) {
           displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
@@ -99,9 +130,17 @@
           displayNotification({ message, type: "error", autoDismiss: 30000 });
           return;
         }
+
+        
+        if( new BigNumber(allowance).isLessThan(requestedAmount) ) {
+          console.log('Im asking for allowance')
+          await askApproval(token.address, token.productiveAs.address);
+        }
+
+        console.log('Allowance done');
     
         const instance = new ethers.Contract(token.productiveAs.address, decimalWrapperABI, $eth.signer); 
-        const { emitter } = displayNotification(await instance.deposit(requestedAmount) );
+        const { emitter } = displayNotification(await instance.deposit(requestedAmountWei) );
     
         emitter.on("txConfirmed", ({ hash }) => {
           const { dismiss } = displayNotification({
@@ -116,7 +155,7 @@
                 message: `${requestedAmount.toFixed()} ${token.symbol} successfully wrapped`,
                 type: "success",
               });
-              await fetch();
+
               dismiss();
               subscription.unsubscribe();
             },
@@ -137,11 +176,11 @@
       <div class="flex justify-center font-thin mb-2">
       </div>
     
-      <div class="w-100pc flex justify-center justify-items-center content-center text-center">
+      <!-- <div class="w-100pc flex justify-center justify-items-center content-center text-center">
         <button on:click={ () => selectedTab = 0} class:oven-button-active={selectedTab === 0} class="oven-button m-0 mb-4 w-50pc rounded-8px min-w-100px lg:w-20pc lg:min-w-100px">
             Wrap
         </button>
-      </div>
+      </div> -->
     
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white">
               <div class="flex items-center justify-between">

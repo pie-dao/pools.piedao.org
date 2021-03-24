@@ -10,7 +10,7 @@
   
 </script>
 
-<Modal title={""} backgroundColor="#f3f3f3" bind:this={modal}>
+<Modal title={"Wrap / Unwrap"} backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
     <WrappedModal token={token}/>
   </span>
