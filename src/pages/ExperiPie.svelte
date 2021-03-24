@@ -58,7 +58,6 @@
 
   const toggleDropdow = (event) => {
     dropdownOpen = !dropdownOpen;
-    event.preventDefault();
   };
 
   $: options = {

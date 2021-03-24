@@ -171,7 +171,7 @@
               <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
             <div class="flex flex-col justify-around">
               <span class="text-lg leading-6">{pie.symbol}</span>
-              <span class="text-sm font-thin opacity-40" >Yearn Ecosystem Pie</span>
+              <span class="text-sm font-thin opacity-40" >{pie.description ? pie.description : "Another great porfolio"}</span>
             </div>
             <div class="text-right flex flex-col justify-end items-end ml-auto">
               <span class="">{pie.price}</span>

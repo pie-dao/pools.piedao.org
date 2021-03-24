@@ -27,7 +27,11 @@
               <span class="text-lg leading-6">{token.symbol}</span>
               <span class="bg-black opacity-60 px-5px py-1px roundedxs text-xs ml-2">{((token.usdValue * 100) / totalVal).toFixed(2)}%</span>
             </span>
-            <span class="text-sm font-thin">{token.balance.label} {token.symbol} • ${token.market_data.current_price}</span>
+            <span class="text-sm font-thin">{token.balance.label} {token.symbol} 
+              {#if token.market_data && token.market_data.current_price }
+              • ${token.market_data.current_price}
+              {/if}
+            </span>
           </div>
           <div class="flex flex-col justify-around text-right ml-auto font-thin">
             <span class="text-lg leading-6">{formatFiat(token.usdValue)}</span>
