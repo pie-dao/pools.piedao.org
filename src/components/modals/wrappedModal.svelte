@@ -131,8 +131,8 @@
           return;
         }
 
-        
-        if( new BigNumber(allowance).isLessThan(requestedAmount) ) {
+        let needAllowance = BigNumber( allowance.toString() ).isLessThan( BigNumber(requestedAmount) );
+        if( needAllowance ) {
           console.log('Im asking for allowance')
           await askApproval(token.address, token.productiveAs.address);
         }
