@@ -25,6 +25,7 @@
     "symbol": "PLAY",
     "isExperipie": true,
     "name": "Metaverse NFT Index",
+    "description": "Complete exposure to the Metaverse and NFTs.",
     "useMintOverBuy": true,
     "useRecipe": true,
     "swapEnabled": false,
