@@ -97,7 +97,7 @@
             next: async () => {
               displayNotification({
                 autoDismiss: 15000,
-                message: `${oven.baking.symbol} successfully withdrew from the Oven`,
+                message: `Pie successfully withdrew from the Oven`,
                 type: "success",
               });
               dismiss();
@@ -133,7 +133,7 @@
             next: async () => {
               displayNotification({
                 autoDismiss: 15000,
-                message: `${ovenData.ethBalance.toFixed()} ETH successfully withdrew from the Oven`,
+                message: `WETH successfully withdrew from the Oven`,
                 type: "success",
               });
               await fetch();
@@ -164,7 +164,6 @@
       const symbol = await erc20Contract.symbol();
       
       await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
-        currentBlockNumber = blockNumber;
         resolve();
         return { message: `${symbol} unlocked`, type: 'success' };
       }));
@@ -204,37 +203,42 @@
           console.log('Im asking for allowance')
           await askApproval(WETH_ADDRESS, ovenAddress);
         }
-        return
 
         console.log('Allowance done');
     
-        const { emitter } = displayNotification(await instance.deposit(requestedAmountWei) );
+        try {
+          const { emitter } = displayNotification(await instance.deposit(requestedAmountWei.toString()) );
     
-        emitter.on("txConfirmed", ({ hash }) => {
-          const { dismiss } = displayNotification({
-            message: "Confirming...",
-            type: "pending",
+          emitter.on("txConfirmed", ({ hash }) => {
+            const { dismiss } = displayNotification({
+              message: "Confirming...",
+              type: "pending",
+            });
+
+            const subscription = subject("blockNumber").subscribe({
+              next: async () => {
+                displayNotification({
+                  autoDismiss: 15000,
+                  message: `${requestedAmount.toFixed()} WETH successfully deposited in the Oven`,
+                  type: "success",
+                });
+                await fetch();
+                amount = 0;
+                dismiss();
+                subscription.unsubscribe();
+              },
+            });
+
+            return {
+              autoDismiss: 1,
+              message: "Mined",
+              type: "success",
+            };
           });
-    
-          const subscription = subject("blockNumber").subscribe({
-            next: async () => {
-              displayNotification({
-                autoDismiss: 15000,
-                message: `${requestedAmount.toFixed()} ETH successfully deposited in the Oven`,
-                type: "success",
-              });
-              await fetch();
-              dismiss();
-              subscription.unsubscribe();
-            },
-          });
-    
-          return {
-            autoDismiss: 1,
-            message: "Mined",
-            type: "success",
-          };
-        });
+        } catch(e) {
+          displayNotification({ message: e.message, type: "error", autoDismiss: 30000 });
+        }
+        
       };
     
     const deposit = async () => {
@@ -273,6 +277,7 @@
                 message: `${requestedAmount.toFixed()} ETH successfully deposited in the Oven`,
                 type: "success",
               });
+              amount = 0;
               await fetch();
               dismiss();
               subscription.unsubscribe();
