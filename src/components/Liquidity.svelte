@@ -220,7 +220,6 @@
     }
 
     let erc20Contract = new ethers.Contract(address, erc20, $eth.signer);
-    console.log('Im being calle');
 
     const { hash } = await erc20Contract['approve(address,uint256)'](spender, ethers.constants.MaxUint256);
     const { emitter } = displayNotification({ hash });

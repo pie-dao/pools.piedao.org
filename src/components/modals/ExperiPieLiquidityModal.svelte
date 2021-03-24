@@ -160,7 +160,6 @@
     const recipe = await contract({ address: '0xE1F9E100cbF4aD6D546b196Af33E1129Dd0866b3', abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
-    
 
     let overrides = {
       value: percentagePlus
