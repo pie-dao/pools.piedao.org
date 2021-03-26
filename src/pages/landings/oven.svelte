@@ -231,8 +231,36 @@
   </div>
 </section>
 
-<div
-  class="content spl flex flex-col justify-center justify-items-center content-center flex-wrap md:flex-row lg:flex-row">
+<div class="content spl flex flex-col justify-center justify-items-center content-center flex-wrap md:flex-row lg:flex-row">
+  <div class="max300 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin" data-aos="fade-up" data-aos-delay="250">
+    <a class="flex justify-start mb-4 items-center" href={`#/pie/0x33e18a092a93ff21ad04746c7da12e35d34dc7c4`}>
+      <img
+        class="w-50px h-auto md:w-50px h-auto"
+        src={getTokenImage('0x33e18a092a93ff21ad04746c7da12e35d34dc7c4')}
+        alt="PLAY Icon" />
+      <span class="font-bold text-xl text-right ml-2">PLAY</span>
+    </a>
+    <div class="flex justify-between my-2">
+      <div class="flex items-center ">
+        <span class="font-thin text-left mr-2">Oven Status:</span>
+        <TooltipButton tooltip="For precaution the Oven V2 has been paused. No funds are lost.">
+          <img src={images.InfoIcon} class="" alt="info" width="16px" />
+        </TooltipButton>
+      </div>
+      <div class="font-bold text-right rounded-sm w-40pc">
+        ⏸ Paused
+      </div>
+    </div>
+    <div class="flex justify-between my-2">
+      <span class="font-thin text-left">Funds:</span>
+      <span class="font-bold text-right">SAFE</span>
+    </div>
+    <a href="https://medium.com/piedao/piedao-is-pausing-oven-v2-deployment-until-further-notice-and-rewards-for-early-adopters-be7b60f259b2" target="_blank">
+      <button class="main-cta-ghost m-0 mt-4 rounded-8px p-15px w-full">
+        Learn more
+      </button>
+    </a>
+  </div>
   {#each ovens as oven}
     <div class="max300 my-10px lg:m-10px p-20px rounded-sm bg-white border-thin" data-aos="fade-up" data-aos-delay="250">
       <a class="flex justify-start mb-4 items-center" href={`#/pie/${oven.baking.address}`}>
