@@ -19,26 +19,26 @@
 
 
   $: ovens = [
-    {
-      version: 2,
-      addressOven: '0x90Cc6F4ec7Aa0468D2eDb3F627AcD988B14A78b4',
-      //addressOven: '0xb9Eef048dcc5F9CC453029cC2ed21f4a558ad0E8',
-      deprecated: false,
-      name: 'PLAY Oven',
-      description: 'Bakes PLAY with ETH',
-      data: {
-        ethBalance: 0,
-        pieBalance: 0,
-      },
-      baking: {
-        symbol: 'PLAY',
-        address: '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4',
-        balance: '0',
-        icon: getTokenImage('0x33e18a092a93ff21ad04746c7da12e35d34dc7c4'),
-      },
-      highlight: true,
-      enabled: true,
-    },
+    // {
+    //   version: 2,
+    //   addressOven: '0x90Cc6F4ec7Aa0468D2eDb3F627AcD988B14A78b4',
+    //   //addressOven: '0xb9Eef048dcc5F9CC453029cC2ed21f4a558ad0E8',
+    //   deprecated: false,
+    //   name: 'PLAY Oven',
+    //   description: 'Bakes PLAY with ETH',
+    //   data: {
+    //     ethBalance: 0,
+    //     pieBalance: 0,
+    //   },
+    //   baking: {
+    //     symbol: 'PLAY',
+    //     address: '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4',
+    //     balance: '0',
+    //     icon: getTokenImage('0x33e18a092a93ff21ad04746c7da12e35d34dc7c4'),
+    //   },
+    //   highlight: true,
+    //   enabled: true,
+    // },
     {
       addressOven: '0x1d616dad84dd0b3ce83e5fe518e90617c7ae3915',
       deprecated: false,
