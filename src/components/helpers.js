@@ -5,10 +5,10 @@ import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
 import { pieSmartPool, erc20 } from '@pie-dao/abis';
-
 import find from 'lodash/find';
 import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
+import smartcontracts from '../config/smartcontracts.json';
 import recipeAbi from '../config/recipeABI.json';
 import unipoolAbi from '../config/unipoolABI.json';
 import geyserABI from '../config/geyser.json';
@@ -345,13 +345,14 @@ export const fetchCalcToPie = async (pieAddress, poolAmount) => {
 
   const { provider } = get(eth);
 
-  const recipe = new ethers.Contract('0xE1F9E100cbF4aD6D546b196Af33E1129Dd0866b3', recipeAbi, provider);
+  const recipe = new ethers.Contract(smartcontracts.recipe, recipeAbi, provider);
 
   const amount = ethers.BigNumber.from(
     BigNumber(poolAmount)
       .multipliedBy(10 ** 18)
       .toFixed(0),
   );
+  
   const amountEthNecessary = await recipe.callStatic.calcToPie(
     pieAddress, 
     amount

@@ -7,7 +7,7 @@
   import { _ } from "svelte-i18n";
   import { ethers } from "ethers";
   import { pieSmartPool, erc20 } from "@pie-dao/abis";
-
+  import smartcontracts from '../../config/smartcontracts.json';
   import images from "../../config/images.json";
   import poolsConfig from "../../config/pools.json";
   import recipeAbi from '../../config/recipeABI.json';
@@ -157,7 +157,7 @@
       return;
     }
 
-    const recipe = await contract({ address: '0xE1F9E100cbF4aD6D546b196Af33E1129Dd0866b3', abi: recipeAbi });
+    const recipe = await contract({ address: smartcontracts.recipe, abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
 
