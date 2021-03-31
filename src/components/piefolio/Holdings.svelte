@@ -20,7 +20,7 @@
   
     {#each tokens as token}
       {#if token.balance && token.balance.number > 0 }
-      <a class="flex mt-8" href="token">
+      <a class="flex mt-8" href={`#/pie/${token.address}`}>
           <div class="mr-4 w-60px max-w-60px h-60px max-h-60px"><img width="60px" height="60px" src={token.icon} alt={token.symbol} /></div>
           <div class="flex flex-col justify-around">
             <span class="flex items-center">
