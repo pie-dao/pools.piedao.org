@@ -13,10 +13,10 @@
 <div class="w-100pc flex flex-col cardbordergradient">
   <div class="w-100pc bg-lightgrey rounded-xl text-black py-8 px-6 flex flex-col items-center">
 
-    <div class="w-100pc font-huge text-left">Wallet Allocation - {formatFiat(totalVal)}</div>
+    <div class="w-100pc font-huge text-left">Wallet Allocation / {formatFiat(totalVal)}</div>
     
     {#each tokens as t }
-      <a class="flex mt-8 w-100pc" href="#">
+      <a class="flex mt-8 w-100pc">
         <div class="mr-4 w-60px max-w-60px h-60px max-h-60px">
           <img width="60px" height="60px" on:error={(e) => e.target.src = "https://raw.githubusercontent.com/pie-dao/brand/329c5f1b348cd47a68eec12a71f06727398e789e/misc/generic-token.svg" } src={t.icon} alt={t.symbol} />
         </div>
