@@ -1,0 +1,10 @@
+[
+    {
+        "id": "0",
+        "name": "PLAY/DOUGH",
+        "stakingToken": "0x022E292b44B5a146F2e8ee36Ff44D3dd863C915c",
+        "stakingTokenSymbol": "SLP",
+        "stakingTokenName": "PLAY/DOUGH Sushi LP",
+        "rewardsPaused": false
+    }
+]
