@@ -1,8 +1,30 @@
 <script>
     import Meta from '../components/elements/meta.svelte';
     import stakingPools from '../config/stakingPools.json';
+    import stakingPoolsABI from '../abis/stakingPoolsABI.json';
     import images from "../config/images.json";
     import { _ } from "svelte-i18n";
+    import { BigNumber, ethers } from "ethers";
+    import {
+      allowances,
+      functionKey,
+      approveMax,
+      balanceKey,
+      balances,
+      connectWeb3,
+      contract,
+      eth,
+      pools,
+      bumpLifecycle,
+      subject,
+    } from "../stores/eth.js";
+
+    import {
+      amountFormatter
+    } from "../components/helpers.js";
+
+    import { get } from "svelte/store";
+import { formatEther } from '@ethersproject/units';
 
     export let params;
 
@@ -16,9 +38,44 @@
 
     let amountToUnstake = 0;
     let needAllowance = false;
-
     let stakeAmount = 0;
     let unstakeAmount = 0;
+
+    let data = {
+      accumulatedRewardWeight: BigNumber.from(0),
+      escrowPercentage: BigNumber.from(0),
+      exitFeePercentage: BigNumber.from(0),
+      lastUpdatedBlock: BigNumber.from(0),
+      rewardRate: BigNumber.from(0),
+      rewardWeight: BigNumber.from(0),
+      token: "0x0000000000000000000000000000000000000000",
+      totalDeposited: BigNumber.from(0),
+      userDeposited: BigNumber.from(0),
+      userTokenApproval: BigNumber.from(0),
+      userTokenBalance: BigNumber.from(0),
+      userUnclaimed: BigNumber.from(0)
+    }
+
+    console.log("data", data);
+
+    const getStakingPoolData = async () => {
+      console.log($eth.address);
+      // put address in config
+      const { provider, signer } = get(eth);
+      let contract = new ethers.Contract('0xca55BDfDA9E3c7Cb738C16d4Eb8bc385202a0F5a', stakingPoolsABI, provider);
+
+      data = (await contract.getPools($eth.address))[poolId] || data;     
+
+      console.log(data);
+    };
+
+    const formatAmount = (amount) => {
+      return Number(formatEther(amount)).toFixed();
+    };
+
+    getStakingPoolData();
+
+
 </script>
 <Meta 
 metadata={{
@@ -37,7 +94,7 @@ metadata={{
               <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.withdraw} alt="PieDAO logo" />
               <div class="title text-lg">UNSTAKE</div>
               <div class="apy">
-                x
+                {formatAmount(data.userDeposited)} {stakingPool.stakingTokenSymbol}
               </div>
               <div class="subtitle font-thin">STAKED BALANCE</div>
               
@@ -66,10 +123,10 @@ metadata={{
               <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.stake} alt="PieDAO logo" />
               <div class="title text-lg"> STAKE</div>
               <div class="apy">
-               
+                {formatAmount(data.userTokenBalance)} {stakingPool.stakingTokenSymbol}
               </div>
               <div class="subtitle font-thin">BALANCE</div>
-              <div class="apy text-sm"></div>
+              <div class="apy text-sm">{stakingPool.stakingTokenName} </div>
               <div class="w-100pc input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
                   <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
                       <div class="text-black left black float-left">{$_('general.amount')} to stake</div>
@@ -99,7 +156,7 @@ metadata={{
               <div class="title text-lg">REWARDS AVAILABLE</div>
               <div class="subtitle font-thin">TO CLAIM</div>
               <div class="apy">
-               0
+               {formatAmount(data.userUnclaimed)}
               </div>
               
               <button on:click={() => console.log("lol")} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
