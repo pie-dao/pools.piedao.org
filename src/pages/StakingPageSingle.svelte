@@ -2,9 +2,11 @@
     import Meta from '../components/elements/meta.svelte';
     import stakingPools from '../config/stakingPools.json';
     import stakingPoolsABI from '../abis/stakingPoolsABI.json';
+    import ERC20ABI from '../abis/erc20ABI.json';
     import images from "../config/images.json";
     import { _ } from "svelte-i18n";
     import { BigNumber, ethers } from "ethers";
+    import displayNotification from "../notifications.js";
     import {
       allowances,
       functionKey,
@@ -24,7 +26,7 @@
     } from "../components/helpers.js";
 
     import { get } from "svelte/store";
-import { formatEther } from '@ethersproject/units';
+    import { formatEther, parseEther } from '@ethersproject/units';
 
     export let params;
 
@@ -56,17 +58,17 @@ import { formatEther } from '@ethersproject/units';
       userUnclaimed: BigNumber.from(0)
     }
 
-    console.log("data", data);
+    let stakingContract;
+    let token;
 
     const getStakingPoolData = async () => {
       console.log($eth.address);
       // put address in config
       const { provider, signer } = get(eth);
-      let contract = new ethers.Contract('0xca55BDfDA9E3c7Cb738C16d4Eb8bc385202a0F5a', stakingPoolsABI, provider);
+      stakingContract = new ethers.Contract('0xca55BDfDA9E3c7Cb738C16d4Eb8bc385202a0F5a', stakingPoolsABI, signer || provider);
+      data = (await stakingContract.getPools($eth.address))[poolId] || data;
 
-      data = (await contract.getPools($eth.address))[poolId] || data;     
-
-      console.log(data);
+      token = new ethers.Contract(data.token, ERC20ABI, signer || provider);
     };
 
     const formatAmount = (amount) => {
@@ -75,7 +77,140 @@ import { formatEther } from '@ethersproject/units';
 
     getStakingPoolData();
 
+    const claim = async () => {
+      if (!$eth.address || !$eth.signer) {
+        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+        connectWeb3();
+        return;
+      }
 
+      const { emitter } = displayNotification(await stakingContract.claim(poolId));
+
+      emitter.on("txConfirmed", ({ hash }) => {
+        const { dismiss } = displayNotification({
+          message: "Confirming...",
+          type: "pending",
+        });
+
+        const subscription = subject("blockNumber").subscribe({
+          next: () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: `You claimed your rewards`,
+              type: "success",
+            });
+            dismiss();
+            subscription.unsubscribe();
+          },
+        });
+
+        return {
+          autoDismiss: 1,
+          message: "Mined",
+          type: "success",
+        };
+      });
+    }
+
+    const unstake = async () => {
+      if (!$eth.address || !$eth.signer) {
+        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+        connectWeb3();
+        return;
+      }
+
+      const { emitter } = displayNotification(await stakingContract.withdraw(poolId, parseEther(unstakeAmount)));
+
+      emitter.on("txConfirmed", ({ hash }) => {
+        const { dismiss } = displayNotification({
+          message: "Confirming...",
+          type: "pending",
+        });
+
+        const subscription = subject("blockNumber").subscribe({
+          next: () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: `You withdrawed`,
+              type: "success",
+            });
+            dismiss();
+            subscription.unsubscribe();
+          },
+        });
+
+        return {
+          autoDismiss: 1,
+          message: "Mined",
+          type: "success",
+        };
+      });
+    }
+
+    const stake = async () => {
+      if (!$eth.address || !$eth.signer) {
+        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+        connectWeb3();
+        return;
+      }
+
+      // if needs approval
+      if(data.userTokenApproval.lt(parseEther(stakeAmount))) {
+        const { emitter2 } = displayNotification(await token.approve(stakingContract.address, ethers.constants.MaxUint256));
+
+        emitter2.on("txConfirmed", ({ hash }) => {
+          const { dismiss } = displayNotification({
+            message: "Confirming...",
+            type: "pending",
+          });
+
+          const subscription = subject("blockNumber").subscribe({
+            next: () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: `You deposited`,
+                type: "success",
+              });
+              dismiss();
+              subscription.unsubscribe();
+            },
+          });
+
+          return {
+            autoDismiss: 1,
+            message: "Mined",
+            type: "success",
+          };
+        });
+      }
+
+      const { emitter } = displayNotification(await stakingContract.deposit(poolId, parseEther(stakeAmount)));
+
+      emitter.on("txConfirmed", ({ hash }) => {
+        const { dismiss } = displayNotification({
+          message: "Confirming...",
+          type: "pending",
+        });
+
+        const subscription = subject("blockNumber").subscribe({
+          next: () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: `You deposited`,
+              type: "success",
+            });
+            dismiss();
+            subscription.unsubscribe();
+          },
+        });
+
+        return {
+          autoDismiss: 1,
+          message: "Mined",
+          type: "success",
+        };
+      });
+    }
 </script>
 <Meta 
 metadata={{
@@ -106,14 +241,14 @@ metadata={{
                   <div class="bottom px-4 py-4 md:py-2">
                       <input bind:value={unstakeAmount}  type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
                       <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
-                          <button on:click={() => {}} class="text-black py-2px px-4px">MAX</button>
+                          <button on:click={() => {unstakeAmount = formatEther(data.userDeposited)}} class="text-black py-2px px-4px">MAX</button>
                       </div>
                   </div>            
               </div>
-              {#if amountToUnstake === 0 }
+              {#if unstakeAmount === 0 }
                   <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
               {:else}
-                <button on:click={() => console.log("lol")} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Unstake</button>
+                <button on:click={unstake} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Unstake</button>
               {/if}
               
         </div>
@@ -134,20 +269,17 @@ metadata={{
                   <div class="bottom px-4 py-4 md:py-2">
                       <input bind:value={stakeAmount} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
                       <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
-                          <button on:click={() => { console.log("click")
+                          <button on:click={() => { stakeAmount = formatEther(data.userTokenBalance)
                             }} class="text-black py-2px px-4px">MAX</button>
                       </div>
                   </div>           
               </div>
-              {#if needAllowance }
-                <button on:click={ () => console.log('lol')} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Approve</button>
-              {:else}
                 {#if stakeAmount === 0 }
                   <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
                 {:else}
-                  <button on:click={() => console.log('lol')} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Stake</button>
+                  <button on:click={stake} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Stake</button>
                 {/if}
-              {/if}
+              
         </div>
 
         <!-- CLAIM BOX -->
@@ -156,10 +288,10 @@ metadata={{
               <div class="title text-lg">REWARDS AVAILABLE</div>
               <div class="subtitle font-thin">TO CLAIM</div>
               <div class="apy">
-               {formatAmount(data.userUnclaimed)}
+               {formatEther(data.userUnclaimed)}
               </div>
               
-              <button on:click={() => console.log("lol")} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
+              <button on:click={claim} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
         </div>
     </div>
 </div>
