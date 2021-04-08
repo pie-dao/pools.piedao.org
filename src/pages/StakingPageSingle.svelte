@@ -1,6 +1,7 @@
 <script>
     import Meta from '../components/elements/meta.svelte';
     import stakingPools from '../config/stakingPools.json';
+    import smartcontracts from '../config/smartcontracts.json';
     import stakingPoolsABI from '../abis/stakingPoolsABI.json';
     import ERC20ABI from '../abis/erc20ABI.json';
     import images from "../config/images.json";
@@ -65,7 +66,7 @@
       console.log($eth.address);
       // put address in config
       const { provider, signer } = get(eth);
-      stakingContract = new ethers.Contract('0xca55BDfDA9E3c7Cb738C16d4Eb8bc385202a0F5a', stakingPoolsABI, signer || provider);
+      stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI, signer || provider);
       data = (await stakingContract.getPools($eth.address))[poolId] || data;
 
       token = new ethers.Contract(data.token, ERC20ABI, signer || provider);
@@ -76,6 +77,12 @@
     };
 
     getStakingPoolData();
+
+    // update data on address or block change
+    $: if($eth.address || $eth.currentBlockNumber) {
+      $eth.address || !$eth.signer
+      getStakingPoolData();
+    };
 
     const claim = async () => {
       if (!$eth.address || !$eth.signer) {
