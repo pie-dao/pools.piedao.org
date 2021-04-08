@@ -154,6 +154,44 @@
       });
     }
 
+    const approve = async () => {
+      if (!$eth.address || !$eth.signer) {
+        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+        connectWeb3();
+        return;
+      }
+
+      // if needs approval
+      if(data.userTokenApproval.lt(parseEther(stakeAmount))) {
+        const { emitter2 } = displayNotification(await token.approve(stakingContract.address, ethers.constants.MaxUint256));
+
+        emitter2.on("txConfirmed", ({ hash }) => {
+          const { dismiss } = displayNotification({
+            message: "Confirming...",
+            type: "pending",
+          });
+
+          const subscription = subject("blockNumber").subscribe({
+            next: () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: `You deposited`,
+                type: "success",
+              });
+              dismiss();
+              subscription.unsubscribe();
+            },
+          });
+
+          return {
+            autoDismiss: 1,
+            message: "Mined",
+            type: "success",
+          };
+        });
+      }
+    }
+
     const stake = async () => {
       if (!$eth.address || !$eth.signer) {
         displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
@@ -252,7 +290,7 @@ metadata={{
                       </div>
                   </div>            
               </div>
-              {#if unstakeAmount === 0 }
+              {#if unstakeAmount == 0 }
                   <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
               {:else}
                 <button on:click={unstake} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Unstake</button>
@@ -281,10 +319,14 @@ metadata={{
                       </div>
                   </div>           
               </div>
-                {#if stakeAmount === 0 }
+                {#if stakeAmount == 0 }
                   <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
                 {:else}
-                  <button on:click={stake} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Stake</button>
+                  {#if parseEther(stakeAmount).gt(data.userTokenApproval)}
+                  <button on:click={approve} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Approve</button>
+                  {:else}
+                    <button on:click={stake} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Stake</button>
+                  {/if}
                 {/if}
               
         </div>
@@ -298,7 +340,11 @@ metadata={{
                {formatEther(data.userUnclaimed)}
               </div>
               
-              <button on:click={claim} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
+              {#if data.userUnclaimed.eq(0)}
+                <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">No rewards available</button>
+              {:else}
+                <button on:click={claim} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
+              {/if}
         </div>
     </div>
 </div>
