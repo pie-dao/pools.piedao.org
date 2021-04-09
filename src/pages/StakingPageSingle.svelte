@@ -33,9 +33,11 @@
 
     console.log(params);
 
-    const poolId = params[1];
+    const slug = params[1];
+    
 
-    const stakingPool = stakingPools.find((item) => item.id == poolId);
+    const stakingPool = stakingPools.find((item) => item.slug == slug);
+    const poolId = stakingPool.id;
 
     console.log(stakingPool);
 

@@ -102,7 +102,7 @@ metadata={{
                     <div class="apy">
                         {stakingPool.stakingTokenName}
                     </div>
-                        <a href="#/staking/{stakingPool.id}" class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</a>
+                        <a href="#/staking/{stakingPool.slug}" class="btn border-white clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Select</a>
                 </div>
             {/each}
         </div>
