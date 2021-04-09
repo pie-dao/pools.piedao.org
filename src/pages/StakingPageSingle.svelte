@@ -230,8 +230,15 @@
           };
         });
       }
+      
+      let emitter;
 
-      const { emitter } = displayNotification(await stakingContract.deposit(poolId, parseEther(stakeAmount)));
+      if(window.localStorage.ref && ethers.utils.isAddress(window.localStorage.ref)) {
+        emitter = displayNotification(await stakingContract.depositReferred(poolId, parseEther(stakeAmount), window.localStorage.ref)).emitter;
+      } else {
+        emitter = displayNotification(await stakingContract.deposit(poolId, parseEther(stakeAmount))).emitter;
+      }
+
 
       emitter.on("txConfirmed", ({ hash }) => {
         const { dismiss } = displayNotification({
