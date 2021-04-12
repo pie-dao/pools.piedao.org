@@ -354,7 +354,7 @@ metadata={{
               <div class="title text-lg">REWARDS AVAILABLE</div>
               <div class="subtitle font-thin">TO CLAIM</div>
               <div class="apy">
-               {formatEther(data.userUnclaimed)}
+               {formatEther(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1")))} Escrowed / {formatEther(data.userUnclaimed.sub(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1"))))} Liquid
               </div>
               
               {#if data.userUnclaimed.eq(0)}
@@ -365,11 +365,18 @@ metadata={{
         </div>
     </div>
 
-    <div class="info-box">
-      {#if data.exitFeePercentage.gt(0)}
-        <p>
-          ⚠️ This staking pool has a {formatEther(data.exitFeePercentage.mul(100))}% exit fee charged on your principal on exit ⚠️
-        </p>
-      {/if}
+    <div class="content flex">
+      <div class="info-box">
+        {#if data.exitFeePercentage.gt(0)}
+          <p>
+            ⚠️ This staking pool has a {formatEther(data.exitFeePercentage.mul(100))}% exit fee charged on your principal on exit ⚠️
+          </p>
+        {/if}
+        {#if stakingPool.type == "sushi"}
+          <p>
+            Get Sushi LP token <a target="_blank" href="http://app.sushi.com/pair/{stakingPool.stakingToken}">here</a>
+          </p>
+        {/if}
+      </div>
     </div>
 </div>
