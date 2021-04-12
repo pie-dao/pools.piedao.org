@@ -201,6 +201,12 @@
         return;
       }
 
+      if(!data.exitFeePercentage.eq(0)) {
+        if(!window.confirm(`On exit a ${formatEther(data.exitFeePercentage.mul(100))}% fee will be charged on your principal`)) {
+          return;
+        }
+      }
+
       // if needs approval
       if(data.userTokenApproval.lt(parseEther(stakeAmount))) {
         const { emitter2 } = displayNotification(await token.approve(stakingContract.address, ethers.constants.MaxUint256));
