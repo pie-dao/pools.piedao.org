@@ -5,6 +5,8 @@ import { CoinGecko } from './stores/coingecko.js';
 import poolsConfig from './config/pools.json';
 import { pools } from './stores/eth.js';
 
+import "./helpers/referral";
+
 pools.set(poolsConfig);
 
 const poolsDefault = {};

@@ -10,6 +10,8 @@ import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
+import Staking from '../pages/Staking.svelte';
+import StakingPageSingle from '../pages/StakingPageSingle.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
 import Markets from '../pages/Markets.svelte';
 import DefiPie from '../pages/landings/defiPie.svelte';
@@ -113,6 +115,8 @@ const formatRoute = (route) => {
         window.localStorage.setItem('referral', referral);
       }
       return { page: LPStaking, params: { referral } };
+    case 'staking':
+      return route[1] ? {page: StakingPageSingle, params: route } : { page: Staking };
     case 'pools':
       address = (route[1] || '').toLowerCase();
       poolAction = (route[2] || 'add').toLowerCase();

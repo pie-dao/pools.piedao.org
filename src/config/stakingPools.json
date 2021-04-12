@@ -1,0 +1,22 @@
+[
+    {
+        "id": "0",
+        "slug": "play-dough",
+        "name": "PLAY/DOUGH",
+        "stakingToken": "0xaf491d603db3c1138a5ee5db35eb0c7b6c4541a2",
+        "stakingTokenSymbol": "SLP",
+        "stakingTokenName": "PLAY/DOUGH Sushi LP",
+        "type": "sushi",
+        "rewardsPaused": false
+    },
+    {
+        "id": "1",
+        "slug": "doug-eth",
+        "name": "DOUGH/ETH",
+        "stakingToken": "0x97f34c8e5992eb985c5f740e7ee8c7e48a1de76a",
+        "stakingTokenSymbol": "SLP",
+        "stakingTokenName": "DOUGH/ETH Sushi LP",
+        "type": "sushi",
+        "rewardsPaused": false
+    }
+]
