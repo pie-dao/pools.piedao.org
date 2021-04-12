@@ -377,6 +377,28 @@ metadata={{
             Get Sushi LP token <a target="_blank" href="http://app.sushi.com/pair/{stakingPool.stakingToken}">here</a>
           </p>
         {/if}
+
+        <p>
+          Total pool rewards per week: {formatEther(data.rewardRate.mul(45371))} DOUGH
+        </p>
+        <p>
+          Total staked: {formatEther(data.totalDeposited)} SLP
+        </p>
+        <p>
+          Staked by you: {formatEther(data.userDeposited)} SLP
+        </p>
+        <p>
+          Your share: {data.userDeposited.eq(0) ? "0" : formatEther(data.userDeposited.div(data.totalDeposited).mul(100))} %
+        </p>
+        <p>
+          Your total rewards per week: {data.userDeposited.eq(0) ? "0" : formatEther(data.rewardRate.mul(45371).mul(data.userDeposited).div(data.totalDeposited))} DOUGH
+        </p>
+        <p>
+          Your escrowed rewards per week: {data.userDeposited.eq(0) ? "0" : formatEther(data.rewardRate.mul(45371).mul(data.userDeposited).div(data.totalDeposited).mul(data.escrowPercentage).div(parseEther("1")))} DOUGH
+        </p>
+        <p>
+          Your liquid rewards per week: {data.userDeposited.eq(0) ? "0" : formatEther(data.rewardRate.mul(45371).mul(data.userDeposited).div(data.totalDeposited).mul(parseEther("1").sub(data.escrowPercentage)).div(parseEther("1")))} DOUGH
+        </p>
       </div>
     </div>
 </div>
