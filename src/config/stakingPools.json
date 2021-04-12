@@ -11,7 +11,7 @@
     },
     {
         "id": "1",
-        "slug": "doug-eth",
+        "slug": "dough-eth",
         "name": "DOUGH/ETH",
         "stakingToken": "0x97f34c8e5992eb985c5f740e7ee8c7e48a1de76a",
         "stakingTokenSymbol": "SLP",
