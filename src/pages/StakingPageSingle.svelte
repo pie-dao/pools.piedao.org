@@ -281,7 +281,9 @@ metadata={{
 
 <div class="content flex flex-col">
 
-    <a href="#/staking" class="md:w-1 float-left btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Go back</a>
+    <div class="content flex ">
+      <a href="#/staking" class="md:w-1 float-left btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Go back</a>
+    </div>
 
     <div class="flex flex-col w-full justify-around md:flex-row">
         <!-- UNSTAKE BOX -->
