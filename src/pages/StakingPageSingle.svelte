@@ -356,4 +356,12 @@ metadata={{
               {/if}
         </div>
     </div>
+
+    <div class="info-box">
+      {#if data.exitFeePercentage.gt(0)}
+        <p>
+          ⚠️ This staking pool has a {formatEther(data.exitFeePercentage.mul(100))}% exit fee charged on your principal on exit ⚠️
+        </p>
+      {/if}
+    </div>
 </div>
