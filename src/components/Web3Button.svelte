@@ -23,7 +23,7 @@
 </script>
 
 <button
-  class="btn connect-button-container"
+  class="btn connect-button-container min-w-150px md:min-w-0"
   on:click={handleClick}
   role="button"
   tabIndex="-100"

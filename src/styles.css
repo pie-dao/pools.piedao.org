@@ -625,6 +625,12 @@ right: 0px;
   }
 }
 
+@screen md {
+  .header-container .connect-button-container {
+    @apply ml-8;
+  }
+}
+
 /* Info */
 
 .info-container {
