@@ -19,7 +19,7 @@
   <div class="flex  items-center justify-center fitcontent text-black">
   <!-- <div class="ml-2px font-thin">{value.toFixed(2)} %</div>
   <div class="font-thin">{#if displayLabel} 24h{/if}</div> -->
-  <div class="ml-2px font-thin">0</div>
+  <div class="ml-2px font-thin">-</div>
   </div>
 
   {:else}
