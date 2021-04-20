@@ -11,19 +11,21 @@
   </script>
   
   <ModalFarm bind:this={modalinfo}>
-      <span slot="content" class="py-0 px-4 md:px-12 font-thin">
+      <span slot="content" class="py-0 px-4 mt-6 md:mt-0 md:px-12 font-thin">
         <span class="flex mt-0 md:mt-4 w-100pc">
           <div class="mr-4 flex items-center">
-            <img class="z-10" width="60px" height="60px" src={images.doughtoken} alt="token name" />
-            <img class="-ml-20px" width="60px" height="60px" src={images.logos.eth} alt="token name" />
+            <img class="z-10 w-40px md:w-60px"  src={images.doughtoken} alt="token name" />
+            <img class="-ml-15px md:-ml-20px w-40px md:w-60px"  src={images.logos.eth} alt="token name" />
           </div>
           <div class="flex flex-col justify-around">
             <span class="flex items-center"
-              ><span class="text-lg leading-6 font-bold">DOUGH / ETH</span><span
+              ><span class="text-base md:text-lg md:leading-6 font-bold">DOUGH / ETH</span><span
                 class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">55.30% APY</span
               ></span
             >
+            <span class="block md:hidden text-sm leading-6 font-bold">Pool: Balancer</span>
             <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
+            <span class="block md:hidden text-sm text-grey">Tot 166.345 BPT Staked</span>
           </div>
           <div class="hidden md:flex flex-col justify-around text-right ml-auto font-thin">
             <span class="text-lg leading-6">Balancer</span>
@@ -97,7 +99,7 @@
                 <div class="h-32px flex items-center pointer">
                   <img
                     class="token-icon w-30px h-30px"
-                    src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png"
+                    src={images.doughtoken}
                     alt="ETH"
                   />
                   <span class="py-2px px-4px">DOUGH</span>
