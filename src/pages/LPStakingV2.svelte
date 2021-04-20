@@ -63,7 +63,7 @@
               <div class="h-32px flex items-center pointer">
                 <img
                   class="token-icon w-30px h-30px"
-                  src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png"
+                  src={images.bpt}
                   alt="ETH"
                 />
                 <span class="py-2px px-4px">BPT</span>
@@ -133,7 +133,7 @@
                 <div class="h-32px flex items-center pointer">
                   <img
                     class="token-icon w-30px h-30px"
-                    src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png"
+                    src={images.bpt}
                     alt="ETH"
                   />
                   <span class="py-2px px-4px">BPT</span>
