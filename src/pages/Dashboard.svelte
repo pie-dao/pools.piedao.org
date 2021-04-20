@@ -100,7 +100,7 @@
           <tr>
             <th class="font-thin border-b-2 px-4 py-2 text-left">Index</th>
             <th class="font-thin border-b-2 px-4 py-2">Assets</th>
-            <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
+            <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
             <th class="font-thin border-b-2 px-4 py-2">Current Price</th>
             <th class="font-thin border-b-2 px-4 py-2">Buy</th>
           </tr>
@@ -108,7 +108,7 @@
         <tbody>
           {#each piVaults as pie}
             <tr class="row-highlight">
-              <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+              <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-180px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
                 <a class="flex items-center px-2 py-2" href={`#/pie/${pie.address}`}>
                   <img
                     class="inline icon ml-2 mr-2"
@@ -169,9 +169,11 @@
       <a class="mx-4 thinborderbottom" href={`#/pie/${pie.address}`}>
         <div class="flex items-center w-100pc py-4">
               <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
-            <div class="flex flex-col justify-around">
+            <div class="flex flex-col justify-around max-w-55pc">
               <span class="text-lg leading-6">{pie.symbol}</span>
               <span class="text-sm font-thin opacity-40" >{pie.description ? pie.description : "Another great porfolio"}</span>
+              <!-- <span class="text-sm font-thin opacity-40" >{pie.totalLiquidity}</span> -->
+
             </div>
             <div class="text-right flex flex-col justify-end items-end ml-auto">
               <span class="">{pie.price}</span>
@@ -216,7 +218,7 @@
           <th class="font-thin border-b-2 px-4 py-2 text-left">Index</th>
           <th class="font-thin border-b-2 px-4 py-2">Assets</th>
           <!-- <th class="font-thin border-b-2 px-4 py-2">Market Cap</th> -->
-          <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
           <th class="font-thin border-b-2 px-4 py-2">Current Price</th>
           <th class="font-thin border-b-2 px-4 py-2">Buy</th>
         </tr>
