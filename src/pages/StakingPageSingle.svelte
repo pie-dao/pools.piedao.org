@@ -374,7 +374,7 @@ metadata={{
         {/if}
         {#if stakingPool.type == "sushi"}
           <p>
-            Get Sushi LP token <a target="_blank" href="http://app.sushi.com/pair/{stakingPool.stakingToken}">here</a>
+            Get Sushi LP token <a target="_blank" href="{stakingPool.lpLink}">here</a>
           </p>
         {/if}
 
