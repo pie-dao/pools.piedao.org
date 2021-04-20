@@ -7,6 +7,7 @@
   import Meta from '../../components/elements/meta.svelte';
   import images from "../../config/images.json";
   import FeaturedIn from '../../components/FeaturedIn.svelte';
+  import AuditedBy from '../../components/AuditedBy.svelte';
   import Contributors from '../../components/Contributors.svelte';
   import Newsletter from '../../components/Newsletter.svelte';
   import Change from '../../components/Change.svelte';
@@ -212,4 +213,5 @@
 <Contributors />
 <Newsletter />
 <FeaturedIn />
+<AuditedBy />
 
