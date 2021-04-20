@@ -6,6 +6,7 @@
         "stakingToken": "0xaf491d603db3c1138a5ee5db35eb0c7b6c4541a2",
         "stakingTokenSymbol": "SLP",
         "stakingTokenName": "PLAY/DOUGH Sushi LP",
+        "lpLink": "https://app.sushi.com/add/0x33e18a092a93ff21aD04746c7Da12e35D34DC7C4/0xad32A8e6220741182940c5aBF610bDE99E737b2D",
         "type": "sushi",
         "rewardsPaused": false
     },
@@ -16,6 +17,7 @@
         "stakingToken": "0x97f34c8e5992eb985c5f740e7ee8c7e48a1de76a",
         "stakingTokenSymbol": "SLP",
         "stakingTokenName": "DOUGH/ETH Sushi LP",
+        "lpLink": "https://app.sushi.com/add/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/0xad32A8e6220741182940c5aBF610bDE99E737b2D",
         "type": "sushi",
         "rewardsPaused": false
     }
