@@ -10,6 +10,7 @@ import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
+import LPStakingV2 from '../pages/LPStakingV2.svelte';
 import Staking from '../pages/Staking.svelte';
 import StakingPageSingle from '../pages/StakingPageSingle.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
@@ -106,8 +107,10 @@ const formatRoute = (route) => {
       return { page: Migration, params: { address } };
     case 'oven':
       return { page: Oven };
-      case 'piefolio':
+    case 'piefolio':
         return { page: Piefolio };
+    case 'farms':
+      return { page: LPStakingV2 };
     case 'stake':
       referral = route[1] || null;
 
