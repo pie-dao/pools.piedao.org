@@ -24,8 +24,7 @@ import Learn from '../pages/Learn.svelte';
 import Integrations from '../pages/Integrations.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
 import Farm from '../pages/Farm.svelte';
-
-
+import RewardsPie from '../pages/RewardsPie.svelte';
 
 
 
@@ -115,6 +114,8 @@ const formatRoute = (route) => {
       return { page: LPStakingV2 };
     case 'farm':
       return { page: Farm };
+    case 'rewardspie':
+        return { page: RewardsPie };
     case 'stake':
       referral = route[1] || null;
 

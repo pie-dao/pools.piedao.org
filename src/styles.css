@@ -2104,3 +2104,46 @@ max-width: 100vw;
   fill: white;
   filter: invert(100%);
 }
+
+
+/* SVELTE TABS */
+
+.svelte-tabs {
+  border-bottom: none;
+  border:none!important;
+}
+
+.svelte-tabs__tab-list {
+  border-bottom: none;
+  border: none!important;
+  display: flex;
+  justify-content: space-between;
+}
+
+.svelte-tabs li.svelte-tabs__tab {
+  display: inline-flex;
+  border: double 1px transparent;
+  border-radius: 12px;
+  background-image: linear-gradient(white, white), radial-gradient(circle at top left,#ffffff, #ffffff, #ffffff, #ffffff);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  padding: 1px;
+  color: #000;
+  font-weight: 500;
+}
+
+.svelte-tabs li.svelte-tabs__selected {
+  display: inline-flex;
+  border: double 1px transparent;
+  border-radius: 12px;
+  background-image: linear-gradient(white, white), radial-gradient(circle at top left,#ff8932, #a50bce, #1fa6e0, #47d482);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  padding: 1px;
+  color: #000;
+  font-weight: 500;
+}
+
+.svelte-tabs div.svelte-tabs__tab-panel {
+
+}
