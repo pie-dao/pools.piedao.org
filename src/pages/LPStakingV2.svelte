@@ -50,7 +50,7 @@
                   </div>
                 </a>
     
-                <a class="flex mt-2 md:mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4" href="token">
+                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
                   <div class="mr-4 flex items-center">
                     <img class="z-10" width="40px" height="40px" src={images.bcp} alt="token name" />
                     <img
@@ -74,7 +74,7 @@
                   </div>
                 </a>
     
-                <a class="flex mt-2 md:mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4" href="token">
+                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
                   <div class="mr-4 flex items-center">
                     <img
                       class="z-10"
@@ -104,7 +104,7 @@
                   </div>
                 </a>
 
-                <a class="flex mt-2 md:mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4" href="token">
+                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
                   <div class="mr-4 flex items-center">
                     <img
                       class="z-10"
@@ -134,7 +134,7 @@
                   </div>
                 </a>
 
-                <a class="flex mt-2 md:mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4" href="token">
+                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
                   <div class="mr-4 flex items-center">
                     <img
                       class="z-10"
@@ -164,7 +164,7 @@
                   </div>
                 </a>
     
-                <a class="flex mt-2 md:mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4" href="token">
+                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
                   <div class="mr-4 flex items-center">
                     <img
                       class="z-10"

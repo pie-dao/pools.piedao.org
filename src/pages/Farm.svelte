@@ -22,7 +22,7 @@ metadata={{
     <div class="flex justify-center items-start md:items-center">
       <div class="flex flex-col justify-start p-1px cardbordergradient w-100pc min-h-100pc   lg:min-w-30pc lg:min-h-50pc">
 
-        <span class="py-0 px-4 mt-6 md:mt-0 md:px-12 font-thin">
+        <span class="py-0 px-4 mt-6 md:px-12 font-thin">
           <span class="flex mt-0 md:mt-4 w-100pc">
             <div class="mr-4 flex items-center">
               <img class="z-10 w-40px md:w-60px"  src={images.doughtoken} alt="token name" />
@@ -64,7 +64,7 @@ metadata={{
                   maxlength="79"
                   spellcheck="false"
                 />
-                <div class="h-32px flex items-center pointer">
+                <div class="h-32px flex items-center">
                   <img
                     class="token-icon w-30px h-30px"
                     src={images.bpt}
@@ -100,7 +100,7 @@ metadata={{
                     maxlength="79"
                     spellcheck="false"
                   />
-                  <div class="h-32px flex items-center pointer">
+                  <div class="h-32px flex items-center">
                     <img
                       class="token-icon w-30px h-30px"
                       src={images.doughtoken}
@@ -134,7 +134,7 @@ metadata={{
                     maxlength="79"
                     spellcheck="false"
                   />
-                  <div class="h-32px flex items-center pointer">
+                  <div class="h-32px flex items-center">
                     <img
                       class="token-icon w-30px h-30px"
                       src={images.bpt}
@@ -152,7 +152,7 @@ metadata={{
           <div class="info-box mt-4 mb-8">
             <h1 class="text-xl text-left font-bold">Info</h1>
             <p>
-              ℹ️ <strong>YPIE/ETH</strong> Staking Rewards - the pool will keep receiving 20000 DOUGH as nominal
+              <strong>YPIE/ETH</strong> Staking Rewards - the pool will keep receiving 20000 DOUGH as nominal
               weekly reward distributed to LPs, of which 20% distributed liquid along the week 80% escrowed
               within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
             </p>

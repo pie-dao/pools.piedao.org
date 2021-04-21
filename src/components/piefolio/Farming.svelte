@@ -32,14 +32,14 @@
 
     </div>
     
-    <a href="link" target="_blank">
+    <a href="#/farm">
       <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-6 mt-2 md:mt-4">
         <div class="flex items-center mr-4">
           <img class="z-10" width="40px" height="40px" src={images.doughtoken} alt="token name" />
           <img class="-ml-20px" width="40px" height="40px" src={images.bcp} alt="token name" />
         </div>
         <div class="flex flex-col justify-around">
-          <span class="font-bold leading-6">DOUGH / ETH</span>
+          <span class="md:text-lg font-bold leading-6">DOUGH / ETH</span>
           <span class="text-xs font-thin opacity-80">Staked</span>
           <span class="text-xs font-thin opacity-80">Rewards</span>
         </div>
@@ -51,14 +51,14 @@
       </div>
     </a>
 
-    <a href="link" target="_blank">
+    <a href="#/farm">
       <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-6 mt-2 md:mt-4">
         <div class="flex items-center mr-4">
           <img class="z-10" width="40px" height="40px" src={images.defiplusl} alt="token name" />
           <img class="-ml-20px" width="40px" height="40px" src={images.usdplus} alt="token name" />
         </div>
         <div class="flex flex-col justify-around">
-          <span class="font-bold leading-6">DEFI+L / ETH</span>
+          <span class="md:text-lg font-bold leading-6">DEFI+L / ETH</span>
           <span class="text-xs font-thin opacity-80">Staked</span>
           <span class="text-xs font-thin opacity-80">Rewards</span>
         </div>
