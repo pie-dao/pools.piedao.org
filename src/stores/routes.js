@@ -23,6 +23,8 @@ import PiePageSwitch from '../pages/PiePageSwitch.svelte';
 import Learn from '../pages/Learn.svelte';
 import Integrations from '../pages/Integrations.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
+import Farm from '../pages/Farm.svelte';
+
 
 
 
@@ -111,6 +113,8 @@ const formatRoute = (route) => {
         return { page: Piefolio };
     case 'farms':
       return { page: LPStakingV2 };
+    case 'farm':
+      return { page: Farm };
     case 'stake':
       referral = route[1] || null;
 
