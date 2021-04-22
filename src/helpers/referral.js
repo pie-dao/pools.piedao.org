@@ -16,7 +16,5 @@ if(query) {
         }
     }
     // strip off all params from url
-    console.log('url', url)
-    console.log('url.split("?")[0]', url.split("?")[0])
     window.location.href = url.split("?")[0];
 }
