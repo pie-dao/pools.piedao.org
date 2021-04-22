@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from 'svelte';
     import Meta from '../components/elements/meta.svelte';
     import stakingPools from '../config/stakingPools.json';
     import smartcontracts from '../config/smartcontracts.json';
@@ -31,18 +32,11 @@
 
     export let params;
 
-    console.log(params);
-
     const slug = params[1];
     
 
-    const stakingPool = stakingPools.find((item) => item.slug == slug);
-    const poolId = stakingPool.id;
-
-    console.log(stakingPool);
-
-    let amountToUnstake = 0;
-    let needAllowance = false;
+    let stakingPool = '';
+    let poolId = '';
     let stakeAmount = 0;
     let unstakeAmount = 0;
 
@@ -65,7 +59,6 @@
     let token;
 
     const getStakingPoolData = async () => {
-      console.log($eth.address);
       // put address in config
       const { provider, signer } = get(eth);
       stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI, signer || provider);
@@ -78,8 +71,26 @@
       return Number(formatEther(amount)).toFixed();
     };
 
-    getStakingPoolData();
+    
 
+    onMount(() => {
+      stakingPool = stakingPools.find((item) => {
+        item.slug === slug
+        return item;
+      });
+      poolId = stakingPool.id;
+      getStakingPoolData();
+    });
+
+
+    $: (() => {
+      if(window.localStorage.ref && ethers.utils.isAddress(window.localStorage.ref)) {
+        console.log('//------------------------//')
+        console.log('Ref Active', window.localStorage.ref);
+        console.log('//------------------------//')
+      }
+    })()
+    
     // update data on address or block change
     $: if($eth.address || $eth.currentBlockNumber) {
       $eth.address || !$eth.signer
@@ -240,6 +251,10 @@
       let emitter;
 
       if(window.localStorage.ref && ethers.utils.isAddress(window.localStorage.ref)) {
+        console.log('//------------------------//')
+        console.log('Ref Active', window.localStorage.ref);
+        console.log('//------------------------//')
+
         emitter = displayNotification(await stakingContract.depositReferred(poolId, parseEther(stakeAmount), window.localStorage.ref)).emitter;
       } else {
         emitter = displayNotification(await stakingContract.deposit(poolId, parseEther(stakeAmount))).emitter;

@@ -10,8 +10,13 @@ if(query) {
 
         if(ethers.utils.isAddress(ref)) {
             localStorage.setItem("ref", ref);
+            console.log('//------------------------//')
+            console.log('Ref has been set', ref);
+            console.log('//------------------------//')
         }
     }
     // strip off all params from url
+    console.log('url', url)
+    console.log('url.split("?")[0]', url.split("?")[0])
     window.location.href = url.split("?")[0];
 }
