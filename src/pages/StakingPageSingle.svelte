@@ -75,8 +75,9 @@
 
     onMount(() => {
       stakingPool = stakingPools.find((item) => {
-        item.slug === slug
-        return item;
+        if(item.slug === slug) {
+          return item;
+        }
       });
       poolId = stakingPool.id;
       getStakingPoolData();
