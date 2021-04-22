@@ -1,6 +1,6 @@
 <script>
   import images from '../config/images.json';
-  import Meta from '../components/elements/meta.svelte';  
+  import Meta from '../components/elements/meta.svelte'; 
   import { Tabs, Tab, TabList, TabPanel } from 'svelte-tabs';
   </script>
 
@@ -90,26 +90,29 @@ metadata={{
             <div class="text-l font-bold mt-4 mb-2">Choose your commitment</div>
             <Tabs>
               <TabList class="tablist font-bold">
-                <Tab><div class="flex items-center py-3 px-6"><span>6 months</span></div></Tab>
-                <Tab><div class="flex items-center py-2 px-6"><span>12 months</span></div></Tab>
+                <Tab><div class="flex items-center py-1 px-6"><span>36 months</span><img class="w-30px ml-2 mb-2" src={images.diamond} alt="token name" /></div></Tab>
                 <Tab><div class="flex items-center py-1 px-6"><span>24 months</span></div></Tab>
-                <Tab><div class="flex items-center py-1 px-6"><span>36 months</span><img class="w-30px ml-2" src={images.treasure} alt="token name" /></div></Tab>
+                <Tab><div class="flex items-center py-2 px-6"><span>12 months</span></div></Tab>
+                <Tab><div class="flex items-center py-3 px-6"><span>6 months</span></div></Tab>
               </TabList>
-             
-              <TabPanel>
-                <div class="text-sm opacity-70">For <strong>1 DOUGH</strong> you will receive <strong>0.115571 veDOUGH</strong></div>
+
+              <TabPanel class="mb-2">
+                <div class="text-sm opacity-70">For <strong>1 DOUGH</strong> you will receive <strong>1 veDOUGH</strong></div>
               </TabPanel>
-             
-              <TabPanel>
-                <div class="text-sm opacity-70">For <strong>1 DOUGH</strong> you will receive <strong>0.231142 veDOUGH</strong></div>
-              </TabPanel>
-             
+                           
               <TabPanel>
                 <div class="text-sm opacity-70">For <strong>1 DOUGH</strong> you will receive <strong>0.591235 veDOUGH</strong></div>
               </TabPanel>
 
               <TabPanel>
-                <div class="text-sm opacity-70">For <strong>1 DOUGH</strong> you will receive <strong>1 veDOUGH</strong></div>
+                <div class="text-sm opacity-70">For <strong>1 DOUGH</strong> you will receive <strong>0.231142 veDOUGH</strong></div>
+              </TabPanel>
+
+              <TabPanel>
+                <div class="text-sm opacity-70">For <strong>1 DOUGH</strong> you will receive <strong>0.115571 veDOUGH</strong></div>  
+              </TabPanel>
+
+              <TabPanel class="mb-2">
               </TabPanel>
             </Tabs>
 
