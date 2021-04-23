@@ -14,7 +14,7 @@ metadata={{
 <div class="w-100pc m-0 p-0 flex justify-center">
   <div class="w-100pc lg:max-w-900px flex flex-col items-center justify-center py-0 md:py-8 px-2"> 
     <div class="font-huge text-center">Rewards Pie</div>
-    <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">Stake for yummi yield</div>
+    <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">Flow cash to the future</div>
 
 
 
@@ -24,7 +24,7 @@ metadata={{
         <div class="bg-purple rounded-xl text-white py-8 px-6 mt-12 mx-12">
           <div class="font-huge">Your position</div>
               <a class="flex mt-8" href={images.doughtoken}>
-                  <div class="mr-4 w-60px max-w-60px h-60px max-h-60px"><img width="60px" height="60px" src={images.doughtoken} alt="veDOUGH" /></div>
+                  <div class="mr-4 w-60px max-w-60px h-60px max-h-60px"><img width="60px" height="60px" src={images.vedough} alt="veDOUGH" /></div>
                   <div class="flex flex-col justify-around">
                     <span class="flex items-center">
                       <span class="text-lg leading-6">veDOUGH</span>
@@ -37,7 +37,7 @@ metadata={{
                   </div>
                 </a>
                 <a class="flex mt-8" href={images.doughtoken}>
-                  <div class="mr-4 w-60px max-w-60px h-60px max-h-60px"><img width="60px" height="60px" src={images.doughtoken} alt="veDOUGH" /></div>
+                  <div class="mr-4 w-60px max-w-60px h-60px max-h-60px"><img width="60px" height="60px" src={images.rewardspie} alt="veDOUGH" /></div>
                   <div class="flex flex-col justify-around">
                     <span class="flex items-center">
                       <span class="text-lg leading-6">RewardsPIE</span>
@@ -150,7 +150,7 @@ metadata={{
                   <div class="h-32px flex items-center">
                     <img
                       class="token-icon w-30px h-30px"
-                      src={images.doughtoken}
+                      src={images.rewardspie}
                       alt="ETH"
                     />
                     <span class="py-2px px-4px">RewardsPie</span>
@@ -184,7 +184,7 @@ metadata={{
                   <div class="h-32px flex items-center">
                     <img
                       class="token-icon w-30px h-30px"
-                      src={images.bpt}
+                      src={images.vedough}
                       alt="ETH"
                     />
                     <span class="py-2px px-4px">veDOUGH</span>
@@ -197,31 +197,8 @@ metadata={{
           </span>
       
           <div class="info-box mt-4 mb-8">
-            <h1 class="text-xl text-left font-bold">Info</h1>
-            <p>
-              <strong>YPIE/ETH</strong> Staking Rewards - the pool will keep receiving 20000 DOUGH as nominal
-              weekly reward distributed to LPs, of which 20% distributed liquid along the week 80% escrowed
-              within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
-            </p>
-            <br />
-            <p>There are total of : <strong>2740.9505 UNI-V2 </strong>.</p>
-            <p>There are total : <strong>2579.4828 UNI-V2</strong> staked in the Staking contract.</p>
-            <p>
-              You are staking : <strong>0%</strong>
-              of the pool = [0 YPIE, 0 ETH] = $ 0.00
-            </p>
-            <br />
-            <p>
-              You can add liquidity to the 🦄 Uniswap pool to get UNI-V2 tokens
-              <a
-                target="_blank"
-                href="https://info.uniswap.org/pair/0xdf5096804705d135656b50b62f9ee13041253d97">
-                HERE
-                </a>
-            </p>
-            <p>Weekly rewards for this pool are <strong>20000 DOUGH</strong></p>
-            <p><a href="#/swap">Buy YPIE !</a></p>
-            <p><a href="#/swap">Buy DOUGH!</a></p>
+            <h1 class="text-xl text-center font-bold">Info WIP</h1>
+  
           </div>
         </span>
       </div>
