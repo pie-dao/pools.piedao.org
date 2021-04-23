@@ -296,7 +296,7 @@ const incentivizedPools = [
   {
     addressTokenToStake: '0xdF5096804705D135656B50b62f9ee13041253D97',
     aprEnabled: true,
-    deprecated: false,
+    deprecated: true,
     addressUniPoll: '0x3A05D2394F7241e00F4ae90A1f14D9c9c48A1E9B',
     poolLink: 'https://info.uniswap.org/pair/0xdf5096804705d135656b50b62f9ee13041253d97',
     name: 'YPIE/ETH',
