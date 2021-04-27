@@ -580,7 +580,7 @@
     "name": "DeFi Index Pie ",
     "useRecipe": true,
     "streamingFees": "0",
-    "useMintOverBuy": true,
+    "useMintOverBuy": false,
     "swapEnabled": true,
     "coingeckoId": "piedao-defi",
     "swapFees": "1",

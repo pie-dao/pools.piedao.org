@@ -8,6 +8,7 @@
   import find from 'lodash/find';
 
   import ApiOx from "../classes/0xApi";
+  import Api1inch from "../classes/1inch";
   import poolsConfig from '../config/pools.json';
   import TokenSelectModal from "../components/modals/TokenSelectModal.svelte";
   import Modal from '../components/elements/Modal.svelte';
@@ -100,7 +101,8 @@
     frozeQuote = null;
     fetchQuote(true) 
   });
-  const api = new ApiOx();
+  const api = new Api1inch();
+  const api2 = new ApiOx();
 
   const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
 
@@ -289,6 +291,7 @@
     } else {
       console.log('refreshing quote')
     }
+    api2.getQuote(sellToken, buyToken, amount.bn);
     const res = await api.getQuote(sellToken, buyToken, amount.bn);
     needAllowance = needApproval(sellToken.allowance);
     
