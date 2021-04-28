@@ -398,10 +398,10 @@ metadata={{
           Total pool rewards per week: {formatEther(data.rewardRate.mul(45371))} DOUGH
         </p>
         <p>
-          Total staked: {formatEther(data.totalDeposited)} SLP
+          Total staked: {formatEther(data.totalDeposited)} {stakingPool.stakingTokenSymbol}
         </p>
         <p>
-          Staked by you: {formatEther(data.userDeposited)} SLP
+          Staked by you: {formatEther(data.userDeposited)} {stakingPool.stakingTokenSymbol}
         </p>
         <p>
           Your share: {data.userDeposited.eq(0) ? "0" : formatEther(data.userDeposited.div(data.totalDeposited).mul(100))} %
