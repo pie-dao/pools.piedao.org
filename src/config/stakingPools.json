@@ -6,6 +6,7 @@
         "stakingToken": "0xaf491d603db3c1138a5ee5db35eb0c7b6c4541a2",
         "stakingTokenSymbol": "SLP",
         "stakingTokenName": "PLAY/DOUGH Sushi LP",
+        "lpLink": "https://app.sushi.com/add/0x33e18a092a93ff21aD04746c7Da12e35D34DC7C4/0xad32A8e6220741182940c5aBF610bDE99E737b2D",
         "type": "sushi",
         "rewardsPaused": false
     },
@@ -16,7 +17,52 @@
         "stakingToken": "0x97f34c8e5992eb985c5f740e7ee8c7e48a1de76a",
         "stakingTokenSymbol": "SLP",
         "stakingTokenName": "DOUGH/ETH Sushi LP",
+        "lpLink": "https://app.sushi.com/add/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2/0xad32A8e6220741182940c5aBF610bDE99E737b2D",
         "type": "sushi",
+        "rewardsPaused": false
+    },
+    {
+        "id": "2",
+        "slug": "dough-eth-balancer",
+        "name": "DOUGH/ETH",
+        "stakingToken": "0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A",
+        "stakingTokenSymbol": "BPT",
+        "stakingTokenName": "DOUGH/ETH Balancer LP",
+        "lpLink": "https://pools.balancer.exchange/#/pool/0xFAE2809935233d4BfE8a56c2355c4A2e7d1fFf1A/",
+        "type": "balancer",
+        "rewardsPaused": false
+    },
+    {
+        "id": "3",
+        "slug": "defis-eth-balancer",
+        "name": "DEFI+S/ETH",
+        "stakingToken": "0x35333CF3Db8e334384EC6D2ea446DA6e445701dF",
+        "stakingTokenSymbol": "BPT",
+        "stakingTokenName": "DEFI+S/ETH Balancer LP",
+        "lpLink": "https://pools.balancer.exchange/#/pool/0x35333CF3Db8e334384EC6D2ea446DA6e445701dF/",
+        "type": "balancer",
+        "rewardsPaused": false
+    },
+    {
+        "id": "4",
+        "slug": "defil-eth-balancer",
+        "name": "DEFI+L/ETH",
+        "stakingToken": "0xa795600590a7da0057469049ab8f1284baed977e",
+        "stakingTokenSymbol": "BPT",
+        "stakingTokenName": "DEFI+L/ETH Balancer LP",
+        "lpLink": "https://pools.balancer.exchange/#/pool/0xa795600590a7da0057469049ab8f1284baed977e/",
+        "type": "balancer",
+        "rewardsPaused": false
+    },
+    {
+        "id": "5",
+        "slug": "bcp",
+        "name": "BCP",
+        "stakingToken": "0xE4f726Adc8e89C6a6017F01eadA77865dB22dA14",
+        "stakingTokenSymbol": "BCP",
+        "stakingTokenName": "BCP Pie",
+        "lpLink": "https://www.piedao.org/#/pie/0xe4f726adc8e89c6a6017f01eada77865db22da14",
+        "type": "piedao",
         "rewardsPaused": false
     }
 ]
