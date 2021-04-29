@@ -145,7 +145,96 @@
                     </a>
                   {/each}
                 {:else}
-                    Loading pools...
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <a class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
+                  <div class="mr-4 flex items-center">
+                    <img
+                      class="z-10"
+                      width="40px"
+                      height="40px"
+                      src='https://raw.githubusercontent.com/pie-dao/brand/329c5f1b348cd47a68eec12a71f06727398e789e/misc/generic-token.svg'
+                      alt="token name"
+                    />
+                    <img
+                      class="-ml-20px"
+                      width="40px"
+                      height="40px"
+                      src='https://raw.githubusercontent.com/pie-dao/brand/329c5f1b348cd47a68eec12a71f06727398e789e/misc/generic-token.svg'
+                      alt="token name"
+                    />
+                  </div>
+                  <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
+                    <div class="w-100pc flex items-center justify-between md:justify-start">
+                      <span class="md:text-lg leading-6">Loading pools</span>
+                      <!-- <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30% APY</span> -->
+                    </div>
+                    <span class="text-sm font-thin">... ... ...</span>
+                  </div>
+                  <div class="flex flex-col justify-around text-right ml-auto font-thin">
+                    <span class="text-sm md:text-lg leading-6 hidden md:block capitalize">⏳</span>
+                    <!-- <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span> -->
+                  </div>
+                </a>
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <a class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
+                  <div class="mr-4 flex items-center">
+                    <img
+                      class="z-10"
+                      width="40px"
+                      height="40px"
+                      src='https://raw.githubusercontent.com/pie-dao/brand/329c5f1b348cd47a68eec12a71f06727398e789e/misc/generic-token.svg'
+                      alt="token name"
+                    />
+                    <img
+                      class="-ml-20px"
+                      width="40px"
+                      height="40px"
+                      src='https://raw.githubusercontent.com/pie-dao/brand/329c5f1b348cd47a68eec12a71f06727398e789e/misc/generic-token.svg'
+                      alt="token name"
+                    />
+                  </div>
+                  <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
+                    <div class="w-100pc flex items-center justify-between md:justify-start">
+                      <span class="md:text-lg leading-6">Loading pools</span>
+                      <!-- <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30% APY</span> -->
+                    </div>
+                    <span class="text-sm font-thin">... ... ...</span>
+                  </div>
+                  <div class="flex flex-col justify-around text-right ml-auto font-thin">
+                    <span class="text-sm md:text-lg leading-6 hidden md:block capitalize">⏳</span>
+                    <!-- <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span> -->
+                  </div>
+                </a>
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <a class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
+                  <div class="mr-4 flex items-center">
+                    <img
+                      class="z-10"
+                      width="40px"
+                      height="40px"
+                      src='https://raw.githubusercontent.com/pie-dao/brand/329c5f1b348cd47a68eec12a71f06727398e789e/misc/generic-token.svg'
+                      alt="token name"
+                    />
+                    <img
+                      class="-ml-20px"
+                      width="40px"
+                      height="40px"
+                      src='https://raw.githubusercontent.com/pie-dao/brand/329c5f1b348cd47a68eec12a71f06727398e789e/misc/generic-token.svg'
+                      alt="token name"
+                    />
+                  </div>
+                  <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
+                    <div class="w-100pc flex items-center justify-between md:justify-start">
+                      <span class="md:text-lg leading-6">Loading pools</span>
+                      <!-- <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30% APY</span> -->
+                    </div>
+                    <span class="text-sm font-thin">... ... ...</span>
+                  </div>
+                  <div class="flex flex-col justify-around text-right ml-auto font-thin">
+                    <span class="text-sm md:text-lg leading-6 hidden md:block capitalize">⏳</span>
+                    <!-- <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span> -->
+                  </div>
+                </a>
                 {/if}
     
               </div>
