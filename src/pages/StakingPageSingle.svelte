@@ -4,28 +4,17 @@
     import stakingPools from '../config/stakingPools.json';
     import smartcontracts from '../config/smartcontracts.json';
     import stakingPoolsABI from '../abis/stakingPoolsABI.json';
+    import { getTokenImage, toFixed } from './../components/helpers.js';
     import ERC20ABI from '../abis/erc20ABI.json';
     import images from "../config/images.json";
     import { _ } from "svelte-i18n";
     import { BigNumber, ethers } from "ethers";
     import displayNotification from "../notifications.js";
     import {
-      allowances,
-      functionKey,
-      approveMax,
-      balanceKey,
-      balances,
       connectWeb3,
-      contract,
       eth,
-      pools,
-      bumpLifecycle,
       subject,
     } from "../stores/eth.js";
-
-    import {
-      amountFormatter
-    } from "../components/helpers.js";
 
     import { get } from "svelte/store";
     import { formatEther, parseEther } from '@ethersproject/units';
@@ -35,7 +24,7 @@
     const slug = params[1];
     
 
-    let stakingPool = '';
+    let stakingPool = { containing: []};
     let poolId = '';
     let stakeAmount = 0;
     let unstakeAmount = 0;
@@ -62,16 +51,29 @@
       // put address in config
       const { provider, signer } = get(eth);
       stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI, signer || provider);
-      data = (await stakingContract.getPools('0x520C1e99eBa69e2E10AF2DE1BcE326D04EFD21B0'))[poolId] || data;
+      // TODO
+      let res = (await stakingContract.getPools('0x520C1e99eBa69e2E10AF2DE1BcE326D04EFD21B0'))[poolId] || data;
 
-      token = new ethers.Contract(data.token, ERC20ABI, signer || provider);
+      const percentage = Number(formatEther(data.escrowPercentage)) * 100;;
+      if( percentage !== undefined) {
+        data.escrowPercentageLabel = `${percentage}%`;
+        data.liquidPercentageLabel = `${100 - percentage}%`;
+      } else {
+        data.escrowPercentageLabel = `n/a`;
+        data.liquidPercentageLabel = `n/a`;
+      }
+
+      data = {
+        ...data,
+        ...res
+      };
+
+      token = new ethers.Contract(res.token, ERC20ABI, signer || provider);
     };
 
     const formatAmount = (amount) => {
       return Number(formatEther(amount)).toFixed();
     };
-
-    
 
     onMount(() => {
       stakingPool = stakingPools.find((item) => {
@@ -295,126 +297,193 @@ metadata={{
 }}
 />
 
-<div class="content flex flex-col">
 
-    <div class="content flex ">
-      <a href="#/staking" class="md:w-1 float-left btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Go back</a>
+<div class="w-100pc m-0 p-0 flex justify-center">
+  <div class="w-100pc lg:max-w-900px flex flex-col items-center justify-center py-0 md:py-8 px-2"> 
+    <div class="w-100pc">
+      <a href="#/farms" class="flex items-center hover:opacity-60 mb-4">
+        <img class="z-10 w-20px mr-2" src={images.backarrow} alt="token name" />
+        <span>Back to Farms</span>
+      </a>
     </div>
 
-    <div class="flex flex-col w-full justify-around md:flex-row">
-        <!-- UNSTAKE BOX -->
-        <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm p-4">
-              <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.withdraw} alt="PieDAO logo" />
-              <div class="title text-lg">UNSTAKE</div>
-              <div class="apy">
-                {formatAmount(data.userDeposited)} {stakingPool.stakingTokenSymbol}
+    <div class="flex justify-center items-start md:items-center">
+      <div class="flex flex-col justify-start p-1px cardbordergradient w-100pc min-h-100pc   lg:min-w-30pc lg:min-h-50pc">
+
+        <span class="py-0 px-4 mt-6 md:px-12 font-thin">
+          <span class="flex mt-0 md:mt-4 w-100pc">
+            <div class="mr-4 flex items-center">
+              {#each stakingPool.containing as asset, i}
+                <img
+                  class={i === 0 ? "z-10 w-40px md:w-60px" : "-ml-15px md:-ml-20px w-40px md:w-60px"}
+                  src={getTokenImage(asset.address)}
+                  alt="token name"
+                />
+              {/each}
+            </div>
+            <div class="flex flex-col justify-around">
+              <div class="flex items-center">
+                <span class="text-base md:text-lg md:leading-6 font-bold">{stakingPool.name}</span>
+                <!-- <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">55.30% APY</span> -->
               </div>
-              <div class="subtitle font-thin">STAKED BALANCE</div>
-              
-              <div class="apy text-sm">{stakingPool.stakingTokenName} </div>
-              <div class="w-100pc input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
-                  <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
-                      <div class="left float-left">{$_('general.amount')} to unstake</div>
-                  </div>
-                  <div class="bottom px-4 py-4 md:py-2">
-                      <input bind:value={unstakeAmount}  type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
-                      <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
-                          <button on:click={() => {unstakeAmount = formatEther(data.userDeposited)}} class="text-black py-2px px-4px">MAX</button>
-                      </div>
-                  </div>            
+              <span class="block md:hidden text-sm leading-6 font-bold">Pool: Balancer</span>
+              <span class="text-sm font-thin">{data.liquidPercentageLabel} Liquid - {data.escrowPercentageLabel} Escrowed</span>
+              <span class="block md:hidden text-sm text-grey">Tot 166.345 BPT Staked</span>
+            </div>
+            <div class="hidden md:flex flex-col justify-around text-right ml-auto font-thin">
+              <span class="text-lg leading-6">Balancer</span>
+              <span class="text-sm px-1 text-grey">Tot 166.345 BPT Staked</span>
+            </div>
+          </span>
+      
+          <span class="w-100pc">
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
+              <div class="flex items-center justify-between">
+                <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
+                <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
+                  <button on:click={() => { stakeAmount = formatEther(data.userTokenBalance)}} class="oven-withdraw-button">100%</button>
+                </div>
               </div>
-              {#if unstakeAmount == 0 }
-                  <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
+              <div class="flex nowrap items-center p-1">
+                <input
+                  bind:value={stakeAmount}
+                  class="swap-input-from"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  autocorrect="off"
+                  type="number"
+                  pattern="^[0-9]*[.]?[0-9]*$"
+                  placeholder="0.0"
+                  minlength="1"
+                  maxlength="79"
+                  spellcheck="false"
+                />
+                <div class="h-32px flex items-center">
+                  <img
+                    class="token-icon w-30px h-30px"
+                    src={images.bpt}
+                    alt="ETH"
+                  />
+                  <span class="py-2px px-4px">BPT</span>
+                </div>
+              </div>
+            </div>
+
+            {#if stakeAmount == 0 }
+              <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Enter an amount</button>
+            {:else}
+              {#if parseEther(stakeAmount).gt(data.userTokenApproval)}
+              <button on:click={approve} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Approve</button>
               {:else}
-                <button on:click={unstake} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Unstake</button>
+                <button on:click={stake} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Stake</button>
               {/if}
-              
-        </div>
-
-        <!-- STAKE BOX -->
-        <div class="farming-card highlight-box flex flex-col justify-center align-center items-center mx-1 my-4  border border-grey border-opacity-50 border-solid rounded-sm p-4">
-              <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.stake} alt="PieDAO logo" />
-              <div class="title text-lg"> STAKE</div>
-              <div class="apy">
-                {formatAmount(data.userTokenBalance)} {stakingPool.stakingTokenSymbol}
-              </div>
-              <div class="subtitle font-thin">BALANCE</div>
-              <div class="apy text-sm">{stakingPool.stakingTokenName} </div>
-              <div class="w-100pc input bg-white border border-solid rounded-8px border-grey-204 mx-0 md:mx-4">
-                  <div class="top h-24px text-sm font-thin px-4 py-4 md:py-2">
-                      <div class="text-black left black float-left">{$_('general.amount')} to stake</div>
+            {/if}
+          </span>
+      
+          <span class="flex flex-col md:flex-row mt-4 justify-between">
+            <span class="w-100pc md:mr-1 md:w-1/2">
+              <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white">
+                <div class="flex items-center justify-between">
+                  <div class="flex nowrap intems-center p-1 font-thin">Rewards available to claim</div>
+                </div>
+                <div class="flex items-center p-1">
+                  <div class='font-bold'>
+                    {Number(formatEther(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1")))).toFixed(4)} 
+                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">Escrow</span>
                   </div>
-                  <div class="bottom px-4 py-4 md:py-2">
-                      <input bind:value={stakeAmount} type="text" class="text-black font-thin text-base w-60pc md:w-75pc md:text-lg">
-                      <div class="text-black asset-btn float-right h-32px bg-grey-243 rounded-32px px-2px flex align-middle justify-center items-center pointer mt-0">
-                          <button on:click={() => { stakeAmount = formatEther(data.userTokenBalance)
-                            }} class="text-black py-2px px-4px">MAX</button>
-                      </div>
-                  </div>           
+                  <div class='font-bold'>
+                    {Number(formatEther(data.userUnclaimed.sub(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1"))))).toFixed(4)} 
+                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">Liquid</span>
+                  </div>
+                
+                  <div class="h-32px flex items-center">
+                    <img
+                      class="token-icon w-30px h-30px"
+                      src={images.doughtoken}
+                      alt="DOUGH"
+                    />
+                    <span class="py-2px px-4px">DOUGH</span>
+                  </div>
+                </div>
               </div>
-                {#if stakeAmount == 0 }
-                  <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Enter an amount</button>
-                {:else}
-                  {#if parseEther(stakeAmount).gt(data.userTokenApproval)}
-                  <button on:click={approve} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Approve</button>
-                  {:else}
-                    <button on:click={stake} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">Stake</button>
-                  {/if}
-                {/if}
-              
-        </div>
 
-        <!-- CLAIM BOX -->
-        <div class="farming-card flex flex-col justify-center align-center items-center mx-1 my-4  border border-gray border-opacity-50 border-solid rounded-sm p-4">
-              <img class="h-40px w-40px mb-2 md:h-70px md:w-70px"src={images.claim} alt="PieDAO logo" />
-              <div class="title text-lg">REWARDS AVAILABLE</div>
-              <div class="subtitle font-thin">TO CLAIM</div>
-              <div class="apy">
-               {formatEther(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1")))} Escrowed / {formatEther(data.userUnclaimed.sub(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1"))))} Liquid
-              </div>
-              
               {#if data.userUnclaimed.eq(0)}
-                <button disabled class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4 border-white">No rewards available</button>
+                <button disabled class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">No rewards available</button>
               {:else}
-                <button on:click={claim} class="btn clear font-bold ml-1 mr-0 rounded md:mr-4 py-2 px-4">Claim</button>
+                <button on:click={claim} class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Claim</button>
               {/if}
-        </div>
-    </div>
+            </span>
+      
+            <span class="w-100pc mt-8 md:mt-0 md:mr-1 md:w-1/2">
+              <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white">
+                <div class="flex items-center justify-between">
+                  <div class="flex nowrap intems-center p-1 font-thin">Amount to Unstake</div>
+                  <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
+                    <button on:click={() => {unstakeAmount = formatEther(data.userDeposited)}} class="oven-withdraw-button">100%</button>
+                  </div>
+                </div>
+                <div class="flex nowrap items-center p-1">
+                  <input
+                    bind:value={unstakeAmount}
+                    class="swap-input-from"
+                    inputmode="decimal"
+                    autocomplete="off"
+                    autocorrect="off"
+                    type="number"
+                    pattern="^[0-9]*[.]?[0-9]*$"
+                    placeholder="0.0"
+                    minlength="1"
+                    maxlength="79"
+                    spellcheck="false"
+                  />
+                  <div class="h-32px flex items-center">
+                    <img
+                      class="token-icon w-30px h-30px"
+                      src={images.bpt}
+                      alt="ETH"
+                    />
+                    <span class="py-2px px-4px">BPT</span>
+                  </div>
+                </div>
+              </div>
 
-    <div class="content flex">
-      <div class="info-box">
-        {#if data.exitFeePercentage.gt(0)}
-          <p>
-            ⚠️ This staking pool has a {formatEther(data.exitFeePercentage.mul(100))}% exit fee for 30 days, charged on your principal on exit ⚠️
-          </p>
-        {/if}
-        {#if stakingPool.type == "sushi"}
-          <p>
-            Get Sushi LP token <a target="_blank" href="{stakingPool.lpLink}">here</a>
-          </p>
-        {/if}
-
-        <p>
-          Total pool rewards per week: {formatEther(data.rewardRate.mul(45371))} DOUGH
-        </p>
-        <p>
-          Total staked: {formatEther(data.totalDeposited)} {stakingPool.stakingTokenSymbol}
-        </p>
-        <p>
-          Staked by you: {formatEther(data.userDeposited)} {stakingPool.stakingTokenSymbol}
-        </p>
-        <p>
-          Your share: {data.userDeposited.eq(0) ? "0" : formatEther(data.userDeposited.div(data.totalDeposited).mul(100))} %
-        </p>
-        <p>
-          Your total rewards per week: {data.userDeposited.eq(0) ? "0" : formatEther(data.rewardRate.mul(45371).mul(data.userDeposited).div(data.totalDeposited))} DOUGH
-        </p>
-        <p>
-          Your escrowed rewards per week: {data.userDeposited.eq(0) ? "0" : formatEther(data.rewardRate.mul(45371).mul(data.userDeposited).div(data.totalDeposited).mul(data.escrowPercentage).div(parseEther("1")))} DOUGH
-        </p>
-        <p>
-          Your liquid rewards per week: {data.userDeposited.eq(0) ? "0" : formatEther(data.rewardRate.mul(45371).mul(data.userDeposited).div(data.totalDeposited).mul(parseEther("1").sub(data.escrowPercentage)).div(parseEther("1")))} DOUGH
-        </p>
+              {#if unstakeAmount == 0 }
+                  <button disabled class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Enter an amount</button>
+              {:else}
+                <button on:click={unstake} class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Unstake</button>
+              {/if}
+              
+            </span>
+      
+          </span>
+      
+          <div class="info-box mt-4 mb-8">
+            <h1 class="text-xl text-left font-bold">Info</h1>
+            <p>
+              <strong>YPIE/ETH</strong> Staking Rewards - the pool will keep receiving <strong>{Number(formatEther(data.rewardRate.mul(45371))).toFixed(4)}</strong> DOUGH as nominal
+              weekly reward distributed to LPs, of which <strong>{data.liquidPercentageLabel}</strong> distributed liquid along the week <strong>{data.escrowPercentageLabel}</strong> escrowed
+              within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
+            </p>
+            <br />
+            <p>There are total : <strong>{Number(formatEther(data.totalDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol} </strong> staked in the Staking contract.</p>
+            <p>Staked by you: <strong>{Number(formatEther(data.userDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol}</p>
+            <p>
+              You are staking : <strong>{data.userDeposited.eq(0) ? "0" : formatEther(data.userDeposited.div(data.totalDeposited).mul(100))}%</strong>
+            </p>
+            {#if data.exitFeePercentage.gt(0)}
+                <p>
+                  ⚠️ This staking pool has a <strong>{formatEther(data.exitFeePercentage.mul(100))}%</strong> exit fee charged on your principal on exit
+                </p>
+            {/if}
+            <br />
+            <p>
+              You can add liquidity and get {stakingPool.stakingTokenSymbol} tokens
+              <a target="_blank" href="{stakingPool.lpLink}">here</a>
+            </p>
+            <p>Weekly rewards for this pool are <strong>{Number(formatEther(data.rewardRate.mul(45371))).toFixed(4)}</strong></p>
+          </div>
+        </span>
       </div>
+    </div>
     </div>
 </div>

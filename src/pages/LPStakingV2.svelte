@@ -30,7 +30,6 @@
       return p;
   });
 
-  console.log('stakingPools', stakingPools)
   const fetchRewardEscrowData = async () => {
       const address = $eth.address
 
@@ -151,7 +150,9 @@
     
               </div>
             </div>
-            <div class="text-center font-thin w-100pc mt-2 hover:opacity-60"><a href="#/stake">Go to old farms</a></div>
+            <div class="text-center font-thin w-100pc mt-2 hover:opacity-60">
+              Cannot find your pool? <a href="#/stake">Go to old farms!</a>
+            </div>
           </span>
         </div>
         <!-- YOUR FARMING POSITIONS -->
