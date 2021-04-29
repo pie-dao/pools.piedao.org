@@ -1,5 +1,11 @@
 <script>
   import images from "../../config/images.json";
+  import { getTokenImage } from '../helpers.js';
+
+  export let doughInEscrow;
+  export let escrowEntries;
+  export let pools;
+  
 </script>
 
 <span class="-mt-20px">
@@ -16,7 +22,7 @@
         </div>
         <div class="flex flex-col justify-around">
             <span class="text-xs font-thin opacity-80">DOUGH in Escrow</span>
-            <span class="font-bold leading-6">0</span>
+            <span class="font-bold leading-6">{doughInEscrow || 0}</span>
         </div>
       </div>
 
@@ -26,51 +32,41 @@
         </div>
         <div class="flex flex-col justify-around">
             <span class="text-xs font-thin opacity-80">Vesting Entries</span>
-            <span class="font-bold leading-6">2.353,00</span>
+            <span class="font-bold leading-6">{escrowEntries || 0 }</span>
         </div>
       </div>
 
     </div>
     
-    <a href="#/farm">
-      <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-6 mt-2 md:mt-4">
-        <div class="flex items-center mr-4">
-          <img class="z-10" width="40px" height="40px" src={images.doughtoken} alt="token name" />
-          <img class="-ml-20px" width="40px" height="40px" src={images.bcp} alt="token name" />
-        </div>
-        <div class="flex flex-col justify-around">
-          <span class="md:text-lg font-bold leading-6">DOUGH / ETH</span>
-          <span class="text-xs font-thin opacity-80">Staked</span>
-          <span class="text-xs font-thin opacity-80">Rewards</span>
-        </div>
-        <div class="flex flex-col justify-around text-right ml-auto font-thin">
-          <span><span class="bg-darkpurple font-bold text-white px-5px py-1px roundedxs text-xs">55.30% APY</span></span>
-          <span class="text-xs font-thin opacity-80">831.20 BPT</span>
-          <span class="text-xs font-thin opacity-80">27,80 DOUGH</span>
-        </div>
-      </div>
-    </a>
-
-    <a href="#/farm">
-      <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-6 mt-2 md:mt-4">
-        <div class="flex items-center mr-4">
-          <img class="z-10" width="40px" height="40px" src={images.defiplusl} alt="token name" />
-          <img class="-ml-20px" width="40px" height="40px" src={images.usdplus} alt="token name" />
-        </div>
-        <div class="flex flex-col justify-around">
-          <span class="md:text-lg font-bold leading-6">DEFI+L / ETH</span>
-          <span class="text-xs font-thin opacity-80">Staked</span>
-          <span class="text-xs font-thin opacity-80">Rewards</span>
-        </div>
-        <div class="flex flex-col justify-around text-right ml-auto font-thin">
-          <span><span class="bg-darkpurple font-bold text-white px-5px py-1px roundedxs text-xs">55.30% APY</span></span>
-          <span class="text-xs font-thin opacity-80">831.20 BPT</span>
-          <span class="text-xs font-thin opacity-80">27,80 DOUGH</span>
-        </div>
-      </div>
-    </a>
-
-
+    {#if pools.length > 0 }
+      {#each pools as stakingPool}
+        <a href={`#/staking/${stakingPool.slug}`}>
+          <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-6 mt-2 md:mt-4">
+            <div class="flex items-center mr-4">
+              {#each stakingPool.containing as asset, i}
+                <img
+                  class={i === 0 ? "z-10" : "-ml-20px"}
+                  width="40px"
+                  height="40px"
+                  src={getTokenImage(asset.address)}
+                  alt="token name"
+                />
+              {/each}
+            </div>
+            <div class="flex flex-col justify-around">
+              <span class="md:text-lg font-bold leading-6">{stakingPool.name}</span>
+              <span class="text-xs font-thin opacity-80">Staked</span>
+              <span class="text-xs font-thin opacity-80">Rewards</span>
+            </div>
+            <div class="flex flex-col justify-around text-right ml-auto font-thin">
+              <!-- <span><span class="bg-darkpurple font-bold text-white px-5px py-1px roundedxs text-xs">55.30% APY</span></span> -->
+              <span class="text-xs font-thin opacity-80">{stakingPool.userDeposited} {stakingPool.stakingTokenSymbol}</span>
+              <span class="text-xs font-thin opacity-80">{stakingPool.userUnclaimed} DOUGH</span>
+            </div>
+          </div>
+        </a>
+      {/each}
+    {/if}
     
   </div>
 </span>

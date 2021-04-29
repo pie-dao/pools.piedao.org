@@ -62,7 +62,7 @@
       // put address in config
       const { provider, signer } = get(eth);
       stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI, signer || provider);
-      data = (await stakingContract.getPools($eth.address))[poolId] || data;
+      data = (await stakingContract.getPools('0x520C1e99eBa69e2E10AF2DE1BcE326D04EFD21B0'))[poolId] || data;
 
       token = new ethers.Contract(data.token, ERC20ABI, signer || provider);
     };

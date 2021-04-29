@@ -1,9 +1,104 @@
 <script>
-  import images from '../config/images.json';
+  import { onMount } from 'svelte';
+  import { get } from "svelte/store";
+  import { BigNumber, ethers } from "ethers";
+  import { formatEther, parseEther } from '@ethersproject/units';
+
+	import { getTokenImage } from './../components/helpers.js';
+
+  import stakingPools from '../config/stakingPools.json';
+  import smartcontracts from '../config/smartcontracts.json';
+  import rewardEscrowABI from '../config/rewardEscrowABI.json';
+  import stakingPoolsABI from '../abis/stakingPoolsABI.json';
+  import { eth } from "../stores/eth.js";
   import Farming from '../components/piefolio/Farming.svelte';
   import Accordion from '../components/elements/Accordion.svelte';
   import AccordionGroup from '../components/elements/AccordionGroup.svelte';
   import Meta from '../components/elements/meta.svelte';
+
+
+  let doughInEscrow = "n/a";
+  let escrowEntries = "n/a";
+  let userPools = [];
+
+  $: initialised = false;
+
+  stakingPools.map( p => {
+      p.escrowPercentage = 'n/a';
+      p.liquidPercentage = 'n/a';
+      p.withdrawFee = 'n/a';
+      return p;
+  });
+
+  console.log('stakingPools', stakingPools)
+  const fetchRewardEscrowData = async () => {
+      const address = $eth.address
+
+      if(!address) {
+          return;
+      }
+
+      const { provider, signer } = get(eth);
+      const rewardEscrow = new ethers.Contract(smartcontracts.eDOUGH, rewardEscrowABI,  signer || provider);
+
+      doughInEscrow = Number(formatEther(await rewardEscrow.totalEscrowedAccountBalance(address))).toFixed(4);
+      escrowEntries = (await rewardEscrow.numVestingEntries(address)).toString();
+  }
+
+  const getEscrowPercentages = async (poolId) => {
+      const { provider, signer } = get(eth);
+      const stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI,  signer || provider);
+      return Number(formatEther(await stakingContract.getPoolEscrowPercentage(poolId))) * 100;
+  }
+
+  const getPoolsUser = async () => {
+      const { provider, signer } = get(eth);
+      const stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI,  signer || provider);
+      let pools = await stakingContract.getPools($eth.address);
+      const res = [];
+      
+      let poolId = 0;
+      for (const p of pools) {
+        if(p.userDeposited.gt(0)) {
+          res.push({
+            id: poolId,
+            userDeposited: Number(formatEther(p.userDeposited)).toFixed(4),
+            totalDeposited: Number(formatEther(p.totalDeposited)).toFixed(4),
+            userUnclaimed: Number(formatEther(p.userUnclaimed)).toFixed(4),
+            ...stakingPools[poolId]
+          })
+        }
+        poolId++;
+      }
+
+      userPools = res;
+  }
+
+  const fetchEscrowPercentages = async () => {
+    for (const p of stakingPools) {
+      const percentage = await getEscrowPercentages(p.id);
+      if( percentage !== undefined) {
+        p.escrowPercentage = `${percentage}%`;
+        p.liquidPercentage = `${100 - percentage}%`;
+      }
+    }
+  }
+
+  fetchRewardEscrowData();
+
+  onMount( async () => {
+    await fetchEscrowPercentages();
+    initialised = true;
+  })
+
+  // update data on address or block change
+  $: if($eth.address || $eth.currentBlockNumber) {
+    $eth.address || !$eth.signer
+    fetchRewardEscrowData();
+    getPoolsUser()
+  };
+
+  
 </script>
 
 <Meta 
@@ -21,178 +116,39 @@
             <div class="w-100pc flex flex-col cardbordergradient">
               <div class="w-100pc bg-lightgrey rounded-xl text-black pt-8 pb-2 md:pt-8 pb-6 px-2 md:px-6 flex flex-col items-center">
                 <div class="w-100pc font-huge text-center md:text-left">Farm Pools</div>
+                {#if initialised === true }
                 <!-- svelte-ignore a11y-missing-attribute -->
-                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
-                  <div class="mr-4 flex items-center">
-                    <img
-                      class="z-10"
-                      width="40px"
-                      height="40px"
-                      src={images.doughtoken}
-                      alt="token name"
-                    />
-                    <img
-                      class="-ml-20px"
-                      width="40px"
-                      height="40px"
-                      src={images.logos.eth}
-                      alt="token name"
-                    />
-                  </div>
-                  <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
-                    <span class="w-100pc flex items-center justify-between md:justify-start"><span class="md:text-lg leading-6">DOUGH / ETH</span>
-                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30% APY</span></span>
-                    <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
-                  </div>
-                  <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                    <span class="text-sm md:text-lg leading-6 hidden md:block">Balancer</span>
-                    <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span>
-                  </div>
-                </a>
-    
-                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
-                  <div class="mr-4 flex items-center">
-                    <img class="z-10" width="40px" height="40px" src={images.bcp} alt="token name" />
-                    <img
-                      class="-ml-20px invisible"
-                      width="40px"
-                      height="40px"
-                      src={images.bcp}
-                      alt="token name"
-                    />
-                  </div>
-                  <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
-                    <span class="w-100pc flex items-center justify-between md:justify-start">
-                      <span class="md:text-lg leading-6">BCP</span>
-                      <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30% APY</span>
-                    </span>
-                    <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
-                  </div>
-                  <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                    <span class="text-sm md:text-lg leading-6 hidden md:block">PieDAO</span>
-                    <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span>
-                  </div>
-                </a>
-    
-                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
-                  <div class="mr-4 flex items-center">
-                    <img
-                      class="z-10"
-                      width="40px"
-                      height="40px"
-                      src={images.play}
-                      alt="token name"
-                    />
-                    <img
-                      class="-ml-20px"
-                      width="40px"
-                      height="40px"
-                      src={images.doughtoken}
-                      alt="token name"
-                    />
-                  </div>
-                  <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
-                    <span class="w-100pc flex items-center justify-between md:justify-start">
-                      <span class="md:text-lg leading-6">PLAY / DOUGH</span>
-                      <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30% APY</span>
-                    </span>
-                    <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
-                  </div>
-                  <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                    <span class="text-sm md:text-lg leading-6 hidden md:block">Sushi</span>
-                    <span class="text-sm px-1 text-grey hidden md:block">Tot 1088893.345 SLP Staked</span>
-                  </div>
-                </a>
+                  {#each stakingPools as stakingPool}
+                    <a href={`#/staking/${stakingPool.slug}`} class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
+                      <div class="mr-4 flex items-center">
 
-                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
-                  <div class="mr-4 flex items-center">
-                    <img
-                      class="z-10"
-                      width="40px"
-                      height="40px"
-                      src={images.doughtoken}
-                      alt="token name"
-                    />
-                    <img
-                      class="-ml-20px"
-                      width="40px"
-                      height="40px"
-                      src={images.logos.eth}
-                      alt="token name"
-                    />
-                  </div>
-                  <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
-                    <span class="w-100pc flex items-center justify-between md:justify-start">
-                      <span class="md:text-lg leading-6">DOUGH / ETH</span>
-                      <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30% APY</span>
-                    </span>
-                    <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
-                  </div>
-                  <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                    <span class="text-sm md:text-lg leading-6 hidden md:block">Sushi</span>
-                    <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 SLP Staked</span>
-                  </div>
-                </a>
-
-                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
-                  <div class="mr-4 flex items-center">
-                    <img
-                      class="z-10"
-                      width="40px"
-                      height="40px"
-                      src={images.defipluss}
-                      alt="token name"
-                    />
-                    <img
-                      class="-ml-20px"
-                      width="40px"
-                      height="40px"
-                      src={images.logos.eth}
-                      alt="token name"
-                    />
-                  </div>
-                  <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
-                    <span class="w-100pc flex items-center justify-between md:justify-start">
-                      <span class="md:text-lg leading-6">DEFI+S / ETH</span>
-                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30% APY</span>
-                    </span>
-                    <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
-                  </div>
-                  <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                    <span class="text-sm md:text-lg leading-6 hidden md:block">Balancer</span>
-                    <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span>
-                  </div>
-                </a>
+                        {#each stakingPool.containing as asset, i}
+                          <img
+                            class={i === 0 ? "z-10" : "-ml-20px"}
+                            width="40px"
+                            height="40px"
+                            src={getTokenImage(asset.address)}
+                            alt="token name"
+                          />
+                        {/each}
+                      </div>
+                      <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
+                        <div class="w-100pc flex items-center justify-between md:justify-start">
+                          <span class="md:text-lg leading-6">{stakingPool.name}</span>
+                          <!-- <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2">55.30% APY</span> -->
+                        </div>
+                        <span class="text-sm font-thin">{stakingPool.liquidPercentage} Liquid - {stakingPool.escrowPercentage} Escrowed</span>
+                      </div>
+                      <div class="flex flex-col justify-around text-right ml-auto font-thin">
+                        <span class="text-sm md:text-lg leading-6 hidden md:block capitalize">{stakingPool.type}</span>
+                        <!-- <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span> -->
+                      </div>
+                    </a>
+                  {/each}
+                {:else}
+                    Loading pools...
+                {/if}
     
-                <a href="#/farm" class="flex mt-4 w-100pc rounded md:rounded-xl bg-white p-2 md:p-4 pointer">
-                  <div class="mr-4 flex items-center">
-                    <img
-                      class="z-10"
-                      width="40px"
-                      height="40px"
-                      src={images.defiplusl}
-                      alt="token name"
-                    />
-                    <img
-                      class="-ml-20px"
-                      width="40px"
-                      height="40px"
-                      src={images.logos.eth}
-                      alt="token name"
-                    />
-                  </div>
-                  <div class="flex flex-col justify-around flex-grow md:flex-grow-0">
-                    <span class="w-100pc flex items-center justify-between md:justify-start">
-                      <span class="md:text-lg leading-6">DEFI+L ETH</span>
-                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2" >55.30% APY</span>
-                    </span>
-                    <span class="text-sm font-thin">40% Liquid - 60% Escrowed</span>
-                  </div>
-                  <div class="flex flex-col justify-around text-right ml-auto font-thin">
-                    <span class="text-sm md:text-lg leading-6 hidden md:block">Balancer</span>
-                    <span class="text-sm px-1 text-grey hidden md:block">Tot 166.345 BPT Staked</span>
-                  </div>
-                </a>
               </div>
             </div>
             <div class="text-center font-thin w-100pc mt-2 hover:opacity-60"><a href="#/stake">Go to old farms</a></div>
@@ -200,7 +156,15 @@
         </div>
         <!-- YOUR FARMING POSITIONS -->
         <div class="flex flex-col w-100pc lg:w-38pc">
-          <span class="-mt-4 mb-2 md:mb-1"><Farming /></span>
+          <span class="-mt-4 mb-2 md:mb-1">
+            {#if $eth.address}
+            <Farming
+              doughInEscrow={doughInEscrow}
+              escrowEntries={escrowEntries}
+              pools={userPools}
+            />
+            {/if}
+          </span>
         </div>
       </div>
     </div>
