@@ -361,10 +361,10 @@ metadata={{
                 <div class="h-32px flex items-center">
                   <img
                     class="token-icon w-30px h-30px"
-                    src={images.bpt}
+                    src={stakingPool.stakingTokenSymbol === 'BPT' ? images.bpt : images.slp}
                     alt="ETH"
                   />
-                  <span class="py-2px px-4px">BPT</span>
+                  <span class="py-2px px-4px">{stakingPool.stakingTokenSymbol}</span>
                 </div>
               </div>
             </div>
@@ -442,10 +442,10 @@ metadata={{
                   <div class="h-32px flex items-center">
                     <img
                       class="token-icon w-30px h-30px"
-                      src={images.bpt}
+                      src={stakingPool.stakingTokenSymbol === 'BPT' ? images.bpt : images.slp}
                       alt="ETH"
                     />
-                    <span class="py-2px px-4px">BPT</span>
+                    <span class="py-2px px-4px">{stakingPool.stakingTokenSymbol}</span>
                   </div>
                 </div>
               </div>

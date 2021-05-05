@@ -277,7 +277,7 @@
     </div>
     
     <!-- FAQ -->
-    <div class="content">
+    <!-- <div class="content">
       <div class="flex flex-col items-start mx-0 md:mx-4 w-100pc md:max-w-1280px">
         <div class="w-100pc font-huge text-center mb-4">Got questions?</div>
     
@@ -341,5 +341,6 @@
             </div>
           </Accordion>
         </AccordionGroup>
-      </div>
+      </div> 
     </div>
+  -->
