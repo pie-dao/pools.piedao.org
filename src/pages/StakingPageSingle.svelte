@@ -326,7 +326,9 @@ metadata={{
                 <!-- <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">55.30% APY</span> -->
               </div>
               <span class="block md:hidden text-sm leading-6 font-bold">Pool: Balancer</span>
-              <span class="text-sm font-thin">{data.liquidPercentageLabel} Liquid - {data.escrowPercentageLabel} Escrowed</span>
+              {#if $eth.address}
+                <span class="text-sm font-thin">{data.liquidPercentageLabel} Liquid - {data.escrowPercentageLabel} Escrowed</span>
+              {/if}
             </div>
             <div class="hidden md:flex flex-col justify-around text-right ml-auto font-thin">
               <span class="text-lg leading-6 capitalize">{stakingPool.type}</span>
@@ -383,32 +385,35 @@ metadata={{
               <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white">
                 <div class="flex items-center justify-between">
                   <div class="flex nowrap intems-center p-1 font-thin">Rewards available to claim</div>
-                </div>
-                <div class="flex items-center p-1">
-                  <div class='font-bold'>
-                    {Number(formatEther(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1")))).toFixed(4)} 
-                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">Escrow</span>
+                  <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
+                    <div class="h-32px flex items-center">
+                      <img
+                        class="token-icon w-30px h-30px"
+                        src={images.doughtoken}
+                        alt="DOUGH"
+                      />
+                      <span class="py-2px px-4px text-black">DOUGH</span>
+                    </div>
                   </div>
-                  <div class='font-bold'>
-                    {Number(formatEther(data.userUnclaimed.sub(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1"))))).toFixed(4)} 
-                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">Liquid</span>
+                </div>
+                <div class="flex items-center justify-between p-1 mt-2">
+                  <div class='font-bold flex items-center'>
+                    <span>{Number(formatEther(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1")))).toFixed(4)}</span>
+                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-1 font-bold">Escrow</span>
+                  </div>
+                  <div class='font-bold flex items-center'>
+                  <span>{Number(formatEther(data.userUnclaimed.sub(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1"))))).toFixed(4)}</span>
+                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-1 font-bold">Liquid</span>
                   </div>
                 
-                  <div class="h-32px flex items-center">
-                    <img
-                      class="token-icon w-30px h-30px"
-                      src={images.doughtoken}
-                      alt="DOUGH"
-                    />
-                    <span class="py-2px px-4px">DOUGH</span>
-                  </div>
+  
                 </div>
               </div>
 
               {#if data.userUnclaimed.eq(0)}
-                <button disabled class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">No rewards available</button>
+                <button disabled class="clear farm-button-ghost mt-13px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">No rewards available</button>
               {:else}
-                <button on:click={claim} class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Claim</button>
+                <button on:click={claim} class="clear farm-button-ghost mt-13px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Claim</button>
               {/if}
             </span>
       
@@ -457,28 +462,35 @@ metadata={{
       
           <div class="info-box mt-4 mb-8">
             <h1 class="text-xl text-left font-bold">Info</h1>
-            <p>
-              <strong>YPIE/ETH</strong> Staking Rewards - the pool will keep receiving <strong>{Number(formatEther(data.rewardRate.mul(45371))).toFixed(4)}</strong> DOUGH as nominal
-              weekly reward distributed to LPs, of which <strong>{data.liquidPercentageLabel}</strong> distributed liquid along the week <strong>{data.escrowPercentageLabel}</strong> escrowed
-              within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
-            </p>
-            <br />
-            <p>There are total : <strong>{Number(formatEther(data.totalDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol} </strong> staked in the Staking contract.</p>
-            <p>Staked by you: <strong>{Number(formatEther(data.userDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol}</p>
-            <p>
-              You are staking : <strong>{data.userDeposited.eq(0) ? "0" : formatEther(data.userDeposited.div(data.totalDeposited).mul(100))}%</strong>
-            </p>
-            {#if data.exitFeePercentage.gt(0)}
-                <p>
-                  ⚠️ This staking pool has a <strong>{formatEther(data.exitFeePercentage.mul(100))}%</strong> exit fee charged on your principal on exit
-                </p>
+            {#if $eth.address}
+              <p>
+                <strong>{stakingPool.name}</strong> Staking Rewards - the pool will keep receiving <strong>{Number(formatEther(data.rewardRate.mul(45371))).toFixed(4)}</strong> DOUGH as nominal
+                weekly reward distributed to LPs, of which <strong>{data.liquidPercentageLabel}</strong> distributed liquid along the week <strong>{data.escrowPercentageLabel}</strong> escrowed
+                within the staking contract, and subject to 52 weeks vesting from the moment they will be claimed.
+              </p>
+              <br />
+              <p>There are total : <strong>{Number(formatEther(data.totalDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol} </strong> staked in the Staking contract.</p>
+              <p>Staked by you: <strong>{Number(formatEther(data.userDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol}</p>
+              <p>
+                You are staking : <strong>{data.userDeposited.eq(0) ? "0" : formatEther(data.userDeposited.div(data.totalDeposited).mul(100))}%</strong>
+              </p>
+              {#if data.exitFeePercentage.gt(0)}
+                  <p>
+                    ⚠️ This staking pool has a <strong>{formatEther(data.exitFeePercentage.mul(100))}%</strong> exit fee charged on your principal on exit
+                  </p>
+              {/if}
+              <br />
+              <p>
+                You can add liquidity and get {stakingPool.stakingTokenSymbol} tokens
+                <a target="_blank" href="{stakingPool.lpLink}">here</a>
+              </p>
+              <p>Weekly rewards for this pool are <strong>{Number(formatEther(data.rewardRate.mul(45371))).toFixed(4)}</strong></p>
+            {:else}
+              <p>
+                <strong>Connect you wallet</strong> - You need to connect to MetaMask before seeing the info.
+              </p>
             {/if}
-            <br />
-            <p>
-              You can add liquidity and get {stakingPool.stakingTokenSymbol} tokens
-              <a target="_blank" href="{stakingPool.lpLink}">here</a>
-            </p>
-            <p>Weekly rewards for this pool are <strong>{Number(formatEther(data.rewardRate.mul(45371))).toFixed(4)}</strong></p>
+            
           </div>
         </span>
       </div>

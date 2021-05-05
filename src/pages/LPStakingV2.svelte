@@ -254,7 +254,20 @@
               pools={userPools}
             />
             {:else}
-              This is the empty state
+            <div class="mt-20px">            
+              <div class="bg-lightgreen rounded-xl text-black pt-8 pb-2 md:py-8 px-2 md:px-6">
+                <div class="font-huge text-center">Farm Positions</div>
+                <div class="flex flex-col items-center">
+                  <span class="w-full text-xs text-center font-thin opacity-80">Connect Web3 to see your positions</span>
+                  <img
+                  class="z-10 mt-4"
+                  width="150px"
+                  src='https://raw.githubusercontent.com/pie-dao/brand/master/misc/stakemoji.png'
+                  alt="farmer"
+                />
+                  </div>
+                  </div>
+                </div>
             {/if}
           </span>
         </div>
