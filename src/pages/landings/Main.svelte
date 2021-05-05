@@ -42,7 +42,8 @@
       totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
       change: change ? change : 0,
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
-      price: price ? `$ ${price}` : `n/a`
+      price: price ? `$ ${price}` : `n/a`,
+      rawPrice: price
     };
   }), {isExperipie: true}) || [];
 
@@ -94,25 +95,30 @@
 
 <div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll md:overflow-x-hidden hidescrollbar">
   <div class="w-100pc md:max-w-1200px flex items-start justify-start md:justify-center self-center pt-4 pb-0 md:py-4 px-4 hidescrollbar md:flex-wrap">  
+  
+  {#each piVaults as pie}
+    {#if pie.address !== '0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e'}
+      <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 rounded-xl flex pointer scale cardbordergradient">
+        <a href={`#/pie/${pie.address}`}>
 
-    <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 rounded-xl flex pointer scale cardbordergradient">
-      <a href={`#/pie/0x33e18a092a93ff21ad04746c7da12e35d34dc7c4`}>
-
-        <div class="px-4 py-2 flex flex-col">
-          <div class="flex items-center">
-          <img class="mt-2 mb-4 w-60px h-60px mr-3" src={getTokenImage("0x33e18a092a93ff21ad04746c7da12e35d34dc7c4")} alt="PLAY" />
-          <div class="flex flex-col">
-          <span class="text-lg leading-6">PLAY</span>
-          <span class="flex items-center font-base font-thin text-sm">{getNav("0x33e18a092a93ff21ad04746c7da12e35d34dc7c4")}&nbsp; &nbsp;</span>
+          <div class="px-4 py-2 flex flex-col">
+            <div class="flex items-center">
+            <img class="mt-2 mb-4 w-60px h-60px mr-3" src={pie.icon} alt={pie.symbol} />
+            <div class="flex flex-col">
+            <span class="text-lg leading-6">{pie.symbol}</span>
+            <span class="flex items-center font-base font-thin text-sm">{pie.price}&nbsp; &nbsp;<Change class="text-sm" value={pie.change} /></span>
+          </div>
         </div>
+            <span class="font-thin text-sm mb-1 opacity-70">{poolsConfig[pie.address].description}</span>
+            <div class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top">
+              <span class="block md:hidden mr-1">🔥 </span>
+              <span class="flex items-center font-thin text-sm opacity-70 leading-4"><span class="hidden md:block">🔥 </span>
+              Since inception <strong class="ml-2 text-black">+{(parseFloat(pie.rawPrice)*100).toFixed(2)}%</strong></span><a href={`#/swap`}><button class="btn-text-pink min-w-70px mt-2 mb-2 text-right">BUY</button>
+          </div>
+        </a>
       </div>
-          <span class="font-thin text-sm mb-1 opacity-70">PieDAO & NFTX team up to bring to market the most comprehensive NFT/Gaming index in the market.</span>
-          <div class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top">
-            <span class="block md:hidden mr-1">🔥 </span>
-            <span class="flex items-center font-thin text-sm opacity-70 leading-4"><span class="hidden md:block">🔥 </span>Get it now!</span>
-        </div>
-      </a>
-    </div>
+      {/if}
+  {/each}
 
   {#each pies as pie}
     {#if pie.address !== '0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd'}
