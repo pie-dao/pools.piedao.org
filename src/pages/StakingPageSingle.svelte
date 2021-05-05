@@ -490,6 +490,7 @@ metadata={{
                 <strong>Connect you wallet</strong> - You need to connect to MetaMask before seeing the info.
               </p>
             {/if}
+            <p>Looking for APR? <a href="https://vfat.tools/piedao/" target="_blank">Go to 👨‍🌾 vfat.tools!</a> <br/></p>
             
           </div>
         </span>
