@@ -385,25 +385,28 @@ metadata={{
               <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white">
                 <div class="flex items-center justify-between">
                   <div class="flex nowrap intems-center p-1 font-thin">Rewards available to claim</div>
-                </div>
-                <div class="flex items-center p-1">
-                  <div class='font-bold'>
-                    {Number(formatEther(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1")))).toFixed(4)} 
-                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">Escrow</span>
+                  <div class="right text-white font-bold text-xs py-1px text-center align-right float-right rounded">
+                    <div class="h-32px flex items-center">
+                      <img
+                        class="token-icon w-30px h-30px"
+                        src={images.doughtoken}
+                        alt="DOUGH"
+                      />
+                      <span class="py-2px px-4px text-black">DOUGH</span>
+                    </div>
                   </div>
-                  <div class='font-bold'>
-                    {Number(formatEther(data.userUnclaimed.sub(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1"))))).toFixed(4)} 
-                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">Liquid</span>
+                </div>
+                <div class="flex items-center justify-between p-1 mt-2">
+                  <div class='font-bold flex items-center'>
+                    <span>{Number(formatEther(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1")))).toFixed(4)}</span>
+                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-1 font-bold">Escrow</span>
+                  </div>
+                  <div class='font-bold flex items-center'>
+                  <span>{Number(formatEther(data.userUnclaimed.sub(data.userUnclaimed.mul(data.escrowPercentage).div(parseEther("1"))))).toFixed(4)}</span>
+                    <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-1 font-bold">Liquid</span>
                   </div>
                 
-                  <div class="h-32px flex items-center">
-                    <img
-                      class="token-icon w-30px h-30px"
-                      src={images.doughtoken}
-                      alt="DOUGH"
-                    />
-                    <span class="py-2px px-4px">DOUGH</span>
-                  </div>
+  
                 </div>
               </div>
 
