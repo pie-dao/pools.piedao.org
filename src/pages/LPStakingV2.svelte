@@ -253,6 +253,8 @@
               escrowEntries={escrowEntries}
               pools={userPools}
             />
+            {:else}
+              This is the empty state
             {/if}
           </span>
         </div>

@@ -51,8 +51,7 @@
       // put address in config
       const { provider, signer } = get(eth);
       stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI, signer || provider);
-      // TODO
-      let res = (await stakingContract.getPools('0x520C1e99eBa69e2E10AF2DE1BcE326D04EFD21B0'))[poolId] || data;
+      let res = (await stakingContract.getPools($eth.address))[poolId] || data;
 
       const percentage = Number(formatEther(data.escrowPercentage)) * 100;;
       if( percentage !== undefined) {
@@ -328,11 +327,10 @@ metadata={{
               </div>
               <span class="block md:hidden text-sm leading-6 font-bold">Pool: Balancer</span>
               <span class="text-sm font-thin">{data.liquidPercentageLabel} Liquid - {data.escrowPercentageLabel} Escrowed</span>
-              <span class="block md:hidden text-sm text-grey">Tot 166.345 BPT Staked</span>
             </div>
             <div class="hidden md:flex flex-col justify-around text-right ml-auto font-thin">
-              <span class="text-lg leading-6">Balancer</span>
-              <span class="text-sm px-1 text-grey">Tot 166.345 BPT Staked</span>
+              <span class="text-lg leading-6 capitalize">{stakingPool.type}</span>
+              <!-- <span class="text-sm px-1 text-grey">Tot 166.345 BPT Staked</span> -->
             </div>
           </span>
       
