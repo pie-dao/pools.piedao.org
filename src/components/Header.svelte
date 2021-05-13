@@ -63,11 +63,12 @@
 
     <div class="hidden md:block">
       <TVL/>
+      <a href="https://medium.com/piedao/piedao-is-expanding-the-core-team-and-open-sourcing-the-search-for-talent-b22fce733293" target="_blank" class="block md:px-4 py-2 text-sm leading-5 font-bold text-pink hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">
+        🧙🦄🥷 We are hiring!
+      </a>
     </div>
-    
 
     <div class="relative inline-block text-left hidden md:block">
-
       <div use:clickOutside on:click_outside={closeDropdown1}>
         <span class="shadow-sm">
           <button on:click={toggleDropdow}  type="button" class="inline-flex justify-center w-full px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150" id="options-menu" aria-haspopup="true" aria-expanded="true">
