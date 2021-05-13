@@ -78,9 +78,9 @@
     </span>
   </Modal>
 
-  <a class="h-100pc" href="#/pie/0x33e18a092a93ff21ad04746c7da12e35d34dc7c4">
-    <img class="inline rounded hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/PLAY_banner%20thin.png" alt="PLAY banner" />
-    <img class="inline rounded block md:hidden" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/PLAY_banner%20mobile.png" alt="PLAY banner" />
+  <a class="h-100pc" target="_blank" href="https://medium.com/piedao/piedao-is-expanding-the-core-team-and-open-sourcing-the-search-for-talent-b22fce733293">
+    <img class="inline hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/wearehiringdesktop.png" alt="We are hiring banner" />
+    <img class="inline block md:hidden" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/wearehiringmobile.png" alt="We are hiring banner" />
 
   </a>
 
