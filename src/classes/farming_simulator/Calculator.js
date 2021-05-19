@@ -97,7 +97,7 @@ export class Calculator {
           let treasury_market_data = treasury_response.data.market_data;
           
           // saving the values we need inside our config object...
-          this.markets.DOUGH.PRICE = 1.07; //dough_market_data.current_price.usd;
+          this.markets.DOUGH.PRICE = dough_market_data.current_price.usd;
           this.markets.DOUGH.CIRC_SUPPLY = dough_market_data.circulating_supply;
           this.markets.DOUGH.MARKET_CAP = dough_market_data.market_cap.usd;
 
