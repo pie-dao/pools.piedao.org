@@ -121,13 +121,27 @@ export class Calculator {
     return new Promise(async (resolve, reject) => {
       this.project(inputs).then(() => {
         let staked_capital = inputs.STAKED_DOUGH * this.markets.DOUGH.PRICE;
-        let yearly_returns = staked_capital * this.returns[inputs.COMMITMENT]["$"];
+        let user_yearly_returns = staked_capital * this.returns[inputs.COMMITMENT]["$"];
 
+        // TODO: check this calcualtions with Gabo, should be ok but it differs a bit from google sheet...
         this.outputs.user = {
-          EXPECTED_YEARLY_RETURNS: yearly_returns,
-          EXPECTED_MONTHLY_RETURNS: yearly_returns / 12,
+          EXPECTED_YEARLY_RETURNS: user_yearly_returns,
+          EXPECTED_MONTHLY_RETURNS: user_yearly_returns / 12,
           EXPECTED_APR: this.returns[inputs.COMMITMENT]["%"]
         };
+
+        let treasury_yearly_returns = 0;
+
+        Object.keys(this.projections.STAKING_REWARDS).forEach(key => {
+          treasury_yearly_returns += parseFloat(this.projections.STAKING_REWARDS[key]);
+        });
+
+        // TODO: check this calcualtions with Gabo, should be ok but we shall we sure about it...
+        this.outputs.treasury = {
+          EXPECTED_YEARLY_RETURNS: treasury_yearly_returns,
+          EXPECTED_MONTHLY_RETURNS: treasury_yearly_returns / 12,
+          EXPECTED_APR: this.returns[inputs.COMMITMENT]["%"]
+        };        
 
         // rounding the numbers of the returns object...
         this.roundNumbers(this.outputs, null, 2);
