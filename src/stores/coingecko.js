@@ -134,4 +134,9 @@ export class CoinGecko {
     const baseURL = 'https://api.coingecko.com/api/v3';
     return request(`${baseURL}/coins/${coingeckoID}`);
   }
+
+  static fetchContractData(address) {
+    const baseURL = 'https://api.coingecko.com/api/v3';
+    return request(`${baseURL}/coins/ethereum/contract/${address}`);
+  }  
 }
