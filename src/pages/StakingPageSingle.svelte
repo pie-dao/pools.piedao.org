@@ -141,9 +141,16 @@
         return;
       }
 
-      const { emitter } = displayNotification(await stakingContract.withdraw(poolId, parseEther(unstakeAmount)));
-
-      emitter.on("txConfirmed", ({ hash }) => {
+      let emitter;
+      try {
+        emitter = displayNotification(await stakingContract.withdraw(poolId, parseEther(unstakeAmount.toString())));
+      } catch(e) {
+        alert(e);
+        return;
+      }
+      
+      emitter
+      .on("txConfirmed", ({ hash }) => {
         const { dismiss } = displayNotification({
           message: "Confirming...",
           type: "pending",
@@ -257,9 +264,9 @@
         console.log('Ref Active', window.localStorage.ref);
         console.log('//------------------------//')
 
-        emitter = displayNotification(await stakingContract.depositReferred(poolId, parseEther(stakeAmount), window.localStorage.ref)).emitter;
+        emitter = displayNotification(await stakingContract.depositReferred(poolId, parseEther(stakeAmount.toString()), window.localStorage.ref)).emitter;
       } else {
-        emitter = displayNotification(await stakingContract.deposit(poolId, parseEther(stakeAmount))).emitter;
+        emitter = displayNotification(await stakingContract.deposit(poolId, parseEther(stakeAmount.toString()))).emitter;
       }
 
 
