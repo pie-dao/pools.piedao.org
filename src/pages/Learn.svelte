@@ -112,7 +112,7 @@
     </div>
 
     <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
-      <a class="" target="_blank" href={`https://docs.piedao.org/current-pies/defi+l`}>
+      <a class="" target="_blank" href={`https://docs.piedao.org/pies/what-is-a-pie/pies/pievaults/defi+l`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">DEFI+L</span></div>
       </div>
