@@ -17,19 +17,19 @@ export class Simulator {
     this.calculator = new Calculator();
   }
 
-  calculate(staked_dough, commitment, rewards_unclaimed, staked_vedough, expected_apr) {
-    return new Promise((resolve, reject) => {
-      this.inputs = {
-        STAKED_DOUGH: staked_dough,
-        COMMITMENT: commitment,
-        REWARDS_UNCLAIMED: rewards_unclaimed,
-        STAKED_VEDOUGH: staked_vedough ? staked_vedough : 4500000,
-        EXPECTED_APR: expected_apr ? expected_apr : 50
-      };
-            
-      this.calculator.calculate(this.inputs).then(response => {
+  calculate(inputs) {
+    return new Promise((resolve, reject) => {            
+      this.calculator.calculate(inputs).then(response => {
         resolve(response);
       }).catch(error => reject(error));
-    })
+    });
+  }
+
+  retrieveMarkets() {
+    return new Promise((resolve, reject) => {            
+      this.calculator.initMarkets().then(markets => {
+        resolve(markets);
+      }).catch(error => reject(error));
+    });
   }
 }

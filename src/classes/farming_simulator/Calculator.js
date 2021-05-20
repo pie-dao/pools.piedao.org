@@ -90,7 +90,7 @@ export class Calculator {
           let dough_market_data = dough_response.market_data;
 
           // saving the values we need inside our config object...
-          this.markets.DOUGH.PRICE = 1.07; //dough_market_data.current_price.usd;
+          this.markets.DOUGH.PRICE = dough_market_data.current_price.usd;
           this.markets.DOUGH.CIRC_SUPPLY = dough_market_data.circulating_supply;
           this.markets.DOUGH.MARKET_CAP = dough_market_data.market_cap.usd;
           
@@ -98,14 +98,12 @@ export class Calculator {
           let treasury_response = await await CoinGecko.fetchContractData(this.treasury_address);
           let treasury_market_data = treasury_response.market_data;
 
-          this.markets.TREASURY_LIQUIDITY_DEPLOYED.MARKET_CAP = 5760405; //treasury_market_data.market_cap.usd;
+          this.markets.TREASURY_LIQUIDITY_DEPLOYED.MARKET_CAP = treasury_market_data.market_cap.usd;
           this.markets.TREASURY_LIQUIDITY_DEPLOYED.TOTAL_SUPPLY = treasury_market_data.total_supply;
           this.markets.TREASURY_LIQUIDITY_DEPLOYED.CIRC_SUPPLY = treasury_market_data.circulating_supply;
           this.markets.TREASURY_LIQUIDITY_DEPLOYED.TOTAL_VOLUME = treasury_market_data.total_volume.usd;
 
           this.markets.INITIALIZED = true;
-          
-          console.log(this.markets, this.projections, this.returns);
           resolve(this.markets);
     
           } catch(error) {
@@ -180,11 +178,6 @@ export class Calculator {
           });
  
         }
-
-        // rounding the numbers of the projections object...
-        // this.roundNumbers(this.projections);
-        // rounding the numbers of the returns object...
-        // this.roundNumbers(this.returns, null, 2);
 
         resolve({projections: this.projections, returns: this.returns});
       }).catch(error => reject(error));      
