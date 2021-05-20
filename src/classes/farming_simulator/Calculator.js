@@ -5,19 +5,14 @@ export class Calculator {
   constructor() {
     // default treasury address, just a placeholder for now
     // TODO: change it for real address before go live...
-    this.treasury_address = "0x78f225869c08d478c34e5f645d07a87d3fe8eb78";
+    this.treasury_address = "0x4efD8CEad66bb0fA64C8d53eBE65f31663199C6d";
 
     // default empty markets object, to be filled dynamically...
     this.markets = {
       // toggle variable to check if markets is initialized or not...
       INITIALIZED: false,
       // treasury liquidity infos...
-      TREASURY_LIQUIDITY_DEPLOYED: {
-        MARKET_CAP: 0,
-        TOTAL_SUPPLY: 0,
-        CIRC_SUPPLY: 0,
-        TOTAL_VOLUME: 0
-      },
+      TREASURY_LIQUIDITY_DEPLOYED: 0,
       // dough-v2 infos...
       DOUGH: {
         PRICE: 0,
@@ -31,19 +26,19 @@ export class Calculator {
       YEARLY: {},
       MONTHLY: {},
       STAKING_REWARDS: {},
-      USD: {},
-      "6M": {"$": {}, "%": {}},
-      "12M": {"$": {}, "%": {}},
-      "24M": {"$": {}, "%": {}},
-      "36M": {"$": {}, "%": {}},
+      PER_VE_DOUGH: {},
+      6: {"$": {}, "%": {}},
+      12: {"$": {}, "%": {}},
+      24: {"$": {}, "%": {}},
+      36: {"$": {}, "%": {}},
     };
 
     // total returns in $ and %...
     this.returns = {
-      "6M": {"$": 0, "%": 0},
-      "12M": {"$": 0, "%": 0},
-      "24M": {"$": 0, "%": 0},
-      "36M": {"$": 0, "%": 0},
+      6: {"$": 0, "%": 0},
+      12: {"$": 0, "%": 0},
+      24: {"$": 0, "%": 0},
+      36: {"$": 0, "%": 0},
     }
 
     // default rewards object...
@@ -53,13 +48,8 @@ export class Calculator {
       costs: 15
     };    
 
-    // default commitment multipliers...
-    this.commitment_multipliers = {
-      "6M": 0.08333333333,
-      "12M": 0.2311421345,
-      "24M": 0.5912352048,
-      "36M": 1.00000000 
-    };
+    // default constant...
+    this.k = 56.0268900276223;
 
     // final outputs...
     this.outputs = {
@@ -90,18 +80,13 @@ export class Calculator {
           let dough_market_data = dough_response.market_data;
 
           // saving the values we need inside our config object...
-          this.markets.DOUGH.PRICE = dough_market_data.current_price.usd;
+          this.markets.DOUGH.PRICE = 0.882686; // dough_market_data.current_price.usd;
           this.markets.DOUGH.CIRC_SUPPLY = dough_market_data.circulating_supply;
           this.markets.DOUGH.MARKET_CAP = dough_market_data.market_cap.usd;
           
-          // retrieving the infos about Treasury from coingecko...
-          let treasury_response = await await CoinGecko.fetchContractData(this.treasury_address);
-          let treasury_market_data = treasury_response.market_data;
-
-          this.markets.TREASURY_LIQUIDITY_DEPLOYED.MARKET_CAP = treasury_market_data.market_cap.usd;
-          this.markets.TREASURY_LIQUIDITY_DEPLOYED.TOTAL_SUPPLY = treasury_market_data.total_supply;
-          this.markets.TREASURY_LIQUIDITY_DEPLOYED.CIRC_SUPPLY = treasury_market_data.circulating_supply;
-          this.markets.TREASURY_LIQUIDITY_DEPLOYED.TOTAL_VOLUME = treasury_market_data.total_volume.usd;
+          // retrieving the balance of Treasury from address...
+          // TODO: remove the hardcoded number and use API (Zapper, Zerion)...
+          this.markets.TREASURY_LIQUIDITY_DEPLOYED = 10000000;
 
           this.markets.INITIALIZED = true;
           resolve(this.markets);
@@ -116,26 +101,20 @@ export class Calculator {
   calculate(inputs) {
     return new Promise(async (resolve, reject) => {
       this.project(inputs).then(() => {
-        let user_yearly_returns = inputs.STAKED_DOUGH * this.returns[inputs.COMMITMENT]["$"];
+        let user_yearly_returns = this.projections[inputs.COMMITMENT]["$"];
+        let treasury_yearly_returns = this.projections.YEARLY[13] - this.markets.TREASURY_LIQUIDITY_DEPLOYED;
 
-        // TODO: check this calcualtions with Gabo, should be ok but it differs a bit from google sheet...
         this.outputs.user = {
           EXPECTED_YEARLY_RETURNS: user_yearly_returns,
           EXPECTED_MONTHLY_RETURNS: user_yearly_returns / 12,
-          EXPECTED_APR: this.returns[inputs.COMMITMENT]["%"]
+          EXPECTED_APR: 0,
+          EXPECTED_VEDOUGH: this.calculateVEDOUGH(inputs.STAKED_DOUGH, inputs.COMMITMENT)
         };
 
-        let treasury_yearly_returns = 0;
-
-        Object.keys(this.projections.STAKING_REWARDS).forEach(key => {
-          treasury_yearly_returns += parseFloat(this.projections.STAKING_REWARDS[key]);
-        });
-
-        // TODO: check this calcualtions with Gabo, should be ok but we shall we sure about it...
         this.outputs.treasury = {
           EXPECTED_YEARLY_RETURNS: treasury_yearly_returns,
           EXPECTED_MONTHLY_RETURNS: treasury_yearly_returns / 12,
-          EXPECTED_APR: this.returns[inputs.COMMITMENT]["%"]
+          EXPECTED_APR: this.markets.TREASURY_LIQUIDITY_DEPLOYED / this.projections.MONTHLY[13]
         };        
 
         // rounding the numbers of the returns object...
@@ -146,39 +125,57 @@ export class Calculator {
     });
   }
 
+  calculateVEDOUGH(staked_dough, commitment) {    
+    return staked_dough * this.calculateCommitmentMultiplier(commitment);
+  }
+
+  calculateCommitmentMultiplier(commitment) {
+    return commitment / this.k * Math.log10(commitment);
+  }
+
+  calculateCompound(index) {
+    return this.projections.MONTHLY[index - 1] * (this.rewards.compound / 100);
+  }
+
   project(inputs) {
     return new Promise(async(resolve, reject) => {
       this.initMarkets().then(() => {
-        // calculating first month...
-        let farming_asset = this.markets.TREASURY_LIQUIDITY_DEPLOYED.MARKET_CAP;
+        let farming_asset = this.markets.TREASURY_LIQUIDITY_DEPLOYED;
 
+        // calculating first month...
         this.projections.YEARLY[1] = farming_asset * (inputs.EXPECTED_APR / 100);
         this.projections.MONTHLY[1] = this.projections.YEARLY[1] / 12;
 
         // calculating the projections for the next 12 months...
         for(let i = 2; i < 14; i++) {
-          // calculating the compound for the current month, considering previous returns...
-          let compound = this.projections.MONTHLY[i - 1] * (this.rewards.compound / 100);
+          // adding the montly compound into the farming asset...
+          farming_asset += this.calculateCompound(i);
           
-          // calculating the yearly/montly returns for the current month...
-          farming_asset += compound; 
+          // calculating the yearly/montly returns and the staking rewards for the current month...
           this.projections.YEARLY[i] = farming_asset * (inputs.EXPECTED_APR / 100);
           this.projections.MONTHLY[i] = this.projections.YEARLY[i] / 12;
           this.projections.STAKING_REWARDS[i] = this.projections.MONTHLY[i] * (this.rewards.distributed / 100);
-
-          this.projections.USD[i] = this.projections.STAKING_REWARDS[i] / (inputs.STAKED_VEDOUGH * (1 - (inputs.REWARDS_UNCLAIMED / 100)));
           
-          // calculating the relative commitment for each month...
-          ["6M", "12M", "24M", "36M"].forEach(commitment => {
-            this.projections[commitment]["$"][i] = this.projections.USD[i] * this.commitment_multipliers[commitment];
+          let total_staked_ve_dough = inputs.STAKED_VEDOUGH + this.calculateVEDOUGH(inputs.STAKED_DOUGH, inputs.COMMITMENT);
+          this.projections.PER_VE_DOUGH[i] = this.projections.STAKING_REWARDS[i] / (total_staked_ve_dough * (1 - (inputs.REWARDS_UNCLAIMED / 100)));          
+
+          this.projections[inputs.COMMITMENT]["$"][i] = this.projections.PER_VE_DOUGH[i] * this.calculateVEDOUGH(inputs.STAKED_DOUGH, inputs.COMMITMENT);
+          this.projections[inputs.COMMITMENT]["%"][i] = (this.projections[inputs.COMMITMENT]["$"][i] / this.markets.DOUGH.PRICE) * 100;
+
+          /*
+          // for each compounded month, we calculate the scenario for the default commitments
+          // those values can be used to show charts comparison for example...
+          [inputs.COMMITMENT, 6, 12, 24, 36].forEach(commitment => {
+            let temp_staked_ve_dough = inputs.STAKED_VEDOUGH + this.calculateVEDOUGH(inputs.STAKED_DOUGH, commitment);
+            this.projections[commitment]["$"][i] = this.projections.PER_VE_DOUGH[i] * this.calculateCommitmentMultiplier(commitment);
             this.projections[commitment]["%"][i] = (this.projections[commitment]["$"][i] / this.markets.DOUGH.PRICE) * 100;
             // calculating the totals for $ and % APR for each month's projection...
             this.returns[commitment]["$"] += this.projections[commitment]["$"][i];
             this.returns[commitment]["%"] += this.projections[commitment]["%"][i];
           });
- 
+          */
         }
-
+        console.log({projections: this.projections, returns: this.returns});
         resolve({projections: this.projections, returns: this.returns});
       }).catch(error => reject(error));      
     });

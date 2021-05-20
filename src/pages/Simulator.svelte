@@ -6,7 +6,7 @@
   // filling the first default values...
   let inputs = {
     STAKED_DOUGH: 100000,
-    COMMITMENT: "36M",
+    COMMITMENT: 36,
     REWARDS_UNCLAIMED: 10,
     STAKED_VEDOUGH: 4500000,
     EXPECTED_APR: 50
