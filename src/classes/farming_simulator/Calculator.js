@@ -60,7 +60,7 @@ export class Calculator {
           let dough_market_data = dough_response.market_data;
 
           // saving the values we need inside our config object...
-          this.markets.DOUGH.PRICE = 0.882686; // dough_market_data.current_price.usd;
+          this.markets.DOUGH.PRICE = dough_market_data.current_price.usd;
           this.markets.DOUGH.CIRC_SUPPLY = dough_market_data.circulating_supply;
           this.markets.DOUGH.MARKET_CAP = dough_market_data.market_cap.usd;
           
@@ -83,13 +83,12 @@ export class Calculator {
       this.project(inputs).then((projections) => {
         console.log(projections);
   
-        // TODO: this math for user might not be correct, check it out...
-        let user_yearly_returns = projections.returns.commitment["$"][12];
+        let user_yearly_returns = projections.returns.user.reduce((total, value) => total += value);
 
         this.outputs.user = {
           EXPECTED_YEARLY_RETURNS: user_yearly_returns,
-          EXPECTED_MONTHLY_RETURNS: user_yearly_returns / 12,
-          EXPECTED_APR: 0,
+          EXPECTED_AVERAGE_MONTHLY_RETURNS: user_yearly_returns / 12,
+          EXPECTED_APR: (user_yearly_returns / (inputs.STAKED_DOUGH * this.markets.DOUGH.PRICE)) * 100,
           EXPECTED_VEDOUGH: this.calculateVEDOUGH(inputs.STAKED_DOUGH, inputs.COMMITMENT)
         };
 
@@ -97,7 +96,7 @@ export class Calculator {
 
         this.outputs.treasury = {
           EXPECTED_YEARLY_RETURNS: treasury_yearly_returns,
-          EXPECTED_MONTHLY_RETURNS: treasury_yearly_returns / 12,
+          EXPECTED_AVERAGE_MONTHLY_RETURNS: treasury_yearly_returns / 12,
           EXPECTED_APR: this.markets.TREASURY_LIQUIDITY_DEPLOYED  / projections.farming.asset[12]
         };        
 
@@ -133,10 +132,7 @@ export class Calculator {
           }, 
           returns: {
             per_ve_dough: [],
-            commitment: {
-              "$": [],
-              "%": []
-            }
+            user: [] 
           }
         };
 
@@ -151,10 +147,7 @@ export class Calculator {
           projections.farming.staking_rewards[i] = i == 0 ? 0 : projections.farming.gains[i] * (this.rewards.distributed / 100);
         
           projections.returns.per_ve_dough[i] = projections.farming.staking_rewards[i] / (total_staked_ve_dough * (1 - (inputs.REWARDS_UNCLAIMED / 100)));
-           // TODO: CHECK OUT THOSE TWO LINES, MIGHT NOT BE CORRECT...
-           console.log("using commitment multuplier", this.calculateCommitmentMultiplier(inputs.COMMITMENT));
-          projections.returns.commitment["$"][i] = projections.returns.per_ve_dough[i] * this.calculateCommitmentMultiplier(inputs.COMMITMENT);
-          projections.returns.commitment["%"][i] = (projections.returns.commitment["$"][i] / this.markets.DOUGH.PRICE) * 100; // <---- EXPECIALLY THAT ONE
+          projections.returns.user[i] = projections.returns.per_ve_dough[i] * this.calculateVEDOUGH(inputs.STAKED_DOUGH, inputs.COMMITMENT);
           
           // adding the montly compound into the farming asset...
           farming_asset += this.calculateCompound(projections.farming.gains[i]);
