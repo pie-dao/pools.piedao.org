@@ -5,11 +5,11 @@
   let simulator = new Simulator();
   // filling the first default values...
   let inputs = {
-    STAKED_DOUGH: 100000,
-    COMMITMENT: 36,
-    REWARDS_UNCLAIMED: 10,
-    STAKED_VEDOUGH: 4500000,
-    EXPECTED_APR: 50
+    stakedDough: 100000,
+    commitment: 36,
+    rewardsUnclaimed: 10,
+    stakedVeDough: 4500000,
+    expectedApr: 50
   };
   // retrieving the markets infos...
   let markets = simulator.retrieveMarkets().then(markets => {
