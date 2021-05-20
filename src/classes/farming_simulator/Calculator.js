@@ -137,19 +137,26 @@ export class Calculator {
     return this.projections.MONTHLY[index - 1] * (this.rewards.compound / 100);
   }
 
+  _calculateCompound(value) {
+    return value * (this.rewards.compound / 100);
+  }
+
   project(inputs) {
     return new Promise(async(resolve, reject) => {
       this.initMarkets().then(() => {
         let farming_asset = this.markets.TREASURY_LIQUIDITY_DEPLOYED;
 
         // calculating first month...
-        this.projections.YEARLY[1] = farming_asset * (inputs.EXPECTED_APR / 100);
-        this.projections.MONTHLY[1] = this.projections.YEARLY[1] / 12;
+        let expectedFarmingRewardsYearly = farming_asset * (inputs.EXPECTED_APR / 100);
+        let expectedFarmingRewardsMonthly = startingFarmingRewardsYearly / 12;
+
+        this.projections.YEARLY[1] = 0;
+        this.projections.MONTHLY[1] = 0;
 
         // calculating the projections for the next 12 months...
         for(let i = 2; i < 14; i++) {
           // adding the montly compound into the farming asset...
-          farming_asset += this.calculateCompound(i);
+          farming_asset += this._calculateCompound(expectedFarmingRewardsMonthly);
           
           // calculating the yearly/montly returns and the staking rewards for the current month...
           this.projections.YEARLY[i] = farming_asset * (inputs.EXPECTED_APR / 100);
