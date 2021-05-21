@@ -12,9 +12,11 @@
     expectedApr: 50
   };
   // retrieving the markets infos...
+  /*
   let markets = simulator.retrieveMarkets().then(markets => {
     console.log(markets);
   }).catch(error => console.error(error));
+  */
 
   simulator.calculate(inputs).then(response => {
     console.log(response);
