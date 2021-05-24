@@ -3,6 +3,14 @@
   import Simulator from '../classes/farming_simulator/Simulator.js';
   import { formatBigMoneyAmount } from '../components/helpers.js';
   import images from '../config/images.json';
+
+  function calculate() {
+    console.log("going to calculate using inputs", inputs);
+    simulator.calculate(inputs).then(response => {
+      outputs = response.outputs;
+      projections = response.breakdowns;
+    }).catch(error => console.error(error));  
+  }
   
   // creating the Simulator class instance...
   let simulator = new Simulator();
@@ -37,10 +45,8 @@
   let projections = simulator.getProjections();
 
   // calculating real outputs...
-  simulator.calculate(inputs).then(response => {
-    outputs = response.outputs;
-    projections = response.breakdowns;
-  }).catch(error => console.error(error));
+  calculate();
+  
 </script>
 
 <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
@@ -82,6 +88,7 @@
             maxlength="79"
             spellcheck="false"
             bind:value={inputs.stakedVeDough}
+            on:change={calculate}
           />
           <div class="h-32px flex items-center">
             <img
@@ -113,6 +120,7 @@
             maxlength="79"
             spellcheck="false"
             bind:value={inputs.expectedApr}
+            on:change={calculate}
           />
           <div class="h-32px flex items-center">
             <img
@@ -140,6 +148,7 @@
             maxlength="79"
             spellcheck="false"
             bind:value={inputs.rewardsUnclaimed}
+            on:change={calculate}
           />
           <div class="h-32px flex items-center">
             <img
@@ -172,6 +181,7 @@
             maxlength="79"
             spellcheck="false"
             bind:value={inputs.stakedDough}
+            on:change={calculate}
           />
           <div class="h-32px flex items-center">
             <img

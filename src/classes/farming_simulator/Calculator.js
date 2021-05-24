@@ -92,7 +92,7 @@ export default class Calculator {
     return new Promise((resolve, reject) => {
       this.project(inputs).then((projections) => {
         let outputs = {};
-        const userYearlyReturns = this.projections.returns.user.reduce((total, value) => total + value);
+        const userYearlyReturns = projections.returns.user.reduce((total, value) => total + value);
 
         outputs.user = {
           expectedYearlyReturns: userYearlyReturns,
@@ -101,19 +101,23 @@ export default class Calculator {
           expectedVeDough: this.calculateVeDough(inputs.stakedDough, inputs.commitment),
         };
 
-        const treasuryYearlyReturns = this.projections.farming.asset[12]
+        const treasuryYearlyReturns = projections.farming.asset[12]
           - this.markets.treasuryLiquidity.amount;
 
         outputs.treasury = {
           expectedYearlyReturns: treasuryYearlyReturns,
           expectedAverageMontlyReturns: treasuryYearlyReturns / 12,
-          expectedApr: this.markets.treasuryLiquidity.amount / this.projections.farming.asset[12],
+          expectedApr: this.markets.treasuryLiquidity.amount / projections.farming.asset[12],
         };
 
         // rounding the numbers of the returns object...
         Object.keys(outputs).forEach((key) => {
           outputs[key] = Calculator.roundNumbers(outputs[key], 2);
         });
+
+        // TODO: to be improved using roundNumers function...
+        console.log(projections.farming.totalStakedVeDough);
+        projections.farming.totalStakedVeDough = projections.farming.totalStakedVeDough.toFixed(2);     
 
         resolve({ outputs: outputs, breakdowns: projections });
       }).catch((error) => reject(error));
