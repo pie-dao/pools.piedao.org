@@ -66,7 +66,15 @@
     </div>
     <div class="font-bold text-xs py-1px text-left align-left float-left rounded">
       used to cover costs <button class="ml-4 oven-withdraw-button">15%</button>
-    </div>      
+    </div>  
+    
+    <div class="h-100px flex items-center">       
+      <img
+        class="token-icon w-100px h-100px"
+        src={images.simulator_chart}
+        alt="ETH"
+      />
+    </div>     
   </div> 
 </div>
 <!-- SECOND FLEX ROW - TOTAL STAKED veDOUGH | REWARDS | APR -->
@@ -93,7 +101,7 @@
           <div class="h-32px flex items-center">
             <img
               class="token-icon w-30px h-30px"
-              src={images.doughtoken}
+              src={images.simulator_veDough}
               alt="ETH"
             />
             <span class="py-2px px-4px">veDOUGH</span>
@@ -125,7 +133,7 @@
           <div class="h-32px flex items-center">
             <img
               class="token-icon w-30px h-30px"
-              src={images.doughtoken}
+              src={images.simulator_launch}
               alt="ETH"
             />
           </div>
@@ -153,7 +161,7 @@
           <div class="h-32px flex items-center">
             <img
               class="token-icon w-30px h-30px"
-              src={images.doughtoken}
+              src={images.simulator_sword}
               alt="ETH"
             />
           </div>
@@ -214,16 +222,17 @@
       <!-- <button class="w-1/4 oven-withdraw-button">custom</button> -->
     </div> 
     <div>
-      <span class="md:text-xs leading-2 mb-4">
-        You will receive: {outputs.user.expectedVeDough}
-        <div class="h-32px flex items-center">
+      <div class="h-32px flex items-center">
+        <span class="md:text-xs leading-2 mb-4">
+          You will receive: {outputs.user.expectedVeDough}
+        </span>         
         <img
           class="token-icon w-30px h-30px"
-          src={images.doughtoken}
+          src={images.simulator_veDough}
           alt="ETH"
         />
         <span class="py-2px px-4px">veDOUGH</span>
-      </div></span>              
+      </div>             
     </div>
     <div class="col-span-2">
       <span class="md:text-xs leading-2 mb-4">For 3 years commitment: 1 DOUGH = 1 veDOUGH</span>
@@ -260,7 +269,16 @@
       </div>
       <div class="flex-initial w-1/3">
         <span class="md:text-xs leading-2 mb-4">Tot veDOUGH (Yours + Others)</span>
-        <div class="md:text-s leading-2 mt-4">$ {projections.farming.totalStakedVeDough}</div>
+        
+        <div class="h-32px flex items-center">
+          <div class="md:text-s leading-2 mt-4">$ {projections.farming.totalStakedVeDough}</div>
+          <img
+            class="token-icon w-30px h-30px"
+            src={images.simulator_veDough}
+            alt="ETH"
+          />
+          <span class="py-2px px-4px">veDOUGH</span>
+        </div>        
       </div>
     </div>      
   </div>
