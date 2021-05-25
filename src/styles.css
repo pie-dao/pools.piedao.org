@@ -8,6 +8,11 @@
 
 /* Custom css */
 
+button:focus {
+  outline: none;
+  outline: none;
+}
+
 /* Hide arrows on input[type=number] on webkit*/
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -2103,4 +2108,9 @@ max-width: 100vw;
 .svgclose {
   fill: white;
   filter: invert(100%);
+}
+
+
+.commitment-btn {
+  background-image: linear-gradient(white, white), radial-gradient(circle at top left,#ff8932, #a50bce, #1fa6e0, #47d482);
 }

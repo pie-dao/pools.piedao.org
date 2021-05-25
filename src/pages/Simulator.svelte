@@ -211,10 +211,10 @@
       </div>
     </div>
     <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
-    <div class="flex flex-row gap-2 mb-2">
-      <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-auto flex-col items-left">
-        <div>
-          <span class="md:text-xs leading-2 mb-4">Your Staked DOUGH</span>
+      <div class="w-full bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
+        <div class="w-full flex flex-col md:flex-row">
+        <div class="w-full md:w-1/3 md:mr-2">
+          <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staked DOUGH</div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
             <div class="flex nowrap items-center p-1">
               <input
@@ -242,43 +242,46 @@
             </div>
           </div>                 
         </div>
-        <div class="col-span-2 flex items-center">
-          <span class="md:text-xs leading-2 mb-4">Your Staking Commitment</span>  
-          <div class="flex bg-white rounded text-center w-3/4">
-            <div class="flex-initial w-1/4">
-              <button class="">6 months</button>
+        <div class="w-full md:w-2/3 flex flex-col">
+          <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staking Commitment</div>  
+          <div class="flex items-center bg-white rounded text-center w-3/4">
+            <div class="w-1/4">
+              <button class="focus:bg-pink">6 months</button>
             </div>
-            <div class="flex-initial w-1/4">
-              <button class="">1 year</button>
+            <div class="w-1/4">
+              <button class="commitment-btn">1 year</button>
             </div>
-            <div class="flex-initial w-1/4">
-              <button class="">2 years</button>
+            <div class="w-1/4">
+              <button class="focus:bg-toto">2 years</button>
             </div>
-            <div class="flex-initial w-1/4">
-              <button class="">3 years</button>
+            <div class="w-1/4">
+              <button class="focus:commitment-btn">3 years</button>
             </div>
           </div>
+        </div>
 
           <!-- <button class="w-1/4 oven-withdraw-button">custom</button> -->
         </div> 
-        <div>
+        <div class="flex items-center mt-8">
           <div class="h-32px flex items-center">
-            <span class="md:text-xs leading-2 mb-4">
-              You will receive: {outputs.user.expectedVeDough}
-            </span>         
+            <span class="md:text-xs leading-2 font-thin mr-2">
+              You will receive: 
+            </span>   
+            <span class="md:text-base leading-2 mr-2">
+             {outputs.user.expectedVeDough}
+            </span>       
             <img
               class="token-icon w-30px h-30px"
               src={images.simulator_veDough}
               alt="ETH"
             />
-            <span class="py-2px px-4px">veDOUGH</span>
-          </div>             
+            <span class="px-4px font-thin">veDOUGH</span>
+          </div>
+          <div class="font-thin mx-6">|</div>  
+          <span class="md:text-xs leading-2 font-thin">For 3 years commitment: 1 DOUGH = 1 veDOUGH</span>
+           
         </div>
-        <div class="col-span-2">
-          <span class="md:text-xs leading-2 mb-4">For 3 years commitment: 1 DOUGH = 1 veDOUGH</span>
-        </div>       
       </div>
-    </div>
 
     <!-- FOURTH FLEX ROW - SUMMARY -->
     <div class="flex flex-row gap-2 mb-2">
