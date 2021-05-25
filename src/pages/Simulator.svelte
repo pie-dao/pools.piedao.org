@@ -136,7 +136,7 @@
                 maxlength="79"
                 spellcheck="false"
                 bind:value={inputs.stakedVeDough}
-                on:change={calculate}
+                on:keyup={calculate}
               />
               <div class="h-32px flex items-center">
                 <img
@@ -168,7 +168,7 @@
                 maxlength="79"
                 spellcheck="false"
                 bind:value={inputs.expectedApr}
-                on:change={calculate}
+                on:keyup={calculate}
               />
               <div class="h-32px flex items-center">
                 <img
@@ -196,7 +196,7 @@
                 maxlength="79"
                 spellcheck="false"
                 bind:value={inputs.rewardsUnclaimed}
-                on:change={calculate}
+                on:keyup={calculate}
               />
               <div class="h-32px flex items-center">
                 <img
@@ -229,7 +229,7 @@
                 maxlength="79"
                 spellcheck="false"
                 bind:value={inputs.stakedDough}
-                on:change={calculate}
+                on:keyup={calculate}
               />
               <div class="h-32px flex items-center">
                 <img
