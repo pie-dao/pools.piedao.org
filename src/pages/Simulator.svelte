@@ -85,28 +85,29 @@
 </div>
 </div>
 
-<div class="flex flex-col items-center text-center mt-20">
+<div class="flex flex-col items-center text-center mt-20 m-5">
 <div class="w-full max-w-1200px">
   <div class="font-huge">Rewards Simulator</div>
   <div class="text-base font-thin mx-20pc mb-8">Tweak the parameters. We build this expensive tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
     <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
-    <div class="flex flex-row gap-2 mb-2">
-      <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-shrink-0 flex-col items-left">
+    <div class="flex flex-col md:flex-row gap-2 mb-2">
+      <div class=" md:m-0px pl-4 bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-shrink-0 flex-col items-left">
         <div class="font-thin leading-2 mb-4 text-left">Treasury Liquidity Deployed</div>
         <div class="w-100pc font-huge text-left mb-4">$ {formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
-        <div class="font-thin leading-2 text-left">{markets.treasuryLiquidity.eth_value} ETH</div>
+        <div class="font-thin leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
 
-      <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-1 flex-col items-left">
-        <div class="w-1/2">
+      <div class=" bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-1 flex-col items-left">
+        <div class="w-full md:w-1/2">
           <div class="font-thin leading-2 mb-4 text-left">Rewards Distrubutions</div>
-          <div class="font-bold text-base py-1px text-left align-left float-left rounded">
-            Directly distributed to veDOUGH holders <button class="ml-4 oven-withdraw-button">60%</button>
+          <div class="font-bold text-xs md:text-base py-1px text-left align-left float-left rounded">
+            Directly distributed to veDOUGH holders 
+            <button class="ml-4 oven-withdraw-button">60%</button>
           </div>
-          <div class="font-bold text-base py-1px text-left align-left float-left rounded">
+          <div class="font-bold text-xs md:text-base py-1px text-left align-left float-left rounded">
             Used to compound the treasury <button class="ml-4 oven-withdraw-button">25%</button>
           </div>
-          <div class="font-bold text-base py-1px text-left align-left float-left rounded">
+          <div class="font-bold text-xs md:text-base py-1px text-left align-left float-left rounded">
             used to cover costs <button class="ml-4 oven-withdraw-button">15%</button>
           </div>            
         </div>
@@ -121,12 +122,12 @@
       </div>      
     </div>
     <!-- SECOND FLEX ROW - TOTAL STAKED veDOUGH | REWARDS | APR -->
-    <div class="w-full bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
+    <div class=" w-full bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
       <div class="w-full flex flex-col md:flex-row">
         <!-- Total Staked veDOUGH -->
         <div class="w-full md:w-2/6 md:mr-8">
-          <div class="md:text-xs leading-2 mb-4">Total Staked veDOUGH</div>
-          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
+          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Total Staked veDOUGH</div>
+          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
             <div class="flex nowrap items-center p-1">
               <input
                 class="swap-input-from"
@@ -155,12 +156,13 @@
         </div>
         <!-- Total Staking Commitment -->
         <div class="w-full md:w-2/6 md:mr-8">
-          <div class="md:text-xs leading-2 mb-4">Total Staking Commitment</div>
+          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Total Staking Commitment</div>
+          <div class="p-4">some content goes in here...</div>
         </div>
         <!-- Expected APR -->
         <div class="w-full md:w-1/6 md:mr-8">
-          <div class="md:text-xs leading-2 mb-4">Expected APR</div>
-          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
+          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Expected APR</div>
+          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
             <div class="flex nowrap items-center p-1">
               <input
                 class="swap-input-from"
@@ -188,8 +190,8 @@
         </div>
         <!-- Rewrds Unclaimed -->
         <div class="w-full md:w-1/6 md:mr-8">
-          <div class="md:text-xs leading-2 mb-4">Rewrds Unclaimed</div>
-          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
+          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Rewrds Unclaimed</div>
+          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
             <div class="flex nowrap items-center p-1">
               <input
                 class="swap-input-from"
@@ -218,11 +220,11 @@
       </div>
     </div>
     <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
-      <div class="w-full bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
+      <div class="w-full  bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
           <div class="w-full md:w-1/3 md:mr-8">
             <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staked DOUGH</div>
-            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
               <div class="flex nowrap items-center p-1">
                 <input
                   class="swap-input-from"
@@ -250,8 +252,8 @@
             </div>                 
           </div>
           <div class="w-full md:w-2/3 flex flex-col">
-            <div class="w-full font-thin text-left md:text-xs leading-2">Your Staking Commitment</div>  
-            <div class="flex items-center bg-white rounded text-center w-3/4 p-26px mt-8">
+            <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staking Commitment</div>  
+            <div class="flex items-center bg-white rounded text-center w-3/4 p-26px mb-8 md:mt-8">
               <div class="w-1/4">
                 <button class="focus:bg-pink">6 months</button>
               </div>
@@ -291,7 +293,7 @@
 
     <!-- FOURTH FLEX ROW - SUMMARY -->
     <div class="flex flex-row gap-2 mb-2">
-      <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-auto flex-col items-left">
+      <div class="bg-lightgrey  rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-auto flex-col items-left">
         <div class="font-huge leading-2 mb-8 text-left">Summary</div>
         <div class="flex flex-row border-b-2 border-gray-50 pb-4">
           <div class="flex-initial w-1/3">
