@@ -72,7 +72,7 @@
     <div class="text-base font-thin mx-20pc mb-8">Invest in <strong>veDOUGH*</strong> and build your cashflow, taking additional yield from PieDAO famed treasury.</div>
     <div class="font-huge">How it works</div>
     <LottiePlayer
-    src="https://assets10.lottiefiles.com/private_files/lf30_nlnvqw0r.json"
+    src="https://assets10.lottiefiles.com/private_files/lf30_wksf88hl.json"
     autoplay="{true}"
     loop="{true}"
     controls="{false}"
