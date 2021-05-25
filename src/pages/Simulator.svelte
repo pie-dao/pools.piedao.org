@@ -91,37 +91,41 @@
   <div class="text-base font-thin mx-20pc mb-8">Tweak the parameters. We build this expensive tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
     <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
     <div class="flex flex-row gap-2 mb-2">
-      <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-auto flex-col items-left">
-        <span class="md:text-xs leading-2 mb-4">Treasury Liquidity Deployed</span>
+      <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-shrink-0 flex-col items-left">
+        <div class="font-thin leading-2 mb-4 text-left">Treasury Liquidity Deployed</div>
         <div class="w-100pc font-huge text-left mb-4">$ {formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
-        <span class="md:text-xs leading-2">{markets.treasuryLiquidity.eth_value} ETH</span>
+        <div class="font-thin leading-2 text-left">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
-      <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-auto flex-col items-left">
-        <span class="md:text-xs leading-2 mb-4">Rewards Distrubutions</span>
-        <div class="font-bold text-xs py-1px text-left align-left float-left rounded">
-          Directly distributed to veDOUGH holders <button class="ml-4 oven-withdraw-button">60%</button>
+
+      <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-1 flex-col items-left">
+        <div class="w-1/2">
+          <div class="font-thin leading-2 mb-4 text-left">Rewards Distrubutions</div>
+          <div class="font-bold text-base py-1px text-left align-left float-left rounded">
+            Directly distributed to veDOUGH holders <button class="ml-4 oven-withdraw-button">60%</button>
+          </div>
+          <div class="font-bold text-base py-1px text-left align-left float-left rounded">
+            Used to compound the treasury <button class="ml-4 oven-withdraw-button">25%</button>
+          </div>
+          <div class="font-bold text-base py-1px text-left align-left float-left rounded">
+            used to cover costs <button class="ml-4 oven-withdraw-button">15%</button>
+          </div>            
         </div>
-        <div class="font-bold text-xs py-1px text-left align-left float-left rounded">
-          Used to compound the treasury <button class="ml-4 oven-withdraw-button">25%</button>
-        </div>
-        <div class="font-bold text-xs py-1px text-left align-left float-left rounded">
-          used to cover costs <button class="ml-4 oven-withdraw-button">15%</button>
-        </div>  
         
-        <div class="h-100px flex items-center">       
+        <div class="w-1/2">       
           <img
-            class="token-icon w-100px h-100px"
+            class="token-icon w-50px h-50px"
             src={images.simulator_chart}
             alt="ETH"
           />
-        </div>     
-      </div> 
+        </div>          
+      </div>      
     </div>
     <!-- SECOND FLEX ROW - TOTAL STAKED veDOUGH | REWARDS | APR -->
-    <div class="flex flex-row gap-2 mb-2">
-      <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-auto flex-col items-left">
-        <div>
-          <span class="md:text-xs leading-2 mb-4">Total Staked veDOUGH</span>
+    <div class="w-full bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
+      <div class="w-full flex flex-col md:flex-row">
+        <!-- Total Staked veDOUGH -->
+        <div class="w-full md:w-2/6 md:mr-8">
+          <div class="md:text-xs leading-2 mb-4">Total Staked veDOUGH</div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
             <div class="flex nowrap items-center p-1">
               <input
@@ -144,16 +148,18 @@
                   src={images.simulator_veDough}
                   alt="ETH"
                 />
-                <span class="py-2px px-4px">veDOUGH</span>
+                <div class="py-2px px-4px">veDOUGH</div>
               </div>
             </div>
           </div>            
         </div>
-        <div>
-          <span class="md:text-xs leading-2 mb-4">Total Staking Commitment</span>
+        <!-- Total Staking Commitment -->
+        <div class="w-full md:w-2/6 md:mr-8">
+          <div class="md:text-xs leading-2 mb-4">Total Staking Commitment</div>
         </div>
-        <div>
-          <span class="md:text-xs leading-2 mb-4">Expected APR</span>
+        <!-- Expected APR -->
+        <div class="w-full md:w-1/6 md:mr-8">
+          <div class="md:text-xs leading-2 mb-4">Expected APR</div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
             <div class="flex nowrap items-center p-1">
               <input
@@ -180,8 +186,9 @@
             </div>
           </div>            
         </div>
-        <div>
-          <span class="md:text-xs leading-2 mb-4">Rewrds Unclaimed</span>
+        <!-- Rewrds Unclaimed -->
+        <div class="w-full md:w-1/6 md:mr-8">
+          <div class="md:text-xs leading-2 mb-4">Rewrds Unclaimed</div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
             <div class="flex nowrap items-center p-1">
               <input
@@ -213,72 +220,71 @@
     <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
       <div class="w-full bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
-        <div class="w-full md:w-1/3 md:mr-8">
-          <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staked DOUGH</div>
-          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
-            <div class="flex nowrap items-center p-1">
-              <input
-                class="swap-input-from"
-                inputmode="decimal"
-                autocomplete="off"
-                autocorrect="off"
-                type="number"
-                pattern="^[0-9]*[.]?[0-9]*$"
-                placeholder="0.0"
-                minlength="1"
-                maxlength="79"
-                spellcheck="false"
-                bind:value={inputs.stakedDough}
-                on:keyup={calculate}
-              />
-              <div class="h-32px flex items-center">
-                <img
-                  class="token-icon w-30px h-30px"
-                  src={images.doughtoken}
-                  alt="ETH"
+          <div class="w-full md:w-1/3 md:mr-8">
+            <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staked DOUGH</div>
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
+              <div class="flex nowrap items-center p-1">
+                <input
+                  class="swap-input-from"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  autocorrect="off"
+                  type="number"
+                  pattern="^[0-9]*[.]?[0-9]*$"
+                  placeholder="0.0"
+                  minlength="1"
+                  maxlength="79"
+                  spellcheck="false"
+                  bind:value={inputs.stakedDough}
+                  on:keyup={calculate}
                 />
-                <span class="py-2px px-4px">DOUGH</span>
+                <div class="h-32px flex items-center">
+                  <img
+                    class="token-icon w-30px h-30px"
+                    src={images.doughtoken}
+                    alt="ETH"
+                  />
+                  <div class="py-2px px-4px">DOUGH</div>
+                </div>
+              </div>
+            </div>                 
+          </div>
+          <div class="w-full md:w-2/3 flex flex-col">
+            <div class="w-full font-thin text-left md:text-xs leading-2">Your Staking Commitment</div>  
+            <div class="flex items-center bg-white rounded text-center w-3/4 p-26px mt-8">
+              <div class="w-1/4">
+                <button class="focus:bg-pink">6 months</button>
+              </div>
+              <div class="w-1/4">
+                <button class="commitment-btn">1 year</button>
+              </div>
+              <div class="w-1/4">
+                <button class="focus:bg-toto">2 years</button>
+              </div>
+              <div class="w-1/4">
+                <button class="focus:commitment-btn">3 years</button>
               </div>
             </div>
-          </div>                 
-        </div>
-        <div class="w-full md:w-2/3 flex flex-col">
-          <div class="w-full font-thin text-left md:text-xs leading-2">Your Staking Commitment</div>  
-          <div class="flex items-center bg-white rounded text-center w-3/4 p-26px mt-8">
-            <div class="w-1/4">
-              <button class="focus:bg-pink">6 months</button>
-            </div>
-            <div class="w-1/4">
-              <button class="commitment-btn">1 year</button>
-            </div>
-            <div class="w-1/4">
-              <button class="focus:bg-toto">2 years</button>
-            </div>
-            <div class="w-1/4">
-              <button class="focus:commitment-btn">3 years</button>
-            </div>
           </div>
-        </div>
-
           <!-- <button class="w-1/4 oven-withdraw-button">custom</button> -->
         </div> 
-        <div class="flex items-center mt-8 border-t-1">
+        <div class="flex items-center mt-8 border-t-2 border-gray-50 pt-4">
           <div class="h-32px flex items-center">
-            <span class="md:text-xs leading-2 font-thin mr-2">
+            <div class="md:text-xs leading-2 font-thin mr-2">
               You will receive: 
-            </span>   
-            <span class="md:text-base leading-2 mr-2">
+            </div>   
+            <div class="md:text-base leading-2 mr-2">
              {outputs.user.expectedVeDough}
-            </span>       
+            </div>       
             <img
               class="token-icon w-30px h-30px"
               src={images.simulator_veDough}
               alt="ETH"
             />
-            <span class="px-4px font-thin">veDOUGH</span>
+            <div class="px-4px font-thin">veDOUGH</div>
           </div>
           <div class="font-thin mx-6">|</div>  
-          <span class="md:text-xs leading-2 font-thin">For 3 years commitment: 1 DOUGH = 1 veDOUGH</span>
+          <div class="md:text-xs leading-2 font-thin">For 3 years commitment: 1 DOUGH = 1 veDOUGH</div>
            
         </div>
       </div>
@@ -286,42 +292,41 @@
     <!-- FOURTH FLEX ROW - SUMMARY -->
     <div class="flex flex-row gap-2 mb-2">
       <div class="bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-auto flex-col items-left">
-        <span class="md:text-xl leading-2 mb-4">Summary</span>
-        <div class="flex flex-row border-b-2 mb-4 pb-4">
+        <div class="font-huge leading-2 mb-8 text-left">Summary</div>
+        <div class="flex flex-row border-b-2 border-gray-50 pb-4">
           <div class="flex-initial w-1/3">
-            <span class="md:text-xs leading-2 mb-4">Your Expected Returns (Yearly)</span>
-            <div class="md:text-s leading-2 mt-4">${outputs.user.expectedYearlyReturns}</div>
+            <div class="leading-2 mb-4 font-thin">Your Expected Returns (Yearly)</div>
+            <div class="md:text-base leading-2 mt-4">${outputs.user.expectedYearlyReturns}</div>
           </div>
           <div class="flex-initial w-1/3">
-            <span class="md:text-xs leading-2 mb-4">Your Expected Returns (Monthly)</span>
-            <div class="md:text-s leading-2 mt-4">${outputs.user.expectedAverageMontlyReturns}</div>
+            <div class="leading-2 mb-4 font-thin">Your Expected Returns (Monthly)</div>
+            <div class="md:text-base leading-2 mt-4">${outputs.user.expectedAverageMontlyReturns}</div>
           </div>
           <div class="flex-initial w-1/3">
-            <span class="md:text-xs leading-2 mb-4">Your Expected APR</span>
-            <div class="md:text-s leading-2 mt-4">{outputs.user.expectedApr}%</div>
+            <div class="leading-2 mb-4 font-thin">Your Expected APR</div>
+            <div class="md:text-base leading-2 mt-4">{outputs.user.expectedApr}%</div>
           </div>
         </div>     
-        <div class="flex flex-row">
+        <div class="flex flex-row pt-4">
           <div class="flex-initial w-1/3">
-            <span class="md:text-xs leading-2 mb-4">Treasury Expected Returns (Yearly)</span>
-            <div class="md:text-s leading-2 mt-4">$ {outputs.treasury.expectedYearlyReturns}</div>
+            <div class="leading-2 mb-4 font-thin">Treasury Expected Returns (Yearly)</div>
+            <div class="md:text-base leading-2 mt-4">$ {outputs.treasury.expectedYearlyReturns}</div>
           </div>
           <div class="flex-initial w-1/3">
-            <span class="md:text-xs leading-2 mb-4">Treasury Expected Returns (Monthly)</span>
-            <div class="md:text-s leading-2 mt-4">$ {outputs.treasury.expectedAverageMontlyReturns}</div>
+            <div class="leading-2 mb-4 font-thin">Treasury Expected Returns (Monthly)</div>
+            <div class="md:text-base leading-2 mt-4">$ {outputs.treasury.expectedAverageMontlyReturns}</div>
           </div>
           <div class="flex-initial w-1/3">
-            <span class="md:text-xs leading-2 mb-4">Tot veDOUGH (Yours + Others)</span>
-            
-            <div class="h-32px flex items-center">
-              <div class="md:text-s leading-2 mt-4">$ {projections.farming.totalStakedVeDough}</div>
+            <div class="leading-2 mb-4 font-thin">Tot veDOUGH (Yours + Others)</div>
+            <div class="md:text-base leading-2 mr-2">
+              ${projections.farming.totalStakedVeDough}
               <img
-                class="token-icon w-30px h-30px"
-                src={images.simulator_veDough}
-                alt="ETH"
+              class="w-30px h-30px"
+              src={images.simulator_veDough}
+              alt="ETH"
               />
-              <span class="py-2px px-4px">veDOUGH</span>
-            </div>        
+              <div class="px-4px font-thin">veDOUGH</div>               
+             </div>    
           </div>
         </div>      
       </div>
