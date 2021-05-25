@@ -213,7 +213,7 @@
     <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
       <div class="w-full bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
-        <div class="w-full md:w-1/3 md:mr-2">
+        <div class="w-full md:w-1/3 md:mr-8">
           <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staked DOUGH</div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mt-8">
             <div class="flex nowrap items-center p-1">
@@ -243,8 +243,8 @@
           </div>                 
         </div>
         <div class="w-full md:w-2/3 flex flex-col">
-          <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staking Commitment</div>  
-          <div class="flex items-center bg-white rounded text-center w-3/4">
+          <div class="w-full font-thin text-left md:text-xs leading-2">Your Staking Commitment</div>  
+          <div class="flex items-center bg-white rounded text-center w-3/4 p-26px mt-8">
             <div class="w-1/4">
               <button class="focus:bg-pink">6 months</button>
             </div>
@@ -262,7 +262,7 @@
 
           <!-- <button class="w-1/4 oven-withdraw-button">custom</button> -->
         </div> 
-        <div class="flex items-center mt-8">
+        <div class="flex items-center mt-8 border-t-1">
           <div class="h-32px flex items-center">
             <span class="md:text-xs leading-2 font-thin mr-2">
               You will receive: 
