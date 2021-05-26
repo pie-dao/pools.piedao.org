@@ -277,6 +277,10 @@ right: 0px;
 
 }
 
+.border-t-1 {
+  border-top: solid 1px;
+}
+
 .font-huge {
   font-size: 2.8rem;
   line-height: 3.2rem;

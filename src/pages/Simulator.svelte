@@ -300,8 +300,8 @@
           </div>
           <!-- <button class="w-1/4 oven-withdraw-button">custom</button> -->
         </div> 
-        <div class="flex flex-col md:flex-row items-center mt-8 border-t-2 border-gray-50 pt-4">
-          <div class="h-32px w-full md:w-1/2 p-8 flex items-center">
+        <div class="flex flex-col md:flex-row items-center mt-8 border-t-1 border-gray-50 py-4">
+          <div class="h-32px p-4 flex items-center">
             <div class="md:text-xs leading-3 font-thin mr-2">
               You will receive: 
             </div>   
@@ -315,8 +315,8 @@
             />
             <div class="px-4px font-thin">veDOUGH</div>
           </div>
-          <div class="font-thin mx-6 hidden md:block">|</div>  
-          <div class="w-full md:w-1/2 p-4 md:text-xs font-thin">For 3 years commitment: 1 DOUGH = 1 veDOUGH</div>
+          <div class="font-thin mx-2 hidden md:block">|</div>  
+          <div class="p-4 md:text-xs font-thin">For 3 years commitment: 1 DOUGH = 1 veDOUGH</div>
            
         </div>
       </div>
