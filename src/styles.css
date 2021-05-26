@@ -12,14 +12,14 @@ button:focus {
   outline: none;
 }
 
-.bg-toto {
+.bg-button {
   display: inline-flex;
   border: double 1px transparent;
   border-radius: 1.6rem;
   background-color: white;
 }
 
-.bg-toto:focus {
+.bg-button.selected {
   display: inline-flex;
   border: double 1px transparent;
   border-radius: 1.6rem;

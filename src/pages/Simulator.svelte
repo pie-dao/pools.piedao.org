@@ -169,7 +169,7 @@
         <!-- Total Staking Commitment -->
         <div class="w-full md:w-2/6 md:mr-8">
           <div class="md:text-xs font-thin leading-2 text-left">Total Staking Commitment</div>
-          <div class="flex flex-col md:flex-row p-4">
+          <div class="flex flex-col md:flex-row pt-7">
             <div class="w-full md:w-2/3 hidden md:block">
               {#each rewarads as reward}
               <div class="flex h-18px">
@@ -284,16 +284,16 @@
             <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staking Commitment</div>  
             <div class="flex items-center bg-white rounded text-center w-full md:w-3/4 p-13px md:p-26px mb-8 md:mt-4">
               <div class="w-1/4">
-                <button class="bg-toto" on:click={() => changeCommitment(6)}>6 months</button>
+                <button class:selected="{inputs.commitment === 6}" class="bg-button" on:click={() => changeCommitment(6)}>6 months</button>
               </div>
               <div class="w-1/4">
-                <button class="bg-toto" on:click={() => changeCommitment(12)}>1 year</button>
+                <button class:selected="{inputs.commitment === 12}" class="bg-button" on:click={() => changeCommitment(12)}>1 year</button>
               </div>
               <div class="w-1/4">
-                <button class="bg-toto" on:click={() => changeCommitment(24)}>2 years</button>
+                <button class:selected="{inputs.commitment === 24}" class="bg-button" on:click={() => changeCommitment(24)}>2 years</button>
               </div>
               <div class="w-1/4">
-                <button class="bg-toto" on:click={() => changeCommitment(36)}>3 years</button>
+                <button class:selected="{inputs.commitment === 36}" class="bg-button" on:click={() => changeCommitment(36)}>3 years</button>
               </div>
             </div>
           </div>
