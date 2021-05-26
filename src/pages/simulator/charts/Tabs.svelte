@@ -1,7 +1,9 @@
 <script>
   export let tabs = [];
+  export let projections = {};
   export let activeTabValue = 1;
   
+  console.log(projections);
   const handleClick = tabValue => () => (activeTabValue = tabValue);
 </script>
 
