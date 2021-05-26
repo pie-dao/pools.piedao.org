@@ -190,8 +190,8 @@
         <!-- Total Staking Commitment -->
         <div class="w-full md:w-2/6 md:mr-8">
           <div class="md:text-xs font-thin leading-2 text-left">Total Staking Commitment</div>
-          <div class="flex flex-col md:flex-row pt-7">
-            <div class="w-full md:w-2/3 hidden md:block">
+          <div class="flex pt-7 mb-8 md:mb-0 justify-between">
+            <div class="flex flex-col justify-between">
               {#each rewarads as reward}
               <div class="flex h-18px">
                 <div style={`width: ${20 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">            
@@ -199,7 +199,7 @@
               </div>
             {/each}
             </div>
-            <div class="w-full md:w-2/3">
+            <div class="">
               {#each rewarads as reward}
               <div class="md:text-xs font-thin text-left">
                 <span class="font-bold">{reward.percentage}%</span>
