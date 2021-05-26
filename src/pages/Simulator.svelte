@@ -6,12 +6,16 @@
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
 
   function calculate() {
-    console.log("going to calculate using inputs", inputs);
     simulator.calculate(inputs).then(response => {
       outputs = response.outputs;
       projections = response.breakdowns;
     }).catch(error => console.error(error));  
   }
+
+  function changeCommitment(commitment) {
+    inputs.commitment = commitment;
+    calculate();
+	}
   
   // creating the Simulator class instance...
   let simulator = new Simulator();
@@ -281,16 +285,16 @@
             <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staking Commitment</div>  
             <div class="flex items-center bg-white rounded text-center w-full md:w-3/4 p-13px md:p-26px mb-8 md:mt-4">
               <div class="w-1/4">
-                <button class="bg-toto">6 months</button>
+                <button class="bg-toto" on:click={() => changeCommitment(6)}>6 months</button>
               </div>
               <div class="w-1/4">
-                <button class="bg-toto">1 year</button>
+                <button class="bg-toto" on:click={() => changeCommitment(12)}>1 year</button>
               </div>
               <div class="w-1/4">
-                <button class="bg-toto">2 years</button>
+                <button class="bg-toto" on:click={() => changeCommitment(24)}>2 years</button>
               </div>
               <div class="w-1/4">
-                <button class="bg-toto">3 years</button>
+                <button class="bg-toto" on:click={() => changeCommitment(36)}>3 years</button>
               </div>
             </div>
           </div>

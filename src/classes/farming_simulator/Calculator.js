@@ -116,7 +116,6 @@ export default class Calculator {
         });
 
         // TODO: to be improved using roundNumers function...
-        console.log(projections.farming.totalStakedVeDough);
         projections.farming.totalStakedVeDough = projections.farming.totalStakedVeDough.toFixed(2);     
 
         resolve({ outputs: outputs, breakdowns: projections });
