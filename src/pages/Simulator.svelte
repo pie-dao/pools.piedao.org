@@ -26,12 +26,12 @@
   };
 
   // rewards distrubutions, hardcoded for now...
-  let rewarads = {
-    6: 12,
-    12: 18,
-    24: 23,
-    36: 37
-  };
+  let rewarads = [
+    {commitment: "6 Months", percentage: 12},
+    {commitment: "1 Year", percentage: 18},
+    {commitment: "2 Years", percentage: 23},
+    {commitment: "3 Years", percentage: 37}
+  ];
 
   // retrieving default markets infos...
   let markets = simulator.getMarkets();
@@ -162,9 +162,26 @@
           </div>            
         </div>
         <!-- Total Staking Commitment -->
-        <div class="w-full md:w-2/6 md:mr-8">
+        <div class="w-full md:w-2/6 md:mr-8 p-4">
           <div class="md:text-xs font-thin leading-2 mb-4 text-left">Total Staking Commitment</div>
-          <div class="p-4">some content goes in here...</div>
+          <div class="flex">
+            <div class="w-2/3">
+              {#each rewarads as reward}
+              <div class="flex h-18px">
+                <div style={`width: ${20 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">            
+                </div>
+              </div>
+            {/each}
+            </div>
+            <div class="w-1/3">
+              {#each rewarads as reward}
+              <div class="md:text-xs font-thin text-left">
+                <span class="font-bold">{reward.percentage}%</span>
+                {reward.commitment}
+              </div>
+            {/each}
+            </div> 
+          </div>
         </div>
         <!-- Expected APR -->
         <div class="w-full md:w-1/6 md:mr-8">
