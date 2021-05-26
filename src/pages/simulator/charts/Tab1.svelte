@@ -8,6 +8,9 @@
   // Plotly - Charts Section
   onMount(async () => {
     let layout = {
+      margin: {
+        pad: 20
+      },
       showlegend: false,
       yaxis: {
         fixedrange: true,

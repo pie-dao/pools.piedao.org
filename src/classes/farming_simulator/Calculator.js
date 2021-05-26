@@ -92,7 +92,8 @@ export default class Calculator {
     return new Promise((resolve, reject) => {
       this.project(inputs).then((projections) => {
         let outputs = {};
-        const userYearlyReturns = projections.returns.user.reduce((total, value) => total + value);
+        let user_yearly_returns = projections.returns.user.slice(0, 12);
+        const userYearlyReturns = user_yearly_returns.reduce((total, value) => total + value);
 
         outputs.user = {
           expectedYearlyReturns: userYearlyReturns,
@@ -144,7 +145,7 @@ export default class Calculator {
           + this.calculateVeDough(inputs.stakedDough, inputs.commitment);
 
         // calculating the projections for the next 12 months...
-        for (let i = 0; i < 13; i += 1) {
+        for (let i = 0; i < 36; i += 1) {
           this.projections.farming.asset[i] = farmingAsset;
           
           this.projections.farming.gains[i] = (farmingAsset * (parseFloat(inputs.expectedApr) / 100)) / 12;
