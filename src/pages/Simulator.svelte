@@ -324,7 +324,7 @@
     <!-- FOURTH FLEX ROW - SUMMARY -->
     <div class="flex flex-row gap-2 mb-2">
       <div class="bg-lightgrey  rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-auto flex-col items-left">
-        <div class="font-huge leading-2 mb-8 text-left">Summary</div>
+        <div class="font-huge leading-2 mb-8 text-center">Summary</div>
         <div class="flex flex-col md:flex-row border-b-2 border-gray-50 pb-4">
           <div class="flex-initial w-full md:w-1/3">
             <div class="font-thin">Your Expected Returns (Yearly)</div>
