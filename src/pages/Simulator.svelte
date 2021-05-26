@@ -103,17 +103,19 @@
           <div class="w-full">
             <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
               Distributed to veDOUGH holders 
-              <button class="ml-4 oven-withdraw-button">60%</button>
+              <button style="background-color: #24D897;" class="ml-4 oven-withdraw-button">60%</button>
             </div>
           </div>
           <div class="w-full">
             <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
-              Used to compound the treasury <button class="ml-4 oven-withdraw-button">25%</button>
+              Used to compound the treasury 
+              <button  style="background-color: #CF4EB7;" class="ml-4 oven-withdraw-button">25%</button>
             </div>
           </div>
           <div class="w-full">
             <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
-              used to cover costs <button class="ml-4 oven-withdraw-button">15%</button>
+              used to cover costs 
+              <button  style="background-color: #67BDF0;" class="ml-4 oven-withdraw-button">15%</button>
             </div>
           </div>
           
@@ -162,10 +164,10 @@
           </div>            
         </div>
         <!-- Total Staking Commitment -->
-        <div class="w-full md:w-2/6 md:mr-8 p-4">
-          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Total Staking Commitment</div>
-          <div class="flex">
-            <div class="w-2/3">
+        <div class="w-full md:w-2/6 md:mr-8">
+          <div class="md:text-xs font-thin leading-2 text-left">Total Staking Commitment</div>
+          <div class="flex flex-col md:flex-row p-4">
+            <div class="w-full md:w-2/3 hidden md:block">
               {#each rewarads as reward}
               <div class="flex h-18px">
                 <div style={`width: ${20 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">            
@@ -173,7 +175,7 @@
               </div>
             {/each}
             </div>
-            <div class="w-1/3">
+            <div class="w-full md:w-2/3">
               {#each rewarads as reward}
               <div class="md:text-xs font-thin text-left">
                 <span class="font-bold">{reward.percentage}%</span>
