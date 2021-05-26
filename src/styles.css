@@ -297,10 +297,15 @@ right: 0px;
   font-weight: bolder;
 }
 
+
 @media (max-width: 768px) {
   .font-hero {
     font-size: 15vw;
     line-height: 3.5rem;
+  }
+  .font-hero-sim {
+    font-size: 15vw;
+    line-height: 4.5rem;
   }
   .font-huge {
     font-size: 2rem;
