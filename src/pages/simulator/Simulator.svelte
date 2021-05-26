@@ -350,26 +350,26 @@
             <div class="font-thin">Your Expected Returns (Yearly)</div>
             <div class="md:text-base mb-4 mt-2">$ {outputs.user.expectedYearlyReturns}</div>
           </div>
-          <div class="flex-initial w-full md:w-1/3">
+          <div class="flex-initial w-full md:w-1/3 mt-2 md:mt-0">
             <div class="font-thin">Your Expected Returns (Monthly)</div>
             <div class="md:text-base mb-4  mt-2">$ {outputs.user.expectedAverageMontlyReturns}</div>
           </div>
-          <div class="flex-initial w-full md:w-1/3">
+          <div class="flex-initial w-full md:w-1/3 mt-2 md:mt-0">
             <div class="font-thin">Your Expected APR</div>
             <div class="md:text-base mb-4 mt-2">{outputs.user.expectedApr}%</div>
           </div>
         </div>     
         <div class="flex flex-col md:flex-row pt-4">
-          <div class="flex-initial w-full md:w-1/3">
+          <div class="flex-initial w-full md:w-1/3 mt-4">
             <div class="font-thin">Treasury Expected Returns (Yearly)</div>
             <div class="md:text-base mb-4 mt-2">$ {outputs.treasury.expectedYearlyReturns}</div>
           </div>
-          <div class="flex-initialw-full md:w-1/3">
+          <div class="flex-initialw-full md:w-1/3 mt-4">
             <div class="font-thin">Treasury Expected Returns (Monthly)</div>
             <div class="md:text-base mb-4 mt-2">$ {outputs.treasury.expectedAverageMontlyReturns}</div>
           </div>
 
-          <div class="w-full md:w-1/3">
+          <div class="w-full md:w-1/3 mt-4">
             <div class="font-thin">Tot veDOUGH (Yours + Others)</div>
             <div class="flex items-center justify-center w-full mt-2">
               <div class="mr-2">$ {projections.farming.totalStakedVeDough}</div>
