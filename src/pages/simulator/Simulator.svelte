@@ -190,7 +190,7 @@
         <!-- Total Staking Commitment -->
         <div class="w-full md:w-2/6 md:mr-8">
           <div class="md:text-xs font-thin leading-2 text-left">Total Staking Commitment</div>
-          <div class="flex pt-7 mb-8 md:mb-0 justify-between">
+          <div class="flex pt-2 md:pt-7 mb-8 md:mb-0 justify-between">
             <div class="flex flex-col justify-between">
               {#each rewarads as reward}
               <div class="flex h-18px">
