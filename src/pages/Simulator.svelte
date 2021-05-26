@@ -95,7 +95,7 @@
   <div class="text-base font-thin mx-20pc mb-8">Tweak the parameters. We build this expensive tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
     <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
     <div class="flex flex-col md:flex-row gap-2 mb-2">
-      <div class="w-1/3 md:m-0px pl-4 bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-shrink-0 flex-col items-left">
+      <div class="w-full md:w-1/3 md:m-0px pl-4 bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-shrink-0 flex-col items-left">
         <div class="font-thin leading-2 mb-4 text-left">Treasury Liquidity Deployed</div>
         <div class="w-100pc font-veryhuge tracking-tight text-left mb-4">$ {formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
         <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
