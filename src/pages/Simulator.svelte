@@ -101,9 +101,9 @@
         <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
 
-      <div class=" bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-1 flex-col md:flex-row items-left">
+      <div class=" bg-lightgrey rounded text-black pt-8 pb-8 px-2 md:px-6 flex flex-1 flex-col md:flex-row items-left">
         <div class="w-full md:w-2/3">
-          <div class="font-thin leading-2 mb-4 text-left">Rewards Distrubutions</div>
+          <div class="font-thin leading-2 mb-8 text-left">Rewards Distrubutions</div>
           <div class="w-full">
             <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
               Distributed to veDOUGH holders 
@@ -122,12 +122,11 @@
               <button  style="background-color: #67BDF0;" class="ml-4 oven-withdraw-button">15%</button>
             </div>
           </div>
-          
         </div>
         
         <div class="w-full md:w-1/3 align-center hidden md:block">       
           <img
-            class="token-icon w-200px"
+            class="token-icon w-180px"
             src={images.simulator_chart}
             alt="ETH"
           />
