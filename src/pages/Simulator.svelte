@@ -95,13 +95,13 @@
   <div class="text-base font-thin mx-20pc mb-8">Tweak the parameters. We build this expensive tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
     <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
     <div class="flex flex-col md:flex-row gap-2 mb-2">
-      <div class="w-full md:w-1/3 md:m-0px pl-4 bg-lightgrey rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-shrink-0 flex-col items-left">
+      <div class="w-full md:w-1/3 md:m-0px bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
         <div class="font-thin leading-2 mb-4 text-left">Treasury Liquidity Deployed</div>
         <div class="w-100pc font-veryhuge tracking-tight text-left mb-4">$ {formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
         <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
 
-      <div class=" bg-lightgrey rounded text-black pt-8 pb-8 px-2 md:px-6 flex flex-1 flex-col md:flex-row items-left">
+      <div class=" bg-lightgrey rounded text-black p-8 flex flex-1 flex-col md:flex-row items-left">
         <div class="w-full md:w-2/3">
           <div class="font-thin leading-2 mb-8 text-left">Rewards Distrubutions</div>
           <div class="w-full">
@@ -134,7 +134,7 @@
       </div>      
     </div>
     <!-- SECOND FLEX ROW - TOTAL STAKED veDOUGH | REWARDS | APR -->
-    <div class=" w-full bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
+    <div class=" w-full bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
       <div class="w-full flex flex-col md:flex-row">
         <!-- Total Staked veDOUGH -->
         <div class="w-full md:w-2/6 md:mr-8">
@@ -249,7 +249,7 @@
       </div>
     </div>
     <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
-      <div class="w-full  bg-lightgrey rounded text-black mb-2 pt-8 pb-2 px-2 md:px-6 flex flex-col">
+      <div class="w-full  bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
           <div class="w-full md:w-1/3 md:mr-8">
             <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staked DOUGH</div>
@@ -322,7 +322,7 @@
 
     <!-- FOURTH FLEX ROW - SUMMARY -->
     <div class="flex flex-row gap-2 mb-2">
-      <div class="bg-lightgrey  rounded text-black pt-8 pb-2 px-2 md:px-6 flex flex-auto flex-col items-left">
+      <div class="bg-lightgrey  rounded text-black p-8 flex flex-auto flex-col items-left">
         <div class="font-huge leading-2 mb-8 text-center">Summary</div>
         <div class="flex flex-col md:flex-row border-b-2 border-gray-50 pb-4">
           <div class="flex-initial w-full md:w-1/3">
