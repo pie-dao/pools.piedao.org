@@ -24,7 +24,7 @@ import Learn from '../pages/Learn.svelte';
 import Integrations from '../pages/Integrations.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
 import Farm from '../pages/Farm.svelte';
-import Simulator from '../pages/Simulator.svelte';
+import Simulator from '../pages/simulator/Simulator.svelte';
 
 export const defaultRouteObj = {
   page: Main,
