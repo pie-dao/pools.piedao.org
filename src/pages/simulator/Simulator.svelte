@@ -301,9 +301,9 @@
               </div>
             </div>                 
           </div>
-          <div class="w-full md:w-2/3 flex flex-col">
+          <div class="w-full flex flex-col">
             <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staking Commitment</div>  
-            <div class="flex items-center bg-white rounded text-center w-full md:w-3/4 p-13px md:p-26px mb-8 md:mt-4">
+            <div class="flex items-center bg-white rounded text-center w-full p-13px md:p-26px mb-8 md:mt-4">
               <div class="w-1/4">
                 <button class:selected="{inputs.commitment === 6}" class="bg-button" on:click={() => changeCommitment(6)}>6 months</button>
               </div>
