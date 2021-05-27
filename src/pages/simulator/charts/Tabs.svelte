@@ -6,7 +6,7 @@
   const handleClick = tabValue => () => (activeTabValue = tabValue);
 </script>
 
-<ul>
+<ul class="tabs_menu">
 {#each tabs as item}
 	<li class={activeTabValue === item.value ? 'active' : ''}>
 		<span on:click={handleClick(item.value)}>{item.label}</span>
@@ -15,7 +15,7 @@
 </ul>
 {#each tabs as item}
 	{#if activeTabValue == item.value}
-	<div class="box">
+	<div class="tabs_content">
 		<svelte:component this={item.component} projections={projections}/>
 	</div>
 	{/if}
