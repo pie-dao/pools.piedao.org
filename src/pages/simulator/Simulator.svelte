@@ -14,6 +14,21 @@
     simulator.calculate(inputs).then(response => {
       outputs = response.outputs;
       projections = response.breakdowns;
+
+      tabs = [
+        { label: "Expected Tot Returns",
+        value: 1,
+        component: Tab1
+        },
+        { label: "Farmed Treasury",
+        value: 2,
+        component: Tab2
+        },
+        { label: "Reward Distributions",
+        value: 3,
+        component: Tab3
+        }
+      ];      
     }).catch(error => console.error(error));  
   }
 
@@ -54,6 +69,9 @@
   let outputs = simulator.getOutputs();
   let projections = simulator.getProjections();
 
+  // List of tab items with labels, values and assigned components
+  let tabs = [];  
+
   // calculating real outputs...
   calculate();
 
@@ -71,22 +89,6 @@
     'snapshot',
     'zoom',
     'info',
-  ];
-
-  // List of tab items with labels, values and assigned components
-  let tabs = [
-    { label: "Expected Tot Returns",
-		 value: 1,
-		 component: Tab1
-		},
-    { label: "Farmed Treasury",
-		 value: 2,
-		 component: Tab2
-		},
-    { label: "Reward Distributions",
-		 value: 3,
-		 component: Tab3
-		}
   ];
 </script>
 
