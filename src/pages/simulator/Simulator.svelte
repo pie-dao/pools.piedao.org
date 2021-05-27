@@ -240,9 +240,9 @@
             </div>
           </div>            
         </div>
-        <!-- Rewrds Unclaimed -->
+        <!-- Rewards Unclaimed -->
         <div class="w-full md:w-1/6 md:mr-8">
-          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Rewrds Unclaimed</div>
+          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Rewards Unclaimed</div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
             <div class="flex nowrap items-center p-1">
               <input

@@ -16,9 +16,9 @@
     x[i] = i + 1;
 
     if(i == 0) {
-      y_median[i] = 0;
-      y_lowest[i] = 0;
-      y_highest[i] = 0;
+      y_median[i] = projections.median.farming.asset[i];
+      y_lowest[i] = projections.lowest.farming.asset[i];
+      y_highest[i] = projections.highest.farming.asset[i];
     } else {
       y_median[i] = y_median[i - 1] + projections.median.farming.asset[i];
       y_lowest[i] = y_lowest[i - 1] + projections.lowest.farming.asset[i];
