@@ -56,8 +56,10 @@
       y: y_median,
       type: 'scatter',
       mode: 'lines',
+      name: 'Median APR',
       line: {
-        width: 6
+        width: 6,
+        color: '#65D0F5'
       }      
     };
 
@@ -66,8 +68,10 @@
       y: y_lowest,
       type: 'scatter',
       mode: 'lines',
+      name: 'Lowest APR',
       line: {
-        width: 6
+        width: 6,
+        color: "#F8E71C"
       }        
     };    
 
@@ -76,8 +80,10 @@
       y: y_highest,
       type: 'scatter',
       mode: 'lines',
+      name: 'Highest APR',
       line: {
-        width: 6
+        width: 6,
+        color: '#F005C4'
       }      
     };      
 
