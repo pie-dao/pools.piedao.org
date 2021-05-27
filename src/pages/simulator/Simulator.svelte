@@ -83,7 +83,7 @@
 		 value: 2,
 		 component: Tab2
 		},
-    { label: "Reward Distribution",
+    { label: "Reward Distributions",
 		 value: 3,
 		 component: Tab3
 		}
@@ -372,7 +372,7 @@
           <div class="w-full md:w-1/3 mt-4">
             <div class="font-thin">Tot veDOUGH (Yours + Others)</div>
             <div class="flex items-center justify-center w-full mt-2">
-              <div class="mr-2">$ {projections.farming.totalStakedVeDough}</div>
+              <div class="mr-2">$ {projections.median.farming.totalStakedVeDough}</div>
               <img
               class="token-icon w-30px h-30px"
               src={images.simulator_veDough}

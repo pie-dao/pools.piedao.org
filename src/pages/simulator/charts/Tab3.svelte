@@ -8,22 +8,23 @@
   let chartId = uniqueId('chart_');
 
   let x = [];
-  let y_median = [];
-  let y_lowest = [];
-  let y_highest = [];
+  let y_distributed = [];
+  let y_compound = [];
+  let y_costs = [];
 
-  for(let i = 0; i < projections.farming.staking_rewards.length; i++) {
+  for(let i = 0; i < projections.median.farming.gains.length; i++) {
     x[i] = i;
-    y_median[i] = projections.farming.staking_rewards[i];
-    y_lowest[i] = y_median[i] - (y_median[i] * ( 1 - 0.25));
-    y_highest[i] = y_median[i] + (y_median[i] * ( 1 - 0.25));    
-  }  
 
-  // shifting the first array's item, 
-  // cause we ain't got no profits on the first month
-  y_median.shift();
-  y_lowest.shift();
-  y_highest.shift();  
+    if(i == 0) {
+      y_distributed[i] = projections.median.farming.gains[i] * 0.60;
+      y_compound[i] = projections.median.farming.gains[i] * 0.25;
+      y_costs[i] = projections.median.farming.gains[i] * 0.15;
+    } else {
+      y_distributed[i] = y_distributed[i - 1] + (projections.median.farming.gains[i] * 0.60);
+      y_compound[i] = y_compound[i - 1] + (projections.median.farming.gains[i] * 0.25);
+      y_costs[i] = y_costs[i - 1] + (projections.median.farming.gains[i] * 0.15); 
+    }
+  }
   
   // Plotly - Charts Section
   onMount(async () => {
@@ -31,7 +32,12 @@
       margin: {
         pad: 20
       },
-      showlegend: false,
+      legend: {
+        y: 1.5,
+        x: 0.5,
+        orientation: "h",
+        tracegroupgap: 500
+      },
       yaxis: {
         fixedrange: true,
         zeroline: false,
@@ -53,10 +59,10 @@
 
     var trace_median = {
       x: x,
-      y: y_median,
+      y: y_distributed,
       type: 'scatter',
       mode: 'lines',
-      name: 'Median APR',
+      name: 'Distributed to Holders',
       line: {
         width: 6,
         color: '#65D0F5'
@@ -65,10 +71,10 @@
 
     var trace_lowest = {
       x: x,
-      y: y_lowest,
+      y: y_compound,
       type: 'scatter',
       mode: 'lines',
-      name: 'Lowest APR',
+      name: 'Compound Treasury',
       line: {
         width: 6,
         color: "#F8E71C"
@@ -77,10 +83,10 @@
 
     var trace_highest = {
       x: x,
-      y: y_highest,
+      y: y_costs,
       type: 'scatter',
       mode: 'lines',
-      name: 'Highest APR',
+      name: 'Cover Costs',
       line: {
         width: 6,
         color: '#F005C4'

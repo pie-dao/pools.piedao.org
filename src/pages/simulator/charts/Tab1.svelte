@@ -3,7 +3,6 @@
   import uniqueId from 'lodash/uniqueId';
 
   export let projections = {};
-  console.log("tab1", projections);
 
   // creating a unique chart id...
   let chartId = uniqueId('chart_');
@@ -13,18 +12,19 @@
   let y_lowest = [];
   let y_highest = [];
 
-  for(let i = 0; i < projections.farming.asset.length; i++) {
-    x[i] = i;
-    y_median[i] = projections.returns.user[i];
-    y_lowest[i] = y_median[i] - (y_median[i] * ( 1 - 0.25));
-    y_highest[i] = y_median[i] + (y_median[i] * ( 1 - 0.25));
-  }
+  for(let i = 0; i < projections.median.returns.user.length; i++) {
+    x[i] = i + 1;
 
-  // shifting the first array's item, 
-  // cause we ain't got no profits on the first month
-  y_median.shift();
-  y_lowest.shift();
-  y_highest.shift();
+    if(i == 0) {
+      y_median[i] = 0;
+      y_lowest[i] = 0;
+      y_highest[i] = 0;
+    } else {
+      y_median[i] = y_median[i - 1] + projections.median.returns.user[i];
+      y_lowest[i] = y_lowest[i - 1] + projections.lowest.returns.user[i];
+      y_highest[i] = y_highest[i - 1] + projections.highest.returns.user[i];
+    }
+  }
   
   // Plotly - Charts Section
   onMount(async () => {
@@ -32,7 +32,12 @@
       margin: {
         pad: 20
       },
-      showlegend: false,
+      legend: {
+        y: 1.5,
+        x: 0.6,
+        orientation: "h",
+        tracegroupgap: 500
+      },
       yaxis: {
         fixedrange: true,
         zeroline: false,

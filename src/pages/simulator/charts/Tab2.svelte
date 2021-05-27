@@ -8,15 +8,23 @@
   let chartId = uniqueId('chart_');
 
   let x = [];
-  let y_median = [];
+  let y_median = [0];
   let y_lowest = [];
   let y_highest = [];
 
-  for(let i = 0; i < projections.farming.asset.length; i++) {
-    x[i] = i;
-    y_median[i] = projections.farming.asset[i];
-    y_lowest[i] = y_median[i] - (y_median[i] * ( 1 - 0.25));
-    y_highest[i] = y_median[i] + (y_median[i] * ( 1 - 0.25));    
+  for(let i = 0; i < projections.median.farming.asset.length; i++) {
+    x[i] = i + 1;
+
+    if(i == 0) {
+      y_median[i] = 0;
+      y_lowest[i] = 0;
+      y_highest[i] = 0;
+    } else {
+      y_median[i] = y_median[i - 1] + projections.median.farming.asset[i];
+      y_lowest[i] = y_lowest[i - 1] + projections.lowest.farming.asset[i];
+      y_highest[i] = y_highest[i - 1] + projections.highest.farming.asset[i];
+    }
+  
   }
   
   // Plotly - Charts Section
@@ -25,7 +33,12 @@
       margin: {
         pad: 20
       },
-      showlegend: false,
+      legend: {
+        y: 1.5,
+        x: 0.6,
+        orientation: "h",
+        tracegroupgap: 500
+      },
       yaxis: {
         fixedrange: true,
         zeroline: false,
