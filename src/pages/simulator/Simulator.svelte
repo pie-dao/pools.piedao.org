@@ -389,6 +389,8 @@
     </div>
 
     <!-- CHARTS SECTION -->
-    <Tabs tabs={tabs} projections={projections}/>
+    {#key projections}
+      <Tabs tabs={tabs} projections={projections}/>
+    {/key}
   </div>
 </div>
