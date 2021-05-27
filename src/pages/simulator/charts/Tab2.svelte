@@ -15,15 +15,9 @@
   for(let i = 0; i < projections.median.farming.asset.length; i++) {
     x[i] = i + 1;
 
-    if(i == 0) {
-      y_median[i] = projections.median.farming.asset[i];
+    y_median[i] = projections.median.farming.asset[i];
       y_lowest[i] = projections.lowest.farming.asset[i];
-      y_highest[i] = projections.highest.farming.asset[i];
-    } else {
-      y_median[i] = y_median[i - 1] + projections.median.farming.asset[i];
-      y_lowest[i] = y_lowest[i - 1] + projections.lowest.farming.asset[i];
-      y_highest[i] = y_highest[i - 1] + projections.highest.farming.asset[i];
-    }
+      y_highest[i] = projections.highest.farming.asset[i]; 
   
   }
   

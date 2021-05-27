@@ -16,9 +16,9 @@
     x[i] = i;
 
     if(i == 0) {
-      y_distributed[i] = projections.median.farming.gains[i] * 0.60;
-      y_compound[i] = projections.median.farming.gains[i] * 0.25;
-      y_costs[i] = projections.median.farming.gains[i] * 0.15;
+      y_distributed[i] = 0;
+      y_compound[i] = 0;
+      y_costs[i] = 0;
     } else {
       y_distributed[i] = y_distributed[i - 1] + (projections.median.farming.gains[i] * 0.60);
       y_compound[i] = y_compound[i - 1] + (projections.median.farming.gains[i] * 0.25);
