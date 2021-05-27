@@ -3,7 +3,6 @@
   export let projections = {};
   export let activeTabValue = 1;
   
-  console.log(projections);
   const handleClick = tabValue => () => (activeTabValue = tabValue);
 </script>
 
@@ -17,7 +16,7 @@
 {#each tabs as item}
 	{#if activeTabValue == item.value}
 	<div class="box">
-		<svelte:component this={item.component}/>
+		<svelte:component this={item.component} projections={projections}/>
 	</div>
 	{/if}
 {/each}

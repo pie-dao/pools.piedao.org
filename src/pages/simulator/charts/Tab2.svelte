@@ -2,8 +2,22 @@
   import { onMount } from 'svelte'; 
   import uniqueId from 'lodash/uniqueId';
 
+  export let projections = {};
+
   // creating a unique chart id...
   let chartId = uniqueId('chart_');
+
+  let x = [];
+  let y_median = [];
+  let y_lowest = [];
+  let y_highest = [];
+
+  for(let i = 0; i < projections.farming.asset.length; i++) {
+    x[i] = i;
+    y_median[i] = projections.farming.asset[i];
+    y_lowest[i] = y_median[i] - (y_median[i] * ( 1 - 0.25));
+    y_highest[i] = y_median[i] + (y_median[i] * ( 1 - 0.25));    
+  }
   
   // Plotly - Charts Section
   onMount(async () => {
@@ -32,8 +46,8 @@
     };
 
     var trace_median = {
-      x: [0, 6, 12, 18, 24, 30, 36],
-      y: [0, 5, 10, 15, 20, 25, 30],
+      x: x,
+      y: y_median,
       type: 'scatter',
       mode: 'lines',
       line: {
@@ -42,8 +56,8 @@
     };
 
     var trace_lowest = {
-      x: [0, 6, 12, 18, 24, 30, 36],
-      y: [0, 2, 4, 8, 12, 16, 20],
+      x: x,
+      y: y_lowest,
       type: 'scatter',
       mode: 'lines',
       line: {
@@ -52,8 +66,8 @@
     };    
 
     var trace_highest = {
-      x: [0, 6, 12, 18, 24, 30, 36],
-      y: [0, 10, 20, 30, 40, 50, 60],
+      x: x,
+      y: y_highest,
       type: 'scatter',
       mode: 'lines',
       line: {
