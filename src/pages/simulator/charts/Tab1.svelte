@@ -25,16 +25,23 @@
       y_highest[i] = y_highest[i - 1] + projections.highest.returns.user[i];
     }
   }
+
+  console.log(x, y_median);
   
   // Plotly - Charts Section
   onMount(async () => {
     let layout = {
+      //autosize: true,
       margin: {
-        pad: 20
+        pad: 20,
+        l: 10,
+        r: 70,
+        t: 10,
+        b: 80
       },
       legend: {
         y: 1.5,
-        x: 0.6,
+        x: 0.5,
         orientation: "h",
         tracegroupgap: 500
       },
@@ -48,13 +55,13 @@
         zeroline: false,
         ticktext: ['6 Months', '12 Months', '18 Months', '24 Months', '30 Months', '36 Months'], 
         tickvals: [6, 12, 18, 24, 30, 36],
-        tickmode: 'array'        
+        tickmode: 'array'
       },
     };
 
     let settings = {
       displayModeBar: false,
-      responsive: true,
+      //responsive: true
     };
 
     var trace_median = {
@@ -95,7 +102,7 @@
 
     var data = [trace_median, trace_lowest, trace_highest];
 
-    new Plotly.newPlot(chartId, data, layout, settings);
+    new Plotly.newPlot(chartId, data, layout, settings);  
   });
 
 </script>

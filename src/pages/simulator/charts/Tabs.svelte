@@ -15,7 +15,7 @@
 </ul>
 {#each tabs as item}
 	{#if activeTabValue == item.value}
-	<div class="tabs_content">
+	<div class="tabs_content box">
 		<svelte:component this={item.component} projections={projections}/>
 	</div>
 	{/if}
@@ -23,7 +23,6 @@
 <style>
 	.box {
 		margin-bottom: 10px;
-		padding: 40px;
 		border: 1px solid #dee2e6;
     border-radius: 0 0 .5rem .5rem;
     border-top: 0;

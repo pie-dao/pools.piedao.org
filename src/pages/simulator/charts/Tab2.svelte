@@ -25,11 +25,15 @@
   onMount(async () => {
     let layout = {
       margin: {
-        pad: 20
+        pad: 20,
+        l: 10,
+        r: 70,
+        t: 10,
+        b: 80        
       },
       legend: {
         y: 1.5,
-        x: 0.6,
+        x: 0.5,
         orientation: "h",
         tracegroupgap: 500
       },
@@ -49,7 +53,7 @@
 
     let settings = {
       displayModeBar: false,
-      responsive: true,
+      responsive: true
     };
 
     var trace_median = {
