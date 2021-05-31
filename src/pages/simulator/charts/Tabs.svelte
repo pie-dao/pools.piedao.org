@@ -38,6 +38,7 @@
   }
 	li {
 		margin-bottom: -1px;
+    font-size: 1rem;
 	}
 
   span {
@@ -58,4 +59,13 @@
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff;
   }
+
+  @media screen and (max-width: 640px) {
+    li {
+      font-size: 0.6rem;
+    }
+    span {
+    padding: 0.3rem 0.3rem;
+  }
+}
 </style>
