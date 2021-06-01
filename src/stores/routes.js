@@ -12,7 +12,8 @@ import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
 import LPStakingV2 from '../pages/LPStakingV2.svelte';
 import Staking from '../pages/Staking.svelte';
-import NewStaking from '../pages/staking/Staking.svelte';
+// import NewStaking from '../pages/staking/Staking.svelte';
+import DoughStaking from "../pages/DoughStaking.svelte";
 import StakingPageSingle from '../pages/StakingPageSingle.svelte';
 import PieLanding from '../pages/PieIndexLanding.svelte';
 import Markets from '../pages/Markets.svelte';
@@ -116,7 +117,7 @@ const formatRoute = (route) => {
     case 'simulator':
       return { page: Simulator };
     case 'new_staking':
-      return { page: NewStaking };      
+      return { page: DoughStaking };      
     case 'stake':
       referral = route[1] || null;
 

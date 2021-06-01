@@ -68,9 +68,13 @@ export const registerConnection = async (newWeb3) => {
   } catch {
     icon = "";
   }
-  
 
-  const ens = await provider.lookupAddress(address);
+  let ens
+  try {
+    ens = await provider.lookupAddress(address);
+  } catch {
+    ens = null;
+  }
 
   eth.set({
     address,
