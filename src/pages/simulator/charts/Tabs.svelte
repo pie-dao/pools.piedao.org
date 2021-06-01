@@ -6,7 +6,7 @@
   const handleClick = tabValue => () => (activeTabValue = tabValue);
 </script>
 
-<ul class="tabs_menu">
+<ul class="tabs_menu overflow-x-auto whitespace-nowrap .hidescrollbar">
 {#each tabs as item}
 	<li class={activeTabValue === item.value ? 'active' : ''}>
 		<span on:click={handleClick(item.value)}>{item.label}</span>
@@ -29,7 +29,7 @@
 	}
   ul {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
@@ -38,6 +38,7 @@
 	li {
 		margin-bottom: -1px;
     font-size: 1rem;
+    color: #727272;
 	}
 
   span {
@@ -47,6 +48,7 @@
     display: block;
     padding: 0.5rem 1rem;
     cursor: pointer;
+    white-space: nowrap;
   }
 
   span:hover {
@@ -54,17 +56,17 @@
   }
 
   li.active > span {
-    color: #495057;
+    color: black;
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff;
   }
 
   @media screen and (max-width: 640px) {
     li {
-      font-size: 0.6rem;
+      font-size: 1rem;
     }
     span {
-    padding: 0.3rem 0.3rem;
+    padding: 0.8rem 0.8rem;
   }
 }
 </style>
