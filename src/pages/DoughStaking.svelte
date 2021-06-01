@@ -22,9 +22,13 @@
         const { provider, signer } = get(eth);
         console.log(smartcontracts);
         let sharesTimeLock = new ethers.Contract(smartcontracts.doughStaking, sharesTimeLockABI, signer || provider);
+        console.log("fetching staking data");
+        console.log($eth.address);
         let res = (await sharesTimeLock.getStakingData($eth.address));
 
         console.log(res);
+
+        data = res;
     }
 
     // update data on address or block change
