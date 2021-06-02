@@ -120,7 +120,7 @@ export default class Calculator {
 
   calculate(inputs) {
     return new Promise((resolve, reject) => {
-      const normalizedInputs = this.normalizeFormats(inputs);
+      const normalizedInputs = Calculator.normalizeFormats(inputs);
 
       this.project(normalizedInputs).then((projections) => {
         const calculatedProjections = projections;
