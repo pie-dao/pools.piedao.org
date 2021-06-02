@@ -4,6 +4,7 @@
   import { formatBigMoneyAmount } from '../../components/helpers.js';
   import images from '../../config/images.json';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
+  import { formatFiat } from '../../components/helpers.js';
 
   import Tab1 from "./charts/Tab1.svelte";
 	import Tab2 from "./charts/Tab2.svelte";
@@ -12,9 +13,8 @@
 
   function calculate() {
     // checking for inputs integrity...
-    console.log("calculating....")
     Object.keys(inputs).forEach(key => {
-      switch(typeof(inputs[key])) {
+      switch(key) {
         case 'number':
           if(inputs[key] > max_values[key] || inputs[key] < 0) {
             inputs[key] = max_values[key];
@@ -151,7 +151,7 @@
     <div class="flex flex-col md:flex-row gap-2 mb-2">
       <div class="w-full md:w-1/3 md:m-0px bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
         <div class="font-thin leading-2 mb-4 text-left">Treasury Liquidity Deployed</div>
-        <div class="w-100pc font-veryhuge tracking-tight text-left mb-4">$ {formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
+        <div class="w-100pc font-veryhuge tracking-tight text-left mb-4">{formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
         <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
 
@@ -201,11 +201,11 @@
                 autocomplete="off"
                 autocorrect="off"
                 type="number"
-                pattern="^[0-9]*[.]?[0-9]*$"
-                placeholder="0.0"
+                pattern="^[0-9]*[.,]?[0-9]*$"
                 minlength="1"
-                maxlength="79"
+                maxlength="10"
                 spellcheck="false"
+                placeholder={inputs.stakedVeDough}
                 bind:value={inputs.stakedVeDough}
                 on:keyup={calculate}
               />
@@ -252,12 +252,12 @@
                 inputmode="decimal"
                 autocomplete="off"
                 autocorrect="off"
-                type="text"
-                pattern="^[0-9]*[.]?[0-9]*$"
-                placeholder={inputs.expectedApr}
+                type="string"
+                pattern="^[0-9]*?[0-9]*$"
                 minlength="1"
-                maxlength="79"
+                maxlength="4"
                 spellcheck="false"
+                placeholder={inputs.expectedApr}
                 bind:value={inputs.expectedApr}
                 on:keyup={calculate}
               />
@@ -281,12 +281,12 @@
                 inputmode="decimal"
                 autocomplete="off"
                 autocorrect="off"
-                type="text"
-                pattern="^[0-9]*[.]?[0-9]*$"
-                placeholder={inputs.rewardsUnclaimed}
+                type="string"
+                pattern="^[0-9]*?[0-9]*$"
                 minlength="1"
-                maxlength="79"
+                maxlength="4"
                 spellcheck="false"
+                placeholder={inputs.rewardsUnclaimed}
                 bind:value={inputs.rewardsUnclaimed}
                 on:keyup={calculate}
               />
@@ -310,16 +310,16 @@
             <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
               <div class="flex nowrap items-center p-1">
                 <input
-                  class="swap-input-from"
-                  inputmode="decimal"
-                  autocomplete="off"
-                  autocorrect="off"
-                  type="number"
-                  pattern="^[0-9]*[.]?[0-9]*$"
-                  placeholder="0.0"
-                  minlength="1"
-                  maxlength="79"
-                  spellcheck="false"
+                class="swap-input-from"
+                inputmode="decimal"
+                autocomplete="off"
+                autocorrect="off"
+                type="number"
+                pattern="^[0-9]*[.,]?[0-9]*$"
+                minlength="1"
+                maxlength="10"
+                spellcheck="false"
+                placeholder={inputs.stakedDough}
                   bind:value={inputs.stakedDough}
                   on:keyup={calculate}
                 />
@@ -381,11 +381,11 @@
         <div class="flex flex-col md:flex-row border-b-2 border-gray-50 pb-4">
           <div class="flex-initial w-full md:w-1/3">
             <div class="font-thin">Your Expected Returns (Yearly)</div>
-            <div class="md:text-base mb-4 mt-2">$ {outputs.user.expectedYearlyReturns}</div>
+            <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.user.expectedYearlyReturns)}</div>
           </div>
           <div class="flex-initial w-full md:w-1/3 mt-2 md:mt-0">
             <div class="font-thin">Your Expected Returns (Monthly)</div>
-            <div class="md:text-base mb-4  mt-2">$ {outputs.user.expectedAverageMontlyReturns}</div>
+            <div class="md:text-base mb-4  mt-2">{formatFiat(outputs.user.expectedAverageMontlyReturns)}</div>
           </div>
           <div class="flex-initial w-full md:w-1/3 mt-2 md:mt-0">
             <div class="font-thin">Your Expected APR</div>
@@ -395,17 +395,17 @@
         <div class="flex flex-col md:flex-row pt-4">
           <div class="flex-initial w-full md:w-1/3 mt-4">
             <div class="font-thin">Treasury Expected Returns (Yearly)</div>
-            <div class="md:text-base mb-4 mt-2">$ {outputs.treasury.expectedYearlyReturns}</div>
+            <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.treasury.expectedYearlyReturns)}</div>
           </div>
           <div class="flex-initialw-full md:w-1/3 mt-4">
             <div class="font-thin">Treasury Expected Returns (Monthly)</div>
-            <div class="md:text-base mb-4 mt-2">$ {outputs.treasury.expectedAverageMontlyReturns}</div>
+            <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.treasury.expectedAverageMontlyReturns)}</div>
           </div>
 
           <div class="w-full md:w-1/3 mt-4">
             <div class="font-thin">Tot veDOUGH (Yours + Others)</div>
             <div class="flex items-center justify-center w-full mt-2">
-              <div class="mr-2">$ {projections.median.farming.totalStakedVeDough}</div>
+              <div class="mr-2">{formatFiat(projections.median.farming.totalStakedVeDough)}</div>
               <img
               class="token-icon w-30px h-30px"
               src={images.simulator_veDough}
