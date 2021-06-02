@@ -11,6 +11,29 @@
   import Tabs from "./charts/Tabs.svelte";  
 
   function calculate() {
+    // checking for inputs integrity...
+    console.log("calculating....")
+    Object.keys(inputs).forEach(key => {
+      switch(typeof(inputs[key])) {
+        case 'number':
+          if(inputs[key] > max_values[key] || inputs[key] < 0) {
+            inputs[key] = max_values[key];
+          }
+          break;
+        case 'string':
+          inputs[key] = inputs[key].replace(/[^0-9]/g, '');
+          
+          if(inputs[key] > max_values[key] || inputs[key] < 0) {
+            inputs[key] = max_values[key] + '%';
+          } else {
+            inputs[key] += '%';
+          }
+          
+        break;          
+      }
+    });
+
+    // calculating the outputs and projections...
     simulator.calculate(inputs).then(response => {
       outputs = response.outputs;
       projections = response.breakdowns;
@@ -48,6 +71,14 @@
     stakedVeDough: 4500000,
     expectedApr: "50%"
   };
+
+  // defining maximum values for input fields...
+  let max_values = {
+    commitment: 36,
+    rewardsUnclaimed: 100,
+    stakedVeDough: 15000000,
+    expectedApr: 100
+  }  
 
   // rewards distrubutions, hardcoded for now...
   let rewarads = [

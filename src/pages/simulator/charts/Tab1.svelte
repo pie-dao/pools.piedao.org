@@ -25,8 +25,6 @@
       y_highest[i] = y_highest[i - 1] + projections.highest.returns.user[i];
     }
   }
-
-  console.log(x, y_median);
   
   // Plotly - Charts Section
   onMount(async () => {
