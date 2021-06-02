@@ -14,10 +14,11 @@
 	import Tab3 from "./charts/Tab3.svelte";
   import Tabs from "./charts/Tabs.svelte";  
 
-  function calculate() {
+  function format() {
+    console.log("formatting");
     // checking for inputs integrity...
     Object.keys(inputs).forEach(key => {
-      switch(key) {
+      switch(typeof(inputs[key])) {
         case 'number':
           if(inputs[key] > max_values[key] || inputs[key] < 0) {
             inputs[key] = max_values[key];
@@ -35,7 +36,9 @@
         break;          
       }
     });
+  }
 
+  function calculate() {
     // calculating the outputs and projections...
     simulator.calculate(inputs).then(response => {
       outputs = response.outputs;
@@ -220,6 +223,7 @@
                 placeholder={inputs.stakedVeDough}
                 bind:value={inputs.stakedVeDough}
                 on:keyup={calculate}
+                on:change={format}
               />
               <div class="h-32px flex items-center">
                 <img
@@ -272,6 +276,7 @@
                 placeholder={inputs.expectedApr}
                 bind:value={inputs.expectedApr}
                 on:keyup={calculate}
+                on:change={format}
               />
               <div class="h-32px flex items-center">
                 <img
@@ -301,6 +306,7 @@
                 placeholder={inputs.rewardsUnclaimed}
                 bind:value={inputs.rewardsUnclaimed}
                 on:keyup={calculate}
+                on:change={format}
               />
               <div class="h-32px flex items-center">
                 <img
@@ -332,8 +338,9 @@
                 maxlength="10"
                 spellcheck="false"
                 placeholder={inputs.stakedDough}
-                  bind:value={inputs.stakedDough}
-                  on:keyup={calculate}
+                bind:value={inputs.stakedDough}
+                on:keyup={calculate}
+                on:change={format}
                 />
                 <div class="h-32px flex items-center">
                   <img
