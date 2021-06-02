@@ -3,10 +3,11 @@
   import Simulator from '../../classes/farming_simulator/Simulator.js';
   import { formatBigMoneyAmount } from '../../components/helpers.js';
   import images from '../../config/images.json';
+
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { formatFiat } from '../../components/helpers.js';
 
-  import WrappedModal from '../../components/modals/wrappedModal.svelte'
+  import WrappedModal from '../../components/modals/infoModal.svelte'
   import Modal from '../../components/elements/Modal.svelte';
 
   import Tab1 from "./charts/Tab1.svelte";
@@ -76,8 +77,14 @@
     calculate();
 	}
 
+  function openModal(content_key) {
+    modal_content_key = content_key;
+    modal.open();
+  }
+
   // modal instance...
   let modal;
+  let modal_content_key;
   
   // creating the Simulator class instance...
   let simulator = new Simulator();
@@ -142,9 +149,9 @@
   ];
 </script>
 
-<Modal title={"Your Staking Commitment"} backgroundColor="#f3f3f3" bind:this={modal}>
+<Modal backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
-    just a modal content here
+    <WrappedModal description_key={modal_content_key}/>
   </span>
 </Modal>
 
@@ -175,14 +182,30 @@
     <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
     <div class="flex flex-col md:flex-row gap-2 mb-2">
       <div class="w-full md:w-1/3 md:m-0px bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
-        <div class="font-thin leading-2 mb-4 text-left">Treasury Liquidity Deployed</div>
+        <div class="font-thin md:text-xs mb-4 text-left">
+          <span class="float-left">Treasury Liquidity Deployed</span>
+          <img
+          on:click={() => openModal('simulator.treasury.liquidity.deployed')}
+          class="token-icon w-18px h-18px pl-4px"
+          src={images.simulator_info}
+          alt="ETH"
+        />
+        </div>
         <div class="w-100pc font-veryhuge tracking-tight text-left mb-4">{formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
         <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
 
       <div class=" bg-lightgrey rounded text-black p-8 flex flex-1 flex-col md:flex-row items-left">
         <div class="w-full md:w-2/3">
-          <div class="font-thin leading-2 mb-8 text-left">Rewards Distrubutions</div>
+          <div class="font-thin md:text-xs mb-8 text-left">
+            <span class="float-left">Rewards Distrubutions</span>
+            <img
+            on:click={() => openModal('simulator.rewards.distribution')}
+            class="token-icon w-18px h-18px pl-4px"
+            src={images.simulator_info}
+            alt="ETH"
+          />            
+          </div>
           <div class="w-full">
             <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
               Distributed to veDOUGH holders 
@@ -217,7 +240,15 @@
       <div class="w-full flex flex-col md:flex-row">
         <!-- Total Staked veDOUGH -->
         <div class="w-full md:w-2/6 md:mr-8">
-          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Total Staked veDOUGH</div>
+          <div class="md:text-xs font-thin mb-4 text-left">
+            <span class="float-left">Total Staked veDOUGH</span>
+            <img
+            on:click={() => openModal('simulator.total.staked.ve.dough')}
+            class="token-icon w-18px h-18px pl-4px"
+            src={images.simulator_info}
+            alt="ETH"
+          />
+          </div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
             <div class="flex nowrap items-center p-1">
               <input
@@ -248,7 +279,15 @@
         </div>
         <!-- Total Staking Commitment -->
         <div class="w-full md:w-2/6 md:mr-8">
-          <div class="md:text-xs font-thin leading-2 text-left">Total Staking Commitment</div>
+          <div class="md:text-xs font-thin text-left">
+            <span class="float-left">Total Staking Commitment</span>
+            <img
+            on:click={() => openModal('simulator.total.staking.commitment')}
+            class="token-icon w-18px h-18px pl-4px"
+            src={images.simulator_info}
+            alt="ETH"
+          />            
+          </div>
           <div class="flex pt-2 md:pt-7 mb-8 md:mb-0 justify-between">
             <div class="flex flex-col justify-between">
               {#each rewarads as reward}
@@ -270,7 +309,15 @@
         </div>
         <!-- Expected APR -->
         <div class="w-full md:w-1/6 md:mr-8">
-          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Expected APR</div>
+          <div class="md:text-xs font-thin mb-4 text-left">
+            <span class="float-left">Expected APR</span>
+            <img
+            on:click={() => openModal('simulator.expected.apr')}
+              class="token-icon w-18px h-18px pl-4px"
+              src={images.simulator_info}
+              alt="ETH"
+            />
+          </div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
             <div class="flex nowrap items-center p-1">
               <input
@@ -300,7 +347,15 @@
         </div>
         <!-- Rewards Unclaimed -->
         <div class="w-full md:w-1/6 md:mr-8">
-          <div class="md:text-xs font-thin leading-2 mb-4 text-left">Rewards Unclaimed</div>
+          <div class="md:text-xs font-thin mb-4 text-left">
+            <span class="float-left">Rewards Unclaimed</span>
+            <img
+            on:click={() => openModal('simulator.rewards.unclaimed')}
+              class="token-icon w-18px h-18px pl-4px"
+              src={images.simulator_info}
+              alt="ETH"
+            />
+          </div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
             <div class="flex nowrap items-center p-1">
               <input
@@ -334,7 +389,15 @@
       <div class="w-full  bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
           <div class="w-full md:w-1/3 md:mr-8">
-            <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staked DOUGH</div>
+            <div class="w-full font-thin text-left md:text-xs mb-4">
+              <span class="float-left">Your Staked DOUGH</span>
+              <img
+              on:click={() => openModal('simulator.your.staked.dough')}
+                class="token-icon w-18px h-18px pl-4px"
+                src={images.simulator_info}
+                alt="ETH"
+              />
+            </div>
             <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
               <div class="flex nowrap items-center p-1">
                 <input
@@ -364,7 +427,15 @@
             </div>                 
           </div>
           <div class="w-full md:w-3/4 flex flex-col">
-            <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staking Commitment</div>  
+            <div class="w-full font-thin text-left md:text-xs mb-4">
+              <span class="float-left">Your Staking Commitment</span>
+              <img
+              on:click={() => openModal('simulator.your.staking.commitment')}
+                class="token-icon w-18px h-18px pl-4px"
+                src={images.simulator_info}
+                alt="ETH"
+              />
+            </div>  
             <div class="flex items-center bg-white rounded text-center w-full p-10px mb-8 md:mt-4">
               <div class="w-1/4">
                 <button class:selected="{inputs.commitment === 6}" class="bg-button" on:click={() => changeCommitment(6)}>6 months</button>
@@ -379,9 +450,6 @@
                 <button class:selected="{inputs.commitment === 36}" class="bg-button" on:click={() => changeCommitment(36)}>3 years</button>
               </div>
             </div>
-          </div>
-          <div class="text-center w-full p-10px mb-8 md:mt-4 md:w-1/4 flex flex-col">
-            <button class="oven-withdraw-button m-4" on:click={() => modal.open()}>custom</button>
           </div>
         </div> 
         <div class="flex flex-col md:flex-row items-center mt-8 border-t-1 border-gray-50 pt-4">

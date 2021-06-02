@@ -61,5 +61,15 @@
     "multi.asset.enables.withdraw": "Multi Asset enables you to withdraw",
     "please.connect.wallet": "Please connect a wallet and try again.",
     "single.asset.coming.soon": "Single Asset entry / exit coming soon!"
+  },
+  "simulator": {
+    "treasury.liquidity.deployed": "Treasury Liquidity Deployed",
+    "rewards.distribution": "Rewards Distribution",
+    "total.staked.ve.dough": "Total Staked veDOUGH",
+    "total.staking.commitment": "Total Staking Commitment",
+    "expected.apr": "Expected Apr",
+    "rewards.unclaimed": "Rewards Unclaimed",
+    "your.staked.dough": "Your Staked DOUGH",
+    "your.staking.commitment": "Your Staking Commitment"  
   }
 }
