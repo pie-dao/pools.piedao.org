@@ -13,7 +13,7 @@ export default class Calculator {
       // treasury liquidity infos...
       treasuryLiquidity: {
         amount: 0,
-        eth_value: 0
+        eth_value: 0,
       },
       // dough-v2 infos...
       dough: {
@@ -32,7 +32,7 @@ export default class Calculator {
 
     // default constant...
     this.k = 56.0268900276223;
-    
+
     // default empty projections object, to be filled dynamically...
     this.projections = {
       median: {
@@ -41,12 +41,12 @@ export default class Calculator {
           gains: [],
           compounds: [],
           staking_rewards: [],
-          totalStakedVeDough: 0
+          totalStakedVeDough: 0,
         },
         returns: {
           per_ve_dough: [],
           user: [],
-        },        
+        },
       },
       lowest: {
         farming: {
@@ -54,12 +54,12 @@ export default class Calculator {
           gains: [],
           compounds: [],
           staking_rewards: [],
-          totalStakedVeDough: 0
+          totalStakedVeDough: 0,
         },
         returns: {
           per_ve_dough: [],
           user: [],
-        },        
+        },
       },
       highest: {
         farming: {
@@ -67,14 +67,14 @@ export default class Calculator {
           gains: [],
           compounds: [],
           staking_rewards: [],
-          totalStakedVeDough: 0
+          totalStakedVeDough: 0,
         },
         returns: {
           per_ve_dough: [],
           user: [],
-        },        
-      }
-    };    
+        },
+      },
+    };
   }
 
   getMarkets() {
@@ -83,7 +83,7 @@ export default class Calculator {
 
   getProjections() {
     return this.projections;
-  }  
+  }
 
   initMarkets() {
     return new Promise((resolve, reject) => {
@@ -104,12 +104,14 @@ export default class Calculator {
 
           // retrieving the balance of Treasury from address...
           // TODO: remove the hardcoded number and use API (Zapper, Zerion)...
-          CoinGecko.fetchPriceFromString("ethereum").then((response) => {
+          CoinGecko.fetchPriceFromString('ethereum').then((response) => {
             this.markets.treasuryLiquidity.amount = 10000000;
-            this.markets.treasuryLiquidity.eth_value = ((this.markets.treasuryLiquidity.amount) / response.ethereum.usd).toFixed(2);
-            
+            this.markets.treasuryLiquidity.eth_value = (
+              (this.markets.treasuryLiquidity.amount) / response.ethereum.usd
+            ).toFixed(2);
+
             this.markets.initialized = true;
-            resolve(this.markets);            
+            resolve(this.markets);
           }).catch((error) => reject(error));
         }).catch((error) => reject(error));
       }
@@ -118,27 +120,34 @@ export default class Calculator {
 
   calculate(inputs) {
     return new Promise((resolve, reject) => {
-      inputs = this.normalize(inputs);
-      
-      this.project(inputs).then((projections) => {
-        let outputs = {};
-        let user_yearly_returns = projections.median.returns.user.slice(0, 12);
-        const userYearlyReturns = user_yearly_returns.reduce((total, value) => total + value);
+      const normalizedInputs = this.normalizeFormats(inputs);
+
+      this.project(normalizedInputs).then((projections) => {
+        const calculatedProjections = projections;
+
+        const outputs = {};
+        const userYearlyReturns = calculatedProjections.median.returns.user.slice(0, 12)
+          .reduce((total, value) => total + value);
 
         outputs.user = {
           expectedYearlyReturns: userYearlyReturns,
           expectedAverageMontlyReturns: userYearlyReturns / 12,
-          expectedApr: (userYearlyReturns / (inputs.stakedDough * this.markets.dough.price)) * 100,
-          expectedVeDough: this.calculateVeDough(inputs.stakedDough, inputs.commitment),
+          expectedApr: (
+            userYearlyReturns / (normalizedInputs.stakedDough * this.markets.dough.price)
+          ) * 100,
+          expectedVeDough: this.calculateVeDough(
+            normalizedInputs.stakedDough, normalizedInputs.commitment,
+          ),
         };
 
-        const treasuryYearlyReturns = projections.median.farming.asset[12]
+        const treasuryYearlyReturns = calculatedProjections.median.farming.asset[12]
           - this.markets.treasuryLiquidity.amount;
 
         outputs.treasury = {
           expectedYearlyReturns: treasuryYearlyReturns,
           expectedAverageMontlyReturns: treasuryYearlyReturns / 12,
-          expectedApr: this.markets.treasuryLiquidity.amount / projections.median.farming.asset[12],
+          expectedApr: this.markets.treasuryLiquidity.amount
+            / calculatedProjections.median.farming.asset[12],
         };
 
         // rounding the numbers of the returns object...
@@ -147,25 +156,26 @@ export default class Calculator {
         });
 
         // TODO: to be improved using roundNumers function...
-        projections.median.farming.totalStakedVeDough = projections.median.farming.totalStakedVeDough.toFixed(2);    
+        calculatedProjections.median.farming.totalStakedVeDough = projections
+          .median.farming.totalStakedVeDough.toFixed(2);
 
-        resolve({ outputs: outputs, breakdowns: projections });
+        resolve({ outputs, breakdowns: calculatedProjections });
       }).catch((error) => reject(error));
     });
   }
 
-  normalize(inputs) {
-    let normalized_inputs = {};
+  static normalizeFormats(inputs) {
+    const normalizedInputs = {};
 
-    Object.keys(inputs).forEach(key => {
-      if(typeof(inputs[key]) == 'string') {
-        normalized_inputs[key] = parseFloat(inputs[key].replace(/[^0-9.]/g, ''));
+    Object.keys(inputs).forEach((key) => {
+      if (typeof (inputs[key]) === 'string') {
+        normalizedInputs[key] = parseFloat(inputs[key].replace(/[^0-9.]/g, ''));
       } else {
-        normalized_inputs[key] = inputs[key];
+        normalizedInputs[key] = inputs[key];
       }
     });
 
-    return normalized_inputs;
+    return normalizedInputs;
   }
 
   calculateVeDough(stakedDough, commitment) {
@@ -184,7 +194,7 @@ export default class Calculator {
     return new Promise((resolve, reject) => {
       this.initMarkets().then(() => {
         // calculating the projections for the next 12 months...
-        Object.keys(this.projections).forEach(key => {
+        Object.keys(this.projections).forEach((key) => {
           let farmingAsset = this.markets.treasuryLiquidity.amount;
 
           this.projections[key].farming.totalStakedVeDough = inputs.stakedVeDough
@@ -192,35 +202,39 @@ export default class Calculator {
 
           let expectedApr = 0;
 
-          switch(key) {
+          switch (key) {
+            default:
             case 'median':
               expectedApr = parseFloat(inputs.expectedApr);
               break;
             case 'lowest':
-              expectedApr = parseFloat(inputs.expectedApr) - (parseFloat(inputs.expectedApr) * ( 1 - 0.25));
+              expectedApr = parseFloat(inputs.expectedApr)
+                - (parseFloat(inputs.expectedApr) * (1 - 0.25));
               break;
             case 'highest':
-              expectedApr = parseFloat(inputs.expectedApr) + (parseFloat(inputs.expectedApr) * ( 1 - 0.25));
-              break;              
+              expectedApr = parseFloat(inputs.expectedApr)
+                + (parseFloat(inputs.expectedApr) * (1 - 0.25));
+              break;
           }
 
           for (let i = 0; i < 36; i += 1) {
             this.projections[key].farming.asset[i] = farmingAsset;
-            
+
             this.projections[key].farming.gains[i] = (farmingAsset * (expectedApr / 100)) / 12;
-  
+
             this.projections[key].farming.compounds[i] = this.projections[key].farming.gains[i]
               * (this.rewards.compound / 100);
-  
+
             this.projections[key].farming.staking_rewards[i] = i === 0 ? 0
               : this.projections[key].farming.gains[i] * (this.rewards.distributed / 100);
-            
-            this.projections[key].returns.per_ve_dough[i] = this.projections[key].farming.staking_rewards[i]
-              / (this.projections[key].farming.totalStakedVeDough * (1 - (parseInt(inputs.rewardsUnclaimed) / 100)));
-  
+
+            this.projections[key].returns.per_ve_dough[i] = this.projections[key]
+              .farming.staking_rewards[i] / (this.projections[key].farming.totalStakedVeDough
+              * (1 - (parseInt(inputs.rewardsUnclaimed, 10) / 100)));
+
             this.projections[key].returns.user[i] = this.projections[key].returns.per_ve_dough[i]
               * this.calculateVeDough(inputs.stakedDough, inputs.commitment);
-  
+
             // adding the montly compound into the farming asset...
             farmingAsset += this.calculateCompound(this.projections[key].farming.gains[i]);
           }

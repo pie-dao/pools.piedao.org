@@ -15,7 +15,7 @@ export default class Simulator {
         expectedYearlyReturns: 0,
         expectedMonthlyReturns: 0,
         expectedApr: 0,
-        expectedVeDough: 0
+        expectedVeDough: 0,
       },
     };
   }
@@ -42,7 +42,7 @@ export default class Simulator {
 
   getProjections() {
     return this.calculator.getProjections();
-  }  
+  }
 
   getOutputs() {
     return this.outputs;
