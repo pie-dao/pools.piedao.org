@@ -6,6 +6,9 @@
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { formatFiat } from '../../components/helpers.js';
 
+  import WrappedModal from '../../components/modals/wrappedModal.svelte'
+  import Modal from '../../components/elements/Modal.svelte';
+
   import Tab1 from "./charts/Tab1.svelte";
 	import Tab2 from "./charts/Tab2.svelte";
 	import Tab3 from "./charts/Tab3.svelte";
@@ -59,6 +62,9 @@
     inputs.commitment = commitment;
     calculate();
 	}
+
+  // modal instance...
+  let modal;
   
   // creating the Simulator class instance...
   let simulator = new Simulator();
@@ -122,6 +128,12 @@
     'info',
   ];
 </script>
+
+<Modal title={"Your Staking Commitment"} backgroundColor="#f3f3f3" bind:this={modal}>
+  <span slot="content">
+    just a modal content here
+  </span>
+</Modal>
 
 <div class="flex flex-col items-center text-center mt-8">
   <div class="w-full px-8 max-w-1200px">
@@ -334,7 +346,7 @@
               </div>
             </div>                 
           </div>
-          <div class="w-full flex flex-col">
+          <div class="w-full md:w-3/4 flex flex-col">
             <div class="w-full font-thin text-left md:text-xs leading-2 mb-4">Your Staking Commitment</div>  
             <div class="flex items-center bg-white rounded text-center w-full p-10px mb-8 md:mt-4">
               <div class="w-1/4">
@@ -351,7 +363,9 @@
               </div>
             </div>
           </div>
-          <!-- <button class="w-1/4 oven-withdraw-button">custom</button> -->
+          <div class="text-center w-full p-10px mb-8 md:mt-4 md:w-1/4 flex flex-col">
+            <button class="oven-withdraw-button m-4" on:click={() => modal.open()}>custom</button>
+          </div>
         </div> 
         <div class="flex flex-col md:flex-row items-center mt-8 border-t-1 border-gray-50 pt-4">
           <div class="h-32px flex items-center">
