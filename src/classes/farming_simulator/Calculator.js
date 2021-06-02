@@ -118,6 +118,8 @@ export default class Calculator {
 
   calculate(inputs) {
     return new Promise((resolve, reject) => {
+      inputs = this.normalize(inputs);
+      
       this.project(inputs).then((projections) => {
         let outputs = {};
         let user_yearly_returns = projections.median.returns.user.slice(0, 12);
@@ -150,6 +152,20 @@ export default class Calculator {
         resolve({ outputs: outputs, breakdowns: projections });
       }).catch((error) => reject(error));
     });
+  }
+
+  normalize(inputs) {
+    let normalized_inputs = {};
+
+    Object.keys(inputs).forEach(key => {
+      if(typeof(inputs[key]) == 'string') {
+        normalized_inputs[key] = parseFloat(inputs[key].replace(/[^0-9.]/g, ''));
+      } else {
+        normalized_inputs[key] = inputs[key];
+      }
+    });
+
+    return normalized_inputs;
   }
 
   calculateVeDough(stakedDough, commitment) {

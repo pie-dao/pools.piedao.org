@@ -15,16 +15,26 @@
   import Tabs from "./charts/Tabs.svelte";  
 
   function format() {
-    console.log("formatting");
     // checking for inputs integrity...
     Object.keys(inputs).forEach(key => {
-      switch(typeof(inputs[key])) {
-        case 'number':
+      switch(key) {
+        case 'commitment':
           if(inputs[key] > max_values[key] || inputs[key] < 0) {
             inputs[key] = max_values[key];
           }
           break;
-        case 'string':
+        case 'stakedDough':
+        case 'stakedVeDough':
+          inputs[key] = parseFloat(inputs[key].replace(/[^0-9.]/g, ''));
+
+          if(inputs[key] > max_values[key] || inputs[key] < 0) {
+            inputs[key] = max_values[key];
+          }
+
+          inputs[key] = formatFiat(inputs[key]);
+          break;          
+        case 'rewardsUnclaimed':
+        case 'expectedApr':          
           inputs[key] = inputs[key].replace(/[^0-9]/g, '');
           
           if(inputs[key] > max_values[key] || inputs[key] < 0) {
@@ -72,22 +82,22 @@
   // creating the Simulator class instance...
   let simulator = new Simulator();
 
-  // filling the first default values...
-  let inputs = {
-    stakedDough: 100000,
-    commitment: 36,
-    rewardsUnclaimed: "10%",
-    stakedVeDough: 4500000,
-    expectedApr: "50%"
-  };
-
   // defining maximum values for input fields...
   let max_values = {
     commitment: 36,
     rewardsUnclaimed: 100,
     stakedVeDough: 15000000,
     expectedApr: 100
-  }  
+  } ;
+
+  // filling the first default values...
+  let inputs = {
+    stakedDough: formatFiat(100000),
+    commitment: 36,
+    rewardsUnclaimed: "10%",
+    stakedVeDough: formatFiat(max_values.stakedVeDough),
+    expectedApr: "50%"
+  };  
 
   // rewards distrubutions, hardcoded for now...
   let rewarads = [
@@ -215,10 +225,10 @@
                 inputmode="decimal"
                 autocomplete="off"
                 autocorrect="off"
-                type="number"
+                type="string"
                 pattern="^[0-9]*[.,]?[0-9]*$"
                 minlength="1"
-                maxlength="10"
+                maxlength="16"
                 spellcheck="false"
                 placeholder={inputs.stakedVeDough}
                 bind:value={inputs.stakedVeDough}
@@ -332,10 +342,10 @@
                 inputmode="decimal"
                 autocomplete="off"
                 autocorrect="off"
-                type="number"
+                type="string"
                 pattern="^[0-9]*[.,]?[0-9]*$"
                 minlength="1"
-                maxlength="10"
+                maxlength="16"
                 spellcheck="false"
                 placeholder={inputs.stakedDough}
                 bind:value={inputs.stakedDough}
