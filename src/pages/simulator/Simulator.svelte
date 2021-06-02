@@ -278,7 +278,7 @@
           </div>            
         </div>
         <!-- Total Staking Commitment -->
-        <div class="w-full md:w-2/6 md:mr-8">
+        <div class="flex flex-col w-full md:w-2/6 md:mr-8">
           <div class="md:text-xs font-thin text-left">
             <span class="float-left">Total Staking Commitment</span>
             <img
