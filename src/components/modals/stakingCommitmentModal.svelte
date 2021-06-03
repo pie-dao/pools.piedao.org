@@ -17,11 +17,11 @@
       </div>
     </div>  
     <div class="nowrap swap-from border rounded-20px border-grey p-16px bg-white mb-12">
-      <div class="flex nowrap items-center p-1">
-        <div class="font-bold mb-4 text-base py-1px text-center">
+      <div class="w-full flex flex-row">
+        <div class="font-bold mb-4 text-base py-1px text-center w-3/4">
           27,2345,234
         </div>
-        <div class="h-32px flex items-center">
+        <div class="h-32px flex items-center w-1/4">
           <img
             class="token-icon w-30px h-30px"
             src={images.doughtoken}
@@ -29,6 +29,10 @@
           />
           <div class="py-2px px-4px">DOUGH</div>
         </div>
+      </div>
+
+      <div class="w-full">
+        <RangeSlider values={[50]}/>
       </div>
     </div>   
 
