@@ -114,7 +114,7 @@
   };  
 
   // rewards distrubutions, hardcoded for now...
-  let rewarads = [
+  let rewards = [
     {commitment: "6 Months", percentage: 12},
     {commitment: "1 Year", percentage: 18},
     {commitment: "2 Years", percentage: 23},
@@ -156,7 +156,7 @@
   ];
 </script>
 
-<Modal backgroundColor="#f3f3f3" bind:this={modal}>
+<Modal title="asdf" backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
     <InfoModal description_key={modal_content_key}/>
   </span>
@@ -164,7 +164,7 @@
 
 <Modal backgroundColor="#f3f3f3" bind:this={sliderModal}>
   <span slot="content">
-    <StakingCommitmentModal rewards={rewarads}/>
+    <StakingCommitmentModal rewards={rewards}/>
   </span>
 </Modal>
 
@@ -254,7 +254,7 @@
         <!-- Total Staked veDOUGH -->
         <div class="w-full md:w-2/6 md:mr-8">
           <div class="md:text-xs font-thin mb-4 text-left">
-            <span class="float-left">Total Staked veDOUGH</span>
+            <span class="float-left">Total veDOUGH</span>
             <img
             on:click={() => openModal('simulator.total.staked.ve.dough')}
             class="token-icon w-18px h-18px pl-4px"
@@ -303,7 +303,7 @@
           </div>
           <div class="flex pt-2 md:pt-7 mb-8 md:mb-0 justify-between">
             <div class="flex flex-col justify-between">
-              {#each rewarads as reward}
+              {#each rewards as reward}
               <div class="flex h-18px">
                 <div style={`width: ${20 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">       
                 </div>
@@ -311,7 +311,7 @@
             {/each}
             </div>
             <div class="">
-              {#each rewarads as reward}
+              {#each rewards as reward}
               <div class="md:text-xs font-thin text-left">
                 <span class="font-bold">{reward.percentage}%</span>
                 {reward.commitment}
@@ -323,7 +323,7 @@
         <!-- Expected APR -->
         <div class="w-full md:w-1/6 md:mr-8">
           <div class="md:text-xs font-thin mb-4 text-left">
-            <span class="float-left">Expected APR</span>
+            <span class="float-left">Expected Treasury APR</span>
             <img
             on:click={() => openModal('simulator.expected.apr')}
               class="token-icon w-18px h-18px pl-4px"
