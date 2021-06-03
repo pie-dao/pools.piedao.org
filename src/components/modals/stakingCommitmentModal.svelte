@@ -43,14 +43,14 @@
     </div>    
     <div class="flex flex-col">
       {#each rewards as reward}
-        <div class="flex flex-row">
-          <div class="w-3/4">
-            <RangeSlider values={[reward.percentage]} on:change={(event) => sliderChanged(event, reward)}/>
-          </div>
-          <div class="w-1/4">
-            <b>{reward.percentage}%</b> {reward.commitment}
-          </div>
+      <div class="flex flex-row items-center">
+        <div class="w-3/4">
+          <RangeSlider values={[reward.percentage]} on:change={(event) => sliderChanged(event, reward)}/>
         </div>
+        <div class="w-1/4">
+         {reward.percentage}% &nbsp;{reward.commitment}
+        </div>
+      </div>
       {/each}    
     </div>
   </div>
