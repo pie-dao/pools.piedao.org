@@ -7,6 +7,9 @@
 @tailwind media;
 
 /* Custom css */
+#customSlider.rangeSlider {
+  margin: 0 !important;
+}
 
 button:focus {
   outline: none;
