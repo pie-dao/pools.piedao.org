@@ -113,7 +113,7 @@
     stakedDough: formatFiat(100000, ',', '.', ''),
     commitment: "36 Months",
     rewardsUnclaimed: "10%",
-    stakedVeDough: formatFiat(max_values.stakedVeDough, ',', '.', ''),
+    stakedVeDough: 0,
     expectedApr: "50%"
   };  
 
@@ -131,6 +131,7 @@
   // fetching real market infos...
   simulator.retrieveMarkets().then(response => {
     markets = response;
+    inputs.stakedVeDough = formatFiat(markets.dough.circSupply * 0.2, ',', '.', '');
   });
 
   // retrieving default outputs object...
@@ -168,7 +169,7 @@
 
 <Modal backgroundColor="#f3f3f3" bind:this={sliderModal}>
   <span slot="content">
-    <StakingCommitmentModal rewards={rewards} dough_circulation_supply={markets.dough.circSupply} on:message={updateSimulator}/>
+    <StakingCommitmentModal rewards={rewards} estimated_dough_value={parseFloat(inputs.stakedVeDough.replace(/[^0-9.]/g, ''))} dough_circulation_supply={markets.dough.circSupply} on:message={updateSimulator}/>
   </span>
 </Modal>
 

@@ -7,8 +7,9 @@
     const dispatch = createEventDispatcher();
 
     export let rewards;
-    export  let dough_circulation_supply;
-    let estimated_dough_value = dough_circulation_supply * 0.2;
+    export let dough_circulation_supply;
+    export let estimated_dough_value = dough_circulation_supply * 0.2;
+    console.log("estimated_dough_value", estimated_dough_value);
 
     function commitmentUpdating(event, reward) {
       reward.percentage = event.detail.value;
