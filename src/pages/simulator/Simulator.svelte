@@ -122,7 +122,7 @@
     {commitment: "6 Months", percentage: 12},
     {commitment: "1 Year", percentage: 18},
     {commitment: "2 Years", percentage: 23},
-    {commitment: "3 Years", percentage: 37}
+    {commitment: "3 Years", percentage: 47}
   ];
 
   // retrieving default markets infos...
@@ -168,7 +168,7 @@
 
 <Modal backgroundColor="#f3f3f3" bind:this={sliderModal}>
   <span slot="content">
-    <StakingCommitmentModal rewards={rewards} on:message={updateSimulator}/>
+    <StakingCommitmentModal rewards={rewards} dough_circulation_supply={markets.dough.circSupply} on:message={updateSimulator}/>
   </span>
 </Modal>
 
@@ -267,8 +267,9 @@
           />
           </div>
           <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
-            <div class="flex nowrap items-center p-1">
+            <div class="flex nowrap items-center p-1" on:click={() => sliderModal.open()}>
               <input
+                disabled
                 class="swap-input-from"
                 inputmode="decimal"
                 autocomplete="off"
@@ -299,14 +300,14 @@
           <div class="md:text-xs font-thin text-left">
             <span class="float-left">Total Staking Commitment</span>
             <img
-            on:click={() => sliderModal.open()}
-            class="token-icon w-18px h-18px pl-4px"
-            src={images.simulator_info}
-            alt="ETH"
-          />            
+            on:click={() => openModal('simulator.total.staking.commitment')}
+              class="token-icon w-18px h-18px pl-4px"
+              src={images.simulator_info}
+              alt="ETH"
+            />
           </div>
-          <div class="flex pt-2 md:pt-7 mb-8 md:mb-0 justify-between">
-            <div class="flex flex-col justify-between">
+          <div on:click={() => sliderModal.open()} class="flex pt-2 md:pt-7 mb-8 md:mb-0 justify-between">
+            <div class="flex flex-col justify-between w-2/3">
               {#each rewards as reward}
               <div class="flex h-18px">
                 <div style={`width: ${20 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">       
@@ -314,7 +315,7 @@
               </div>
             {/each}
             </div>
-            <div class="">
+            <div class="w-1/3 pl-2">
               {#each rewards as reward}
               <div class="md:text-xs font-thin text-left">
                 <span class="font-bold">{reward.percentage}%</span>

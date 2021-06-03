@@ -1,29 +1,35 @@
 <script>
     import RangeSlider from "svelte-range-slider-pips";
     import images from '../../config/images.json';
-    import { CoinGecko } from '../../stores/coingecko.js';
     import { formatFiat } from '../../components/helpers.js';
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
 
     export let rewards;
-    let circulating_dough = 0;
-    let estimated_dough_value = 0;
+    export  let dough_circulation_supply;
+    let estimated_dough_value = dough_circulation_supply * 0.2;
 
-    CoinGecko.fetchCoinData('piedao-dough-v2').then((doughResponse) => {
-      circulating_dough = doughResponse.market_data.circulating_supply;
-      estimated_dough_value = circulating_dough / 2;
-    });
-
-    function sliderChanged(event, reward) {
+    function commitmentUpdating(event, reward) {
       reward.percentage = event.detail.value;
       rewards = rewards;
+    }
 
-      dispatch('message', {
-        rewards: rewards,
-        estimated_dough_value: estimated_dough_value
-	  	});      
+    function commitmentChanged(event, reward) {
+      let total_commitment = rewards.reduce(function (a, b) {
+        return {percentage: a.percentage + b.percentage};
+      });
+
+      if(total_commitment.percentage <= 100) {
+        dispatch('message', {
+          rewards: rewards,
+          estimated_dough_value: estimated_dough_value
+	  	  });         
+      } else {
+        reward.percentage = 100 - (total_commitment.percentage - event.detail.value);
+      }
+
+      rewards = rewards;
     }
 
     function doughChanged(event) {
@@ -59,7 +65,7 @@
       </div>
 
       <div class="w-full">
-        <RangeSlider id="customSlider" values={[estimated_dough_value]} max={circulating_dough} on:change={(event) => doughChanged(event)}/>
+        <RangeSlider id="customSlider" values={[estimated_dough_value]} max={dough_circulation_supply} on:stop={(event) => doughChanged(event)}/>
       </div>
     </div>   
 
@@ -72,7 +78,7 @@
       {#each rewards as reward}
       <div class="flex flex-row items-center">
         <div class="w-3/4">
-          <RangeSlider values={[reward.percentage]} on:change={(event) => sliderChanged(event, reward)}/>
+          <RangeSlider values={[reward.percentage]} on:change={(event) => commitmentUpdating(event, reward)} on:stop={(event) => commitmentChanged(event, reward)}/>
         </div>
         <div class="w-1/4 ml-4 py-2">
          {reward.percentage}% &nbsp;{reward.commitment}
