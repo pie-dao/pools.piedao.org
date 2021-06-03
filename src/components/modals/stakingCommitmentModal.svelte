@@ -19,11 +19,21 @@
     function sliderChanged(event, reward) {
       reward.percentage = event.detail.value;
       rewards = rewards;
+
+      dispatch('message', {
+        rewards: rewards,
+        estimated_dough_value: estimated_dough_value
+	  	});      
     }
 
     function doughChanged(event) {
       estimated_dough_value = event.detail.value;
       estimated_dough_value = estimated_dough_value;
+
+      dispatch('message', {
+        rewards: rewards,
+        estimated_dough_value: estimated_dough_value
+	  	});       
     }
     </script>  
     

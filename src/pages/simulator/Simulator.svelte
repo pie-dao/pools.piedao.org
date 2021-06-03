@@ -16,6 +16,10 @@
 	import Tab3 from "./charts/Tab3.svelte";
   import Tabs from "./charts/Tabs.svelte";  
 
+  function updateSimulator(event) {
+    rewards = event.detail.rewards;
+  }
+
   function setCommitment(months) {
     inputs.commitment = `${months} Months`;
     format();
@@ -164,7 +168,7 @@
 
 <Modal backgroundColor="#f3f3f3" bind:this={sliderModal}>
   <span slot="content">
-    <StakingCommitmentModal rewards={rewards}/>
+    <StakingCommitmentModal rewards={rewards} on:message={updateSimulator}/>
   </span>
 </Modal>
 
