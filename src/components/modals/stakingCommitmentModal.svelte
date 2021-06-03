@@ -71,10 +71,9 @@
       {/each}    
     </div>
 
-    <div class="flex flex-col justify-items-center">
-      <button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">
-        add
+    <div class="flex flex-col items-center">
+      <button class="bg-black text-white m-0 my-8 rounded p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">
+        Add
       </button>
-      <button class="bg-black rounded w-1/6">Add</button>
     </div>
   </div>
