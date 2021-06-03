@@ -63,7 +63,7 @@
     "single.asset.coming.soon": "Single Asset entry / exit coming soon!"
   },
   "simulator": {
-    "treasury.liquidity.deployed": "Treasury Liquidity Deployed",
+    "treasury.liquidity.deployed": "<b>Treasury Liquidity Deployed</b></br>test new line<u>and underline</u>",
     "rewards.distribution": "Rewards Distribution",
     "total.staked.ve.dough": "Total Staked veDOUGH",
     "total.staking.commitment": "Total Staking Commitment",

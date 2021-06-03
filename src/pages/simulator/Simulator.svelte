@@ -7,7 +7,8 @@
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { formatFiat } from '../../components/helpers.js';
 
-  import WrappedModal from '../../components/modals/infoModal.svelte'
+  import InfoModal from '../../components/modals/infoModal.svelte';
+  import StakingCommitmentModal from '../../components/modals/stakingCommitmentModal.svelte';
   import Modal from '../../components/elements/Modal.svelte';
 
   import Tab1 from "./charts/Tab1.svelte";
@@ -42,7 +43,7 @@
             inputs[key] = max_values[key];
           }
 
-          inputs[key] = formatFiat(inputs[key]);
+          inputs[key] = formatFiat(inputs[key], ',', '.', '');
           break;          
         case 'rewardsUnclaimed':
         case 'expectedApr':          
@@ -82,11 +83,6 @@
     }).catch(error => console.error(error));  
   }
 
-  function changeCommitment(commitment) {
-    inputs.commitment = commitment;
-    calculate();
-	}
-
   function openModal(content_key) {
     modal_content_key = content_key;
     modal.open();
@@ -94,6 +90,7 @@
 
   // modal instance...
   let modal;
+  let sliderModal;
   let modal_content_key;
   
   // creating the Simulator class instance...
@@ -109,10 +106,10 @@
 
   // filling the first default values...
   let inputs = {
-    stakedDough: formatFiat(100000),
+    stakedDough: formatFiat(100000, ',', '.', ''),
     commitment: "36 Months",
     rewardsUnclaimed: "10%",
-    stakedVeDough: formatFiat(max_values.stakedVeDough),
+    stakedVeDough: formatFiat(max_values.stakedVeDough, ',', '.', ''),
     expectedApr: "50%"
   };  
 
@@ -161,7 +158,13 @@
 
 <Modal backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
-    <WrappedModal description_key={modal_content_key}/>
+    <InfoModal description_key={modal_content_key}/>
+  </span>
+</Modal>
+
+<Modal backgroundColor="#f3f3f3" bind:this={sliderModal}>
+  <span slot="content">
+    <StakingCommitmentModal rewards={rewarads}/>
   </span>
 </Modal>
 
@@ -292,7 +295,7 @@
           <div class="md:text-xs font-thin text-left">
             <span class="float-left">Total Staking Commitment</span>
             <img
-            on:click={() => openModal('simulator.total.staking.commitment')}
+            on:click={() => sliderModal.open()}
             class="token-icon w-18px h-18px pl-4px"
             src={images.simulator_info}
             alt="ETH"
@@ -302,7 +305,7 @@
             <div class="flex flex-col justify-between">
               {#each rewarads as reward}
               <div class="flex h-18px">
-                <div style={`width: ${20 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">            
+                <div style={`width: ${20 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">       
                 </div>
               </div>
             {/each}

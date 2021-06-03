@@ -4,5 +4,5 @@
     </script>
     
   <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:px-4 lg:pb-4">
-    {$_(description_key)}
+    {@html $_(description_key)}
   </div>
