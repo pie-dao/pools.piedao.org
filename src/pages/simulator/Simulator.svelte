@@ -15,13 +15,23 @@
 	import Tab3 from "./charts/Tab3.svelte";
   import Tabs from "./charts/Tabs.svelte";  
 
+  function setCommitment(months) {
+    inputs.commitment = `${months} Months`;
+    format();
+    calculate();
+  }
+
   function format() {
     // checking for inputs integrity...
     Object.keys(inputs).forEach(key => {
       switch(key) {
         case 'commitment':
+          inputs[key] = inputs[key].replace(/[^0-9]/g, '');
+
           if(inputs[key] > max_values[key] || inputs[key] < 0) {
-            inputs[key] = max_values[key];
+            inputs[key] = max_values[key] + ' Months';
+          } else {
+            inputs[key] += ' Months';
           }
           break;
         case 'stakedDough':
@@ -100,7 +110,7 @@
   // filling the first default values...
   let inputs = {
     stakedDough: formatFiat(100000),
-    commitment: 36,
+    commitment: "36 Months",
     rewardsUnclaimed: "10%",
     stakedVeDough: formatFiat(max_values.stakedVeDough),
     expectedApr: "50%"
@@ -388,7 +398,7 @@
     <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
       <div class="w-full  bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
-          <div class="w-full md:w-1/3 md:mr-8">
+          <div class="w-full md:w-2/4 md:mr-8">
             <div class="w-full font-thin text-left md:text-xs mb-4">
               <span class="float-left">Your Staked DOUGH</span>
               <img
@@ -426,7 +436,7 @@
               </div>
             </div>                 
           </div>
-          <div class="w-full md:w-3/4 flex flex-col">
+          <div class="w-full md:w-2/4 md:mr-8">
             <div class="w-full font-thin text-left md:text-xs mb-4">
               <span class="float-left">Your Staking Commitment</span>
               <img
@@ -436,6 +446,34 @@
                 alt="ETH"
               />
             </div>  
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
+              <div class="flex nowrap items-center p-1">
+                <input
+                class="swap-input-from"
+                inputmode="decimal"
+                autocomplete="off"
+                autocorrect="off"
+                type="string"
+                pattern="^[0-9]*[.,]?[0-9]*$"
+                minlength="1"
+                maxlength="16"
+                spellcheck="false"
+                placeholder={inputs.commitment}
+                bind:value={inputs.commitment}
+                on:keyup={calculate}
+                on:change={format}
+                />
+                <div class="flex items-center cardbordergradient" on:click={() => setCommitment(36)}>
+                  <div class="py-2px p-18px">3 Years</div>
+                  <img
+                    class="w-30px h-30px m-8px"
+                    src={images.simulator_hands}
+                    alt="ETH"
+                  />
+                </div>
+              </div>
+            </div>              
+            <!--
             <div class="flex items-center bg-white rounded text-center w-full p-10px mb-8 md:mt-4">
               <div class="w-1/4">
                 <button class:selected="{inputs.commitment === 6}" class="bg-button" on:click={() => changeCommitment(6)}>6 months</button>
@@ -450,6 +488,7 @@
                 <button class:selected="{inputs.commitment === 36}" class="bg-button" on:click={() => changeCommitment(36)}>3 years</button>
               </div>
             </div>
+            -->
           </div>
         </div> 
         <div class="flex flex-col md:flex-row items-center mt-8 border-t-1 border-gray-50 pt-4">
