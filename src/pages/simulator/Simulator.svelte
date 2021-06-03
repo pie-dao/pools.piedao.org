@@ -454,8 +454,8 @@
                 alt="ETH"
               />
             </div>  
-            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
-              <div class="flex nowrap items-center p-1">
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8">
+              <div class="flex nowrap items-center">
                 <input
                 class="swap-input-from"
                 inputmode="decimal"
@@ -472,12 +472,14 @@
                 on:change={format}
                 />
                 <div class="flex items-center cardbordergradient" on:click={() => setCommitment(36)}>
-                  <div class="py-2px p-18px">3 Years</div>
-                  <img
-                    class="w-30px h-30px"
-                    src={images.simulator_hands}
-                    alt="ETH"
-                  />
+                  <div class="flex items-center p-2">
+                    <div class="">3 Years</div>
+                    <img
+                      class="w-30px h-30px"
+                      src={images.simulator_hands}
+                      alt="ETH"
+                    />
+                  </div>
                 </div>
               </div>
             </div>              
