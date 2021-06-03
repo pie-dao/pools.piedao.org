@@ -1,12 +1,26 @@
 <script>
     import RangeSlider from "svelte-range-slider-pips";
     import images from '../../config/images.json';
+    import { CoinGecko } from '../../stores/coingecko.js';
+    import { formatFiat } from '../../components/helpers.js';
+
     export let rewards;
-    $: rewards;
+    let circulating_dough = 0;
+    let estimated_dough_value = 0;
+
+    CoinGecko.fetchCoinData('piedao-dough-v2').then((doughResponse) => {
+      circulating_dough = doughResponse.market_data.circulating_supply;
+      estimated_dough_value = circulating_dough / 2;
+    });
 
     function sliderChanged(event, reward) {
       reward.percentage = event.detail.value;
       rewards = rewards;
+    }
+
+    function doughChanged(event) {
+      estimated_dough_value = event.detail.value;
+      estimated_dough_value = estimated_dough_value;
     }
     </script>
     
@@ -19,7 +33,7 @@
     <div class="nowrap swap-from border rounded-20px border-grey p-16px bg-white mb-12">
       <div class="w-full flex flex-row">
         <div class="font-bold mb-4 text-base py-1px text-center w-3/4">
-          27,2345,234
+          {formatFiat(estimated_dough_value, ',', '.', '')}
         </div>
         <div class="h-32px flex items-center w-1/4">
           <img
@@ -32,7 +46,7 @@
       </div>
 
       <div class="w-full">
-        <RangeSlider values={[50]}/>
+        <RangeSlider values={[estimated_dough_value]} max={circulating_dough} on:change={(event) => doughChanged(event)}/>
       </div>
     </div>   
 
