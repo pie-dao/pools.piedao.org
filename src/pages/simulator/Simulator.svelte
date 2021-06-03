@@ -396,7 +396,7 @@
       </div>
     </div>
     <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
-      <div class="w-full  bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
+      <div class="w-full bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
           <div class="w-full md:w-2/4 md:mr-8">
             <div class="w-full font-thin text-left md:text-xs mb-4">
@@ -466,7 +466,7 @@
                 <div class="flex items-center cardbordergradient" on:click={() => setCommitment(36)}>
                   <div class="py-2px p-18px">3 Years</div>
                   <img
-                    class="w-30px h-30px m-8px"
+                    class="w-30px h-30px"
                     src={images.simulator_hands}
                     alt="ETH"
                   />
