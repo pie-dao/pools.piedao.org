@@ -18,6 +18,8 @@
 
   function updateSimulator(event) {
     rewards = event.detail.rewards;
+    inputs.stakedVeDough = formatFiat(event.detail.stakedVeDough, ',', '.', '');
+    estimated_dough_value = event.detail.estimated_dough_value;
   }
 
   function setCommitment(months) {
@@ -96,6 +98,7 @@
   let modal;
   let sliderModal;
   let modal_content_key;
+  let estimated_dough_value;
   
   // creating the Simulator class instance...
   let simulator = new Simulator();
@@ -119,10 +122,10 @@
 
   // rewards distrubutions, hardcoded for now...
   let rewards = [
-    {commitment: "6 Months", percentage: 12},
-    {commitment: "1 Year", percentage: 18},
-    {commitment: "2 Years", percentage: 23},
-    {commitment: "3 Years", percentage: 47}
+    {commitment: "6 Months", months: 6, percentage: 12},
+    {commitment: "1 Year", months: 12, percentage: 18},
+    {commitment: "2 Years", months: 24, percentage: 23},
+    {commitment: "3 Years", months: 36, percentage: 47}
   ];
 
   // retrieving default markets infos...
@@ -131,7 +134,18 @@
   // fetching real market infos...
   simulator.retrieveMarkets().then(response => {
     markets = response;
-    inputs.stakedVeDough = formatFiat(markets.dough.circSupply * 0.2, ',', '.', '');
+    estimated_dough_value = markets.dough.circSupply * 0.2;
+
+    let stakedVeDough = 0;
+
+    rewards.forEach(reward => {
+      
+      let stakedDoughPercentage = estimated_dough_value * (reward.percentage / 100);
+      stakedVeDough += simulator.calculator.calculateVeDough(stakedDoughPercentage, reward.months);
+    });
+
+    inputs.stakedVeDough = formatFiat(stakedVeDough, ',', '.', '');
+    // parseFloat(inputs.stakedVeDough.replace(/[^0-9.]/g, ''))
   });
 
   // retrieving default outputs object...
@@ -169,7 +183,7 @@
 
 <Modal backgroundColor="#f3f3f3" bind:this={sliderModal}>
   <span slot="content">
-    <StakingCommitmentModal rewards={rewards} estimated_dough_value={parseFloat(inputs.stakedVeDough.replace(/[^0-9.]/g, ''))} dough_circulation_supply={markets.dough.circSupply} on:message={updateSimulator}/>
+    <StakingCommitmentModal rewards={rewards} estimated_dough_value={estimated_dough_value} dough_circulation_supply={markets.dough.circSupply} on:applyConfig={updateSimulator}/>
   </span>
 </Modal>
 

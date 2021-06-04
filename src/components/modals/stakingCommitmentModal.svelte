@@ -1,18 +1,31 @@
 <script>
+    import Calculator from '../../classes/farming_simulator/Calculator.js';
     import RangeSlider from "svelte-range-slider-pips";
     import images from '../../config/images.json';
     import { formatFiat } from '../../components/helpers.js';
     import { createEventDispatcher } from 'svelte';
 
     const dispatch = createEventDispatcher();
+    let calculator = new Calculator();
 
     export let rewards;
     export let dough_circulation_supply;
-    export let estimated_dough_value = dough_circulation_supply * 0.2;
+    export let estimated_dough_value;
     let total_commitment = 100;
 
     function applyConfig() {
-      console.log("clicked");
+      let stakedVeDough = 0;
+
+      rewards.forEach(reward => {
+        let stakedDoughPercentage = estimated_dough_value * (reward.percentage / 100);
+        stakedVeDough += calculator.calculateVeDough(stakedDoughPercentage, reward.months);
+      });
+
+      dispatch('applyConfig', {
+        rewards: rewards,
+        stakedVeDough: stakedVeDough,
+        estimated_dough_value: estimated_dough_value
+      });
     }
 
     function resetCommitmentRewards() {
@@ -33,19 +46,10 @@
         return {percentage: a.percentage + b.percentage};
       });
 
-      if(total_commitment.percentage < 100) {
-        console.log("is less than 100%");
-        /*
-        dispatch('message', {
-          rewards: rewards,
-          estimated_dough_value: estimated_dough_value
-	  	  });      
-        */   
-      } else {
+      if(total_commitment.percentage > 100) {
         reward.percentage = 100 - (total_commitment.percentage - event.detail.value);
       }
 
-      console.log("total_commitment", total_commitment);
       rewards = rewards;
     }
 
