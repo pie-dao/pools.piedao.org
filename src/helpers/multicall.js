@@ -22,9 +22,7 @@ export const MULTICALL = {
 };
 
 export function getNormalizedNumber(number, decimals) {
-  return new BigNumber(number).dividedBy(
-    new BigNumber(10).pow(decimals),
-  );
+  return new BigNumber(number).dividedBy(new BigNumber(10).pow(decimals));
 }
 
 const abi = [
@@ -91,9 +89,7 @@ const abi = [
     type: 'function',
   },
   {
-    inputs: [
-
-    ],
+    inputs: [],
     name: 'symbol',
     outputs: [
       {
@@ -144,10 +140,7 @@ export async function multicall(
   const itf = new Interface(abi);
   try {
     const [, res] = await multi.aggregate(
-      calls.map((call) => [
-        call[0].toLowerCase(),
-        itf.encodeFunctionData(call[1], call[2]),
-      ]),
+      calls.map((call) => [call[0].toLowerCase(), itf.encodeFunctionData(call[1], call[2])]),
       options,
     );
     return res.map((call, i) => itf.decodeFunctionResult(calls[i][1], call));
@@ -156,31 +149,20 @@ export async function multicall(
   }
 }
 
-const chunk = (arr, size) => Array.from(
-  { length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size),
-);
+/* eslint-disable max-len */
+const chunk = (arr, size) => Array.from({ length: Math.ceil(arr.length / size) }, (v, i) => arr.slice(i * size, i * size + size));
+/* eslint-enable max-len */
 
 export const roundDownLabel = (numberString) => {
   const number = parseFloat(numberString);
   return (Math.floor(number * 100) / 100).toString();
 };
 
-const getBalanceQuery = (tokensList, wallet) => tokensList.map((token) => [
-  token.address,
-  'balanceOf',
-  [wallet],
-]);
+const getBalanceQuery = (tokensList, wallet) => tokensList.map((token) => [token.address, 'balanceOf', [wallet]]);
 
-const getDecimalsQuery = (tokenList) => tokenList.map((token) => [
-  token.address,
-  'decimals',
-]);
+const getDecimalsQuery = (tokenList) => tokenList.map((token) => [token.address, 'decimals']);
 
-const getAllowanceQuery = (tokensList, wallet, allowanceTarget) => tokensList.map((token) => [
-  token.address,
-  'allowance',
-  [wallet, allowanceTarget],
-]);
+const getAllowanceQuery = (tokensList, wallet, allowanceTarget) => tokensList.map((token) => [token.address, 'allowance', [wallet, allowanceTarget]]);
 
 /**
  * Warning, token list has to contain eth at position [0]
@@ -190,7 +172,12 @@ const getAllowanceQuery = (tokensList, wallet, allowanceTarget) => tokensList.ma
  * @param {*} allowanceTarget default to 0x Contract
  *
  */
-export async function fetchBalances(tokensList, walletAddress, provider, allowanceTarget = '0xdef1c0ded9bec7f1a1670819833240f027b25eff') {
+export async function fetchBalances(
+  tokensList,
+  walletAddress,
+  provider,
+  allowanceTarget = '0xdef1c0ded9bec7f1a1670819833240f027b25eff',
+) {
   const tokensListWithoutEth = tokensList.slice(1);
 
   const balanceQuery = getBalanceQuery(tokensListWithoutEth, walletAddress);
@@ -223,7 +210,7 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
   newTokenList.push({
     ...tokensList[0],
     decimals: 18,
-    allowance: new BigNumber((ethers.constants.MaxUint256).toString()),
+    allowance: new BigNumber(ethers.constants.MaxUint256.toString()),
     balance: {
       bn: new BigNumber(ethBalance.toString()),
       label: roundDownLabel(getNormalizedNumber(ethBalance.toString(), 18).toString()),
@@ -253,20 +240,9 @@ export async function fetchBalances(tokensList, walletAddress, provider, allowan
 }
 
 export async function fetchEthBalances(addressList, provider) {
-  const balanceQuery = addressList.map((address) => [
-    MULTICALL['1'],
-    'getEthBalance',
-    [address],
-  ]);
+  const balanceQuery = addressList.map((address) => [MULTICALL['1'], 'getEthBalance', [address]]);
 
-  const response = await multicall(
-    provider,
-    abi,
-    [
-      ...balanceQuery,
-    ],
-    { blockTag: 'latest' },
-  );
+  const response = await multicall(provider, abi, [...balanceQuery], { blockTag: 'latest' });
 
   const balances = {};
   /* eslint-disable prefer-destructuring */
@@ -279,59 +255,59 @@ export async function fetchEthBalances(addressList, provider) {
 }
 
 export async function fetchOvensUserData(ovensList, walletAddress, provider) {
-  const ovenAbi = [{
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'ethBalanceOf',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'outputBalanceOf',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-
-    ],
-    name: 'cap',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  }];
+  const ovenAbi = [
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: '',
+          type: 'address',
+        },
+      ],
+      name: 'ethBalanceOf',
+      outputs: [
+        {
+          internalType: 'uint256',
+          name: '',
+          type: 'uint256',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: '',
+          type: 'address',
+        },
+      ],
+      name: 'outputBalanceOf',
+      outputs: [
+        {
+          internalType: 'uint256',
+          name: '',
+          type: 'uint256',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    {
+      inputs: [],
+      name: 'cap',
+      outputs: [
+        {
+          internalType: 'uint256',
+          name: '',
+          type: 'uint256',
+        },
+      ],
+      stateMutability: 'view',
+      type: 'function',
+    },
+  ];
 
   const balanceEthQuery = ovensList.map((oven) => [
     oven.addressOven,
@@ -345,19 +321,12 @@ export async function fetchOvensUserData(ovensList, walletAddress, provider) {
     [walletAddress],
   ]);
 
-  const capQuery = ovensList.map((oven) => [
-    oven.addressOven,
-    'cap',
-  ]);
+  const capQuery = ovensList.map((oven) => [oven.addressOven, 'cap']);
 
   const response = await multicall(
     provider,
     ovenAbi,
-    [
-      ...balanceEthQuery,
-      ...balancePieQuery,
-      ...capQuery,
-    ],
+    [...balanceEthQuery, ...balancePieQuery, ...capQuery],
 
     { blockTag: 'latest' },
   );

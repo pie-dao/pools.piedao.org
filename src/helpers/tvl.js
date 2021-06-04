@@ -4,12 +4,12 @@
 /* eslint-disable no-restricted-syntax */
 import { pieSmartPool, erc20 } from '@pie-dao/abis';
 import BigNumber from 'bignumber.js';
-import {
-  contract,
-} from '../stores/eth.js';
+import { contract } from '../stores/eth.js';
 
 async function getTokenPricesFromString(stringFeed) {
-  const response = await fetch(`https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${stringFeed}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true`);
+  const response = await fetch(
+    `https://api.coingecko.com/api/v3/simple/token_price/ethereum?contract_addresses=${stringFeed}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true`,
+  );
   const result = await response.json();
   return result;
 }
@@ -153,7 +153,9 @@ export async function fetchNav() {
     }
 
     // eslint-disable-next-line max-len
-    tokenAmounts[token].amount += ((new BigNumber(amount.toString())).dividedBy(10 ** tokenAmounts[token].decimals)).toNumber();
+    tokenAmounts[token].amount += new BigNumber(amount.toString())
+      .dividedBy(10 ** tokenAmounts[token].decimals)
+      .toNumber();
   }
 
   // Pies
@@ -184,9 +186,14 @@ export async function fetchNav() {
       // eslint-disable-next-line no-restricted-syntax
       for (const underlying of stakingPool.underlyings) {
         const underlyingContract = await contract({ abi: erc20, address: underlying });
-        const tokenAmount = new BigNumber((await underlyingContract.balanceOf(stakingPool.lpUnderlyingsAddress)).toString());
+        const tokenAmount = new BigNumber(
+          (await underlyingContract.balanceOf(stakingPool.lpUnderlyingsAddress)).toString(),
+        );
         // console.log(tokenAmount.times(lpBalance).div(lpTotalSupply).toString());
-        await pushTokenAmount(underlying, tokenAmount.multipliedBy(lpBalance).dividedBy(lpTotalSupply));
+        await pushTokenAmount(
+          underlying,
+          tokenAmount.multipliedBy(lpBalance).dividedBy(lpTotalSupply),
+        );
       }
     } else {
       throw new Error('lpType not supported');

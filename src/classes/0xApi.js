@@ -17,7 +17,9 @@ export default class ApiOx {
 
     const weiAmount = amount.toFixed(0);
     // Slippage: 0.01 = 1%
-    const callUrl = `${this.baseUrl}quote?sellAmount=${weiAmount}&buyToken=${buyToken.address}&sellToken=${sellToken.address}&slippagePercentage=${this.slippage / 100}`;
+    const callUrl = `${this.baseUrl}quote?sellAmount=${weiAmount}&buyToken=${
+      buyToken.address
+    }&sellToken=${sellToken.address}&slippagePercentage=${this.slippage / 100}`;
     const response = await fetch(callUrl);
 
     if (response.status !== 200) {
