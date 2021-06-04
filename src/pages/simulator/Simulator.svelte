@@ -20,6 +20,7 @@
     rewards = event.detail.rewards;
     inputs.stakedVeDough = formatFiat(event.detail.stakedVeDough, ',', '.', '');
     estimated_dough_value = event.detail.estimated_dough_value;
+    sliderModal.close();
   }
 
   function setCommitment(months) {
@@ -139,13 +140,11 @@
     let stakedVeDough = 0;
 
     rewards.forEach(reward => {
-      
       let stakedDoughPercentage = estimated_dough_value * (reward.percentage / 100);
       stakedVeDough += simulator.calculator.calculateVeDough(stakedDoughPercentage, reward.months);
     });
 
     inputs.stakedVeDough = formatFiat(stakedVeDough, ',', '.', '');
-    // parseFloat(inputs.stakedVeDough.replace(/[^0-9.]/g, ''))
   });
 
   // retrieving default outputs object...
