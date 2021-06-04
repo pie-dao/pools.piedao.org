@@ -1,7 +1,7 @@
-import { Subject } from "rxjs";
+import { Subject } from 'rxjs';
 
 const subjects = {};
-
+/* eslint-disable import/prefer-default-export */
 export const subject = (name) => {
   if (subjects[name]) {
     return subjects[name];
@@ -11,3 +11,4 @@ export const subject = (name) => {
 
   return subjects[name];
 };
+/* eslint-enable import/prefer-default-export */

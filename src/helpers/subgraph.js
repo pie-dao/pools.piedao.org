@@ -78,6 +78,7 @@ export async function getSubgraphMetadata(address) {
     return formatPool(response.pool);
   } catch (e) {
     console.error(e);
+    return false;
   }
 }
 
@@ -104,7 +105,7 @@ export async function getPoolMetrics(address) {
     const now = Date.now();
     const today = now - (now % day);
     const query = {};
-    for (let i = 0; i < 31; i++) {
+    for (let i = 0; i < 31; i += 1) {
       const timestamp = today - i * day;
       query[`metrics_${timestamp}`] = {
         __aliasFor: 'swaps',
@@ -126,5 +127,6 @@ export async function getPoolMetrics(address) {
     return await request('getPoolMetrics', query);
   } catch (e) {
     console.log('e', e);
+    return false;
   }
 }

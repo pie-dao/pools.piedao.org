@@ -36,7 +36,7 @@ let pies = [
   '0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd',
   // BCP
   '0xe4f726adc8e89c6a6017f01eada77865db22da14',
-  '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31'
+  '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31',
 ];
 
 pies = pies.map((pie) => pie.toLowerCase());
@@ -143,10 +143,10 @@ export async function fetchNav() {
       let price;
       try {
         price = (await getTokenPricesFromString(token))[token.toLowerCase()].usd;
-      } catch {
-          // If no price is found set it to 0
-          price = 0;
-      } 
+      } catch (e) {
+        // If no price is found set it to 0
+        price = 0;
+      }
 
       tokenAmounts[token].decimals = decimals;
       tokenAmounts[token].price = price;
@@ -177,14 +177,14 @@ export async function fetchNav() {
 
     const lp = await contract({ abi: erc20, address: stakingPool.lp });
 
-    const lpBalance = new BigNumber( (await lp.balanceOf(stakingPoolAddress)).toString() );
-    const lpTotalSupply = new BigNumber( (await lp.totalSupply()).toString() );
+    const lpBalance = new BigNumber((await lp.balanceOf(stakingPoolAddress)).toString());
+    const lpTotalSupply = new BigNumber((await lp.totalSupply()).toString());
 
     if (stakingPool.lpType === 'balancer') {
       // eslint-disable-next-line no-restricted-syntax
       for (const underlying of stakingPool.underlyings) {
         const underlyingContract = await contract({ abi: erc20, address: underlying });
-        const tokenAmount = new BigNumber( (await underlyingContract.balanceOf(stakingPool.lpUnderlyingsAddress)).toString() );
+        const tokenAmount = new BigNumber((await underlyingContract.balanceOf(stakingPool.lpUnderlyingsAddress)).toString());
         // console.log(tokenAmount.times(lpBalance).div(lpTotalSupply).toString());
         await pushTokenAmount(underlying, tokenAmount.multipliedBy(lpBalance).dividedBy(lpTotalSupply));
       }
@@ -200,7 +200,7 @@ export async function fetchNav() {
     const tokenAmount = tokenAmounts[tokenAddress];
 
     nav += tokenAmount.amount * tokenAmount.price;
-    console.log(tokenAddress, nav)
+    console.log(tokenAddress, nav);
   }
   return nav;
 }

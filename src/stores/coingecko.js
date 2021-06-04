@@ -40,7 +40,7 @@ function objectToQueryString(obj) {
     .join('&');
 }
 
-export const fetchChartData = async(coingeckoID, days = 90) => {
+export const fetchChartData = async (coingeckoID, days = 90) => {
   const baseURL = 'https://api.coingecko.com/api/v3';
   return request(`${baseURL}/coins/${coingeckoID}/market_chart?vs_currency=usd&days=${days}`);
 };
@@ -74,7 +74,6 @@ export class CoinGecko {
       return newState;
     });
   }
-
 
   static async fetchAssetPrices() {
     let idQueryString = 'piedao-dough-v2%2Cweth%2Cethereum%2C';

@@ -1,16 +1,16 @@
 /* eslint-disable arrow-body-style */
-import { erc20 } from "@pie-dao/abis";
-import { ethers } from "ethers";
-import { get } from "svelte/store";
-import { isAddress, isPOJO, validateIsAddress } from "@pie-dao/utils";
+import { erc20 } from '@pie-dao/abis';
+import { ethers } from 'ethers';
+import { get } from 'svelte/store';
+import { isAddress, isPOJO, validateIsAddress } from '@pie-dao/utils';
 
-import contractOverrides from "../../config/contractOverrides.json";
+import contractOverrides from '../../config/contractOverrides.json';
 import unipoolAbi from '../../config/unipoolABI.json';
 
-import { balanceKey, functionKey } from "./keys";
-import { eth } from "./writables";
-import { findAbi } from "./abi";
-import { subject } from "./observables";
+import { balanceKey, functionKey } from './keys';
+import { eth } from './writables';
+import { findAbi } from './abi';
+import { subject } from './observables';
 
 let contracts = {};
 
@@ -23,19 +23,19 @@ let blockNumberPid = [0];
 const updateOnBlock = () => {
   // console.log('running balance update', Date.now());
   trackedBalances.forEach(async (key) => {
-    const [token, account] = key.split(".");
+    const [token, account] = key.split('.');
     if (isAddress(token) && isAddress(account)) {
       const contract = (await observableContract({ abi: erc20, address: token })).raw;
       const balance = (await contract.balanceOf(account)).toString();
       subject(key).next(balance);
     } else {
-      console.warn("Invalid key found in trackedBalances", key);
+      console.warn('Invalid key found in trackedBalances', key);
       console.warn("key should be formatted '[token address].[wallet address]'");
     }
   });
 
   trackedEarningBalances.forEach(async (key) => {
-    const [token, account] = key.split(".");
+    const [token, account] = key.split('.');
     if (isAddress(token) && isAddress(account)) {
       const contract = (await observableContract({ abi: unipoolAbi, address: token })).raw;
       if (!contract.earned) return;
@@ -59,9 +59,9 @@ const updateOnBlock = () => {
   });
 };
 
-subject("blockNumber").subscribe({
+subject('blockNumber').subscribe({
   next: (blockNumber) => {
-    //console.log('blockNumber', blockNumber);
+    // console.log('blockNumber', blockNumber);
     if (blockNumber > blockNumberPid[0] + 4) {
       clearTimeout(blockNumberPid[1]);
       blockNumberPid = [blockNumber, setTimeout(updateOnBlock, 500)];
@@ -69,7 +69,7 @@ subject("blockNumber").subscribe({
   },
 });
 
-subject("blockNumberBump").subscribe({
+subject('blockNumberBump').subscribe({
   next: (blockNumber) => {
     clearTimeout(blockNumberPid[1]);
     blockNumberPid = [blockNumber, setTimeout(updateOnBlock, 500)];
@@ -81,7 +81,7 @@ const expectedArgLength = (functionName, contract) => {
   const definition = contract.interface.fragments.find(({ name }) => name === functionName);
   if (!definition) {
     throw new Error(
-      `eth/contracts.js - function '${functionName}' not found in contract abi for ${address}`
+      `eth/contracts.js - function '${functionName}' not found in contract abi for ${address}`,
     );
   }
 
@@ -171,14 +171,14 @@ const hasOverrides = (functionName, contract) => {
   return !!overrides;
 };
 
-const overrideWrapped = (prop, contract) => (...passedArgs) => {
+const overrideWrapped = (prop, contract, address) => (...passedArgs) => {
   const args = [...passedArgs];
   const position = expectedArgLength(prop, contract);
 
   if (position < args.length) {
     throw new Error(
-      `eth/contracts.js - function '${prop}' for contract ${address} ` +
-      `called with too few arguments. Got ${args.length}. Expected ${position}.`
+      `eth/contracts.js - function '${prop}' for contract ${address} `
+      + `called with too few arguments. Got ${args.length}. Expected ${position}.`,
     );
   }
 
@@ -232,17 +232,19 @@ export const observableContract = async ({ abi, address }) => {
     addons.functions[functionName] = generateTrackableFunction(
       address,
       functionName,
-      contract.functions[functionName]
+      contract.functions[functionName],
     );
+
+    return addons.functions[functionName];
   });
 
   const handler = {
     get: (obj, prop) => {
       if (Object.keys(addons).includes(prop)) {
         return addons[prop];
-      } else if (contract[prop] && hasOverrides(prop, contract)) {
-        return overrideWrapped(prop, contract);
-      } else if (contract[prop]) {
+      } if (contract[prop] && hasOverrides(prop, contract)) {
+        return overrideWrapped(prop, contract, address);
+      } if (contract[prop]) {
         return contract[prop];
       }
 

@@ -2,6 +2,7 @@ import { getTokenImage } from '../components/helpers';
 
 // eslint-disable-next-line import/prefer-default-export
 export const addTokenToMM = (pie, address) => {
+  /* eslint-disable no-undef */
   ethereum.sendAsync({
     method: 'wallet_watchAsset',
     params: {
@@ -18,7 +19,10 @@ export const addTokenToMM = (pie, address) => {
     if (added) {
       console.log('Thanks for your interest!');
     } else {
+      /* eslint-disable no-alert */
       alert('Something went wrong. Is Metamask there?');
+      /* eslint-enable no-alert */
     }
   });
+  /* eslint-enable no-undef */
 };
