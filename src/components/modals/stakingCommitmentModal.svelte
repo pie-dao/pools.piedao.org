@@ -9,7 +9,19 @@
     export let rewards;
     export let dough_circulation_supply;
     export let estimated_dough_value = dough_circulation_supply * 0.2;
-    console.log("estimated_dough_value", estimated_dough_value);
+    let total_commitment = 100;
+
+    function applyConfig() {
+      console.log("clicked");
+    }
+
+    function resetCommitmentRewards() {
+      rewards.forEach(reward => {
+        reward.percentage = 0;
+      });
+
+      rewards = rewards;
+    }
 
     function commitmentUpdating(event, reward) {
       reward.percentage = event.detail.value;
@@ -17,19 +29,23 @@
     }
 
     function commitmentChanged(event, reward) {
-      let total_commitment = rewards.reduce(function (a, b) {
+      total_commitment = rewards.reduce(function (a, b) {
         return {percentage: a.percentage + b.percentage};
       });
 
-      if(total_commitment.percentage <= 100) {
+      if(total_commitment.percentage < 100) {
+        console.log("is less than 100%");
+        /*
         dispatch('message', {
           rewards: rewards,
           estimated_dough_value: estimated_dough_value
-	  	  });         
+	  	  });      
+        */   
       } else {
         reward.percentage = 100 - (total_commitment.percentage - event.detail.value);
       }
 
+      console.log("total_commitment", total_commitment);
       rewards = rewards;
     }
 
@@ -50,7 +66,7 @@
         How much of the DOUGH Circulating supply will be staked?
       </div>
     </div>  
-    <div class="nowrap swap-from border rounded-20px border-grey p-16px bg-white mb-12">
+    <div class="nowrap swap-from border rounded-20px border-grey p-16px bg-white mb-2">
       <div class="w-full flex flex-row">
         <div class="font-bold mb-4 text-base py-1px text-left w-3/4">
           {formatFiat(estimated_dough_value, ',', '.', '')}
@@ -68,12 +84,22 @@
       <div class="w-full">
         <RangeSlider id="customSlider" values={[estimated_dough_value]} max={dough_circulation_supply} on:stop={(event) => doughChanged(event)}/>
       </div>
-    </div>   
+    </div> 
+    <div class="w-full font-thin mb-6 ml-4">
+      Current Circulating Supply: {formatFiat(dough_circulation_supply,',','.','')} DOUGH
+    </div>     
 
     <div class="w-full">
-      <div class="font-bold mb-4 text-base py-1px text-center">
+      <div class="font-bold text-base py-1px text-center">
         Total Staking Commitment
       </div>
+      
+      <div class="font-thin text-red h-20px text-center">
+        {#if total_commitment.percentage < 100}
+          You still need to allocate the {100 - total_commitment.percentage}%
+        {/if} 
+      </div>
+             
     </div>    
     <div class="flex flex-col">
       {#each rewards as reward}
@@ -87,10 +113,16 @@
       </div>
       {/each}    
     </div>
-
+    
     <div class="flex flex-col items-center">
-      <button class="bg-black text-white m-0 my-8 rounded p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">
-        Add
+      <button disabled={total_commitment.percentage < 100} 
+      class="{total_commitment.percentage < 100 ? 'bg-red text-white m-0 my-4 rounded p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px' : 'bg-black text-white m-0 my-4 rounded p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px'}"
+      on:click={applyConfig}>
+        Apply
       </button>
+      <button class="m-0 rounded min-w-200px w-100pc lg:w-200px lg:min-w-200px" on:click={resetCommitmentRewards}>
+        Reset
+      </button>     
     </div>
+    
   </div>

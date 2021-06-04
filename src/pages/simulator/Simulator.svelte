@@ -474,7 +474,7 @@
                 />
                 <div class="flex items-center cardbordergradient" on:click={() => setCommitment(36)}>
                   <div class="flex items-center p-2">
-                    <div class="">3 Years</div>
+                    <div class=" mr-8px">3 Years</div>
                     <img
                       class="w-30px h-30px"
                       src={images.simulator_hands}
