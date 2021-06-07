@@ -332,7 +332,7 @@ metadata={{
                 <span class="text-base md:text-lg md:leading-6 font-bold">{stakingPool.name}</span>
                 <!-- <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">55.30% APY</span> -->
               </div>
-              <span class="block md:hidden text-sm leading-6 font-bold">Pool: Balancer</span>
+              <span class="block md:hidden text-sm leading-6 font-bold">Pool: <span class="capitalize">{stakingPool.type}</span></span>
               {#if $eth.address}
                 <span class="text-sm font-thin">{data.liquidPercentageLabel} Liquid - {data.escrowPercentageLabel} Escrowed</span>
               {/if}
