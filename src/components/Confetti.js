@@ -79,11 +79,13 @@ function animate(root, fettis, dragFriction, decay, duration, stagger) {
       if (time - startTime < duration) {
         requestAnimationFrame(update);
       } else {
+        /* eslint-disable consistent-return */
         fettis.forEach((fetti) => {
           if (fetti.element.parentNode === root) {
             return root.removeChild(fetti.element);
           }
         });
+        /* eslint-enable consistent-return */
         resolve();
       }
     }
@@ -109,7 +111,9 @@ const defaults = {
 
 function backwardPatch(config) {
   if (!config.stagger && config.delay) {
+    /* eslint-disable no-param-reassign */
     config.stagger = config.delay;
+    /* eslint-enable no-param-reassign */
   }
   return config;
 }
@@ -130,7 +134,9 @@ export default function confetti(root, config = {}) {
     stagger,
     random,
   } = { ...defaults, ...backwardPatch(config) };
+  /* eslint-disable no-param-reassign */
   root.style.perspective = perspective;
+  /* eslint-enable no-param-reassign */
   const elements = createElements(root, elementCount, colors, width, height);
   const fettis = elements.map((element) => ({
     element,

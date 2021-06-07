@@ -3,7 +3,7 @@ import {
   validateIsArray,
   validateIsPOJO,
   validateIsString,
-} from "@pie-dao/utils";
+} from '@pie-dao/utils';
 
 export const balanceKey = (token, address, method = '') => {
   validateIsAddress(token);

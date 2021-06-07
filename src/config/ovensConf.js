@@ -1,10 +1,10 @@
-import { getTokenImage} from '../components/helpers.js';
+import { getTokenImage } from '../components/helpers.js';
 
 const ovens = [
   {
-    addressOven: "0x0c4Ff8982C66cD29eA7eA96d985f36aE60b85B1C",
-    //addressOven: '0x90Cc6F4ec7Aa0468D2eDb3F627AcD988B14A78b4',
-    //addressOven: '0xb9Eef048dcc5F9CC453029cC2ed21f4a558ad0E8',
+    addressOven: '0x0c4Ff8982C66cD29eA7eA96d985f36aE60b85B1C',
+    // addressOven: '0x90Cc6F4ec7Aa0468D2eDb3F627AcD988B14A78b4',
+    // addressOven: '0xb9Eef048dcc5F9CC453029cC2ed21f4a558ad0E8',
     deprecated: false,
     name: 'PLAY Oven',
     description: 'Bakes PLAY with ETH',

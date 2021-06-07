@@ -13,7 +13,6 @@ import LPStaking from '../pages/LPStaking.svelte';
 import LPStakingV2 from '../pages/LPStakingV2.svelte';
 import Staking from '../pages/Staking.svelte';
 import StakingPageSingle from '../pages/StakingPageSingle.svelte';
-import PieLanding from '../pages/PieIndexLanding.svelte';
 import Markets from '../pages/Markets.svelte';
 import DefiPie from '../pages/landings/defiPie.svelte';
 import About from '../pages/landings/about.svelte';
@@ -25,10 +24,6 @@ import Integrations from '../pages/Integrations.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
 import Farm from '../pages/Farm.svelte';
 
-
-
-
-
 export const defaultRouteObj = {
   page: Main,
   params: {
@@ -38,13 +33,12 @@ export const defaultRouteObj = {
 
 const deriveRoute = () => {
   try {
-    if(window.location.hash == '') {
+    if (window.location.hash === '') {
       const normal = window.location.pathname.split('/');
-      let path = normal.filter((part) => part && part.length > 0);
-      if(path.length > 0)
-        return path;
+      const path = normal.filter((part) => part && part.length > 0);
+      if (path.length > 0) return path;
     }
-    
+
     const core = window.location.href.split('#')[1];
 
     if (!core) {
@@ -52,27 +46,25 @@ const deriveRoute = () => {
     }
 
     const parts = core.split('/').filter((part) => part && part.length > 0);
-    
 
     return parts;
   } catch (e) {
     return [];
   }
 };
-
+/*
 function changeUrl(routes) {
-  if ("undefined" !== typeof history.pushState) {
+  if (typeof history.pushState !== 'undefined') {
     let url = '/';
-    routes.forEach( part => {
+    routes.forEach((part) => {
       url += `${part}/`;
-    })
+    });
     window.history.pushState({}, '', url);
   } else {
     window.location.assign(url);
   }
 }
-
-
+*/
 const formatRoute = (route) => {
   let address;
   let poolAction;
@@ -80,7 +72,7 @@ const formatRoute = (route) => {
   let method;
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
-  //changeUrl(route);
+  // changeUrl(route);
 
   switch (route[0] || 'root') {
     case 'about':
@@ -93,7 +85,7 @@ const formatRoute = (route) => {
       return { page: Dashboard };
     case 'exp':
       address = (route[1] || '0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5').toLowerCase();
-      return { page: Experipie, params: { address }  };
+      return { page: Experipie, params: { address } };
     case 'pie':
       address = (route[1] || '').toLowerCase();
       return { page: PiePageSwitch, params: { address } };
@@ -101,8 +93,8 @@ const formatRoute = (route) => {
       return { page: Dough };
     case 'learn':
       return { page: Learn };
-      case 'integrations':
-        return { page: Integrations };
+    case 'integrations':
+      return { page: Integrations };
     case 'swap':
       return { page: Tokensswap };
     case 'migrate':
@@ -110,7 +102,7 @@ const formatRoute = (route) => {
     case 'oven':
       return { page: Oven };
     case 'piefolio':
-        return { page: Piefolio };
+      return { page: Piefolio };
     case 'farms':
       return { page: LPStakingV2 };
     case 'farm':
@@ -123,7 +115,7 @@ const formatRoute = (route) => {
       }
       return { page: LPStaking, params: { referral } };
     case 'staking':
-      return route[1] ? {page: StakingPageSingle, params: route } : { page: Staking };
+      return route[1] ? { page: StakingPageSingle, params: route } : { page: Staking };
     case 'pools':
       address = (route[1] || '').toLowerCase();
       poolAction = (route[2] || 'add').toLowerCase();
@@ -133,7 +125,7 @@ const formatRoute = (route) => {
         return { page: Pool, params: { address, poolAction, method } };
       }
       break;
-
+    /*
     case 'oven':
       address = (route[1] || '').toLowerCase();
       poolAction = (route[2] || 'add').toLowerCase();
@@ -144,6 +136,7 @@ const formatRoute = (route) => {
       }
 
       break;
+*/
     case 'root':
       return defaultRouteObj;
     default:
@@ -159,18 +152,18 @@ export const currentRoute = writable({ ...formatRoute(route) });
 
 window.addEventListener('hashchange', () => {
   const newRoute = deriveRoute();
-  const trackPath = '/' + newRoute.join('/');
+  const trackPath = `/${newRoute.join('/')}`;
 
-  if(window.location.origin !== 'http://localhost:8080') {
+  if (window.location.origin !== 'http://localhost:8080') {
     window.gtag('event', 'page_view', {
-      page_path: trackPath
-    })
+      page_path: trackPath,
+    });
   } else {
-      console.log('Analytics DEV', {
-        page_path: trackPath
-      })
+    console.log('Analytics DEV', {
+      page_path: trackPath,
+    });
   }
-  
+
   currentRoute.set({ ...formatRoute(newRoute) });
   window.scrollTo({
     top: 0,

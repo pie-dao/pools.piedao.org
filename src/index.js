@@ -5,7 +5,7 @@ import { CoinGecko } from './stores/coingecko.js';
 import poolsConfig from './config/pools.json';
 import { pools } from './stores/eth.js';
 
-import "./helpers/referral";
+import './helpers/referral';
 
 pools.set(poolsConfig);
 
