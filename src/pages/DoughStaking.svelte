@@ -1,5 +1,5 @@
 <script>
-  import { approveMax, connectWeb3, eth } from '../stores/eth.js';
+  import { approve, connectWeb3, eth } from '../stores/eth.js';
   import { ethers } from 'ethers';
   import BigNumber from 'bignumber.js';
   import { _ } from 'svelte-i18n';
@@ -17,7 +17,7 @@
       .toFixed(4);
 
   $: needAllowance = true;
-  $: isLoading = false;
+  $: isLoading = true;
   $: error = false;
   $: balanceError = false;
 
@@ -39,11 +39,13 @@
 
   const fetchStakingData = async () => {
     const { provider, signer } = get(eth);
+
     let sharesTimeLock = new ethers.Contract(
       smartcontracts.doughStaking,
       sharesTimeLockABI,
       signer || provider,
     );
+
     let response = await sharesTimeLock.getStakingData($eth.address);
 
     let stakingData = {};
@@ -53,6 +55,11 @@
         stakingData[key] = new BigNumber(response[key].toString());
       }
     });
+    
+    if(isLoading) {
+      isLoading = false;
+      needApproval(stakingData.accountDepositTokenAllowance);
+    }
 
     return stakingData;
   };
@@ -63,28 +70,28 @@
 
     fetchStakingData().then((stakingData) => {
       data = stakingData;
-      console.log(data.accountDepositTokenAllowance.toString());
-      needAllowance = needApproval(data.accountDepositTokenAllowance);
     });
   }
 
   function needApproval(allowance) {
+    console.log("checking need approval", allowance);
     if (!$eth.address || !$eth.signer) return false;
     if (allowance.isEqualTo(0)) return true;
-    if (allowance.isGreaterThanOrEqualTo(amount.bn)) return false;
+    if (allowance.isGreaterThanOrEqualTo(stake.amount)) return false;
   }
 
   async function approveToken() {
-    console.log('inside approveToken');
     if (!$eth.address || !$eth.signer) {
       displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
       connectWeb3();
       return;
     }
 
-    const { emitter } = displayNotification(await approveMax(smartcontracts.dough, smartcontracts.doughStaking));
+    // resetting the approve to zero, before initiating a new approval
+    await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
+
+    const { emitter } = displayNotification(await approve(smartcontracts.dough, smartcontracts.doughStaking, stake.amount));
     needAllowance = false;
-    data = await fetchStakingData();
 
     await new Promise((resolve) =>
       emitter.on('txConfirmed', ({ blockNumber }) => {
@@ -124,6 +131,7 @@
       </div>
       <div class="flex nowrap items-center p-1">
         <input
+          on:keyup={() => { needApproval(data.accountDepositTokenAllowance) }}
           bind:value={stake.amount}
           class="swap-input-from"
           inputmode="decimal"
@@ -204,6 +212,7 @@
     {#if needAllowance}
       <button
         on:click={approveToken}
+        disabled={error || isLoading || balanceError ? true : false}
         class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button
       >
     {:else}
@@ -212,7 +221,7 @@
         disabled={error || isLoading || balanceError ? true : false}
         class="error stake-button mt-10px rounded-20px p-15px w-100pc"
       >
-        Review Your Stake
+        Stake Your Coins
       </button>
     {/if}
   </div>
