@@ -158,6 +158,7 @@
   }
 
   function needApproval(allowance) {
+    console.log("asserting approval...", allowance);
     if (!$eth.address || !$eth.signer) return false;
     if( allowance.isEqualTo(0) ) return true;
     if( allowance.isGreaterThanOrEqualTo( amount.bn ) ) return false;
