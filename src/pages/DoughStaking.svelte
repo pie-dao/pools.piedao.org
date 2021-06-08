@@ -63,6 +63,7 @@
 
     fetchStakingData().then((stakingData) => {
       data = stakingData;
+      console.log(data.accountDepositTokenAllowance.toString());
       needAllowance = needApproval(data.accountDepositTokenAllowance);
     });
   }
@@ -81,13 +82,13 @@
       return;
     }
 
-    const { emitter } = displayNotification(await approveMax(stake.receiver, ZeroEx));
+    const { emitter } = displayNotification(await approveMax(smartcontracts.dough, smartcontracts.doughStaking));
     needAllowance = false;
     data = await fetchStakingData();
 
     await new Promise((resolve) =>
       emitter.on('txConfirmed', ({ blockNumber }) => {
-        console.log("transaction has been confermed, stake shall be approved now...");
+        console.log("transaction has been confirmed, stake shall be approved now...");
         resolve();
         return { message: `stake has been approved`, type: 'success', address: stake.receiver };
       }),
