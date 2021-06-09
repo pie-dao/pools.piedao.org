@@ -74,6 +74,10 @@
       return Number(formatEther(amount)).toFixed();
     };
 
+    const percentAmount = (amount1, amount2, fixed) => {
+      return Number(+amount1 / +amount2 * 100).toFixed(fixed);
+    }
+
     onMount(() => {
       stakingPool = stakingPools.find((item) => {
         if(item.slug === slug) {
@@ -479,7 +483,7 @@ metadata={{
               <p>There are total : <strong>{Number(formatEther(data.totalDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol} </strong> staked in the Staking contract.</p>
               <p>Staked by you: <strong>{Number(formatEther(data.userDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol}</p>
               <p>
-                You are staking : <strong>{data.userDeposited.eq(0) ? "0" : formatEther(data.userDeposited.div(data.totalDeposited).mul(100))}%</strong>
+                You are staking : <strong>{data.userDeposited.eq(0) ? "0" : percentAmount(data.userDeposited, data.totalDeposited, 4)}%</strong>
               </p>
               {#if data.exitFeePercentage.gt(0)}
                   <p>
