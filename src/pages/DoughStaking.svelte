@@ -9,7 +9,6 @@
   import images from '../config/images.json';
   import displayNotification from '../notifications';
 
-  const ZeroEx = '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
 
   const toNum = (num) =>
     BigNumber(num.toString())
@@ -55,29 +54,29 @@
         stakingData[key] = new BigNumber(response[key].toString());
       }
     });
-    
-    if(isLoading) {
-      isLoading = false;
-      needApproval(stakingData.accountDepositTokenAllowance);
-    }
 
     return stakingData;
   };
 
-  // update data on address or block change
-  $: if ($eth.address || $eth.currentBlockNumber) {
-    stake.receiver = $eth.address;
-
-    fetchStakingData().then((stakingData) => {
-      data = stakingData;
-    });
+  $: if($eth.provider && $eth.address && isLoading) {
+      fetchStakingData().then((stakingData) => {
+        isLoading = false;
+        data = stakingData;
+        stake.receiver = $eth.address;
+        checkApproval(data.accountDepositTokenAllowance);
+      });
   }
 
-  function needApproval(allowance) {
-    console.log("checking need approval", allowance);
-    if (!$eth.address || !$eth.signer) return false;
-    if (allowance.isEqualTo(0)) return true;
-    if (allowance.isGreaterThanOrEqualTo(stake.amount)) return false;
+  function checkApproval(allowance) {
+    if(stake.amount) {
+      let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);
+
+if(allowance.isGreaterThanOrEqualTo(stakeAmount)) {
+  needAllowance = false;
+} else {
+  needAllowance = true;
+}
+    }
   }
 
   async function approveToken() {
@@ -87,19 +86,29 @@
       return;
     }
 
-    // resetting the approve to zero, before initiating a new approval
-    await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
+    // resetting the approve to zero, before initiating a new approval...
+    if(!data.accountDepositTokenAllowance.isEqualTo(0)) {
+      console.log("resetting approval...");
+      await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
+    }
 
-    const { emitter } = displayNotification(await approve(smartcontracts.dough, smartcontracts.doughStaking, stake.amount));
-    needAllowance = false;
+    try {
+      let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);
+      console.log("starting new approval...");
+      const { emitter } = await approve(smartcontracts.dough, smartcontracts.doughStaking, stakeAmount.toString());
+      needAllowance = false;  
+      console.log("approval completed", needAllowance);
 
-    await new Promise((resolve) =>
+      await new Promise((resolve) =>
       emitter.on('txConfirmed', ({ blockNumber }) => {
         console.log("transaction has been confirmed, stake shall be approved now...");
         resolve();
         return { message: `stake has been approved`, type: 'success', address: stake.receiver };
       }),
-    );
+    );      
+    } catch(error) {
+      console.error("PREFIX_" + error);
+    }
   }
 
 </script>
@@ -131,7 +140,7 @@
       </div>
       <div class="flex nowrap items-center p-1">
         <input
-          on:keyup={() => { needApproval(data.accountDepositTokenAllowance) }}
+          on:keyup={() => { checkApproval(data.accountDepositTokenAllowance)}}
           bind:value={stake.amount}
           class="swap-input-from"
           inputmode="decimal"
