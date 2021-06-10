@@ -8,6 +8,7 @@
   import { get } from 'svelte/store';
   import images from '../config/images.json';
   import displayNotification from '../notifications';
+  import { formatEther, parseEther } from '@ethersproject/units';
 
 
   const toNum = (num) =>
@@ -17,8 +18,7 @@
 
   $: needAllowance = true;
   $: isLoading = true;
-  $: error = false;
-  $: balanceError = false;
+  $: stakeError = false;
 
   let data = {
     totalStaked: BigNumber(0),
@@ -36,17 +36,17 @@
     receiver: ""
   };
 
-  const fetchStakingData = async () => {
-    const { provider, signer } = get(eth);
+  const { provider, signer } = get(eth);
 
-    let sharesTimeLock = new ethers.Contract(
+  let sharesTimeLock = new ethers.Contract(
       smartcontracts.doughStaking,
       sharesTimeLockABI,
       signer || provider,
     );
 
+  const fetchStakingData = async () => {
     let response = await sharesTimeLock.getStakingData($eth.address);
-
+    console.log("received staking data", response);
     let stakingData = {};
 
     Object.keys(response).forEach((key) => {
@@ -71,11 +71,11 @@
     if(stake.amount) {
       let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);
 
-if(allowance.isGreaterThanOrEqualTo(stakeAmount)) {
-  needAllowance = false;
-} else {
-  needAllowance = true;
-}
+      if(allowance.isGreaterThanOrEqualTo(stakeAmount)) {
+        needAllowance = false;
+      } else {
+        needAllowance = true;
+      }
     }
   }
 
@@ -88,26 +88,26 @@ if(allowance.isGreaterThanOrEqualTo(stakeAmount)) {
 
     // resetting the approve to zero, before initiating a new approval...
     if(!data.accountDepositTokenAllowance.isEqualTo(0)) {
-      console.log("resetting approval...");
       await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
     }
 
     try {
-      let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);
-      console.log("starting new approval...");
-      const { emitter } = await approve(smartcontracts.dough, smartcontracts.doughStaking, stakeAmount.toString());
-      needAllowance = false;  
-      console.log("approval completed", needAllowance);
-
-      await new Promise((resolve) =>
-      emitter.on('txConfirmed', ({ blockNumber }) => {
-        console.log("transaction has been confirmed, stake shall be approved now...");
-        resolve();
-        return { message: `stake has been approved`, type: 'success', address: stake.receiver };
-      }),
-    );      
+      let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);     
+      await approve(smartcontracts.dough, smartcontracts.doughStaking, stakeAmount.toString(), {gasLimit: 100000});
+      needAllowance = false; 
+      
     } catch(error) {
-      console.error("PREFIX_" + error);
+      stakeError = true;
+      needAllowance = true;
+    }
+  }
+
+  async function stakeDOUGH() {
+    try {
+      let response = await sharesTimeLock.depositByMonths(parseEther(stake.amount.toString()), stake.duration, stake.receiver);
+      console.log(response);     
+    } catch(error) {
+      console.error(error);
     }
   }
 
@@ -221,13 +221,15 @@ if(allowance.isGreaterThanOrEqualTo(stakeAmount)) {
     {#if needAllowance}
       <button
         on:click={approveToken}
-        disabled={error || isLoading || balanceError ? true : false}
+        class:error={isLoading || stakeError ? true : false}
+        disabled={isLoading || stakeError ? true : false}
         class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button
       >
     {:else}
       <button
-        class:error={error || isLoading || balanceError ? true : false}
-        disabled={error || isLoading || balanceError ? true : false}
+      on:click={stakeDOUGH}
+        class:error={isLoading || stakeError ? true : false}
+        disabled={isLoading || stakeError ? true : false}
         class="error stake-button mt-10px rounded-20px p-15px w-100pc"
       >
         Stake Your Coins

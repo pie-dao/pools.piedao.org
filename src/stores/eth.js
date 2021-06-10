@@ -108,9 +108,11 @@ export const trackGasPrice = async () => subject('gasPrice');
 
 // Shortcuts
 
-export const approve = async (address, spender, amount) => {
+export const approve = async (address, spender, amount, overrides = {}) => {
   const erc20Contract = await contract({ address, abi: erc20 });
-  const { hash } = await erc20Contract['approve(address,uint256)'](spender, amount);
+  // added new overrides parameter, we can use it to override default options, ie:
+  // {gasLimit: 100000}
+  const { hash } = await erc20Contract['approve(address,uint256)'](spender, amount, overrides);
 
   const { emitter } = displayNotification({ hash });
   const symbol = await erc20Contract.symbol();
@@ -134,6 +136,10 @@ export const approve = async (address, spender, amount) => {
   if (currentBlockNumber > lastBlock) {
     eth.set({ ...get(eth), currentBlockNumber });
   }
+  
+  // added return value, inside an async function it works like resolve...
+  // without it, this function will never complete its life cycle!!
+  return true;
 };
 
 export const approveMax = async (address, spender) => {
