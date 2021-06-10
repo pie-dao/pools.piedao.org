@@ -14,7 +14,7 @@
   const toNum = (num) =>
     BigNumber(num.toString())
       .dividedBy(10 ** 18)
-      .toFixed(4);
+      .toFixed(2);
 
   $: needAllowance = true;
   $: isLoading = true;
@@ -50,23 +50,34 @@
 
   const fetchStakingData = async () => {
     let response = await sharesTimeLock.getStakingData($eth.address);
-    console.log("received staking data", response);
-    let stakingData = {};
 
     Object.keys(response).forEach((key) => {
       if (key != 'accountLocks') {
-        stakingData[key] = new BigNumber(response[key].toString());
+        data[key] = new BigNumber(response[key].toString());
+      } else {
+        let locks = [];
+
+        data[key].forEach(lock => {
+          locks.push({
+            amount: new BigNumber(lock.amount.toString()),
+            lockDuration: lock.lockDuration,
+            lockedAt: lock.lockedAt
+          });
+        });
+
+        data[key] = locks;
       }
     });
 
-    return stakingData;
+    console.log(data);
+    
+    data = data;
+    return data;
   };
 
   $: if($eth.provider && $eth.address && isLoading) {
-    fetchStakingData().then((stakingData) => {
+    fetchStakingData().then(() => {
       isLoading = false;
-      data = stakingData;
-      console.log(data);
       stake.receiver = $eth.address;
       checkApproval(data.accountDepositTokenAllowance);
     });
@@ -109,7 +120,11 @@
 
   async function stakeDOUGH() {
     try {
-      let response = await sharesTimeLock.depositByMonths(parseEther(stake.amount.toString()), stake.duration, stake.receiver);
+      let response = await sharesTimeLock.depositByMonths(
+        parseEther(stake.amount.toString()), 
+        stake.duration, 
+        stake.receiver);
+
       console.log(response);
 
       displayNotification({
@@ -118,15 +133,34 @@
         type: "success",
       });
 
-      unstake.amount += stake.amount;
-      stake.amount = 0.0;
+      needAllowance = true;
+      // TODO: fetchStakingData should be called after txConfirmed...
+      await fetchStakingData();
+      console.log("fetchStakingData", data);
+
     } catch(error) {
       console.error(error);
     }
   }
 
-  async function unstakeDOUGH() {
-    console.log("going to unstake soon");
+  async function unstakeDOUGH(id, lockAmount) {
+    try {
+      let response = await sharesTimeLock.withdraw(id);
+      console.log(response);
+
+      displayNotification({
+        autoDismiss: 15000,
+        message: `You unstaked ${lockAmount.toString()} DOUGH`,
+        type: "success",
+      });
+
+      // TODO: fetchStakingData should be called after txConfirmed...
+      await fetchStakingData();
+      console.log("fetchStakingData", data);
+
+    } catch(error) {
+      console.error(error);
+    }
   }
 
 </script>
@@ -259,50 +293,29 @@
   class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc mt-4"
 >
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
-    <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">Amount to Unstake</div>
-      <div
-        class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin"
-        style="display: inline; cursor: pointer;"
-      >
-        <div
-          on:click={() => {
-            unstake.amount = toNum(data.totalStaked);
-          }}
-        >
-          Total Staked: {toNum(data.totalStaked)}
-        </div>
-      </div>
-    </div>
     <div class="flex nowrap items-center p-1">
-      <input
-        bind:value={unstake.amount}
-        class="swap-input-from"
-        inputmode="decimal"
-        title="Token Amount"
-        autocomplete="off"
-        autocorrect="off"
-        type="number"
-        pattern="^[0-9]*[,]?[0-9]*$"
-        placeholder="0.0"
-        minlength="1"
-        maxlength="79"
-        spellcheck="false"
-      />
       <span class="sc-iybRtq gjVeBU">
-        <img class="h-auto w-24px mr-5px" src={images.doughtoken} alt="dough token" />
+        Total Staked: {toNum(data.totalStaked)}
+        <img class="h-auto w-24px mr-5px ml-4" src={images.doughtoken} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
       </span>
     </div>
+    <div>Select the item you wish to unstake from the list.</div>
   </div>   
 
-  <button
-    on:click={unstakeDOUGH}
-    class:error={isLoading || stakeError ? true : false}
-    disabled={isLoading || stakeError ? true : false}
-    class="error stake-button mt-10px rounded-20px p-15px w-100pc"
-  >
-    Unstake Your Coins
-  </button>
+  <ul>
+    {#each data.accountLocks as lock, id}
+	  <li 
+    class="swap-container mt-8 stake-button"
+    on:click={() => {
+      unstakeDOUGH(id, toNum(lock.amount));
+    }}
+    >
+		<div>{toNum(lock.amount)} DOUGH</div>
+    <div>staked for: {lock.lockDuration / 60} Months</div>
+    <div>started: {new Date(lock.lockedAt * 1000).toLocaleString()}</div>
+	  </li>
+    {/each}
+  </ul>
 </div>
 </div>
