@@ -36,6 +36,10 @@
     receiver: ""
   };
 
+  let unstake = {
+    amount: 0.0
+  }
+
   const { provider, signer } = get(eth);
 
   let sharesTimeLock = new ethers.Contract(
@@ -59,16 +63,17 @@
   };
 
   $: if($eth.provider && $eth.address && isLoading) {
-      fetchStakingData().then((stakingData) => {
-        isLoading = false;
-        data = stakingData;
-        stake.receiver = $eth.address;
-        checkApproval(data.accountDepositTokenAllowance);
-      });
+    fetchStakingData().then((stakingData) => {
+      isLoading = false;
+      data = stakingData;
+      console.log(data);
+      stake.receiver = $eth.address;
+      checkApproval(data.accountDepositTokenAllowance);
+    });
   }
 
   function checkApproval(allowance) {
-    if(stake.amount) {
+    if(stake.amount && allowance) {
       let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);
 
       if(allowance.isGreaterThanOrEqualTo(stakeAmount)) {
@@ -105,10 +110,23 @@
   async function stakeDOUGH() {
     try {
       let response = await sharesTimeLock.depositByMonths(parseEther(stake.amount.toString()), stake.duration, stake.receiver);
-      console.log(response);     
+      console.log(response);
+
+      displayNotification({
+        autoDismiss: 15000,
+        message: `You staked ${stake.amount.toString()} DOUGH`,
+        type: "success",
+      });
+
+      unstake.amount += stake.amount;
+      stake.amount = 0.0;
     } catch(error) {
       console.error(error);
     }
+  }
+
+  async function unstakeDOUGH() {
+    console.log("going to unstake soon");
   }
 
 </script>
@@ -236,4 +254,55 @@
       </button>
     {/if}
   </div>
+
+  <div
+  class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc mt-4"
+>
+  <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
+    <div class="flex items-center justify-between">
+      <div class="flex nowrap intems-center p-1 font-thin">Amount to Unstake</div>
+      <div
+        class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin"
+        style="display: inline; cursor: pointer;"
+      >
+        <div
+          on:click={() => {
+            unstake.amount = toNum(data.totalStaked);
+          }}
+        >
+          Total Staked: {toNum(data.totalStaked)}
+        </div>
+      </div>
+    </div>
+    <div class="flex nowrap items-center p-1">
+      <input
+        bind:value={unstake.amount}
+        class="swap-input-from"
+        inputmode="decimal"
+        title="Token Amount"
+        autocomplete="off"
+        autocorrect="off"
+        type="number"
+        pattern="^[0-9]*[,]?[0-9]*$"
+        placeholder="0.0"
+        minlength="1"
+        maxlength="79"
+        spellcheck="false"
+      />
+      <span class="sc-iybRtq gjVeBU">
+        <img class="h-auto w-24px mr-5px" src={images.doughtoken} alt="dough token" />
+        <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+      </span>
+    </div>
+  </div>   
+
+  <button
+    on:click={unstakeDOUGH}
+    class:error={isLoading || stakeError ? true : false}
+    disabled={isLoading || stakeError ? true : false}
+    class="error stake-button mt-10px rounded-20px p-15px w-100pc"
+  >
+    Unstake Your Coins
+  </button>
+</div>
 </div>
