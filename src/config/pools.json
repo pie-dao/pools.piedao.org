@@ -1,5 +1,6 @@
 {
   "available": [
+    "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4",
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
@@ -11,6 +12,7 @@
     
   ],
   "selectable": [
+    "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4",
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
@@ -19,6 +21,35 @@
     "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+  "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4": {
+    "symbol": "PLAY",
+    "isExperipie": true,
+    "name": "Metaverse NFT Index",
+    "description": "Complete exposure to the Metaverse and NFTs. In collab with NFTX",
+    "useMintOverBuy": true,
+    "useRecipe": true,
+    "swapEnabled": false,
+    "swapFees": "0.2",
+    "streamingFees": "1%",
+    "coingeckoId": "metaverse-nft-index",
+    "composition": [
+      {"symbol":"MANA","coingeckoId":"decentraland", "address":"0x0f5d2fb29fb7d3cfee444a200298f468908cc942", "coingeckoImageId": ""},
+      {"symbol":"ENJ","coingeckoId":"enjincoin","address":"0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c", "coingeckoImageId": ""},
+      {"symbol":"RFOX","coingeckoId":"redfox-labs-2","address":"0xa1d6df714f91debf4e0802a542e13067f31b8262", "coingeckoImageId": ""},
+      {"symbol":"SAND","coingeckoId":"the-sandbox","address":"0x3845badAde8e6dFF049820680d1F14bD3903a5d0", "coingeckoImageId": ""},
+      {"symbol":"AXS","coingeckoId":"axie-infinity","address":"0xF5D669627376EBd411E34b98F19C868c8ABA5ADA", "coingeckoImageId": ""},
+      {"symbol":"NFTX","coingeckoId":"nftx","address":"0x87d73E916D7057945c9BcD8cdd94e42A6F47f776", "coingeckoImageId": ""},
+      {"symbol":"wATRI","coingeckoId":"atari","address":"0xdacD69347dE42baBfAEcD09dC88958378780FB62", "coingeckoImageId": ""},
+      {"symbol":"GHST","coingeckoId":"aavegotchi","address":"0x3F382DbD960E3a9bbCeaE22651E88158d2791550", "coingeckoImageId": ""},
+      {"symbol":"PUNK-BASIC","coingeckoId":"punk-basic","address":"0x69bbe2fa02b4d90a944ff328663667dc32786385", "coingeckoImageId": ""},
+      {"symbol":"MASK","coingeckoId":"nftx-hashmasks-index","address":"0x0fe629d1e84e171f8ff0c1ded2cc2221caa48a3f", "coingeckoImageId": ""},
+      {"symbol":"RARI","coingeckoId":"rarible","address":"0xfca59cd816ab1ead66534d82bc21e7515ce441cf", "coingeckoImageId": ""},
+      {"symbol":"SOCKS","coingeckoId":"unisocks","address":"0x23b608675a2b2fb1890d3abbd85c5775c51691d5", "coingeckoImageId": ""},
+      {"symbol":"UOS","coingeckoId":"ultra","address":"0xd13c7342e1ef687c5ad21b27c2b65d772cab5c8c", "coingeckoImageId": "", "decimals": 4},
+      {"symbol":"MUST","coingeckoId":"must","address":"0x9c78ee466d6cb57a4d01fd887d2b5dfb2d46288f", "coingeckoImageId": ""}
+    ],
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
+  },
   "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
     "symbol": "BTC++",
     "isExperipie": false,

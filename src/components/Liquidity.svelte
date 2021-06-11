@@ -7,7 +7,7 @@
   import { _ } from "svelte-i18n";
   import { ethers } from "ethers";
   import { pieSmartPool, erc20 } from "@pie-dao/abis";
-
+  import smartcontracts from '../config/smartcontracts.json';
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
   import recipeAbi from '../config/recipeABI.json';
@@ -149,7 +149,7 @@
       return;
     }
 
-    const recipe = await contract({ address: '0x6cb4b8669e23295563d3b34df4a760c0cee993c7', abi: recipeAbi });
+    const recipe = await contract({ address: smartcontracts.recipe, abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {
@@ -220,7 +220,6 @@
     }
 
     let erc20Contract = new ethers.Contract(address, erc20, $eth.signer);
-    console.log('Im being calle');
 
     const { hash } = await erc20Contract['approve(address,uint256)'](spender, ethers.constants.MaxUint256);
     const { emitter } = displayNotification({ hash });

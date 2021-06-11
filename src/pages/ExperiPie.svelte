@@ -58,7 +58,6 @@
 
   const toggleDropdow = (event) => {
     dropdownOpen = !dropdownOpen;
-    event.preventDefault();
   };
 
   $: options = {
@@ -120,7 +119,9 @@
       };
     }
     
+    console.log('Pie.nav', Pie.nav)
     let _nav = parseFloat(Pie.nav);
+
     let price = parseFloat(tokenPrice);
     
     let spread = (price - _nav);
@@ -178,6 +179,7 @@
 
     console.log('globalAPR', globalAPR)
 
+    console.log('Pie.nav', Pie.nav)
     nav = formatFiat(Pie.nav.toFixed(2));
     marketCap = formatFiat(Pie.marketCap.toFixed(2));
     PieAPR = `${(globalAPR / 100).toFixed(2)}%`;
@@ -566,7 +568,7 @@
 
             <td class="flex items-center justify-center border text-center px-4 py-2">
               {#if pooledToken.productive}
-                <StrategyInUse protocol={pooledToken.productiveAs.protocol.name} />
+                <StrategyInUse token={pooledToken} protocol={pooledToken.productiveAs.protocol.name} />
               {:else }
               <StrategyInUse protocol={'none'} />
               {/if}

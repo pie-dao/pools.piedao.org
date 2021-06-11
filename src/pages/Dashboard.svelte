@@ -78,6 +78,13 @@
     </span>
   </Modal>
 
+  <a class="h-100pc" target="_blank" href="https://medium.com/piedao/piedao-is-expanding-the-core-team-and-open-sourcing-the-search-for-talent-b22fce733293">
+    <img class="inline hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/wearehiringdesktop.png" alt="We are hiring banner" />
+    <img class="inline block md:hidden" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/wearehiringmobile.png" alt="We are hiring banner" />
+
+  </a>
+
+
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
 
@@ -93,7 +100,7 @@
           <tr>
             <th class="font-thin border-b-2 px-4 py-2 text-left">Index</th>
             <th class="font-thin border-b-2 px-4 py-2">Assets</th>
-            <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
+            <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
             <th class="font-thin border-b-2 px-4 py-2">Current Price</th>
             <th class="font-thin border-b-2 px-4 py-2">Buy</th>
           </tr>
@@ -101,7 +108,7 @@
         <tbody>
           {#each piVaults as pie}
             <tr class="row-highlight">
-              <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+              <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-180px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
                 <a class="flex items-center px-2 py-2" href={`#/pie/${pie.address}`}>
                   <img
                     class="inline icon ml-2 mr-2"
@@ -128,12 +135,11 @@
               </td>
               <td class="border px-4 ml-8 py-2 font-thin text-center">
                 {#if pie.useMintOverBuy}
-                  <button on:click={() => {
-                    modalOption.token = pie.address;
-                    modal.open();
-                  }} class="table-btn highlight-box min-w-70px">
-                    {pie.symbol}
-                  </button>
+                    <a href={`#/pie/${pie.address}`}>
+                      <button class="table-btn highlight-box min-w-70px">
+                        {pie.symbol}
+                      </button>
+                    </a>
                 {:else}
                   <a href={`#/swap`}>
                     <button class="table-btn highlight-box min-w-70px">
@@ -163,9 +169,11 @@
       <a class="mx-4 thinborderbottom" href={`#/pie/${pie.address}`}>
         <div class="flex items-center w-100pc py-4">
               <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
-            <div class="flex flex-col justify-around">
+            <div class="flex flex-col justify-around max-w-55pc">
               <span class="text-lg leading-6">{pie.symbol}</span>
-              <span class="text-sm font-thin opacity-40" >Yearn Ecosystem Pie</span>
+              <span class="text-sm font-thin opacity-40" >{pie.description ? pie.description : "Another great porfolio"}</span>
+              <!-- <span class="text-sm font-thin opacity-40" >{pie.totalLiquidity}</span> -->
+
             </div>
             <div class="text-right flex flex-col justify-end items-end ml-auto">
               <span class="">{pie.price}</span>
@@ -210,7 +218,7 @@
           <th class="font-thin border-b-2 px-4 py-2 text-left">Index</th>
           <th class="font-thin border-b-2 px-4 py-2">Assets</th>
           <!-- <th class="font-thin border-b-2 px-4 py-2">Market Cap</th> -->
-          <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
+          <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
           <th class="font-thin border-b-2 px-4 py-2">Current Price</th>
           <th class="font-thin border-b-2 px-4 py-2">Buy</th>
         </tr>

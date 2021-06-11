@@ -8,7 +8,7 @@
   import { ethers } from "ethers";
   import { pieSmartPool } from "@pie-dao/abis";
   import { get } from 'svelte/store';
-
+  import smartcontracts from '../config/smartcontracts.json';
   import images from "../config/images.json";
   import poolsConfig from "../config/pools.json";
   import uniswapLpZapABI from '../config/uniswapLpZapABI.json';
@@ -241,7 +241,7 @@
       return;
     }
 
-    const recipe = await contract({ address: '0x6cb4b8669e23295563d3b34df4a760c0cee993c7', abi: recipeAbi });
+    const recipe = await contract({ address: smartcontracts.recipe, abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {

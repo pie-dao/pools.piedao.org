@@ -20,14 +20,18 @@
   
     {#each tokens as token}
       {#if token.balance && token.balance.number > 0 }
-      <a class="flex mt-8" href="token">
+      <a class="flex mt-8" href={`#/pie/${token.address}`}>
           <div class="mr-4 w-60px max-w-60px h-60px max-h-60px"><img width="60px" height="60px" src={token.icon} alt={token.symbol} /></div>
           <div class="flex flex-col justify-around">
             <span class="flex items-center">
               <span class="text-lg leading-6">{token.symbol}</span>
               <span class="bg-black opacity-60 px-5px py-1px roundedxs text-xs ml-2">{((token.usdValue * 100) / totalVal).toFixed(2)}%</span>
             </span>
-            <span class="text-sm font-thin">{token.balance.label} {token.symbol} • ${token.market_data.current_price}</span>
+            <span class="text-sm font-thin">{token.balance.label} {token.symbol} 
+              {#if token.market_data && token.market_data.current_price }
+              • ${token.market_data.current_price}
+              {/if}
+            </span>
           </div>
           <div class="flex flex-col justify-around text-right ml-auto font-thin">
             <span class="text-lg leading-6">{formatFiat(token.usdValue)}</span>

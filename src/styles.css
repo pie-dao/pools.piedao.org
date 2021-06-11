@@ -323,7 +323,7 @@ right: 0px;
 }
 
 .thinborderbottom {
-  border-bottom: solid 0.5px #8d8d8d;
+  border-bottom: solid 0.5px #cecece;
 }
 
 .thinborderbottom:last-child {
@@ -620,6 +620,12 @@ right: 0px;
     @apply block;
   }
 
+  .header-container .connect-button-container {
+    @apply ml-8;
+  }
+}
+
+@screen md {
   .header-container .connect-button-container {
     @apply ml-8;
   }
@@ -2074,4 +2080,27 @@ scrollbar-width: none;  /* Firefox */
 
 .max-w-100vw {
 max-width: 100vw;
+}
+
+.guTiyV {
+  z-index: 100;
+}
+
+.videoWrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+}
+.videoWrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.svgclose {
+  fill: white;
+  filter: invert(100%);
 }

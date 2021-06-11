@@ -5,10 +5,10 @@ import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { isBigNumber, isNumber, validateIsAddress, validateIsBigNumber } from '@pie-dao/utils';
 import { pieSmartPool, erc20 } from '@pie-dao/abis';
-
 import find from 'lodash/find';
 import images from '../config/images.json';
 import poolsConfig from '../config/pools.json';
+import smartcontracts from '../config/smartcontracts.json';
 import recipeAbi from '../config/recipeABI.json';
 import unipoolAbi from '../config/unipoolABI.json';
 import geyserABI from '../config/geyser.json';
@@ -36,11 +36,15 @@ const poolUpdatePids = {};
 const allowanceSubscriptions = new Set();
 const balanceSubscriptions = new Set();
 
-export const getTokenImage = (tokenAddress) =>
-  images.logos[tokenAddress]
-    ? images.logos[tokenAddress]
-    : `https://s3.amazonaws.com/token-icons/${tokenAddress.toLowerCase()}.png`;
-    //: `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${tokenAddress}/logo.png`;
+export const getTokenImage = (tokenAddress) => {
+  if (images.logos[tokenAddress]) {
+    return images.logos[tokenAddress];
+  } else if (images.logos[tokenAddress.toLowerCase()]) {
+    return images.logos[tokenAddress.toLowerCase()];
+  } else {
+    return `https://s3.amazonaws.com/token-icons/${tokenAddress.toLowerCase()}.png`;
+  }
+};
 
 const enqueueWeightUpdate = (poolAddress) => {
   clearTimeout(poolUpdatePids[poolAddress]);
@@ -98,9 +102,9 @@ const updatePoolWeight = async (poolAddress) => {
       if (marketData[token]) {
         price = marketData[token].market_data.current_price;
       } else {
-        if(token === '0x8d1ce361eb68e9e05573443c407d4a3bed23b033') {
+        if (token === '0x8d1ce361eb68e9e05573443c407d4a3bed23b033') {
           let data = get(pools);
-          price = data["0x8d1ce361eb68e9e05573443c407d4a3bed23b033-nav"] || 0;
+          price = data['0x8d1ce361eb68e9e05573443c407d4a3bed23b033-nav'] || 0;
         } else {
           price = 0;
         }
@@ -109,14 +113,13 @@ const updatePoolWeight = async (poolAddress) => {
       console.error(e);
     }
 
-    
     const balance = BigNumber(poolCurrentBalances[token]);
     poolCurrentUSD[token] = balance.multipliedBy(price);
     //console.log('--->', token, price, balance.toString(), poolCurrentUSD[token].toString());
     return sum.plus(poolCurrentUSD[token]);
   }, BigNumber(0));
 
-  let totalSupply = await poolContract.totalSupply() / 1e18;
+  let totalSupply = (await poolContract.totalSupply()) / 1e18;
   const nav = totalUSD / totalSupply;
 
   const updates = {};
@@ -310,14 +313,13 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
   const res = await tokenContract.calcTokensForAmount(amount.toString());
   const data = {};
 
-  for (const [index, token]  of res.tokens.entries() ) {
+  for (const [index, token] of res.tokens.entries()) {
     const tokenInstance = new ethers.Contract(token, erc20, ethData.provider);
     const d = (await tokenInstance.functions.decimals())[0];
     if (d < 18) {
-      
       let adjustedAmount = BigNumber(res.amounts[index].toString())
-                            .multipliedBy(10 ** (18 - d))
-                            .toFixed(0);
+        .multipliedBy(10 ** (18 - d))
+        .toFixed(0);
       let bnAdjustedAmount = ethers.BigNumber.from(adjustedAmount.toString());
 
       data[token.toLowerCase()] = {
@@ -330,7 +332,6 @@ export const fetchCalcTokensForAmounts = async (pieAddress, poolAmount) => {
         label: ethers.utils.formatEther(res.amounts[index]),
       };
     }
-
   }
 
   return data;
@@ -341,17 +342,15 @@ export const fetchCalcToPie = async (pieAddress, poolAmount) => {
 
   const { provider } = get(eth);
 
-  const recipe = new ethers.Contract('0xE1F9E100cbF4aD6D546b196Af33E1129Dd0866b3', recipeAbi, provider);
+  const recipe = new ethers.Contract(smartcontracts.recipe, recipeAbi, provider);
 
   const amount = ethers.BigNumber.from(
     BigNumber(poolAmount)
       .multipliedBy(10 ** 18)
       .toFixed(0),
   );
-  const amountEthNecessary = await recipe.callStatic.calcToPie(
-    pieAddress, 
-    amount
-  );
+
+  const amountEthNecessary = await recipe.callStatic.calcToPie(pieAddress, amount);
 
   return {
     val: amountEthNecessary,
@@ -590,8 +589,7 @@ export const subscribeToBalance = async (tokenAddress, address, shouldBump = tru
     token = ethers.constants.AddressZero;
   }
 
-  
-  if(!token || token === '') return;
+  if (!token || token === '') return;
   validateIsAddress(token);
   validateIsAddress(address);
 
@@ -607,7 +605,7 @@ export const subscribeToBalance = async (tokenAddress, address, shouldBump = tru
   let decimals = 18;
 
   if (token !== ethers.constants.AddressZero) {
-    const tokenContract = await contract({ address: token, abi:erc20 });
+    const tokenContract = await contract({ address: token, abi: erc20 });
     decimals = await tokenContract.decimals();
   }
 
@@ -658,7 +656,7 @@ export const subscribeToPoolWeights = async (poolAddress) => {
 };
 
 export const toFixed = function (num = 0, fixed) {
-  if(num < 0.000000001) return '0';
+  if (num < 0.000000001) return '0';
   const re = new RegExp('^-?\\d+(?:.\\d{0,' + (fixed || -1) + '})?');
   const arr = num.toString().match(re);
   if (arr && arr.length > 0) {
@@ -832,11 +830,11 @@ export const calculateAPRBalancer = async (
   const $assetOnePerBPT = DOUGHperBPT * DOUGHPrice;
   const $assetTwoPerBPT = WETHperBPT * ETHPrice;
 
-  if( DOUGH === '0x8d1ce361eb68e9e05573443c407d4a3bed23b033') {
+  if (DOUGH === '0x8d1ce361eb68e9e05573443c407d4a3bed23b033') {
     console.log('---->', {
       DOUGHPrice,
-      ETHPrice
-    })
+      ETHPrice,
+    });
   }
 
   const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
@@ -942,11 +940,7 @@ export const calculateAPRBalancer = async (
   farming.set({ ...get(farming), ...updates });
 };
 
-export const calculateAPRPie = async (
-  addressStakingPool,
-  tokenToStake,
-  nav
-) => {
+export const calculateAPRPie = async (addressStakingPool, tokenToStake, nav) => {
   const marketData = get(piesMarketDataStore);
   const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
   const totalStakedBPTAmount = (await StakingPOOL.totalSupply()) / 1e18;
@@ -955,7 +949,8 @@ export const calculateAPRPie = async (
   // Find out reward rate
   const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
   const rewardPerToken = weekly_reward / totalStakedBPTAmount;
-  const RewardTokenPrice = marketData[`0xad32A8e6220741182940c5aBF610bDE99E737b2D`].market_data.current_price;
+  const RewardTokenPrice =
+    marketData[`0xad32A8e6220741182940c5aBF610bDE99E737b2D`].market_data.current_price;
   const DOUGHWeeklyROI = (rewardPerToken * RewardTokenPrice * 100) / nav;
 
   res = {
@@ -969,5 +964,4 @@ export const calculateAPRPie = async (
   const updates = {};
   updates[addressStakingPool] = res;
   farming.set({ ...get(farming), ...updates });
-
 };
