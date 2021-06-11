@@ -57,12 +57,14 @@
       } else {
         let locks = [];
 
-        data[key].forEach(lock => {
-          locks.push({
-            amount: new BigNumber(lock.amount.toString()),
-            lockDuration: lock.lockDuration,
-            lockedAt: lock.lockedAt
-          });
+        response[key].forEach(lock => {
+          if(lock.amount.toString() != '0') {
+            locks.push({
+              amount: new BigNumber(lock.amount.toString()),
+              lockDuration: lock.lockDuration,
+              lockedAt: lock.lockedAt
+            });
+          }
         });
 
         data[key] = locks;
@@ -127,13 +129,15 @@
 
       console.log(response);
 
-      displayNotification({
+      const { emitter } = displayNotification({
         autoDismiss: 15000,
         message: `You staked ${stake.amount.toString()} DOUGH`,
         type: "success",
       });
 
       needAllowance = true;
+
+      console.log(emitter);
       // TODO: fetchStakingData should be called after txConfirmed...
       await fetchStakingData();
       console.log("fetchStakingData", data);
@@ -305,15 +309,12 @@
 
   <ul>
     {#each data.accountLocks as lock, id}
-	  <li 
-    class="swap-container mt-8 stake-button"
-    on:click={() => {
-      unstakeDOUGH(id, toNum(lock.amount));
-    }}
-    >
-		<div>{toNum(lock.amount)} DOUGH</div>
-    <div>staked for: {lock.lockDuration / 60} Months</div>
-    <div>started: {new Date(lock.lockedAt * 1000).toLocaleString()}</div>
+	  <li class="swap-container mt-8 stake-button">
+      <button on:click={() => {unstakeDOUGH(id, toNum(lock.amount))}}>
+        <div>{toNum(lock.amount)} DOUGH</div>
+        <div>staked for: {lock.lockDuration / 60} Months</div>
+        <div>started: {new Date(lock.lockedAt * 1000).toLocaleString()}</div>
+      </button>
 	  </li>
     {/each}
   </ul>
