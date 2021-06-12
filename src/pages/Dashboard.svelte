@@ -141,7 +141,7 @@
                       </button>
                     </a>
                 {:else}
-                  <a href={`#/swap`}>
+                  <a href={`#/swap/${encodeURIComponent(pie.symbol)}`}>
                     <button class="table-btn highlight-box min-w-70px">
                       {pie.symbol}
                     </button>
@@ -265,7 +265,7 @@
                   {pie.symbol}
                 </button>
               {:else}
-                <a href={`#/swap`}>
+                <a href={`#/swap/${encodeURIComponent(pie.symbol)}`}>
                   <button class="table-btn highlight-box min-w-70px">
                     {pie.symbol}
                   </button>
