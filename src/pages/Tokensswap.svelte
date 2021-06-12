@@ -6,7 +6,6 @@
   import { onMount, onDestroy } from 'svelte';
   import orderBy from 'lodash/orderBy';
   import find from 'lodash/find';
-
   import ApiOx from "../classes/0xApi";
   import poolsConfig from '../config/pools.json';
   import TokenSelectModal from "../components/modals/TokenSelectModal.svelte";
@@ -48,6 +47,8 @@
       icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
     }
   ];
+
+  export let params;
 
   let modal;
   let modalOption = {
@@ -104,6 +105,8 @@
 
   const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
 
+  const tokenParam = decodeURIComponent(params?.symbol)?.toUpperCase();
+
   $: sellToken = defaultTokenSell;
   $: buyToken = defaultTokenBuy;
   $: amount = defaultAmount;
@@ -143,6 +146,9 @@
 
     if($eth.address) {
       await fetchOnchainData();
+      if (tokenParam) {
+        buyToken = find(listed, ['symbol', tokenParam], defaultTokenBuy) || defaultTokenBuy;
+      }
       initialized.onChainData = true;
     }
     await fetchQuote();
