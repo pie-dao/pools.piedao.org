@@ -5,10 +5,9 @@
   import { _ } from 'svelte-i18n';
   import sharesTimeLockABI from '../abis/sharesTimeLock.json';
   import smartcontracts from '../config/smartcontracts.json';
-  import { get } from 'svelte/store';
   import images from '../config/images.json';
   import displayNotification from '../notifications';
-  import { formatEther, parseEther } from '@ethersproject/units';
+  import { parseEther } from '@ethersproject/units';
 
   const toNum = (num) =>
     BigNumber(num.toString())
@@ -195,6 +194,7 @@
       });
 
     } catch(error) {
+      console.log(error.message);
       if(error.message.includes('lock not expired')) {
         displayNotification({
           message: 'can\'t unstake, lock not expired.',
