@@ -39,15 +39,10 @@
     amount: 0.0
   }
 
-  const { provider, signer } = get(eth);
-
-  let sharesTimeLock = new ethers.Contract(
-      smartcontracts.doughStaking,
-      sharesTimeLockABI,
-      signer || provider,
-    );
+  let sharesTimeLock = false;
 
   const fetchStakingData = async () => {
+    console.log('sharesTimeLock', sharesTimeLock)
     let response = await sharesTimeLock.getStakingData($eth.address);
 
     Object.keys(response).forEach((key) => {
@@ -75,12 +70,28 @@
     return data;
   };
 
-  $: if($eth.provider && $eth.address && isLoading) {
-    fetchStakingData().then(() => {
+  $: if($eth.address && isLoading) {
+    console.log('dui crusto impestato')
+    initialize();
+  }
+
+  async function initialize() {
+    try {
+
+      sharesTimeLock = new ethers.Contract(
+        smartcontracts.doughStaking,
+        sharesTimeLockABI,
+        $eth.signer || $eth.provider,
+      );
+
+      await fetchStakingData();
       isLoading = false;
       stake.receiver = $eth.address;
       checkApproval(data.accountDepositTokenAllowance);
-    });
+    } catch(e) {
+      console.log('Something went wrong...', e)
+    }
+    
   }
 
   function checkApproval(allowance) {
@@ -119,6 +130,7 @@
   }
 
   async function stakeDOUGH() {
+    if(!sharesTimeLock) return;
     try {
       let response = await sharesTimeLock.depositByMonths(
         parseEther(stake.amount.toString()), 
@@ -157,6 +169,7 @@
   }
 
   async function unstakeDOUGH(id, lockAmount) {
+    if(!sharesTimeLock) return;
     try {
       let response = await sharesTimeLock.withdraw(id);
       console.log("unstakeDOUGH", response);
