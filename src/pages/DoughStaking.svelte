@@ -1,5 +1,5 @@
 <script>
-  import { approve, connectWeb3, eth } from '../stores/eth.js';
+  import { approve, connectWeb3, subject, eth } from '../stores/eth.js';
   import { ethers } from 'ethers';
   import BigNumber from 'bignumber.js';
   import { _ } from 'svelte-i18n';
@@ -9,7 +9,6 @@
   import images from '../config/images.json';
   import displayNotification from '../notifications';
   import { formatEther, parseEther } from '@ethersproject/units';
-
 
   const toNum = (num) =>
     BigNumber(num.toString())
@@ -71,8 +70,6 @@
         data[key] = locks;
       }
     });
-
-    console.log(data);
     
     data = data;
     return data;
@@ -128,20 +125,31 @@
         stake.duration, 
         stake.receiver);
 
-      console.log(response);
+      console.log("stakeDOUGH", response);
 
       const { emitter } = displayNotification({
         autoDismiss: 15000,
         message: `You staked ${stake.amount.toString()} DOUGH`,
         type: "success",
+        hash: response.hash
       });
 
       needAllowance = true;
 
-      console.log(emitter);
-      // TODO: fetchStakingData should be called after txConfirmed...
-      await fetchStakingData();
-      console.log("fetchStakingData", data);
+      emitter.on("txConfirmed", async() => {
+        console.log("stakeDOUGH -> txConfirmed");
+
+        const subscription = subject("blockNumber").subscribe({
+          next: async () => {
+            console.log("stakeDOUGH -> blockNumber");
+
+            await fetchStakingData();
+            console.log("fetchStakingData", data);   
+                       
+            subscription.unsubscribe();
+          },
+        });          
+      });
 
     } catch(error) {
       console.error(error);
@@ -151,18 +159,29 @@
   async function unstakeDOUGH(id, lockAmount) {
     try {
       let response = await sharesTimeLock.withdraw(id);
-      console.log(response);
+      console.log("unstakeDOUGH", response);
 
       const { emitter } = displayNotification({
         autoDismiss: 15000,
         message: `You unstaked ${lockAmount.toString()} DOUGH`,
         type: "success",
+        hash: response.hash
       });
 
-      console.log(emitter);
-      // TODO: fetchStakingData should be called after txConfirmed...
-      await fetchStakingData();
-      console.log("fetchStakingData", data);
+      emitter.on("txConfirmed", async() => {
+        console.log("unstakeDOUGH -> txConfirmed");
+
+        const subscription = subject("blockNumber").subscribe({
+          next: async () => {
+            console.log("unstakeDOUGH -> blockNumber");
+
+            await fetchStakingData();
+            console.log("fetchStakingData", data);   
+
+            subscription.unsubscribe();
+          },
+        });      
+      });
 
     } catch(error) {
       console.error(error);
