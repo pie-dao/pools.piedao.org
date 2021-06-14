@@ -49,7 +49,7 @@ const displayNotification = ({
     const { emitter } = notify.hash(hash);
     return { ...notificationResponse, emitter };
   }
-  console.log("going to return", notificationResponse);
+
   return notificationResponse;
 };
 

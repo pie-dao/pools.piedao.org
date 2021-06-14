@@ -42,7 +42,6 @@
   let sharesTimeLock = false;
 
   const fetchStakingData = async () => {
-    console.log('sharesTimeLock', sharesTimeLock)
     let response = await sharesTimeLock.getStakingData($eth.address);
 
     Object.keys(response).forEach((key) => {
@@ -66,18 +65,17 @@
       }
     });
     
+    console.log(data);
     data = data;
     return data;
   };
 
   $: if($eth.address && isLoading) {
-    console.log('dui crusto impestato')
     initialize();
   }
 
   async function initialize() {
     try {
-
       sharesTimeLock = new ethers.Contract(
         smartcontracts.doughStaking,
         sharesTimeLockABI,
@@ -85,17 +83,19 @@
       );
 
       await fetchStakingData();
+
       isLoading = false;
       stake.receiver = $eth.address;
       checkApproval(data.accountDepositTokenAllowance);
     } catch(e) {
-      console.log('Something went wrong...', e)
+      console.log('Something went wrong...', e);
     }
     
   }
 
   function checkApproval(allowance) {
     if(stake.amount && allowance) {
+      stakeError = false;
       let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);
 
       if(allowance.isGreaterThanOrEqualTo(stakeAmount)) {
@@ -103,6 +103,8 @@
       } else {
         needAllowance = true;
       }
+    } else {
+      stakeError = true;
     }
   }
 
@@ -113,12 +115,12 @@
       return;
     }
 
-    // resetting the approve to zero, before initiating a new approval...
-    if(!data.accountDepositTokenAllowance.isEqualTo(0)) {
-      await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
-    }
-
     try {
+      // resetting the approve to zero, before initiating a new approval...
+      if(!data.accountDepositTokenAllowance.isEqualTo(0)) {
+        await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
+      }
+
       let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);     
       await approve(smartcontracts.dough, smartcontracts.doughStaking, stakeAmount.toString(), {gasLimit: 100000});
       needAllowance = false; 
@@ -131,33 +133,29 @@
 
   async function stakeDOUGH() {
     if(!sharesTimeLock) return;
+
     try {
       let response = await sharesTimeLock.depositByMonths(
         parseEther(stake.amount.toString()), 
         stake.duration, 
         stake.receiver);
 
-      console.log("stakeDOUGH", response);
-
       const { emitter } = displayNotification({
-        autoDismiss: 15000,
-        message: `You staked ${stake.amount.toString()} DOUGH`,
-        type: "success",
-        hash: response.hash
+        hash: response.hash,
       });
 
-      needAllowance = true;
-
       emitter.on("txConfirmed", async() => {
-        console.log("stakeDOUGH -> txConfirmed");
+
+        displayNotification({
+          message: `You staked ${stake.amount.toString()} DOUGH. Your new stake will appear in the list in a really short while...`,
+          type: "success",
+        });       
 
         const subscription = subject("blockNumber").subscribe({
           next: async () => {
-            console.log("stakeDOUGH -> blockNumber");
-
             await fetchStakingData();
-            console.log("fetchStakingData", data);   
-                       
+            console.log("fetchStakingData", data);               
+
             subscription.unsubscribe();
           },
         });          
@@ -170,19 +168,19 @@
 
   async function unstakeDOUGH(id, lockAmount) {
     if(!sharesTimeLock) return;
+
     try {
       let response = await sharesTimeLock.withdraw(id);
-      console.log("unstakeDOUGH", response);
 
       const { emitter } = displayNotification({
-        autoDismiss: 15000,
-        message: `You unstaked ${lockAmount.toString()} DOUGH`,
-        type: "success",
         hash: response.hash
       });
 
       emitter.on("txConfirmed", async() => {
-        console.log("unstakeDOUGH -> txConfirmed");
+        displayNotification({
+          message: `You unstaked ${lockAmount.toString()} DOUGH`,
+          type: "success",
+        });
 
         const subscription = subject("blockNumber").subscribe({
           next: async () => {
@@ -197,7 +195,17 @@
       });
 
     } catch(error) {
-      console.error(error);
+      if(error.message.includes('lock not expired')) {
+        displayNotification({
+          message: 'can\'t unstake, lock not expired.',
+          type: "error",
+        });
+      } else {
+        displayNotification({
+          message: 'sorry, some error occurred while unstaking. Please try again later...',
+          type: "error",
+        });        
+      }
     }
   }
 
