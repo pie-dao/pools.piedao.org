@@ -134,6 +134,8 @@ export const approve = async (address, spender, amount) => {
   if (currentBlockNumber > lastBlock) {
     eth.set({ ...get(eth), currentBlockNumber });
   }
+
+  return true;
 };
 
 export const approveMax = async (address, spender) => {
