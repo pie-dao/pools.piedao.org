@@ -6,7 +6,7 @@
 
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { formatFiat } from '../../components/helpers.js';
-
+  import { currentRoute } from "../../stores/routes.js";
   import InfoModal from '../../components/modals/infoModal.svelte';
   import StakingCommitmentModal from '../../components/modals/stakingCommitmentModal.svelte';
   import Modal from '../../components/elements/Modal.svelte';
@@ -15,6 +15,17 @@
 	import Tab2 from "./charts/Tab2.svelte";
 	import Tab3 from "./charts/Tab3.svelte";
   import Tabs from "./charts/Tabs.svelte";  
+
+  import firebase from 'firebase';
+  import firebase_env from '../../config/firebase.json';
+
+  function saveSimulation() {
+    firebase.firestore().collection('staking_simulations').add({inputs: inputs, rewards: rewards}).then(response => {
+      permalink_url = response.id;
+    }).catch(error => {
+      console.error(error);
+    });  
+  }
 
   function updateSimulator(event) {
     rewards = event.detail.rewards;
@@ -172,6 +183,29 @@
     'zoom',
     'info',
   ];
+
+  // firebase variables...
+  let firebase_app = null;
+  let permalink_url = null;
+
+  if (!firebase.apps.length) {
+    firebase_app = firebase.initializeApp(firebase_env);
+  } else {
+    firebase_app = firebase.app();
+  }
+
+  if($currentRoute.params.simulation != '') {
+    firebase.firestore().collection('staking_simulations').get($currentRoute.params.simulation).then(response => {
+      permalink_url = window.location;
+      let simulation = response.docs[0].data();
+      inputs = simulation.inputs;
+      rewards = simulation.rewards;
+    }).catch(error => {
+      console.error(error);
+    });    
+  } else {
+    permalink_url = window.location + response.docs[0].id;
+  } 
 </script>
 
 <Modal backgroundColor="#f3f3f3" bind:this={modal}>
@@ -579,6 +613,20 @@
 
         </div>      
       </div>
+    </div>
+
+    <div class="flex flex-row gap-2 mb-2">
+      <button 
+        on:click={() => saveSimulation()}
+        class="w-full btnbig text-white m-4 rounded-8px p-15px">
+        {#if permalink_url}
+        <a target="_blank" href={permalink_url}>
+          Your Simulation link is: {permalink_url}
+        </a>
+        {:else}
+          Save your simulation, get a permalink!
+        {/if}
+      </button>
     </div>
 
     <!-- CHARTS SECTION -->
