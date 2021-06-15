@@ -28,7 +28,9 @@
   }
 
   function saveSimulation() {
-    firebase.firestore().collection('staking_simulations').add({inputs: inputs, rewards: rewards}).then(response => {
+    firebase.firestore().collection('staking_simulations')
+      .add({inputs: inputs, rewards: rewards, name: simulation.name, author: simulation.author})
+      .then(response => {
       simulationChanged = false;
       permalink_url = window.location + response.id;
       console.log(permalink_url);
@@ -40,7 +42,7 @@
   function updateSimulation() {
     firebase.firestore().collection('staking_simulations')
       .doc($currentRoute.params.simulation)
-      .set({inputs: inputs, rewards: rewards})
+      .set({inputs: inputs, rewards: rewards, name: simulation.name, author: simulation.author})
       .then(() => {
         simulationChanged = false;
     }).catch(error => {
@@ -53,10 +55,14 @@
       firebase.firestore().collection('staking_simulations').doc($currentRoute.params.simulation).get().then(response => {
         if(response.exists) {
           permalink_url = window.location;
-          let simulation = response.docs[0].data();
-          inputs = simulation.inputs;
-          rewards = simulation.rewards;
+          let data = response.data();
 
+          inputs = data.inputs;
+          rewards = data.rewards;
+          simulation.name = data.name;
+          simulation.author = data.author;
+
+          simulation = simulation;
           inputs = inputs;
           rewards = rewards;
         } else {
@@ -236,6 +242,10 @@
   let firebase_app = null;
   let permalink_url = null;
   let simulationChanged = false;
+  let simulation = {
+    name: '',
+    author: ''
+  }
 
   // initialize firebase app instance...
   if (!firebase.apps.length) {
@@ -656,21 +666,67 @@
     </div>
 
     <div class="flex flex-row gap-2 mb-2">
-      <button 
-        on:click={() => getPermalink()}
-        class="w-full btnbig text-white m-4 rounded-8px p-15px">
-        {#if permalink_url}
-          {#if simulationChanged}
-            Update Your Simulation
+      <div class="w-full bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
+        <div class="w-full flex flex-col md:flex-row">
+          <div class="w-full md:w-2/4 md:mr-8">
+            <div class="w-full font-thin text-left md:text-xs mb-4">
+              <span class="float-left">Name Yourself</span>
+            </div>
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8">
+              <div class="flex nowrap items-center">
+                <input
+                class="swap-input-from"
+                inputmode="text"
+                autocomplete="off"
+                autocorrect="off"
+                type="string"
+                spellcheck="false"
+                placeholder={simulation.author}
+                bind:value={simulation.author}
+                on:keyup={simulationChanged = true}
+                />
+              </div>
+            </div>                 
+          </div>
+          <div class="w-full md:w-2/4 md:mr-8">
+            <div class="w-full font-thin text-left md:text-xs mb-4">
+              <span class="float-left">Name Your Simulation</span>
+            </div>  
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8">
+              <div class="flex nowrap items-center">
+                <input
+                class="swap-input-from"
+                inputmode="text"
+                autocomplete="off"
+                autocorrect="off"
+                type="string"
+                spellcheck="false"
+                placeholder={simulation.name}
+                bind:value={simulation.name}
+                on:keyup={simulationChanged = true}
+                />
+              </div>
+            </div>
+          </div>
+        </div> 
+        <div class="flex flex-col md:flex-row items-center mt-8 border-t-1 border-gray-50 pt-4">
+          <button 
+          on:click={() => getPermalink()}
+          class="w-full btnbig text-white m-4 rounded-8px p-15px">
+          {#if permalink_url}
+            {#if simulationChanged}
+              Update Your Simulation
+            {:else}
+              <a target="_blank" href={permalink_url}>
+                Your Simulation link is: {permalink_url}
+              </a>
+            {/if}
           {:else}
-            <a target="_blank" href={permalink_url}>
-              Your Simulation link is: {permalink_url}
-            </a>
+            Save your simulation, get a permalink!
           {/if}
-        {:else}
-          Save your simulation, get a permalink!
-        {/if}
-      </button>
+        </button>
+        </div>
+      </div>      
     </div>
 
     <!-- CHARTS SECTION -->
