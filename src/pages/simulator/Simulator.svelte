@@ -29,6 +29,7 @@
 
   function saveSimulation() {
     firebase.firestore().collection('staking_simulations').add({inputs: inputs, rewards: rewards}).then(response => {
+      simulationChanged = false;
       permalink_url = window.location + response.id;
       console.log(permalink_url);
     }).catch(error => {
@@ -37,12 +38,11 @@
   }
 
   function updateSimulation() {
-    console.log("updateSimulation", inputs, rewards);
     firebase.firestore().collection('staking_simulations')
       .doc($currentRoute.params.simulation)
       .set({inputs: inputs, rewards: rewards})
-      .then(response => {
-        console.log("updateSimulation", response);
+      .then(() => {
+        simulationChanged = false;
     }).catch(error => {
       console.error(error);
     }); 
@@ -61,7 +61,7 @@
           rewards = rewards;
         } else {
           history.replaceState({}, document.title, window.location.href.replace($currentRoute.params.simulation, "")); 
-          
+
           displayNotification({
           message: 'Sorry, this simulation does not exist on our database.',
           type: "error",
