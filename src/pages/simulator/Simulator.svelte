@@ -3,7 +3,7 @@
   import Simulator from '../../classes/farming_simulator/Simulator.js';
   import { formatBigMoneyAmount } from '../../components/helpers.js';
   import images from '../../config/images.json';
-
+  import displayNotification from '../../notifications';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { formatFiat } from '../../components/helpers.js';
   import { currentRoute } from "../../stores/routes.js";
@@ -19,12 +19,58 @@
   import firebase from 'firebase';
   import firebase_env from '../../config/firebase.json';
 
+  function getPermalink() {
+    if(permalink_url) {
+      updateSimulation();
+    } else {
+      saveSimulation();
+    }
+  }
+
   function saveSimulation() {
     firebase.firestore().collection('staking_simulations').add({inputs: inputs, rewards: rewards}).then(response => {
       permalink_url = window.location + response.id;
+      console.log(permalink_url);
     }).catch(error => {
       console.error(error);
     });  
+  }
+
+  function updateSimulation() {
+    console.log("updateSimulation", inputs, rewards);
+    firebase.firestore().collection('staking_simulations')
+      .doc($currentRoute.params.simulation)
+      .set({inputs: inputs, rewards: rewards})
+      .then(response => {
+        console.log("updateSimulation", response);
+    }).catch(error => {
+      console.error(error);
+    }); 
+  }
+
+  function loadSimulation() {
+    if($currentRoute.params.simulation != '') {
+      firebase.firestore().collection('staking_simulations').doc($currentRoute.params.simulation).get().then(response => {
+        if(response.exists) {
+          permalink_url = window.location;
+          let simulation = response.docs[0].data();
+          inputs = simulation.inputs;
+          rewards = simulation.rewards;
+
+          inputs = inputs;
+          rewards = rewards;
+        } else {
+          history.replaceState({}, document.title, window.location.href.replace($currentRoute.params.simulation, "")); 
+          
+          displayNotification({
+          message: 'Sorry, this simulation does not exist on our database.',
+          type: "error",
+        });   
+        }
+      }).catch(error => {
+        console.error(error);
+      });    
+    }    
   }
 
   function updateSimulator(event) {
@@ -78,9 +124,11 @@
     });
   }
 
-  function calculate() {
+  function calculate(changed = true) {
     // calculating the outputs and projections...
     simulator.calculate(inputs).then(response => {
+      simulationChanged = changed;
+
       outputs = response.outputs;
       projections = response.breakdowns;
 
@@ -166,7 +214,7 @@
   let tabs = [];  
 
   // calculating real outputs...
-  calculate();
+  calculate(false);
 
   // lottie...
   let controlsLayout = [
@@ -187,26 +235,17 @@
   // firebase variables...
   let firebase_app = null;
   let permalink_url = null;
+  let simulationChanged = false;
 
+  // initialize firebase app instance...
   if (!firebase.apps.length) {
     firebase_app = firebase.initializeApp(firebase_env);
   } else {
     firebase_app = firebase.app();
   }
 
-  if($currentRoute.params.simulation != '') {
-    firebase.firestore().collection('staking_simulations').get($currentRoute.params.simulation).then(response => {
-      permalink_url = window.location;
-      let simulation = response.docs[0].data();
-      inputs = simulation.inputs;
-      rewards = simulation.rewards;
-
-      inputs = inputs;
-      rewards = rewards;
-    }).catch(error => {
-      console.error(error);
-    });    
-  }
+  // checking if we have to load an already-existing configuration...
+  loadSimulation();
 </script>
 
 <Modal backgroundColor="#f3f3f3" bind:this={modal}>
@@ -618,12 +657,16 @@
 
     <div class="flex flex-row gap-2 mb-2">
       <button 
-        on:click={() => saveSimulation()}
+        on:click={() => getPermalink()}
         class="w-full btnbig text-white m-4 rounded-8px p-15px">
         {#if permalink_url}
-        <a target="_blank" href={permalink_url}>
-          Your Simulation link is: {permalink_url}
-        </a>
+          {#if simulationChanged}
+            Update Your Simulation
+          {:else}
+            <a target="_blank" href={permalink_url}>
+              Your Simulation link is: {permalink_url}
+            </a>
+          {/if}
         {:else}
           Save your simulation, get a permalink!
         {/if}

@@ -113,7 +113,7 @@ const formatRoute = (route) => {
     case 'farm':
       return { page: Farm };
     case 'simulator':
-      let simulation = (route[1] || '').toLowerCase();
+      let simulation = (route[1] || '');
       return { page: Simulator, params: { simulation } };   
     case 'stake':
       referral = route[1] || null;
