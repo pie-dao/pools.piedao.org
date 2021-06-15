@@ -21,7 +21,7 @@
 
   function saveSimulation() {
     firebase.firestore().collection('staking_simulations').add({inputs: inputs, rewards: rewards}).then(response => {
-      permalink_url = response.id;
+      permalink_url = window.location + response.id;
     }).catch(error => {
       console.error(error);
     });  
@@ -200,12 +200,13 @@
       let simulation = response.docs[0].data();
       inputs = simulation.inputs;
       rewards = simulation.rewards;
+
+      inputs = inputs;
+      rewards = rewards;
     }).catch(error => {
       console.error(error);
     });    
-  } else {
-    permalink_url = window.location + response.docs[0].id;
-  } 
+  }
 </script>
 
 <Modal backgroundColor="#f3f3f3" bind:this={modal}>
