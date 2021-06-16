@@ -71,7 +71,7 @@
           displayNotification({
           message: 'Sorry, this simulation does not exist on our database.',
           type: "error",
-        });   
+          });   
         }
       }).catch(error => {
         console.error(error);
