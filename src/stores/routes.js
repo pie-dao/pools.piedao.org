@@ -13,7 +13,6 @@ import LPStaking from '../pages/LPStaking.svelte';
 import LPStakingV2 from '../pages/LPStakingV2.svelte';
 import Staking from '../pages/Staking.svelte';
 import StakingPageSingle from '../pages/StakingPageSingle.svelte';
-import PieLanding from '../pages/PieIndexLanding.svelte';
 import Markets from '../pages/Markets.svelte';
 import DefiPie from '../pages/landings/defiPie.svelte';
 import About from '../pages/landings/about.svelte';
@@ -25,6 +24,7 @@ import Integrations from '../pages/Integrations.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
 import Farm from '../pages/Farm.svelte';
 import Simulator from '../pages/simulator/Simulator.svelte';
+import SimulatorStats from '../pages/simulator/Stats.svelte';
 
 export const defaultRouteObj = {
   page: Main,
@@ -115,6 +115,8 @@ const formatRoute = (route) => {
     case 'simulator':
       let simulation = (route[1] || '');
       return { page: Simulator, params: { simulation } };   
+      case 'simulator-stats':
+        return { page: SimulatorStats };         
     case 'stake':
       referral = route[1] || null;
 
