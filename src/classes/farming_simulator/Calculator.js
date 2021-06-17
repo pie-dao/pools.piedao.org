@@ -39,7 +39,6 @@ export default class Calculator {
         farming: {
           asset: [],
           gains: [],
-          compounds: [],
           staking_rewards: [],
           totalStakedVeDough: 0,
         },
@@ -52,7 +51,6 @@ export default class Calculator {
         farming: {
           asset: [],
           gains: [],
-          compounds: [],
           staking_rewards: [],
           totalStakedVeDough: 0,
         },
@@ -65,7 +63,6 @@ export default class Calculator {
         farming: {
           asset: [],
           gains: [],
-          compounds: [],
           staking_rewards: [],
           totalStakedVeDough: 0,
         },
@@ -140,14 +137,18 @@ export default class Calculator {
           ),
         };
 
-        const treasuryYearlyReturns = calculatedProjections.median.farming.asset[12]
+        const treasuryYearlyReturns = calculatedProjections.median.farming.gains.slice(0, 12)
+        .reduce((total, value) => total + value);
+        
+        /*
+        calculatedProjections.median.farming.asset[12]
           - this.markets.treasuryLiquidity.amount;
-
+        */
         outputs.treasury = {
           expectedYearlyReturns: treasuryYearlyReturns,
           expectedAverageMontlyReturns: treasuryYearlyReturns / 12,
-          expectedApr: this.markets.treasuryLiquidity.amount
-            / calculatedProjections.median.farming.asset[12],
+          expectedApr: calculatedProjections.median.farming.asset[12]
+            / this.markets.treasuryLiquidity.amount,
         };
 
         // rounding the numbers of the returns object...
@@ -222,9 +223,6 @@ export default class Calculator {
 
             this.projections[key].farming.gains[i] = (farmingAsset * (expectedApr / 100)) / 12;
 
-            this.projections[key].farming.compounds[i] = this.projections[key].farming.gains[i]
-              * (this.rewards.compound / 100);
-
             this.projections[key].farming.staking_rewards[i] = i === 0 ? 0
               : this.projections[key].farming.gains[i] * (this.rewards.distributed / 100);
 
@@ -235,8 +233,10 @@ export default class Calculator {
             this.projections[key].returns.user[i] = this.projections[key].returns.per_ve_dough[i]
               * this.calculateVeDough(inputs.stakedDough, inputs.commitment);
 
-            // adding the montly compound into the farming asset...
-            farmingAsset += this.calculateCompound(this.projections[key].farming.gains[i]);
+            if(i > 0) {
+              // adding the montly compound into the farming asset...
+              farmingAsset += this.calculateCompound(this.projections[key].farming.gains[i - 1]);
+            }
           }
         });
 
