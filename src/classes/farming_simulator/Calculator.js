@@ -123,7 +123,8 @@ export default class Calculator {
         const calculatedProjections = projections;
 
         const outputs = {};
-        const userYearlyReturns = calculatedProjections.median.returns.user.slice(0, 12)
+
+        const userYearlyReturns = calculatedProjections.median.returns.user.slice(1, 13)
           .reduce((total, value) => total + value);
 
         outputs.user = {
@@ -139,11 +140,7 @@ export default class Calculator {
 
         const treasuryYearlyReturns = calculatedProjections.median.farming.gains.slice(0, 12)
         .reduce((total, value) => total + value);
-        
-        /*
-        calculatedProjections.median.farming.asset[12]
-          - this.markets.treasuryLiquidity.amount;
-        */
+
         outputs.treasury = {
           expectedYearlyReturns: treasuryYearlyReturns,
           expectedAverageMontlyReturns: treasuryYearlyReturns / 12,
@@ -233,10 +230,8 @@ export default class Calculator {
             this.projections[key].returns.user[i] = this.projections[key].returns.per_ve_dough[i]
               * this.calculateVeDough(inputs.stakedDough, inputs.commitment);
 
-            if(i > 0) {
-              // adding the montly compound into the farming asset...
-              farmingAsset += this.calculateCompound(this.projections[key].farming.gains[i - 1]);
-            }
+            // adding the montly compound into the farming asset...
+            farmingAsset += this.calculateCompound(this.projections[key].farming.gains[i]);
           }
         });
 
