@@ -108,9 +108,9 @@ export const trackGasPrice = async () => subject('gasPrice');
 
 // Shortcuts
 
-export const approve = async (address, spender, amount) => {
+export const approve = async (address, spender, amount, overrides = {}) => {
   const erc20Contract = await contract({ address, abi: erc20 });
-  const { hash } = await erc20Contract['approve(address,uint256)'](spender, amount);
+  const { hash } = await erc20Contract['approve(address,uint256)'](spender, amount, overrides);
 
   const { emitter } = displayNotification({ hash });
   const symbol = await erc20Contract.symbol();
