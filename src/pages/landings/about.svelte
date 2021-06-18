@@ -2,6 +2,7 @@
   import images from "../../config/images.json";
   import SectionImageRight from "../../components/elements/SectionImageRight.svelte"
   import SectionImageLeft from "../../components/elements/SectionImageLeft.svelte"
+  console.log(__myapp.env.API_URL);
 </script>
 
 <section class="mt-5 px-4 text-center">
