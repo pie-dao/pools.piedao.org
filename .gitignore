@@ -14,7 +14,6 @@ node_modules
 /build
 .build
 build
-src/config/firebase.json
 
 # misc
 .DS_Store
