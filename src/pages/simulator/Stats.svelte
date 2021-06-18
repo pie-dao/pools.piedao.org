@@ -1,6 +1,7 @@
 <script>
   import firebase from 'firebase';
-  import firebase_env from '../../config/firebase.json';
+  //import firebase_env from '../../config/firebase.json';
+  let firebase_env = {};
   import { onMount } from 'svelte';
   import displayNotification from '../../notifications';
 
