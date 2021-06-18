@@ -19,7 +19,8 @@
   import Tabs from "./charts/Tabs.svelte";  
 
   import firebase from 'firebase';
-  import firebase_env from '../../config/firebase.json';
+  //import firebase_env from '../../config/firebase.json';
+  let firebase_env = {};
 
   function getPermalink() {
     if(permalink_url) {
