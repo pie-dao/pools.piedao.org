@@ -19,6 +19,8 @@
   import firebase from 'firebase';
   import firebase_env from '../../config/firebase.json';
 
+  console.log("SNOWPACK_PUBLIC_FIREBASE", __SNOWPACK_ENV__.SNOWPACK_PUBLIC_FIREBASE);
+
   function getPermalink() {
     if(permalink_url) {
       updateSimulation();
