@@ -83,13 +83,13 @@
     rewards = event.detail.rewards;
     inputs.stakedVeDough = formatFiat(event.detail.stakedVeDough, ',', '.', '');
     estimated_dough_value = event.detail.estimated_dough_value;
+    calculate();
     sliderModal.close();
   }
 
   function setCommitment(months) {
     inputs.commitment = `${months} Months`;
     format();
-    calculate();
   }
 
   function format() {
@@ -128,6 +128,8 @@
         break;          
       }
     });
+
+    calculate();
   }
 
   function calculate(changed = true) {
