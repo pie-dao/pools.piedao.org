@@ -273,7 +273,8 @@
 </Modal>
 
 <div class="flex flex-col items-center text-center mt-8">
-  <div class="w-full px-8 max-w-1200px">
+  <div class="w-full flex flex-col items-center px-8 max-w-1200px">
+    <img class="w-400px" src={images.voting_hands} alt="governance mining"/>
     <div class="font-hero font-hero-sim">Get paid for<br />Governaning</div>
     <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
     <div class="text-lg font-thin mx-4 md:mx-20pc mt-8 mb-8">
@@ -292,13 +293,26 @@
         </div>
       </div>
     </div>
-      <img class="w-300px -mt-50px z-50" src={images.d_bottom} alt="dollar-in"/>
+      <img class="w-300px -mt-50px z-50" src={images.d_bottom} alt="dollar-out"/>
+    </div>
+
+    <div class="flex flex-col items-center text-center mt-8">
+      <div class="w-full flex flex-col items-center px-8 max-w-1200px">
+        <img class="w-600px" src={images.intro_gov_mining} alt="governance mining"/>
+        <div class="text-xl font-bold mt-4 mb-4">Introducing</div>
+        <div class="font-hero font-hero-sim">Governance<br />Mining</div>
+        <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
+        <div class="text-lg font-thin mx-4 md:mx-20pc mt-8 mb-8">
+          A complete redesign of the governance system with token holders in mind: go vote on key DAO matters & get a paycheck for your work,
+          every month.
+        </div>
+      </div>
     </div>
 
     <div class="flex flex-col items-center text-center mt-20 m-5">
     <div class="w-full max-w-1200px">
-      <div class="bg-melanzanafritta flex items-center text-white rounded py-12 px-12">
-        <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="dollar-in"/>
+      <div class="bg-melanzanafritta min-h-300px flex items-center text-white rounded py-12 px-12">
+        <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="vedough is the new black"/>
         <div class="text-justify font-thin">
           <div class="font-bold text-xl">veDOUGH Is The New Black</div>
           <div class="">Any DOUGH holder can choose to stake, selecting a time period and amount to stake, which will determine their voting power and their share of the DAO profits. This completely transforms DOUGH value accrual, putting a buy & hold pressure as a source of cashflows.
@@ -309,8 +323,19 @@
     </div>
     </div>
 
-
-
+    <div class="flex flex-col items-center text-center mt-20 m-5">
+      <div class="w-full max-w-1200px">
+        <div class="bg-melanzana min-h-300px flex items-center text-white rounded py-12 px-12">
+          <img class="w-180px h-180px md:mr-12" src={images.costumeparty} alt="members"/>
+          <div class="text-justify font-thin">
+            <div class="font-bold text-xl">Anyone Can Become A Governance Member</div>
+            <div class="">Governing PieDAO is about commitment and genuine passion for the mission - not the size of your wallet to cover those gas fees for votes. 
+              <br /><br />To ensure inclusivity, we introduced optimistic execution design, where members can vote gas-free on Snapshot, and results are submitted on-chain.
+              </div>
+          </div>
+        </div>
+      </div>
+      </div>
 
 
     <div class="font-huge">How it works</div>
