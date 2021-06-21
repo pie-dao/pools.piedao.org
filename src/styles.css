@@ -138,6 +138,7 @@ flex: 1 1 0;
   background-color: #fdfdfd;
 }
 
+
 .text-l {
   font-size: 1.2rem;
 }
@@ -230,6 +231,11 @@ right: 0px;
 .bg-lightgreen {
   background-color: #B7F1E2;
 }
+
+.bg-peppermint {
+  background-color: #7EE999;
+}
+
 
 .bg-purple {
   background-color: #8B60F8;

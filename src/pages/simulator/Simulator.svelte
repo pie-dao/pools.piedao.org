@@ -274,9 +274,30 @@
 
 <div class="flex flex-col items-center text-center mt-8">
   <div class="w-full px-8 max-w-1200px">
-    <div class="font-hero font-hero-sim">New<br />Governance<br />Mining</div>
-    <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a>
-    <div class="text-base font-thin mx-4 md:mx-20pc mb-8">Invest in <strong>veDOUGH*</strong> and build your cashflow, taking additional yield from PieDAO farmed treasury.</div>
+    <div class="font-hero font-hero-sim">Get paid for<br />Governaning</div>
+    <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
+    <div class="text-lg font-thin mx-4 md:mx-20pc mt-8 mb-8">
+      A complete redesign of the governance system with token holders in mind: go vote on key DAO matters & get a paycheck for your work,
+      every month.
+    </div>
+
+    <div class="flex flex-col items-center text-center mt-20 m-5">
+      <img class="w-300px -mb-50px z-50" src={images.d_top} alt="dollar-in"/>
+    <div class="w-full max-w-1200px">
+      <div class="bg-peppermint rounded py-20 px-12">
+        <div class="font-bold text-xl">We stand by our products</div>
+        <div class="flex text-justify font-thin mt-4">
+          <div class="w-1/2 mr-4">Our products do what it says on the tin: diversify your portfolio and make you money. That is why we propose to actively manage our own treasury, generating more revenues on liquidity pools across Balancer, Uniswap, Curve, and Sushiswap.</div>
+          <div class="w-1/2 ml-4">The better the Pies perform, the more funds in the treasury.The more funds in the treasury, the more profits derived from Treasury Farming. Where do these profits go?</div>
+        </div>
+      </div>
+    </div>
+      <img class="w-300px -mt-50px z-50" src={images.d_bottom} alt="dollar-in"/>
+    </div>
+
+
+
+
     <div class="font-huge">How it works</div>
     <LottiePlayer
     src="https://assets10.lottiefiles.com/private_files/lf30_wksf88hl.json"
