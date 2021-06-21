@@ -295,6 +295,21 @@
       <img class="w-300px -mt-50px z-50" src={images.d_bottom} alt="dollar-in"/>
     </div>
 
+    <div class="flex flex-col items-center text-center mt-20 m-5">
+    <div class="w-full max-w-1200px">
+      <div class="bg-melanzanafritta flex items-center text-white rounded py-12 px-12">
+        <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="dollar-in"/>
+        <div class="text-justify font-thin">
+          <div class="font-bold text-xl">veDOUGH Is The New Black</div>
+          <div class="">Any DOUGH holder can choose to stake, selecting a time period and amount to stake, which will determine their voting power and their share of the DAO profits. This completely transforms DOUGH value accrual, putting a buy & hold pressure as a source of cashflows.
+            <br /><br />Active veDOUGH holders will get 60% (!) of the DAO profits, while 25% will be used to compound the treasury and 15% - allocated for development costs.
+            </div>
+        </div>
+      </div>
+    </div>
+    </div>
+
+
 
 
 
