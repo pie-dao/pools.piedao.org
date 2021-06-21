@@ -277,7 +277,7 @@
     <img class="w-400px" src={images.voting_hands} alt="governance mining"/>
     <div class="font-hero font-hero-sim">Get paid for<br />Governaning</div>
     <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
-    <div class="text-lg font-thin mx-4 md:mx-20pc mt-8 mb-8">
+    <div class="text-lg font-thin mx-4 md:mx-10pc mt-8 mb-8">
       A complete redesign of the governance system with token holders in mind: go vote on key DAO matters & get a paycheck for your work,
       every month.
     </div>
@@ -302,14 +302,14 @@
         <div class="text-xl font-bold mt-4 mb-4">Introducing</div>
         <div class="font-hero font-hero-sim">Governance<br />Mining</div>
         <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
-        <div class="text-lg font-thin mx-4 md:mx-20pc mt-8 mb-8">
-          A complete redesign of the governance system with token holders in mind: go vote on key DAO matters & get a paycheck for your work,
-          every month.
+        <div class="text-lg font-thin text-justify mx-4 md:mx-10pc mt-8 mb-8">
+          The DAO’s profits should go to those who put the hard work of driving this wealth creation machine forward: <strong>active governance members.</strong>
+          <br /><br />Should PIP-XX pass the community vote, only staked DOUGH (veDOUGH) would be used for governance votes: this means no free-riding, no swaying votes for short-term gain, and true long-term alignment for the future of PieDAO.
         </div>
       </div>
     </div>
 
-    <div class="flex flex-col items-center text-center mt-20 m-5">
+    <div class="flex flex-col items-center text-center mt-20">
     <div class="w-full max-w-1200px">
       <div class="bg-melanzanafritta min-h-300px flex items-center text-white rounded py-12 px-12">
         <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="vedough is the new black"/>
@@ -323,7 +323,23 @@
     </div>
     </div>
 
-    <div class="flex flex-col items-center text-center mt-20 m-5">
+    <div class="w-full flex flex-col items-center text-center mt-20 m-5">
+      <div class="w-full max-w-1200px flex">
+        <div class="mr-4 flex flex-col items-center drowpdown-shadow rounded p-12">
+          <img class="w-180px h-180px" src={images.ecosystem_friendly} alt="vedough is the new black"/>
+          <div class="text-xl leading-12 mt-4">Synergistic To The<br />DeFi Ecosystem</div>
+          <div class="font-base font-thin text-justify mt-4">PieDAO lies at the heart of the DeFi ecosystem, and we want it to thrive. That is why we won't be selling our farmed tokens for other assets to distribute to $DOUGH holders - we will distribute what we farm, all nicely packed together in our special RewardsPie.</div>
+        </div>
+        <div class="ml-4 flex flex-col items-center drowpdown-shadow rounded p-12">
+          <img class="w-180px h-180px" src={images.duck} alt="vedough is the new black"/>
+          <div class="text-xl leading-12 mt-4">Who calls the<br />Shots?</div>
+          <div class="font-base font-thin text-justify mt-4">A specially designated Treasury Committee is being formed, whose main tasks will be ensuring sufficiently diversified allocation of assets, the decision making on farming strategies to ensure consistent returns to token holders, and finally, bringing the DAO to self-sustainability.</div>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="flex flex-col items-center text-center mt-20">
       <div class="w-full max-w-1200px">
         <div class="bg-melanzana min-h-300px flex items-center text-white rounded py-12 px-12">
           <img class="w-180px h-180px md:mr-12" src={images.costumeparty} alt="members"/>
@@ -338,7 +354,7 @@
       </div>
 
 
-    <div class="font-huge">How it works</div>
+    <div class="font-huge mt-12">How it works</div>
     <LottiePlayer
     src="https://assets10.lottiefiles.com/private_files/lf30_wksf88hl.json"
     autoplay="{true}"
