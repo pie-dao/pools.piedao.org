@@ -277,19 +277,19 @@
     <img class="w-400px" src={images.voting_hands} alt="governance mining"/>
     <div class="font-hero font-hero-sim">Get paid for<br />Governaning</div>
     <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
-    <div class="text-lg font-thin mx-4 md:mx-10pc mt-8 mb-8">
+    <div class="text-l md:text-lg font-thin mx-4 md:mx-10pc mt-4 md:mt-8 mb-8">
       A complete redesign of the governance system with token holders in mind: go vote on key DAO matters & get a paycheck for your work,
       every month.
     </div>
 
-    <div class="flex flex-col items-center text-center mt-20 m-5">
+    <div class="flex flex-col items-center text-center mt-12 md:mt-20">
       <img class="w-300px -mb-50px z-50" src={images.d_top} alt="dollar-in"/>
     <div class="w-full max-w-1200px">
       <div class="bg-peppermint rounded py-20 px-12">
-        <div class="font-bold text-xl">We stand by our products</div>
-        <div class="flex text-justify font-thin mt-4">
-          <div class="w-1/2 mr-4">Our products do what it says on the tin: diversify your portfolio and make you money. That is why we propose to actively manage our own treasury, generating more revenues on liquidity pools across Balancer, Uniswap, Curve, and Sushiswap.</div>
-          <div class="w-1/2 ml-4">The better the Pies perform, the more funds in the treasury.The more funds in the treasury, the more profits derived from Treasury Farming. Where do these profits go?</div>
+        <div class="font-bold text-xl leading-12">We stand by our products</div>
+        <div class="flex flex-col md:flex-row text-justify font-thin mt-4">
+          <div class="md:w-1/2 md:mr-4">Our products do what it says on the tin: diversify your portfolio and make you money. That is why we propose to actively manage our own treasury, generating more revenues on liquidity pools across Balancer, Uniswap, Curve, and Sushiswap.</div>
+          <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">The better the Pies perform, the more funds in the treasury.The more funds in the treasury, the more profits derived from Treasury Farming. Where do these profits go?</div>
         </div>
       </div>
     </div>
@@ -302,20 +302,20 @@
         <div class="text-xl font-bold mt-4 mb-4">Introducing</div>
         <div class="font-hero font-hero-sim">Governance<br />Mining</div>
         <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
-        <div class="text-lg font-thin text-justify mx-4 md:mx-10pc mt-8 mb-8">
+        <div class="text-l md:text-lg font-thin text-justify mx-4 md:mx-10pc mt-8 mb-8">
           The DAO’s profits should go to those who put the hard work of driving this wealth creation machine forward: <strong>active governance members.</strong>
           <br /><br />Should PIP-XX pass the community vote, only staked DOUGH (veDOUGH) would be used for governance votes: this means no free-riding, no swaying votes for short-term gain, and true long-term alignment for the future of PieDAO.
         </div>
       </div>
     </div>
 
-    <div class="flex flex-col items-center text-center mt-20">
+    <div class="flex flex-col items-center text-center mt-12 md:mt-20">
     <div class="w-full max-w-1200px">
-      <div class="bg-melanzanafritta min-h-300px flex items-center text-white rounded py-12 px-12">
+      <div class="bg-melanzanafritta min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
         <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="vedough is the new black"/>
-        <div class="text-justify font-thin">
-          <div class="font-bold text-xl">veDOUGH Is The New Black</div>
-          <div class="">Any DOUGH holder can choose to stake, selecting a time period and amount to stake, which will determine their voting power and their share of the DAO profits. This completely transforms DOUGH value accrual, putting a buy & hold pressure as a source of cashflows.
+        <div class="font-thin">
+          <div class="font-bold text-l md:text-xl text-center mt-4 md:mt-0">veDOUGH Is The New Black</div>
+          <div class="text-justify mt-4 md:mt-0">Any DOUGH holder can choose to stake, selecting a time period and amount to stake, which will determine their voting power and their share of the DAO profits. This completely transforms DOUGH value accrual, putting a buy & hold pressure as a source of cashflows.
             <br /><br />Active veDOUGH holders will get 60% (!) of the DAO profits, while 25% will be used to compound the treasury and 15% - allocated for development costs.
             </div>
         </div>
@@ -323,29 +323,29 @@
     </div>
     </div>
 
-    <div class="w-full flex flex-col items-center text-center mt-20 m-5">
-      <div class="w-full max-w-1200px flex">
-        <div class="mr-4 flex flex-col items-center drowpdown-shadow rounded p-12">
+    <div class="w-full flex flex-col items-center text-center mt-8 md:mt-20">
+      <div class="w-full max-w-1200px flex flex-col md:flex-row">
+        <div class="md:mr-4 flex flex-col items-center drowpdown-shadow rounded p-12">
           <img class="w-180px h-180px" src={images.ecosystem_friendly} alt="vedough is the new black"/>
-          <div class="text-xl leading-12 mt-4">Synergistic To The<br />DeFi Ecosystem</div>
+          <div class="text-l md:text-xl md:leading-12 mt-4">Synergistic To The<br class="hidden md:block" />DeFi Ecosystem</div>
           <div class="font-base font-thin text-justify mt-4">PieDAO lies at the heart of the DeFi ecosystem, and we want it to thrive. That is why we won't be selling our farmed tokens for other assets to distribute to $DOUGH holders - we will distribute what we farm, all nicely packed together in our special RewardsPie.</div>
         </div>
-        <div class="ml-4 flex flex-col items-center drowpdown-shadow rounded p-12">
+        <div class="mt-8 md:mt-0 md:ml-4 flex flex-col items-center drowpdown-shadow rounded p-12">
           <img class="w-180px h-180px" src={images.duck} alt="vedough is the new black"/>
-          <div class="text-xl leading-12 mt-4">Who calls the<br />Shots?</div>
+          <div class="text-l md:text-xl md:leading-12 mt-4">Who calls the<br class="hidden md:block" />Shots?</div>
           <div class="font-base font-thin text-justify mt-4">A specially designated Treasury Committee is being formed, whose main tasks will be ensuring sufficiently diversified allocation of assets, the decision making on farming strategies to ensure consistent returns to token holders, and finally, bringing the DAO to self-sustainability.</div>
         </div>
       </div>
     </div>
     
 
-    <div class="flex flex-col items-center text-center mt-20">
+    <div class="flex flex-col items-center text-center mt-8 md:mt-20">
       <div class="w-full max-w-1200px">
-        <div class="bg-melanzana min-h-300px flex items-center text-white rounded py-12 px-12">
+        <div class="bg-melanzana min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
           <img class="w-180px h-180px md:mr-12" src={images.costumeparty} alt="members"/>
-          <div class="text-justify font-thin">
-            <div class="font-bold text-xl">Anyone Can Become A Governance Member</div>
-            <div class="">Governing PieDAO is about commitment and genuine passion for the mission - not the size of your wallet to cover those gas fees for votes. 
+          <div class="font-thin">
+            <div class="font-bold text-l md:text-xl text-center mt-4 md:mt-0">Anyone Can Become A Governance Member</div>
+            <div class="text-justify mt-4 md:mt-0">Governing PieDAO is about commitment and genuine passion for the mission - not the size of your wallet to cover those gas fees for votes. 
               <br /><br />To ensure inclusivity, we introduced optimistic execution design, where members can vote gas-free on Snapshot, and results are submitted on-chain.
               </div>
           </div>
@@ -354,22 +354,24 @@
       </div>
 
 
-    <div class="font-huge mt-12">How it works</div>
-    <LottiePlayer
-    src="https://assets10.lottiefiles.com/private_files/lf30_wksf88hl.json"
-    autoplay="{true}"
-    loop="{true}"
-    controls="{false}"
-    renderer="svg"
-    background="white"
-    height=""
-    width="100%"
-    controlsLayout="{controlsLayout}"
-  />
+    <div class="font-huge mt-12 hidden md:block">How it works</div>
+    <div class="hidden md:block">
+      <LottiePlayer
+      src="https://assets10.lottiefiles.com/private_files/lf30_wksf88hl.json"
+      autoplay="{true}"
+      loop="{true}"
+      controls="{false}"
+      renderer="svg"
+      background="white"
+      height=""
+      width="100%"
+      controlsLayout="{controlsLayout}"
+    />
+  </div>
 </div>
 </div>
 
-<div class="flex flex-col items-center text-center mt-20 m-5">
+<div class="flex flex-col items-center text-center mt-8 md:mt-20">
 <div class="w-full max-w-1200px">
   <div class="font-huge">Rewards Simulator</div>
   <div class="text-base font-thin mx-4 md:mx-20pc mb-8">Tweak the parameters. We build this expensive tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
@@ -385,7 +387,7 @@
           alt="ETH"
         />
         </div>
-        <div class="w-100pc font-veryhuge tracking-tight text-left mb-4">{formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
+        <div class="w-100pc font-huge md:font-veryhuge tracking-tight text-left mb-4">{formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
         <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
 
