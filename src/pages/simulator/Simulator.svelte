@@ -784,6 +784,10 @@
         </div>      
       </div>
     </div>
+    <!-- CHARTS SECTION -->
+    {#key projections}
+      <Tabs tabs={tabs} projections={projections}/>
+    {/key}
 
     <div class="flex flex-row gap-2 mb-2">
       <div class="w-full bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
@@ -848,10 +852,6 @@
         </div>
       </div>      
     </div>
-
-    <!-- CHARTS SECTION -->
-    {#key projections}
-      <Tabs tabs={tabs} projections={projections}/>
-    {/key}
+    
   </div>
 </div>
