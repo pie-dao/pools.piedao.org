@@ -1,5 +1,5 @@
 <script>
-  import { approve, connectWeb3, subject, eth } from '../stores/eth.js';
+  import { approve, approveMax, connectWeb3, subject, eth } from '../stores/eth.js';
   import { ethers } from 'ethers';
   import BigNumber from 'bignumber.js';
   import { _ } from 'svelte-i18n';
@@ -8,11 +8,16 @@
   import images from '../config/images.json';
   import displayNotification from '../notifications';
   import { parseEther } from '@ethersproject/units';
+  import { isAddress } from '@pie-dao/utils';
 
   const toNum = (num) =>
     BigNumber(num.toString())
       .dividedBy(10 ** 18)
       .toFixed(2);
+
+  const toBN = (num) =>
+    BigNumber(num.toString())
+      .multipliedBy(10 ** 18);
 
   $: needAllowance = true;
   $: isLoading = true;
@@ -28,11 +33,9 @@
     accountLocks: [],
   };
 
-  let stake = {
-    amount: 0.0,
-    duration: 1,
-    receiver: ""
-  };
+  let stakeAmount = 0;
+  let stakeDuration = 36;
+  let receiver = "";
 
   let unstake = {
     amount: 0.0
@@ -64,7 +67,7 @@
       }
     });
     
-    console.log(data);
+    console.log('data', data);
     data = data;
     return data;
   };
@@ -84,27 +87,12 @@
       await fetchStakingData();
 
       isLoading = false;
-      stake.receiver = $eth.address;
-      checkApproval(data.accountDepositTokenAllowance);
+      receiver = $eth.address;
+      console.log('$eth.', $eth)
     } catch(e) {
       console.log('Something went wrong...', e);
     }
     
-  }
-
-  function checkApproval(allowance) {
-    if(stake.amount && allowance) {
-      stakeError = false;
-      let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);
-
-      if(allowance.isGreaterThanOrEqualTo(stakeAmount)) {
-        needAllowance = false;
-      } else {
-        needAllowance = true;
-      }
-    } else {
-      stakeError = true;
-    }
   }
 
   async function approveToken() {
@@ -116,52 +104,114 @@
 
     try {
       // resetting the approve to zero, before initiating a new approval...
-      if(!data.accountDepositTokenAllowance.isEqualTo(0)) {
+      if(
+        !data.accountDepositTokenAllowance.isEqualTo(0) && 
+        !data.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
+      ) {
+
         await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
       }
 
-      let stakeAmount = BigNumber(stake.amount.toString()).multipliedBy(10 ** 18);     
-      await approve(smartcontracts.dough, smartcontracts.doughStaking, stakeAmount.toString(), {gasLimit: 100000});
+      
+      await approveMax(smartcontracts.dough, smartcontracts.doughStaking, {gasLimit: 100000});
+      await fetchStakingData();
+      console.log("fetchStakingData", data);   
       needAllowance = false; 
       
     } catch(error) {
+      console.log('error', error);
       stakeError = true;
       needAllowance = true;
     }
   }
 
-  async function stakeDOUGH() {
-    if(!sharesTimeLock) return;
+  const safeFlow = async () => {
+      const Errors = {
+        NOT_CONNECTED: {
+          code: 1,
+          message: "The wallet is not connected or signer not available"
+        },
+        NOT_APPROVED: {
+          code: 2,
+          message: "Allowance too low"
+        },
+        NOT_INITIALIZED: {
+          code: 2,
+          message: "Timelock not initialized"
+        },
+        WRONG_DURATION: {
+          code: 2,
+          message: "Duration Value incorrect"
+        },
+        NOT_VALID_ADDRESS: {
+          code: 2,
+          message: "Receiver is not a valid address"
+        }
+      }
+
+      // Check connection to wallet
+      if (!$eth.address || !$eth.signer) {
+        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+        connectWeb3();
+        return Errors.NOT_CONNECTED;
+      }
+
+      if(!sharesTimeLock) {
+        displayNotification({ message: Errors.NOT_INITIALIZED.message, type: "hint" });
+        return Errors.NOT_INITIALIZED;
+      };
+
+      if(!stakeDuration) {
+        displayNotification({ message: Errors.WRONG_DURATION.message, type: "hint" });
+        return Errors.WRONG_DURATION;
+      };
+
+      if(!isAddress(receiver)) {
+        displayNotification({ message: Errors.NOT_VALID_ADDRESS.message, type: "hint" });
+        return Errors.NOT_VALID_ADDRESS;
+
+      }
+      return false;
+  }
+
+  async function stake() {
+    const error = await safeFlow();
+    if(error) {
+      console.log('error', error)
+      return;
+    }
 
     try {
-      let response = await sharesTimeLock.depositByMonths(
-        parseEther(stake.amount.toString()), 
-        stake.duration, 
-        stake.receiver);
-
-      const { emitter } = displayNotification({
-        hash: response.hash,
-      });
+      const { emitter } = displayNotification( await sharesTimeLock.depositByMonths(
+        parseEther(stakeAmount.toString()), 
+        stakeDuration, 
+        receiver
+      ));
 
       emitter.on("txConfirmed", async() => {
-
-        displayNotification({
-          message: `You staked ${stake.amount.toString()} DOUGH. Your new stake will appear in the list in a really short while...`,
-          type: "success",
-        });       
-
         const subscription = subject("blockNumber").subscribe({
-          next: async () => {
-            await fetchStakingData();
-            console.log("fetchStakingData", data);               
-
-            subscription.unsubscribe();
-          },
-        });          
+            next: async () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: `You staked successfully`,
+                type: "success",
+              });
+              stakeAmount = 0;
+              await fetchStakingData();
+              console.log("fetchStakingData", data);
+              subscription.unsubscribe();
+            },
+          });
+        
+        
       });
 
     } catch(error) {
-      console.error(error);
+      displayNotification({
+        autoDismiss: 15000,
+        message: e.message,
+        type: "error",
+      });
     }
   }
 
@@ -217,19 +267,17 @@
     The new Stake, under development.
   </div>
 
+  {#if !isLoading}
   <div
     class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc"
   >
     <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
-        <div
-          class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin"
-          style="display: inline; cursor: pointer;"
-        >
+        <div class="font-thin" style="display: inline; cursor: pointer;">
           <div
             on:click={() => {
-              stake.amount = toNum(data.accountDepositTokenBalance);
+              stakeAmount = toNum(data.accountDepositTokenBalance);
             }}
           >
             Max balance: {toNum(data.accountDepositTokenBalance)}
@@ -238,8 +286,7 @@
       </div>
       <div class="flex nowrap items-center p-1">
         <input
-          on:keyup={() => { checkApproval(data.accountDepositTokenAllowance)}}
-          bind:value={stake.amount}
+          bind:value={stakeAmount}
           class="swap-input-from"
           inputmode="decimal"
           title="Token Amount"
@@ -268,7 +315,7 @@
         >
           <div
             on:click={() => {
-              stake.duration = 36;
+              stakeDuration = 36;
             }}
           >
             Max 36 Months
@@ -277,7 +324,7 @@
       </div>
       <div class="flex nowrap items-center p-1">
         <input
-          bind:value={stake.duration}
+          bind:value={stakeDuration}
           class="swap-input-from"
           inputmode="number"
           title="Token Amount"
@@ -300,10 +347,19 @@
     <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px mt-4">
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Receiver</div>
+        <div class="font-thin" style="display: inline; cursor: pointer;">
+          <div
+            on:click={() => {
+              receiver = $eth.address;
+            }}
+          >
+            {$eth.shortAddress}
+          </div>
+        </div>
       </div>
       <div class="flex nowrap items-center p-1">
         <input
-          bind:value={stake.receiver}
+          bind:value={receiver}
           class="swap-input-from"
           inputmode="text"
           placeholder="loading default address..."
@@ -314,25 +370,28 @@
           spellcheck="false"
         />
       </div>
-    </div>    
+    </div>
 
-    {#if needAllowance}
-      <button
-        on:click={approveToken}
-        class:error={isLoading || stakeError ? true : false}
-        disabled={isLoading || stakeError ? true : false}
-        class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button
-      >
+    {#if data.accountDepositTokenBalance.eq(0)}
+      <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">You don't own tokens </button>  
     {:else}
-      <button
-      on:click={stakeDOUGH}
-        class:error={isLoading || stakeError ? true : false}
-        disabled={isLoading || stakeError ? true : false}
-        class="error stake-button mt-10px rounded-20px p-15px w-100pc"
-      >
-        Stake Your Coins
-      </button>
+      {#if stakeAmount }
+        {#if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
+          <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Balance too low</button>
+        {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
+          <button on:click={approveToken} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Approve</button>
+        {:else}
+          {#if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
+            <button on:click={stake} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Stake</button>
+          {:else}
+            <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Duration not correct</button>
+          {/if}
+        {/if}
+      {:else}
+        <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Enter an amount</button>  
+      {/if}
     {/if}
+
   </div>
 
   <div
@@ -361,4 +420,7 @@
     {/each}
   </ul>
 </div>
+{:else}
+  Loading...
+{/if}
 </div>

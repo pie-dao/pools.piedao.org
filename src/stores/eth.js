@@ -138,6 +138,5 @@ export const approve = async (address, spender, amount, overrides = {}) => {
   return true;
 };
 
-export const approveMax = async (address, spender) => {
-  await approve(address, spender, ethers.constants.MaxUint256);
-};
+// eslint-disable-next-line max-len
+export const approveMax = async (address, spender, overrides = {}) => approve(address, spender, ethers.constants.MaxUint256, overrides);
