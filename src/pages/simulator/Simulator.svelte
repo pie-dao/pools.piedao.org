@@ -272,6 +272,39 @@
   </span>
 </Modal>
 
+<div class="moneycontainer">
+	<div class="dolla">
+    <span></span>
+    <span></span>
+    <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+    <span></span>
+    <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+    <span></span>
+    <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+    <span></span>
+    <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+	  <span></span>
+  </div>
+</div>
+
 <div class="flex flex-col items-center text-center mt-8">
   <div class="w-full flex flex-col items-center px-8 max-w-1200px">
     <img class="w-400px" src={images.voting_hands} alt="governance mining"/>
