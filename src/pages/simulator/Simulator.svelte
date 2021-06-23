@@ -20,11 +20,15 @@
   import firebase_env from '../../config/firebase.json';
 
   function getPermalink() {
+    saveSimulation();
+
+    /*
     if(permalink_url) {
       updateSimulation();
     } else {
       saveSimulation();
     }
+    */
   }
 
   function saveSimulation() {
@@ -32,13 +36,14 @@
       .add({inputs: inputs, rewards: rewards, name: simulation.name, author: simulation.author})
       .then(response => {
       simulationChanged = false;
-      permalink_url = window.location + response.id;
+      permalink_url = window.location + '/' + response.id;
       console.log(permalink_url);
     }).catch(error => {
       console.error(error);
     });  
   }
 
+  /*
   function updateSimulation() {
     firebase.firestore().collection('staking_simulations')
       .doc($currentRoute.params.simulation)
@@ -49,6 +54,7 @@
       console.error(error);
     }); 
   }
+  */
 
   function loadSimulation() {
     if($currentRoute.params.simulation != '') {
@@ -764,7 +770,7 @@
                 spellcheck="false"
                 placeholder={simulation.author}
                 bind:value={simulation.author}
-                on:keyup={simulationChanged = true}
+                on:keyup={permalink_url = null}
                 />
               </div>
             </div>                 
@@ -784,7 +790,7 @@
                 spellcheck="false"
                 placeholder={simulation.name}
                 bind:value={simulation.name}
-                on:keyup={simulationChanged = true}
+                on:keyup={permalink_url = null}
                 />
               </div>
             </div>
@@ -796,7 +802,7 @@
           class="w-full btnbig text-white m-4 rounded-8px p-15px">
           {#if permalink_url}
             {#if simulationChanged}
-              Update Your Simulation
+              Save your simulation, get a permalink!
             {:else}
               <a target="_blank" href={permalink_url}>
                 Your Simulation link is: {permalink_url}
