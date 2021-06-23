@@ -50,6 +50,7 @@
   }
 
   $: token = params.address;
+  let bakingPies = ["PLAY", "DEFI++", "YPIE", "BCP"];
 
   let pieOfPies = false;
   let initialized = false;
@@ -394,15 +395,16 @@
             {/if}
         </div>
         
-        <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 md:mr-2 hover:opacity-80" onclick="location.href='#/oven'">
-          <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
-          <div class="">
-            <div class="text-base font-bold leading-5">Bake your Pie</div>
-            <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
-            <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
-          </div>
-        </button>
- 
+        {#if bakingPies.includes(poolsConfig[params.address].symbol)}
+          <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 md:mr-2 hover:opacity-80" onclick="location.href='#/oven'">
+            <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+            <div class="">
+              <div class="text-base font-bold leading-5">Bake your Pie</div>
+              <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
+              <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
+            </div>
+          </button>
+        {/if}
 
         <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
           <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
