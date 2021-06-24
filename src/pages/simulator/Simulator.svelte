@@ -10,6 +10,7 @@
   import InfoModal from '../../components/modals/infoModal.svelte';
   import StakingCommitmentModal from '../../components/modals/stakingCommitmentModal.svelte';
   import Modal from '../../components/elements/Modal.svelte';
+  import confetti from '../../components/Confetti.js';
 
   import Tab1 from "./charts/Tab1.svelte";
 	import Tab2 from "./charts/Tab2.svelte";
@@ -18,6 +19,8 @@
 
   import firebase from 'firebase';
   import firebase_env from '../../config/firebase.json';
+
+  console.log(confetti);
 
   function getPermalink() {
     saveSimulation();
@@ -264,6 +267,22 @@
 
   // checking if we have to load an already-existing configuration...
   loadSimulation();
+
+  const config = {
+    angle: 180,
+    spread: 360,
+    startVelocity: 40,
+    elementCount: 40,
+    dragFriction: 0.12,
+    duration: 12000,
+    stagger: 3,
+    width: "90px",
+    height: "169px",
+    colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
+  };
+
+  const button = document.querySelector("#confetti");
+  confetti(button, config);
 </script>
 
 <Modal backgroundColor="#f3f3f3" bind:this={modal}>
@@ -278,38 +297,7 @@
   </span>
 </Modal>
 
-<div class="moneycontainer">
-	<div class="dolla">
-    <span></span>
-    <span></span>
-    <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-    <span></span>
-    <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-    <span></span>
-    <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-    <span></span>
-    <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-	  <span></span>
-  </div>
-</div>
+<div id="confetti"></div>
 
 <div class="flex flex-col items-center text-center mt-8">
   <div class="w-full flex flex-col items-center px-8 max-w-1200px">

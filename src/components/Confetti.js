@@ -8,13 +8,14 @@ function createElements(root, elementCount, colors, width, height) {
   return Array.from({ length: elementCount }).map((_, index) => {
     const element = document.createElement('div');
     const color = colors[index % colors.length];
-    element.style['background-color'] = color; // eslint-disable-line space-infix-ops
+    //element.style['background-color'] = color; // eslint-disable-line space-infix-ops
     element.style.width = width;
     element.style.height = height;
     element.style.position = 'absolute';
     element.style.zIndex = '10000';
     element.style.willChange = 'transform, opacity';
     element.style.visibility = 'hidden';
+    element.style.background = 'url("https://raw.githubusercontent.com/pie-dao/brand/master/misc/rainydolla.png")';
     root.appendChild(element);
     return element;
   });
