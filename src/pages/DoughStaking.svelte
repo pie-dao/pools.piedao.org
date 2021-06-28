@@ -4,8 +4,10 @@
   import BigNumber from 'bignumber.js';
   import { _ } from 'svelte-i18n';
   import sharesTimeLockABI from '../abis/sharesTimeLock.json';
+  import veDoughABI from '../abis/veDoughABI.json';
   import smartcontracts from '../config/smartcontracts.json';
   import images from '../config/images.json';
+  import PartecipationJson from '../config/rewards/test.json'
   import displayNotification from '../notifications';
   import { parseEther } from '@ethersproject/units';
   import { isAddress } from '@pie-dao/utils';
@@ -29,8 +31,8 @@
   let data = {
     totalStaked: BigNumber(0),
     rewardTokenSupply: BigNumber(0),
-    accountRewardTokenBalance: BigNumber(0),
-    accountWithdrawableRewards: BigNumber(0),
+    accountRewardTokenBalance: BigNumber(0), //amount of veDOUGH you have
+    accountWithdrawableRewards: BigNumber(0), //amount is in reward Pie
     accountWithdrawnRewards: BigNumber(0),
     accountDepositTokenBalance: BigNumber(0),
     accountLocks: [],
@@ -45,6 +47,7 @@
   }
 
   let sharesTimeLock = false;
+  let veDOUGH = false;
 
   const fetchStakingData = async () => {
     let response = await sharesTimeLock.getStakingData($eth.address);
@@ -87,6 +90,12 @@
         $eth.signer || $eth.provider,
       );
 
+      veDOUGH = new ethers.Contract(
+        smartcontracts.veDOUGH,
+        veDoughABI,
+        $eth.signer || $eth.provider,
+      );
+
       await fetchStakingData();
       receiver = $eth.address;
       console.log(prepareProofs());
@@ -122,28 +131,49 @@
       console.log('error', error);
       displayNotification({
         autoDismiss: 15000,
-        message: e.message,
+        message: error.message,
         type: "error",
       });
     }
   }
 
+  async function claim() {
+    const proof = prepareProofs();
+    console.log('proof', proof);
+
+    try {
+      const { emitter } = displayNotification( await veDOUGH.claim(proof.proof));
+
+      emitter.on("txConfirmed", async() => {
+        const subscription = subject("blockNumber").subscribe({
+            next: async () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: `Pay day baby!`,
+                type: "success",
+              });
+              stakeAmount = 0;
+              await fetchStakingData();
+              subscription.unsubscribe();
+            },
+          });
+        
+        
+      });
+
+    } catch(error) {
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.message,
+        type: "error",
+      });
+    }
+
+  }
+
   function prepareProofs() {
     if(!$eth.address) return;
-    const merkleTree = createParticipationTree([
-        {
-            "address": "0xd18a54f89603Fe4301b29EF6a8ab11b9Ba24f139",
-            "participation": 1
-        },
-        {
-            "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96046",
-            "participation": 1
-        },
-        {
-            "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96047",
-            "participation": 0
-        }
-    ]);
+    const merkleTree = createParticipationTree(PartecipationJson);
       
     console.log('merkleTree', merkleTree)
     const leaf = merkleTree.leafs.find((item) => item.address.toLowerCase() === $eth.address.toLowerCase());
@@ -238,7 +268,7 @@
     } catch(error) {
       displayNotification({
         autoDismiss: 15000,
-        message: e.message,
+        message: error.message,
         type: "error",
       });
     }
@@ -436,7 +466,9 @@
     </div>
 
     <div>Account Reward Token Balance: {toNum(data.accountRewardTokenBalance)}</div>
-    <div>Account Withdrawable Rewards: {toNum(data.accountWithdrawableRewards)}</div>
+    <div>Account Withdrawable Rewards: {toNum(data.accountWithdrawableRewards)}
+      <button on:click={claim}> Claim now</button>
+    </div>
     <div>Account Withdrawn Rewards: {toNum(data.accountWithdrawnRewards)}</div>
     <div>Select the item you wish to unstake from the list.</div>
   </div>   
