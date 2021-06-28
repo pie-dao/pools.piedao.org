@@ -9,6 +9,7 @@
   import displayNotification from '../notifications';
   import { parseEther } from '@ethersproject/units';
   import { isAddress } from '@pie-dao/utils';
+  import { createParticipationTree } from '../classes/MerkleTreeUtils';
 
   const toNum = (num) =>
     BigNumber(num.toString())
@@ -19,9 +20,11 @@
     BigNumber(num.toString())
       .multipliedBy(10 ** 18);
 
-  $: needAllowance = true;
-  $: isLoading = true;
-  $: stakeError = false;
+
+  
+  // All the epochs where rewards are available.
+  $: epochs = [];
+  $: isLoading = true;  
 
   let data = {
     totalStaked: BigNumber(0),
@@ -85,10 +88,9 @@
       );
 
       await fetchStakingData();
-
-      isLoading = false;
       receiver = $eth.address;
-      console.log('$eth.', $eth)
+      console.log(prepareProofs());
+      isLoading = false;
     } catch(e) {
       console.log('Something went wrong...', e);
     }
@@ -116,12 +118,39 @@
       await approveMax(smartcontracts.dough, smartcontracts.doughStaking, {gasLimit: 100000});
       await fetchStakingData();
       console.log("fetchStakingData", data);   
-      needAllowance = false; 
-      
     } catch(error) {
       console.log('error', error);
-      stakeError = true;
-      needAllowance = true;
+      displayNotification({
+        autoDismiss: 15000,
+        message: e.message,
+        type: "error",
+      });
+    }
+  }
+
+  function prepareProofs() {
+    if(!$eth.address) return;
+    const merkleTree = createParticipationTree([
+        {
+            "address": "0xd18a54f89603Fe4301b29EF6a8ab11b9Ba24f139",
+            "participation": 1
+        },
+        {
+            "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96046",
+            "participation": 1
+        },
+        {
+            "address": "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96047",
+            "participation": 0
+        }
+    ]);
+      
+    console.log('merkleTree', merkleTree)
+    const leaf = merkleTree.leafs.find((item) => item.address.toLowerCase() === $eth.address.toLowerCase());
+
+    return {
+      valid: leaf ? true : false,
+      proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null
     }
   }
 
@@ -405,6 +434,10 @@
         <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
       </span>
     </div>
+
+    <div>Account Reward Token Balance: {toNum(data.accountRewardTokenBalance)}</div>
+    <div>Account Withdrawable Rewards: {toNum(data.accountWithdrawableRewards)}</div>
+    <div>Account Withdrawn Rewards: {toNum(data.accountWithdrawnRewards)}</div>
     <div>Select the item you wish to unstake from the list.</div>
   </div>   
 
