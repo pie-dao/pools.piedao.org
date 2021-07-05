@@ -274,7 +274,7 @@
     startVelocity: 40,
     elementCount: 40,
     dragFriction: 0.12,
-    duration: 6000,
+    duration: 8000,
     stagger: 3,
     width: "30px",
     height: "56px",
@@ -297,7 +297,7 @@
   </span>
 </Modal>
 
-<div id="confetti"></div>
+<div id="confetti" class="hidden md:block"></div>
 
 <div class="flex flex-col items-center text-center mt-8">
   <div class="w-full flex flex-col items-center px-8 max-w-1200px">
