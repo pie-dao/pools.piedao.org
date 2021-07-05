@@ -274,10 +274,10 @@
     startVelocity: 40,
     elementCount: 40,
     dragFriction: 0.12,
-    duration: 12000,
+    duration: 6000,
     stagger: 3,
-    width: "90px",
-    height: "169px",
+    width: "30px",
+    height: "56px",
     colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
   };
 
