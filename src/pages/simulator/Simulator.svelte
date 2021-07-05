@@ -511,17 +511,17 @@
             />
           </div>
           <div on:click={() => sliderModal.open()} class="flex pt-2 md:pt-7 mb-8 md:mb-0 justify-between">
-            <div class="flex flex-col justify-between w-2/3">
+            <div class="flex flex-col justify-between w-1/2 md:w-2/3">
               {#each rewards as reward}
               <div class="flex h-18px">
-                <div style={`width: ${20 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">       
+                <div style={`width: ${18 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">       
                 </div>
               </div>
             {/each}
             </div>
-            <div class="w-1/3 pl-2">
+            <div class="w-full md:w-1/3 md:pl-2">
               {#each rewards as reward}
-              <div class="md:text-xs font-thin text-right">
+              <div class="md:text-xs font-thin text-right h-18px">
                 <span class="font-bold">{reward.percentage}%</span>
                 {reward.commitment}
               </div>
