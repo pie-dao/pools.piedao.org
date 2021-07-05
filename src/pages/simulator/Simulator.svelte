@@ -336,7 +336,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col items-center text-center mt-12 md:mt-20">
+    <div class="flex flex-col items-center text-center mt-6 md:mt-20">
     <div class="w-full max-w-1200px">
       <div class="bg-melanzanafritta min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
         <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="vedough is the new black"/>
@@ -350,14 +350,14 @@
     </div>
     </div>
 
-    <div class="w-full flex flex-col items-center text-center mt-8 md:mt-20">
+    <div class="w-full flex flex-col items-center text-center mt-4 md:mt-20">
       <div class="w-full max-w-1200px flex flex-col md:flex-row">
         <div class="md:mr-4 flex flex-col items-center border-grey rounded p-12">
           <img class="w-180px h-180px" src={images.ecosystem_friendly} alt="vedough is the new black"/>
           <div class="text-l md:text-xl md:leading-12 mt-4">Synergistic To The<br class="hidden md:block" />DeFi Ecosystem</div>
           <div class="font-base font-thin text-justify mt-4">PieDAO lies at the heart of the DeFi ecosystem, and we want it to thrive. That is why we won't be selling our farmed tokens for other assets to distribute to $DOUGH holders - we will distribute what we farm, all nicely packed together in our special RewardsPie.</div>
         </div>
-        <div class="mt-8 md:mt-0 md:ml-4 flex flex-col items-center border-grey rounded p-12">
+        <div class="mt-4 md:mt-0 md:ml-4 flex flex-col items-center border-grey rounded p-12">
           <img class="w-180px h-180px" src={images.duck} alt="vedough is the new black"/>
           <div class="text-l md:text-xl md:leading-12 mt-4">Who calls the<br class="hidden md:block" />Shots?</div>
           <div class="font-base font-thin text-justify mt-4">A specially designated Treasury Committee is being formed, whose main tasks will be ensuring sufficiently diversified allocation of assets, the decision making on farming strategies to ensure consistent returns to token holders, and finally, bringing the DAO to self-sustainability.</div>
@@ -366,7 +366,7 @@
     </div>
     
 
-    <div class="flex flex-col items-center text-center mt-8 md:mt-20">
+    <div class="flex flex-col items-center text-center mt-4 md:mt-20">
       <div class="w-full max-w-1200px">
         <div class="bg-melanzana min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
           <img class="w-180px h-180px md:mr-12" src={images.costumeparty} alt="members"/>
