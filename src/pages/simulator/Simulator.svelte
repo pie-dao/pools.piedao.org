@@ -612,7 +612,7 @@
     <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
       <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
-          <div class="w-full md:w-2/4 md:mr-8">
+          <div class="w-full md:w-1/2 md:mr-4">
             <div class="w-full font-thin text-left md:text-xs mb-4">
               <span class="float-left">Your Staked DOUGH</span>
               <img
@@ -650,7 +650,7 @@
               </div>
             </div>                 
           </div>
-          <div class="w-full md:w-2/4 md:mr-8">
+          <div class="w-full md:w-1/2 md:ml-4">
             <div class="w-full font-thin text-left md:text-xs mb-4">
               <span class="float-left">Your Staking Commitment</span>
               <img
@@ -707,8 +707,8 @@
             -->
           </div>
         </div> 
-        <div class="flex flex-col md:flex-row items-center mt-8 border-t-1 border-gray-50 pt-4">
-          <div class="h-32px flex items-center">
+        <div class="flex flex-col md:flex-row items-center mt-4 border-t-1 border-gray-50 pt-4">
+          <div class="md:h-32px flex items-center">
             <div class="md:text-xs leading-3 font-thin mr-2">
               You will receive: 
             </div>   
@@ -732,7 +732,7 @@
     <div class="flex flex-row gap-2 mb-2">
       <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey  rounded text-black p-8 flex flex-auto flex-col items-left">
         <div class="font-huge leading-2 mb-8 text-center">Summary</div>
-        <div class="flex flex-col md:flex-row border-b-2 border-gray-50 pb-4">
+        <div class="flex flex-col md:flex-row pb-4">
           <div class="flex-initial w-full md:w-1/3">
             <div class="font-thin">Your Expected Returns (Yearly)</div>
             <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.user.expectedYearlyReturns)}</div>
@@ -746,7 +746,7 @@
             <div class="md:text-base mb-4 mt-2">{outputs.user.expectedApr}%</div>
           </div>
         </div>     
-        <div class="flex flex-col md:flex-row pt-4">
+        <div class="flex flex-col md:flex-row pt-4 border-t-1 border-gray-50">
           <div class="flex-initial w-full md:w-1/3 mt-4">
             <div class="font-thin">Treasury Expected Returns (Yearly)</div>
             <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.treasury.expectedYearlyReturns)}</div>
