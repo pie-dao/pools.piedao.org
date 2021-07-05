@@ -418,7 +418,8 @@
         <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
 
-      <div class="w-92pc mx-4 md:w-2/3 md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-1 flex-col md:flex-row items-left">
+      <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-1 flex-col md:flex-row items-left">
+        <div class="w-full md:w-2/3">
           <div class="font-thin md:text-xs mb-8 text-left">
             <span class="float-left">Rewards Distrubutions</span>
             <img
@@ -445,6 +446,7 @@
               used to cover costs 
               <button  style="background-color: #67BDF0;" class="ml-4 oven-withdraw-button">15%</button>
             </div>
+          </div>
         </div>
         
         <div class="w-full md:w-1/3 align-center hidden md:block">       
