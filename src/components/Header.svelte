@@ -14,8 +14,15 @@
   let dropdownOpen2 = false;
 
   const toggleMobileMenu = (event) => {
-    mobileMenuVisible = !mobileMenuVisible;
-  };
+  event.stopPropagation();
+  mobileMenuVisible = !mobileMenuVisible;
+};
+
+const outsideClicks = (event)  => {
+  if(mobileMenuVisible) {
+    toggleMobileMenu(event);
+  }
+}
 
   const toggleDropdow = (event) => {
     dropdownOpen2 = false;
@@ -50,6 +57,9 @@
   };
 
 </script>
+
+<svelte:window on:click={outsideClicks}/>
+
 <div class="header-container">
   <div class="left">
     <a href="#/">
