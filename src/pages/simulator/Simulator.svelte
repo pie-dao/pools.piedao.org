@@ -274,10 +274,10 @@
     startVelocity: 40,
     elementCount: 40,
     dragFriction: 0.12,
-    duration: 12000,
+    duration: 8000,
     stagger: 3,
-    width: "90px",
-    height: "169px",
+    width: "30px",
+    height: "56px",
     colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
   };
 
@@ -297,10 +297,10 @@
   </span>
 </Modal>
 
-<div id="confetti"></div>
+<div id="confetti" class="hidden md:block"></div>
 
 <div class="flex flex-col items-center text-center mt-8">
-  <div class="w-full flex flex-col items-center px-8 max-w-1200px">
+  <div class="w-full flex flex-col items-center px-4 md:px-8 max-w-1200px">
     <img class="w-400px" src={images.voting_hands} alt="governance mining"/>
     <div class="font-hero font-hero-sim">Get paid for<br />Governaning</div>
     <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
@@ -336,7 +336,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col items-center text-center mt-12 md:mt-20">
+    <div class="flex flex-col items-center text-center mt-6 md:mt-20">
     <div class="w-full max-w-1200px">
       <div class="bg-melanzanafritta min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
         <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="vedough is the new black"/>
@@ -350,14 +350,14 @@
     </div>
     </div>
 
-    <div class="w-full flex flex-col items-center text-center mt-8 md:mt-20">
+    <div class="w-full flex flex-col items-center text-center mt-4 md:mt-20">
       <div class="w-full max-w-1200px flex flex-col md:flex-row">
-        <div class="md:mr-4 flex flex-col items-center drowpdown-shadow rounded p-12">
+        <div class="md:mr-4 flex flex-col items-center border-grey rounded p-12">
           <img class="w-180px h-180px" src={images.ecosystem_friendly} alt="vedough is the new black"/>
           <div class="text-l md:text-xl md:leading-12 mt-4">Synergistic To The<br class="hidden md:block" />DeFi Ecosystem</div>
           <div class="font-base font-thin text-justify mt-4">PieDAO lies at the heart of the DeFi ecosystem, and we want it to thrive. That is why we won't be selling our farmed tokens for other assets to distribute to $DOUGH holders - we will distribute what we farm, all nicely packed together in our special RewardsPie.</div>
         </div>
-        <div class="mt-8 md:mt-0 md:ml-4 flex flex-col items-center drowpdown-shadow rounded p-12">
+        <div class="mt-4 md:mt-0 md:ml-4 flex flex-col items-center border-grey rounded p-12">
           <img class="w-180px h-180px" src={images.duck} alt="vedough is the new black"/>
           <div class="text-l md:text-xl md:leading-12 mt-4">Who calls the<br class="hidden md:block" />Shots?</div>
           <div class="font-base font-thin text-justify mt-4">A specially designated Treasury Committee is being formed, whose main tasks will be ensuring sufficiently diversified allocation of assets, the decision making on farming strategies to ensure consistent returns to token holders, and finally, bringing the DAO to self-sustainability.</div>
@@ -366,7 +366,7 @@
     </div>
     
 
-    <div class="flex flex-col items-center text-center mt-8 md:mt-20">
+    <div class="flex flex-col items-center text-center mt-4 md:mt-20">
       <div class="w-full max-w-1200px">
         <div class="bg-melanzana min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
           <img class="w-180px h-180px md:mr-12" src={images.costumeparty} alt="members"/>
@@ -404,7 +404,7 @@
   <div class="text-base font-thin mx-4 md:mx-20pc mb-8">Tweak the parameters. We build this expensive tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
     <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
     <div class="flex flex-col md:flex-row gap-2 mb-2">
-      <div class="w-full md:w-1/3 md:m-0px bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
+      <div class="w-92pc mx-4 md:w-1/3 md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
         <div class="font-thin md:text-xs mb-4 text-left">
           <span class="float-left">Treasury Liquidity Deployed</span>
           <img
@@ -418,7 +418,7 @@
         <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
 
-      <div class=" bg-lightgrey rounded text-black p-8 flex flex-1 flex-col md:flex-row items-left">
+      <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-1 flex-col md:flex-row items-left">
         <div class="w-full md:w-2/3">
           <div class="font-thin md:text-xs mb-8 text-left">
             <span class="float-left">Rewards Distrubutions</span>
@@ -459,7 +459,7 @@
       </div>      
     </div>
     <!-- SECOND FLEX ROW - TOTAL STAKED veDOUGH | REWARDS | APR -->
-    <div class=" w-full bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
+    <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
       <div class="w-full flex flex-col md:flex-row">
         <!-- Total Staked veDOUGH -->
         <div class="w-full md:w-2/6 md:mr-8">
@@ -513,17 +513,17 @@
             />
           </div>
           <div on:click={() => sliderModal.open()} class="flex pt-2 md:pt-7 mb-8 md:mb-0 justify-between">
-            <div class="flex flex-col justify-between w-2/3">
+            <div class="flex flex-col justify-between w-1/2 md:w-2/3">
               {#each rewards as reward}
               <div class="flex h-18px">
-                <div style={`width: ${20 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">       
+                <div style={`width: ${18 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">       
                 </div>
               </div>
             {/each}
             </div>
-            <div class="w-1/3 pl-2">
+            <div class="w-full md:w-1/3 md:pl-2">
               {#each rewards as reward}
-              <div class="md:text-xs font-thin text-left">
+              <div class="md:text-xs font-thin text-right h-18px">
                 <span class="font-bold">{reward.percentage}%</span>
                 {reward.commitment}
               </div>
@@ -610,9 +610,9 @@
       </div>
     </div>
     <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
-      <div class="w-full bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
+      <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
-          <div class="w-full md:w-2/4 md:mr-8">
+          <div class="w-full md:w-1/2 md:mr-4">
             <div class="w-full font-thin text-left md:text-xs mb-4">
               <span class="float-left">Your Staked DOUGH</span>
               <img
@@ -650,7 +650,7 @@
               </div>
             </div>                 
           </div>
-          <div class="w-full md:w-2/4 md:mr-8">
+          <div class="w-full md:w-1/2 md:ml-4">
             <div class="w-full font-thin text-left md:text-xs mb-4">
               <span class="float-left">Your Staking Commitment</span>
               <img
@@ -707,8 +707,8 @@
             -->
           </div>
         </div> 
-        <div class="flex flex-col md:flex-row items-center mt-8 border-t-1 border-gray-50 pt-4">
-          <div class="h-32px flex items-center">
+        <div class="flex flex-col md:flex-row items-center mt-4 border-t-1 border-gray-50 pt-4">
+          <div class="md:h-32px flex items-center">
             <div class="md:text-xs leading-3 font-thin mr-2">
               You will receive: 
             </div>   
@@ -730,9 +730,9 @@
 
     <!-- FOURTH FLEX ROW - SUMMARY -->
     <div class="flex flex-row gap-2 mb-2">
-      <div class="bg-lightgrey  rounded text-black p-8 flex flex-auto flex-col items-left">
+      <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey  rounded text-black p-8 flex flex-auto flex-col items-left">
         <div class="font-huge leading-2 mb-8 text-center">Summary</div>
-        <div class="flex flex-col md:flex-row border-b-2 border-gray-50 pb-4">
+        <div class="flex flex-col md:flex-row pb-4">
           <div class="flex-initial w-full md:w-1/3">
             <div class="font-thin">Your Expected Returns (Yearly)</div>
             <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.user.expectedYearlyReturns)}</div>
@@ -746,7 +746,7 @@
             <div class="md:text-base mb-4 mt-2">{outputs.user.expectedApr}%</div>
           </div>
         </div>     
-        <div class="flex flex-col md:flex-row pt-4">
+        <div class="flex flex-col md:flex-row pt-4 border-t-1 border-gray-50">
           <div class="flex-initial w-full md:w-1/3 mt-4">
             <div class="font-thin">Treasury Expected Returns (Yearly)</div>
             <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.treasury.expectedYearlyReturns)}</div>
@@ -773,21 +773,23 @@
       </div>
     </div>
     <!-- CHARTS SECTION -->
+    <div class="w-92pc mx-4 md:w-full md:mx-0">
     {#key projections}
       <Tabs tabs={tabs} projections={projections}/>
     {/key}
+  </div>
 
     <div class="flex flex-row gap-2 mb-2">
-      <div class="w-full bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
+      <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
-          <div class="w-full md:w-2/4 md:mr-8">
+          <div class="w-full md:w-1/2 md:mr-4">
             <div class="w-full font-thin text-left md:text-xs mb-4">
               <span class="float-left">Name Yourself</span>
             </div>
             <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8">
-              <div class="flex nowrap items-center">
+              <div class="w-full flex nowrap items-center">
                 <input
-                class="swap-input-from"
+                class="w-full swap-input-from"
                 inputmode="text"
                 autocomplete="off"
                 autocorrect="off"
@@ -800,14 +802,14 @@
               </div>
             </div>                 
           </div>
-          <div class="w-full md:w-2/4 md:mr-8">
+          <div class="w-full md:w-1/2 md:ml-4">
             <div class="w-full font-thin text-left md:text-xs mb-4">
               <span class="float-left">Name Your Simulation</span>
             </div>  
             <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8">
-              <div class="flex nowrap items-center">
+              <div class="w-full flex nowrap items-center">
                 <input
-                class="swap-input-from"
+                class="w-full swap-input-from"
                 inputmode="text"
                 autocomplete="off"
                 autocorrect="off"
@@ -821,10 +823,10 @@
             </div>
           </div>
         </div> 
-        <div class="flex flex-col md:flex-row items-center mt-8 border-t-1 border-gray-50 pt-4">
+        <div class="flex flex-col md:flex-row items-center">
           <button 
           on:click={() => getPermalink()}
-          class="w-full btnbig text-white m-4 rounded-8px p-15px">
+          class="w-full btnbig text-white rounded-8px p-15px">
           {#if permalink_url}
             {#if simulationChanged}
               Save your simulation, get a permalink!

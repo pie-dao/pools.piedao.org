@@ -64,9 +64,9 @@
     }
     </script>  
     
-  <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:px-4 lg:pb-4">    
+  <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px p-6">    
     <div class="w-full">
-      <div class="font-bold mb-4 text-base py-1px text-center">
+      <div class="font-bold mb-4 text-base text-center">
         How much of the DOUGH Circulating supply will be staked?
       </div>
     </div>  
@@ -89,8 +89,8 @@
         <RangeSlider id="customSlider" values={[estimated_dough_value]} max={dough_circulation_supply} on:stop={(event) => doughChanged(event)}/>
       </div>
     </div> 
-    <div class="w-full font-thin mb-6 ml-4">
-      Current Circulating Supply: {formatFiat(dough_circulation_supply,',','.','')} DOUGH
+    <div class="w-full font-thin text-center mb-6">
+      Current Circulating Supply:<br />{formatFiat(dough_circulation_supply,',','.','')} DOUGH
     </div>     
 
     <div class="w-full">

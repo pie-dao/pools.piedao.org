@@ -16,6 +16,7 @@ function createElements(root, elementCount, colors, width, height) {
     element.style.willChange = 'transform, opacity';
     element.style.visibility = 'hidden';
     element.style.background = 'url("https://raw.githubusercontent.com/pie-dao/brand/master/misc/rainydolla.png")';
+    element.style.backgroundSize = 'contain',
     root.appendChild(element);
     return element;
   });
