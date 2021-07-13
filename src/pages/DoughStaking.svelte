@@ -336,7 +336,7 @@
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">87,093.10 DOUGH</div>
+              <div class="font-24px">87,093.10</div>
               <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
               <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
             </span>
@@ -348,21 +348,21 @@
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">87,093.10 DOUGH</div>
-              <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-              <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+              <div class="font-24px">87,093.10</div>
+              <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
+              <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
             </span>
           </div>     
       </div>
       <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 mb-6 swap-from rounded-20px bg-white p-16px">
         <div class="flex items-center justify-between">
-          <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+          <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">87,093.10 DOUGH</div>
-              <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-              <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+              <div class="font-24px">87,093.10</div>
+              <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
+              <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
             </span>
           </div>     
       </div>
