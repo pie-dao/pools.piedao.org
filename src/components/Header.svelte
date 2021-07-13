@@ -6,7 +6,7 @@
   import links from "../config/links.json";
 
   import {clickOutside} from '../helpers/clickOutside.js';
-
+  import { resetConnection } from '../stores/eth/connection';
   import Web3Button from "./Web3Button.svelte";
   import TVL from "./Tvl.svelte";
 
@@ -17,6 +17,7 @@
   const disconnect = () => {
     $eth.address = null;
     window.localStorage.removeItem('address');
+    //resetConnection();
   }
 
   const toggleMobileMenu = (event) => {
@@ -166,9 +167,11 @@
             <div class="flex justify-center py-2">
               <Web3Button />
             </div>
-            <div class="flex justify-center py-2">
-              <a on:click={disconnect} href="#" class="block px-4 py-2 mb-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</a>
-            </div>            
+            {#if $eth.address}
+              <div class="flex justify-center py-2">
+                <a on:click={disconnect} href="#" class="block px-4 py-2 mb-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</a>
+              </div>  
+            {/if}          
           </div>
         </div>
         {/if}
