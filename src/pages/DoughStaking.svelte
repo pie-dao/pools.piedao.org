@@ -1,0 +1,491 @@
+<script>
+  import { approve, approveMax, connectWeb3, subject, eth } from '../stores/eth.js';
+  import { ethers } from 'ethers';
+  import BigNumber from 'bignumber.js';
+  import { _ } from 'svelte-i18n';
+  import sharesTimeLockABI from '../abis/sharesTimeLock.json';
+  import veDoughABI from '../abis/veDoughABI.json';
+  import smartcontracts from '../config/smartcontracts.json';
+  import images from '../config/images.json';
+  import PartecipationJson from '../config/rewards/test.json'
+  import displayNotification from '../notifications';
+  import { parseEther } from '@ethersproject/units';
+  import { isAddress } from '@pie-dao/utils';
+  import { createParticipationTree } from '../classes/MerkleTreeUtils';
+
+  const toNum = (num) =>
+    BigNumber(num.toString())
+      .dividedBy(10 ** 18)
+      .toFixed(2);
+
+  const toBN = (num) =>
+    BigNumber(num.toString())
+      .multipliedBy(10 ** 18);
+
+
+  
+  // All the epochs where rewards are available.
+  $: epochs = [];
+  $: isLoading = true;  
+
+  let data = {
+    totalStaked: BigNumber(0),
+    rewardTokenSupply: BigNumber(0),
+    accountRewardTokenBalance: BigNumber(0), //amount of veDOUGH you have
+    accountWithdrawableRewards: BigNumber(0), //amount is in reward Pie
+    accountWithdrawnRewards: BigNumber(0),
+    accountDepositTokenBalance: BigNumber(0),
+    accountLocks: [],
+  };
+
+  let stakeAmount = 0;
+  let stakeDuration = 36;
+  let receiver = "";
+
+  let unstake = {
+    amount: 0.0
+  }
+
+  let sharesTimeLock = false;
+  let veDOUGH = false;
+
+  const fetchStakingData = async () => {
+    let response = await sharesTimeLock.getStakingData($eth.address);
+
+    Object.keys(response).forEach((key) => {
+      if (key != 'accountLocks') {
+        data[key] = new BigNumber(response[key].toString());
+      } else {
+        let locks = [];
+
+        response[key].forEach((lock, index) => {
+          if(lock.amount.toString() != '0') {
+            locks.push({
+              amount: new BigNumber(lock.amount.toString()),
+              lockDuration: lock.lockDuration,
+              lockedAt: lock.lockedAt,
+              lockId: index
+            });
+          }
+        });
+
+        data[key] = locks;
+      }
+    });
+    
+    console.log('data', data);
+    data = data;
+    return data;
+  };
+
+  $: if($eth.address && isLoading) {
+    initialize();
+  }
+
+  async function initialize() {
+    try {
+      sharesTimeLock = new ethers.Contract(
+        smartcontracts.doughStaking,
+        sharesTimeLockABI,
+        $eth.signer || $eth.provider,
+      );
+
+      veDOUGH = new ethers.Contract(
+        smartcontracts.veDOUGH,
+        veDoughABI,
+        $eth.signer || $eth.provider,
+      );
+
+      await fetchStakingData();
+      receiver = $eth.address;
+      console.log(prepareProofs());
+      isLoading = false;
+    } catch(e) {
+      console.log('Something went wrong...', e);
+    }
+    
+  }
+
+  async function approveToken() {
+    if (!$eth.address || !$eth.signer) {
+      displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
+      connectWeb3();
+      return;
+    }
+
+    try {
+      // resetting the approve to zero, before initiating a new approval...
+      if(
+        !data.accountDepositTokenAllowance.isEqualTo(0) && 
+        !data.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
+      ) {
+
+        await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
+      }
+
+      
+      await approveMax(smartcontracts.dough, smartcontracts.doughStaking, {gasLimit: 100000});
+      await fetchStakingData();
+      console.log("fetchStakingData", data);   
+    } catch(error) {
+      console.log('error', error);
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.message,
+        type: "error",
+      });
+    }
+  }
+
+  async function claim() {
+    const proof = prepareProofs();
+    console.log('proof', proof);
+
+    try {
+      const { emitter } = displayNotification( await veDOUGH.claim(proof.proof));
+
+      emitter.on("txConfirmed", async() => {
+        const subscription = subject("blockNumber").subscribe({
+            next: async () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: `Pay day baby!`,
+                type: "success",
+              });
+              stakeAmount = 0;
+              await fetchStakingData();
+              subscription.unsubscribe();
+            },
+          });
+        
+        
+      });
+
+    } catch(error) {
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.message,
+        type: "error",
+      });
+    }
+
+  }
+
+  function prepareProofs() {
+    if(!$eth.address) return;
+    const merkleTree = createParticipationTree(PartecipationJson);
+      
+    console.log('merkleTree', merkleTree)
+    const leaf = merkleTree.leafs.find((item) => item.address.toLowerCase() === $eth.address.toLowerCase());
+
+    return {
+      valid: leaf ? true : false,
+      proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null
+    }
+  }
+
+  const safeFlow = async () => {
+      const Errors = {
+        NOT_CONNECTED: {
+          code: 1,
+          message: "The wallet is not connected or signer not available"
+        },
+        NOT_APPROVED: {
+          code: 2,
+          message: "Allowance too low"
+        },
+        NOT_INITIALIZED: {
+          code: 2,
+          message: "Timelock not initialized"
+        },
+        WRONG_DURATION: {
+          code: 2,
+          message: "Duration Value incorrect"
+        },
+        NOT_VALID_ADDRESS: {
+          code: 2,
+          message: "Receiver is not a valid address"
+        }
+      }
+
+      // Check connection to wallet
+      if (!$eth.address || !$eth.signer) {
+        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
+        connectWeb3();
+        return Errors.NOT_CONNECTED;
+      }
+
+      if(!sharesTimeLock) {
+        displayNotification({ message: Errors.NOT_INITIALIZED.message, type: "hint" });
+        return Errors.NOT_INITIALIZED;
+      };
+
+      if(!stakeDuration) {
+        displayNotification({ message: Errors.WRONG_DURATION.message, type: "hint" });
+        return Errors.WRONG_DURATION;
+      };
+
+      if(!isAddress(receiver)) {
+        displayNotification({ message: Errors.NOT_VALID_ADDRESS.message, type: "hint" });
+        return Errors.NOT_VALID_ADDRESS;
+
+      }
+      return false;
+  }
+
+  async function stake() {
+    const error = await safeFlow();
+    if(error) {
+      console.log('error', error)
+      return;
+    }
+
+    try {
+      const { emitter } = displayNotification( await sharesTimeLock.depositByMonths(
+        parseEther(stakeAmount.toString()), 
+        stakeDuration, 
+        receiver
+      ));
+
+      emitter.on("txConfirmed", async() => {
+        const subscription = subject("blockNumber").subscribe({
+            next: async () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: `You staked successfully`,
+                type: "success",
+              });
+              stakeAmount = 0;
+              await fetchStakingData();
+              console.log("fetchStakingData", data);
+              subscription.unsubscribe();
+            },
+          });
+        
+        
+      });
+
+    } catch(error) {
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.message,
+        type: "error",
+      });
+    }
+  }
+
+  async function unstakeDOUGH(id, lockAmount) {
+    if(!sharesTimeLock) return;
+
+    try {
+      let response = await sharesTimeLock.withdraw(id);
+
+      const { emitter } = displayNotification({
+        hash: response.hash
+      });
+
+      emitter.on("txConfirmed", async() => {
+        displayNotification({
+          message: `You unstaked ${lockAmount.toString()} DOUGH`,
+          type: "success",
+        });
+
+        const subscription = subject("blockNumber").subscribe({
+          next: async () => {
+            console.log("unstakeDOUGH -> blockNumber");
+
+            await fetchStakingData();
+            console.log("fetchStakingData", data);   
+
+            subscription.unsubscribe();
+          },
+        });      
+      });
+
+    } catch(error) {
+      console.log(error.message);
+      if(error.message.includes('lock not expired')) {
+        displayNotification({
+          message: 'can\'t unstake, lock not expired.',
+          type: "error",
+        });
+      } else {
+        displayNotification({
+          message: 'sorry, some error occurred while unstaking. Please try again later...',
+          type: "error",
+        });        
+      }
+    }
+  }
+
+</script>
+
+<div class="content flex flex-col pt-10pc justify-center spl">
+  <div class="font-huge text-center">DOUGH Staking</div>
+  <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">
+    The new Stake, under development.
+  </div>
+
+  {#if !isLoading}
+  <div
+    class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc"
+  >
+    <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
+      <div class="flex items-center justify-between">
+        <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
+        <div class="font-thin" style="display: inline; cursor: pointer;">
+          <div
+            on:click={() => {
+              stakeAmount = toNum(data.accountDepositTokenBalance);
+            }}
+          >
+            Max balance: {toNum(data.accountDepositTokenBalance)}
+          </div>
+        </div>
+      </div>
+      <div class="flex nowrap items-center p-1">
+        <input
+          bind:value={stakeAmount}
+          class="swap-input-from"
+          inputmode="decimal"
+          title="Token Amount"
+          autocomplete="off"
+          autocorrect="off"
+          type="number"
+          pattern="^[0-9]*[,]?[0-9]*$"
+          placeholder="0.0"
+          minlength="1"
+          maxlength="79"
+          spellcheck="false"
+        />
+        <span class="sc-iybRtq gjVeBU">
+          <img class="h-auto w-24px mr-5px" src={images.doughtoken} alt="dough token" />
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px mt-4">
+      <div class="flex items-center justify-between">
+        <div class="flex nowrap intems-center p-1 font-thin">Stake Duration (Months)</div>
+        <div
+          class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin"
+          style="display: inline; cursor: pointer;"
+        >
+          <div
+            on:click={() => {
+              stakeDuration = 36;
+            }}
+          >
+            Max 36 Months
+          </div>
+        </div>
+      </div>
+      <div class="flex nowrap items-center p-1">
+        <input
+          bind:value={stakeDuration}
+          class="swap-input-from"
+          inputmode="number"
+          title="Token Amount"
+          autocomplete="off"
+          autocorrect="off"
+          type="number"
+          pattern="^[0-9]*[.]?[0-9]*$"
+          placeholder="36"
+          minlength="1"
+          maxlength="79"
+          spellcheck="false"
+        />
+        <span class="sc-iybRtq gjVeBU">
+          <img class="h-auto w-24px mr-5px" src={images.simulator_hands} alt="dough token" />
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">3 Years</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px mt-4">
+      <div class="flex items-center justify-between">
+        <div class="flex nowrap intems-center p-1 font-thin">Receiver</div>
+        <div class="font-thin" style="display: inline; cursor: pointer;">
+          <div
+            on:click={() => {
+              receiver = $eth.address;
+            }}
+          >
+            {$eth.shortAddress}
+          </div>
+        </div>
+      </div>
+      <div class="flex nowrap items-center p-1">
+        <input
+          bind:value={receiver}
+          class="swap-input-from"
+          inputmode="text"
+          placeholder="loading default address..."
+          title="Token Amount"
+          autocomplete="off"
+          autocorrect="off"
+          type="text"
+          spellcheck="false"
+        />
+      </div>
+    </div>
+
+    {#if data.accountDepositTokenBalance.eq(0)}
+      <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">You don't own tokens </button>  
+    {:else}
+      {#if stakeAmount }
+        {#if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
+          <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Balance too low</button>
+        {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
+          <button on:click={approveToken} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Approve</button>
+        {:else}
+          {#if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
+            <button on:click={stake} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Stake</button>
+          {:else}
+            <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Duration not correct</button>
+          {/if}
+        {/if}
+      {:else}
+        <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Enter an amount</button>  
+      {/if}
+    {/if}
+
+  </div>
+
+  <div
+  class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc mt-4"
+>
+  <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
+    <div class="flex nowrap items-center p-1">
+      <span class="sc-iybRtq gjVeBU">
+        Total Staked: {toNum(data.totalStaked)}
+        <img class="h-auto w-24px mr-5px ml-4" src={images.doughtoken} alt="dough token" />
+        <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+      </span>
+    </div>
+
+    <div>Account Reward Token Balance: {toNum(data.accountRewardTokenBalance)}</div>
+    <div>Account Withdrawable Rewards: {toNum(data.accountWithdrawableRewards)}
+      <button on:click={claim}> Claim now</button>
+    </div>
+    <div>Account Withdrawn Rewards: {toNum(data.accountWithdrawnRewards)}</div>
+    <div>Select the item you wish to unstake from the list.</div>
+  </div>   
+
+  <ul>
+    {#each data.accountLocks as lock, id}
+	  <li class="swap-container mt-8 stake-button">
+      <button on:click={() => {unstakeDOUGH(lock.lockId, toNum(lock.amount))}}>
+        <div>{toNum(lock.amount)} DOUGH</div>
+        <div>staked for: {lock.lockDuration / 60} Months</div>
+        <div>started: {new Date(lock.lockedAt * 1000).toLocaleString()}</div>
+      </button>
+	  </li>
+    {/each}
+  </ul>
+</div>
+{:else}
+  Loading...
+{/if}
+</div>
