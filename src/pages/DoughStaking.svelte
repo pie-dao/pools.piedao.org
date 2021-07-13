@@ -342,7 +342,7 @@
             </span>
           </div>     
       </div>
-      <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
+      <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
         <div class="flex items-center justify-between">
           <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
           </div>
@@ -354,7 +354,7 @@
             </span>
           </div>     
       </div>
-      <div class="flex flex-col nowrap w-92pc mx-4pc my-6 swap-from rounded-20px bg-white p-16px">
+      <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 mb-6 swap-from rounded-20px bg-white p-16px">
         <div class="flex items-center justify-between">
           <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
           </div>
@@ -409,7 +409,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px mt-4">
+    <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from border rounded-20px border-grey p-16px mt-4">
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Stake Duration (6 to 36 months)</div>
         <div
@@ -444,7 +444,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px mt-4">
+    <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from border rounded-20px border-grey p-16px mt-4">
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Receiver</div>
         <div class="font-thin" style="display: inline; cursor: pointer;">
@@ -473,7 +473,7 @@
     </div>
 
     {#if data.accountDepositTokenBalance.eq(0)}
-      <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6">You don't own tokens </button>  
+      <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4">You don't own tokens </button>  
     {:else}
       {#if stakeAmount }
         {#if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
