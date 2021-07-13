@@ -301,10 +301,10 @@ right: 0px;
 }
 
 .btn:disabled {
-  background: #634659 !important;
+  background: #d1d1d1 !important;
   pointer-events: none;
   transition: none !important;
-  color: #ffffff;
+  color: #656565;
   opacity: 0.6;
 }
 
@@ -661,10 +661,12 @@ right: 0px;
 
 .spl .btn {
   border-radius: 6px;
-  font-size: 20px;
-  font-weight: 200;
+  font-size: 22px;
+  font-weight: 400;
   /* width: 7rem; */
   min-width: 150px!important;
+  letter-spacing: 3px;
+  min-height: 70px;
 }
 
 .btnbig {
@@ -1150,6 +1152,13 @@ opacity: 0.6;
   padding: 1rem;
 }
 
+.doughstaking-container {
+  background: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.01) 0px 0px 1px, rgba(0, 0, 0, 0.04) 0px 4px 8px, rgba(0, 0, 0, 0.04) 0px 16px 24px, rgba(0, 0, 0, 0.01) 0px 24px 32px;
+  border-radius: 30px;
+  padding: 1px;
+}
+
 .swap-input-from {
   color: black;
   width: 0px;
@@ -1358,12 +1367,13 @@ max-width: 100%;
 .stake-button {
   background: #fc02a7;
   color: white;
-  font-size: 28px;
-  font-weight: 200;
+  font-size: 22px;
+  font-weight: 400;
+  min-height: 70px;
 }
 
 .stake-button.error {
-  opacity: 0.5;
+  background: #f7f7f7;
 }
 
 

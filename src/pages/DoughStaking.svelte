@@ -320,17 +320,22 @@
 
 </script>
 
-<div class="content flex flex-col pt-10pc justify-center spl">
-  <div class="font-huge text-center">DOUGH Staking</div>
-  <div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">
-    The new Stake, under development.
-  </div>
+<div class="font-huge text-center">DOUGH Staking</div>
+<div class="font-thin text-lg text-center mt-10px mb-10px md:w-80pc">The new Stake, under development.</div>
 
+
+<div class="flex w-100pc py-20px flex flex-col items-center">
+<div class="w-full flex flex-col lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
+
+<div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc bg-pink">LEFT</div>
+
+<div class="flex flex-col w-full m-0  lg:w-49pc md:ml-1pc">
+  <!-- STAKING FORM -->
   {#if !isLoading}
   <div
-    class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc"
+    class="flex flex-col items-center w-full  cardbordergradient p-1px bg-lightgrey"
   >
-    <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
+    <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px">
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
         <div class="font-thin" style="display: inline; cursor: pointer;">
@@ -339,7 +344,7 @@
               stakeAmount = toNum(data.accountDepositTokenBalance);
             }}
           >
-            Max balance: {toNum(data.accountDepositTokenBalance)}
+            Balance: {toNum(data.accountDepositTokenBalance)} DOUGH
           </div>
         </div>
       </div>
@@ -365,9 +370,9 @@
       </div>
     </div>
 
-    <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px mt-4">
+    <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px mt-4">
       <div class="flex items-center justify-between">
-        <div class="flex nowrap intems-center p-1 font-thin">Stake Duration (Months)</div>
+        <div class="flex nowrap intems-center p-1 font-thin">Stake Duration (months)</div>
         <div
           class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin"
           style="display: inline; cursor: pointer;"
@@ -377,7 +382,7 @@
               stakeDuration = 36;
             }}
           >
-            Max 36 Months
+            6 to 36 months
           </div>
         </div>
       </div>
@@ -397,13 +402,13 @@
           spellcheck="false"
         />
         <span class="sc-iybRtq gjVeBU">
-          <img class="h-auto w-24px mr-5px" src={images.simulator_hands} alt="dough token" />
+          <img class="h-auto w-24px mr-5px" src={images.veDough} alt="dough token" />
           <span class="sc-kXeGPI jeVIZw token-symbol-container">3 Years</span>
         </span>
       </div>
     </div>
 
-    <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px mt-4">
+    <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px mt-4">
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Receiver</div>
         <div class="font-thin" style="display: inline; cursor: pointer;">
@@ -432,25 +437,25 @@
     </div>
 
     {#if data.accountDepositTokenBalance.eq(0)}
-      <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">You don't own tokens </button>  
+      <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6">You don't own tokens </button>  
     {:else}
       {#if stakeAmount }
         {#if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
-          <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Balance too low</button>
+          <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white">Balance too low</button>
         {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
-          <button on:click={approveToken} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Approve</button>
+          <button on:click={approveToken} class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white">Approve</button>
         {:else}
           {#if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
-            <button on:click={stake} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Stake</button>
+            <button on:click={stake} class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white">Stake</button>
           {:else}
-            <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Duration not correct</button>
+            <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white">Duration not correct</button>
           {/if}
         {/if}
       {:else}
-        <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Enter an amount</button>  
+        <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6">Enter an amount</button>  
       {/if}
     {/if}
-
+ <!-- END STAKING FORM -->
   </div>
 
   <div
@@ -488,4 +493,8 @@
 {:else}
   Loading...
 {/if}
+</div>
+
+
+</div>
 </div>
