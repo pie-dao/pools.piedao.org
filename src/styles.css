@@ -1372,6 +1372,14 @@ max-width: 100%;
   min-height: 70px;
 }
 
+.stake-button:disabled {
+  background: #d1d1d1 !important;
+  pointer-events: none;
+  transition: none !important;
+  color: #656565;
+  opacity: 0.6;
+}
+
 .stake-button.error {
   background: #f7f7f7;
 }

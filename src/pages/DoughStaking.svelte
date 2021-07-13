@@ -372,7 +372,7 @@
 
     <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px mt-4">
       <div class="flex items-center justify-between">
-        <div class="flex nowrap intems-center p-1 font-thin">Stake Duration (months)</div>
+        <div class="flex nowrap intems-center p-1 font-thin">Stake Duration (6 to 36 months)</div>
         <div
           class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin"
           style="display: inline; cursor: pointer;"
@@ -382,11 +382,11 @@
               stakeDuration = 36;
             }}
           >
-            6 to 36 months
+            <!-- 6 to 36 months -->
           </div>
         </div>
       </div>
-      <div class="flex nowrap items-center p-1">
+      <div class="flex nowrap items-center pl-1 pt-1 pb-1">
         <input
           bind:value={stakeDuration}
           class="swap-input-from"
@@ -401,10 +401,7 @@
           maxlength="79"
           spellcheck="false"
         />
-        <span class="sc-iybRtq gjVeBU">
-          <img class="h-auto w-24px mr-5px" src={images.veDough} alt="dough token" />
-          <span class="sc-kXeGPI jeVIZw token-symbol-container">3 Years</span>
-        </span>
+          <div class="flex items-center cardbordergradient"><div class="flex items-center p-2"><div class=" mr-8px">3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
       </div>
     </div>
 
