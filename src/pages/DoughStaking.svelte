@@ -333,8 +333,8 @@
   <!-- STAKING FORM -->
   {#if !isLoading}
   <div
-    class="flex flex-col items-center w-full  cardbordergradient p-1px bg-lightgrey"
-  >
+    class="flex flex-col items-center w-full  cardbordergradient p-1px bg-lightgrey">
+  <div class="font-huge text-center mt-6">DOUGH Staking</div>
     <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px">
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
