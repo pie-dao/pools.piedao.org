@@ -21,6 +21,7 @@
   import Modal from '../components/elements/Modal.svelte';
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
+  import ovens from '../config/ovensConf.js';
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { amountFormatter, getTokenImage, formatFiat, subscribeToBalance } from '../components/helpers.js';
 
@@ -50,7 +51,18 @@
   }
 
   $: token = params.address;
-  let bakingPies = ["PLAY", "DEFI++", "YPIE", "BCP"];
+
+  const isBakingPie = (address) => {
+    let founded = false;
+
+    ovens.forEach(oven => {
+      if(oven.baking.address == address) {
+        founded = true;
+      }
+    });
+
+    return founded;
+  };
 
   let pieOfPies = false;
   let initialized = false;
@@ -395,7 +407,7 @@
             {/if}
         </div>
         
-        {#if bakingPies.includes(poolsConfig[params.address].symbol)}
+        {#if isBakingPie(params.address)}
           <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 md:mr-2 hover:opacity-80" onclick="location.href='#/oven'">
             <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
             <div class="">
