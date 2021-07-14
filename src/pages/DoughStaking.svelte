@@ -390,7 +390,7 @@
             <div class="mt-2 flex justify-end pointer"><span>Unstake</span></div>   
         </div>
 
-        <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
+        <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60">
           <div class="flex items-center justify-between">
             <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
             <div class="flex items-center"><div class="font-thin mr-2">Staking ends: </div><span>24 Mar 2023</span></div>
