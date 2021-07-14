@@ -325,7 +325,7 @@
 
 
 <div class="flex w-100pc py-20px flex flex-col items-center">
-<div class="w-full flex flex-col lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
+<div class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
 
 
 <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
