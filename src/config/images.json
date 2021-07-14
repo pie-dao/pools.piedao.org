@@ -134,7 +134,11 @@
   "simulator_info": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/info.svg",
   "simulator_customize": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/customize.svg",
   "veDough": "https://raw.githubusercontent.com/pie-dao/brand/6adcf8b3a75380cc49ea119150b683a031afa016/PIE%20Tokens/veDOUGH.svg",
-  "rewardsPie": "https://raw.githubusercontent.com/pie-dao/brand/6adcf8b3a75380cc49ea119150b683a031afa016/PIE%20Tokens/RewardPie.svg"
+  "rewardsPie": "https://raw.githubusercontent.com/pie-dao/brand/6adcf8b3a75380cc49ea119150b683a031afa016/PIE%20Tokens/RewardPie.svg",
+  "slashed": "https://raw.githubusercontent.com/pie-dao/brand/86501f412e3c7bb62694ca0e962d6f86f2a278a6/misc/slashed.svg",
+  "claimed": "https://raw.githubusercontent.com/pie-dao/brand/86501f412e3c7bb62694ca0e962d6f86f2a278a6/misc/claimed.svg"
+
+
 
  
   

@@ -427,43 +427,58 @@
     </div>
     <!-- END YOUR STAKING -->
         <!-- PAST REWARDS -->
-        <div class="flex flex-col items-center w-full p-1px bg-lightyellow rounded-16 mt-6">
+        <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
           <div class="font-huge text-center mt-6">Past Rewards</div>
+
             <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
               <div class="flex items-center justify-between">
-                <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+                <div class="flex nowrap intems-center p-1 font-thin">July 2021</div>
+                <a class="" href="#/something" target="_blank"><img width="20px" height="20px" src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg" alt="external link icon"></a>
                 </div>
-                <div class="flex nowrap items-center p-1">
+                <div class="flex nowrap items-center justify-between p-1">
                   <span class="sc-iybRtq gjVeBU">
-                    <div class="font-24px">87,093.10</div>
-                    <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-                    <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+                    <div class="font-24px">$ 87,093.10</div>
+                    <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="rewardspie token" />
                   </span>
-                </div>     
+                  <div class="flex items-center justify-between">
+                    <img class="h-auto w-24px mx-5px" src={images.claimed} alt="clamed icon" />
+                    <span>Claimed</span>
+                  </div>      
+                </div>   
             </div>
-            <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
+
+            <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
               <div class="flex items-center justify-between">
-                <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+                <div class="flex nowrap intems-center p-1 font-thin">July 2021</div>
+                <a class="" href="#/something" target="_blank"><img width="20px" height="20px" src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg" alt="external link icon"></a>
                 </div>
-                <div class="flex nowrap items-center p-1">
+                <div class="flex nowrap items-center justify-between p-1">
                   <span class="sc-iybRtq gjVeBU">
-                    <div class="font-24px">87,093.10</div>
-                    <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-                    <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+                    <div class="font-24px">$ 87,093.10</div>
+                    <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="rewardspie token" />
                   </span>
-                </div>     
+                  <div class="flex items-center justify-between">
+                    <img class="h-auto w-24px mx-5px" src={images.claimed} alt="clamed icon" />
+                    <span>Claimed</span>
+                  </div>      
+                </div>   
             </div>
-            <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 mb-6 swap-from rounded-20px bg-white p-16px">
+
+            <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
               <div class="flex items-center justify-between">
-                <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
+                <div class="flex nowrap intems-center p-1 font-thin">July 2021</div>
+                <a class="" href="#/something" target="_blank"><img width="20px" height="20px" src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg" alt="external link icon"></a>
                 </div>
-                <div class="flex nowrap items-center p-1">
+                <div class="flex nowrap items-center justify-between p-1">
                   <span class="sc-iybRtq gjVeBU">
-                    <div class="font-24px">87,093.10</div>
-                    <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
-                    <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
+                    <div class="font-24px">$ 87,093.10</div>
+                    <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="rewardspie token" />
                   </span>
-                </div>     
+                  <div class="flex items-center justify-between">
+                    <img class="h-auto w-24px mx-5px" src={images.slashed} alt="clamed icon" />
+                    <span>Slashed</span>
+                  </div>      
+                </div>   
             </div>
         </div>
         <!-- END PAST REWARDS -->
