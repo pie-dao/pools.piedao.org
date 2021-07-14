@@ -346,7 +346,7 @@
       </div>
       <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
         <div class="flex items-center justify-between">
-          <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+          <div class="flex nowrap intems-center p-1 font-thin">Your total staked veDOUGH</div>
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
@@ -417,9 +417,9 @@
                 <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
                 <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
               </span>
-              <div class="flex items-center cardbordergradient -mr-2 opacity-30 pointer"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+              <div class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
             </div>  
-            <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstaked</span></div>   
+            <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div>   
         </div>
 
 
