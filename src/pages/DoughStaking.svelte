@@ -327,7 +327,9 @@
 <div class="flex w-100pc py-20px flex flex-col items-center">
 <div class="w-full flex flex-col lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
 
+
 <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
+  <!-- SUMMARY -->
   <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
     <div class="font-huge text-center mt-6">Summary</div>
       <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
@@ -367,7 +369,50 @@
           </div>     
       </div>
   </div>
+  <!-- END SUMMARY -->
+    <!-- YOUR STAKING -->
+    <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16 mt-6">
+      <div class="font-huge text-center mt-6">Your Staking</div>
+        <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
+          <div class="flex items-center justify-between">
+            <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+            </div>
+            <div class="flex nowrap items-center p-1">
+              <span class="sc-iybRtq gjVeBU">
+                <div class="font-24px">87,093.10</div>
+                <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
+                <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+              </span>
+            </div>     
+        </div>
+        <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
+          <div class="flex items-center justify-between">
+            <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+            </div>
+            <div class="flex nowrap items-center p-1">
+              <span class="sc-iybRtq gjVeBU">
+                <div class="font-24px">87,093.10</div>
+                <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
+                <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+              </span>
+            </div>     
+        </div>
+        <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 mb-6 swap-from rounded-20px bg-white p-16px">
+          <div class="flex items-center justify-between">
+            <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
+            </div>
+            <div class="flex nowrap items-center p-1">
+              <span class="sc-iybRtq gjVeBU">
+                <div class="font-24px">87,093.10</div>
+                <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
+                <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
+              </span>
+            </div>     
+        </div>
+    </div>
+    <!-- END YOUR STAKING -->
 </div>
+
 
 <div class="flex flex-col w-full m-0  lg:w-49pc md:ml-1pc">
   <!-- STAKING FORM -->
