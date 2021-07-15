@@ -49,6 +49,20 @@
   let sharesTimeLock = false;
   let veDOUGH = false;
 
+  function calculateStakingEnds(lock) {
+    let startDate = new Date(lock.lockedAt * 1000);
+    let lockDuration = lock.lockDuration / 60;
+    console.log("calculateStakingEnds", startDate.getMonth(), lockDuration);
+    startDate.setMonth(startDate.getMonth() + lockDuration);
+    return startDate;
+  }
+
+  function didLockExpired(lock) {
+    let endDate = calculateStakingEnds(lock);
+    let nowDate = new Date();
+    return nowDate > endDate;
+  }
+
   const fetchStakingData = async () => {
     let response = await sharesTimeLock.getStakingData($eth.address);
 
@@ -97,6 +111,8 @@
       );
 
       await fetchStakingData();
+      console.log("fetchStakingData", data);
+
       receiver = $eth.address;
       console.log(prepareProofs());
       isLoading = false;
@@ -338,7 +354,7 @@
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">87,093.10</div>
+              <div class="font-24px">{toNum(data.totalStaked)}</div>
               <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
               <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
             </span>
@@ -350,7 +366,7 @@
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">87,093.10</div>
+              <div class="font-24px">{toNum(data.accountRewardTokenBalance)}</div>
               <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
               <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
             </span>
@@ -362,11 +378,12 @@
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">87,093.10</div>
+              <div class="font-24px">{toNum(data.accountWithdrawableRewards)}</div>
               <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
               <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
             </span>
-          </div>     
+          </div>
+          <button on:click={claim}> Claim now</button>  
       </div>
   </div>
   <!-- END SUMMARY -->
@@ -374,55 +391,27 @@
     <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
       <div class="font-huge text-center mt-6">Your Staking</div>
 
+        {#each data.accountLocks as lock, id}
         <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
           <div class="flex items-center justify-between">
             <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
-            <div class="flex items-center"><div class="font-thin mr-2">Staking ends: </div><span>24 Mar 2023</span></div>
+            <div class="flex items-center"><div class="font-thin mr-2">Staking ends: </div><span>{calculateStakingEnds(lock).toLocaleDateString()}</span></div>
             </div>
             <div class="flex nowrap items-center p-1 justify-between mt-2">
               <span class="sc-iybRtq gjVeBU">
-                <div class="font-24px">87,093.10</div>
+                <div class="font-24px">{toNum(lock.amount)}</div>
                 <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
                 <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
               </span>
               <div class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
-            </div>  
-            <div class="mt-2 flex justify-end pointer"><span>Unstake</span></div>   
-        </div>
-
-        <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60">
-          <div class="flex items-center justify-between">
-            <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
-            <div class="flex items-center"><div class="font-thin mr-2">Staking ends: </div><span>24 Mar 2023</span></div>
             </div>
-            <div class="flex nowrap items-center p-1 justify-between mt-2">
-              <span class="sc-iybRtq gjVeBU">
-                <div class="font-24px">87,093.10</div>
-                <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-                <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
-              </span>
-              <div class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
-            </div>  
-            <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div>   
+            {#if didLockExpired(lock)}
+              <div on:click={() => {unstakeDOUGH(lock.lockId, toNum(lock.amount))}} class="mt-2 flex justify-end pointer"><span>Unstake</span></div>
+            {:else}
+            <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div> 
+            {/if}
         </div>
-
-        <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
-          <div class="flex items-center justify-between">
-            <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
-            <div class="flex items-center"><div class="font-thin mr-2">Staking ends: </div><span>24 Mar 2023</span></div>
-            </div>
-            <div class="flex nowrap items-center p-1 justify-between mt-2">
-              <span class="sc-iybRtq gjVeBU">
-                <div class="font-24px">87,093.10</div>
-                <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-                <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
-              </span>
-              <div class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
-            </div>  
-            <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div>   
-        </div>
-
-
+        {/each}
 
     </div>
     <!-- END YOUR STAKING -->
@@ -610,38 +599,6 @@
  <!-- END STAKING FORM -->
   </div>
 
-  <div
-  class="swap-container flex flex-col items-center w-94pc p-60px bg-lightgrey md:w-50pc h-50pc mt-4"
->
-  <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
-    <div class="flex nowrap items-center p-1">
-      <span class="sc-iybRtq gjVeBU">
-        Total Staked: {toNum(data.totalStaked)}
-        <img class="h-auto w-24px mr-5px ml-4" src={images.doughtoken} alt="dough token" />
-        <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
-      </span>
-    </div>
-
-    <div>Account Reward Token Balance: {toNum(data.accountRewardTokenBalance)}</div>
-    <div>Account Withdrawable Rewards: {toNum(data.accountWithdrawableRewards)}
-      <button on:click={claim}> Claim now</button>
-    </div>
-    <div>Account Withdrawn Rewards: {toNum(data.accountWithdrawnRewards)}</div>
-    <div>Select the item you wish to unstake from the list.</div>
-  </div>   
-
-  <ul>
-    {#each data.accountLocks as lock, id}
-	  <li class="swap-container mt-8 stake-button">
-      <button on:click={() => {unstakeDOUGH(lock.lockId, toNum(lock.amount))}}>
-        <div>{toNum(lock.amount)} DOUGH</div>
-        <div>staked for: {lock.lockDuration / 60} Months</div>
-        <div>started: {new Date(lock.lockedAt * 1000).toLocaleString()}</div>
-      </button>
-	  </li>
-    {/each}
-  </ul>
-</div>
 {:else}
   Loading...
 {/if}
