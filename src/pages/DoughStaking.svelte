@@ -108,7 +108,10 @@
               amount: new BigNumber(lock.amount.toString()),
               lockDuration: lock.lockDuration,
               lockedAt: lock.lockedAt,
-              lockId: index
+              lockId: lock.lockId,
+              withdrawn: lock.withdrawn,
+              ejected: lock.ejected,
+              boosted: lock.boosted,
             });
           }
         });
@@ -469,7 +472,7 @@
                 <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
                 <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
               </span>
-              {#if (lock.lockDuration / 60) != 36}
+              {#if lock.boosted == ""}
               <div on:click={() => {boostToMax(lock.lockId)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
               {:else}
                 <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
@@ -608,7 +611,7 @@
           maxlength="79"
           spellcheck="false"
         />
-          <div on:click={() => {alert("clicked");stakeDuration = 36;}} class="flex items-center cardbordergradient"><div class="flex items-center p-2"><div class=" mr-8px">3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+          <div on:click={() => {stakeDuration = 36;}} class="flex items-center cardbordergradient"><div class="flex items-center p-2"><div class=" mr-8px">3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
       </div>
     </div>
 
