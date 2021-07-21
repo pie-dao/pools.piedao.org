@@ -142,7 +142,6 @@
         $eth.signer || $eth.provider,
       );
 
-      //await fetchStakingDataGraph($eth.address);
       await fetchStakingData();
       console.log("fetchStakingData", data);
 
