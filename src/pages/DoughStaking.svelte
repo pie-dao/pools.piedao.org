@@ -290,6 +290,42 @@
     }
   }
 
+  async function boostToMax(id) {
+    if(!sharesTimeLock) return;
+
+    try {
+      let response = await sharesTimeLock.boostToMax(id);
+
+      const { emitter } = displayNotification({
+        hash: response.hash
+      });
+
+      emitter.on("txConfirmed", async() => {
+        displayNotification({
+          message: `You boosted your stake to 36 months!`,
+          type: "success",
+        });
+
+        const subscription = subject("blockNumber").subscribe({
+          next: async () => {
+            console.log("boostToMax -> blockNumber");
+
+            await fetchStakingData();
+            console.log("fetchStakingData", data);   
+
+            subscription.unsubscribe();
+          },
+        });      
+      });
+
+    } catch(error) {
+      displayNotification({
+          message: 'sorry, some error occurred while boosting to max. Please try again later...',
+          type: "error",
+        });
+    }    
+  }
+
   async function unstakeDOUGH(id, lockAmount) {
     if(!sharesTimeLock) return;
 
@@ -403,7 +439,11 @@
                 <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
                 <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
               </span>
-              <div class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+              {#if (lock.lockDuration / 60) != 36}
+              <div on:click={() => {boostToMax(lock.lockId)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+              {:else}
+                <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30"><div class="flex items-center p-2"><div class="mr-8px">Restake 3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+              {/if}   
             </div>
             {#if didLockExpired(lock)}
               <div on:click={() => {unstakeDOUGH(lock.lockId, toNum(lock.amount))}} class="mt-2 flex justify-end pointer"><span>Unstake</span></div>
