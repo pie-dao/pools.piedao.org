@@ -12,6 +12,7 @@
   import { parseEther } from '@ethersproject/units';
   import { isAddress } from '@pie-dao/utils';
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
+  import {subgraphRequest} from '../helpers/subgraph.js'
 
   const toNum = (num) =>
     BigNumber(num.toString())
@@ -22,16 +23,14 @@
     BigNumber(num.toString())
       .multipliedBy(10 ** 18);
 
-
-  
   // All the epochs where rewards are available.
   $: epochs = [];
   $: isLoading = true;  
 
   let data = {
     totalStaked: BigNumber(0),
-    rewardTokenSupply: BigNumber(0),
-    accountRewardTokenBalance: BigNumber(0), //amount of veDOUGH you have
+    veTokenTotalSupply: BigNumber(0),
+    accountVeTokenBalance: BigNumber(0), //amount of veDOUGH you have
     accountWithdrawableRewards: BigNumber(0), //amount is in reward Pie
     accountWithdrawnRewards: BigNumber(0),
     accountDepositTokenBalance: BigNumber(0),
@@ -63,8 +62,39 @@
     return nowDate > endDate;
   }
 
+  async function fetchStakingDataGraph(address) {
+    const response = await subgraphRequest('https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop', {
+      "stakers": {
+        __args: {
+          where: { id: address.toLowerCase() }
+        },
+        id: true,
+        totalStaked: true,
+        veTokenTotalSupply: true,
+        accountVeTokenBalance: true,
+        accountWithdrawableRewards: true,
+        accountWithdrawnRewards: true,
+        accountDepositTokenBalance: true,
+        accountDepositTokenAllowance: true,
+        accountLocks: {
+          id: true,
+          lockId: true,
+          lockDuration: true,
+          lockedAt: true,
+          amount: true,
+          withdrawn: true,
+          ejected: true,
+          boosted: true,
+        }
+      }
+    });
+    
+    return response.stakers[0];
+  }
+
   const fetchStakingData = async () => {
-    let response = await sharesTimeLock.getStakingData($eth.address);
+    let response = await fetchStakingDataGraph($eth.address);
+    //let response = await sharesTimeLock.getStakingData($eth.address);
 
     Object.keys(response).forEach((key) => {
       if (key != 'accountLocks') {
@@ -87,7 +117,6 @@
       }
     });
     
-    console.log('data', data);
     data = data;
     return data;
   };
@@ -110,6 +139,7 @@
         $eth.signer || $eth.provider,
       );
 
+      //await fetchStakingDataGraph($eth.address);
       await fetchStakingData();
       console.log("fetchStakingData", data);
 
@@ -402,7 +432,7 @@
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">{toNum(data.accountRewardTokenBalance)}</div>
+              <div class="font-24px">{toNum(data.accountVeTokenBalance)}</div>
               <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
               <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
             </span>
@@ -561,13 +591,6 @@
           class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin"
           style="display: inline; cursor: pointer;"
         >
-          <div
-            on:click={() => {
-              stakeDuration = 36;
-            }}
-          >
-            <!-- 6 to 36 months -->
-          </div>
         </div>
       </div>
       <div class="flex nowrap items-center pl-1 pt-1 pb-1">
@@ -585,7 +608,7 @@
           maxlength="79"
           spellcheck="false"
         />
-          <div class="flex items-center cardbordergradient"><div class="flex items-center p-2"><div class=" mr-8px">3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+          <div on:click={() => {alert("clicked");stakeDuration = 36;}} class="flex items-center cardbordergradient"><div class="flex items-center p-2"><div class=" mr-8px">3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
       </div>
     </div>
 
