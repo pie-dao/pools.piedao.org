@@ -42,9 +42,13 @@ class MerkleTree {
     }, []);
   }
 
-  combinedHash(first, second) {
-    if (!first) { return second; }
-    if (!second) { return first; }
+  static combinedHash(first, second) {
+    if (!first) {
+      return second;
+    }
+    if (!second) {
+      return first;
+    }
 
     return ethers.utils.solidityKeccak256(['bytes32', 'bytes32'], [first, second].sort());
   }
@@ -53,9 +57,9 @@ class MerkleTree {
     return this.layers[this.layers.length - 1][0];
   }
 
-  getHexRoot() {
-    return bufferToHex(this.getRoot());
-  }
+  // getHexRoot() {
+  //   return bufferToHex(this.getRoot());
+  // }
 
   getProof(el) {
     let idx = this.bufIndexOf(el, this.elements);
@@ -83,7 +87,7 @@ class MerkleTree {
     return this.bufArrToHexArr(proof);
   }
 
-  getPairElement(idx, layer) {
+  static getPairElement(idx, layer) {
     const pairIdx = idx % 2 === 0 ? idx + 1 : idx - 1;
 
     if (pairIdx < layer.length) {
@@ -92,13 +96,11 @@ class MerkleTree {
     return null;
   }
 
-  bufIndexOf(el, arr) {
-    let hash;
+  static bufIndexOf(el, arr) {
+    const hash = el;
 
-    hash = el;
-
-    for (let i = 0; i < arr.length; i++) {
-      if (hash == arr[i]) {
+    for (let i = 0; i < arr.length; i += 1) {
+      if (hash === arr[i]) {
         return i;
       }
     }
@@ -106,11 +108,11 @@ class MerkleTree {
     return -1;
   }
 
-  bufDedup(elements) {
+  static bufDedup(elements) {
     return elements.filter((el, idx) => idx === 0 || !elements[idx - 1].equals(el));
   }
 
-  bufArrToHexArr(arr) {
+  static bufArrToHexArr(arr) {
     if (arr.some((el) => !Buffer.isBuffer(el))) {
       throw new Error('Array is not an array of buffers');
     }
@@ -119,13 +121,7 @@ class MerkleTree {
   }
 }
 
-const hashEntry = (entry) => ethers.utils.solidityKeccak256(
-  ['address', 'uint256'],
-  [
-    entry.address,
-    entry.participation,
-  ],
-);
+const hashEntry = (entry) => ethers.utils.solidityKeccak256(['address', 'uint256'], [entry.address, entry.participation]);
 
 // eslint-disable-next-line import/prefer-default-export
 export const createParticipationTree = (entries = []) => {
@@ -138,7 +134,7 @@ export const createParticipationTree = (entries = []) => {
     return entryWithLeaf;
   });
 
-  console.log('entriesWithLeafs', entriesWithLeafs)
+  console.log('entriesWithLeafs', entriesWithLeafs);
   return {
     merkleTree: new MerkleTree(entriesWithLeafs.map((item) => item.leaf)),
     leafs: entriesWithLeafs,
