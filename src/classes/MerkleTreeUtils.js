@@ -9,7 +9,7 @@ class MerkleTree {
     // Sort elements
     this.elements.sort();
     // Deduplicate elements
-    // this.elements = this.bufDedup(this.elements);
+    // this.elements = MerkleTree.bufDedup(this.elements);
 
     // Create layers
     this.layers = this.getLayers(this.elements);
@@ -35,7 +35,7 @@ class MerkleTree {
     return elements.reduce((layer, el, idx, arr) => {
       if (idx % 2 === 0) {
         // Hash the current element with its pair element
-        layer.push(this.combinedHash(el, arr[idx + 1]));
+        layer.push(MerkleTree.combinedHash(el, arr[idx + 1]));
       }
 
       return layer;
@@ -62,14 +62,14 @@ class MerkleTree {
   // }
 
   getProof(el) {
-    let idx = this.bufIndexOf(el, this.elements);
+    let idx = MerkleTree.bufIndexOf(el, this.elements);
 
     if (idx === -1) {
       throw new Error('Element does not exist in Merkle tree');
     }
 
     return this.layers.reduce((proof, layer) => {
-      const pairElement = this.getPairElement(idx, layer);
+      const pairElement = MerkleTree.getPairElement(idx, layer);
 
       if (pairElement) {
         proof.push(pairElement);
@@ -84,7 +84,7 @@ class MerkleTree {
   getHexProof(el) {
     const proof = this.getProof(el);
 
-    return this.bufArrToHexArr(proof);
+    return MerkleTree.bufArrToHexArr(proof);
   }
 
   static getPairElement(idx, layer) {
