@@ -281,7 +281,7 @@
       return false;
   }
 
-  async function stake() {
+  async function stakeDOUGH() {
     const error = await safeFlow();
     if(error) {
       console.log('error', error)
@@ -464,7 +464,7 @@
       <div class="font-huge text-center mt-6">Your Staking</div>
 
         {#each data.accountLocks as lock, id}
-        <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
+        <div class="{lock.ejected ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60' : 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}">
           <div class="flex items-center justify-between">
             <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
             <div class="flex items-center"><div class="font-thin mr-2">Staking ends: </div><span>{calculateStakingEnds(lock).toLocaleDateString()}</span></div>
@@ -656,7 +656,7 @@
           <button on:click={approveToken} class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white">Approve</button>
         {:else}
           {#if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
-            <button on:click={stake} class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white">Stake</button>
+            <button on:click={stakeDOUGH} class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white">Stake</button>
           {:else}
             <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white">Duration not correct</button>
           {/if}
