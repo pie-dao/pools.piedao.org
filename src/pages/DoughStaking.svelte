@@ -451,7 +451,11 @@
               <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
             </span>
           </div>
-          <button on:click={claim}> Claim now</button>  
+          {#if data.accountWithdrawableRewards.eq(0)}
+          <button disabled class="btn clear rounded-20px w-92pc mx-4pc mt-4"> Claim now</button>
+          {:else}
+          <button on:click={claim}> Claim now</button>
+          {/if}
       </div>
   </div>
   <!-- END SUMMARY -->
