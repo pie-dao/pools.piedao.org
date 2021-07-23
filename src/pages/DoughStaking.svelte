@@ -63,7 +63,8 @@
   }
 
   async function fetchStakingDataGraph(address) {
-    const response = await subgraphRequest('https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop', {
+    try {
+      const response = await subgraphRequest('https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop', {
       "stakers": {
         __args: {
           where: { id: address.toLowerCase() }
@@ -90,11 +91,21 @@
     });
     
     return response.stakers[0];
+    } catch(error) {
+      throw new Error("fetchStakingDataGraph: " + error.message);
+    }
   }
 
   const fetchStakingData = async () => {
-    let response = await fetchStakingDataGraph($eth.address);
-    //let response = await sharesTimeLock.getStakingData($eth.address);
+    let response = null;
+
+    try {
+      response = await fetchStakingDataGraph($eth.address);
+      console.log("response from graph", response);
+    } catch(error) {
+      response = await sharesTimeLock.getStakingData($eth.address);
+      console.log("response from contract", response);
+    }
 
     Object.keys(response).forEach((key) => {
       if (key != 'accountLocks') {
@@ -108,6 +119,8 @@
               amount: new BigNumber(lock.amount.toString()),
               lockDuration: lock.lockDuration,
               lockedAt: lock.lockedAt,
+              // when the graph is not working properly,
+              // all those fields will be undefined...
               lockId: lock.lockId,
               withdrawn: lock.withdrawn,
               ejected: lock.ejected,
@@ -326,6 +339,7 @@
     if(!sharesTimeLock) return;
 
     try {
+      console.log("ID", id);
       let response = await sharesTimeLock.boostToMax(id);
 
       const { emitter } = displayNotification({
@@ -351,6 +365,7 @@
       });
 
     } catch(error) {
+      console.log(error);
       displayNotification({
           message: 'sorry, some error occurred while boosting to max. Please try again later...',
           type: "error",
@@ -418,7 +433,7 @@
     <div class="font-huge text-center mt-6">Summary</div>
       <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
         <div class="flex items-center justify-between">
-          <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+          <div class="flex nowrap intems-center p-1 font-thin">Total staked DOUGH</div>
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
@@ -430,7 +445,7 @@
       </div>
       <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
         <div class="flex items-center justify-between">
-          <div class="flex nowrap intems-center p-1 font-thin">Your total staked veDOUGH</div>
+          <div class="flex nowrap intems-center p-1 font-thin">Your veDOUGH</div>
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
@@ -475,14 +490,14 @@
                 <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
                 <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
               </span>
-              {#if lock.boosted == "" && !lock.ejected && lock.lockDuration != 36}
-              <div on:click={() => {boostToMax(lock.lockId)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max Rewards</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+              {#if !lock.ejected && lock.lockDuration != 36}
+              <div on:click={() => {boostToMax(id)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max Rewards</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
               {:else}
                 <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max Rewards</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
-              {/if}   
+              {/if}
             </div>
             {#if didLockExpired(lock)}
-              <div on:click={() => {unstakeDOUGH(lock.lockId, toNum(lock.amount))}} class="mt-2 flex justify-end pointer"><span>Unstake</span></div>
+              <div on:click={() => {unstakeDOUGH(id, toNum(lock.amount))}} class="mt-2 flex justify-end pointer"><span>Unstake</span></div>
             {:else}
             <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div> 
             {/if}
