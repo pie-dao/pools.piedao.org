@@ -23,6 +23,8 @@
     BigNumber(num.toString())
       .multipliedBy(10 ** 18);
 
+
+  const minLockAmount = 1;
   // All the epochs where rewards are available.
   $: epochs = [];
   $: isLoading = true;  
@@ -34,7 +36,8 @@
     accountWithdrawableRewards: BigNumber(0), //amount is in reward Pie
     accountWithdrawnRewards: BigNumber(0),
     accountDepositTokenBalance: BigNumber(0),
-    accountLocks: []
+    accountLocks: [],
+    rewards: []
   };
 
   let stakeAmount = 0;
@@ -105,29 +108,37 @@
     }
   }
 
-  const fetchStakingData = async () => {
+  const fetchStakingData = async (useGraph = false) => {
     let response = null;
     let staker = null;
     let rewards = null;
 
     // this is a fallback in case the graph is not working...
     try {
-      response = await fetchStakingDataGraph($eth.address);
-      
-      // it might also happen that it is working,
-      // but it returns undefined because the address we're querying 
-      // has go no staking data so far, in this case we'll fetch the
-      // basic infos directly from blockchain...
-      if(response.stakers.length === 0) {
-        staker = await sharesTimeLock.getStakingData($eth.address);
-        rewards = [];
+
+      if(useGraph) {
+        console.log('Using the graph..')
+        response = await fetchStakingDataGraph($eth.address);
+        // it might also happen that it is working,
+        // but it returns undefined because the address we're querying 
+        // has go no staking data so far, in this case we'll fetch the
+        // basic infos directly from blockchain...
+        if(response.stakers.length === 0) {
+          staker = await sharesTimeLock.getStakingData($eth.address);
+          rewards = [];
+        } else {
+          staker = response.stakers[0];
+          rewards = response.rewards;
+        }
       } else {
-        staker = response.stakers[0];
-        rewards = response.rewards;
+        console.log('NOT Using the graph..')
+        staker = await sharesTimeLock.getStakingData($eth.address);
+        rewards = data.rewards.length > 0 ? data.rewards : [];
       }
+      
     } catch(error) {
       staker = await sharesTimeLock.getStakingData($eth.address);
-      rewards = [];
+      rewards = data.rewards.length > 0 ? data.rewards : [];
     }
 
     Object.keys(staker).forEach((key) => {
@@ -144,7 +155,7 @@
               lockedAt: lock.lockedAt,
               // when the graph is not working properly,
               // all those fields will be undefined...
-              lockId: lock.lockId,
+              lockId: lock.lockId || index,
               withdrawn: lock.withdrawn,
               ejected: lock.ejected,
               boosted: lock.boosted,
@@ -181,7 +192,7 @@
         $eth.signer || $eth.provider,
       );
 
-      await fetchStakingData();
+      await fetchStakingData(true);
 
       receiver = $eth.address;
       console.log(prepareProofs());
@@ -211,7 +222,7 @@
 
       
       await approveMax(smartcontracts.dough, smartcontracts.doughStaking, {gasLimit: 100000});
-      await fetchStakingData();  
+      data.accountDepositTokenAllowance = ethers.constants.MaxUint256;
     } catch(error) {
       console.log('error', error);
       displayNotification({
@@ -287,6 +298,10 @@
           code: 2,
           message: "Duration Value incorrect"
         },
+        TOO_SMALL: {
+        code: 4,
+          message: "Deposit amount too small"
+        },
         NOT_VALID_ADDRESS: {
           code: 2,
           message: "Receiver is not a valid address"
@@ -304,6 +319,12 @@
         displayNotification({ message: Errors.NOT_INITIALIZED.message, type: "hint" });
         return Errors.NOT_INITIALIZED;
       };
+
+      // Check connection to wallet
+      if (stakeAmount < minLockAmount) {
+        displayNotification({ message: "Deposit amount too small", type: "hint" });
+        return Errors.NOT_CONNECTED;
+      }
 
       if(!stakeDuration) {
         displayNotification({ message: Errors.WRONG_DURATION.message, type: "hint" });
@@ -326,8 +347,6 @@
     }
 
     try {
-
-      console.log('yieks', parseEther(stakeAmount.toString()).toString())
       const { emitter } = displayNotification( await sharesTimeLock.depositByMonths(
         parseEther(stakeAmount.toString()), 
         stakeDuration, 
@@ -390,7 +409,7 @@
     } catch(error) {
       console.log(error);
       displayNotification({
-          message: 'sorry, some error occurred while boosting to max. Please try again later...',
+          message: e.message,
           type: "error",
         });
     }    
