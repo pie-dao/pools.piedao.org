@@ -51,7 +51,7 @@
   function calculateStakingEnds(lock) {
     let startDate = new Date(lock.lockedAt * 1000);
     let lockDuration = lock.lockDuration / 60;
-    console.log("calculateStakingEnds", startDate.getMonth(), lockDuration);
+    
     startDate.setMonth(startDate.getMonth() + lockDuration);
     return startDate;
   }
@@ -87,10 +87,19 @@
           ejected: true,
           boosted: true,
         }
-      }
+      },
+      "rewards": {
+        __args: {
+          where: { staker: address.toLowerCase() }
+        },
+        id: true,
+        timestamp: true,
+        amount: true,
+        type: true
+      }      
     });
     
-    return response.stakers[0];
+    return response;
     } catch(error) {
       throw new Error("fetchStakingDataGraph: " + error.message);
     }
@@ -98,22 +107,36 @@
 
   const fetchStakingData = async () => {
     let response = null;
+    let staker = null;
+    let rewards = null;
 
+    // this is a fallback in case the graph is not working...
     try {
       response = await fetchStakingDataGraph($eth.address);
-      console.log("response from graph", response);
+      
+      // it might also happen that it is working,
+      // but it returns undefined because the address we're querying 
+      // has go no staking data so far, in this case we'll fetch the
+      // basic infos directly from blockchain...
+      if(response.stakers.length === 0) {
+        staker = await sharesTimeLock.getStakingData($eth.address);
+        rewards = [];
+      } else {
+        staker = response.stakers[0];
+        rewards = response.rewards;
+      }
     } catch(error) {
-      response = await sharesTimeLock.getStakingData($eth.address);
-      console.log("response from contract", response);
+      staker = await sharesTimeLock.getStakingData($eth.address);
+      rewards = [];
     }
 
-    Object.keys(response).forEach((key) => {
+    Object.keys(staker).forEach((key) => {
       if (key != 'accountLocks') {
-        data[key] = new BigNumber(response[key].toString());
+        data[key] = new BigNumber(staker[key].toString());
       } else {
         let locks = [];
 
-        response[key].forEach((lock, index) => {
+        staker[key].forEach((lock, index) => {
           if(lock.amount.toString() != '0') {
             locks.push({
               amount: new BigNumber(lock.amount.toString()),
@@ -132,7 +155,10 @@
         data[key] = locks;
       }
     });
-    
+
+    data["rewards"] = rewards;
+    console.log("fetchStakingData", data);
+
     data = data;
     return data;
   };
@@ -156,7 +182,6 @@
       );
 
       await fetchStakingData();
-      console.log("fetchStakingData", data);
 
       receiver = $eth.address;
       console.log(prepareProofs());
@@ -186,8 +211,7 @@
 
       
       await approveMax(smartcontracts.dough, smartcontracts.doughStaking, {gasLimit: 100000});
-      await fetchStakingData();
-      console.log("fetchStakingData", data);   
+      await fetchStakingData();  
     } catch(error) {
       console.log('error', error);
       displayNotification({
@@ -318,7 +342,6 @@
               });
               stakeAmount = 0;
               await fetchStakingData();
-              console.log("fetchStakingData", data);
               subscription.unsubscribe();
             },
           });
@@ -339,7 +362,6 @@
     if(!sharesTimeLock) return;
 
     try {
-      console.log("ID", id);
       let response = await sharesTimeLock.boostToMax(id);
 
       const { emitter } = displayNotification({
@@ -357,7 +379,6 @@
             console.log("boostToMax -> blockNumber");
 
             await fetchStakingData();
-            console.log("fetchStakingData", data);   
 
             subscription.unsubscribe();
           },
@@ -394,8 +415,6 @@
             console.log("unstakeDOUGH -> blockNumber");
 
             await fetchStakingData();
-            console.log("fetchStakingData", data);   
-
             subscription.unsubscribe();
           },
         });      
@@ -509,57 +528,24 @@
         <!-- PAST REWARDS -->
         <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
           <div class="font-huge text-center mt-6">Past Rewards</div>
-
-            <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
-              <div class="flex items-center justify-between">
-                <div class="flex nowrap intems-center p-1 font-thin">July 2021</div>
-                <a class="" href="#/something" target="_blank"><img width="20px" height="20px" src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg" alt="external link icon"></a>
-                </div>
-                <div class="flex nowrap items-center justify-between p-1">
-                  <span class="sc-iybRtq gjVeBU">
-                    <div class="font-24px">$ 87,093.10</div>
-                    <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="rewardspie token" />
-                  </span>
-                  <div class="flex items-center justify-between">
-                    <img class="h-auto w-24px mx-5px" src={images.claimed} alt="clamed icon" />
-                    <span>Claimed</span>
-                  </div>      
-                </div>   
-            </div>
-
-            <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
-              <div class="flex items-center justify-between">
-                <div class="flex nowrap intems-center p-1 font-thin">July 2021</div>
-                <a class="" href="#/something" target="_blank"><img width="20px" height="20px" src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg" alt="external link icon"></a>
-                </div>
-                <div class="flex nowrap items-center justify-between p-1">
-                  <span class="sc-iybRtq gjVeBU">
-                    <div class="font-24px">$ 87,093.10</div>
-                    <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="rewardspie token" />
-                  </span>
-                  <div class="flex items-center justify-between">
-                    <img class="h-auto w-24px mx-5px" src={images.claimed} alt="clamed icon" />
-                    <span>Claimed</span>
-                  </div>      
-                </div>   
-            </div>
-
-            <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
-              <div class="flex items-center justify-between">
-                <div class="flex nowrap intems-center p-1 font-thin">July 2021</div>
-                <a class="" href="#/something" target="_blank"><img width="20px" height="20px" src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg" alt="external link icon"></a>
-                </div>
-                <div class="flex nowrap items-center justify-between p-1">
-                  <span class="sc-iybRtq gjVeBU">
-                    <div class="font-24px">$ 87,093.10</div>
-                    <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="rewardspie token" />
-                  </span>
-                  <div class="flex items-center justify-between">
-                    <img class="h-auto w-24px mx-5px" src={images.slashed} alt="clamed icon" />
-                    <span>Slashed</span>
-                  </div>      
-                </div>   
-            </div>
+            {#each data.rewards as reward, id}
+              <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
+                <div class="flex items-center justify-between">
+                  <div class="flex nowrap intems-center p-1 font-thin">{new Date(reward.timestamp * 1000).toDateString()}</div>
+                  <a class="" href="#/something" target="_blank"><img width="20px" height="20px" src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg" alt="external link icon"></a>
+                  </div>
+                  <div class="flex nowrap items-center justify-between p-1">
+                    <span class="sc-iybRtq gjVeBU">
+                      <div class="font-24px">{toNum(reward.amount)}</div>
+                      <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="rewardspie token" />
+                    </span>
+                    <div class="flex items-center justify-between">
+                      <img class="h-auto w-24px mx-5px" src={reward.type == "claimed" ? images.claimed : images.slashed} alt="clamed icon" />
+                      <span>{reward.type}</span>
+                    </div>      
+                  </div>   
+              </div>              
+            {/each}
         </div>
         <!-- END PAST REWARDS -->
 </div>
