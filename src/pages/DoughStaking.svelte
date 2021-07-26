@@ -34,7 +34,7 @@
     accountWithdrawableRewards: BigNumber(0), //amount is in reward Pie
     accountWithdrawnRewards: BigNumber(0),
     accountDepositTokenBalance: BigNumber(0),
-    accountLocks: [],
+    accountLocks: []
   };
 
   let stakeAmount = 0;
@@ -326,6 +326,8 @@
     }
 
     try {
+
+      console.log('yieks', parseEther(stakeAmount.toString()).toString())
       const { emitter } = displayNotification( await sharesTimeLock.depositByMonths(
         parseEther(stakeAmount.toString()), 
         stakeDuration, 
@@ -497,6 +499,7 @@
     <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
       <div class="font-huge text-center mt-6">Your Staking</div>
 
+      {#if data.accountLocks && data.accountLocks.length > 0}
         {#each data.accountLocks as lock, id}
         <div class="{lock.ejected ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60' : 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}">
           <div class="flex items-center justify-between">
@@ -522,12 +525,17 @@
             {/if}
         </div>
         {/each}
+      {:else} 
+      Insert placeholder
+      No locks 
+      {/if}
 
     </div>
     <!-- END YOUR STAKING -->
         <!-- PAST REWARDS -->
         <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
           <div class="font-huge text-center mt-6">Past Rewards</div>
+          {#if data.rewards && data.rewards.length > 0}
             {#each data.rewards as reward, id}
               <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
                 <div class="flex items-center justify-between">
@@ -546,6 +554,9 @@
                   </div>   
               </div>              
             {/each}
+           {:else}
+           Insert placeholder
+           {/if}
         </div>
         <!-- END PAST REWARDS -->
 </div>
