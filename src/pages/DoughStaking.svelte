@@ -508,7 +508,7 @@
             </span>
           </div>
           {#if data.accountWithdrawableRewards.eq(0)}
-          <button disabled class="btn clear rounded-20px w-92pc mx-4pc mt-4"> Claim now</button>
+          <button disabled class="btn pointer clear rounded-20px w-92pc mx-4pc mt-4"> Claim now</button>
           {:else}
           <button on:click={claim}> Claim now</button>
           {/if}
@@ -646,7 +646,7 @@
           maxlength="79"
           spellcheck="false"
         />
-          <div on:click={() => {stakeDuration = 36;}} class="flex items-center cardbordergradient"><div class="flex items-center p-2"><div class=" mr-8px">3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+          <div on:click={() => {stakeDuration = 36;}} class="pointer flex items-center cardbordergradient"><div class="flex items-center p-2"><div class=" mr-8px">3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
       </div>
     </div>
 
@@ -694,7 +694,7 @@
           {/if}
         {/if}
       {:else}
-        <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6">Enter an amount</button>  
+        <button disabled class="pointer btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6">Enter an amount</button>  
       {/if}
     {/if}
  <!-- END STAKING FORM -->
