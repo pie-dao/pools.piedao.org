@@ -55,7 +55,9 @@
     let startDate = new Date(lock.lockedAt * 1000);
     let lockDuration = lock.lockDuration / 60;
     
-    startDate.setMonth(startDate.getMonth() + lockDuration);
+    //startDate.setMonth(startDate.getMonth() + lockDuration);
+    // TODO: remove this line, and use the previous one...
+    startDate.setMinutes(startDate.getMinutes() + lockDuration);
     return startDate;
   }
 
@@ -115,7 +117,6 @@
 
     // this is a fallback in case the graph is not working...
     try {
-
       if(useGraph) {
         console.log('Using the graph..')
         response = await fetchStakingDataGraph($eth.address);
