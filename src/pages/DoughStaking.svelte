@@ -557,6 +557,7 @@
           <div class="font-huge text-center mt-6">Past Rewards</div>
           {#if data.rewards && data.rewards.length > 0}
             {#each data.rewards as reward, id}
+              {#if reward.type != "distributed"}
               <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
                 <div class="flex items-center justify-between">
                   <div class="flex nowrap intems-center p-1 font-thin">{new Date(reward.timestamp * 1000).toDateString()}</div>
@@ -572,7 +573,8 @@
                       <span>{reward.type}</span>
                     </div>      
                   </div>   
-              </div>              
+              </div>
+              {/if}              
             {/each}
            {:else}
            Insert placeholder
