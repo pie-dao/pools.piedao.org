@@ -56,8 +56,10 @@
     let lockDuration = lock.lockDuration / 60;
     
     //startDate.setMonth(startDate.getMonth() + lockDuration);
+    
     // TODO: remove this line, and use the previous one...
     startDate.setMinutes(startDate.getMinutes() + lockDuration);
+
     return startDate;
   }
 
@@ -110,33 +112,19 @@
     }
   }
 
-  const fetchStakingData = async (useGraph = false) => {
+  const fetchStakingData = async () => {
     let response = null;
     let staker = null;
     let rewards = null;
 
     // this is a fallback in case the graph is not working...
     try {
-      if(useGraph) {
-        console.log('Using the graph..')
-        response = await fetchStakingDataGraph($eth.address);
-        // it might also happen that it is working,
-        // but it returns undefined because the address we're querying 
-        // has go no staking data so far, in this case we'll fetch the
-        // basic infos directly from blockchain...
-        if(response.stakers.length === 0) {
-          staker = await sharesTimeLock.getStakingData($eth.address);
-          rewards = [];
-        } else {
-          staker = response.stakers[0];
-          rewards = response.rewards;
-        }
-      } else {
-        console.log('NOT Using the graph..')
-        staker = await sharesTimeLock.getStakingData($eth.address);
-        rewards = data.rewards.length > 0 ? data.rewards : [];
-      }
-      
+      // using graph just for rewards...
+      response = await fetchStakingDataGraph($eth.address);
+      rewards = response.rewards;
+
+      // fetching stakingData from onchain...
+      staker = await sharesTimeLock.getStakingData($eth.address);
     } catch(error) {
       staker = await sharesTimeLock.getStakingData($eth.address);
       rewards = data.rewards.length > 0 ? data.rewards : [];
@@ -193,7 +181,7 @@
         $eth.signer || $eth.provider,
       );
 
-      await fetchStakingData(true);
+      await fetchStakingData();
 
       receiver = $eth.address;
       console.log(prepareProofs());
