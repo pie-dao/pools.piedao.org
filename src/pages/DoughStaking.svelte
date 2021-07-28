@@ -12,7 +12,8 @@
   import { parseEther } from '@ethersproject/units';
   import { isAddress } from '@pie-dao/utils';
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
-  import {subgraphRequest} from '../helpers/subgraph.js'
+  import {subgraphRequest} from '../helpers/subgraph.js';
+  import { formatFiat } from '../components/helpers.js';
 
   const toNum = (num) =>
     BigNumber(num.toString())
@@ -473,7 +474,7 @@
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">{toNum(data.totalStaked)}</div>
+              <div class="font-24px">{formatFiat(toNum(data.totalStaked), ',', '.', '')}</div>
               <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
               <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
             </span>
@@ -485,7 +486,7 @@
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">{toNum(data.accountVeTokenBalance)}</div>
+              <div class="font-24px">{formatFiat(toNum(data.accountVeTokenBalance), ',', '.', '')}</div>
               <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
               <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
             </span>
@@ -497,7 +498,7 @@
           </div>
           <div class="flex nowrap items-center p-1">
             <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">{toNum(data.accountWithdrawableRewards)}</div>
+              <div class="font-24px">{formatFiat(toNum(data.accountWithdrawableRewards), ',', '.', '')}</div>
               <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
               <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
             </span>
@@ -524,12 +525,12 @@
             <div class="flex nowrap items-center p-1 justify-between mt-2">
               <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
                 <div class="sc-iybRtq gjVeBU">
-                  <div class="font-24px">{toNum(lock.amount)}</div>
+                  <div class="font-24px">{formatFiat(toNum(lock.amount), ',', '.', '')}</div>
                   <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
                   <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
                 </div>
                 <div class="sc-iybRtq gjVeBU float-left">
-                  <div class="font-24px">{calculateVeDough(lock.amount, lock.lockDuration / 60)}</div>
+                  <div class="font-24px">{formatFiat(calculateVeDough(lock.amount, lock.lockDuration / 60), ',', '.', '')}</div>
                   <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
                   <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                 </div>
@@ -567,7 +568,7 @@
                   </div>
                   <div class="flex nowrap items-center justify-between p-1">
                     <span class="sc-iybRtq gjVeBU">
-                      <div class="font-24px">{toNum(reward.amount)}</div>
+                      <div class="font-24px">{formatFiat(toNum(reward.amount), ',', '.', '')}</div>
                       <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="rewardspie token" />
                     </span>
                     <div class="flex items-center justify-between">
