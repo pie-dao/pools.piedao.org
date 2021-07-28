@@ -446,6 +446,13 @@
     }
   }
 
+  function calculateVeDough(stakedDough, commitment) {
+    let k = 56.0268900276223;
+    let commitmentMultiplier = (commitment / k) * Math.log10(commitment);
+    let veDOUGH = stakedDough * commitmentMultiplier;
+    return toNum(veDOUGH);
+  }
+
 </script>
 
 <div class="font-huge text-center">Governance mining</div>
@@ -522,7 +529,7 @@
                   <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
                 </div>
                 <div class="sc-iybRtq gjVeBU float-left">
-                  <div class="font-24px">{toNum(lock.amount)}</div>
+                  <div class="font-24px">{calculateVeDough(lock.amount, lock.lockDuration / 60)}</div>
                   <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
                   <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                 </div>
