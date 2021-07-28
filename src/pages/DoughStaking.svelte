@@ -14,6 +14,9 @@
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
   import {subgraphRequest} from '../helpers/subgraph.js';
   import { formatFiat } from '../components/helpers.js';
+  import Modal from '../components/elements/Modal.svelte';
+
+  let modalinfo;
 
   const toNum = (num) =>
     BigNumber(num.toString())
@@ -456,6 +459,18 @@
 
 </script>
 
+<Modal title="Slashed Rewards" backgroundColor="#f3f3f3" bind:this="{modalinfo}">
+  <span slot="content" class="p-4 font-thin">
+    <strong>What's that?</strong><br/>
+    If you don't partecipate, you're a looser.<br/>
+    If you're a looser, we'll slash you.<br/><br/>
+
+    <strong>why?</strong><br/>
+    Sorry man.<br/>
+    This is your own fault.<br/>
+  </span>
+</Modal>
+
 <div class="font-huge text-center">Governance mining</div>
 <div class="font-thin text-lg text-center mt-10px mb-10px">Get paid for Governing the DAO</div>
 
@@ -561,7 +576,7 @@
           {#if data.rewards && data.rewards.length > 0}
             {#each data.rewards as reward, id}
               {#if reward.type != "distributed"}
-              <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
+              <div on:click={() => { reward.type == "slashed" ? modalinfo.open() : null }} class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
                 <div class="flex items-center justify-between">
                   <div class="flex nowrap intems-center p-1 font-thin">{new Date(reward.timestamp * 1000).toDateString()}</div>
                   <a class="" href="https://rinkeby.etherscan.io/tx/{reward.id}" target="_blank"><img width="20px" height="20px" src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg" alt="external link icon"></a>
