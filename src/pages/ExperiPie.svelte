@@ -53,15 +53,11 @@
   $: token = params.address;
 
   const isBakingPie = (address) => {
-    let founded = false;
-
-    ovens.forEach(oven => {
-      if(oven.baking.address == address) {
-        founded = true;
+    return ovens.find((oven) => {
+      if (oven.baking.address == address) {
+        return oven;
       }
     });
-
-    return founded;
   };
 
   let pieOfPies = false;
