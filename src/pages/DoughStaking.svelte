@@ -659,12 +659,13 @@
           title="Token Amount"
           autocomplete="off"
           autocorrect="off"
-          type="number"
-          pattern="^[0-9]*[.]?[0-9]*$"
+          type="text"
+          pattern="^[0-9]?[0-9]*$"
           placeholder="36"
           minlength="1"
           maxlength="79"
           spellcheck="false"
+          oninput="this.value=this.value.replace(/[^0-9]/g,'')"
         />
           <div on:click={() => {stakeDuration = 36;}} class="pointer flex items-center cardbordergradient"><div class="flex items-center p-2"><div class=" mr-8px">3 Years</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
       </div>
