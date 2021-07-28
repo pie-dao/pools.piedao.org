@@ -515,15 +515,22 @@
             <div class="flex items-center"><div class="font-thin mr-2">Staking ends: </div><span>{calculateStakingEnds(lock).toLocaleDateString()}</span></div>
             </div>
             <div class="flex nowrap items-center p-1 justify-between mt-2">
-              <span class="sc-iybRtq gjVeBU">
-                <div class="font-24px">{toNum(lock.amount)}</div>
-                <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-                <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
-              </span>
+              <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
+                <div class="sc-iybRtq gjVeBU">
+                  <div class="font-24px">{toNum(lock.amount)}</div>
+                  <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
+                  <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+                </div>
+                <div class="sc-iybRtq gjVeBU float-left">
+                  <div class="font-24px">{toNum(lock.amount)}</div>
+                  <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
+                  <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+                </div>
+              </div>                         
               {#if !lock.ejected && lock.lockDuration != 36}
-              <div on:click={() => {boostToMax(id)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max Rewards</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+              <div on:click={() => {boostToMax(id)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
               {:else}
-                <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max Rewards</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+                <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
               {/if}
             </div>
             {#if didLockExpired(lock)}
