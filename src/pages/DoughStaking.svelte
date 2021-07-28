@@ -517,8 +517,8 @@
             <div class="flex nowrap items-center p-1 justify-between mt-2">
               <span class="sc-iybRtq gjVeBU">
                 <div class="font-24px">{toNum(lock.amount)}</div>
-                <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-                <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+                <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
+                <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
               </span>
               {#if !lock.ejected && lock.lockDuration != 36}
               <div on:click={() => {boostToMax(id)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max Rewards</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
