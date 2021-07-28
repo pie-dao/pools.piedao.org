@@ -17,7 +17,7 @@
   const disconnect = () => {
     $eth.address = null;
     window.localStorage.removeItem('address');
-    //resetConnection();
+    resetConnection();
   }
 
   const toggleMobileMenu = (event) => {
