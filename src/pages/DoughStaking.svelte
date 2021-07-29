@@ -97,6 +97,7 @@
           withdrawn: true,
           ejected: true,
           boosted: true,
+          boostedPointer: true
         }
       },
       "rewards": {
@@ -123,13 +124,14 @@
 
     // this is a fallback in case the graph is not working...
     try {
-      // using graph just for rewards...
+      // using graph...
       response = await fetchStakingDataGraph($eth.address);
+      console.log("response for " + $eth.address.toLowerCase(), response);
       rewards = response.rewards;
-
-      // fetching stakingData from onchain...
-      staker = await sharesTimeLock.getStakingData($eth.address);
+      staker = response.stakers[0];
     } catch(error) {
+      console.error(error);
+      // using onchain as fallback...
       staker = await sharesTimeLock.getStakingData($eth.address);
       rewards = data.rewards.length > 0 ? data.rewards : [];
     }
@@ -146,12 +148,13 @@
               amount: new BigNumber(lock.amount.toString()),
               lockDuration: lock.lockDuration,
               lockedAt: lock.lockedAt,
+              lockId: lock.lockId || index,
               // when the graph is not working properly,
               // all those fields will be undefined...
-              lockId: lock.lockId || index,
               withdrawn: lock.withdrawn,
               ejected: lock.ejected,
               boosted: lock.boosted,
+              boostedPointer: lock.boostedPointer
             });
           }
         });
@@ -532,36 +535,39 @@
 
       {#if data.accountLocks && data.accountLocks.length > 0}
         {#each data.accountLocks as lock, id}
-        <div class="{lock.ejected ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60' : 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}">
-          <div class="flex items-center justify-between">
-            <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
-            <div class="flex items-center"><div class="font-thin mr-2">Staking ends: </div><span>{calculateStakingEnds(lock).toLocaleDateString()}</span></div>
-            </div>
-            <div class="flex nowrap items-center p-1 justify-between mt-2">
-              <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
-                <div class="sc-iybRtq gjVeBU">
-                  <div class="font-24px">{formatFiat(toNum(lock.amount), ',', '.', '')}</div>
-                  <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-                  <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+        <!-- Let's show just the normal stakes, and the boosted ones. The stakes having a boostedPointer are obsolete stakes, so we won't show them -->
+          {#if lock.boostedPointer == ""}
+            <div class="{lock.ejected ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60' : 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}">
+              <div class="flex items-center justify-between">
+                <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+                <div class="flex items-center"><div class="font-thin mr-2">Staking ends: </div><span>{calculateStakingEnds(lock).toLocaleDateString()}</span></div>
                 </div>
-                <div class="sc-iybRtq gjVeBU float-left">
-                  <div class="font-24px">{formatFiat(calculateVeDough(lock.amount, lock.lockDuration / 60), ',', '.', '')}</div>
-                  <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-                  <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+                <div class="flex nowrap items-center p-1 justify-between mt-2">
+                  <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
+                    <div class="sc-iybRtq gjVeBU">
+                      <div class="font-24px">{formatFiat(toNum(lock.amount), ',', '.', '')}</div>
+                      <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
+                      <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+                    </div>
+                    <div class="sc-iybRtq gjVeBU float-left">
+                      <div class="font-24px">{formatFiat(calculateVeDough(lock.amount, lock.lockDuration / 60), ',', '.', '')}</div>
+                      <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
+                      <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+                    </div>
+                  </div>
+                  {#if !lock.boosted}
+                  <div on:click={() => {boostToMax(id)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+                  {:else}
+                    <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30"><div class="flex items-center p-2"><div class="mr-8px">Already Boosted</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+                  {/if}
                 </div>
-              </div>                         
-              {#if !lock.ejected && lock.lockDuration != 36}
-              <div on:click={() => {boostToMax(id)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
-              {:else}
-                <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
-              {/if}
+                {#if didLockExpired(lock)}
+                  <div on:click={() => {unstakeDOUGH(id, toNum(lock.amount))}} class="mt-2 flex justify-end pointer"><span>Unstake</span></div>
+                {:else}
+                <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div> 
+                {/if}
             </div>
-            {#if didLockExpired(lock)}
-              <div on:click={() => {unstakeDOUGH(id, toNum(lock.amount))}} class="mt-2 flex justify-end pointer"><span>Unstake</span></div>
-            {:else}
-            <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div> 
-            {/if}
-        </div>
+          {/if}
         {/each}
       {:else} 
       Insert placeholder
