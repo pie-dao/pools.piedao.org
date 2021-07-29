@@ -251,9 +251,11 @@
       });
 
     } catch(error) {
+      console.error("Error on Claim", [error.message]);
+
       displayNotification({
         autoDismiss: 15000,
-        message: error.message,
+        message: "Sorry, an error occurred while claiming your rewards. Please try again later.",
         type: "error",
       });
     }
@@ -518,10 +520,8 @@
               <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
             </span>
           </div>
-          {#if data.accountWithdrawableRewards.eq(0)}
-          <button disabled class="btn pointer clear rounded-20px w-92pc mx-4pc mt-4"> Claim now</button>
-          {:else}
-          <button on:click={claim}> Claim now</button>
+          {#if !data.accountWithdrawableRewards.eq(0)}
+          <button class="pointer" on:click={claim}> Claim now</button>          
           {/if}
       </div>
   </div>

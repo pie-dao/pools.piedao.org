@@ -25,13 +25,13 @@ class MerkleTree {
 
     // Get next layer until we reach the root
     while (layers[layers.length - 1].length > 1) {
-      layers.push(this.getNextLayer(layers[layers.length - 1]));
+      layers.push(MerkleTree.getNextLayer(layers[layers.length - 1]));
     }
 
     return layers;
   }
 
-  getNextLayer(elements) {
+  static getNextLayer(elements) {
     return elements.reduce((layer, el, idx, arr) => {
       if (idx % 2 === 0) {
         // Hash the current element with its pair element
