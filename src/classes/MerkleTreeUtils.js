@@ -12,10 +12,10 @@ class MerkleTree {
     // this.elements = MerkleTree.bufDedup(this.elements);
 
     // Create layers
-    this.layers = this.getLayers(this.elements);
+    this.layers = MerkleTree.getLayers(this.elements);
   }
 
-  getLayers(elements) {
+  static getLayers(elements) {
     if (elements.length === 0) {
       return [['']];
     }
