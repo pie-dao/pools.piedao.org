@@ -159,6 +159,10 @@
           }
         });
 
+        locks.sort(function(lock_a, lock_b) {
+          return lock_a.lockedAt - lock_b.lockedAt;
+        });        
+
         data[key] = locks;
       }
     });
