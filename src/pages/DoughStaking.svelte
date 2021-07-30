@@ -567,10 +567,12 @@
                     {/if}
                   {/if}
                 </div>
-                {#if didLockExpired(lock)}
-                  <div on:click={() => {unstakeDOUGH(id, toNum(lock.amount))}} class="mt-2 flex justify-end pointer"><span>Unstake</span></div>
-                {:else}
-                <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div> 
+                {#if !lock.withdrawn && !lock.ejected}
+                  {#if didLockExpired(lock)}
+                    <div on:click={() => {unstakeDOUGH(id, toNum(lock.amount))}} class="mt-2 flex justify-end pointer"><span>Unstake</span></div>
+                  {:else}
+                  <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div> 
+                  {/if}                
                 {/if}
             </div>
           {/if}
