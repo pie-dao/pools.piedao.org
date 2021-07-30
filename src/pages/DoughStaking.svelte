@@ -67,6 +67,18 @@
     return startDate;
   }
 
+  function getLockStatus(lock) {
+    if(lock.withdrawn) {
+      return "withdrawn";
+    } else {
+      if(lock.ejected) {
+        return "ejected";
+      } else {
+        return "running";
+      }
+    }
+  }
+
   function didLockExpired(lock) {
     let endDate = calculateStakingEnds(lock);
     let nowDate = new Date();
@@ -567,6 +579,7 @@
                     {/if}
                   {/if}
                 </div>
+                <div class="mt-2 flex justify-start opacity-30 pointer"><span>{getLockStatus(lock)}</span></div>
                 {#if !lock.withdrawn && !lock.ejected}
                   {#if didLockExpired(lock)}
                     <div on:click={() => {unstakeDOUGH(id, toNum(lock.amount))}} class="mt-2 flex justify-end pointer"><span>Unstake</span></div>
