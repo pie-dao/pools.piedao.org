@@ -555,10 +555,12 @@
                       <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                     </div>
                   </div>
-                  {#if !lock.boosted}
-                  <div on:click={() => {boostToMax(id)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
-                  {:else}
-                    <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30"><div class="flex items-center p-2"><div class="mr-8px">Already Boosted</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+                  {#if (lock.lockDuration / 60) != 36}
+                    {#if !lock.boosted}
+                    <div on:click={() => {boostToMax(id)}} class="flex items-center cardbordergradient -mr-2 pointer"><div class="flex items-center p-2"><div class="mr-8px">Boost to Max</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+                    {:else}
+                      <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30"><div class="flex items-center p-2"><div class="mr-8px">Already Boosted</div> <img class="w-30px h-30px" src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png" alt="ETH"></div></div>
+                    {/if}
                   {/if}
                 </div>
                 {#if didLockExpired(lock)}
