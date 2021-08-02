@@ -1,11 +1,11 @@
-import { writable } from "svelte/store";
+import { writable } from 'svelte/store';
 
 export const defaultEth = {
   address: undefined,
   icon: undefined,
   network: {},
   provider: undefined,
-  shortAddress: "",
+  shortAddress: '',
   signer: undefined,
   balance: undefined,
 };

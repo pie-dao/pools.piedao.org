@@ -239,10 +239,11 @@
     
               </div>
             </div>
-            <div class="text-center font-thin w-100pc mt-2 hover:opacity-60">
-              Cannot find your pool? <strong><a href="#/stake">Go to old farms!</a></strong> <br/><br/>
-              Looking for APR? <strong><a href="https://vfat.tools/piedao/" target="_blank">Go to 👨‍🌾 vfat.tools!</a></strong> <br/>
-
+            <div class="text-center font-thin w-100pc mt-4 hover:opacity-60">
+              <a href="#/stake">Cannot find your pool? <strong>Go to old farms!</strong></a>
+            </div>
+            <div class="text-center font-thin w-100pc mt-4 hover:opacity-60">
+              <a href="https://vfat.tools/piedao/" target="_blank">Looking for APR? <strong>Go to 👨‍🌾 vfat.tools!</strong></a>
             </div>
           </span>
         </div>

@@ -20,7 +20,9 @@ class cToken {
     try {
       const supplyRate = (await this.instance.functions.supplyRatePerBlock()) / 1e18;
       this.calculateApr(supplyRate);
-    } catch (e) { console.log(e); }
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 

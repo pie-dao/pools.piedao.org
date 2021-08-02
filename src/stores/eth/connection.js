@@ -1,15 +1,16 @@
-import jazzicon from "jazzicon";
+import jazzicon from 'jazzicon';
 
-import { ethers } from "ethers";
-import { get } from "svelte/store";
-import { shortenAddress } from "@pie-dao/utils";
+import { ethers } from 'ethers';
+import { get } from 'svelte/store';
+import { shortenAddress } from '@pie-dao/utils';
 
-import { defaultEth, eth } from "./writables.js";
-import { bumpLifecycle, updateCurrentBlock } from "./lifecycle.js";
-import { resetContractCache } from "./contracts.js";
+import { defaultEth, eth } from './writables.js';
+import { connectWeb3 } from '../eth.js';
+import { bumpLifecycle, updateCurrentBlock } from './lifecycle.js';
+import { resetContractCache } from './contracts.js';
 
 export const defaultProvider = new ethers.providers.InfuraProvider('homestead', 'e106b2b27c0f4941be1f2c183a20b3ea');
-defaultProvider.on("block", updateCurrentBlock);
+defaultProvider.on('block', updateCurrentBlock);
 
 eth.set({ ...get(eth), provider: defaultProvider });
 
@@ -17,37 +18,40 @@ const resetWeb3Listeners = () => {
   const { provider, web3 } = get(eth);
 
   if (provider) {
-    provider.off("block", updateCurrentBlock);
-    defaultProvider.on("block", updateCurrentBlock);
+    provider.off('block', updateCurrentBlock);
+    defaultProvider.on('block', updateCurrentBlock);
   }
 
-  if (web3) {
-    web3.off("accountsChanged", connectWeb3);
-    web3.off("chainChanged", resetWeb3);
-    web3.off("disconnect", resetWeb3);
+  /* eslint-disable no-undef */
+  if (web3 && web3.off) {
+    console.log('web', web3)
+    web3.off('accountsChanged', connectWeb3);
+    web3.off('chainChanged', resetWeb3);
+    web3.off('disconnect', resetWeb3);
   }
+  /* eslint-enable no-undef */
 };
 
 const setWeb3Listeners = () => {
   const { provider, web3 } = get(eth);
 
   if (provider) {
-    defaultProvider.off("block", updateCurrentBlock);
-    provider.on("block", updateCurrentBlock);
+    defaultProvider.off('block', updateCurrentBlock);
+    provider.on('block', updateCurrentBlock);
   }
 
   if (web3) {
-    web3.on("accountsChanged", () => registerConnection());
-    web3.on("chainChanged", resetConnection);
-    web3.on("disconnect", resetConnection);
+    web3.on('accountsChanged', () => registerConnection());
+    web3.on('chainChanged', resetConnection);
+    web3.on('disconnect', resetConnection);
   }
 };
 
 export const registerConnection = async (newWeb3) => {
   const web3 = newWeb3 || get(eth).web3;
-  console.log('newWeb3', newWeb3)
+  console.log('newWeb3', newWeb3);
   if (!web3) {
-    throw new Error("Unable to find a web3 object. Was one passed?");
+    throw new Error('Unable to find a web3 object. Was one passed?');
   }
 
   const provider = new ethers.providers.Web3Provider(web3);
@@ -65,10 +69,9 @@ export const registerConnection = async (newWeb3) => {
   let icon;
   try {
     icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
-  } catch {
-    icon = "";
+  } catch (e) {
+    icon = '';
   }
-  
 
   const ens = await provider.lookupAddress(address);
 

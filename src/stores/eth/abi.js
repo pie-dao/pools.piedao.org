@@ -1,27 +1,28 @@
-import { ethers } from "ethers";
-import { get } from "svelte/store";
-import { pieSmartPool } from "@pie-dao/abis";
+import { ethers } from 'ethers';
+import { get } from 'svelte/store';
+import { pieSmartPool } from '@pie-dao/abis';
 
-import pools from "../../config/pools.json";
+import pools from '../../config/pools.json';
 
-import { eth } from "./writables.js";
+import { eth } from './writables.js';
 
-const etherscanApiKey = "67NWT4RN7W1TQ9NX4MIY1MCAIW52NK26SC";
+const etherscanApiKey = '67NWT4RN7W1TQ9NX4MIY1MCAIW52NK26SC';
 
 const findProxyAddressFunc = (abi) => {
   if (isPie(abi)) {
-    return "getImplementation";
-  } else if (hasImplementation(abi)) {
-    return "implementation";
+    return 'getImplementation';
+  } if (hasImplementation(abi)) {
+    return 'implementation';
   }
 
   return false;
 };
 
-const hasImplementation = (abi) => abi.filter(({ name }) => name === "implementation").length > 0;
+const hasImplementation = (abi) => abi.filter(({ name }) => name === 'implementation').length > 0;
 
-const isPie = (abi) => abi.filter(({ name }) => name === "getImplementation").length > 0;
+const isPie = (abi) => abi.filter(({ name }) => name === 'getImplementation').length > 0;
 
+/* eslint-disable consistent-return */
 const loadAbi = (addy) => {
   const address = addy.toLowerCase();
   try {
@@ -34,12 +35,11 @@ const loadAbi = (addy) => {
       return JSON.parse(abi);
     }
   } catch (e) {
-    console.warn("Error parsing stored abi for address", address, e);
+    console.warn('Error parsing stored abi for address', address, e);
     window.localStorage.removeItem(`abis.${address}`);
   }
-
-  return;
 };
+/* eslint-enable consistent-return */
 
 const storeAbi = (addy, abi) => {
   const address = addy.toLowerCase();
@@ -47,7 +47,7 @@ const storeAbi = (addy, abi) => {
     const json = JSON.stringify(abi);
     window.localStorage.setItem(`abis.${address}`, json);
   } catch (e) {
-    console.warn("Unable to store abi for address", address, e);
+    console.warn('Unable to store abi for address', address, e);
   }
 };
 
@@ -59,10 +59,10 @@ export const findAbi = async (address) => {
     return existing;
   }
 
-  const response = await fetch(
-    `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apiKey=${etherscanApiKey}`
+  let response = await fetch(
+    `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apiKey=${etherscanApiKey}`,
   );
-  const decoded = await response.json();
+  let decoded = await response.json();
   const abi = JSON.parse(decoded.result);
 
   const proxyAddressFunc = findProxyAddressFunc(abi);
@@ -70,14 +70,14 @@ export const findAbi = async (address) => {
   if (proxyAddressFunc) {
     // Proxy
     const { provider } = get(eth);
-    console.log('proxyAddressFunc', proxyAddressFunc)
+    console.log('proxyAddressFunc', proxyAddressFunc);
     const contract = new ethers.Contract(address, abi, provider);
     const proxy = await contract[proxyAddressFunc]();
 
-    const response = await fetch(
-      `https://api.etherscan.io/api?module=contract&action=getabi&address=${proxy}&apiKey=${etherscanApiKey}`
+    response = await fetch(
+      `https://api.etherscan.io/api?module=contract&action=getabi&address=${proxy}&apiKey=${etherscanApiKey}`,
     );
-    const decoded = await response.json();
+    decoded = await response.json();
     const proxyAbi = JSON.parse(decoded.result);
     proxyAbi.forEach((item) => abi.push(item));
   }

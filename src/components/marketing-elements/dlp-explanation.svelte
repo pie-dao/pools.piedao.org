@@ -37,11 +37,15 @@
     <h1 class="mt-4">Operation:</h1>
 
     <div class="font-thin">
-        DEFI+L is a tokenized representation of the seven biggest projects in DeFi. When a user mints DEFI+L our contract either purchases the underlying assets from Uniswap and other decentralized providers or uses tokens available in the user’s wallet, sending them to our treasury. In this way DEFI+L tokens are fully backed by reserves, redeemable at any time at the press of a button.
-        <br/><br/>
-        The index is built using Balancer smart pools which constantly rebalance and react to market changes in real-time. There is no withdrawal fee, and a highly competitive 0.7% streaming fee rewards DOUGH holders for their governance of the system.
-        <br/><br/>
-        It’s also possible to stake DEFI+L in our DEFI+L / ETH pool. Users are able to provide liquidity in return for a steady stream of DOUGH. This pool enables an efficient market for other users to easily swap in and out of the DEFI+L token.
-    </div>
+      DEFI+L is a tokenized representation of the seven biggest projects in DeFi. When a user mints DEFI+L our contract either purchases the underlying assets from Uniswap and other decentralized providers or uses tokens available in the user’s wallet, sending them to our treasury. In this way DEFI+L tokens are fully backed by reserves, redeemable at any time at the press of a button.
+      <br/><br/>
+      DeFi+L has been upgraded from a Balancer Smart Pool to a PieVault, benefitting from a more secure architecture than traditional AMM based ETF products. Unlike AMMs that rebalance constantly, PieVaults allow flexibility in the allocation, enabling holders to benefit from upward price movements without ‘selling the winners’ and buying the losers. Rebalancing can be called by anyone at any time via governance.
+      <br/><br/>
+      PieVaults allow for interaction with smart-contracts, allowing the assets to be used productively across DeFi and generate passive income.
+      <br/><br/>
+      Just like other PieVaults YPIE, PLAY and USD++, DeFi+L will enable meta-governance, with DOUGH holders able to vote using the underlying assets in their respective protocol decisions.
+      <br/><br/>
+      It’s also possible to stake DEFI+L in our DEFI+L / ETH pool. Users are able to provide liquidity in return for a steady stream of DOUGH. This pool enables an efficient market for other users to easily swap in and out of the DEFI+L token.
+  </div>
     
 </div>

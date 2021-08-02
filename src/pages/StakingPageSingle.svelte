@@ -70,10 +70,6 @@
       token = new ethers.Contract(res.token, ERC20ABI, signer || provider);
     };
 
-    const formatAmount = (amount) => {
-      return Number(formatEther(amount)).toFixed();
-    };
-
     onMount(() => {
       stakingPool = stakingPools.find((item) => {
         if(item.slug === slug) {
@@ -86,9 +82,9 @@
 
 
     $: (() => {
-      if(window.localStorage.ref && ethers.utils.isAddress(window.localStorage.ref)) {
+      if(getReferral()) {
         console.log('//------------------------//')
-        console.log('Ref Active', window.localStorage.ref);
+        console.log('Ref Active', getReferral());
         console.log('//------------------------//')
       }
     })()
@@ -100,138 +96,268 @@
     };
 
     const claim = async () => {
-      if (!$eth.address || !$eth.signer) {
-        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
-        connectWeb3();
+      const error = await safeFlow('claim');
+      if(error) {
+        console.log('error', error)
         return;
       }
 
-      const { emitter } = displayNotification(await stakingContract.claim(poolId));
+      try {
+        const { emitter } = displayNotification(await stakingContract.claim(poolId));
+        emitter.on("txConfirmed", ({ hash }) => {
+          const { dismiss } = displayNotification({
+            message: "Confirming...",
+            type: "pending",
+          });
 
-      emitter.on("txConfirmed", ({ hash }) => {
-        const { dismiss } = displayNotification({
-          message: "Confirming...",
-          type: "pending",
+          const subscription = subject("blockNumber").subscribe({
+            next: () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: `You claimed your rewards`,
+                type: "success",
+              });
+              getStakingPoolData();
+              dismiss();
+              subscription.unsubscribe();
+            },
+          });
+
+          return {
+            autoDismiss: 1,
+            message: "Mined",
+            type: "success",
+          };
         });
-
-        const subscription = subject("blockNumber").subscribe({
-          next: () => {
-            displayNotification({
-              autoDismiss: 15000,
-              message: `You claimed your rewards`,
-              type: "success",
-            });
-            dismiss();
-            subscription.unsubscribe();
-          },
+      } catch (e) {
+        displayNotification({
+          autoDismiss: 15000,
+          message: e.message,
+          type: "error",
         });
-
-        return {
-          autoDismiss: 1,
-          message: "Mined",
-          type: "success",
-        };
-      });
+      }
     }
 
     const unstake = async () => {
-      if (!$eth.address || !$eth.signer) {
-        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
-        connectWeb3();
+      const error = await safeFlow('unstake');
+      if(error) {
+        console.log('error', error)
         return;
       }
 
-      let emitter;
       try {
-        emitter = displayNotification(await stakingContract.withdraw(poolId, parseEther(unstakeAmount.toString())));
+        const { emitter } = displayNotification(await stakingContract.withdraw(poolId, parseEther(unstakeAmount.toString())));
+        emitter.on("txConfirmed", ({ hash }) => {
+          const { dismiss } = displayNotification({
+            message: "Confirming...",
+            type: "pending",
+          });
+
+          const subscription = subject("blockNumber").subscribe({
+            next: () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: `You unstaked successfully`,
+                type: "success",
+              });
+              unstakeAmount = 0;
+              getStakingPoolData();
+              dismiss();
+              subscription.unsubscribe();
+            },
+          });
+
+          return {
+            autoDismiss: 1,
+            message: "Mined",
+            type: "success",
+          };
+        });
       } catch(e) {
-        alert(e);
-        return;
+        displayNotification({
+          autoDismiss: 15000,
+          message: e.message,
+          type: "error",
+        });
       }
       
-      emitter
-      .on("txConfirmed", ({ hash }) => {
-        const { dismiss } = displayNotification({
-          message: "Confirming...",
-          type: "pending",
-        });
-
-        const subscription = subject("blockNumber").subscribe({
-          next: () => {
-            displayNotification({
-              autoDismiss: 15000,
-              message: `You withdrawed`,
-              type: "success",
-            });
-            dismiss();
-            subscription.unsubscribe();
-          },
-        });
-
-        return {
-          autoDismiss: 1,
-          message: "Mined",
-          type: "success",
-        };
-      });
+      
     }
 
     const approve = async () => {
-      if (!$eth.address || !$eth.signer) {
-        displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
-        connectWeb3();
-        return;
-      }
-
-      // if needs approval
-      if(data.userTokenApproval.lt(parseEther(stakeAmount))) {
-        const { emitter2 } = displayNotification(await token.approve(stakingContract.address, ethers.constants.MaxUint256));
-
-        emitter2.on("txConfirmed", ({ hash }) => {
-          const { dismiss } = displayNotification({
-            message: "Confirming...",
-            type: "pending",
-          });
-
-          const subscription = subject("blockNumber").subscribe({
-            next: () => {
-              displayNotification({
-                autoDismiss: 15000,
-                message: `You deposited`,
-                type: "success",
-              });
-              dismiss();
-              subscription.unsubscribe();
-            },
-          });
-
-          return {
-            autoDismiss: 1,
-            message: "Mined",
-            type: "success",
-          };
-        });
-      }
+      return safeFlow('approve');
     }
 
-    const stake = async () => {
+    const safeFlow = async (action) => {
+      const Errors = {
+        NOT_CONNECTED: {
+          code: 1,
+          message: "The wallet is not connected or signer not available"
+        },
+        NOT_APPROVED: {
+          code: 2,
+          message: "Allowance too low"
+        },
+        NOT_ENOUGH_TOKENS: {
+          code: 3,
+          message: "Balance too low"
+        },
+        USER_REFUSE_EXIT_FEES: {
+          code: 4,
+          message: "User refused exit fee, aborting"
+        },
+        AMOUNT_IS_NULL: {
+          code: 5,
+          message: "Amount is null"
+        },
+        AMOUNT_IS_ZERO: {
+          code: 6,
+          message: "You have 0 token staked"
+        },
+        NOTHING_TO_CLAIM: {
+          code: 6,
+          message: "You have no rewards to claim, stake now!"
+        },
+      }
+
+      // Check connection to wallet
       if (!$eth.address || !$eth.signer) {
         displayNotification({ message: $_("piedao.please.connect.wallet"), type: "hint" });
         connectWeb3();
-        return;
+        return Errors.NOT_CONNECTED;
       }
 
-      if(!data.exitFeePercentage.eq(0)) {
-        if(!window.confirm(`On exit a ${formatEther(data.exitFeePercentage.mul(100))}% fee will be charged on your principal`)) {
-          return;
+      //Clean variables
+      let cleanStakeAmount = stakeAmount ? parseEther(stakeAmount.toString()) : 0; // Since stakeAmount is bound to an input it can be null.
+      let cleanUnstakeAmount = unstakeAmount ? parseEther(unstakeAmount.toString()) : 0;
+
+
+      // Action: claim
+      if(action === 'claim') {
+       if( data.userUnclaimed.eq("0") ) {
+          displayNotification({
+            message: Errors.NOTHING_TO_CLAIM.message,
+            type: "hint",
+          });
+          return { ...Errors.NOTHING_TO_CLAIM, context: {rewards: data.userUnclaimed.toString()}};
         }
       }
 
-      // if needs approval
-      if(data.userTokenApproval.lt(parseEther(stakeAmount))) {
-        const { emitter2 } = displayNotification(await token.approve(stakingContract.address, ethers.constants.MaxUint256));
+      // Action: unstake
+      if(action === 'unstake') {
+        if(!unstakeAmount)
+          return { ...Errors.AMOUNT_IS_NULL, context: {amount: stakeAmount}};
 
-        emitter2.on("txConfirmed", ({ hash }) => {
+        //Check if there are zero staked tokens
+        if( data.userDeposited.eq("0") ) {
+          displayNotification({
+            message: Errors.AMOUNT_IS_ZERO.message,
+            type: "hint",
+          });
+          return { ...Errors.AMOUNT_IS_ZERO, context: {amountDeposited: data.userDeposited.toString()}};
+        }
+
+        //Check if we have enough token to unstake
+        if( data.userDeposited.lt(cleanUnstakeAmount) ) {
+          displayNotification({
+            message: Errors.NOT_ENOUGH_TOKENS.message,
+            type: "hint",
+          });
+          return { ...Errors.NOT_ENOUGH_TOKENS, context: {requested: cleanUnstakeAmount.toString(), actual: data.userDeposited.toString()}};
+        }
+      }
+
+      // Action: approve
+      if(action === 'approve') {
+        //Check if we have enough token
+        if( data.userTokenBalance.lt(cleanStakeAmount) ) {
+          displayNotification({
+            message: Errors.NOT_ENOUGH_TOKENS.message,
+            type: "hint",
+          });
+          return { ...Errors.NOT_ENOUGH_TOKENS, context: {requested: cleanStakeAmount.toString(), actual: data.userTokenBalance.toString()}};
+        }
+        
+        //Check if we have enough approval
+        if(data.userTokenApproval.lt(cleanStakeAmount)) {
+          try {
+            const { emitter } = displayNotification(await token.approve(stakingContract.address, ethers.constants.MaxUint256));
+            emitter.on("txConfirmed", ({ hash }) => {
+                const { dismiss } = displayNotification({
+                  message: "Confirming...",
+                  type: "pending",
+                });
+                getStakingPoolData();
+
+                const subscription = subject("blockNumber").subscribe({
+                  next: () => {
+                    displayNotification({
+                      autoDismiss: 15000,
+                      message: `Approved successfully, now stake!`,
+                      type: "success",
+                    });
+                    getStakingPoolData();
+                    dismiss();
+                    subscription.unsubscribe();
+                  },
+                });
+
+                return {
+                  autoDismiss: 1,
+                  message: "Mined",
+                  type: "success",
+                };
+            });
+          } catch (e) {
+            displayNotification({
+              autoDismiss: 15000,
+              message: e.message,
+              type: "error",
+            });
+            return { ...Errors.NOT_APPROVED, context: {currentAllowance: data.userTokenApproval, requestedAmount: cleanStakeAmount}};
+          }
+        }
+      }
+
+      // Action: stake
+      if(action === 'stake') {
+        if(!stakeAmount)
+          return { ...Errors.AMOUNT_IS_NULL, context: {amount: stakeAmount}};
+
+        let res = await safeFlow('approve');
+        console.log('Approve', res);
+        if(res) return res;
+
+        //Double check with user
+        if(!data.exitFeePercentage.eq(0)) {
+          if(!window.confirm(`On exit a ${formatEther(data.exitFeePercentage.mul(100))}% fee will be charged on your principal`)) {
+            displayNotification({
+              message: Errors.USER_REFUSE_EXIT_FEES.message,
+              type: "hint",
+            });
+            return { ...Errors.USER_REFUSE_EXIT_FEES, context: {fee: data.exitFeePercentage}};
+          }
+        }
+      }
+
+      return false;
+    }
+
+    const getReferral = () => window.localStorage.ref && ethers.utils.isAddress(window.localStorage.ref) ? window.localStorage.ref : false;
+
+    const stake = async () => {
+      const error = await safeFlow('stake');
+      if(error) {
+        console.log('error', error)
+        return;
+      }
+      
+      let referral = getReferral();
+      try {
+        let cleanStakeAmount = parseEther(stakeAmount.toString());
+        const { emitter } = displayNotification(referral ? await stakingContract.depositReferred(poolId, cleanStakeAmount, referral) : await stakingContract.deposit(poolId, cleanStakeAmount));
+    
+        emitter.on("txConfirmed", ({ hash }) => {
           const { dismiss } = displayNotification({
             message: "Confirming...",
             type: "pending",
@@ -241,10 +367,12 @@
             next: () => {
               displayNotification({
                 autoDismiss: 15000,
-                message: `You deposited`,
+                message: `You staked successfully`,
                 type: "success",
               });
               dismiss();
+              stakeAmount = 0;
+              getStakingPoolData();
               subscription.unsubscribe();
             },
           });
@@ -255,45 +383,14 @@
             type: "success",
           };
         });
+      } catch (e) {
+        displayNotification({
+          autoDismiss: 15000,
+          message: e.message,
+          type: "error",
+        });
       }
       
-      let emitter;
-
-      if(window.localStorage.ref && ethers.utils.isAddress(window.localStorage.ref)) {
-        console.log('//------------------------//')
-        console.log('Ref Active', window.localStorage.ref);
-        console.log('//------------------------//')
-
-        emitter = displayNotification(await stakingContract.depositReferred(poolId, parseEther(stakeAmount.toString()), window.localStorage.ref)).emitter;
-      } else {
-        emitter = displayNotification(await stakingContract.deposit(poolId, parseEther(stakeAmount.toString()))).emitter;
-      }
-
-
-      emitter.on("txConfirmed", ({ hash }) => {
-        const { dismiss } = displayNotification({
-          message: "Confirming...",
-          type: "pending",
-        });
-
-        const subscription = subject("blockNumber").subscribe({
-          next: () => {
-            displayNotification({
-              autoDismiss: 15000,
-              message: `You deposited`,
-              type: "success",
-            });
-            dismiss();
-            subscription.unsubscribe();
-          },
-        });
-
-        return {
-          autoDismiss: 1,
-          message: "Mined",
-          type: "success",
-        };
-      });
     }
 </script>
 <Meta 
@@ -332,7 +429,7 @@ metadata={{
                 <span class="text-base md:text-lg md:leading-6 font-bold">{stakingPool.name}</span>
                 <!-- <span class="bg-darkpurple text-white px-5px py-1px roundedxs text-xs ml-2 font-bold">55.30% APY</span> -->
               </div>
-              <span class="block md:hidden text-sm leading-6 font-bold">Pool: Balancer</span>
+              <span class="block md:hidden text-sm leading-6 font-bold">Pool: <span class="capitalize">{stakingPool.type}</span></span>
               {#if $eth.address}
                 <span class="text-sm font-thin">{data.liquidPercentageLabel} Liquid - {data.escrowPercentageLabel} Escrowed</span>
               {/if}
@@ -376,15 +473,23 @@ metadata={{
               </div>
             </div>
 
-            {#if stakeAmount == 0 }
-              <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Enter an amount</button>
+            {#if data.userTokenBalance.eq(0)}
+              <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">You don't have any {stakingPool.name} {stakingPool.stakingTokenSymbol} tokens available to stake</button>  
             {:else}
-              {#if parseEther(stakeAmount).gt(data.userTokenApproval)}
-              <button on:click={approve} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Approve</button>
+              {#if stakeAmount }
+                {#if parseEther(stakeAmount.toString()).gt(data.userTokenBalance)}
+                  <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Balance too low</button>
+                {:else if parseEther(stakeAmount.toString()).gt(data.userTokenApproval)}
+                  <button on:click={approve} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Approve</button>
+                {:else}
+                  <button on:click={stake} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Stake</button>
+                {/if}
               {:else}
-                <button on:click={stake} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Stake</button>
+                <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Enter an amount</button>  
               {/if}
             {/if}
+            
+            
           </span>
       
           <span class="flex flex-col md:flex-row mt-4 justify-between">
@@ -457,10 +562,14 @@ metadata={{
                 </div>
               </div>
 
-              {#if unstakeAmount == 0 }
-                  <button disabled class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Enter an amount</button>
+              {#if unstakeAmount }
+                {#if parseEther(unstakeAmount.toString()).gt(data.userDeposited)}
+                  <button disabled class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Balance too low</button>
+                {:else}
+                  <button on:click={unstake} class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Unstake</button>
+                {/if}
               {:else}
-                <button on:click={unstake} class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Unstake</button>
+                <button disabled class="clear farm-button-ghost mt-10px rounded-20px p-15px w-100pc border-grey hover:bg-black hover:text-white">Enter an amount</button>
               {/if}
               
             </span>
@@ -477,10 +586,10 @@ metadata={{
               </p>
               <br />
               <p>There are total : <strong>{Number(formatEther(data.totalDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol} </strong> staked in the Staking contract.</p>
-              <p>Staked by you: <strong>{Number(formatEther(data.userDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol}</p>
-              <p>
-                You are staking : <strong>{data.userDeposited.eq(0) ? "0" : formatEther(data.userDeposited.div(data.totalDeposited).mul(100))}%</strong>
-              </p>
+              
+              {#if data.userDeposited.gt(0)}
+                <p>Staked by you: <strong>{Number(formatEther(data.userDeposited)).toFixed(4)} {stakingPool.stakingTokenSymbol}</p>
+              {/if}
               {#if data.exitFeePercentage.gt(0)}
                   <p>
                     ⚠️ This staking pool has a <strong>{formatEther(data.exitFeePercentage.mul(100))}%</strong> exit fee charged on your principal on exit

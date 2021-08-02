@@ -5,14 +5,11 @@
   import ovensConf from '../../config/ovensConf.js';
   import Meta from '../../components/elements/meta.svelte';
   import { balances, balanceKey, eth } from '../../stores/eth.js';
-
   import { getTokenImage, subscribeToBalance, toFixed } from '../../components/helpers.js';
-
   import Modal from '../../components/elements/Modal.svelte';
   import LiquidityModal from '../../components/modals/LiquidityModal.svelte';
   import OvenModal from '../../components/modals/OvenModal.svelte';
-  import Oven2Modal from '../../components/modals/Oven2Modal.svelte';
-  
+  import Oven2Modal from '../../components/modals/Oven2Modal.svelte';  
   import TooltipButton from '../../components/elements/TooltipButton.svelte';
   import { fetchOvensUserData } from '../../helpers/multicall';
   import Accordion from '../../components/elements/Accordion.svelte'
