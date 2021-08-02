@@ -27,7 +27,6 @@
     BigNumber(num.toString())
       .multipliedBy(10 ** 18);
 
-
   const minLockAmount = 1;
   // All the epochs where rewards are available.
   $: epochs = [];
