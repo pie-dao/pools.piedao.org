@@ -10,7 +10,9 @@ import displayNotification from '../notifications';
 import { allowances, eth } from './eth/writables.js';
 import { functionKey } from './eth/keys.js';
 import { observableContract } from './eth/contracts.js';
+/* eslint-disable import/no-cycle */
 import { registerConnection, resetConnection } from './eth/connection.js';
+/* eslint-enable import/no-cycle */
 import { subject } from './eth/observables.js';
 import { trackEthBalance } from './eth/lifecycle.js';
 
