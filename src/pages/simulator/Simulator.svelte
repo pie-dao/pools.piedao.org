@@ -302,7 +302,7 @@
 <div class="flex flex-col items-center text-center mt-8">
   <div class="w-full flex flex-col items-center px-4 md:px-8 max-w-1200px">
     <img class="w-400px" src={images.voting_hands} alt="governance mining"/>
-    <div class="font-hero font-hero-sim">Get paid for<br />Governing</div>
+    <div class="font-hero font-hero-sim">Get paid for<br />Governaning</div>
     <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
     <div class="text-l md:text-lg font-thin mx-4 md:mx-10pc mt-4 md:mt-8 mb-8">
       A complete redesign of the governance system with token holders in mind: go vote on key DAO matters & get a paycheck for your work,
