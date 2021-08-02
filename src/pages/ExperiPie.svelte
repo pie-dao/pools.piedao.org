@@ -440,6 +440,15 @@
     </div>
 
     <div class="p-0 flex-initial self-start mr-8">
+      <div class="text-md md:text-md font-black text-black">
+        {getSpread.number}
+      </div>
+      <TooltipButton tooltip="Difference between NAV and the Pie current price on exchanges">
+      <div class="font-thin text-xs md:text-base text-black">{getSpread.label}</div>
+      </TooltipButton>
+    </div>
+
+    <div class="p-0 flex-initial self-start mr-8">
       <div class="font-bold text-md md:text-md text-black">
         {PieAPR}
       </div>

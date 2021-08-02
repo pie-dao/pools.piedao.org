@@ -364,6 +364,10 @@ export async function fetchOvensUserData(ovensList, walletAddress, provider) {
     if (parseFloat(getNormalizedNumber(balanceEth.toString(), 18).toString()) > 0) {
       userHasPosition = true;
     }
+
+    if( parseFloat(getNormalizedNumber(balanceEth.toString(), 18).toString()) > 0) {
+      userHasPosition = true;
+    }
   }
 
   ovenData.userHasPosition = userHasPosition;
