@@ -110,7 +110,7 @@
   $: receivedAmount = 0;
   $: quote = null;
   $: frozeQuote = null;
-  $: needAllowance = true;
+  $: needAllowance = false;
   $: initialized = {
     onMount: false,
     onChainData: false
