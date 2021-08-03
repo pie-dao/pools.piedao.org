@@ -23,6 +23,8 @@ import Learn from '../pages/Learn.svelte';
 import Integrations from '../pages/Integrations.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
 import Farm from '../pages/Farm.svelte';
+import Simulator from '../pages/simulator/Simulator.svelte';
+import SimulatorStats from '../pages/simulator/Stats.svelte';
 
 export const defaultRouteObj = {
   page: Main,
@@ -107,6 +109,13 @@ const formatRoute = (route) => {
       return { page: LPStakingV2 };
     case 'farm':
       return { page: Farm };
+    case 'simulator':
+      /* eslint-disable no-case-declarations */
+      const simulation = (route[1] || '');
+      /* eslint-enable no-case-declarations */
+      return { page: Simulator, params: { simulation } };
+    case 'simulator-stats':
+      return { page: SimulatorStats };
     case 'stake':
       referral = route[1] || null;
 
