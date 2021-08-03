@@ -110,9 +110,9 @@ export const trackGasPrice = async () => subject('gasPrice');
 
 // Shortcuts
 
-export const approve = async (address, spender, amount) => {
+export const approve = async (address, spender, amount, overrides = {}) => {
   const erc20Contract = await contract({ address, abi: erc20 });
-  const { hash } = await erc20Contract['approve(address,uint256)'](spender, amount);
+  const { hash } = await erc20Contract['approve(address,uint256)'](spender, amount, overrides);
 
   const { emitter } = displayNotification({ hash });
   const symbol = await erc20Contract.symbol();
@@ -136,8 +136,9 @@ export const approve = async (address, spender, amount) => {
   if (currentBlockNumber > lastBlock) {
     eth.set({ ...get(eth), currentBlockNumber });
   }
+
+  return true;
 };
 
-export const approveMax = async (address, spender) => {
-  await approve(address, spender, ethers.constants.MaxUint256);
-};
+// eslint-disable-next-line max-len
+export const approveMax = async (address, spender, overrides = {}) => approve(address, spender, ethers.constants.MaxUint256, overrides);

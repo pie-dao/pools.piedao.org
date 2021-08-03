@@ -110,7 +110,7 @@
   $: receivedAmount = 0;
   $: quote = null;
   $: frozeQuote = null;
-  $: needAllowance = false;
+  $: needAllowance = true;
   $: initialized = {
     onMount: false,
     onChainData: false
@@ -176,16 +176,9 @@
       return;
     }
 
-    const { emitter } = displayNotification(await approveMax(sellToken.address, ZeroEx));
+    await approveMax(sellToken.address, ZeroEx);
     needAllowance = false;
-    await fetchOnchainData();
-    
-    await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
-      resolve();
-      return { message: `${sellToken.symbol} unlocked`, type: 'success', address:null };
-    }));
-
-    
+    await fetchOnchainData();    
   }
 
   function onAmountChange() {
