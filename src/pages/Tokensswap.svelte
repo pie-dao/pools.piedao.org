@@ -207,6 +207,8 @@
         gasLimit: ethers.BigNumber.from(gasPercentagePlus),
     };
 
+    modal.close();
+
     const { emitter } = displayNotification(await $eth.signer.sendTransaction(transaction) );
 
     emitter.on("txConfirmed", ({ hash }) => {
