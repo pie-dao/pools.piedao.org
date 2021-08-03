@@ -133,4 +133,9 @@ export class CoinGecko {
     const baseURL = 'https://api.coingecko.com/api/v3';
     return request(`${baseURL}/coins/${coingeckoID}`);
   }
+
+  static fetchPriceFromString(stringFeed) {
+    const baseURL = 'https://api.coingecko.com/api/v3';
+    return request(`${baseURL}/simple/price?ids=${stringFeed}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true`);
+  }    
 }
