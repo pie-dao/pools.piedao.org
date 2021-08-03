@@ -110,10 +110,12 @@ const formatRoute = (route) => {
     case 'farm':
       return { page: Farm };
     case 'simulator':
-      let simulation = (route[1] || '');
-      return { page: Simulator, params: { simulation } };   
+      /* eslint-disable no-case-declarations */
+      const simulation = (route[1] || '');
+      /* eslint-enable no-case-declarations */
+      return { page: Simulator, params: { simulation } };
     case 'simulator-stats':
-      return { page: SimulatorStats };       
+      return { page: SimulatorStats };
     case 'stake':
       referral = route[1] || null;
 

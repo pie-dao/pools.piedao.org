@@ -139,7 +139,7 @@ export default class Calculator {
         };
 
         const treasuryYearlyReturns = calculatedProjections.median.farming.gains.slice(0, 12)
-        .reduce((total, value) => total + value);
+          .reduce((total, value) => total + value);
 
         outputs.treasury = {
           expectedYearlyReturns: treasuryYearlyReturns,
