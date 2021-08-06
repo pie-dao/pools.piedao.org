@@ -7,6 +7,46 @@
 @tailwind media;
 
 /* Custom css */
+#customSlider.rangeSlider {
+  margin: 0 !important;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* .bg-button {
+  display: inline-flex;
+  border: double 1px transparent;
+  border-radius: 1.6rem;
+  background-color: white;
+}
+
+.bg-button.selected {
+  display: inline-flex;
+  border: double 1px transparent;
+  border-radius: 1.6rem;
+  background-image: linear-gradient(white, white), radial-gradient(circle at top left,#ff8932, #a50bce, #1fa6e0, #47d482);
+  background-origin: border-box;
+  background-clip: content-box, border-box;  
+} */
+
+.bg-button {
+  display: inline-flex;
+  border: solid 2px transparent;
+  border-radius: 1.6rem;
+  background-color: white;
+  padding: 10px;
+}
+
+.bg-button.selected {
+  display: inline-flex;
+  border: solid 2px #1ec2ff;
+  border-radius: 1.6rem;
+  background-color: #1ec2ff;
+  color: white;
+
+}
 
 /* Hide arrows on input[type=number] on webkit*/
 input::-webkit-outer-spin-button,
@@ -97,6 +137,7 @@ flex: 1 1 0;
 .bg-genericbanner {
   background-color: #fdfdfd;
 }
+
 
 .text-l {
   font-size: 1.2rem;
@@ -191,6 +232,11 @@ right: 0px;
   background-color: #B7F1E2;
 }
 
+.bg-peppermint {
+  background-color: #7EE999;
+}
+
+
 .bg-purple {
   background-color: #8B60F8;
 }
@@ -205,6 +251,14 @@ right: 0px;
 
 .bg-lightblu {
   background-color: #D3E8FF;
+}
+
+.bg-melanzanafritta {
+  background-color: #1D1D1D;
+}
+
+.bg-melanzana {
+  background-color: #454764;
 }
 
 .text-green {
@@ -256,9 +310,15 @@ right: 0px;
 .toggle-btn {
 
 }
+
 .font-24px {
   font-size: 24px;
 }
+
+.border-t-1 {
+  border-top: solid 1px;
+}
+
 .font-huge {
   font-size: 2.8rem;
   line-height: 3.2rem;
@@ -275,10 +335,15 @@ right: 0px;
   font-weight: bolder;
 }
 
+
 @media (max-width: 768px) {
   .font-hero {
     font-size: 15vw;
     line-height: 3.5rem;
+  }
+  .font-hero-sim {
+    font-size: 15vw;
+    line-height: 4.5rem;
   }
   .font-huge {
     font-size: 2rem;
@@ -2127,4 +2192,9 @@ max-width: 100vw;
 .svgclose {
   fill: white;
   filter: invert(100%);
+}
+
+
+.commitment-btn {
+  background-image: linear-gradient(white, white), radial-gradient(circle at top left,#ff8932, #a50bce, #1fa6e0, #47d482);
 }

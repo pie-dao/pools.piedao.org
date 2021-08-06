@@ -38,6 +38,7 @@
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/DeFi%2B%2B.svg",
     "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599": "https://assets.coingecko.com/coins/images/7598/small/wrapped_bitcoin_wbtc.png?1548822744",
+    "0x269616D549D7e8Eaa82DFb17028d0B212D11232A": "https://assets.coingecko.com/coins/images/17018/small/Punk.png?1626086346",
     "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png",
     "0xe4f726adc8e89c6a6017f01eada77865db22da14": "https://github.com/pie-dao/brand/blob/master/PIE%20Tokens/BCP.png?raw=true",
     "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": "https://github.com/pie-dao/brand/blob/master/PIE%20Tokens/BCP.png?raw=true",
@@ -74,8 +75,6 @@
   "bpt": "https://raw.githubusercontent.com/pie-dao/brand/4a2c994845bac4fd24ab58ffac01d4fb83c9d2d9/misc/bpt.svg",
   "slp": "https://raw.githubusercontent.com/pie-dao/brand/4a2c994845bac4fd24ab58ffac01d4fb83c9d2d9/misc/slp.svg",
   "backarrow": "https://raw.githubusercontent.com/pie-dao/brand/eec1c8c2be5948762d6930254bc37306865b47f1/misc/back.svg",
-
-
   "tokenmigration": "https://i.ibb.co/tY41vvx/migra.png",
   "liquiditymining": "https://i.ibb.co/3YyvfzX/farming.png",
   "vestingperiod": "https://i.ibb.co/VSyRLBY/astro.png",
@@ -93,8 +92,14 @@
   "oven_social": "oven_social.png",
   "oven_illustration": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/oven-illustration.png",
   "piechart_illustration": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/pichartillustration.png",
-  
-  
+  "d_top": "https://raw.githubusercontent.com/pie-dao/brand/6122496b1dafe638d98308e0f69434acec11e064/misc/d-top.svg",
+  "d_bottom": "https://raw.githubusercontent.com/pie-dao/brand/6c2b22853008dba0257135df033260178c53107d/misc/d-bottom.svg",
+  "newblack": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/newblack.png",
+  "costumeparty": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/costumeparty.png",
+  "intro_gov_mining": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/introducing-gov.jpg",
+  "voting_hands": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/votinghands.jpg",
+  "ecosystem_friendly": "https://raw.githubusercontent.com/pie-dao/brand/ee2529dbb8d19324e56fa59dfeb5f38ad6694f23/misc/ecosystem-icon.svg",
+  "duck": "https://raw.githubusercontent.com/pie-dao/brand/ee2529dbb8d19324e56fa59dfeb5f38ad6694f23/misc/duck.svg",
   "koala": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/koala.png",
   "defihero": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/hero.png",
   "degen": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/degen.png",
@@ -137,19 +142,4 @@
   "rewardsPie": "https://raw.githubusercontent.com/pie-dao/brand/6adcf8b3a75380cc49ea119150b683a031afa016/PIE%20Tokens/RewardPie.svg",
   "slashed": "https://raw.githubusercontent.com/pie-dao/brand/86501f412e3c7bb62694ca0e962d6f86f2a278a6/misc/slashed.svg",
   "claimed": "https://raw.githubusercontent.com/pie-dao/brand/86501f412e3c7bb62694ca0e962d6f86f2a278a6/misc/claimed.svg"
-
-
-
- 
-  
-
-
-
-
-
-  
-  
-  
-
-
 }

@@ -162,6 +162,16 @@ export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') =>
   }
 };
 
+export const formatBigMoneyAmount = (amount, separator = ',', fiat = '$') => {
+  var decimals = amount.toString().split(".").length == 2 ? amount.toString().split(".")[1] : "00";
+  var units = ["M","B","T","Q"];
+  var unit = Math.floor((amount / 1.0e+1).toFixed(0).toString().length);
+  var r = unit%3;
+  var x =  Math.abs(Number(amount))/Number('1.0e+'+(unit-r)).toFixed(2);
+  var final_unit = units[Math.floor(unit / 3) - 2] ? units[Math.floor(unit / 3) - 2] : "";
+  return fiat + ' ' + x.toFixed(0) + separator + decimals + ' ' + final_unit;
+};
+
 export const amountFormatter = ({
   amount,
   approximatePrefix = '~',

@@ -13,11 +13,14 @@
   })()
 
   const handleClick = () => {
-    connectWeb3();
+    if (!$eth.address) {
+      connectWeb3();
+    }
+
     if ($eth.address) {
       window.location.hash = '#/piefolio';
       return;
-    }
+    }      
   }
   
 </script>
