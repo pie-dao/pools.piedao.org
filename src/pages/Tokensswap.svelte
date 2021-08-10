@@ -176,16 +176,9 @@
       return;
     }
 
-    const { emitter } = displayNotification(await approveMax(sellToken.address, ZeroEx));
+    await approveMax(sellToken.address, ZeroEx);
     needAllowance = false;
-    await fetchOnchainData();
-    
-    await new Promise((resolve) => emitter.on('txConfirmed', ({ blockNumber }) => {
-      resolve();
-      return { message: `${sellToken.symbol} unlocked`, type: 'success', address:null };
-    }));
-
-    
+    await fetchOnchainData();    
   }
 
   function onAmountChange() {
@@ -213,6 +206,8 @@
         data: quote.data,
         gasLimit: ethers.BigNumber.from(gasPercentagePlus),
     };
+
+    modal.close();
 
     const { emitter } = displayNotification(await $eth.signer.sendTransaction(transaction) );
 
