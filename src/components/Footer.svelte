@@ -95,6 +95,14 @@
     >
       {$_('brands.github')}
     </a>
+    <a
+      class="footer-link"
+      href={links.nomics}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {$_('brands.nomics')}
+    </a>    
     <a href={links.dao} target="_blank" rel="noopener noreferrer">
       <img src={images.logos.aragon} class="aragon" alt={$_('brands.aragon')} />
     </a>
