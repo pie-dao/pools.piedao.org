@@ -33,7 +33,7 @@
       </a>
     {/if}
     <a href="mailto:piedao@protonmail.com" class="footer-link">
-      piedao@protonmail.com
+      email
     </a>
     
 
@@ -47,6 +47,14 @@
     >
       {$_('brands.discord')}
     </a>
+    <a
+      class="footer-link"
+      href={links.telegram}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {$_('brands.telegram')}
+    </a>    
     <a
       class="footer-link"
       href={links.twitter}
@@ -86,7 +94,7 @@
       rel="noopener noreferrer"
     >
       {$_('brands.github')}
-    </a>
+    </a>   
     <a href={links.dao} target="_blank" rel="noopener noreferrer">
       <img src={images.logos.aragon} class="aragon" alt={$_('brands.aragon')} />
     </a>
