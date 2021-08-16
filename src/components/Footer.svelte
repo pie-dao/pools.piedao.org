@@ -33,7 +33,7 @@
       </a>
     {/if}
     <a href="mailto:piedao@protonmail.com" class="footer-link">
-      piedao@protonmail.com
+      email
     </a>
     
 
