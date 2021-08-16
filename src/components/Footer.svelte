@@ -49,6 +49,14 @@
     </a>
     <a
       class="footer-link"
+      href={links.telegram}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {$_('brands.telegram')}
+    </a>    
+    <a
+      class="footer-link"
       href={links.twitter}
       target="_blank"
       rel="noopener noreferrer"
