@@ -766,7 +766,7 @@
                 on:click={() => {
                   stakeDuration = 36;
                 }}
-                class="pointer flex items-center cardbordergradient"
+                class="pointer flex items-center stakinggradient shake"
               >
                 <div class="flex items-center p-2">
                   <div class=" mr-8px">3 Years</div>
