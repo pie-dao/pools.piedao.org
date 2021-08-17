@@ -819,7 +819,7 @@
               <button
                 disabled
                 class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
-                >Balance too low</button
+                >Insufficient Balance</button
               >
             {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
               <button
