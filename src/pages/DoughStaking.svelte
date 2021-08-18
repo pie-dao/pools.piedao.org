@@ -174,7 +174,7 @@
           });
 
           locks.sort(function (lock_a, lock_b) {
-            return lock_a.lockedAt - lock_b.lockedAt;
+            return lock_b.lockedAt - lock_a.lockedAt;
           });
 
           data[key] = locks;
