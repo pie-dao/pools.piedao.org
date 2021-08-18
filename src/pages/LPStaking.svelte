@@ -19,6 +19,7 @@
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { farming } from '../stores/eth/writables.js';
   import Meta from '../components/elements/meta.svelte';
+  
   import {
     amountFormatter,
     toFixed,
