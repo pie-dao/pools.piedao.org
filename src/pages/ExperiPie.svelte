@@ -12,6 +12,7 @@
   import CoinGeckoBanner from "../components/CoinGeckoBanner.svelte";
   import TooltipButton from '../components/elements/TooltipButton.svelte';
   import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
+  import stakingPools from '../config/stakingPools.json';
 
   import SingleAssetModal from "../components/modals/SingleAssetModal.svelte"; 
 
@@ -59,6 +60,19 @@
       }
     });
   };
+
+  const farmingPie = (address) => {
+    return stakingPools.find((stakingPool) => {
+      return stakingPool.containing.find((token) => {
+        if (token.address == address) {
+          return stakingPool;
+        }
+      });
+    });
+  };
+
+  let farmingPieObj = farmingPie(params.address);
+  farmingPieObj = farmingPieObj;
 
   let pieOfPies = false;
   let initialized = false;
@@ -115,7 +129,7 @@
 
   $: if($eth.provider && $eth.address && !loadings.init && !initialized) {
       loadings.init = true;
-      console.log('$eth.address', $eth.address)
+      console.log('$eth.address', $eth.address);
       subscribeToBalance(token, $eth.address, true);
       initialize();
   }
@@ -146,8 +160,6 @@
     let globalAPR = 0;
     const compoundData = await fetchCompoundData();
     const aaveData = await fetchAaveData();
-
-    
     
     Pie = new Experipie(token, $eth.provider);
     await Pie.initialize($piesMarketDataStore);
@@ -197,6 +209,7 @@
     console.log('res', res);
     initialized = true;
     loadings.init = false;
+
     return initialized;
   }
 
@@ -397,6 +410,9 @@
                     modal.open()
                     toggleDropdow();
                   }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Redeem</a>
+                  {#if farmingPieObj}
+                    <a href="#/staking/{farmingPieObj.slug}" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farm</a>
+                  {/if}                    
                 </div>
               </div>
             </div>
@@ -719,6 +735,9 @@
               modal.open()
               toggleDropdow();
             }} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Redeem</a>
+            {#if farmingPieObj}
+              <a href="#/staking/{farmingPieObj.slug}" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farm</a>
+            {/if}              
           </div>
         </div>
       </div>
