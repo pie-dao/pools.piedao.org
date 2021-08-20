@@ -39,6 +39,12 @@ button:focus {
   padding: 10px;
 }
 
+.input-invalid {
+  border: solid 1px #f40a50;
+  -webkit-box-shadow: 0px 0px 8px 2px #f450a450;
+  box-shadow: 0px 0px 8px 2px #f450a450;  
+}
+
 .bg-button.selected {
   display: inline-flex;
   border: solid 2px #1ec2ff;
