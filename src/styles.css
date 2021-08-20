@@ -45,6 +45,10 @@ button:focus {
   box-shadow: 0px 0px 8px 2px #f450a450;  
 }
 
+.input-box-loading {
+  opacity: 0.6;
+}
+
 .bg-button.selected {
   display: inline-flex;
   border: solid 2px #1ec2ff;

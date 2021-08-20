@@ -30,6 +30,8 @@
   // All the epochs where rewards are available.
   $: epochs = [];
   $: isLoading = true;
+  $: stakeButtonText = "Stake";
+  $: isStaking = false;
 
   let data = {
     totalStaked: BigNumber(0),
@@ -358,6 +360,20 @@
     }
 
     try {
+      stakeButtonText = "Staking";
+      isStaking = true;
+
+      let interval = setInterval(() => {
+        let occurrences = stakeButtonText.split(".").length - 1;
+        
+        if(occurrences < 3) {
+          stakeButtonText += ".";
+        } else {
+          stakeButtonText = "Staking";
+        }
+        
+      }, 1000);
+
       const { emitter } = displayNotification(
         await sharesTimeLock.depositByMonths(
           parseEther(stakeAmount.toString()),
@@ -369,6 +385,10 @@
       emitter.on('txConfirmed', async () => {
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
+            clearInterval(interval);
+            stakeButtonText = "Stake";
+            isStaking = false;
+
             displayNotification({
               autoDismiss: 15000,
               message: `You staked successfully`,
@@ -695,11 +715,12 @@
     <div class="flex flex-col w-full m-0  lg:w-49pc md:ml-1pc">
       <!-- STAKING FORM -->
       {#if !isLoading}
-        <div class="flex flex-col items-center w-full  cardbordergradient p-1px bg-lightgrey">
+        <div class="flex flex-col items-center w-full  cardbordergradient p-1px bg-lightgrey"
+        class:input-box-loading="{isStaking}">
           <div class="font-huge text-center mt-6">DOUGH Staking</div>
           <div
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px"
-            class:input-invalid="{toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}"
+            class:input-invalid="{stakeAmount && toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}"
           >
             <div class="flex items-center justify-between">
               <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
@@ -727,6 +748,7 @@
                 minlength="1"
                 maxlength="79"
                 spellcheck="false"
+                disabled={isStaking}
               />
               <span class="sc-iybRtq gjVeBU">
                 <img class="h-auto w-24px mr-5px" src={images.doughtoken} alt="dough token" />
@@ -762,6 +784,7 @@
                 maxlength="79"
                 spellcheck="false"
                 oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+                disabled={isStaking}
 
                 on:keyup={() => {
                   if(stakeDuration > 36) {
@@ -813,6 +836,7 @@
                 autocorrect="off"
                 type="text"
                 spellcheck="false"
+                disabled={isStaking}
               />
             </div>
           </div>
@@ -821,7 +845,7 @@
             <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4"
               >You don't own tokens
             </button>
-          {:else if stakeAmount}
+          {:else if (stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0)}
             {#if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
               <button
                 disabled
@@ -838,7 +862,7 @@
               <button
                 on:click={stakeDOUGH}
                 class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
-                >Stake</button
+                >{stakeButtonText}</button
               >
             {:else}
               <button
