@@ -32,6 +32,8 @@
   $: isLoading = true;
   $: stakeButtonText = "Stake";
   $: isStaking = false;
+  $: approveButtonText = "Approve";
+  $: isApproving = false;  
 
   let data = {
     totalStaked: BigNumber(0),
@@ -227,6 +229,20 @@
     }
 
     try {
+      approveButtonText = "Approving";
+      isApproving = true;
+
+      let interval = setInterval(() => {
+        let occurrences = approveButtonText.split(".").length - 1;
+        
+        if(occurrences < 3) {
+          approveButtonText += ".";
+        } else {
+          approveButtonText = "Approving";
+        }
+        
+      }, 1000);
+
       // resetting the approve to zero, before initiating a new approval...
       if (
         !data.accountDepositTokenAllowance.isEqualTo(0) &&
@@ -237,6 +253,10 @@
 
       await approveMax(smartcontracts.dough, smartcontracts.doughStaking, { gasLimit: 100000 });
       data.accountDepositTokenAllowance = ethers.constants.MaxUint256;
+      
+      clearInterval(interval);
+      approveButtonText = "Approve";
+      isApproving = false;
     } catch (error) {
       console.log('error', error);
       displayNotification({
@@ -752,7 +772,7 @@
                 minlength="1"
                 maxlength="79"
                 spellcheck="false"
-                disabled={isStaking}
+                disabled={isStaking || isApproving}
               />
               <span class="sc-iybRtq gjVeBU">
                 <img class="h-auto w-24px mr-5px" src={images.doughtoken} alt="dough token" />
@@ -788,7 +808,7 @@
                 maxlength="79"
                 spellcheck="false"
                 oninput="this.value=this.value.replace(/[^0-9]/g,'')"
-                disabled={isStaking}
+                disabled={isStaking || isApproving}
 
                 on:keyup={() => {
                   if(stakeDuration > 36) {
@@ -840,7 +860,7 @@
                 autocorrect="off"
                 type="text"
                 spellcheck="false"
-                disabled={isStaking}
+                disabled={isStaking || isApproving}
               />
             </div>
           </div>
@@ -860,7 +880,7 @@
               <button
                 on:click={approveToken}
                 class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
-                >Approve</button
+                >{approveButtonText}</button
               >
             {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
               <button
