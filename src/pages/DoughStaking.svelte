@@ -386,8 +386,12 @@
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
             clearInterval(interval);
-            stakeButtonText = "Stake";
+            stakeButtonText = "Success! 🥳";
             isStaking = false;
+
+             setTimeout(() => {
+              stakeButtonText = "Stake";
+             }, 3000);
 
             displayNotification({
               autoDismiss: 15000,
