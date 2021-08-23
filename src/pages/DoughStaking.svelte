@@ -411,6 +411,7 @@
 
              setTimeout(() => {
               stakeButtonText = "Stake";
+              stakeAmount = 0;
              }, 3000);
 
             displayNotification({
@@ -418,7 +419,7 @@
               message: `You staked successfully`,
               type: 'success',
             });
-            stakeAmount = 0;
+
             await fetchStakingData();
             subscription.unsubscribe();
           },
@@ -592,7 +593,7 @@
         <div class="font-huge text-center mt-6">Your Staking</div>
 
         {#if data.accountLocks && data.accountLocks.length > 0}
-          {#each data.accountLocks as lock, id}
+          {#each data.accountLocks.slice(0,3) as lock, id}
             <!-- Let's show just the normal stakes, and the boosted ones. The stakes having a boostedPointer are obsolete stakes, so we won't show them -->
             {#if lock.boostedPointer == ''}
               <div
@@ -681,13 +682,19 @@
         {:else}
           Insert placeholder No locks
         {/if}
+
+        {#if data.accountLocks.length > 3}
+          <a class="pt-6" href="#/staking_positions">
+            See all staking positions
+          </a>
+        {/if}
       </div>
       <!-- END YOUR STAKING -->
       <!-- PAST REWARDS -->
       <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
         <div class="font-huge text-center mt-6">Rewards History</div>
         {#if data.rewards && data.rewards.length > 0}
-          {#each data.rewards as reward, id}
+          {#each data.rewards.slice(0,3) as reward, id}
             {#if reward.type != 'distributed'}
               <div
                 on:click={() => {
@@ -732,6 +739,12 @@
         {:else}
           Insert placeholder
         {/if}
+
+        {#if data.rewards.length > 3}
+          <a class="pt-6"href="#/staking_rewards">
+            See all rewards
+          </a>
+          {/if}
       </div>
       <!-- END PAST REWARDS -->
     </div>

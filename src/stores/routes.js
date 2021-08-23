@@ -23,6 +23,8 @@ import Learn from '../pages/Learn.svelte';
 import Integrations from '../pages/Integrations.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
 import DoughStaking from '../pages/DoughStaking.svelte';
+import StakingPositions from '../pages/StakingPositions.svelte';
+import StakingRewards from '../pages/StakingRewards.svelte';
 import Farm from '../pages/Farm.svelte';
 import Simulator from '../pages/simulator/Simulator.svelte';
 import SimulatorStats from '../pages/simulator/Stats.svelte';
@@ -112,6 +114,10 @@ const formatRoute = (route) => {
       return { page: Farm };
     case 'new_staking':
       return { page: DoughStaking };
+    case 'staking_positions':
+      return { page: StakingPositions };
+    case 'staking_rewards':
+      return { page: StakingRewards };
     case 'simulator':
       /* eslint-disable no-case-declarations */
       const simulation = (route[1] || '');
