@@ -14,168 +14,41 @@
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
   import { subgraphRequest } from '../helpers/subgraph.js';
   import { formatFiat, formatToken } from '../components/helpers.js';
-  import { toNum, toBN, calculateStakingEnds, getLockStatus, didLockExpired, calculateVeDough } from '../helpers/staking.js';
-  
+  import {
+    toNum,
+    toBN,
+    calculateStakingEnds,
+    getLockStatus,
+    didLockExpired,
+    calculateVeDough,
+    data,
+    sharesTimeLock,
+    veDOUGH,
+    initialize
+  } from '../helpers/staking.js';
+
   import Modal from '../components/elements/Modal.svelte';
   let modalinfo;
 
   const minLockAmount = 1;
 
   $: isLoading = true;
-  $: stakeButtonText = "Stake";
+  $: stakeButtonText = 'Stake';
   $: isStaking = false;
-  $: approveButtonText = "Approve";
-  $: isApproving = false;  
-
-  let data = {
-    totalStaked: BigNumber(0),
-    veTokenTotalSupply: BigNumber(0),
-    accountVeTokenBalance: BigNumber(0), //amount of veDOUGH you have
-    accountWithdrawableRewards: BigNumber(0), //amount is in reward Pie
-    accountWithdrawnRewards: BigNumber(0),
-    accountDepositTokenBalance: BigNumber(0),
-    accountLocks: [],
-    rewards: [],
-  };
+  $: approveButtonText = 'Approve';
+  $: isApproving = false;
 
   let stakeAmount;
   let stakeDuration = 36;
   let receiver = '';
 
-  let sharesTimeLock = false;
-  let veDOUGH = false;
-
-  async function fetchStakingDataGraph(address) {
-    try {
-      const response = await subgraphRequest(
-        'https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop',
-        {
-          stakers: {
-            __args: {
-              where: { id: address.toLowerCase() },
-            },
-            id: true,
-            totalStaked: true,
-            veTokenTotalSupply: true,
-            accountVeTokenBalance: true,
-            accountWithdrawableRewards: true,
-            accountWithdrawnRewards: true,
-            accountDepositTokenBalance: true,
-            accountDepositTokenAllowance: true,
-            accountLocks: {
-              id: true,
-              lockId: true,
-              lockDuration: true,
-              lockedAt: true,
-              amount: true,
-              withdrawn: true,
-              ejected: true,
-              boosted: true,
-              boostedPointer: true,
-            },
-          },
-          rewards: {
-            __args: {
-              where: { staker: address.toLowerCase() },
-            },
-            id: true,
-            timestamp: true,
-            amount: true,
-            type: true,
-          },
-        },
-      );
-
-      return response;
-    } catch (error) {
-      throw new Error('fetchStakingDataGraph: ' + error.message);
-    }
-  }
-
-  const fetchStakingData = async () => {
-    let response = null;
-    let staker = null;
-    let rewards = null;
-
-    // this is a fallback in case the graph is not working...
-    try {
-      // using graph...
-      response = await fetchStakingDataGraph($eth.address);
-      console.log('response for ' + $eth.address.toLowerCase(), response);
-      rewards = response.rewards;
-      staker = response.stakers[0];
-    } catch (error) {
-      console.error(error);
-      // using onchain as fallback...
-      staker = await sharesTimeLock.getStakingData($eth.address);
-      rewards = data.rewards.length > 0 ? data.rewards : [];
-    }
-
-    if (staker !== undefined) {
-      Object.keys(staker).forEach((key) => {
-        if (key != 'accountLocks') {
-          data[key] = new BigNumber(staker[key].toString());
-        } else {
-          let locks = [];
-
-          staker[key].forEach((lock, index) => {
-            if (lock.amount.toString() != '0') {
-              locks.push({
-                amount: new BigNumber(lock.amount.toString()),
-                lockDuration: lock.lockDuration,
-                lockedAt: lock.lockedAt,
-                lockId: lock.lockId || index,
-                // when the graph is not working properly,
-                // all those fields will be undefined...
-                withdrawn: lock.withdrawn,
-                ejected: lock.ejected,
-                boosted: lock.boosted,
-                boostedPointer: lock.boostedPointer,
-              });
-            }
-          });
-
-          locks.sort(function (lock_a, lock_b) {
-            return lock_b.lockedAt - lock_a.lockedAt;
-          });
-
-          data[key] = locks;
-        }
-      });
-    }
-
-    data['rewards'] = rewards;
-    console.log('fetchStakingData', data);
-
-    data = data;
-    return data;
-  };
-
   $: if ($eth.address && isLoading) {
-    initialize();
-  }
-
-  async function initialize() {
-    try {
-      sharesTimeLock = new ethers.Contract(
-        smartcontracts.doughStaking,
-        sharesTimeLockABI,
-        $eth.signer || $eth.provider,
-      );
-
-      veDOUGH = new ethers.Contract(
-        smartcontracts.veDOUGH,
-        veDoughABI,
-        $eth.signer || $eth.provider,
-      );
-
-      await fetchStakingData();
-
-      receiver = $eth.address;
+    initialize($eth).then(() => {
       isLoading = false;
-    } catch (e) {
-      console.log('Something went wrong...', e);
-    }
+      data = data;
+      sharesTimeLock = sharesTimeLock;
+      veDOUGH = veDOUGH;
+    });
   }
 
   async function approveToken() {
@@ -185,19 +58,18 @@
       return;
     }
 
-    approveButtonText = "Approving";
+    approveButtonText = 'Approving';
     isApproving = true;
 
     let interval = setInterval(() => {
-      let occurrences = approveButtonText.split(".").length - 1;
-      
-      if(occurrences < 3) {
-        approveButtonText += ".";
+      let occurrences = approveButtonText.split('.').length - 1;
+
+      if (occurrences < 3) {
+        approveButtonText += '.';
       } else {
-        approveButtonText = "Approving";
+        approveButtonText = 'Approving';
       }
-      
-    }, 1000);    
+    }, 1000);
 
     try {
       // resetting the approve to zero, before initiating a new approval...
@@ -210,13 +82,13 @@
 
       await approveMax(smartcontracts.dough, smartcontracts.doughStaking, { gasLimit: 100000 });
       data.accountDepositTokenAllowance = ethers.constants.MaxUint256;
-      
+
       clearInterval(interval);
-      approveButtonText = "Approve";
+      approveButtonText = 'Approve';
       isApproving = false;
     } catch (error) {
       clearInterval(interval);
-      approveButtonText = "Approve";
+      approveButtonText = 'Approve';
       isApproving = false;
 
       displayNotification({
@@ -243,8 +115,10 @@
               type: 'success',
             });
             stakeAmount = 0;
-            await fetchStakingData();
             subscription.unsubscribe();
+
+            await fetchStakingData();
+            data = data;
           },
         });
       });
@@ -339,19 +213,18 @@
       return;
     }
 
-    stakeButtonText = "Staking";
+    stakeButtonText = 'Staking';
     isStaking = true;
 
     let interval = setInterval(() => {
-        let occurrences = stakeButtonText.split(".").length - 1;
-        
-        if(occurrences < 3) {
-          stakeButtonText += ".";
-        } else {
-          stakeButtonText = "Staking";
-        }
-        
-      }, 1000);
+      let occurrences = stakeButtonText.split('.').length - 1;
+
+      if (occurrences < 3) {
+        stakeButtonText += '.';
+      } else {
+        stakeButtonText = 'Staking';
+      }
+    }, 1000);
 
     try {
       const { emitter } = displayNotification(
@@ -366,13 +239,13 @@
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
             clearInterval(interval);
-            stakeButtonText = "Success! 🥳";
+            stakeButtonText = 'Success! 🥳';
             isStaking = false;
 
-             setTimeout(() => {
-              stakeButtonText = "Stake";
+            setTimeout(() => {
+              stakeButtonText = 'Stake';
               stakeAmount = 0;
-             }, 3000);
+            }, 3000);
 
             displayNotification({
               autoDismiss: 15000,
@@ -380,14 +253,16 @@
               type: 'success',
             });
 
-            await fetchStakingData();
             subscription.unsubscribe();
+
+            await fetchStakingData();
+            data = data;
           },
         });
       });
     } catch (error) {
       clearInterval(interval);
-      stakeButtonText = "Stake";
+      stakeButtonText = 'Stake';
       isStaking = false;
 
       displayNotification({
@@ -417,10 +292,10 @@
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
             console.log('boostToMax -> blockNumber');
+            subscription.unsubscribe();
 
             await fetchStakingData();
-
-            subscription.unsubscribe();
+            data = data;
           },
         });
       });
@@ -452,9 +327,10 @@
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
             console.log('unstakeDOUGH -> blockNumber');
+            subscription.unsubscribe();
 
             await fetchStakingData();
-            subscription.unsubscribe();
+            data = data;
           },
         });
       });
@@ -550,7 +426,7 @@
         <div class="font-huge text-center mt-6">Your Staking</div>
 
         {#if data.accountLocks && data.accountLocks.length > 0}
-          {#each data.accountLocks.slice(0,3) as lock, id}
+          {#each data.accountLocks.slice(0, 3) as lock, id}
             <!-- Let's show just the normal stakes, and the boosted ones. The stakes having a boostedPointer are obsolete stakes, so we won't show them -->
             {#if lock.boostedPointer == ''}
               <div
@@ -641,9 +517,7 @@
         {/if}
 
         {#if data.accountLocks.length > 3}
-          <a class="pt-6" href="#/staking_positions">
-            See all staking positions
-          </a>
+          <a class="pt-6" href="#/staking_positions"> See all staking positions </a>
         {/if}
       </div>
       <!-- END YOUR STAKING -->
@@ -651,7 +525,7 @@
       <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
         <div class="font-huge text-center mt-6">Rewards History</div>
         {#if data.rewards && data.rewards.length > 0}
-          {#each data.rewards.slice(0,3) as reward, id}
+          {#each data.rewards.slice(0, 3) as reward, id}
             {#if reward.type != 'distributed'}
               <div
                 on:click={() => {
@@ -698,10 +572,8 @@
         {/if}
 
         {#if data.rewards.length > 3}
-          <a class="pt-6"href="#/staking_rewards">
-            See all rewards
-          </a>
-          {/if}
+          <a class="pt-6" href="#/staking_rewards"> See all rewards </a>
+        {/if}
       </div>
       <!-- END PAST REWARDS -->
     </div>
@@ -709,12 +581,15 @@
     <div class="flex flex-col w-full m-0  lg:w-49pc md:ml-1pc">
       <!-- STAKING FORM -->
       {#if !isLoading}
-        <div class="flex flex-col items-center w-full  cardbordergradient p-1px bg-lightgrey"
-        class:input-box-loading="{isStaking}">
+        <div
+          class="flex flex-col items-center w-full  cardbordergradient p-1px bg-lightgrey"
+          class:input-box-loading={isStaking}
+        >
           <div class="font-huge text-center mt-6">DOUGH Staking</div>
           <div
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px"
-            class:input-invalid="{stakeAmount && toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}"
+            class:input-invalid={stakeAmount &&
+              toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
           >
             <div class="flex items-center justify-between">
               <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
@@ -783,9 +658,8 @@
                 spellcheck="false"
                 oninput="this.value=this.value.replace(/[^0-9]/g,'')"
                 disabled={isStaking || isApproving}
-
                 on:keyup={() => {
-                  if(stakeDuration > 36) {
+                  if (stakeDuration > 36) {
                     stakeDuration = 36;
                   }
                 }}
@@ -843,7 +717,7 @@
             <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4"
               >You don't own tokens
             </button>
-          {:else if (stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0)}
+          {:else if stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0}
             {#if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
               <button
                 disabled

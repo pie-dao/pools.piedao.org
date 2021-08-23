@@ -1,172 +1,20 @@
 <script>
-  import { approve, approveMax, connectWeb3, subject, eth } from '../stores/eth.js';
-  import { ethers } from 'ethers';
-  import BigNumber from 'bignumber.js';
+  import { eth } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
-  import sharesTimeLockABI from '../abis/sharesTimeLock.json';
-  import veDoughABI from '../abis/veDoughABI.json';
-  import smartcontracts from '../config/smartcontracts.json';
   import images from '../config/images.json';
-  import PartecipationJson from '../config/rewards/test.json';
-  import displayNotification from '../notifications';
-  import { isAddress } from '@pie-dao/utils';
-  import { createParticipationTree } from '../classes/MerkleTreeUtils';
-  import { subgraphRequest } from '../helpers/subgraph.js';
   import { formatFiat } from '../components/helpers.js';
-  import { toNum } from '../helpers/staking.js';
+  import { toNum, initialize, data } from '../helpers/staking.js';
 
   import Modal from '../components/elements/Modal.svelte';
   let modalinfo;
 
   $: isLoading = true;
 
-  let data = {
-    totalStaked: BigNumber(0),
-    veTokenTotalSupply: BigNumber(0),
-    accountVeTokenBalance: BigNumber(0), //amount of veDOUGH you have
-    accountWithdrawableRewards: BigNumber(0), //amount is in reward Pie
-    accountWithdrawnRewards: BigNumber(0),
-    accountDepositTokenBalance: BigNumber(0),
-    accountLocks: [],
-    rewards: [],
-  };
-
-  let receiver = '';
-
-  let sharesTimeLock = false;
-  let veDOUGH = false;
-
-  async function fetchStakingDataGraph(address) {
-    try {
-      const response = await subgraphRequest(
-        'https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop',
-        {
-          stakers: {
-            __args: {
-              where: { id: address.toLowerCase() },
-            },
-            id: true,
-            totalStaked: true,
-            veTokenTotalSupply: true,
-            accountVeTokenBalance: true,
-            accountWithdrawableRewards: true,
-            accountWithdrawnRewards: true,
-            accountDepositTokenBalance: true,
-            accountDepositTokenAllowance: true,
-            accountLocks: {
-              id: true,
-              lockId: true,
-              lockDuration: true,
-              lockedAt: true,
-              amount: true,
-              withdrawn: true,
-              ejected: true,
-              boosted: true,
-              boostedPointer: true,
-            },
-          },
-          rewards: {
-            __args: {
-              where: { staker: address.toLowerCase() },
-            },
-            id: true,
-            timestamp: true,
-            amount: true,
-            type: true,
-          },
-        },
-      );
-
-      return response;
-    } catch (error) {
-      throw new Error('fetchStakingDataGraph: ' + error.message);
-    }
-  }
-
-  const fetchStakingData = async () => {
-    let response = null;
-    let staker = null;
-    let rewards = null;
-
-    // this is a fallback in case the graph is not working...
-    try {
-      // using graph...
-      response = await fetchStakingDataGraph($eth.address);
-      console.log('response for ' + $eth.address.toLowerCase(), response);
-      rewards = response.rewards;
-      staker = response.stakers[0];
-    } catch (error) {
-      console.error(error);
-      // using onchain as fallback...
-      staker = await sharesTimeLock.getStakingData($eth.address);
-      rewards = data.rewards.length > 0 ? data.rewards : [];
-    }
-
-    if (staker !== undefined) {
-      Object.keys(staker).forEach((key) => {
-        if (key != 'accountLocks') {
-          data[key] = new BigNumber(staker[key].toString());
-        } else {
-          let locks = [];
-
-          staker[key].forEach((lock, index) => {
-            if (lock.amount.toString() != '0') {
-              locks.push({
-                amount: new BigNumber(lock.amount.toString()),
-                lockDuration: lock.lockDuration,
-                lockedAt: lock.lockedAt,
-                lockId: lock.lockId || index,
-                // when the graph is not working properly,
-                // all those fields will be undefined...
-                withdrawn: lock.withdrawn,
-                ejected: lock.ejected,
-                boosted: lock.boosted,
-                boostedPointer: lock.boostedPointer,
-              });
-            }
-          });
-
-          locks.sort(function (lock_a, lock_b) {
-            return lock_b.lockedAt - lock_a.lockedAt;
-          });
-
-          data[key] = locks;
-        }
-      });
-    }
-
-    data['rewards'] = rewards;
-    console.log('fetchStakingData', data);
-
-    data = data;
-    return data;
-  };
-
   $: if ($eth.address && isLoading) {
-    initialize();
-  }
-
-  async function initialize() {
-    try {
-      sharesTimeLock = new ethers.Contract(
-        smartcontracts.doughStaking,
-        sharesTimeLockABI,
-        $eth.signer || $eth.provider,
-      );
-
-      veDOUGH = new ethers.Contract(
-        smartcontracts.veDOUGH,
-        veDoughABI,
-        $eth.signer || $eth.provider,
-      );
-
-      await fetchStakingData();
-
-      receiver = $eth.address;
+    initialize($eth).then(() => {
       isLoading = false;
-    } catch (e) {
-      console.log('Something went wrong...', e);
-    }
+      data = data;
+    });
   }
 </script>
 
@@ -240,9 +88,7 @@
           Insert placeholder
         {/if}
 
-        <a class="pt-6"href="#/new_staking">
-          go back on Staking page
-        </a>
+        <a class="pt-6" href="#/new_staking"> go back on Staking page </a>
       </div>
       <!-- END PAST REWARDS -->
     </div>
