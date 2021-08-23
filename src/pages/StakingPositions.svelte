@@ -12,7 +12,7 @@
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
   import { subgraphRequest } from '../helpers/subgraph.js';
   import { formatFiat } from '../components/helpers.js';
-  import { toNum } from '../helpers/staking.js';
+  import { toNum, calculateStakingEnds, getLockStatus, didLockExpired, calculateVeDough} from '../helpers/staking.js';
 
   $: isLoading = true;
 
@@ -30,36 +30,6 @@
   let receiver = '';
   let sharesTimeLock = false;
   let veDOUGH = false;
-
-  function calculateStakingEnds(lock) {
-    let startDate = new Date(lock.lockedAt * 1000);
-    let lockDuration = lock.lockDuration / 60;
-
-    //startDate.setMonth(startDate.getMonth() + lockDuration);
-
-    // TODO: remove this line, and use the previous one...
-    startDate.setMinutes(startDate.getMinutes() + lockDuration);
-
-    return startDate;
-  }
-
-  function getLockStatus(lock) {
-    if (lock.withdrawn) {
-      return 'withdrawn';
-    } else {
-      if (lock.ejected) {
-        return 'ejected';
-      } else {
-        return 'running';
-      }
-    }
-  }
-
-  function didLockExpired(lock) {
-    let endDate = calculateStakingEnds(lock);
-    let nowDate = new Date();
-    return nowDate > endDate;
-  }
 
   async function fetchStakingDataGraph(address) {
     try {
@@ -188,26 +158,10 @@
       await fetchStakingData();
 
       receiver = $eth.address;
-      console.log(prepareProofs());
       isLoading = false;
     } catch (e) {
       console.log('Something went wrong...', e);
     }
-  }
-
-  function prepareProofs() {
-    if (!$eth.address) return;
-    const merkleTree = createParticipationTree(PartecipationJson);
-
-    console.log('merkleTree', merkleTree);
-    const leaf = merkleTree.leafs.find(
-      (item) => item.address.toLowerCase() === $eth.address.toLowerCase(),
-    );
-
-    return {
-      valid: leaf ? true : false,
-      proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null,
-    };
   }
 
   async function boostToMax(id) {
@@ -284,13 +238,6 @@
         });
       }
     }
-  }
-
-  function calculateVeDough(stakedDough, commitment) {
-    let k = 56.0268900276223;
-    let commitmentMultiplier = (commitment / k) * Math.log10(commitment);
-    let veDOUGH = stakedDough * commitmentMultiplier;
-    return toNum(veDOUGH);
   }
 </script>
 

@@ -14,7 +14,7 @@
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
   import { subgraphRequest } from '../helpers/subgraph.js';
   import { formatFiat, formatToken } from '../components/helpers.js';
-  import { toNum, toBN } from '../helpers/staking.js';
+  import { toNum, toBN, calculateStakingEnds, getLockStatus, didLockExpired, calculateVeDough } from '../helpers/staking.js';
   
   import Modal from '../components/elements/Modal.svelte';
   let modalinfo;
@@ -42,42 +42,8 @@
   let stakeDuration = 36;
   let receiver = '';
 
-  let unstake = {
-    amount: 0.0,
-  };
-
   let sharesTimeLock = false;
   let veDOUGH = false;
-
-  function calculateStakingEnds(lock) {
-    let startDate = new Date(lock.lockedAt * 1000);
-    let lockDuration = lock.lockDuration / 60;
-
-    //startDate.setMonth(startDate.getMonth() + lockDuration);
-
-    // TODO: remove this line, and use the previous one...
-    startDate.setMinutes(startDate.getMinutes() + lockDuration);
-
-    return startDate;
-  }
-
-  function getLockStatus(lock) {
-    if (lock.withdrawn) {
-      return 'withdrawn';
-    } else {
-      if (lock.ejected) {
-        return 'ejected';
-      } else {
-        return 'running';
-      }
-    }
-  }
-
-  function didLockExpired(lock) {
-    let endDate = calculateStakingEnds(lock);
-    let nowDate = new Date();
-    return nowDate > endDate;
-  }
 
   async function fetchStakingDataGraph(address) {
     try {
@@ -206,7 +172,6 @@
       await fetchStakingData();
 
       receiver = $eth.address;
-      console.log(prepareProofs());
       isLoading = false;
     } catch (e) {
       console.log('Something went wrong...', e);
@@ -507,13 +472,6 @@
         });
       }
     }
-  }
-
-  function calculateVeDough(stakedDough, commitment) {
-    let k = 56.0268900276223;
-    let commitmentMultiplier = (commitment / k) * Math.log10(commitment);
-    let veDOUGH = stakedDough * commitmentMultiplier;
-    return toNum(veDOUGH);
   }
 </script>
 

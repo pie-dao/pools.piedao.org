@@ -18,8 +18,6 @@
   import Modal from '../components/elements/Modal.svelte';
   let modalinfo;
 
-  const minLockAmount = 1;
-
   $: isLoading = true;
 
   let data = {
@@ -33,8 +31,6 @@
     rewards: [],
   };
 
-  let stakeAmount = 0;
-  let stakeDuration = 36;
   let receiver = '';
 
   let sharesTimeLock = false;
@@ -167,26 +163,10 @@
       await fetchStakingData();
 
       receiver = $eth.address;
-      console.log(prepareProofs());
       isLoading = false;
     } catch (e) {
       console.log('Something went wrong...', e);
     }
-  }
-
-  function prepareProofs() {
-    if (!$eth.address) return;
-    const merkleTree = createParticipationTree(PartecipationJson);
-
-    console.log('merkleTree', merkleTree);
-    const leaf = merkleTree.leafs.find(
-      (item) => item.address.toLowerCase() === $eth.address.toLowerCase(),
-    );
-
-    return {
-      valid: leaf ? true : false,
-      proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null,
-    };
   }
 </script>
 
