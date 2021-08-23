@@ -12,6 +12,7 @@
   import displayNotification from "../notifications.js";
   import { farming } from '../stores/eth/writables.js';
   import Meta from '../components/elements/meta.svelte';
+  
   import {
     amountFormatter,
     toFixed,
