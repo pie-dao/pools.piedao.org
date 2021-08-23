@@ -13,7 +13,7 @@
   import { isAddress } from '@pie-dao/utils';
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
   import { subgraphRequest } from '../helpers/subgraph.js';
-  import { formatFiat } from '../components/helpers.js';
+  import { formatFiat, formatToken } from '../components/helpers.js';
   import Modal from '../components/elements/Modal.svelte';
 
   let modalinfo;
@@ -46,7 +46,7 @@
     rewards: [],
   };
 
-  let stakeAmount = 0;
+  let stakeAmount;
   let stakeDuration = 36;
   let receiver = '';
 
@@ -228,21 +228,21 @@
       return;
     }
 
+    approveButtonText = "Approving";
+    isApproving = true;
+
+    let interval = setInterval(() => {
+      let occurrences = approveButtonText.split(".").length - 1;
+      
+      if(occurrences < 3) {
+        approveButtonText += ".";
+      } else {
+        approveButtonText = "Approving";
+      }
+      
+    }, 1000);    
+
     try {
-      approveButtonText = "Approving";
-      isApproving = true;
-
-      let interval = setInterval(() => {
-        let occurrences = approveButtonText.split(".").length - 1;
-        
-        if(occurrences < 3) {
-          approveButtonText += ".";
-        } else {
-          approveButtonText = "Approving";
-        }
-        
-      }, 1000);
-
       // resetting the approve to zero, before initiating a new approval...
       if (
         !data.accountDepositTokenAllowance.isEqualTo(0) &&
@@ -258,7 +258,10 @@
       approveButtonText = "Approve";
       isApproving = false;
     } catch (error) {
-      console.log('error', error);
+      clearInterval(interval);
+      approveButtonText = "Approve";
+      isApproving = false;
+
       displayNotification({
         autoDismiss: 15000,
         message: error.message,
@@ -379,11 +382,10 @@
       return;
     }
 
-    try {
-      stakeButtonText = "Staking";
-      isStaking = true;
+    stakeButtonText = "Staking";
+    isStaking = true;
 
-      let interval = setInterval(() => {
+    let interval = setInterval(() => {
         let occurrences = stakeButtonText.split(".").length - 1;
         
         if(occurrences < 3) {
@@ -394,6 +396,7 @@
         
       }, 1000);
 
+    try {
       const { emitter } = displayNotification(
         await sharesTimeLock.depositByMonths(
           parseEther(stakeAmount.toString()),
@@ -426,6 +429,10 @@
         });
       });
     } catch (error) {
+      clearInterval(interval);
+      stakeButtonText = "Stake";
+      isStaking = false;
+
       displayNotification({
         autoDismiss: 15000,
         message: error.message,
@@ -779,13 +786,17 @@
                 title="Token Amount"
                 autocomplete="off"
                 autocorrect="off"
-                type="number"
-                pattern="^[0-9]*[,]?[0-9]*$"
+                type="string"
+                pattern="^[0-9]*[.]?[0-9]*$"
                 placeholder="0.0"
                 minlength="1"
                 maxlength="79"
                 spellcheck="false"
                 disabled={isStaking || isApproving}
+                on:change={() => {
+                  //  1.123456789012345678
+                  stakeAmount = formatToken(stakeAmount, '.', 18);
+                }}
               />
               <span class="sc-iybRtq gjVeBU">
                 <img class="h-auto w-24px mr-5px" src={images.doughtoken} alt="dough token" />

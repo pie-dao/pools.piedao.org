@@ -162,6 +162,23 @@ export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') =>
   }
 };
 
+export const formatToken = (value, decimal = '.', toFixed = 2) => {
+  if (!value) return 'n/a';
+
+  try {
+    const values = value.replace(/^-/, '').split('.');
+
+    const dollars = parseInt(values[0]);//.replace(/[^0-9.]/g, '');
+    const cents = values[1] ? values[1].slice(0, toFixed) : "00";
+    
+    console.log("dollars", values[0], dollars);
+    return `${dollars}${cents ? decimal + cents : ''}`;
+  } catch (e) {
+    console.error(e);
+    return value === undefined ? '-' : value;
+  }
+};
+
 export const formatBigMoneyAmount = (amount, separator = ',', fiat = '$') => {
   var decimals = amount.toString().split(".").length == 2 ? amount.toString().split(".")[1] : "00";
   var units = ["M","B","T","Q"];
