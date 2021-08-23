@@ -14,21 +14,13 @@
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
   import { subgraphRequest } from '../helpers/subgraph.js';
   import { formatFiat, formatToken } from '../components/helpers.js';
+  import { toNum, toBN } from '../helpers/staking.js';
+  
   import Modal from '../components/elements/Modal.svelte';
-
   let modalinfo;
-
-  const toNum = (num) =>
-    BigNumber(num.toString())
-      .dividedBy(10 ** 18)
-      .toFixed(2);
-
-  const toBN = (num) => BigNumber(num.toString()).multipliedBy(10 ** 18);
 
   const minLockAmount = 1;
 
-  // All the epochs where rewards are available.
-  $: epochs = [];
   $: isLoading = true;
   $: stakeButtonText = "Stake";
   $: isStaking = false;

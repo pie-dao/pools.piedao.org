@@ -168,10 +168,9 @@ export const formatToken = (value, decimal = '.', toFixed = 2) => {
   try {
     const values = value.replace(/^-/, '').split('.');
 
-    const dollars = parseInt(values[0]);//.replace(/[^0-9.]/g, '');
+    const dollars = parseInt(values[0]);
     const cents = values[1] ? values[1].slice(0, toFixed) : "00";
     
-    console.log("dollars", values[0], dollars);
     return `${dollars}${cents ? decimal + cents : ''}`;
   } catch (e) {
     console.error(e);
