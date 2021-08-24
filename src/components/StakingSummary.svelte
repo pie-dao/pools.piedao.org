@@ -4,6 +4,9 @@
   import { toNum, claim } from '../helpers/staking.js';
   import images from '../config/images.json';
 
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
+
   export let data;
   export let eth;
 </script>
@@ -58,6 +61,10 @@
         claim(eth).then(updated_data => {
           data = updated_data;
           data = data;
+
+          dispatch('update', {
+            data: data,
+          });          
         }).catch(error => {
           console.error(error);
         });

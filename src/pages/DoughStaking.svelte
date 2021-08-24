@@ -107,11 +107,11 @@
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"
   >
     <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
-      <!-- SUMMARY -->
-      <StakingSummary data={data} eth={$eth}></StakingSummary>
-      <!-- END SUMMARY -->
-
       {#key data}
+        <!-- SUMMARY -->
+        <StakingSummary data={data} eth={$eth} on:update={handleUpdate}></StakingSummary>
+        <!-- END SUMMARY -->
+              
         <!-- YOUR STAKING -->
         <StakingPositions data={data} isLoading={isLoading} itemsNumber=3 eth={$eth} on:update={handleUpdate}></StakingPositions>
         <!-- END YOUR STAKING -->
