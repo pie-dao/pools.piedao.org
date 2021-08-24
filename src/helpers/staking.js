@@ -8,11 +8,7 @@ import { subgraphRequest } from '../helpers/subgraph.js';
 import { subject } from '../stores/eth.js';
 import displayNotification from '../notifications';
 
-export let receiver = '';
-export let sharesTimeLock = false;
-export let veDOUGH = false;
-
-export let data = {
+export let dataObj = {
   totalStaked: BigNumber(0),
   veTokenTotalSupply: BigNumber(0),
   accountVeTokenBalance: BigNumber(0),
@@ -22,6 +18,9 @@ export let data = {
   accountLocks: [],
   rewards: [],
 };
+
+export let sharesTimeLock = false;
+export let veDOUGH = false;
 
 export const toNum = (num) =>
   BigNumber(num.toString())
@@ -67,25 +66,32 @@ export function calculateVeDough(stakedDough, commitment) {
   return toNum(veDOUGH);
 }
 
-export async function initialize(eth) {
-  try {
-    sharesTimeLock = new ethers.Contract(
-      smartcontracts.doughStaking,
-      sharesTimeLockABI,
-      eth.signer || eth.provider,
-    );
+export function initialize(eth) {
+  return new Promise(async(resolve, reject) => {
+    try {
+      sharesTimeLock = new ethers.Contract(
+        smartcontracts.doughStaking,
+        sharesTimeLockABI,
+        eth.signer || eth.provider,
+      );
+  
+      veDOUGH = new ethers.Contract(
+        smartcontracts.veDOUGH,
+        veDoughABI,
+        eth.signer || eth.provider,
+      );
+  
+      await fetchStakingData(eth);
+      resolve(dataObj);
+    } catch (error) {
+      displayNotification({
+        message: error.message,
+        type: 'error',
+      });
 
-    veDOUGH = new ethers.Contract(
-      smartcontracts.veDOUGH,
-      veDoughABI,
-      eth.signer || eth.provider,
-    );
-
-    await fetchStakingData(eth);
-    receiver = eth.address;
-  } catch (e) {
-    console.log('Something went wrong...', e);
-  }
+      reject(error);
+    }
+  });
 }
 
 export async function fetchStakingDataGraph(address) {
@@ -144,20 +150,20 @@ export const fetchStakingData = async (eth) => {
   try {
     // using graph...
     response = await fetchStakingDataGraph(eth.address);
-    console.log('response for ' + eth.address.toLowerCase(), response);
+
     rewards = response.rewards;
     staker = response.stakers[0];
   } catch (error) {
     console.error(error);
     // using onchain as fallback...
     staker = await sharesTimeLock.getStakingData(eth.address);
-    rewards = data.rewards.length > 0 ? data.rewards : [];
+    rewards = dataObj.rewards.length > 0 ? dataObj.rewards : [];
   }
 
   if (staker !== undefined) {
     Object.keys(staker).forEach((key) => {
       if (key != 'accountLocks') {
-        data[key] = new BigNumber(staker[key].toString());
+        dataObj[key] = new BigNumber(staker[key].toString());
       } else {
         let locks = [];
 
@@ -182,92 +188,97 @@ export const fetchStakingData = async (eth) => {
           return lock_b.lockedAt - lock_a.lockedAt;
         });
 
-        data[key] = locks;
+        dataObj[key] = locks;
       }
     });
   }
 
-  data['rewards'] = rewards;
-  console.log('fetchStakingData', data);
+  dataObj['rewards'] = rewards;
+  console.log('fetchStakingData', dataObj);
 
-  data = data;
-  return data;
+  dataObj = dataObj;
+  return dataObj;
 };
 
-// TODO: to be improved, it must work fully async and resolve once it's all really done...
-export async function boostToMax(id) {
-  if (!sharesTimeLock) return;
+export function boostToMax(id, eth) {
+  return new Promise(async (resolve, reject) => {
+    if (!sharesTimeLock) 
+      reject("ShareTimeLock contract has not being initiated.");
 
-  try {
-    let response = await sharesTimeLock.boostToMax(id);
+    try {
+      let response = await sharesTimeLock.boostToMax(id);
+  
+      const { emitter } = displayNotification({
+        hash: response.hash,
+      });
+  
+      emitter.on('txConfirmed', async () => {
+        displayNotification({
+          message: `You boosted your stake to 36 months!`,
+          type: 'success',
+        });
+  
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {
+            await fetchStakingData(eth);  
+            subscription.unsubscribe();
 
-    const { emitter } = displayNotification({
-      hash: response.hash,
-    });
-
-    emitter.on('txConfirmed', async () => {
+            resolve(dataObj);
+          },
+        });
+      });
+    } catch (error) {
       displayNotification({
-        message: `You boosted your stake to 36 months!`,
-        type: 'success',
+        message: error.message,
+        type: 'error',
       });
 
-      const subscription = subject('blockNumber').subscribe({
-        next: async () => {
-          console.log('boostToMax -> blockNumber');
-
-          await fetchStakingData();
-
-          subscription.unsubscribe();
-        },
-      });
-    });
-  } catch (error) {
-    console.log(error);
-    displayNotification({
-      message: e.message,
-      type: 'error',
-    });
-  }
+      reject(error);
+    }
+  });
 }
 
-// TODO: to be improved, it must work fully async and resolve once it's all really done...
-export async function unstakeDOUGH(id, lockAmount) {
-  if (!sharesTimeLock) return;
+export async function unstakeDOUGH(id, lockAmount, eth) {
+  return new Promise(async (resolve, reject) => {
+    if (!sharesTimeLock) 
+      reject("ShareTimeLock contract has not being initiated.");
 
-  try {
-    let response = await sharesTimeLock.withdraw(id);
-
-    const { emitter } = displayNotification({
-      hash: response.hash,
-    });
-
-    emitter.on('txConfirmed', async () => {
-      displayNotification({
-        message: `You unstaked ${lockAmount.toString()} DOUGH`,
-        type: 'success',
+    try {
+      let response = await sharesTimeLock.withdraw(id);
+  
+      const { emitter } = displayNotification({
+        hash: response.hash,
       });
+  
+      emitter.on('txConfirmed', async () => {
+        displayNotification({
+          message: `You unstaked ${lockAmount.toString()} DOUGH`,
+          type: 'success',
+        });
+  
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {  
+            await fetchStakingData(eth);
+            subscription.unsubscribe();
 
-      const subscription = subject('blockNumber').subscribe({
-        next: async () => {
-          console.log('unstakeDOUGH -> blockNumber');
+            resolve(dataObj);
+          },
+        });
+      });
+    } catch (error) {
+      if (error.message.includes('lock not expired')) {
+        displayNotification({
+          message: "can't unstake, lock not expired.",
+          type: 'error',
+        });
+      } else {
+        displayNotification({
+          message: 'sorry, some error occurred while unstaking. Please try again later...',
+          type: 'error',
+        });
+      }
 
-          await fetchStakingData();
-          subscription.unsubscribe();
-        },
-      });
-    });
-  } catch (error) {
-    console.log(error.message);
-    if (error.message.includes('lock not expired')) {
-      displayNotification({
-        message: "can't unstake, lock not expired.",
-        type: 'error',
-      });
-    } else {
-      displayNotification({
-        message: 'sorry, some error occurred while unstaking. Please try again later...',
-        type: 'error',
-      });
+      reject(error);
     }
-  }
+  });
 }

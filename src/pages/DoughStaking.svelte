@@ -1,10 +1,8 @@
 <script>
   import { approve, approveMax, connectWeb3, subject, eth } from '../stores/eth.js';
   import { ethers } from 'ethers';
-  import BigNumber from 'bignumber.js';
   import { _ } from 'svelte-i18n';
-  import sharesTimeLockABI from '../abis/sharesTimeLock.json';
-  import veDoughABI from '../abis/veDoughABI.json';
+  import BigNumber from 'bignumber.js';
   import smartcontracts from '../config/smartcontracts.json';
   import images from '../config/images.json';
   import PartecipationJson from '../config/rewards/test.json';
@@ -12,7 +10,6 @@
   import { parseEther } from '@ethersproject/units';
   import { isAddress } from '@pie-dao/utils';
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
-  import { subgraphRequest } from '../helpers/subgraph.js';
   import { formatFiat, formatToken } from '../components/helpers.js';
   import {
     toNum,
@@ -21,9 +18,9 @@
     getLockStatus,
     didLockExpired,
     calculateVeDough,
-    data,
     sharesTimeLock,
     veDOUGH,
+    dataObj,
     initialize
   } from '../helpers/staking.js';
 
@@ -32,7 +29,10 @@
 
   const minLockAmount = 1;
 
+  $: data = dataObj;
   $: isLoading = true;
+  $: hasLoaded = false;
+
   $: stakeButtonText = 'Stake';
   $: isStaking = false;
   $: approveButtonText = 'Approve';
@@ -40,14 +40,18 @@
 
   let stakeAmount;
   let stakeDuration = 36;
-  let receiver = '';
+  let receiver;
 
-  $: if ($eth.address && isLoading) {
-    initialize($eth).then(() => {
+  $: if ($eth.address && isLoading && !hasLoaded) {
+    hasLoaded = true;
+
+    initialize($eth).then(updated_data => {
       isLoading = false;
-      data = data;
-      sharesTimeLock = sharesTimeLock;
-      veDOUGH = veDOUGH;
+      data = updated_data;
+      receiver = $eth.address;
+    }).catch(error => {
+      hasLoaded = false;
+      console.error(error);
     });
   }
 
@@ -425,95 +429,107 @@
       <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
         <div class="font-huge text-center mt-6">Your Staking</div>
 
-        {#if data.accountLocks && data.accountLocks.length > 0}
-          {#each data.accountLocks.slice(0, 3) as lock, id}
-            <!-- Let's show just the normal stakes, and the boosted ones. The stakes having a boostedPointer are obsolete stakes, so we won't show them -->
-            {#if lock.boostedPointer == ''}
-              <div
-                class={lock.ejected
-                  ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60'
-                  : 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}
-              >
-                <div class="flex items-center justify-between">
-                  <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
-                  <div class="flex items-center">
-                    <div class="font-thin mr-2">Staking ends:</div>
-                    <span>{calculateStakingEnds(lock).toLocaleDateString()}</span>
-                  </div>
-                </div>
-                <div class="flex nowrap items-center p-1 justify-between mt-2">
-                  <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
-                    <div class="sc-iybRtq gjVeBU">
-                      <div class="font-24px">{formatFiat(toNum(lock.amount), ',', '.', '')}</div>
-                      <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-                      <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+        {#if isLoading}
+          Loading...
+        {:else}
+          {#if data.accountLocks && data.accountLocks.length > 0}
+            {#each data.accountLocks.slice(0,3) as lock, id}
+              <!-- Let's show just the normal stakes, and the boosted ones. The stakes having a boostedPointer are obsolete stakes, so we won't show them -->
+              {#if lock.boostedPointer == ''}
+                <div
+                  class={lock.ejected
+                    ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60'
+                    : 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}
+                >
+                  <div class="flex items-center justify-between">
+                    <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+                    <div class="flex items-center">
+                      <div class="font-thin mr-2">Staking ends:</div>
+                      <span>{calculateStakingEnds(lock).toLocaleDateString()}</span>
                     </div>
-                    <div class="sc-iybRtq gjVeBU float-left">
-                      <div class="font-24px">
-                        {formatFiat(
-                          calculateVeDough(lock.amount, lock.lockDuration / 60),
-                          ',',
-                          '.',
-                          '',
-                        )}
+                  </div>
+                  <div class="flex nowrap items-center p-1 justify-between mt-2">
+                    <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
+                      <div class="sc-iybRtq gjVeBU">
+                        <div class="font-24px">{formatFiat(toNum(lock.amount), ',', '.', '')}</div>
+                        <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
+                        <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
                       </div>
-                      <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-                      <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+                      <div class="sc-iybRtq gjVeBU float-left">
+                        <div class="font-24px">
+                          {formatFiat(
+                            calculateVeDough(lock.amount, lock.lockDuration / 60),
+                            ',',
+                            '.',
+                            '',
+                          )}
+                        </div>
+                        <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
+                        <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+                      </div>
                     </div>
+                    {#if lock.lockDuration / 60 != 36}
+                      {#if !lock.boosted}
+                        <div
+                          on:click={() => {
+                            boostToMax(lock.lockId).then(updated_data => {
+                              data = updated_data;
+                            }).catch(error => {
+                              console.error(error);
+                            });
+                          }}
+                          class="flex items-center cardbordergradient -mr-2 pointer"
+                        >
+                          <div class="flex items-center p-2">
+                            <div class="mr-8px">Boost to Max</div>
+                            <img
+                              class="w-30px h-30px"
+                              src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
+                              alt="ETH"
+                            />
+                          </div>
+                        </div>
+                      {:else}
+                        <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30">
+                          <div class="flex items-center p-2">
+                            <div class="mr-8px">Already Boosted</div>
+                            <img
+                              class="w-30px h-30px"
+                              src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
+                              alt="ETH"
+                            />
+                          </div>
+                        </div>
+                      {/if}
+                    {/if}
                   </div>
-                  {#if lock.lockDuration / 60 != 36}
-                    {#if !lock.boosted}
+                  <div class="mt-2 flex justify-start opacity-30 pointer">
+                    <span>{getLockStatus(lock)}</span>
+                  </div>
+                  {#if !lock.withdrawn && !lock.ejected}
+                    {#if didLockExpired(lock)}
                       <div
                         on:click={() => {
-                          boostToMax(id);
+                          unstakeDOUGH(lock.lockId, toNum(lock.amount)).then(updated_data => {
+                            data = updated_data;
+                          }).catch(error => {
+                            console.error(error.message);
+                          });
                         }}
-                        class="flex items-center cardbordergradient -mr-2 pointer"
+                        class="mt-2 flex justify-end pointer"
                       >
-                        <div class="flex items-center p-2">
-                          <div class="mr-8px">Boost to Max</div>
-                          <img
-                            class="w-30px h-30px"
-                            src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
-                            alt="ETH"
-                          />
-                        </div>
+                        <span>Unstake</span>
                       </div>
                     {:else}
-                      <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30">
-                        <div class="flex items-center p-2">
-                          <div class="mr-8px">Already Boosted</div>
-                          <img
-                            class="w-30px h-30px"
-                            src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
-                            alt="ETH"
-                          />
-                        </div>
-                      </div>
+                      <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div>
                     {/if}
                   {/if}
                 </div>
-                <div class="mt-2 flex justify-start opacity-30 pointer">
-                  <span>{getLockStatus(lock)}</span>
-                </div>
-                {#if !lock.withdrawn && !lock.ejected}
-                  {#if didLockExpired(lock)}
-                    <div
-                      on:click={() => {
-                        unstakeDOUGH(id, toNum(lock.amount));
-                      }}
-                      class="mt-2 flex justify-end pointer"
-                    >
-                      <span>Unstake</span>
-                    </div>
-                  {:else}
-                    <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div>
-                  {/if}
-                {/if}
-              </div>
-            {/if}
-          {/each}
-        {:else}
-          Insert placeholder No locks
+              {/if}
+            {/each}
+          {:else}
+            You haven't staked anything yet, what are you waiting for?
+          {/if}
         {/if}
 
         {#if data.accountLocks.length > 3}
@@ -524,51 +540,55 @@
       <!-- PAST REWARDS -->
       <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
         <div class="font-huge text-center mt-6">Rewards History</div>
-        {#if data.rewards && data.rewards.length > 0}
-          {#each data.rewards.slice(0, 3) as reward, id}
-            {#if reward.type != 'distributed'}
-              <div
-                on:click={() => {
-                  reward.type == 'slashed' ? modalinfo.open() : null;
-                }}
-                class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px"
-              >
-                <div class="flex items-center justify-between">
-                  <div class="flex nowrap intems-center p-1 font-thin">
-                    {new Date(reward.timestamp * 1000).toDateString()}
-                  </div>
-                  <a class="" href="https://rinkeby.etherscan.io/tx/{reward.id}" target="_blank"
-                    ><img
-                      width="20px"
-                      height="20px"
-                      src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg"
-                      alt="external link icon"
-                    /></a
-                  >
-                </div>
-                <div class="flex nowrap items-center justify-between p-1">
-                  <span class="sc-iybRtq gjVeBU">
-                    <div class="font-24px">{formatFiat(toNum(reward.amount), ',', '.', '')}</div>
-                    <img
-                      class="h-auto w-24px mx-5px"
-                      src={images.rewardsPie}
-                      alt="rewardspie token"
-                    />
-                  </span>
+        {#if isLoading}
+          Loading...
+        {:else}        
+          {#if data.rewards && data.rewards.length > 0}
+            {#each data.rewards.slice(0,3) as reward, id}
+              {#if reward.type != 'distributed'}
+                <div
+                  on:click={() => {
+                    reward.type == 'slashed' ? modalinfo.open() : null;
+                  }}
+                  class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px"
+                >
                   <div class="flex items-center justify-between">
-                    <img
-                      class="h-auto w-24px mx-5px"
-                      src={reward.type == 'claimed' ? images.claimed : images.slashed}
-                      alt="clamed icon"
-                    />
-                    <span>{reward.type}</span>
+                    <div class="flex nowrap intems-center p-1 font-thin">
+                      {new Date(reward.timestamp * 1000).toDateString()}
+                    </div>
+                    <a class="" href="https://rinkeby.etherscan.io/tx/{reward.id}" target="_blank"
+                      ><img
+                        width="20px"
+                        height="20px"
+                        src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg"
+                        alt="external link icon"
+                      /></a
+                    >
+                  </div>
+                  <div class="flex nowrap items-center justify-between p-1">
+                    <span class="sc-iybRtq gjVeBU">
+                      <div class="font-24px">{formatFiat(toNum(reward.amount), ',', '.', '')}</div>
+                      <img
+                        class="h-auto w-24px mx-5px"
+                        src={images.rewardsPie}
+                        alt="rewardspie token"
+                      />
+                    </span>
+                    <div class="flex items-center justify-between">
+                      <img
+                        class="h-auto w-24px mx-5px"
+                        src={reward.type == 'claimed' ? images.claimed : images.slashed}
+                        alt="clamed icon"
+                      />
+                      <span>{reward.type}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            {/if}
-          {/each}
-        {:else}
-          Insert placeholder
+              {/if}
+            {/each}
+          {:else}
+            You have no rewards yet.
+          {/if}
         {/if}
 
         {#if data.rewards.length > 3}
