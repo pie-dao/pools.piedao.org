@@ -2,7 +2,6 @@
   import { approve, approveMax, connectWeb3, subject, eth } from '../stores/eth.js';
   import { ethers } from 'ethers';
   import { _ } from 'svelte-i18n';
-  import BigNumber from 'bignumber.js';
   import smartcontracts from '../config/smartcontracts.json';
   import images from '../config/images.json';
   import PartecipationJson from '../config/rewards/test.json';
@@ -14,18 +13,14 @@
   import {
     toNum,
     toBN,
-    calculateStakingEnds,
-    getLockStatus,
-    didLockExpired,
-    calculateVeDough,
     sharesTimeLock,
     veDOUGH,
     dataObj,
-    initialize
+    initialize 
   } from '../helpers/staking.js';
 
-  import Modal from '../components/elements/Modal.svelte';
-  let modalinfo;
+  import StakingRewards from '../components/StakingRewards.svelte';
+  import StakingPositions from '../components/StakingPositions.svelte';
 
   const minLockAmount = 1;
 
@@ -54,6 +49,10 @@
       console.error(error);
     });
   }
+
+  function handleUpdate(event) {
+		data = event.detail.data;
+	} 
 
   async function approveToken() {
     if (!$eth.address || !$eth.signer) {
@@ -276,96 +275,7 @@
       });
     }
   }
-
-  async function boostToMax(id) {
-    if (!sharesTimeLock) return;
-
-    try {
-      let response = await sharesTimeLock.boostToMax(id);
-
-      const { emitter } = displayNotification({
-        hash: response.hash,
-      });
-
-      emitter.on('txConfirmed', async () => {
-        displayNotification({
-          message: `You boosted your stake to 36 months!`,
-          type: 'success',
-        });
-
-        const subscription = subject('blockNumber').subscribe({
-          next: async () => {
-            console.log('boostToMax -> blockNumber');
-            subscription.unsubscribe();
-
-            await fetchStakingData();
-            data = data;
-          },
-        });
-      });
-    } catch (error) {
-      console.log(error);
-      displayNotification({
-        message: e.message,
-        type: 'error',
-      });
-    }
-  }
-
-  async function unstakeDOUGH(id, lockAmount) {
-    if (!sharesTimeLock) return;
-
-    try {
-      let response = await sharesTimeLock.withdraw(id);
-
-      const { emitter } = displayNotification({
-        hash: response.hash,
-      });
-
-      emitter.on('txConfirmed', async () => {
-        displayNotification({
-          message: `You unstaked ${lockAmount.toString()} DOUGH`,
-          type: 'success',
-        });
-
-        const subscription = subject('blockNumber').subscribe({
-          next: async () => {
-            console.log('unstakeDOUGH -> blockNumber');
-            subscription.unsubscribe();
-
-            await fetchStakingData();
-            data = data;
-          },
-        });
-      });
-    } catch (error) {
-      console.log(error.message);
-      if (error.message.includes('lock not expired')) {
-        displayNotification({
-          message: "can't unstake, lock not expired.",
-          type: 'error',
-        });
-      } else {
-        displayNotification({
-          message: 'sorry, some error occurred while unstaking. Please try again later...',
-          type: 'error',
-        });
-      }
-    }
-  }
 </script>
-
-<Modal title="Slashed Rewards" backgroundColor="#f3f3f3" bind:this={modalinfo}>
-  <span slot="content" class="p-4 font-thin">
-    <strong>What's that?</strong><br />
-    If you don't partecipate, you're a looser.<br />
-    If you're a looser, we'll slash you.<br /><br />
-
-    <strong>why?</strong><br />
-    Sorry man.<br />
-    This is your own fault.<br />
-  </span>
-</Modal>
 
 <div class="font-huge text-center">Governance mining</div>
 <div class="font-thin text-lg text-center mt-10px mb-10px">Get paid for Governing the DAO</div>
@@ -425,181 +335,22 @@
         </div>
       </div>
       <!-- END SUMMARY -->
+
       <!-- YOUR STAKING -->
-      <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
-        <div class="font-huge text-center mt-6">Your Staking</div>
-
-        {#if isLoading}
-          Loading...
-        {:else}
-          {#if data.accountLocks && data.accountLocks.length > 0}
-            {#each data.accountLocks.slice(0,3) as lock, id}
-              <!-- Let's show just the normal stakes, and the boosted ones. The stakes having a boostedPointer are obsolete stakes, so we won't show them -->
-              {#if lock.boostedPointer == ''}
-                <div
-                  class={lock.ejected
-                    ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60'
-                    : 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}
-                >
-                  <div class="flex items-center justify-between">
-                    <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
-                    <div class="flex items-center">
-                      <div class="font-thin mr-2">Staking ends:</div>
-                      <span>{calculateStakingEnds(lock).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                  <div class="flex nowrap items-center p-1 justify-between mt-2">
-                    <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
-                      <div class="sc-iybRtq gjVeBU">
-                        <div class="font-24px">{formatFiat(toNum(lock.amount), ',', '.', '')}</div>
-                        <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-                        <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
-                      </div>
-                      <div class="sc-iybRtq gjVeBU float-left">
-                        <div class="font-24px">
-                          {formatFiat(
-                            calculateVeDough(lock.amount, lock.lockDuration / 60),
-                            ',',
-                            '.',
-                            '',
-                          )}
-                        </div>
-                        <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-                        <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
-                      </div>
-                    </div>
-                    {#if lock.lockDuration / 60 != 36}
-                      {#if !lock.boosted}
-                        <div
-                          on:click={() => {
-                            boostToMax(lock.lockId).then(updated_data => {
-                              data = updated_data;
-                            }).catch(error => {
-                              console.error(error);
-                            });
-                          }}
-                          class="flex items-center cardbordergradient -mr-2 pointer"
-                        >
-                          <div class="flex items-center p-2">
-                            <div class="mr-8px">Boost to Max</div>
-                            <img
-                              class="w-30px h-30px"
-                              src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
-                              alt="ETH"
-                            />
-                          </div>
-                        </div>
-                      {:else}
-                        <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30">
-                          <div class="flex items-center p-2">
-                            <div class="mr-8px">Already Boosted</div>
-                            <img
-                              class="w-30px h-30px"
-                              src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
-                              alt="ETH"
-                            />
-                          </div>
-                        </div>
-                      {/if}
-                    {/if}
-                  </div>
-                  <div class="mt-2 flex justify-start opacity-30 pointer">
-                    <span>{getLockStatus(lock)}</span>
-                  </div>
-                  {#if !lock.withdrawn && !lock.ejected}
-                    {#if didLockExpired(lock)}
-                      <div
-                        on:click={() => {
-                          unstakeDOUGH(lock.lockId, toNum(lock.amount)).then(updated_data => {
-                            data = updated_data;
-                          }).catch(error => {
-                            console.error(error.message);
-                          });
-                        }}
-                        class="mt-2 flex justify-end pointer"
-                      >
-                        <span>Unstake</span>
-                      </div>
-                    {:else}
-                      <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div>
-                    {/if}
-                  {/if}
-                </div>
-              {/if}
-            {/each}
-          {:else}
-            You haven't staked anything yet, what are you waiting for?
-          {/if}
-        {/if}
-
-        {#if data.accountLocks.length > 3}
-          <a class="pt-6" href="#/staking_positions"> See all staking positions </a>
-        {/if}
-      </div>
+      {#key data}
+        <StakingPositions data={data} isLoading={isLoading} itemsNumber=4 eth={$eth} on:update={handleUpdate}></StakingPositions>
+      {/key}        
       <!-- END YOUR STAKING -->
-      <!-- PAST REWARDS -->
-      <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
-        <div class="font-huge text-center mt-6">Rewards History</div>
-        {#if isLoading}
-          Loading...
-        {:else}        
-          {#if data.rewards && data.rewards.length > 0}
-            {#each data.rewards.slice(0,3) as reward, id}
-              {#if reward.type != 'distributed'}
-                <div
-                  on:click={() => {
-                    reward.type == 'slashed' ? modalinfo.open() : null;
-                  }}
-                  class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px"
-                >
-                  <div class="flex items-center justify-between">
-                    <div class="flex nowrap intems-center p-1 font-thin">
-                      {new Date(reward.timestamp * 1000).toDateString()}
-                    </div>
-                    <a class="" href="https://rinkeby.etherscan.io/tx/{reward.id}" target="_blank"
-                      ><img
-                        width="20px"
-                        height="20px"
-                        src="https://raw.githubusercontent.com/pie-dao/brand/2deb3b9bb0c666a34dd715dce0f5a48e71ea3fe1/misc/external-link.svg"
-                        alt="external link icon"
-                      /></a
-                    >
-                  </div>
-                  <div class="flex nowrap items-center justify-between p-1">
-                    <span class="sc-iybRtq gjVeBU">
-                      <div class="font-24px">{formatFiat(toNum(reward.amount), ',', '.', '')}</div>
-                      <img
-                        class="h-auto w-24px mx-5px"
-                        src={images.rewardsPie}
-                        alt="rewardspie token"
-                      />
-                    </span>
-                    <div class="flex items-center justify-between">
-                      <img
-                        class="h-auto w-24px mx-5px"
-                        src={reward.type == 'claimed' ? images.claimed : images.slashed}
-                        alt="clamed icon"
-                      />
-                      <span>{reward.type}</span>
-                    </div>
-                  </div>
-                </div>
-              {/if}
-            {/each}
-          {:else}
-            You have no rewards yet.
-          {/if}
-        {/if}
 
-        {#if data.rewards.length > 3}
-          <a class="pt-6" href="#/staking_rewards"> See all rewards </a>
-        {/if}
-      </div>
+      <!-- PAST REWARDS -->
+      {#key data}
+        <StakingRewards data={data} isLoading={isLoading} itemsNumber=4></StakingRewards>
+      {/key}
       <!-- END PAST REWARDS -->
     </div>
 
+    <!-- STAKING FORM -->
     <div class="flex flex-col w-full m-0  lg:w-49pc md:ml-1pc">
-      <!-- STAKING FORM -->
       {#if !isLoading}
         <div
           class="flex flex-col items-center w-full  cardbordergradient p-1px bg-lightgrey"
@@ -776,5 +527,6 @@
         Loading...
       {/if}
     </div>
+    <!-- END STAKING FORM -->
   </div>
 </div>

@@ -196,7 +196,6 @@ export const fetchStakingData = async (eth) => {
   dataObj['rewards'] = rewards;
   console.log('fetchStakingData', dataObj);
 
-  dataObj = dataObj;
   return dataObj;
 };
 
