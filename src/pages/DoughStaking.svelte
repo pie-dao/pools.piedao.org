@@ -6,30 +6,27 @@
   import images from '../config/images.json';
   import PartecipationJson from '../config/rewards/test.json';
   import displayNotification from '../notifications';
-  import { parseEther } from '@ethersproject/units';
-  import { isAddress } from '@pie-dao/utils';
   import { createParticipationTree } from '../classes/MerkleTreeUtils';
   import { formatFiat, formatToken } from '../components/helpers.js';
   import {
     toNum,
     toBN,
-    sharesTimeLock,
+    stakeDOUGH,
     veDOUGH,
     dataObj,
-    initialize 
+    initialize
   } from '../helpers/staking.js';
 
   import StakingRewards from '../components/StakingRewards.svelte';
   import StakingPositions from '../components/StakingPositions.svelte';
 
-  const minLockAmount = 1;
-
   $: data = dataObj;
+  $: stakeButtonText = 'Stake';
+  $: isStaking = false;
+
   $: isLoading = true;
   $: hasLoaded = false;
 
-  $: stakeButtonText = 'Stake';
-  $: isStaking = false;
   $: approveButtonText = 'Approve';
   $: isApproving = false;
 
@@ -150,130 +147,6 @@
       proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null,
     };
   }
-
-  const safeFlow = async () => {
-    const Errors = {
-      NOT_CONNECTED: {
-        code: 1,
-        message: 'The wallet is not connected or signer not available',
-      },
-      NOT_APPROVED: {
-        code: 2,
-        message: 'Allowance too low',
-      },
-      NOT_INITIALIZED: {
-        code: 2,
-        message: 'Timelock not initialized',
-      },
-      WRONG_DURATION: {
-        code: 2,
-        message: 'Duration Value incorrect',
-      },
-      TOO_SMALL: {
-        code: 4,
-        message: 'Deposit amount too small',
-      },
-      NOT_VALID_ADDRESS: {
-        code: 2,
-        message: 'Receiver is not a valid address',
-      },
-    };
-
-    // Check connection to wallet
-    if (!$eth.address || !$eth.signer) {
-      displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
-      connectWeb3();
-      return Errors.NOT_CONNECTED;
-    }
-
-    if (!sharesTimeLock) {
-      displayNotification({ message: Errors.NOT_INITIALIZED.message, type: 'hint' });
-      return Errors.NOT_INITIALIZED;
-    }
-
-    // Check connection to wallet
-    if (stakeAmount < minLockAmount) {
-      displayNotification({ message: 'Deposit amount too small', type: 'hint' });
-      return Errors.NOT_CONNECTED;
-    }
-
-    if (!stakeDuration) {
-      displayNotification({ message: Errors.WRONG_DURATION.message, type: 'hint' });
-      return Errors.WRONG_DURATION;
-    }
-
-    if (!isAddress(receiver)) {
-      displayNotification({ message: Errors.NOT_VALID_ADDRESS.message, type: 'hint' });
-      return Errors.NOT_VALID_ADDRESS;
-    }
-    return false;
-  };
-
-  async function stakeDOUGH() {
-    const error = await safeFlow();
-    if (error) {
-      console.log('error', error);
-      return;
-    }
-
-    stakeButtonText = 'Staking';
-    isStaking = true;
-
-    let interval = setInterval(() => {
-      let occurrences = stakeButtonText.split('.').length - 1;
-
-      if (occurrences < 3) {
-        stakeButtonText += '.';
-      } else {
-        stakeButtonText = 'Staking';
-      }
-    }, 1000);
-
-    try {
-      const { emitter } = displayNotification(
-        await sharesTimeLock.depositByMonths(
-          parseEther(stakeAmount.toString()),
-          stakeDuration,
-          receiver,
-        ),
-      );
-
-      emitter.on('txConfirmed', async () => {
-        const subscription = subject('blockNumber').subscribe({
-          next: async () => {
-            clearInterval(interval);
-            stakeButtonText = 'Success! 🥳';
-            isStaking = false;
-
-            setTimeout(() => {
-              stakeButtonText = 'Stake';
-              stakeAmount = 0;
-            }, 5000);
-
-            displayNotification({
-              autoDismiss: 15000,
-              message: `You staked successfully`,
-              type: 'success',
-            });
-
-            subscription.unsubscribe();
-
-            data = await fetchStakingData();
-          },
-        });
-      });
-    } catch (error) {
-      clearInterval(interval);
-      stakeButtonText = 'Stake';
-      isStaking = false;
-
-      displayNotification({
-        autoDismiss: 15000,
-        message: error.message,
-        type: 'error',
-      });
-    }
-  }
 </script>
 
 <div class="font-huge text-center">Governance mining</div>
@@ -335,17 +208,15 @@
       </div>
       <!-- END SUMMARY -->
 
-      <!-- YOUR STAKING -->
       {#key data}
-        <StakingPositions data={data} isLoading={isLoading} itemsNumber=4 eth={$eth} on:update={handleUpdate}></StakingPositions>
-      {/key}        
-      <!-- END YOUR STAKING -->
+        <!-- YOUR STAKING -->
+        <StakingPositions data={data} isLoading={isLoading} itemsNumber=3 eth={$eth} on:update={handleUpdate}></StakingPositions>
+        <!-- END YOUR STAKING -->
 
-      <!-- PAST REWARDS -->
-      {#key data}
-        <StakingRewards data={data} isLoading={isLoading} itemsNumber=4></StakingRewards>
-      {/key}
-      <!-- END PAST REWARDS -->
+        <!-- PAST REWARDS -->
+        <StakingRewards data={data} isLoading={isLoading} itemsNumber=3></StakingRewards>
+        <!-- END PAST REWARDS -->        
+      {/key}        
     </div>
 
     <!-- STAKING FORM -->
@@ -389,7 +260,6 @@
                 spellcheck="false"
                 disabled={isStaking || isApproving}
                 on:change={() => {
-                  //  1.123456789012345678
                   stakeAmount = formatToken(stakeAmount, '.', 18);
                 }}
               />
@@ -502,7 +372,40 @@
               >
             {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
               <button
-                on:click={stakeDOUGH}
+                on:click={() => {
+                  stakeButtonText = 'Staking';
+                  isStaking = true;
+                
+                  let interval = setInterval(() => {
+                    let occurrences = stakeButtonText.split('.').length - 1;
+                
+                    if (occurrences < 3) {
+                      stakeButtonText += '.';
+                    } else {
+                      stakeButtonText = 'Staking';
+                    }
+                  }, 1000);
+
+                  stakeDOUGH(stakeAmount, stakeDuration, receiver, $eth).then(updated_data => {
+                    data = updated_data;
+                    data = data;
+
+                    clearInterval(interval);
+                    stakeButtonText = 'Success! 🥳';
+          
+                    setTimeout(() => {
+                      stakeButtonText = 'Stake';
+                      isStaking = false;
+                      stakeAmount = 0;
+                    }, 5000);                    
+                  }).catch(error => {
+                    console.error(error);
+
+                    clearInterval(interval);
+                    stakeButtonText = 'Stake';
+                    isStaking = false;                    
+                  });
+                }}
                 class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
                 >{stakeButtonText}</button
               >

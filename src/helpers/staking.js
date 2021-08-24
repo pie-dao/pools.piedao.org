@@ -7,6 +7,8 @@ import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from '../helpers/subgraph.js';
 import { subject } from '../stores/eth.js';
 import displayNotification from '../notifications';
+import { parseEther } from '@ethersproject/units';
+import { isAddress } from '@pie-dao/utils';
 
 export let dataObj = {
   totalStaked: BigNumber(0),
@@ -21,6 +23,7 @@ export let dataObj = {
 
 export let sharesTimeLock = false;
 export let veDOUGH = false;
+export const minLockAmount = 1;
 
 export const toNum = (num) =>
   BigNumber(num.toString())
@@ -51,6 +54,63 @@ export function getLockStatus(lock) {
     }
   }
 }
+
+export function safeFlow(stakeAmount, stakeDuration, receiver, eth) {
+  const Errors = {
+    NOT_CONNECTED: {
+      code: 1,
+      message: 'The wallet is not connected or signer not available',
+    },
+    NOT_APPROVED: {
+      code: 2,
+      message: 'Allowance too low',
+    },
+    NOT_INITIALIZED: {
+      code: 2,
+      message: 'Timelock not initialized',
+    },
+    WRONG_DURATION: {
+      code: 2,
+      message: 'Duration Value incorrect',
+    },
+    TOO_SMALL: {
+      code: 4,
+      message: 'Deposit amount too small',
+    },
+    NOT_VALID_ADDRESS: {
+      code: 2,
+      message: 'Receiver is not a valid address',
+    },
+  };
+
+  if (!eth.address || !eth.signer) {
+    displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
+    connectWeb3();
+    return Errors.NOT_CONNECTED;
+  }
+
+  if (!sharesTimeLock) {
+    displayNotification({ message: Errors.NOT_INITIALIZED.message, type: 'hint' });
+    return Errors.NOT_INITIALIZED;
+  }
+
+  if (stakeAmount < minLockAmount) {
+    displayNotification({ message: 'Deposit amount too small', type: 'hint' });
+    return Errors.NOT_CONNECTED;
+  }
+
+  if (!stakeDuration) {
+    displayNotification({ message: Errors.WRONG_DURATION.message, type: 'hint' });
+    return Errors.WRONG_DURATION;
+  }
+
+  if (!isAddress(receiver)) {
+    displayNotification({ message: Errors.NOT_VALID_ADDRESS.message, type: 'hint' });
+    return Errors.NOT_VALID_ADDRESS;
+  }
+
+  return false;
+};
 
 export function didLockExpired(lock) {
   let endDate = calculateStakingEnds(lock);
@@ -275,6 +335,56 @@ export async function unstakeDOUGH(id, lockAmount, eth) {
           type: 'error',
         });
       }
+
+      reject(error);
+    }
+  });
+}
+
+export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
+  return new Promise(async(resolve, reject) => {
+    const error = safeFlow(stakeAmount, stakeDuration, receiver, eth);
+
+    if (error) {
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.message,
+        type: 'error',
+      });
+
+      reject(error);
+    }
+  
+    try {
+      const { emitter } = displayNotification(
+        await sharesTimeLock.depositByMonths(
+          parseEther(stakeAmount.toString()),
+          stakeDuration,
+          receiver,
+        ),
+      );
+  
+      emitter.on('txConfirmed', async () => {
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {  
+            displayNotification({
+              autoDismiss: 15000,
+              message: `You staked successfully`,
+              type: 'success',
+            });
+  
+            subscription.unsubscribe();
+            dataObj = await fetchStakingData(eth);
+            resolve(dataObj);
+          },
+        });
+      });
+    } catch (error) {  
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.message,
+        type: 'error',
+      });
 
       reject(error);
     }
