@@ -1,17 +1,15 @@
 <script>
-  import { approve, approveMax, connectWeb3, eth } from '../stores/eth.js';
-  import { ethers } from 'ethers';
+  import { eth } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
-  import smartcontracts from '../config/smartcontracts.json';
   import images from '../config/images.json';
-  import displayNotification from '../notifications';
   import { formatToken } from '../components/helpers.js';
   import {
     toNum,
     toBN,
     stakeDOUGH,
     dataObj,
-    initialize
+    initialize,
+    approveToken
   } from '../helpers/staking.js';
 
   import StakingRewards from '../components/StakingRewards.svelte';
@@ -48,55 +46,7 @@
 	function handleUpdate(event) {
 		data = event.detail.data;
     data = data;
-	}   
-
-  async function approveToken() {
-    if (!$eth.address || !$eth.signer) {
-      displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
-      connectWeb3();
-      return;
-    }
-
-    approveButtonText = 'Approving';
-    isApproving = true;
-
-    let interval = setInterval(() => {
-      let occurrences = approveButtonText.split('.').length - 1;
-
-      if (occurrences < 3) {
-        approveButtonText += '.';
-      } else {
-        approveButtonText = 'Approving';
-      }
-    }, 1000);
-
-    try {
-      // resetting the approve to zero, before initiating a new approval...
-      if (
-        !data.accountDepositTokenAllowance.isEqualTo(0) &&
-        !data.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
-      ) {
-        await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
-      }
-
-      await approveMax(smartcontracts.dough, smartcontracts.doughStaking, { gasLimit: 100000 });
-      data.accountDepositTokenAllowance = ethers.constants.MaxUint256;
-
-      clearInterval(interval);
-      approveButtonText = 'Approve';
-      isApproving = false;
-    } catch (error) {
-      clearInterval(interval);
-      approveButtonText = 'Approve';
-      isApproving = false;
-
-      displayNotification({
-        autoDismiss: 15000,
-        message: error.message,
-        type: 'error',
-      });
-    }
-  }
+	}
 </script>
 
 <div class="font-huge text-center">Governance mining</div>
@@ -111,7 +61,7 @@
         <!-- SUMMARY -->
         <StakingSummary data={data} eth={$eth} on:update={handleUpdate}></StakingSummary>
         <!-- END SUMMARY -->
-              
+
         <!-- YOUR STAKING -->
         <StakingPositions data={data} isLoading={isLoading} itemsNumber=3 eth={$eth} on:update={handleUpdate}></StakingPositions>
         <!-- END YOUR STAKING -->
@@ -269,7 +219,35 @@
               >
             {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
               <button
-                on:click={approveToken}
+                on:click={() => {
+                  approveButtonText = 'Approving';
+                  isApproving = true;
+                
+                  let interval = setInterval(() => {
+                    let occurrences = approveButtonText.split('.').length - 1;
+                
+                    if (occurrences < 3) {
+                      approveButtonText += '.';
+                    } else {
+                      approveButtonText = 'Approving';
+                    }
+                  }, 1000);
+
+                  approveToken($eth).then(updated_data => {
+                    data = updated_data;
+                    data = data;
+
+                    clearInterval(interval);
+                    approveButtonText = 'Approve';
+                    isApproving = false;                   
+                  }).catch(error => {
+                    console.error(error);
+
+                    clearInterval(interval);
+                    approveButtonText = 'Approve';
+                    isApproving = false;                    
+                  });
+                }}                
                 class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
                 >{approveButtonText}</button
               >

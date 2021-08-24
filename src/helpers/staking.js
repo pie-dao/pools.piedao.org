@@ -11,6 +11,7 @@ import { parseEther } from '@ethersproject/units';
 import { isAddress } from '@pie-dao/utils';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
+import { approve, approveMax, connectWeb3 } from '../stores/eth.js';
 
 export let dataObj = {
   totalStaked: BigNumber(0),
@@ -442,4 +443,36 @@ export function prepareProofs(eth) {
     valid: leaf ? true : false,
     proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null,
   };
+}
+
+export function approveToken(eth) {
+  return Promise(async(resolve, reject) => {
+    if (!eth.address || !eth.signer) {
+      displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
+      connectWeb3();
+      reject("wallet not connected");
+    }
+
+    try {
+      // resetting the approve to zero, before initiating a new approval...
+      if (
+        !dataObj.accountDepositTokenAllowance.isEqualTo(0) &&
+        !dataObj.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
+      ) {
+        await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
+      }
+  
+      await approveMax(smartcontracts.dough, smartcontracts.doughStaking, { gasLimit: 100000 });
+      dataObj.accountDepositTokenAllowance = ethers.constants.MaxUint256;
+      resolve(dataObj);
+    } catch (error) {
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.message,
+        type: 'error',
+      });
+
+      reject(error);
+    }
+  });
 }
