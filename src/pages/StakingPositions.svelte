@@ -17,7 +17,6 @@
     initialize($eth).then((updated_data) => {
       data = updated_data;
       isLoading = false;
-      console.log("received data", data);
     }).catch(error => {
       hasLoaded = false;
       console.error(error);
@@ -26,6 +25,7 @@
 
 	function handleUpdate(event) {
 		data = event.detail.data;
+    data = data;
 	}  
 </script>
 

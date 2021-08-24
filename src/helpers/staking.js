@@ -33,9 +33,8 @@ export function calculateStakingEnds(lock) {
   let startDate = new Date(lock.lockedAt * 1000);
   let lockDuration = lock.lockDuration / 60;
 
-  //startDate.setMonth(startDate.getMonth() + lockDuration);
-
   // TODO: remove this line, and use the previous one...
+  //startDate.setMonth(startDate.getMonth() + lockDuration);
   startDate.setMinutes(startDate.getMinutes() + lockDuration);
 
   return startDate;
@@ -81,7 +80,7 @@ export function initialize(eth) {
         eth.signer || eth.provider,
       );
   
-      await fetchStakingData(eth);
+      dataObj = await fetchStakingData(eth);
       resolve(dataObj);
     } catch (error) {
       displayNotification({
@@ -219,7 +218,7 @@ export function boostToMax(id, eth) {
   
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
-            await fetchStakingData(eth);  
+            dataObj = await fetchStakingData(eth);  
             subscription.unsubscribe();
 
             resolve(dataObj);
@@ -257,7 +256,7 @@ export async function unstakeDOUGH(id, lockAmount, eth) {
   
         const subscription = subject('blockNumber').subscribe({
           next: async () => {  
-            await fetchStakingData(eth);
+            dataObj = await fetchStakingData(eth);
             subscription.unsubscribe();
 
             resolve(dataObj);

@@ -49,10 +49,11 @@
       console.error(error);
     });
   }
-
-  function handleUpdate(event) {
+  
+	function handleUpdate(event) {
 		data = event.detail.data;
-	} 
+    data = data;
+	}   
 
   async function approveToken() {
     if (!$eth.address || !$eth.signer) {
@@ -120,8 +121,7 @@
             stakeAmount = 0;
             subscription.unsubscribe();
 
-            await fetchStakingData();
-            data = data;
+            data = await fetchStakingData();
           },
         });
       });
@@ -248,7 +248,7 @@
             setTimeout(() => {
               stakeButtonText = 'Stake';
               stakeAmount = 0;
-            }, 3000);
+            }, 5000);
 
             displayNotification({
               autoDismiss: 15000,
@@ -258,8 +258,7 @@
 
             subscription.unsubscribe();
 
-            await fetchStakingData();
-            data = data;
+            data = await fetchStakingData();
           },
         });
       });

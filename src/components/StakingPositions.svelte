@@ -59,31 +59,34 @@
             </div>
             {#if lock.lockDuration / 60 != 36}
               {#if !lock.boosted}
-                <div
-                  on:click={() => {
-                    boostToMax(lock.lockId, eth)
-                      .then((updated_data) => {
-                        data = updated_data;
+                {#if !lock.ejected && !lock.withdrawn}
+                  <div
+                    on:click={() => {
+                      boostToMax(lock.lockId, eth)
+                        .then((updated_data) => {
+                          data = updated_data;
+                          data = data;
 
-                        dispatch('update', {
-                          data: data
-                        });                        
-                      })
-                      .catch((error) => {
-                        console.error(error);
-                      });
-                  }}
-                  class="flex items-center cardbordergradient -mr-2 pointer"
-                >
-                  <div class="flex items-center p-2">
-                    <div class="mr-8px">Boost to Max</div>
-                    <img
-                      class="w-30px h-30px"
-                      src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
-                      alt="ETH"
-                    />
+                          dispatch('update', {
+                            data: data,
+                          });
+                        })
+                        .catch((error) => {
+                          console.error(error);
+                        });
+                    }}
+                    class="flex items-center cardbordergradient -mr-2 pointer"
+                  >
+                    <div class="flex items-center p-2">
+                      <div class="mr-8px">Boost to Max</div>
+                      <img
+                        class="w-30px h-30px"
+                        src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
+                        alt="ETH"
+                      />
+                    </div>
                   </div>
-                </div>
+                {/if}
               {:else}
                 <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30">
                   <div class="flex items-center p-2">
@@ -105,13 +108,15 @@
             {#if didLockExpired(lock)}
               <div
                 on:click={() => {
+                  console.log('unstakeDOUGH', lock.lockId);
                   unstakeDOUGH(lock.lockId, toNum(lock.amount), eth)
                     .then((updated_data) => {
                       data = updated_data;
+                      data = data;
 
                       dispatch('update', {
-                        data: data
-                      });                      
+                        data: data,
+                      });
                     })
                     .catch((error) => {
                       console.error(error.message);
@@ -133,6 +138,6 @@
   {/if}
 
   {#if data.accountLocks.length > itemsNumber}
-  <a class="pt-6" href="#/staking_positions"> See all staking positions </a>
-{/if}
+    <a class="pt-6" href="#/staking_positions"> See all staking positions </a>
+  {/if}
 </div>
