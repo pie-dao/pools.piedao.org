@@ -1,24 +1,22 @@
 <script>
-  import { approve, approveMax, connectWeb3, subject, eth } from '../stores/eth.js';
+  import { approve, approveMax, connectWeb3, eth } from '../stores/eth.js';
   import { ethers } from 'ethers';
   import { _ } from 'svelte-i18n';
   import smartcontracts from '../config/smartcontracts.json';
   import images from '../config/images.json';
-  import PartecipationJson from '../config/rewards/test.json';
   import displayNotification from '../notifications';
-  import { createParticipationTree } from '../classes/MerkleTreeUtils';
-  import { formatFiat, formatToken } from '../components/helpers.js';
+  import { formatToken } from '../components/helpers.js';
   import {
     toNum,
     toBN,
     stakeDOUGH,
-    veDOUGH,
     dataObj,
     initialize
   } from '../helpers/staking.js';
 
   import StakingRewards from '../components/StakingRewards.svelte';
   import StakingPositions from '../components/StakingPositions.svelte';
+  import StakingSummary from '../components/StakingSummary.svelte';
 
   $: data = dataObj;
   $: stakeButtonText = 'Stake';
@@ -99,54 +97,6 @@
       });
     }
   }
-
-  async function claim() {
-    const proof = prepareProofs();
-    console.log('proof', proof);
-
-    try {
-      const { emitter } = displayNotification(await veDOUGH.claim(proof.proof));
-
-      emitter.on('txConfirmed', async () => {
-        const subscription = subject('blockNumber').subscribe({
-          next: async () => {
-            displayNotification({
-              autoDismiss: 15000,
-              message: `Pay day baby!`,
-              type: 'success',
-            });
-            stakeAmount = 0;
-            subscription.unsubscribe();
-
-            data = await fetchStakingData();
-          },
-        });
-      });
-    } catch (error) {
-      console.error('Error on Claim', [error.message]);
-
-      displayNotification({
-        autoDismiss: 15000,
-        message: 'Sorry, an error occurred while claiming your rewards. Please try again later.',
-        type: 'error',
-      });
-    }
-  }
-
-  function prepareProofs() {
-    if (!$eth.address) return;
-    const merkleTree = createParticipationTree(PartecipationJson);
-
-    console.log('merkleTree', merkleTree);
-    const leaf = merkleTree.leafs.find(
-      (item) => item.address.toLowerCase() === $eth.address.toLowerCase(),
-    );
-
-    return {
-      valid: leaf ? true : false,
-      proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null,
-    };
-  }
 </script>
 
 <div class="font-huge text-center">Governance mining</div>
@@ -158,54 +108,7 @@
   >
     <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
       <!-- SUMMARY -->
-      <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
-        <div class="font-huge text-center mt-6">Summary</div>
-        <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
-          <div class="flex items-center justify-between">
-            <div class="flex nowrap intems-center p-1 font-thin">Total staked DOUGH</div>
-          </div>
-          <div class="flex nowrap items-center p-1">
-            <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">{formatFiat(toNum(data.totalStaked), ',', '.', '')}</div>
-              <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-              <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
-            </span>
-          </div>
-        </div>
-        <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
-          <div class="flex items-center justify-between">
-            <div class="flex nowrap intems-center p-1 font-thin">Your veDOUGH</div>
-          </div>
-          <div class="flex nowrap items-center p-1">
-            <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">
-                {formatFiat(toNum(data.accountVeTokenBalance), ',', '.', '')}
-              </div>
-              <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-              <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
-            </span>
-          </div>
-        </div>
-        <div
-          class="flex flex-col nowrap w-92pc mx-4pc mt-4 mb-6 swap-from rounded-20px bg-white p-16px"
-        >
-          <div class="flex items-center justify-between">
-            <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
-          </div>
-          <div class="flex nowrap items-center p-1">
-            <span class="sc-iybRtq gjVeBU">
-              <div class="font-24px">
-                {formatFiat(toNum(data.accountWithdrawableRewards), ',', '.', '')}
-              </div>
-              <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
-              <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
-            </span>
-          </div>
-          {#if !data.accountWithdrawableRewards.eq(0)}
-            <button class="pointer" on:click={claim}> Claim now</button>
-          {/if}
-        </div>
-      </div>
+      <StakingSummary data={data} eth={$eth}></StakingSummary>
       <!-- END SUMMARY -->
 
       {#key data}

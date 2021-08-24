@@ -9,6 +9,8 @@ import { subject } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import { parseEther } from '@ethersproject/units';
 import { isAddress } from '@pie-dao/utils';
+import PartecipationJson from '../config/rewards/test.json';
+import { createParticipationTree } from '../classes/MerkleTreeUtils';
 
 export let dataObj = {
   totalStaked: BigNumber(0),
@@ -121,8 +123,7 @@ export function didLockExpired(lock) {
 export function calculateVeDough(stakedDough, commitment) {
   let k = 56.0268900276223;
   let commitmentMultiplier = (commitment / k) * Math.log10(commitment);
-  let veDOUGH = stakedDough * commitmentMultiplier;
-  return toNum(veDOUGH);
+  return toNum(stakedDough * commitmentMultiplier);
 }
 
 export function initialize(eth) {
@@ -389,4 +390,56 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
       reject(error);
     }
   });
+}
+
+export async function claim(eth) {
+  return new Promise(async(resolve, reject) => {
+    const proof = prepareProofs(eth);
+    console.log('proof', proof);
+  
+    try {
+      const { emitter } = displayNotification(await veDOUGH.claim(proof.proof));
+  
+      emitter.on('txConfirmed', async () => {
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: `Pay day baby!`,
+              type: 'success',
+            });
+
+            stakeAmount = 0;
+            subscription.unsubscribe();
+  
+            dataObj = await fetchStakingData(eth);
+            resolve(dataObj);
+          },
+        });
+      });
+    } catch (error) {  
+      displayNotification({
+        autoDismiss: 15000,
+        message: 'Sorry, an error occurred while claiming your rewards. Please try again later.',
+        type: 'error',
+      });
+
+      reject(error);
+    }
+  });
+}
+
+export function prepareProofs(eth) {
+  if (!eth.address) return;
+  const merkleTree = createParticipationTree(PartecipationJson);
+
+  console.log('merkleTree', merkleTree);
+  const leaf = merkleTree.leafs.find(
+    (item) => item.address.toLowerCase() === eth.address.toLowerCase(),
+  );
+
+  return {
+    valid: leaf ? true : false,
+    proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null,
+  };
 }
