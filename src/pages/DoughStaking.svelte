@@ -3,13 +3,15 @@
   import { _ } from 'svelte-i18n';
   import images from '../config/images.json';
   import { formatToken } from '../components/helpers.js';
+  import { onDestroy } from 'svelte';
   import {
     toNum,
     toBN,
     stakeDOUGH,
     dataObj,
     initialize,
-    approveToken
+    approveToken,
+    observable
   } from '../helpers/staking.js';
 
   import StakingRewards from '../components/StakingRewards.svelte';
@@ -29,6 +31,13 @@
   let stakeAmount;
   let stakeDuration = 36;
   let receiver;
+  let observer = null;
+
+  onDestroy(() => {
+    if(observer) {
+      observer.unsubscribe();
+    }
+  });
 
   $: if ($eth.address && isLoading && !hasLoaded) {
     hasLoaded = true;
@@ -37,6 +46,15 @@
       isLoading = false;
       data = updated_data;
       receiver = $eth.address;
+
+      observer = observable.subscribe({
+        next(updated_data) {
+          // updating the stakingData just when needed...
+          if(JSON.stringify(data) !== JSON.stringify(updated_data)) {
+            data = updated_data;
+          }
+         }
+      });
     }).catch(error => {
       hasLoaded = false;
       console.error(error);

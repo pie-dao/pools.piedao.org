@@ -12,6 +12,7 @@ import { isAddress } from '@pie-dao/utils';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
 import { approve, approveMax, connectWeb3 } from '../stores/eth.js';
+import { Observable } from 'rxjs';
 
 export let dataObj = {
   totalStaked: BigNumber(0),
@@ -27,6 +28,19 @@ export let dataObj = {
 export let sharesTimeLock = false;
 export let veDOUGH = false;
 export const minLockAmount = 1;
+let ETH = null;
+
+export const observable = new Observable(subscriber => {
+  let interval = setInterval(async() => {
+    dataObj = await fetchStakingData(ETH);
+    subscriber.next(dataObj);
+  }, 5000);
+
+  // clearing interval, when unsubscribe action happens...
+  return () => {
+    clearInterval(interval);
+  }
+});
 
 export const toNum = (num) =>
   BigNumber(num.toString())
@@ -128,6 +142,8 @@ export function calculateVeDough(stakedDough, commitment) {
 }
 
 export function initialize(eth) {
+  ETH = eth;
+
   return new Promise(async(resolve, reject) => {
     try {
       sharesTimeLock = new ethers.Contract(

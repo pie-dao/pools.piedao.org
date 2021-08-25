@@ -1,9 +1,11 @@
 <script>
   import { eth } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
+  import { onDestroy } from 'svelte';
   import {
     initialize,
-    dataObj
+    dataObj,
+    observable
   } from '../helpers/staking.js';
   import StakingPositions from '../components/StakingPositions.svelte';
 
@@ -11,12 +13,29 @@
   $: hasLoaded = false;
   $: data = dataObj;
 
+  let observer = null;
+
+  onDestroy(() => {
+    if(observer) {
+      observer.unsubscribe();
+    }
+  });
+
   $: if ($eth.address && isLoading && !hasLoaded) {
     hasLoaded = true;
 
     initialize($eth).then((updated_data) => {
       data = updated_data;
       isLoading = false;
+
+      observer = observable.subscribe({
+        next(updated_data) {
+          // updating the stakingData just when needed...
+          if(JSON.stringify(data) !== JSON.stringify(updated_data)) {
+            data = updated_data;
+          }
+         }
+      });     
     }).catch(error => {
       hasLoaded = false;
       console.error(error);
