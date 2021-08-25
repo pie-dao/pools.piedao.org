@@ -446,7 +446,7 @@ export function prepareProofs(eth) {
 }
 
 export function approveToken(eth) {
-  return Promise(async(resolve, reject) => {
+  return new Promise(async(resolve, reject) => {
     if (!eth.address || !eth.signer) {
       displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
       connectWeb3();
