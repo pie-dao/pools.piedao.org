@@ -32,8 +32,8 @@
       {#if lock.boostedPointer == ''}
         <div
           class={lock.ejected
-            ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60'
-            : 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}
+            ? 'fade-in-1 flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60'
+            : 'fade-in-1 flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}
         >
           <div class="flex items-center justify-between">
             <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
