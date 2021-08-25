@@ -17,6 +17,7 @@
   import poolsConfig from '../config/pools.json';
   import ovens from '../config/ovensConf.js';
   import { piesMarketDataStore } from '../stores/coingecko.js';
+  import stakingPools from '../config/stakingPools.json';
   import {
     amountFormatter,
     getTokenImage,
@@ -51,6 +52,19 @@
       }
     });
   };
+
+  const farmingPie = (address) => {
+    return stakingPools.find((stakingPool) => {
+      return stakingPool.containing.find((token) => {
+        if (token.address == address) {
+          return stakingPool;
+        }
+      });
+    });
+  };
+
+  let farmingPieObj = farmingPie(params.address);
+  farmingPieObj = farmingPieObj;
 
   let pieOfPies = false;
   let tradingViewWidgetComponent;
@@ -291,6 +305,9 @@
                     class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 cursor-pointer hover:opacity-60"
                     role="menuitem">Redeem</a
                   >
+                  {#if farmingPieObj}
+                    <a href="#/staking/{farmingPieObj.slug}" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farm</a>
+                  {/if}                  
                 </div>
               </div>
             </div>
@@ -750,6 +767,9 @@
               class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
               role="menuitem">Redeem</a
             >
+            {#if farmingPieObj}
+              <a href="#/staking/{farmingPieObj.slug}" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farm</a>
+            {/if}
           </div>
         </div>
       </div>

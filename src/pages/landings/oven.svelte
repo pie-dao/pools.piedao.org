@@ -248,7 +248,7 @@
 <Accordion class="flex flex-col">
   <button class="accordionbutton flex flex-col" slot="header" let:toggle on:click={toggle}>When will Oven be triggered?</button>
   <div class="accordioncontent">
-    Oven goes through two checks every fifteen minutes. The first checks if more than ten ETH is ready to be baked. The second checks current gas prices to see if baking is cost-efficient.
+    Oven goes through two checks every 48 hours. The first checks if more than ten ETH is ready to be baked. The second checks current gas prices to see if baking is cost-efficient.
 Once both conditions are met Oven will jump into action, baking everyones’ pies.
   </div>
 </Accordion>

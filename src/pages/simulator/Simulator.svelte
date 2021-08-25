@@ -373,7 +373,7 @@
           <div class="font-thin">
             <div class="font-bold text-l md:text-xl text-center mt-4 md:mt-0">Anyone Can Become A Governance Member</div>
             <div class="text-justify mt-4 md:mt-0">Governing PieDAO is about commitment and genuine passion for the mission - not the size of your wallet to cover those gas fees for votes. 
-              <br /><br />To ensure inclusivity, we introduced optimistic execution design, where members can vote gas-free on Snapshot, and results are submitted on-chain.
+              <!-- <br /><br />To ensure inclusivity, we introduced optimistic execution design, where members can vote gas-free on Snapshot, and results are submitted on-chain. -->
               </div>
           </div>
         </div>

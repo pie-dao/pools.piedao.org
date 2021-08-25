@@ -102,7 +102,7 @@ export default class Calculator {
           // retrieving the balance of Treasury from address...
           // TODO: remove the hardcoded number and use API (Zapper, Zerion)...
           CoinGecko.fetchPriceFromString('ethereum').then((response) => {
-            this.markets.treasuryLiquidity.amount = 10000000;
+            this.markets.treasuryLiquidity.amount = 15000000;
             this.markets.treasuryLiquidity.eth_value = (
               (this.markets.treasuryLiquidity.amount) / response.ethereum.usd
             ).toFixed(2);

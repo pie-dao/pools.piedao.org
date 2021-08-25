@@ -42,7 +42,7 @@
       {"symbol":"wATRI","coingeckoId":"atari","address":"0xdacD69347dE42baBfAEcD09dC88958378780FB62", "coingeckoImageId": ""},
       {"symbol":"GHST","coingeckoId":"aavegotchi","address":"0x3F382DbD960E3a9bbCeaE22651E88158d2791550", "coingeckoImageId": ""},
       {"symbol":"PUNK","coingeckoId":"punk-vault-nftx","address":"0x269616D549D7e8Eaa82DFb17028d0B212D11232A", "coingeckoImageId": ""},
-      {"symbol":"MASK","coingeckoId":"nftx-hashmasks-index","address":"0x0fe629d1e84e171f8ff0c1ded2cc2221caa48a3f", "coingeckoImageId": ""},
+      {"symbol":"MASK","coingeckoId":"mask-vault-nftx","address":"0xC7a8B45E184138114E6085C82936A8Db93DD156a", "coingeckoImageId": ""},
       {"symbol":"RARI","coingeckoId":"rarible","address":"0xfca59cd816ab1ead66534d82bc21e7515ce441cf", "coingeckoImageId": ""},
       {"symbol":"SOCKS","coingeckoId":"unisocks","address":"0x23b608675a2b2fb1890d3abbd85c5775c51691d5", "coingeckoImageId": ""},
       {"symbol":"UOS","coingeckoId":"ultra","address":"0xd13c7342e1ef687c5ad21b27c2b65d772cab5c8c", "coingeckoImageId": "", "decimals": 4},

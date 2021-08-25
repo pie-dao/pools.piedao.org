@@ -25,6 +25,7 @@ import Piefolio from '../pages/Piefolio.svelte';
 import DoughStaking from '../pages/DoughStaking.svelte';
 import StakingPositions from '../pages/StakingPositions.svelte';
 import StakingRewards from '../pages/StakingRewards.svelte';
+import Redirect from '../pages/Redirect.svelte';
 import Farm from '../pages/Farm.svelte';
 import Simulator from '../pages/simulator/Simulator.svelte';
 import SimulatorStats from '../pages/simulator/Stats.svelte';
@@ -80,6 +81,8 @@ const formatRoute = (route) => {
   // changeUrl(route);
 
   switch (route[0] || 'root') {
+    case 'support':
+      return { page: Redirect, params: { label: 'support page!', to: 'https://piedao.atlassian.net/servicedesk/customer/portals' } };
     case 'about':
       return { page: About };
     case 'dxp-defi-index':
