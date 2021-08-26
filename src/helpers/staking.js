@@ -1,19 +1,20 @@
+/* eslint-disable no-unused-vars */
+import { _ } from 'svelte-i18n';
+/* eslint-enable no-unused-vars */
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { _ } from 'svelte-i18n';
+import { parseEther } from '@ethersproject/units';
+import { isAddress } from '@pie-dao/utils';
+import { Observable } from 'rxjs';
 import sharesTimeLockABI from '../abis/sharesTimeLock.json';
 import veDoughABI from '../abis/veDoughABI.json';
 import smartcontracts from '../config/smartcontracts.json';
-import { subgraphRequest } from '../helpers/subgraph.js';
-import { subject } from '../stores/eth.js';
+import { subgraphRequest } from './subgraph.js';
+import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
-import { parseEther } from '@ethersproject/units';
-import { isAddress } from '@pie-dao/utils';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
-import { approve, approveMax, connectWeb3 } from '../stores/eth.js';
-import { Observable } from 'rxjs';
-
+/* eslint-disable import/no-mutable-exports */
 export let dataObj = {
   totalStaked: BigNumber(0),
   veTokenTotalSupply: BigNumber(0),
@@ -29,9 +30,10 @@ export let sharesTimeLock = false;
 export let veDOUGH = false;
 export const minLockAmount = 1;
 let ETH = null;
+/* eslint-enable import/no-mutable-exports */
 
-export const observable = new Observable(subscriber => {
-  let interval = setInterval(async() => {
+export const observable = new Observable((subscriber) => {
+  const interval = setInterval(async () => {
     dataObj = await fetchStakingData(ETH);
     subscriber.next(dataObj);
   }, 5000);
@@ -39,22 +41,21 @@ export const observable = new Observable(subscriber => {
   // clearing interval, when unsubscribe action happens...
   return () => {
     clearInterval(interval);
-  }
+  };
 });
 
-export const toNum = (num) =>
-  BigNumber(num.toString())
-    .dividedBy(10 ** 18)
-    .toFixed(2);
+export const toNum = (num) => BigNumber(num.toString())
+  .dividedBy(10 ** 18)
+  .toFixed(2);
 
-export const toBN = (num) => BigNumber(num.toString()).multipliedBy(10 ** 18);    
+export const toBN = (num) => BigNumber(num.toString()).multipliedBy(10 ** 18);
 
 export function calculateStakingEnds(lock) {
-  let startDate = new Date(lock.lockedAt * 1000);
-  let lockDuration = lock.lockDuration / 60;
+  const startDate = new Date(lock.lockedAt * 1000);
+  const lockDuration = lock.lockDuration / 60;
 
   // TODO: remove this line, and use the previous one...
-  //startDate.setMonth(startDate.getMonth() + lockDuration);
+  // startDate.setMonth(startDate.getMonth() + lockDuration);
   startDate.setMinutes(startDate.getMinutes() + lockDuration);
 
   return startDate;
@@ -63,13 +64,11 @@ export function calculateStakingEnds(lock) {
 export function getLockStatus(lock) {
   if (lock.withdrawn) {
     return 'withdrawn';
-  } else {
-    if (lock.ejected) {
-      return 'ejected';
-    } else {
-      return 'running';
-    }
   }
+  if (lock.ejected) {
+    return 'ejected';
+  }
+  return 'running';
 }
 
 export function safeFlow(stakeAmount, stakeDuration, receiver, eth) {
@@ -101,7 +100,9 @@ export function safeFlow(stakeAmount, stakeDuration, receiver, eth) {
   };
 
   if (!eth.address || !eth.signer) {
+    /* eslint-disable  no-undef */
     displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
+    /* eslint-enable  no-undef */
     connectWeb3();
     return Errors.NOT_CONNECTED;
   }
@@ -127,37 +128,37 @@ export function safeFlow(stakeAmount, stakeDuration, receiver, eth) {
   }
 
   return false;
-};
+}
 
 export function didLockExpired(lock) {
-  let endDate = calculateStakingEnds(lock);
-  let nowDate = new Date();
+  const endDate = calculateStakingEnds(lock);
+  const nowDate = new Date();
   return nowDate > endDate;
 }
 
 export function calculateVeDough(stakedDough, commitment) {
-  let k = 56.0268900276223;
-  let commitmentMultiplier = (commitment / k) * Math.log10(commitment);
+  const k = 56.0268900276223;
+  const commitmentMultiplier = (commitment / k) * Math.log10(commitment);
   return toNum(stakedDough * commitmentMultiplier);
 }
 
 export function initialize(eth) {
   ETH = eth;
-
-  return new Promise(async(resolve, reject) => {
+  /* eslint-disable no-async-promise-executor */
+  return new Promise(async (resolve, reject) => {
     try {
       sharesTimeLock = new ethers.Contract(
         smartcontracts.doughStaking,
         sharesTimeLockABI,
         eth.signer || eth.provider,
       );
-  
+
       veDOUGH = new ethers.Contract(
         smartcontracts.veDOUGH,
         veDoughABI,
         eth.signer || eth.provider,
       );
-  
+
       dataObj = await fetchStakingData(eth);
       resolve(dataObj);
     } catch (error) {
@@ -169,6 +170,7 @@ export function initialize(eth) {
       reject(error);
     }
   });
+  /* eslint-enable no-async-promise-executor */
 }
 
 export async function fetchStakingDataGraph(address) {
@@ -214,7 +216,7 @@ export async function fetchStakingDataGraph(address) {
 
     return response;
   } catch (error) {
-    throw new Error('fetchStakingDataGraph: ' + error.message);
+    throw new Error(`fetchStakingDataGraph: ${error.message}`);
   }
 }
 
@@ -229,7 +231,9 @@ export const fetchStakingData = async (eth) => {
     response = await fetchStakingDataGraph(eth.address);
 
     rewards = response.rewards;
+    /* eslint-disable prefer-destructuring */
     staker = response.stakers[0];
+    /* eslint-enable prefer-destructuring */
   } catch (error) {
     console.error(error);
     // using onchain as fallback...
@@ -239,13 +243,13 @@ export const fetchStakingData = async (eth) => {
 
   if (staker !== undefined) {
     Object.keys(staker).forEach((key) => {
-      if (key != 'accountLocks') {
+      if (key !== 'accountLocks') {
         dataObj[key] = new BigNumber(staker[key].toString());
       } else {
-        let locks = [];
+        const locks = [];
 
         staker[key].forEach((lock, index) => {
-          if (lock.amount.toString() != '0') {
+          if (lock.amount.toString() !== '0') {
             locks.push({
               amount: new BigNumber(lock.amount.toString()),
               lockDuration: lock.lockDuration,
@@ -261,42 +265,40 @@ export const fetchStakingData = async (eth) => {
           }
         });
 
-        locks.sort(function (lock_a, lock_b) {
-          return lock_b.lockedAt - lock_a.lockedAt;
-        });
+        locks.sort((lockA, lockB) => lockB.lockedAt - lockA.lockedAt);
 
         dataObj[key] = locks;
       }
     });
   }
 
-  dataObj['rewards'] = rewards;
+  dataObj.rewards = rewards;
   console.log('fetchStakingData', dataObj);
 
   return dataObj;
 };
 
 export function boostToMax(id, eth) {
+  /* eslint-disable no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
-    if (!sharesTimeLock) 
-      reject("ShareTimeLock contract has not being initiated.");
+    if (!sharesTimeLock) { reject(new Error('ShareTimeLock contract has not being initiated.')); }
 
     try {
-      let response = await sharesTimeLock.boostToMax(id);
-  
+      const response = await sharesTimeLock.boostToMax(id);
+
       const { emitter } = displayNotification({
         hash: response.hash,
       });
-  
+
       emitter.on('txConfirmed', async () => {
         displayNotification({
-          message: `You boosted your stake to 36 months!`,
+          message: 'You boosted your stake to 36 months!',
           type: 'success',
         });
-  
+
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
-            dataObj = await fetchStakingData(eth);  
+            dataObj = await fetchStakingData(eth);
             subscription.unsubscribe();
 
             resolve(dataObj);
@@ -312,28 +314,29 @@ export function boostToMax(id, eth) {
       reject(error);
     }
   });
+  /* eslint-enable no-async-promise-executor */
 }
 
 export async function unstakeDOUGH(id, lockAmount, eth) {
+  /* eslint-disable no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
-    if (!sharesTimeLock) 
-      reject("ShareTimeLock contract has not being initiated.");
+    if (!sharesTimeLock) { reject(new Error('ShareTimeLock contract has not being initiated.')); }
 
     try {
-      let response = await sharesTimeLock.withdraw(id);
-  
+      const response = await sharesTimeLock.withdraw(id);
+
       const { emitter } = displayNotification({
         hash: response.hash,
       });
-  
+
       emitter.on('txConfirmed', async () => {
         displayNotification({
           message: `You unstaked ${lockAmount.toString()} DOUGH`,
           type: 'success',
         });
-  
+
         const subscription = subject('blockNumber').subscribe({
-          next: async () => {  
+          next: async () => {
             dataObj = await fetchStakingData(eth);
             subscription.unsubscribe();
 
@@ -357,10 +360,12 @@ export async function unstakeDOUGH(id, lockAmount, eth) {
       reject(error);
     }
   });
+  /* eslint-enable no-async-promise-executor */
 }
 
 export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
-  return new Promise(async(resolve, reject) => {
+  /* eslint-disable  no-async-promise-executor */
+  return new Promise(async (resolve, reject) => {
     const error = safeFlow(stakeAmount, stakeDuration, receiver, eth);
 
     if (error) {
@@ -372,7 +377,7 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
 
       reject(error);
     }
-  
+
     try {
       const { emitter } = displayNotification(
         await sharesTimeLock.depositByMonths(
@@ -381,60 +386,61 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
           receiver,
         ),
       );
-  
-      emitter.on('txConfirmed', async () => {
-        const subscription = subject('blockNumber').subscribe({
-          next: async () => {  
-            displayNotification({
-              autoDismiss: 15000,
-              message: `You staked successfully`,
-              type: 'success',
-            });
-  
-            subscription.unsubscribe();
-            dataObj = await fetchStakingData(eth);
-            resolve(dataObj);
-          },
-        });
-      });
-    } catch (error) {  
-      displayNotification({
-        autoDismiss: 15000,
-        message: error.message,
-        type: 'error',
-      });
 
-      reject(error);
-    }
-  });
-}
-
-export async function claim(eth) {
-  return new Promise(async(resolve, reject) => {
-    const proof = prepareProofs(eth);
-    console.log('proof', proof);
-  
-    try {
-      const { emitter } = displayNotification(await veDOUGH.claim(proof.proof));
-  
       emitter.on('txConfirmed', async () => {
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
             displayNotification({
               autoDismiss: 15000,
-              message: `Pay day baby!`,
+              message: 'You staked successfully',
               type: 'success',
             });
 
-            stakeAmount = 0;
             subscription.unsubscribe();
-  
             dataObj = await fetchStakingData(eth);
             resolve(dataObj);
           },
         });
       });
-    } catch (error) {  
+    } catch (err) {
+      displayNotification({
+        autoDismiss: 15000,
+        message: err.message,
+        type: 'error',
+      });
+
+      reject(err);
+    }
+  });
+  /* eslint-enable  no-async-promise-executor */
+}
+
+export async function claim(eth) {
+  /* eslint-disable  no-async-promise-executor */
+  return new Promise(async (resolve, reject) => {
+    const proof = prepareProofs(eth);
+    console.log('proof', proof);
+
+    try {
+      const { emitter } = displayNotification(await veDOUGH.claim(proof.proof));
+
+      emitter.on('txConfirmed', async () => {
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: 'Pay day baby!',
+              type: 'success',
+            });
+
+            subscription.unsubscribe();
+
+            dataObj = await fetchStakingData(eth);
+            resolve(dataObj);
+          },
+        });
+      });
+    } catch (error) {
       displayNotification({
         autoDismiss: 15000,
         message: 'Sorry, an error occurred while claiming your rewards. Please try again later.',
@@ -444,6 +450,7 @@ export async function claim(eth) {
       reject(error);
     }
   });
+  /* eslint-enable  no-async-promise-executor */
 }
 
 export function prepareProofs(eth) {
@@ -455,29 +462,34 @@ export function prepareProofs(eth) {
     (item) => item.address.toLowerCase() === eth.address.toLowerCase(),
   );
 
+  /* eslint-disable consistent-return */
   return {
-    valid: leaf ? true : false,
+    valid: !!leaf,
     proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null,
   };
+  /* eslint-enable consistent-return */
 }
 
 export function approveToken(eth) {
-  return new Promise(async(resolve, reject) => {
+  /* eslint-disable  no-async-promise-executor */
+  return new Promise(async (resolve, reject) => {
     if (!eth.address || !eth.signer) {
+      /* eslint-disable  no-undef */
       displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
+      /* eslint-enable  no-undef */
       connectWeb3();
-      reject("wallet not connected");
+      reject(new Error('wallet not connected'));
     }
 
     try {
       // resetting the approve to zero, before initiating a new approval...
       if (
-        !dataObj.accountDepositTokenAllowance.isEqualTo(0) &&
-        !dataObj.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
+        !dataObj.accountDepositTokenAllowance.isEqualTo(0)
+        && !dataObj.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
       ) {
         await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
       }
-  
+
       await approveMax(smartcontracts.dough, smartcontracts.doughStaking, { gasLimit: 100000 });
       dataObj.accountDepositTokenAllowance = ethers.constants.MaxUint256;
       resolve(dataObj);
@@ -491,4 +503,5 @@ export function approveToken(eth) {
       reject(error);
     }
   });
+  /* eslint-enable  no-async-promise-executor */
 }
