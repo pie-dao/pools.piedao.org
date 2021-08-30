@@ -73,6 +73,7 @@ const formatRoute = (route) => {
   let poolAction;
   let referral;
   let method;
+  let symbol;
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
   // changeUrl(route);
@@ -101,7 +102,8 @@ const formatRoute = (route) => {
     case 'integrations':
       return { page: Integrations };
     case 'swap':
-      return { page: Tokensswap };
+      symbol = (route[1] || '');
+      return { page: Tokensswap, params: { symbol } };
     case 'migrate':
       return { page: Migration, params: { address } };
     case 'oven':

@@ -93,7 +93,7 @@
     <div class="text-lg font-bold md:text-xl text-center mb-1" data-aos="fade-up" data-aos-delay="100">Grab a slice of the pie</div>
     <img src={images.doughcolorful} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
     <div class="text-lg font-thin text-center mt-2" data-aos="fade-up" data-aos-delay="200">$DOUGH is the engine behind PieDAO’s self-driving wealth creation machine</div>
-    <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" onclick="location.href='#/swap'" data-aos="fade-up" data-aos-delay="250">
+    <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" onclick="location.href='#/swap/dough'" data-aos="fade-up" data-aos-delay="250">
       <div class="w-100pc flex items-center">
       <div class="mr-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
       <div class="">
@@ -219,7 +219,7 @@
   </AccordionGroup>
 
   <div class="content flex flex-col items-center">
-  <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" onclick="location.href='#/swap'" data-aos="fade-up" data-aos-delay="0">
+  <button class=" items-center btnbigblack text-white text-left py-2 px-3 mt-4 hover:opacity-80" onclick="location.href='#/swap/dough'" data-aos="fade-up" data-aos-delay="0">
     <div class="w-100pc flex items-center">
     <div class="mr-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
     <div class="">
