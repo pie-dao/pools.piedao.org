@@ -48,7 +48,7 @@
       <p>{shortAddress}</p>
       🔌
     {:else}
-      Connect Web3
+      Connect Wallet
     {/if}
   {/if}
 </button>
