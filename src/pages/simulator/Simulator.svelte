@@ -493,7 +493,7 @@
               <div class="h-32px flex items-center">
                 <img
                   class="token-icon w-30px h-30px"
-                  src={images.simulator_veDough}
+                  src={images.veDough}
                   alt="ETH"
                 />
                 <div class="py-2px px-4px">veDOUGH</div>
@@ -717,7 +717,7 @@
             </div>       
             <img
               class="token-icon w-30px h-30px"
-              src={images.simulator_veDough}
+              src={images.veDough}
               alt="ETH"
             />
             <div class="px-4px font-thin">veDOUGH</div>
@@ -762,7 +762,7 @@
               <div class="mr-2">{formatFiat(projections.median.farming.totalStakedVeDough)}</div>
               <img
               class="token-icon w-30px h-30px"
-              src={images.simulator_veDough}
+              src={images.veDough}
               alt="ETH"
               />
               <div class="px-4px font-thin">veDOUGH</div>               
