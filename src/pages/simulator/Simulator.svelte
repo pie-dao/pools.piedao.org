@@ -190,19 +190,19 @@
 
   // filling the first default values...
   let inputs = {
-    stakedDough: formatFiat(100000, ',', '.', ''),
-    commitment: "36 Months",
-    rewardsUnclaimed: "10%",
+    stakedDough: formatFiat(0, ',', '.', ''),
+    commitment: "0 Months",
+    rewardsUnclaimed: "0%",
     stakedVeDough: 0,
-    expectedApr: "50%"
+    expectedApr: "0%"
   };  
 
   // rewards distrubutions, hardcoded for now...
   let rewards = [
-    {commitment: "6 Months", months: 6, percentage: 12},
-    {commitment: "1 Year", months: 12, percentage: 18},
-    {commitment: "2 Years", months: 24, percentage: 23},
-    {commitment: "3 Years", months: 36, percentage: 47}
+    {commitment: "6 Months", months: 6, percentage: 0},
+    {commitment: "1 Year", months: 12, percentage: 0},
+    {commitment: "2 Years", months: 24, percentage: 0},
+    {commitment: "3 Years", months: 36, percentage: 0}
   ];
 
   // retrieving default markets infos...
@@ -220,7 +220,8 @@
       stakedVeDough += simulator.calculator.calculateVeDough(stakedDoughPercentage, reward.months);
     });
 
-    inputs.stakedVeDough = formatFiat(stakedVeDough, ',', '.', '');
+    //inputs.stakedVeDough = formatFiat(stakedVeDough, ',', '.', '');
+    inputs.stakedVeDough = 0;
   });
 
   // retrieving default outputs object...
