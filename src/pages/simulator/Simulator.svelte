@@ -341,7 +341,7 @@
       <div class="bg-melanzanafritta min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
         <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="vedough is the new black"/>
         <div class="font-thin">
-          <div class="font-bold text-l md:text-xl text-center mt-4 md:mt-0">veDOUGH Is The New Black</div>
+          <div class="font-bold text-l md:text-xl text-left mt-4 md:mt-0">veDOUGH Is The New Black</div>
           <div class="text-justify mt-4 md:mt-0">Any DOUGH holder can choose to stake. The selected staking period and token amount will determine a user’s voting power and share of DAO profits. This completely transforms DOUGH value accrual, creating a buy and hold pressure as a source of cash flows.
             <br /><br />Active veDOUGH holders will get 60% (!) of DAO profits, while 25% will be used to compound the treasury and 15% will be allocated to development costs.
             </div>
@@ -371,7 +371,7 @@
         <div class="bg-melanzana min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
           <img class="w-180px h-180px md:mr-12" src={images.costumeparty} alt="members"/>
           <div class="font-thin">
-            <div class="font-bold text-l md:text-xl text-center mt-4 md:mt-0">Anyone Can Become A Governance Member</div>
+            <div class="font-bold text-l md:text-xl text-left mt-4 md:mt-0">Anyone Can Become A Governance Member</div>
             <div class="text-justify mt-4 md:mt-0">
               Governing PieDAO is about commitment and genuine passion for the mission - not the size of your wallet to cover the gas fees for votes.
               </div>
