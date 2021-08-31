@@ -279,7 +279,7 @@ Once both conditions are met Oven will jump into action, baking everyones’ pie
 <Accordion class="flex flex-col">
   <button class="accordionbutton flex flex-col" slot="header" let:toggle on:click={toggle}>Is there a time limit to withdraw my pie?</button>
   <div class="accordioncontent">
-    None at all! But don’t forget, the sooner you withdraw your pie the sooner you can put it to work in our farms. We’re incentivizing pie liquidity providers with 150k of delicious DOUGH each week. <a class="font-bold" about="_blank" href="https://pools.piedao.org/#/stake">Check it out</a>.
+    None at all! But don’t forget, the sooner you withdraw your pie the sooner you can put it to work in our farms. We’re incentivizing pie liquidity providers with 150k of delicious DOUGH each week. <a class="font-bold" about="_blank" href="https://pools.piedao.org/#/lp-legacy-farm">Check it out</a>.
   </div>
 </Accordion>
 

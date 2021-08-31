@@ -108,7 +108,7 @@
       </div>
       
       <div class="text-center thinborderight w-8pc px-1pc">
-        <a href="#/stake">
+        <a href="#/lp-legacy-farm">
           {#if pool.deprecated}
             <button class="table-btn min-w-70px">
               Unstake

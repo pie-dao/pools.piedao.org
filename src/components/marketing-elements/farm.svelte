@@ -9,7 +9,7 @@
       <div class="my-20px">
         <img class="w-100pc h-auto" src={images.olddaysfarming} alt="Farming" />
       </div>
-      <a href="https://pools.piedao.org/#/stake" target="_blank">
+      <a href="https://pools.piedao.org/#/lp-legacy-farm" target="_blank">
         <button class="btn m-0 mt-4 rounded-8px p-15px min-w-200px w-800px">
           Staking Pools
         </button>

@@ -149,7 +149,7 @@
       </div>
     </div>    
     {#each simulations as simulation}
-      <a target="_blank" href={window.location.origin + '/#/simulator/' + simulation.id}>
+      <a target="_blank" href={window.location.origin + '/#/staking-simulator/' + simulation.id}>
         <div class="flex flex-col md:flex-row border-b-2 border-gray-50 pb-4px text-center">
           <div class="flex-initial w-full md:w-1/5">
             <div class="font-thin mt-2">{simulation.data.name}</div>
