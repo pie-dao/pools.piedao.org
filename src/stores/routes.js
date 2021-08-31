@@ -115,7 +115,7 @@ const formatRoute = (route) => {
       return { page: LPStakingV2 };
     case 'farm':
       return { page: Farm };
-    case 'new_staking':
+    case 'dough_staking':
       return { page: DoughStaking };
     case 'staking_positions':
       return { page: StakingPositions };
