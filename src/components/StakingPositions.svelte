@@ -5,6 +5,7 @@
   import {
     toNum,
     calculateStakingEnds,
+    calculateStakingStarts,
     calculateVeDough,
     boostToMax,
     getLockStatus,
@@ -36,10 +37,13 @@
             : 'fade-in-1 flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}
         >
           <div class="flex items-center justify-between">
-            <div class="flex nowrap intems-center p-1 font-thin">Your total staked DOUGH</div>
+            <div class="flex intems-center">
+              <div class="font-thin mr-2">Start:</div>
+              <span>{calculateStakingStarts(lock).toDateString().replace(/^\S+\s/,'')}</span>              
+            </div>
             <div class="flex items-center">
-              <div class="font-thin mr-2">Staking ends:</div>
-              <span>{calculateStakingEnds(lock).toLocaleDateString()}</span>
+              <div class="font-thin mr-2">End:</div>
+              <span>{calculateStakingEnds(lock).toDateString().replace(/^\S+\s/,'')}</span>
             </div>
           </div>
           <div class="flex nowrap items-center p-1 justify-between mt-2">
@@ -78,7 +82,7 @@
                     class="flex items-center cardbordergradient -mr-2 pointer"
                   >
                     <div class="flex items-center p-2">
-                      <div class="mr-8px">Boost to Max</div>
+                      <div class="mr-8px">Restake 3 years</div>
                       <img
                         class="w-30px h-30px"
                         src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
@@ -101,35 +105,41 @@
               {/if}
             {/if}
           </div>
-          <div class="mt-2 flex justify-start opacity-30 pointer">
-            <span>{getLockStatus(lock)}</span>
-          </div>
-          {#if !lock.withdrawn && !lock.ejected}
-            {#if didLockExpired(lock)}
-              <div
-                on:click={() => {
-                  console.log('unstakeDOUGH', lock.lockId);
-                  unstakeDOUGH(lock.lockId, toNum(lock.amount), eth)
-                    .then((updated_data) => {
-                      data = updated_data;
-                      data = data;
-
-                      dispatch('update', {
-                        data: data,
-                      });
-                    })
-                    .catch((error) => {
-                      console.error(error.message);
-                    });
-                }}
-                class="mt-2 flex justify-end pointer"
-              >
-                <span>Unstake</span>
+          <div class="flex items-center justify-between">
+            <div class="flex intems-center">
+              <div class="mt-2 flex justify-start opacity-30 pointer">
+                <span>{getLockStatus(lock)}</span>
               </div>
-            {:else}
-              <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div>
+            </div>
+            <div class="flex items-center">
+              {#if !lock.withdrawn && !lock.ejected}
+              {#if didLockExpired(lock)}
+                <div
+                  on:click={() => {
+                    console.log('unstakeDOUGH', lock.lockId);
+                    unstakeDOUGH(lock.lockId, toNum(lock.amount), eth)
+                      .then((updated_data) => {
+                        data = updated_data;
+                        data = data;
+  
+                        dispatch('update', {
+                          data: data,
+                        });
+                      })
+                      .catch((error) => {
+                        console.error(error.message);
+                      });
+                  }}
+                  class="mt-2 flex justify-end pointer"
+                >
+                  <span>Unstake</span>
+                </div>
+              {:else}
+                <div class="mt-2 flex justify-end opacity-30 pointer"><span>Unstake</span></div>
+              {/if}
             {/if}
-          {/if}
+            </div>
+          </div>
         </div>
       {/if}
     {/each}

@@ -50,15 +50,17 @@ export const toNum = (num) => BigNumber(num.toString())
 
 export const toBN = (num) => BigNumber(num.toString()).multipliedBy(10 ** 18);
 
-export function calculateStakingEnds(lock) {
+export function calculateStakingStarts(lock) {
   const startDate = new Date(lock.lockedAt * 1000);
+  return startDate;
+}
+
+export function calculateStakingEnds(lock) {
+  const endDate = new Date(lock.lockedAt * 1000);
   const lockDuration = lock.lockDuration / 60;
 
-  // TODO: remove this line, and use the previous one...
-  // startDate.setMonth(startDate.getMonth() + lockDuration);
-  startDate.setMinutes(startDate.getMinutes() + lockDuration);
-
-  return startDate;
+  endDate.setMonth(endDate.getMonth() + lockDuration);
+  return endDate;
 }
 
 export function getLockStatus(lock) {
