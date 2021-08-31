@@ -67,7 +67,7 @@
 	}
 </script>
 
-<div class="font-huge text-center">Governance mining</div>
+<div class="font-huge text-center">Dough Staking</div>
 <div class="font-thin text-lg text-center mt-10px mb-10px">Get paid for Governing the DAO</div>
 
 <div class="flex w-100pc py-20px flex flex-col items-center">
