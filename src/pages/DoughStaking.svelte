@@ -4,6 +4,9 @@
   import images from '../config/images.json';
   import { formatToken } from '../components/helpers.js';
   import { onDestroy } from 'svelte';
+  import smartcontracts from '../config/smartcontracts.json';
+  import displayNotification from '../notifications';
+  import Calculator from '../classes/farming_simulator/Calculator.js';
   import {
     toNum,
     toBN,
@@ -18,8 +21,12 @@
   import StakingPositions from '../components/StakingPositions.svelte';
   import StakingSummary from '../components/StakingSummary.svelte';
 
+  // creating the Calculator class instance...
+  let calculator = new Calculator();
+  let veDOUGH = 0;
+
   $: data = dataObj;
-  $: stakeButtonText = 'Stake';
+  $: stakeButtonText = 'Stake DOUGH';
   $: isStaking = false;
 
   $: isLoading = true;
@@ -65,6 +72,39 @@
 		data = event.detail.data;
     data = data;
 	}
+
+  const addToken = () => {
+    ethereum.sendAsync({
+        method: 'wallet_watchAsset',
+        params: {
+          "type":"ERC20",
+          "options":{
+            "address": smartcontracts.veDOUGH,
+            "symbol": 'veDOUGH',
+            "decimals": 18,
+            "image": images.veDough,
+          },
+        },
+        id: Math.round(Math.random() * 100000),
+    }, (err, added) => {
+      if (added) {
+        displayNotification({
+          message: 'The veDOUGH token has been added to your Metamask!',
+          type: 'success',
+        });        
+      } else {
+        displayNotification({
+          message: 'Sorry, something went wrong. Please try again later.',
+          type: 'error',
+        }); 
+      }
+    })
+  };  
+
+  function calculateVeDOUGH() {
+    veDOUGH = calculator.calculateVeDough(stakeAmount, stakeDuration);
+    veDOUGH = formatToken(veDOUGH, '.', 2);
+  }
 </script>
 
 <div class="font-huge text-center">Dough Staking</div>
@@ -97,7 +137,7 @@
           class="flex flex-col items-center w-full  cardbordergradient p-1px bg-lightgrey"
           class:input-box-loading={isStaking}
         >
-          <div class="font-huge text-center mt-6">DOUGH Staking</div>
+          <div class="font-huge text-center mt-6">Stake</div>
           <div
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px"
             class:input-invalid={stakeAmount &&
@@ -109,6 +149,7 @@
                 <div
                   on:click={() => {
                     stakeAmount = toNum(data.accountDepositTokenBalance);
+                    calculateVeDOUGH();
                   }}
                 >
                   Balance: {toNum(data.accountDepositTokenBalance)} DOUGH
@@ -133,6 +174,9 @@
                 on:change={() => {
                   stakeAmount = formatToken(stakeAmount, '.', 18);
                 }}
+                on:keyup={() => {
+                  calculateVeDOUGH();
+                }}                  
               />
               <span class="sc-iybRtq gjVeBU">
                 <img class="h-auto w-24px mr-5px" src={images.doughtoken} alt="dough token" />
@@ -173,7 +217,9 @@
                   if (stakeDuration > 36) {
                     stakeDuration = 36;
                   }
-                }}
+
+                  calculateVeDOUGH();
+                }}              
               />
               <div
                 on:click={() => {
@@ -223,6 +269,21 @@
               />
             </div>
           </div>
+
+          <div class="md:h-32px flex items-center pt-4">
+            <div class="md:text-xs leading-3 font-thin mr-2">
+              You will receive: 
+            </div>   
+            <div class="md:text-base mr-2">
+             { veDOUGH }
+            </div>       
+            <img
+              class="token-icon w-30px h-30px"
+              src={images.veDough}
+              alt="ETH"
+            />
+            <div class="px-4px font-thin">veDOUGH</div>
+          </div>          
 
           {#if data.accountDepositTokenBalance.eq(0)}
             <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4"
@@ -293,7 +354,7 @@
                     stakeButtonText = 'Success! 🥳';
           
                     setTimeout(() => {
-                      stakeButtonText = 'Stake';
+                      stakeButtonText = 'Stake DOUGH';
                       isStaking = false;
                       stakeAmount = 0;
                     }, 5000);                    
@@ -301,27 +362,31 @@
                     console.error(error);
 
                     clearInterval(interval);
-                    stakeButtonText = 'Stake';
+                    stakeButtonText = 'Stake DOUGH';
                     isStaking = false;                    
                   });
                 }}
-                class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
+                class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
                 >{stakeButtonText}</button
               >
             {:else}
               <button
                 disabled
-                class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
+                class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
                 >Duration not correct</button
               >
             {/if}
           {:else}
             <button
               disabled
-              class="pointer btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6"
+              class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
               >Enter an amount</button
             >
           {/if}
+
+          <button on:click={() => addToken()} class="add-dough-metamask mt-4" data-aos="fade-up" data-aos-delay="300">
+            Add to MetaMask 🦊
+          </button>          
           <!-- END STAKING FORM -->
         </div>
       {:else}
