@@ -47,8 +47,20 @@
   });
 
   $: if ($eth.address && isLoading && !hasLoaded) {
-    hasLoaded = true;
+    hasLoaded = true;   
 
+    const { web3 } = $eth;
+    web3.on('accountsChanged', () => {
+      console.log("here we are babe", $eth.address);
+    });
+
+    init();
+  }
+  $: if ($eth.address) {
+    console.log("address changed");
+}
+
+  function init() {
     initialize($eth).then(updated_data => {
       isLoading = false;
       data = updated_data;
@@ -65,7 +77,7 @@
     }).catch(error => {
       hasLoaded = false;
       console.error(error);
-    });
+    });    
   }
   
 	function handleUpdate(event) {

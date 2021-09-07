@@ -60,7 +60,7 @@ export function calculateStakingEnds(lock) {
   const lockDuration = lock.lockDuration / 60;
 
   //endDate.setMonth(endDate.getMonth() + lockDuration);
-  endDate.setMinutes(startDate.getMinutes() + lockDuration);
+  endDate.setMinutes(endDate.getMinutes() + lockDuration);
   return endDate;
 }
 
