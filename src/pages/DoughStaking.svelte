@@ -56,9 +56,10 @@
 
     init();
   }
+
   $: if ($eth.address) {
-    console.log("address changed");
-}
+    init();
+  }
 
   function init() {
     initialize($eth).then(updated_data => {
