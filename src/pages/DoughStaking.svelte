@@ -67,6 +67,10 @@
       data = updated_data;
       receiver = $eth.address;
 
+      if(observer) {
+        observer.unsubscribe();
+      }      
+
       observer = observable.subscribe({
         next(updated_data) {
           // updating the stakingData just when needed...
