@@ -1,7 +1,7 @@
 <script>
   import { _ } from 'svelte-i18n';
   import { formatFiat } from '../components/helpers.js';
-  import { toNum, claim } from '../helpers/staking.js';
+  import { toNum, claim , getParticipations} from '../helpers/staking.js';
   import images from '../config/images.json';
 
   import { createEventDispatcher } from 'svelte';
@@ -9,6 +9,8 @@
 
   export let data;
   export let eth;
+  let participations = getParticipations();
+  let staker = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
 </script>
 
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
@@ -43,7 +45,7 @@
     class="flex flex-col nowrap w-92pc mx-4pc mt-4 mb-6 swap-from rounded-20px bg-white p-16px"
   >
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
+      <div class="flex nowrap intems-center p-1 font-thin">Rewards</div>
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
@@ -54,7 +56,7 @@
         <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
       </span>
     </div>
-    {#if !data.accountWithdrawableRewards.eq(0)}
+    {#if !data.accountWithdrawableRewards.eq(0) && staker.participation == 1}
       <button 
       class="pointer" 
       on:click={() => {

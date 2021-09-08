@@ -32,6 +32,11 @@ export const minLockAmount = 1;
 let ETH = null;
 /* eslint-enable import/no-mutable-exports */
 
+// in a very next future, this function will fetch directly from backend...
+export const getParticipations = () => {
+  return PartecipationJson;
+}
+
 export const observable = new Observable((subscriber) => {
   const interval = setInterval(async () => {
     dataObj = await fetchStakingData(ETH);
