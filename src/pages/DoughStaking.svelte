@@ -349,6 +349,8 @@
               >
             {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
               <button
+              disabled={!receiver}
+
                 on:click={() => {
                   stakeButtonText = 'Staking';
                   isStaking = true;
