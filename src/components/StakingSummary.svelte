@@ -14,7 +14,8 @@
   let staker = {participation: 0};
 
   $: if (eth.address) {
-    staker = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
+    let founded = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
+    staker = founded ? founded : staker;
   }
 </script>
 
