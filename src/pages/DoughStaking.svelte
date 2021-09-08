@@ -241,6 +241,8 @@
               <div
                 on:click={() => {
                   stakeDuration = 36;
+
+                  calculateVeDOUGH();
                 }}
                 class="pointer flex items-center stakinggradient shake"
               >
