@@ -9,8 +9,13 @@
 
   export let data;
   export let eth;
+
   let participations = getParticipations();
-  let staker = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
+  let staker = {participation: 0};
+
+  $: if (eth.address) {
+    staker = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
+  }
 </script>
 
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
