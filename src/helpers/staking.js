@@ -280,7 +280,7 @@ export const fetchStakingData = async (eth) => {
     });
   }
 
-  dataObj.rewards = rewards;
+  dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
   console.log('fetchStakingData', dataObj);
 
   return dataObj;
