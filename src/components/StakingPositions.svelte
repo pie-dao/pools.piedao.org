@@ -61,49 +61,47 @@
                 <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
               </div>
             </div>
-            {#if lock.lockDuration / 60 != 36}
-              {#if !lock.boosted}
-                {#if !lock.ejected && !lock.withdrawn}
-                  <div
-                    on:click={() => {
-                      boostToMax(lock.lockId, eth)
-                        .then((updated_data) => {
-                          data = updated_data;
-                          data = data;
+            {#if !lock.boosted}
+            {#if !lock.ejected && !lock.withdrawn}
+              <div
+                on:click={() => {
+                  boostToMax(lock.lockId, eth)
+                    .then((updated_data) => {
+                      data = updated_data;
+                      data = data;
 
-                          dispatch('update', {
-                            data: data,
-                          });
-                        })
-                        .catch((error) => {
-                          console.error(error);
-                        });
-                    }}
-                    class="flex items-center cardbordergradient -mr-2 pointer"
-                  >
-                    <div class="flex items-center p-2">
-                      <div class="mr-8px">Restake 3 years</div>
-                      <img
-                        class="w-30px h-30px"
-                        src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
-                        alt="ETH"
-                      />
-                    </div>
-                  </div>
-                {/if}
-              {:else}
-                <div class="flex items-center cardbordergradient -mr-2 pointer opacity-30">
-                  <div class="flex items-center p-2">
-                    <div class="mr-8px">Already Boosted</div>
-                    <img
-                      class="w-30px h-30px"
-                      src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
-                      alt="ETH"
-                    />
-                  </div>
+                      dispatch('update', {
+                        data: data,
+                      });
+                    })
+                    .catch((error) => {
+                      console.error(error);
+                    });
+                }}
+                class="flex items-center cardbordergradient -mr-2 pointer"
+              >
+                <div class="flex items-center p-2">
+                  <div class="mr-8px">Restake 3 years</div>
+                  <img
+                    class="w-30px h-30px"
+                    src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
+                    alt="ETH"
+                  />
                 </div>
-              {/if}
+              </div>
             {/if}
+          {:else}
+            <div class="flex items-center cardbordergradient -mr-2 opacity-30">
+              <div class="flex items-center p-2">
+                <div class="mr-8px">Restake 3 years</div>
+                <img
+                  class="w-30px h-30px"
+                  src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
+                  alt="ETH"
+                />
+              </div>
+            </div>
+          {/if}
           </div>
           <div class="flex items-center justify-between">
             <div class="flex intems-center">
