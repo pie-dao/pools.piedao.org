@@ -48,12 +48,12 @@
           </div>
           <div class="flex nowrap items-center p-1 justify-between mt-2">
             <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
-              <div class="sc-iybRtq gjVeBU">
+              <div class="gjVeBU">
                 <div class="font-24px">{formatFiat(toNum(lock.amount), ',', '.', '')}</div>
                 <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
                 <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
               </div>
-              <div class="sc-iybRtq gjVeBU float-left">
+              <div class="gjVeBU float-left">
                 <div class="font-24px">
                   {formatFiat(calculateVeDough(lock.amount, lock.lockDuration / 60), ',', '.', '')}
                 </div>

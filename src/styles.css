@@ -1438,7 +1438,6 @@ max-width: 100%;
   -webkit-box-align: center;
   align-items: center;
   -webkit-box-pack: justify;
-  justify-content: space-between;
 }
 
 .stake-button {
