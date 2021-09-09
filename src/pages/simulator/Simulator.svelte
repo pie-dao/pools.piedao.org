@@ -6,6 +6,7 @@
   import displayNotification from '../../notifications';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { formatFiat } from '../../components/helpers.js';
+  import TotDoughStaked from '../../components/TotDoughStaked.svelte';
   import { currentRoute } from "../../stores/routes.js";
   import InfoModal from '../../components/modals/infoModal.svelte';
   import StakingCommitmentModal from '../../components/modals/stakingCommitmentModal.svelte';
@@ -333,6 +334,12 @@
           We believe that DAO profits should go to those who put in the hard work of driving this wealth creation machine forward: <strong>active governance members.</strong>
           <br /><br />Should PIP-XX pass the community vote, only staked DOUGH (veDOUGH) will be used for governance votes. This means no free-riding, no swaying votes for short-term gain, and true long-term alignment for the future of PieDAO.
         </div>
+      </div>
+    </div>
+
+    <div class="flex flex-col items-center text-center mt-4">
+      <div class="w-full flex flex-col items-center px-4 max-w-1200px">
+        <TotDoughStaked />
       </div>
     </div>
 
