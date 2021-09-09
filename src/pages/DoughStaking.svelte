@@ -378,6 +378,7 @@
                       stakeButtonText = 'Stake DOUGH';
                       isStaking = false;
                       stakeAmount = 0;
+                      calculateVeDOUGH();
                     }, 5000);                    
                   }).catch(error => {
                     console.error(error);
