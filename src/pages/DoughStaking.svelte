@@ -28,10 +28,7 @@
   $: data = dataObj;
   $: stakeButtonText = 'Stake DOUGH';
   $: isStaking = false;
-
-  $: isLoading = true;
-  $: hasLoaded = false;
-
+  $: isLoading = false;
   $: approveButtonText = 'Approve';
   $: isApproving = false;
 
@@ -46,19 +43,17 @@
     }
   });
 
-  $: if ($eth.address && isLoading && !hasLoaded) {
-    hasLoaded = true;   
-
-    const { web3 } = $eth;
-    web3.on('accountsChanged', () => {
-      console.log("here we are babe", $eth.address);
-    });
-
-    init();
-  }
+  // $: if ($eth.address && isLoading) {
+  //   init();
+  // }
 
   $: if ($eth.address) {
-    init();
+    if(receiver !== $eth.address) {
+      if(!isLoading) {
+        isLoading = true;
+        init();        
+      }
+    }
   }
 
   function init() {
@@ -73,14 +68,11 @@
 
       observer = observable.subscribe({
         next(updated_data) {
-          // updating the stakingData just when needed...
-          if(JSON.stringify(data) !== JSON.stringify(updated_data)) {
-            data = updated_data;
-          }
+          data = updated_data;
          }
       });
     }).catch(error => {
-      hasLoaded = false;
+      isLoading = false;
       console.error(error);
     });    
   }

@@ -39,8 +39,13 @@ export const getParticipations = () => {
 
 export const observable = new Observable((subscriber) => {
   const interval = setInterval(async () => {
-    dataObj = await fetchStakingData(ETH);
-    subscriber.next(dataObj);
+    let updated_data = await fetchStakingData(ETH);
+
+    // updating the stakingData just when needed...
+    if(JSON.stringify(dataObj) !== JSON.stringify(updated_data)) {
+      dataObj = updated_data;
+      subscriber.next(dataObj);
+    }
   }, 5000);
 
   // clearing interval, when unsubscribe action happens...

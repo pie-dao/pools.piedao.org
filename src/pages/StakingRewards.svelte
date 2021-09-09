@@ -26,10 +26,7 @@
 
       observer = observable.subscribe({
         next(updated_data) {
-          // updating the stakingData just when needed...
-          if(JSON.stringify(data) !== JSON.stringify(updated_data)) {
-            data = updated_data;
-          }
+          data = updated_data;
          }
       });      
     }).catch(error => {
