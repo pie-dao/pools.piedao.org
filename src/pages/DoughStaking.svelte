@@ -21,6 +21,8 @@
   import StakingPositions from '../components/StakingPositions.svelte';
   import StakingSummary from '../components/StakingSummary.svelte';
 
+  import ProgressBar from "@okrad/svelte-progressbar";
+
   // creating the Calculator class instance...
   let calculator = new Calculator();
   let veDOUGH = 0;
@@ -36,6 +38,8 @@
   let stakeDuration = 36;
   let receiver;
   let observer = null;
+  let refreshInterval = null;
+  let refreshValue = 0;
 
   onDestroy(() => {
     if(observer) {
@@ -64,17 +68,39 @@
 
       if(observer) {
         observer.unsubscribe();
-      }      
+      }
+      
+      if(refreshInterval) {
+        clearInterval(refreshInterval);
+      }
 
       observer = observable.subscribe({
         next(updated_data) {
           data = updated_data;
          }
       });
+
+      refreshInterval = startLoadingInterval();
     }).catch(error => {
       isLoading = false;
       console.error(error);
     });    
+  }
+
+  function startLoadingInterval() {
+    return setInterval(() => {
+        if(refreshValue < 100) {
+          refreshValue += 1;
+        } else {
+          clearInterval(refreshInterval);
+          setTimeout(() => {
+            refreshValue = 0;
+            setTimeout(() => {
+              refreshInterval = startLoadingInterval();
+            }, 1000);
+          }, 1000);
+        }
+      }, 30);    
   }
   
 	function handleUpdate(event) {
@@ -118,6 +144,25 @@
 
 <div class="font-huge text-center">Dough Staking</div>
 <div class="font-thin text-lg text-center mt-10px mb-10px">Get paid for Governing the DAO</div>
+
+<!-- TODO: Nico, please fix me :) -->
+<div style="position: absolute; top: 100px; right: 100px;">
+  <ProgressBar
+  style='radial'
+  width='50px'
+  series={[refreshValue]}
+  thickness={5}
+  thresholds={[
+      {
+        till: 50,
+        color: '#800000'
+      },
+      {
+        till: 100,
+        color: '#008000'
+      }
+    ]}/>  
+</div>
 
 <div class="flex w-100pc py-20px flex flex-col items-center">
   <div
