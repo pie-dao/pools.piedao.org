@@ -12,6 +12,7 @@
     didLockExpired,
     unstakeDOUGH,
   } from '../helpers/staking.js';
+  import { justBoosted, timestampBoosted } from '../stores/eth/writables';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
@@ -34,7 +35,12 @@
         <div
           class={lock.ejected
             ? 'fade-in-1 flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px opacity-60'
-            : 'fade-in-1 flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'}
+            : ($justBoosted == lock.lockId
+              ? 'fade-in-1 flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px justBoosted'
+              : ($timestampBoosted && $timestampBoosted < lock.lockedAt
+                ? 'fade-in-1 flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px newBoosted'
+                : 'fade-in-1 flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px'
+                ))}
         >
           <div class="flex items-center justify-between">
             <div class="flex intems-center">
@@ -65,6 +71,10 @@
             {#if !lock.ejected && !lock.withdrawn}
               <div
                 on:click={() => {
+                  $justBoosted = lock.lockId;
+                  $timestampBoosted = Math.floor(Number(Date.now()) / 1000);
+                  console.log({justBoosted: $justBoosted, timestampBoosted: $timestampBoosted});
+
                   boostToMax(lock.lockId, eth)
                     .then((updated_data) => {
                       data = updated_data;
@@ -73,8 +83,16 @@
                       dispatch('update', {
                         data: data,
                       });
+
+                      setTimeout(() => {
+                        console.log("resetting things out...");
+                        $timestampBoosted = null;
+                        $justBoosted = null;
+                      }, 5000);
                     })
                     .catch((error) => {
+                      $justBoosted = null;
+                      $timestampBoosted = null;
                       console.error(error);
                     });
                 }}

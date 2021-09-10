@@ -15,3 +15,5 @@ export const balances = writable({});
 export const farming = writable({});
 export const eth = writable({ ...defaultEth, currentBlockNumber: 0 });
 export const pools = writable({ composition: [], nav: 0 });
+export const justBoosted = writable(null);
+export const timestampBoosted = writable(null);
