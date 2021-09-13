@@ -47,7 +47,7 @@
     <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
       <!-- PAST REWARDS -->
       {#key data}
-        <StakingRewards data={data} isLoading={isLoading}></StakingRewards>
+        <StakingRewards data={data} isLoading={isLoading} eth={$eth}></StakingRewards>
       {/key}
       <!-- END PAST REWARDS -->
     </div>

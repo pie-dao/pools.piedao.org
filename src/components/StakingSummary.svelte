@@ -27,7 +27,7 @@
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
-        <div class="font-24px">{formatFiat(toNum(data.totalStaked), ',', '.', '')}</div>
+        <div class="font-24px">{eth.address ? formatFiat(toNum(data.totalStaked), ',', '.', '') : 0}</div>
         <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
       </span>
@@ -40,7 +40,7 @@
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
         <div class="font-24px">
-          {formatFiat(toNum(data.accountVeTokenBalance), ',', '.', '')}
+          {eth.address ? formatFiat(toNum(data.accountVeTokenBalance), ',', '.', '') : 0}
         </div>
         <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
@@ -56,7 +56,7 @@
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
         <div class="font-24px">
-          {formatFiat(toNum(data.accountWithdrawableRewards), ',', '.', '')}
+          {eth.address ? formatFiat(toNum(data.accountWithdrawableRewards), ',', '.', '') : 0}
         </div>
         <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>

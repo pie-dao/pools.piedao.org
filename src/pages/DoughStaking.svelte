@@ -1,5 +1,5 @@
 <script>
-  import { eth } from '../stores/eth.js';
+  import { eth, connectWeb3 } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
   import images from '../config/images.json';
   import { formatToken } from '../components/helpers.js';
@@ -14,14 +14,14 @@
     dataObj,
     initialize,
     approveToken,
-    observable
+    observable,
   } from '../helpers/staking.js';
 
   import StakingRewards from '../components/StakingRewards.svelte';
   import StakingPositions from '../components/StakingPositions.svelte';
   import StakingSummary from '../components/StakingSummary.svelte';
 
-  import ProgressBar from "@okrad/svelte-progressbar";
+  import ProgressBar from '@okrad/svelte-progressbar';
 
   // creating the Calculator class instance...
   let calculator = new Calculator();
@@ -42,99 +42,100 @@
   let refreshValue = 0;
 
   onDestroy(() => {
-    if(observer) {
+    if (observer) {
       observer.unsubscribe();
     }
   });
 
-  // $: if ($eth.address && isLoading) {
-  //   init();
-  // }
-
   $: if ($eth.address) {
-    if(receiver !== $eth.address) {
-      if(!isLoading) {
+    if (receiver !== $eth.address) {
+      if (!isLoading) {
         isLoading = true;
-        init();        
+        init();
       }
     }
   }
 
   function init() {
-    initialize($eth).then(updated_data => {
-      isLoading = false;
-      data = updated_data;
-      receiver = $eth.address;
+    initialize($eth)
+      .then((updated_data) => {
+        isLoading = false;
+        data = updated_data;
+        receiver = $eth.address;
 
-      if(observer) {
-        observer.unsubscribe();
-      }
-      
-      if(refreshInterval) {
-        clearInterval(refreshInterval);
-      }
+        if (observer) {
+          observer.unsubscribe();
+        }
 
-      observer = observable.subscribe({
-        next(updated_data) {
-          data = updated_data;
-         }
+        if (refreshInterval) {
+          clearInterval(refreshInterval);
+        }
+
+        observer = observable.subscribe({
+          next(updated_data) {
+            data = updated_data;
+          },
+        });
+
+        refreshInterval = startLoadingInterval();
+      })
+      .catch((error) => {
+        isLoading = false;
+        console.error(error);
       });
-
-      refreshInterval = startLoadingInterval();
-    }).catch(error => {
-      isLoading = false;
-      console.error(error);
-    });    
   }
 
   function startLoadingInterval() {
     return setInterval(() => {
-        if(refreshValue < 100) {
-          refreshValue += 1;
-        } else {
-          clearInterval(refreshInterval);
+      if (refreshValue < 100) {
+        refreshValue += 1;
+      } else {
+        clearInterval(refreshInterval);
+        setTimeout(() => {
+          refreshValue = 0;
           setTimeout(() => {
-            refreshValue = 0;
-            setTimeout(() => {
-              refreshInterval = startLoadingInterval();
-            }, 1000);
+            refreshInterval = startLoadingInterval();
           }, 1000);
-        }
-      }, 30);    
+        }, 1000);
+      }
+    }, 30);
   }
-  
-	function handleUpdate(event) {
-		data = event.detail.data;
+
+  function handleUpdate(event) {
+    data = event.detail.data;
     data = data;
-	}
+  }
 
   const addToken = () => {
-    ethereum.sendAsync({
+    ethereum.sendAsync(
+      {
         method: 'wallet_watchAsset',
         params: {
-          "type":"ERC20",
-          "options":{
-            "address": smartcontracts.veDOUGH,
-            "symbol": 'veDOUGH',
-            "decimals": 18,
-            "image": images.veDough,
+          type: 'ERC20',
+          options: {
+            address: smartcontracts.veDOUGH,
+            symbol: 'veDOUGH',
+            decimals: 18,
+            image: images.veDough,
           },
         },
         id: Math.round(Math.random() * 100000),
-    }, (err, added) => {
-      if (added) {
-        displayNotification({
-          message: 'The veDOUGH token has been added to your Metamask!',
-          type: 'success',
-        });        
-      } else {
-        displayNotification({
-          message: 'Sorry, something went wrong. Please try again later.',
-          type: 'error',
-        }); 
-      }
-    })
-  };  
+      },
+      (err, added) => {
+        if (added) {
+          displayNotification({
+            message: 'The veDOUGH token has been added to your Metamask!',
+            type: 'success',
+          });
+        } else {
+          displayNotification({
+            message: 'Sorry, something went wrong. Please try again later.',
+            type: 'error',
+          });
+        }
+      },
+    );
+  };
 
   function calculateVeDOUGH() {
     veDOUGH = calculator.calculateVeDough(stakeAmount, stakeDuration);
@@ -148,20 +149,21 @@
 <!-- TODO: Nico, please fix me :) -->
 <div style="position: absolute; top: 100px; right: 100px;">
   <ProgressBar
-  style='radial'
-  width='50px'
-  series={[refreshValue]}
-  thickness={5}
-  thresholds={[
+    style="radial"
+    width="50px"
+    series={[refreshValue]}
+    thickness={5}
+    thresholds={[
       {
         till: 50,
-        color: '#800000'
+        color: '#800000',
       },
       {
         till: 100,
-        color: '#008000'
-      }
-    ]}/>  
+        color: '#008000',
+      },
+    ]}
+  />
 </div>
 
 <div class="flex w-100pc py-20px flex flex-col items-center">
@@ -171,17 +173,17 @@
     <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
       {#key data}
         <!-- SUMMARY -->
-        <StakingSummary data={data} eth={$eth} on:update={handleUpdate}></StakingSummary>
+        <StakingSummary {data} eth={$eth} on:update={handleUpdate} />
         <!-- END SUMMARY -->
 
         <!-- YOUR STAKING -->
-        <StakingPositions data={data} isLoading={isLoading} itemsNumber=3 eth={$eth} on:update={handleUpdate}></StakingPositions>
+        <StakingPositions {data} {isLoading} itemsNumber="3" eth={$eth} on:update={handleUpdate} />
         <!-- END YOUR STAKING -->
 
         <!-- PAST REWARDS -->
-        <StakingRewards data={data} isLoading={isLoading} itemsNumber=3></StakingRewards>
-        <!-- END PAST REWARDS -->        
-      {/key}        
+        <StakingRewards {data} {isLoading} itemsNumber="3" eth={$eth}/>
+        <!-- END PAST REWARDS -->
+      {/key}
     </div>
 
     <!-- STAKING FORM -->
@@ -230,7 +232,7 @@
                 }}
                 on:keyup={() => {
                   calculateVeDOUGH();
-                }}                  
+                }}
               />
               <span class="sc-iybRtq gjVeBU">
                 <img class="h-auto w-24px mr-5px" src={images.doughtoken} alt="dough token" />
@@ -273,7 +275,7 @@
                   }
 
                   calculateVeDOUGH();
-                }}              
+                }}
               />
               <div
                 on:click={() => {
@@ -327,125 +329,135 @@
           </div>
 
           <div class="md:h-32px flex items-center pt-4">
-            <div class="md:text-xs leading-3 font-thin mr-2">
-              You will receive: 
-            </div>   
+            <div class="md:text-xs leading-3 font-thin mr-2">You will receive:</div>
             <div class="md:text-base mr-2">
-             { veDOUGH }
-            </div>       
-            <img
-              class="token-icon w-30px h-30px"
-              src={images.veDough}
-              alt="ETH"
-            />
+              {veDOUGH}
+            </div>
+            <img class="token-icon w-30px h-30px" src={images.veDough} alt="ETH" />
             <div class="px-4px font-thin">veDOUGH</div>
-          </div>          
+          </div>
 
-          {#if data.accountDepositTokenBalance.eq(0)}
-            <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4"
-              >You don't own tokens
-            </button>
-          {:else if stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0}
-            {#if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
-              <button
-                disabled
-                class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
-                >Insufficient Balance</button
-              >
-            {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
-              <button
-                on:click={() => {
-                  approveButtonText = 'Approving';
-                  isApproving = true;
-                
-                  let interval = setInterval(() => {
-                    let occurrences = approveButtonText.split('.').length - 1;
-                
-                    if (occurrences < 3) {
-                      approveButtonText += '.';
-                    } else {
-                      approveButtonText = 'Approving';
-                    }
-                  }, 1000);
+          {#if $eth.address}
+            {#if data.accountDepositTokenBalance.eq(0)}
+              <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4"
+                >You don't own tokens
+              </button>
+            {:else if stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0}
+              {#if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
+                <button
+                  disabled
+                  class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
+                  >Insufficient Balance</button
+                >
+              {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
+                <button
+                  on:click={() => {
+                    approveButtonText = 'Approving';
+                    isApproving = true;
 
-                  approveToken($eth).then(updated_data => {
-                    data = updated_data;
-                    data = data;
+                    let interval = setInterval(() => {
+                      let occurrences = approveButtonText.split('.').length - 1;
 
-                    clearInterval(interval);
-                    approveButtonText = 'Approve';
-                    isApproving = false;                   
-                  }).catch(error => {
-                    console.error(error);
+                      if (occurrences < 3) {
+                        approveButtonText += '.';
+                      } else {
+                        approveButtonText = 'Approving';
+                      }
+                    }, 1000);
 
-                    clearInterval(interval);
-                    approveButtonText = 'Approve';
-                    isApproving = false;                    
-                  });
-                }}                
-                class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
-                >{approveButtonText}</button
-              >
-            {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
-              <button
-              disabled={!receiver}
+                    approveToken($eth)
+                      .then((updated_data) => {
+                        data = updated_data;
+                        data = data;
 
-                on:click={() => {
-                  stakeButtonText = 'Staking';
-                  isStaking = true;
-                
-                  let interval = setInterval(() => {
-                    let occurrences = stakeButtonText.split('.').length - 1;
-                
-                    if (occurrences < 3) {
-                      stakeButtonText += '.';
-                    } else {
-                      stakeButtonText = 'Staking';
-                    }
-                  }, 1000);
+                        clearInterval(interval);
+                        approveButtonText = 'Approve';
+                        isApproving = false;
+                      })
+                      .catch((error) => {
+                        console.error(error);
 
-                  stakeDOUGH(stakeAmount, stakeDuration, receiver, $eth).then(updated_data => {
-                    data = updated_data;
-                    data = data;
+                        clearInterval(interval);
+                        approveButtonText = 'Approve';
+                        isApproving = false;
+                      });
+                  }}
+                  class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
+                  >{approveButtonText}</button
+                >
+              {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
+                <button
+                  disabled={!receiver}
+                  on:click={() => {
+                    stakeButtonText = 'Staking';
+                    isStaking = true;
 
-                    clearInterval(interval);
-                    stakeButtonText = 'Success! 🥳';
-          
-                    setTimeout(() => {
-                      stakeButtonText = 'Stake DOUGH';
-                      isStaking = false;
-                      stakeAmount = 0;
-                      calculateVeDOUGH();
-                    }, 5000);                    
-                  }).catch(error => {
-                    console.error(error);
+                    let interval = setInterval(() => {
+                      let occurrences = stakeButtonText.split('.').length - 1;
 
-                    clearInterval(interval);
-                    stakeButtonText = 'Stake DOUGH';
-                    isStaking = false;                    
-                  });
-                }}
-                class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
-                >{stakeButtonText}</button
-              >
+                      if (occurrences < 3) {
+                        stakeButtonText += '.';
+                      } else {
+                        stakeButtonText = 'Staking';
+                      }
+                    }, 1000);
+
+                    stakeDOUGH(stakeAmount, stakeDuration, receiver, $eth)
+                      .then((updated_data) => {
+                        data = updated_data;
+                        data = data;
+
+                        clearInterval(interval);
+                        stakeButtonText = 'Success! 🥳';
+
+                        setTimeout(() => {
+                          stakeButtonText = 'Stake DOUGH';
+                          isStaking = false;
+                          stakeAmount = 0;
+                          calculateVeDOUGH();
+                        }, 5000);
+                      })
+                      .catch((error) => {
+                        console.error(error);
+
+                        clearInterval(interval);
+                        stakeButtonText = 'Stake DOUGH';
+                        isStaking = false;
+                      });
+                  }}
+                  class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
+                  >{stakeButtonText}</button
+                >
+              {:else}
+                <button
+                  disabled
+                  class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
+                  >Duration not correct</button
+                >
+              {/if}
             {:else}
               <button
                 disabled
-                class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
-                >Duration not correct</button
+                class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
+                >Enter an amount</button
               >
             {/if}
           {:else}
-            <button
-              disabled
-              class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
-              >Enter an amount</button
-            >
+          <button
+            on:click={() => connectWeb3()}
+            class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
+            >Connect a Wallet</button
+          >
           {/if}
 
-          <button on:click={() => addToken()} class="add-dough-metamask mt-4" data-aos="fade-up" data-aos-delay="300">
+          <button
+            on:click={() => addToken()}
+            class="add-dough-metamask mt-4"
+            data-aos="fade-up"
+            data-aos-delay="300"
+          >
             Add to MetaMask 🦊
-          </button>          
+          </button>
           <!-- END STAKING FORM -->
         </div>
       {:else}
