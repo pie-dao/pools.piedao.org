@@ -273,7 +273,7 @@ export const fetchStakingData = async (eth) => {
               withdrawn: lock.withdrawn,
               ejected: lock.ejected,
               boosted: lock.boosted,
-              boostedPointer: lock.boostedPointer,
+              boostedPointer: lock.boostedPointer
             });
           }
         });

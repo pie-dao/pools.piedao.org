@@ -31,14 +31,6 @@ button:focus {
   background-clip: content-box, border-box;  
 } */
 
-.justBoosted {
-  background-color: lightgray;
-}
-
-.newBoosted {
-  background-color: antiquewhite;
-}
-
 .bg-button {
   display: inline-flex;
   border: solid 2px transparent;
