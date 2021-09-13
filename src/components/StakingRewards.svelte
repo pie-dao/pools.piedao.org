@@ -25,12 +25,13 @@
   </span>
 </Modal>
 
-{#if eth.address && data.rewards && data.rewards.length > 0}
-  <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
-    <div class="font-huge text-center mt-6">Rewards History</div>
-    {#if isLoading}
-      Loading...
-    {:else}
+{#if eth.address}
+<div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
+  <div class="font-huge text-center mt-6">Rewards History</div>
+  {#if isLoading}
+    Loading...
+  {:else}        
+    {#if data.rewards && data.rewards.length > 0}
       {#each data.rewards.slice(0, itemsNumber) as reward}
         {#if reward.type != 'distributed'}
           <div
@@ -55,7 +56,11 @@
             <div class="flex nowrap items-center justify-between p-1">
               <span class="sc-iybRtq gjVeBU">
                 <div class="font-24px">{formatFiat(toNum(reward.amount), ',', '.', '')}</div>
-                <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="rewardspie token" />
+                <img
+                  class="h-auto w-24px mx-5px"
+                  src={images.rewardsPie}
+                  alt="rewardspie token"
+                />
               </span>
               <div class="flex items-center justify-between">
                 <img
@@ -69,10 +74,13 @@
           </div>
         {/if}
       {/each}
+    {:else}
+      You have no rewards yet.
     {/if}
+  {/if}
 
-    {#if data.rewards.length > itemsNumber}
-      <a class="pt-6" href="#/staking_rewards"> See all rewards </a>
-    {/if}
-  </div>
+  {#if data.rewards.length > itemsNumber}
+  <a class="pt-6" href="#/staking_rewards"> See all rewards </a>
+{/if}
+</div>
 {/if}

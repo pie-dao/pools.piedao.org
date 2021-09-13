@@ -24,13 +24,13 @@
   export let itemsNumber = data.accountLocks.length;
 </script>
 
-{#if eth.address && data.accountLocks && data.accountLocks.length > 0}
+{#if eth.address}
   <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
     <div class="font-huge text-center mt-6">Your Staking</div>
 
     {#if isLoading}
       Loading...
-    {:else}
+    {:else if data.accountLocks && data.accountLocks.length > 0}
       {#each data.accountLocks.slice(0, itemsNumber) as lock, id}
         <!-- Let's show just the normal stakes, and the boosted ones. The stakes having a boostedPointer are obsolete stakes, so we won't show them -->
         {#if lock.boostedPointer == ''}
@@ -185,6 +185,8 @@
           </div>
         {/if}
       {/each}
+    {:else}
+      You haven't staked anything yet, what are you waiting for?
     {/if}
 
     {#if data.accountLocks.length > itemsNumber}
