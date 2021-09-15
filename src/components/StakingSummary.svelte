@@ -124,7 +124,7 @@
         <div class="flex-1">
           <span class="sc-iybRtq gjVeBU">
             <div class="font-24px">
-              {data.accountAverageDuration} Months
+              {eth.address ? data.accountAverageDuration : "0"} Months
             </div>
           </span>        
         </div>
@@ -139,7 +139,7 @@
         <div class="flex-1">
           <span class="sc-iybRtq gjVeBU">
             <div class="font-24px">
-              {data.accountVotingPower} %
+              {eth.address ? data.accountVotingPower : 0} %
             </div>
           </span>        
         </div>
