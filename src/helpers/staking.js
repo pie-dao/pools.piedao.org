@@ -189,8 +189,16 @@ export function initialize(eth) {
   /* eslint-enable no-async-promise-executor */
 }
 
-export async function fetchStakingStats() {
+export async function fetchStakingStats(eth) {
   try {
+    let dough = new ethers.Contract(
+      smartcontracts.dough,
+      veDoughABI,
+      eth.signer || eth.provider,
+    );
+
+    let totalSupply = await dough.totalSupply();
+
     const response = await subgraphRequest(
       'https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop',
       {
@@ -225,9 +233,11 @@ export async function fetchStakingStats() {
       totalHolders: response.stakersTrackers[0].counter,
       averageLockDUration: Math.floor(Number(response.globalStats[0].locksDuration) / 60),
       totalStakedDough: response.globalStats[0].totalStaked,
-      totalVeDough: response.globalStats[0].veTokenTotalSupply
+      totalVeDough: response.globalStats[0].veTokenTotalSupply,
+      totalDough: totalSupply
     };
   } catch (error) {
+    console.log("FUCK", error);
     throw new Error(`fetchStakingDataGraph: ${error.message}`);
   }
 }  
