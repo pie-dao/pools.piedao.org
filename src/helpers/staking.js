@@ -19,6 +19,7 @@ export let dataObj = {
   totalStaked: BigNumber(0),
   veTokenTotalSupply: BigNumber(0),
   accountAverageDuration: 0,
+  accountVotingPower: 0,
   accountVeTokenBalance: BigNumber(0),
   accountTokenBalance: BigNumber(0),
   accountWithdrawableRewards: BigNumber(0),
@@ -292,6 +293,10 @@ export const fetchStakingData = async (eth) => {
       }
     });
   }
+
+
+  let votingPower = ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2);
+  dataObj.accountVotingPower = Number(votingPower);
 
   dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
   console.log('fetchStakingData', dataObj);

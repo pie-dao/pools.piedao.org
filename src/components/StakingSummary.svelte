@@ -139,7 +139,7 @@
         <div class="flex-1">
           <span class="sc-iybRtq gjVeBU">
             <div class="font-24px">
-              2.7%
+              {data.accountVotingPower} %
             </div>
           </span>        
         </div>
