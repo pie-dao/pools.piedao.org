@@ -51,11 +51,11 @@
   <div class="font-huge text-center mt-6">Summary</div>
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">Total staked DOUGH</div>
+      <div class="flex nowrap intems-center p-1 font-thin">Your Total staked DOUGH</div>
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
-        <div class="font-24px">{eth.address ? formatFiat(toNum(data.totalStaked), ',', '.', '') : 0}</div>
+        <div class="font-24px">{eth.address ? formatFiat(toNum(data.accountTokenBalance), ',', '.', '') : 0}</div>
         <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
       </span>
@@ -63,7 +63,7 @@
   </div>
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">Your veDOUGH</div>
+      <div class="flex nowrap intems-center p-1 font-thin">Your Total Staked veDOUGH</div>
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
@@ -76,10 +76,10 @@
     </div>
   </div>
   <div
-    class="flex flex-col nowrap w-92pc mx-4pc mt-4 mb-6 swap-from rounded-20px bg-white p-16px"
+    class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px"
   >
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">Rewards</div>
+      <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
     </div>
     <div class="flex nowrap items-center p-1">
       <div class="flex-1">
@@ -114,4 +114,38 @@
     {/if}
     </div>
   </div>
+  <div class="flex flex-initial">
+    <div
+      class="flex flex-1 flex-col flex-shrink mx-4pc mt-4 mb-6 rounded-20px bg-white p-16px"
+    >
+      <div class="flex items-center justify-between">
+        <div class="flex nowrap intems-center p-1 font-thin">Average Locking Period</div>
+      </div>
+      <div class="flex nowrap items-center p-1">
+        <div class="flex-1">
+          <span class="sc-iybRtq gjVeBU">
+            <div class="font-24px">
+              {data.accountAverageDuration} Months
+            </div>
+          </span>        
+        </div>
+      </div>
+    </div>
+    <div
+      class="flex flex-1 flex-col flex-shrink mx-4pc mt-4 mb-6 rounded-20px bg-white p-16px"
+    >
+      <div class="flex items-center justify-between">
+        <div class="flex nowrap intems-center p-1 font-thin">Your Voting Power</div>
+      </div>
+      <div class="flex nowrap items-center p-1">
+        <div class="flex-1">
+          <span class="sc-iybRtq gjVeBU">
+            <div class="font-24px">
+              2.7%
+            </div>
+          </span>        
+        </div>
+      </div>
+    </div>    
+  </div>  
 </div>

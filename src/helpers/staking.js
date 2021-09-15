@@ -18,7 +18,9 @@ import { createParticipationTree } from '../classes/MerkleTreeUtils';
 export let dataObj = {
   totalStaked: BigNumber(0),
   veTokenTotalSupply: BigNumber(0),
+  accountAverageDuration: 0,
   accountVeTokenBalance: BigNumber(0),
+  accountTokenBalance: BigNumber(0),
   accountWithdrawableRewards: BigNumber(0),
   accountWithdrawnRewards: BigNumber(0),
   accountDepositTokenBalance: BigNumber(0),
@@ -260,9 +262,14 @@ export const fetchStakingData = async (eth) => {
         dataObj[key] = new BigNumber(staker[key].toString());
       } else {
         const locks = [];
+        dataObj.accountAverageDuration = 0;
+        dataObj.accountTokenBalance = new BigNumber('0');
 
         staker[key].forEach((lock, index) => {
           if (lock.amount.toString() !== '0') {
+            dataObj.accountTokenBalance = dataObj.accountTokenBalance.plus(new BigNumber(lock.amount.toString()));
+            dataObj.accountAverageDuration += Number(lock.lockDuration);
+
             locks.push({
               amount: new BigNumber(lock.amount.toString()),
               lockDuration: lock.lockDuration,
@@ -278,6 +285,7 @@ export const fetchStakingData = async (eth) => {
           }
         });
 
+        dataObj.accountAverageDuration = Math.floor((dataObj.accountAverageDuration / locks.length) / 60);
         locks.sort((lockA, lockB) => lockB.lockedAt - lockA.lockedAt);
 
         dataObj[key] = locks;

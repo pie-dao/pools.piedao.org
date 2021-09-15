@@ -82,8 +82,8 @@
                     <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                   </div>
                 </div>
-                {#if !lock.boosted}
-                  {#if !lock.ejected && !lock.withdrawn}
+                {#if !lock.boosted} <!-- || if lockedAt > 1 months -->
+                  {#if !lock.ejected && !lock.withdrawn}  <!-- && if lockedAt > 1 months -->
                     <button
                       disabled={lock.lockId == $justBoosted}
                       on:click={() => {
