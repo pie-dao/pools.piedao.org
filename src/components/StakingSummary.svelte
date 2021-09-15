@@ -114,9 +114,8 @@
     {/if}
     </div>
   </div>
-  <div class="flex flex-initial">
-    <div
-      class="flex flex-1 flex-col flex-shrink mx-4pc mt-4 mb-6 rounded-20px bg-white p-16px"
+  <div class="w-full flex px-6">
+    <div class="w-1/2 flex flex-col flex-shrink mr-2 mt-4 mb-6 rounded-20px bg-white p-16px"
     >
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Average Locking Period</div>
@@ -131,8 +130,7 @@
         </div>
       </div>
     </div>
-    <div
-      class="flex flex-1 flex-col flex-shrink mx-4pc mt-4 mb-6 rounded-20px bg-white p-16px"
+    <div class="w-1/2 flex flex-col flex-shrink ml-2 mt-4 mb-6 rounded-20px bg-white p-16px"
     >
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Your Voting Power</div>
