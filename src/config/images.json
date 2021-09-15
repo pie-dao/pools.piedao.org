@@ -142,5 +142,8 @@
   "veDough": "https://raw.githubusercontent.com/pie-dao/brand/fa037b10556371316c43ea0f0939fd35897f8443/DOUGH%20Token/veDOUGH.svg",
   "rewardsPie": "https://raw.githubusercontent.com/pie-dao/brand/6adcf8b3a75380cc49ea119150b683a031afa016/PIE%20Tokens/RewardPie.svg",
   "slashed": "https://raw.githubusercontent.com/pie-dao/brand/86501f412e3c7bb62694ca0e962d6f86f2a278a6/misc/slashed.svg",
-  "claimed": "https://raw.githubusercontent.com/pie-dao/brand/86501f412e3c7bb62694ca0e962d6f86f2a278a6/misc/claimed.svg"
+  "claimed": "https://raw.githubusercontent.com/pie-dao/brand/86501f412e3c7bb62694ca0e962d6f86f2a278a6/misc/claimed.svg",
+  "person_raising_hand": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/person-raising-hand_1f64b.png",
+  "locked_with_key": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/locked-with-key_1f510.png",
+  "cut_of_meat": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/cut-of-meat_1f969.png"
 }

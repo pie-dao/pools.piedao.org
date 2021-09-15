@@ -189,6 +189,49 @@ export function initialize(eth) {
   /* eslint-enable no-async-promise-executor */
 }
 
+export async function fetchStakingStats() {
+  try {
+    const response = await subgraphRequest(
+      'https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop',
+      {
+        stakersTrackers: {
+          __args: {
+            where: { id: "StakersTrackerID" },
+          },          
+          id: true,
+          counter: true
+        },
+        globalStats: {
+          __args: {
+            where: { id: "unique_stats_id" },
+          },           
+          id: true,
+          depositedLocksCounter: true,
+          depositedLocksValue: true,
+          withdrawnLocksCounter: true,
+          withdrawnLocksValue: true,
+          ejectedLocksCounter: true,
+          ejectedLocksValue: true,
+          boostedLocksCounter: true,
+          boostedLocksValue: true,
+          locksDuration: true,
+          totalStaked: true,
+          veTokenTotalSupply: true,
+        }       
+      }
+    );
+
+    return {
+      totalHolders: response.stakersTrackers[0].counter,
+      averageLockDUration: Math.floor(Number(response.globalStats[0].locksDuration) / 60),
+      totalStakedDough: response.globalStats[0].totalStaked,
+      totalVeDough: response.globalStats[0].veTokenTotalSupply
+    };
+  } catch (error) {
+    throw new Error(`fetchStakingDataGraph: ${error.message}`);
+  }
+}  
+
 export async function fetchStakingDataGraph(address) {
   try {
     const response = await subgraphRequest(

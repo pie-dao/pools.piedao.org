@@ -6,6 +6,7 @@
   import { onDestroy } from 'svelte';
   import smartcontracts from '../config/smartcontracts.json';
   import displayNotification from '../notifications';
+  import { formatFiat } from '../components/helpers.js';
   import Calculator from '../classes/farming_simulator/Calculator.js';
   import {
     toNum,
@@ -15,11 +16,13 @@
     initialize,
     approveToken,
     observable,
+    fetchStakingStats
   } from '../helpers/staking.js';
 
   import StakingRewards from '../components/StakingRewards.svelte';
   import StakingPositions from '../components/StakingPositions.svelte';
   import StakingSummary from '../components/StakingSummary.svelte';
+  import StakingStats from '../components/StakingStats.svelte';
 
   import ProgressBar from '@okrad/svelte-progressbar';
 
@@ -40,6 +43,20 @@
   let observer = null;
   let refreshInterval = null;
   let refreshValue = 0;
+
+  let stakingStats = {
+      totalHolders: 0,
+      averageLockDUration: 0,
+      totalStakedDough: 0,
+      totalVeDough: 0
+    }
+
+  fetchStakingStats().then(response => {
+    stakingStats = response;
+    console.log("fetchStakingStats", stakingStats);
+  }).catch(error => {
+    console.error(error);
+  });
 
   onDestroy(() => {
     if (observer) {
@@ -167,6 +184,10 @@
 </div>
 
 <div class="flex w-100pc py-20px flex flex-col items-center">
+  {#key stakingStats}
+  <StakingStats stakingStats={stakingStats} />
+  {/key}
+    
   <div
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"
   >
