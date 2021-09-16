@@ -200,7 +200,7 @@ export async function fetchStakingStats(eth) {
     let totalSupply = await dough.totalSupply();
 
     const response = await subgraphRequest(
-      'https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop',
+      'https://api.thegraph.com/subgraphs/name/pie-dao/vedough',
       {
         stakersTrackers: {
           __args: {
@@ -245,7 +245,7 @@ export async function fetchStakingStats(eth) {
 export async function fetchStakingDataGraph(address) {
   try {
     const response = await subgraphRequest(
-      'https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop',
+      'https://api.thegraph.com/subgraphs/name/pie-dao/vedough',
       {
         stakers: {
           __args: {
