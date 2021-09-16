@@ -3,7 +3,7 @@
   import { _ } from 'svelte-i18n';
   import images from '../config/images.json';
   import { formatToken } from '../components/helpers.js';
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy } from 'svelte';
   import smartcontracts from '../config/smartcontracts.json';
   import displayNotification from '../notifications';
   import Calculator from '../classes/farming_simulator/Calculator.js';

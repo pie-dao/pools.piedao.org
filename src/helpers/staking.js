@@ -205,11 +205,7 @@ export function initialize(eth) {
 }
 
 export async function fetchStakingStats(provider) {
-  try {
-    // TODO: to be removed / improved for testing purposes...
-    // provider = new ethers.providers.JsonRpcProvider("https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5");
-    console.log("using provider", provider);
-    
+  try {    
     let dough = new ethers.Contract(
       smartcontracts.dough,
       DoughABI,

@@ -3,6 +3,7 @@
   import images from "../config/images.json";
   import { farming } from '../stores/eth/writables.js';
   import TotDoughStaked from '../components/TotDoughStaked.svelte';
+  import StakingStats from '../components/StakingStats.svelte';
   import Accordion from '../components/elements/Accordion.svelte'
   import AccordionGroup from '../components/elements/AccordionGroup.svelte'
   
@@ -136,6 +137,8 @@
     <TotDoughStaked />
   </div>
 </div>
+
+  <StakingStats />
 
 
 
