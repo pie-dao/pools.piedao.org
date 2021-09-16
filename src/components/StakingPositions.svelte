@@ -12,6 +12,7 @@
     getLockStatus,
     didLockExpired,
     unstakeDOUGH,
+    canRestake
   } from '../helpers/staking.js';
   import { justBoosted, timestampBoosted } from '../stores/eth/writables';
 
@@ -21,7 +22,7 @@
   export let isLoading;
   export let data;
   export let eth;
-  export let itemsNumber = data.accountLocks.length;
+  export let itemsNumber = data.accountLocks.length;  
 </script>
 
 {#if eth.address}
@@ -82,8 +83,8 @@
                     <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                   </div>
                 </div>
-                {#if !lock.boosted} <!-- || if lockedAt > 1 months -->
-                  {#if !lock.ejected && !lock.withdrawn}  <!-- && if lockedAt > 1 months -->
+                {#if !lock.boosted && canRestake(lock.lockedAt)}
+                  {#if !lock.ejected && !lock.withdrawn}
                     <button
                       disabled={lock.lockId == $justBoosted}
                       on:click={() => {
