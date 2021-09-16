@@ -231,6 +231,7 @@
                 maxlength="79"
                 spellcheck="false"
                 disabled={isStaking || isApproving}
+                onfocus="this.placeholder=''" 
                 on:change={() => {
                   stakeAmount = formatToken(stakeAmount, '.', 18);
                 }}
