@@ -198,7 +198,7 @@
                     <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                   </div>
                 </div>
-                {#if canRestake(lock.lockedAt)}
+                {#if !lock.boosted || (lock.boosted && canRestake(lock.lockedAt))}
                   {#if !lock.ejected && !lock.withdrawn}
                     <button
                       disabled={lock.lockId == $justBoosted}
