@@ -266,7 +266,7 @@
                 title="Token Amount"
                 autocomplete="off"
                 autocorrect="off"
-                type="text"
+                type="number"
                 pattern="^[0-9]?[0-9]*$"
                 placeholder="36"
                 minlength="1"
