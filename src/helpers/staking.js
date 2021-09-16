@@ -14,6 +14,8 @@ import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
+import moment from 'moment';
+
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
   totalStaked: BigNumber(0),
@@ -33,11 +35,23 @@ export let sharesTimeLock = false;
 export let veDOUGH = false;
 export const minLockAmount = 1;
 let ETH = null;
+
 /* eslint-enable import/no-mutable-exports */
 
 // in a very next future, this function will fetch directly from backend...
 export const getParticipations = () => {
   return PartecipationJson;
+}
+
+export const canRestake = (lockedAt) => {
+  let start = lockedAt * 1000;
+  let end = moment().endOf('day');
+  
+  if(end.diff(start, 'days') > 30) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 export const observable = new Observable((subscriber) => {
@@ -72,8 +86,8 @@ export function calculateStakingEnds(lock) {
   const endDate = new Date(lock.lockedAt * 1000);
   const lockDuration = lock.lockDuration / 60;
 
-  //endDate.setMonth(endDate.getMonth() + lockDuration);
-  endDate.setMinutes(endDate.getMinutes() + lockDuration);
+  endDate.setMonth(endDate.getMonth() + lockDuration);
+  //endDate.setMinutes(endDate.getMinutes() + lockDuration);
   return endDate;
 }
 
