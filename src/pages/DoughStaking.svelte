@@ -145,7 +145,7 @@
 </script>
 
 <div class="font-huge text-center">Dough Staking</div>
-<div class="font-thin text-lg text-center mt-10px mb-10px">Get paid for Governing the DAO</div>
+<div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
 
 <!-- TODO: Nico, please fix me :) -->
 <div style="position: absolute; top: 100px; right: 100px;">
@@ -167,7 +167,7 @@
   />
 </div>
 
-<div class="flex w-100pc py-20px flex flex-col items-center">
+<div class="flex w-100pc pt-0 pb-20px flex flex-col items-center">
   {#key data}
     <StakingStats />
   {/key}
