@@ -92,14 +92,16 @@
     confetti(button, config);
     modalinfo.open();
 
-    let interval = setInterval(() => {
+    setTimeout(() => {
+      let interval = setInterval(() => {
       if(modalLock.animatedAmount < modalLock.newAmount) {
         modalLock.animatedAmount++;
       } else {
-        modalLock.animatedAmount = formatFiat(modalLock.newAmount, ',', '.', '');
+        modalLock.animatedAmount = Number(formatFiat(modalLock.newAmount, ',', '.', ''));
         clearInterval(interval);
       }
-    }, 25);
+    }, 10);      
+    }, 500);
   }
 </script>
 
@@ -109,21 +111,10 @@
   <div slot="content" class="font-thin text-center">
     <p class="pb-2 font-24px">more rewards and voting power!</p>
 
-    <div class="flex flex-row flex-shrink ml-2 mt-4 mb-6 rounded-20px bg-lightgrey p-16px"
-    >
-      <div class="flex items-center justify-between min-w-1/2">
-        <div class="flex nowrap items-center p-1 font-bold font-24px">{modalLock.animatedAmount}</div>
-      </div>
-      <div class="flex nowrap items-right p-1">
-        <div class="flex-1">
-          <span class="sc-iybRtq gjVeBU">
-            <div class="font-24px">
-              veDOUGH
-            </div>
-          </span>        
-        </div>
-      </div>
-    </div>  
+    <div class="flex mt-4 mb-6 mx-12 rounded-20px bg-lightgrey p-16px">
+      <div class="w-1/2 text-right font-bold font-24px mr-1">{modalLock.animatedAmount.toFixed(2)}</div>
+      <div class="w-1/2 text-left font-24px ml-1">veDOUGH</div>
+    </div> 
 
     <div class="text-center mx-auto">
       <img
@@ -134,7 +125,7 @@
     </div>
     <p class="pt-2 font-24px font-bold">what's next?</p>
     <p class="pt-2 font-24px">Add SLICE to your Metamask<br />browser plugin so you  will see it<br />among your assets.</p>
-    <button on:click={() => addToken()} class="text-center pointer mx-auto object-bottom mt-25">
+    <button on:click={() => addToken()} class="text-center pointer mx-auto object-bottom my-8 font-thin">
       🦊 Add SLICE to MetaMask
     </button>
   </div>
@@ -203,37 +194,35 @@
                     <button
                       disabled={lock.lockId == $justBoosted}
                       on:click={() => {
-                        // backupLock needed to avoid modal crash
-                        // after we override data variable...
-                        let backupLock = lock;
+                        showModalLock(lock);
 
                         // marking the lock as justBoosted...
                         $justBoosted = lock.lockId;
                         // saving the timestampBoosted for further uses...
                         $timestampBoosted = Math.floor(Number(Date.now()) / 1000);
 
-                        boostToMax(lock.lockId, eth)
-                          .then((updated_data) => {
-                            if(scrollToTop) {
-                              animateScroll.scrollToTop();
-                            }
+                        // boostToMax(lock.lockId, eth)
+                        //   .then((updated_data) => {
+                        //     if(scrollToTop) {
+                        //       animateScroll.scrollToTop();
+                        //     }
 
-                            showModalLock(backupLock);
+                        //     showModalLock(lock);
 
-                            // updating the data object...
-                            data = updated_data;
-                            data = data;
+                        //     // updating the data object...
+                        //     data = updated_data;
+                        //     data = data;
 
-                            setTimeout(() => {
-                              $timestampBoosted = null;
-                              $justBoosted = null;
-                            }, 15000);
-                          })
-                          .catch((error) => {
-                            $justBoosted = null;
-                            $timestampBoosted = null;
-                            console.error(error);
-                          });
+                        //     setTimeout(() => {
+                        //       $timestampBoosted = null;
+                        //       $justBoosted = null;
+                        //     }, 15000);
+                        //   })
+                        //   .catch((error) => {
+                        //     $justBoosted = null;
+                        //     $timestampBoosted = null;
+                        //     console.error(error);
+                        //   });
                       }}
                       class="flex items-center cardbordergradient -mr-2 pointer"
                     >
