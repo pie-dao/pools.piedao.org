@@ -32,6 +32,7 @@ export let dataObj = {
 export let sharesTimeLock = false;
 export let veDOUGH = false;
 export const minLockAmount = 1;
+export const AVG_SECONDS_MONTH = 2628000;
 let ETH = null;
 /* eslint-enable import/no-mutable-exports */
 
@@ -70,10 +71,9 @@ export function calculateStakingStarts(lock) {
 
 export function calculateStakingEnds(lock) {
   const endDate = new Date(lock.lockedAt * 1000);
-  const lockDuration = lock.lockDuration / 60;
-
-  //endDate.setMonth(endDate.getMonth() + lockDuration);
-  endDate.setMinutes(endDate.getMinutes() + lockDuration);
+  const lockDuration = lock.lockDuration / AVG_SECONDS_MONTH;
+  endDate.setMonth(endDate.getMonth() + lockDuration);
+  //endDate.setMinutes(endDate.getMinutes() + lockDuration);
   return endDate;
 }
 
@@ -231,7 +231,7 @@ export async function fetchStakingStats(eth) {
 
     return {
       totalHolders: response.stakersTrackers[0].counter,
-      averageLockDUration: Math.floor(Number(response.globalStats[0].locksDuration) / 60),
+      averageLockDUration: Math.floor(Number(response.globalStats[0].locksDuration) / AVG_SECONDS_MONTH),
       totalStakedDough: response.globalStats[0].totalStaked,
       totalVeDough: response.globalStats[0].veTokenTotalSupply,
       totalDough: totalSupply
@@ -339,7 +339,7 @@ export const fetchStakingData = async (eth) => {
           }
         });
 
-        dataObj.accountAverageDuration = Math.floor((dataObj.accountAverageDuration / locks.length) / 60);
+        dataObj.accountAverageDuration = Math.floor((dataObj.accountAverageDuration / locks.length) / AVG_SECONDS_MONTH);
         locks.sort((lockA, lockB) => lockB.lockedAt - lockA.lockedAt);
 
         dataObj[key] = locks;

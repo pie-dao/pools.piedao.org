@@ -12,6 +12,7 @@
     getLockStatus,
     didLockExpired,
     unstakeDOUGH,
+    AVG_SECONDS_MONTH
   } from '../helpers/staking.js';
   import { justBoosted, timestampBoosted } from '../stores/eth/writables';
 
@@ -72,7 +73,7 @@
                   <div class="gjVeBU float-left">
                     <div class="font-24px">
                       {formatFiat(
-                        calculateVeDough(lock.amount, lock.lockDuration / 60),
+                        calculateVeDough(lock.amount, lock.lockDuration / AVG_SECONDS_MONTH),
                         ',',
                         '.',
                         '',
