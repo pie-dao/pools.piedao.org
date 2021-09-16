@@ -332,7 +332,7 @@
             </div>
           </div>
 
-          <div class="md:h-32px flex items-center pt-4">
+          <div class="md:h-32px flex items-center pt-6">
             <div class="md:text-xs leading-3 font-thin mr-2">You will receive:</div>
             <div class="md:text-base mr-2">
               {veDOUGH}
@@ -456,7 +456,7 @@
 
           <button
             on:click={() => addToken()}
-            class="add-dough-metamask mt-4"
+            class="add-dough-metamask mb-4"
             data-aos="fade-up"
             data-aos-delay="300"
           >
