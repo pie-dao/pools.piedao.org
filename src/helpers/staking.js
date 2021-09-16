@@ -8,6 +8,7 @@ import { isAddress } from '@pie-dao/utils';
 import { Observable } from 'rxjs';
 import sharesTimeLockABI from '../abis/sharesTimeLock.json';
 import veDoughABI from '../abis/veDoughABI.json';
+import DoughABI from '../abis/DoughABI.json';
 import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
@@ -47,11 +48,12 @@ export const canRestake = (lockedAt) => {
   let start = lockedAt * 1000;
   let end = moment().endOf('day');
   
-  if(end.diff(start, 'days') > 30) {
-    return true;
-  } else {
-    return false;
-  }
+  return true;
+  // if(end.diff(start, 'days') > 30) {
+  //   return true;
+  // } else {
+  //   return false;
+  // }
 }
 
 export const observable = new Observable((subscriber) => {
@@ -203,12 +205,15 @@ export function initialize(eth) {
   /* eslint-enable no-async-promise-executor */
 }
 
-export async function fetchStakingStats(eth) {
+export async function fetchStakingStats(provider) {
   try {
+    provider = new ethers.providers.JsonRpcProvider("https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5");
+    console.log("using provider", provider);
+    
     let dough = new ethers.Contract(
       smartcontracts.dough,
-      veDoughABI,
-      eth.signer || eth.provider,
+      DoughABI,
+      provider,
     );
 
     let totalSupply = await dough.totalSupply();
@@ -251,8 +256,7 @@ export async function fetchStakingStats(eth) {
       totalDough: totalSupply
     };
   } catch (error) {
-    console.log("FUCK", error);
-    throw new Error(`fetchStakingDataGraph: ${error.message}`);
+    throw new Error(`fetchStakingStats: ${error.message}`);
   }
 }  
 

@@ -20,10 +20,10 @@
       totalDough: 0
     }
 
-  $: if($eth.signer && $eth.provider && stakingStats.isLoading) {
+  $: if($eth.provider && stakingStats.isLoading) {
     stakingStats.isLoading = false;
 
-    fetchStakingStats($eth).then(response => {
+    fetchStakingStats($eth.provider).then(response => {
         stakingStats = response;
         console.log("fetchStakingStats", stakingStats);
 

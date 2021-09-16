@@ -88,7 +88,7 @@
             {eth.address ? formatFiat(toNum(data.accountWithdrawableRewards), ',', '.', '') : 0}
           </div>
           <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
-          <span class="sc-kXeGPI jeVIZw token-symbol-container">RWRD</span>
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">SLICE</span>
         </span>        
       </div>
       {#if eth.address}

@@ -21,8 +21,6 @@
   import firebase from 'firebase';
   import firebase_env from '../../config/firebase.json';
 
-  console.log(confetti);
-
   function getPermalink() {
     saveSimulation();
 

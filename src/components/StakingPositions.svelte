@@ -3,6 +3,8 @@
   import images from '../config/images.json';
   import { formatFiat } from '../components/helpers.js';
   import * as animateScroll from 'svelte-scrollto';
+  import smartcontracts from '../config/smartcontracts.json';
+  import Modal from '../components/elements/Modal.svelte';
   import {
     toNum,
     calculateStakingEnds,
@@ -15,6 +17,7 @@
     canRestake
   } from '../helpers/staking.js';
   import { justBoosted, timestampBoosted } from '../stores/eth/writables';
+  import confetti from '../components/Confetti.js';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
@@ -22,8 +25,120 @@
   export let isLoading;
   export let data;
   export let eth;
-  export let itemsNumber = data.accountLocks.length;  
+  export let scrollToTop;
+  export let itemsNumber = data.accountLocks.length; 
+  
+  let modalinfo;
+
+  let modalLock = {
+    gained: 0,
+    oldAmount: 0,
+    newAmount: 0,
+    animatedAmount: 0
+  };
+
+  const config = {
+    angle: 180,
+    spread: 360,
+    startVelocity: 40,
+    elementCount: 40,
+    dragFriction: 0.12,
+    duration: 8000,
+    stagger: 3,
+    width: "30px",
+    height: "56px",
+    colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"]
+  };
+
+  const button = document.querySelector("#confetti");  
+
+  const addToken = () => {
+    ethereum.sendAsync(
+      {
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: smartcontracts.reward,
+            symbol: 'SLICE',
+            decimals: 18,
+            image: images.rewardsPie,
+          },
+        },
+        id: Math.round(Math.random() * 100000),
+      },
+      (err, added) => {
+        if (added) {
+          displayNotification({
+            message: 'The veDOUGH token has been added to your Metamask!',
+            type: 'success',
+          });
+        } else {
+          displayNotification({
+            message: 'Sorry, something went wrong. Please try again later.',
+            type: 'error',
+          });
+        }
+      },
+    );
+  };
+
+  const showModalLock = (lock) => {
+    modalLock.newAmount = Number(formatFiat(toNum(lock.amount), ',', '.', ''));
+    modalLock.oldAmount = Number(formatFiat(calculateVeDough(lock.amount, lock.lockDuration / 60),',','.',''));
+    modalLock.animatedAmount = modalLock.oldAmount;
+    modalLock.gained = (modalLock.newAmount / modalLock.oldAmount).toFixed(0);
+
+    confetti(button, config);
+    modalinfo.open();
+
+    let interval = setInterval(() => {
+      if(modalLock.animatedAmount < modalLock.newAmount) {
+        modalLock.animatedAmount++;
+      } else {
+        modalLock.animatedAmount = formatFiat(modalLock.newAmount, ',', '.', '');
+        clearInterval(interval);
+      }
+    }, 25);
+  }
 </script>
+
+<div id="confetti" class="hidden md:block"></div>
+
+<Modal title={`You gained ${modalLock.gained}X`} backgroundColor="white" bind:this={modalinfo}>
+  <div slot="content" class="font-thin text-center">
+    <p class="pb-2 font-24px">more rewards and voting power!</p>
+
+    <div class="flex flex-row flex-shrink ml-2 mt-4 mb-6 rounded-20px bg-lightgrey p-16px"
+    >
+      <div class="flex items-center justify-between min-w-1/2">
+        <div class="flex nowrap items-center p-1 font-bold font-24px">{modalLock.animatedAmount}</div>
+      </div>
+      <div class="flex nowrap items-right p-1">
+        <div class="flex-1">
+          <span class="sc-iybRtq gjVeBU">
+            <div class="font-24px">
+              veDOUGH
+            </div>
+          </span>        
+        </div>
+      </div>
+    </div>  
+
+    <div class="text-center mx-auto">
+      <img
+      class="w-80px h-80px mx-auto"
+      src={images.rewardsPie}
+      alt="ETH"
+    /> 
+    </div>
+    <p class="pt-2 font-24px font-bold">what's next?</p>
+    <p class="pt-2 font-24px">Add SLICE to your Metamask<br />browser plugin so you  will see it<br />among your assets.</p>
+    <button on:click={() => addToken()} class="text-center pointer mx-auto object-bottom mt-25">
+      🦊 Add SLICE to MetaMask
+    </button>
+  </div>
+</Modal>
 
 {#if eth.address}
   <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
@@ -83,11 +198,15 @@
                     <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                   </div>
                 </div>
-                {#if !lock.boosted && canRestake(lock.lockedAt)}
+                {#if canRestake(lock.lockedAt)}
                   {#if !lock.ejected && !lock.withdrawn}
                     <button
                       disabled={lock.lockId == $justBoosted}
                       on:click={() => {
+                        // backupLock needed to avoid modal crash
+                        // after we override data variable...
+                        let backupLock = lock;
+
                         // marking the lock as justBoosted...
                         $justBoosted = lock.lockId;
                         // saving the timestampBoosted for further uses...
@@ -95,15 +214,15 @@
 
                         boostToMax(lock.lockId, eth)
                           .then((updated_data) => {
-                            animateScroll.scrollToTop();
+                            if(scrollToTop) {
+                              animateScroll.scrollToTop();
+                            }
+
+                            showModalLock(backupLock);
 
                             // updating the data object...
                             data = updated_data;
                             data = data;
-
-                            dispatch('update', {
-                              data: data,
-                            });
 
                             setTimeout(() => {
                               $timestampBoosted = null;

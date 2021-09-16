@@ -181,7 +181,7 @@
         <!-- END SUMMARY -->
 
         <!-- YOUR STAKING -->
-        <StakingPositions {data} {isLoading} itemsNumber="3" eth={$eth} on:update={handleUpdate} />
+        <StakingPositions {data} {isLoading} itemsNumber="3" eth={$eth} on:update={handleUpdate} scrollToTop={false}/>
         <!-- END YOUR STAKING -->
 
         <!-- PAST REWARDS -->
