@@ -7,8 +7,9 @@
   import ProgressBar from '@okrad/svelte-progressbar';
 
   let stakedPercent = 0;
-  let quorumPercent = 0;
+  let quorumPercent = 100;
   let formattedTotalDough = 0;
+  let plotBars = false;
 
   $: stakingStats = {
       isLoading: true,
@@ -27,9 +28,9 @@
         console.log("fetchStakingStats", stakingStats);
 
         formattedTotalDough = formatBigMoneyAmount(toNum(stakingStats.totalDough), ',', '');
-        //let stakedPercent = ((toNum(stakingStats.totalStakedDough) * 100) / toNum(stakingStats.totalDough)).toFixed(2);
-        stakedPercent = 25;
-        quorumPercent = 100;        
+        stakedPercent = ((toNum(stakingStats.totalStakedDough) * 100) / toNum(stakingStats.totalDough));
+        quorumPercent = 100; 
+        plotBars = true;       
       }).catch(error => {
         console.error(error);
       });  
@@ -58,26 +59,28 @@
           </div>
         </span>
         <span class="hidden md:block">
-        <ProgressBar
-        series={[stakedPercent, 100 - stakedPercent]} 
-        valueLabel={` ${stakedPercent}% of ${formattedTotalDough} Tot circulating DOUGH`}
-        invLabelColor= true
-        width='240'
-        height='30'
-        textSize='70'
-        rx='10'
-        ry='10'
-        thresholds={[
-          {
-            till: stakedPercent,
-            color: '#38fe61'
-          },          
-          {
-            till: 100,
-            color: '#dbffdd'
-          }          
-        ]}
-      />  
+        {#if plotBars}
+          <ProgressBar
+            series={[stakedPercent.toFixed(0), 100 - stakedPercent.toFixed(0)]} 
+            valueLabel={` ${stakedPercent.toFixed(2)}% of ${formattedTotalDough} Tot circulating DOUGH`}
+            invLabelColor= true
+            width='240'
+            height='30'
+            textSize='70'
+            rx='10'
+            ry='10'
+            thresholds={[
+              {
+                till: stakedPercent.toFixed(0),
+                color: '#38fe61'
+              },          
+              {
+                till: 100,
+                color: '#dbffdd'
+              }          
+            ]}
+          />  
+        {/if}
     </span>  
       </div>
     </div>
@@ -104,22 +107,24 @@
           </div>
         </span>
         <span class="hidden md:block">
-        <ProgressBar
-          series={quorumPercent} 
-          valueLabel={`5% Quorum = ${formatFiat((toNum(stakingStats.totalVeDough) * 5) / 100, ',', '.', '')} veDOUGH`}
-          width='250'
-          height='30'
-          textSize='90'
-          invLabelColor= true
-          rx='10'
-          ry='10'
-          thresholds={[
-            {
-              till: 100,
-              color: '#fde502'        
-            }
-          ]}
-        />
+        {#if plotBars}
+          <ProgressBar
+            series={quorumPercent} 
+            valueLabel={`5% Quorum = ${formatFiat((toNum(stakingStats.totalVeDough) * 5) / 100, ',', '.', '')} veDOUGH`}
+            width='250'
+            height='30'
+            textSize='90'
+            invLabelColor= true
+            rx='10'
+            ry='10'
+            thresholds={[
+              {
+                till: 100,
+                color: '#fde502'        
+              }
+            ]}
+          />
+        {/if}
       </span>
       </div>
     </div>
