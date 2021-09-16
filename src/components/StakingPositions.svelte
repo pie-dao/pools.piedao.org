@@ -194,35 +194,33 @@
                     <button
                       disabled={lock.lockId == $justBoosted}
                       on:click={() => {
-                        showModalLock(lock);
-
                         // marking the lock as justBoosted...
                         $justBoosted = lock.lockId;
                         // saving the timestampBoosted for further uses...
                         $timestampBoosted = Math.floor(Number(Date.now()) / 1000);
 
-                        // boostToMax(lock.lockId, eth)
-                        //   .then((updated_data) => {
-                        //     if(scrollToTop) {
-                        //       animateScroll.scrollToTop();
-                        //     }
+                        boostToMax(lock.lockId, eth)
+                          .then((updated_data) => {
+                            if(scrollToTop) {
+                              animateScroll.scrollToTop();
+                            }
 
-                        //     showModalLock(lock);
+                            showModalLock(lock);
 
-                        //     // updating the data object...
-                        //     data = updated_data;
-                        //     data = data;
+                            // updating the data object...
+                            data = updated_data;
+                            data = data;
 
-                        //     setTimeout(() => {
-                        //       $timestampBoosted = null;
-                        //       $justBoosted = null;
-                        //     }, 15000);
-                        //   })
-                        //   .catch((error) => {
-                        //     $justBoosted = null;
-                        //     $timestampBoosted = null;
-                        //     console.error(error);
-                        //   });
+                            setTimeout(() => {
+                              $timestampBoosted = null;
+                              $justBoosted = null;
+                            }, 15000);
+                          })
+                          .catch((error) => {
+                            $justBoosted = null;
+                            $timestampBoosted = null;
+                            console.error(error);
+                          });
                       }}
                       class="flex items-center cardbordergradient -mr-2 pointer"
                     >
