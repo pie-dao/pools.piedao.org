@@ -44,7 +44,7 @@
               <div class="flex nowrap intems-center p-1 font-thin">
                 {new Date(reward.timestamp * 1000).toDateString()}
               </div>
-              <a class="" href="https://rinkeby.etherscan.io/tx/{reward.id}" target="_blank"
+              <a class="" href="https://etherscan.io/tx/{reward.id}" target="_blank"
                 ><img
                   width="20px"
                   height="20px"
