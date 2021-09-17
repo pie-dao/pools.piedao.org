@@ -15,6 +15,7 @@ import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
+import { stakingDataInterval } from '../stores/eth/writables.js';
 import moment from 'moment';
 
 /* eslint-disable import/no-mutable-exports */
@@ -56,20 +57,24 @@ export const canRestake = (lockedAt) => {
 }
 
 export const observable = new Observable((subscriber) => {
-  const interval = setInterval(async () => {
-    let updated_data = await fetchStakingData(ETH);
+  let interval = null;
 
-    // updating the stakingData just when needed...
-    if(JSON.stringify(dataObj) !== JSON.stringify(updated_data)) {
-      dataObj = updated_data;
-      subscriber.next(dataObj);
-    }
-  }, 5000);
+  stakingDataInterval.subscribe(intervalRange => {
+    interval = setInterval(async () => {
+      let updated_data = await fetchStakingData(ETH);
+  
+      // updating the stakingData just when needed...
+      if(JSON.stringify(dataObj) !== JSON.stringify(updated_data)) {
+        dataObj = updated_data;
+        subscriber.next(dataObj);
+      }
+    }, intervalRange);
+  });
 
   // clearing interval, when unsubscribe action happens...
   return () => {
     clearInterval(interval);
-  };
+  };  
 });
 
 export const toNum = (num) => BigNumber(num.toString())
@@ -246,7 +251,7 @@ export async function fetchStakingStats(provider) {
 
     return {
       totalHolders: response.stakersTrackers[0].counter,
-      averageLockDUration: Math.floor(Number(response.globalStats[0].locksDuration) / 60),
+      averageLockDuration: Math.floor(Number(response.globalStats[0].locksDuration) / 60),
       totalStakedDough: response.globalStats[0].totalStaked,
       totalVeDough: response.globalStats[0].veTokenTotalSupply,
       totalDough: totalSupply

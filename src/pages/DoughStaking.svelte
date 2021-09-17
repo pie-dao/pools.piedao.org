@@ -7,6 +7,7 @@
   import smartcontracts from '../config/smartcontracts.json';
   import displayNotification from '../notifications';
   import Calculator from '../classes/farming_simulator/Calculator.js';
+  import { stakingDataIntervalRunning } from '../stores/eth/writables.js';
   import {
     toNum,
     toBN,
@@ -39,11 +40,10 @@
   let stakeDuration = 36;
   let receiver;
   let observer = null;
-  let refreshInterval = null;
-  let refreshValue = 0;
 
   onDestroy(() => {
     if (observer) {
+      $stakingDataIntervalRunning = false;
       observer.unsubscribe();
     }
   });
@@ -65,11 +65,8 @@
         receiver = $eth.address;
 
         if (observer) {
+          $stakingDataIntervalRunning = false;
           observer.unsubscribe();
-        }
-
-        if (refreshInterval) {
-          clearInterval(refreshInterval);
         }
 
         observer = observable.subscribe({
@@ -78,28 +75,12 @@
           },
         });
 
-        refreshInterval = startLoadingInterval();
+        $stakingDataIntervalRunning = true;
       })
       .catch((error) => {
         isLoading = false;
         console.error(error);
       });
-  }
-
-  function startLoadingInterval() {
-    return setInterval(() => {
-      if (refreshValue < 100) {
-        refreshValue += 1;
-      } else {
-        clearInterval(refreshInterval);
-        setTimeout(() => {
-          refreshValue = 0;
-          setTimeout(() => {
-            refreshInterval = startLoadingInterval();
-          }, 1000);
-        }, 1000);
-      }
-    }, 30);
   }
 
   function handleUpdate(event) {
@@ -146,26 +127,6 @@
 
 <div class="font-huge text-center">Dough Staking</div>
 <div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
-
-<!-- TODO: Nico, please fix me :) -->
-<div style="position: absolute; top: 100px; right: 100px;">
-  <ProgressBar
-    style="radial"
-    width="50px"
-    series={[refreshValue]}
-    thickness={5}
-    thresholds={[
-      {
-        till: 50,
-        color: '#800000',
-      },
-      {
-        till: 100,
-        color: '#008000',
-      },
-    ]}
-  />
-</div>
 
 <div class="flex w-100pc pt-0 pb-20px flex flex-col items-center">
   {#key data}

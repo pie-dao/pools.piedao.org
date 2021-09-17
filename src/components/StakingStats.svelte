@@ -5,6 +5,7 @@
   import { toNum, fetchStakingStats } from '../helpers/staking.js';
   import images from '../config/images.json';
   import ProgressBar from '@okrad/svelte-progressbar';
+  import ArrowLoadingButton from "./ArrowLoadingButton.svelte";
 
   let stakedPercent = 0;
   let quorumPercent = 100;
@@ -14,7 +15,7 @@
   $: stakingStats = {
       isLoading: true,
       totalHolders: 0,
-      averageLockDUration: 0,
+      averageLockDuration: 0,
       totalStakedDough: 0,
       totalVeDough: 0,
       totalDough: 0
@@ -35,17 +36,24 @@
         console.error(error);
       });  
   }
+
+  function handleLoadingButtonClick() {
+    console.log("loading button has been clicked");
+  }
 </script>
 
 <div
   class="w-full flex flex-col lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6"
 >
   <div class="w-full flex flex-col w-full rounded-16 p-6" style="background-color: #e1f4f2;">
-    <div class="flex nowrap items-center">
-      <span class=" flex items-center">
+    <div class="flex flex-row nowrap w-full items-center">
+      <span class=" flex w-11/12">
         <img class="h-auto w-24px" src={images.cut_of_meat} alt="dough token" />
         <div class="flex intems-center p-1 font-20px">Key Staking Stats</div>
       </span>
+      <span class=" flex w-1/12">
+        <ArrowLoadingButton on:clicked={handleLoadingButtonClick}/>
+      </span>      
     </div>
     <div class="flex flex-col lg:flex-row wrap mt-4">
     <!-- TOTAL STAKED DOUGH -->
@@ -90,7 +98,7 @@
         <span class=" flex items-center ">
           <img class="h-auto w-24px" src={images.locked_with_key} alt="dough token" />
           <div class="flex intems-center p-1 font-thin whitespace-nowrap">Average Time Lock</div>
-          <div class="font-20px whitespace-nowrap">{stakingStats.averageLockDUration} Months</div>
+          <div class="font-20px whitespace-nowrap">{stakingStats.averageLockDuration} Months</div>
         </span>    
       </div>
     </div>
