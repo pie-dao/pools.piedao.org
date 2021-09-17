@@ -40,6 +40,7 @@
   let stakeDuration = 36;
   let receiver;
   let observer = null;
+  let currentAddress = null;
 
   onDestroy(() => {
     if (observer) {
@@ -49,11 +50,18 @@
   });
 
   $: if ($eth.address) {
-    if (receiver !== $eth.address) {
+    if (currentAddress !== $eth.address) {
+      currentAddress = $eth.address;
+
       if (!isLoading) {
         isLoading = true;
         init();
       }
+    }
+  } else {
+    if(observer) {
+      $stakingDataIntervalRunning = false;
+      observer.unsubscribe();      
     }
   }
 

@@ -183,7 +183,7 @@ const outsideClicks = (event)  => {
             </div>
             {#if $eth.address}
               <div class="flex justify-center py-2">
-                <a on:click={disconnect} href="#" class="block px-4 py-2 mb-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</a>
+                <button on:click={disconnect} class="block px-4 py-2 mb-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Logout</button>
               </div>  
             {/if}          
           </div>
@@ -204,9 +204,9 @@ const outsideClicks = (event)  => {
     </div>
 
     {#if $eth.address}
-    <a class="pl-3 ml-3px text-sm leading-5 font-medium text-gray-700 hidden md:block" href="#" on:click={disconnect} rel="noopener noreferrer">
+    <button class="pl-3 ml-3px text-sm leading-5 font-medium text-gray-700 hidden md:block" on:click={disconnect} rel="noopener noreferrer">
       Logout
-    </a>    
+    </button>    
   {/if}
 
   </div>

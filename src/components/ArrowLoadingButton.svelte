@@ -9,8 +9,7 @@
   let isCounting = false;
 
   $: if ($stakingDataIntervalRunning) {
-    if($stakingDataIntervalRunning == true) {
-      if(!isCounting) {
+    if(!isCounting) {
         isCounting = true;
 
         interval = setInterval(() => {
@@ -21,10 +20,10 @@
           }
         }, 1000);
       }
-    } else {
-      isCounting = false;
-      clearInterval(interval);
-    }
+  } else {
+    isCounting = false;
+    counter = 5;
+    clearInterval(interval);
   }
 </script>
 
