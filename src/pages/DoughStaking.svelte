@@ -142,7 +142,7 @@
 
 <div class="flex w-100pc pt-0 pb-20px flex flex-col items-center">
   {#key data}
-    <StakingStats />
+    <StakingStats showLoader={true} />
   {/key}
   <div
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"

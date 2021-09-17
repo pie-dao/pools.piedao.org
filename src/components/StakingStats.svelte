@@ -7,6 +7,7 @@
   import ProgressBar from '@okrad/svelte-progressbar';
   import ArrowLoadingButton from "./ArrowLoadingButton.svelte";
 
+  export let showLoader = false;
   let stakedPercent = 0;
   let quorumPercent = 100;
   let formattedTotalDough = 0;
@@ -51,9 +52,11 @@
         <img class="h-auto w-24px" src={images.cut_of_meat} alt="dough token" />
         <div class="flex intems-center p-1 font-20px">Key Staking Stats</div>
       </span>
-      <span class=" flex w-1/12">
-        <ArrowLoadingButton on:clicked={handleLoadingButtonClick}/>
-      </span>      
+      {#if showLoader}
+        <span class=" flex w-1/12">
+          <ArrowLoadingButton on:clicked={handleLoadingButtonClick}/>
+        </span>
+      {/if}
     </div>
     <div class="flex flex-col lg:flex-row wrap mt-4">
     <!-- TOTAL STAKED DOUGH -->
