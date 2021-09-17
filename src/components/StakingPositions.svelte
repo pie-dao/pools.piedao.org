@@ -161,7 +161,6 @@
                     {#if didLockExpired(lock)}
                       <div
                         on:click={() => {
-                          console.log('unstakeDOUGH', lock.lockId);
                           unstakeDOUGH(lock.lockId, toNum(lock.amount), eth)
                             .then((updated_data) => {
                               data = updated_data;

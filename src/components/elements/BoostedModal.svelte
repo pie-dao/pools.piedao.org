@@ -71,7 +71,7 @@
       (err, added) => {
         if (added) {
           displayNotification({
-            message: 'The veDOUGH token has been added to your Metamask!',
+            message: 'The SLICE token has been added to your Metamask!',
             type: 'success',
           });
         } else {

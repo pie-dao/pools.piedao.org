@@ -22,6 +22,7 @@
   import StakingPositions from '../components/StakingPositions.svelte';
   import StakingSummary from '../components/StakingSummary.svelte';
   import StakingStats from '../components/StakingStats.svelte';
+  import StakedModal from '../components/elements/StakedModal.svelte';
 
   import ProgressBar from '@okrad/svelte-progressbar';
 
@@ -41,6 +42,7 @@
   let receiver;
   let observer = null;
   let currentAddress = null;
+  let stakedModal;
 
   onDestroy(() => {
     if (observer) {
@@ -132,6 +134,8 @@
     veDOUGH = formatToken(veDOUGH, '.', 2);
   }
 </script>
+
+<StakedModal bind:this={stakedModal}/>
 
 <div class="font-huge text-center">Dough Staking</div>
 <div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
@@ -363,41 +367,43 @@
                 <button
                   disabled={!receiver}
                   on:click={() => {
-                    stakeButtonText = 'Staking';
-                    isStaking = true;
+                    stakedModal.showModal(stakeAmount, stakeDuration, data);
 
-                    let interval = setInterval(() => {
-                      let occurrences = stakeButtonText.split('.').length - 1;
+                    // stakeButtonText = 'Staking';
+                    // isStaking = true;
 
-                      if (occurrences < 3) {
-                        stakeButtonText += '.';
-                      } else {
-                        stakeButtonText = 'Staking';
-                      }
-                    }, 1000);
+                    // let interval = setInterval(() => {
+                    //   let occurrences = stakeButtonText.split('.').length - 1;
 
-                    stakeDOUGH(stakeAmount, stakeDuration, receiver, $eth)
-                      .then((updated_data) => {
-                        data = updated_data;
-                        data = data;
+                    //   if (occurrences < 3) {
+                    //     stakeButtonText += '.';
+                    //   } else {
+                    //     stakeButtonText = 'Staking';
+                    //   }
+                    // }, 1000);
 
-                        clearInterval(interval);
-                        stakeButtonText = 'Success! 🥳';
+                    // stakeDOUGH(stakeAmount, stakeDuration, receiver, $eth)
+                    //   .then((updated_data) => {
+                    //     data = updated_data;
+                    //     data = data;
 
-                        setTimeout(() => {
-                          stakeButtonText = 'Stake DOUGH';
-                          isStaking = false;
-                          stakeAmount = 0;
-                          calculateVeDOUGH();
-                        }, 5000);
-                      })
-                      .catch((error) => {
-                        console.error(error);
+                    //     clearInterval(interval);
+                    //     stakeButtonText = 'Success! 🥳';
 
-                        clearInterval(interval);
-                        stakeButtonText = 'Stake DOUGH';
-                        isStaking = false;
-                      });
+                    //     setTimeout(() => {
+                    //       stakeButtonText = 'Stake DOUGH';
+                    //       isStaking = false;
+                    //       stakeAmount = 0;
+                    //       calculateVeDOUGH();
+                    //     }, 5000);
+                    //   })
+                    //   .catch((error) => {
+                    //     console.error(error);
+
+                    //     clearInterval(interval);
+                    //     stakeButtonText = 'Stake DOUGH';
+                    //     isStaking = false;
+                    //   });
                   }}
                   class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
                   >{stakeButtonText}</button
