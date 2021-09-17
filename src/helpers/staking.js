@@ -8,12 +8,16 @@ import { isAddress } from '@pie-dao/utils';
 import { Observable } from 'rxjs';
 import sharesTimeLockABI from '../abis/sharesTimeLock.json';
 import veDoughABI from '../abis/veDoughABI.json';
+import DoughABI from '../abis/DoughABI.json';
 import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
+import { stakingDataInterval } from '../stores/eth/writables.js';
+import moment from 'moment';
+
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
   totalStaked: BigNumber(0),
@@ -34,6 +38,7 @@ export let veDOUGH = false;
 export const minLockAmount = 1;
 export const AVG_SECONDS_MONTH = 2628000;
 let ETH = null;
+
 /* eslint-enable import/no-mutable-exports */
 
 // in a very next future, this function will fetch directly from backend...
@@ -41,21 +46,36 @@ export const getParticipations = () => {
   return PartecipationJson;
 }
 
-export const observable = new Observable((subscriber) => {
-  const interval = setInterval(async () => {
-    let updated_data = await fetchStakingData(ETH);
+export const canRestake = (lockedAt) => {
+  let start = lockedAt * 1000;
+  let end = moment().endOf('day');
+  
+  if(end.diff(start, 'days') > 30) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
-    // updating the stakingData just when needed...
-    if(JSON.stringify(dataObj) !== JSON.stringify(updated_data)) {
-      dataObj = updated_data;
-      subscriber.next(dataObj);
-    }
-  }, 5000);
+export const observable = new Observable((subscriber) => {
+  let interval = null;
+
+  stakingDataInterval.subscribe(intervalRange => {
+    interval = setInterval(async () => {
+      let updated_data = await fetchStakingData(ETH);
+  
+      // updating the stakingData just when needed...
+      if(JSON.stringify(dataObj) !== JSON.stringify(updated_data)) {
+        dataObj = updated_data;
+        subscriber.next(dataObj);
+      }
+    }, intervalRange);
+  });
 
   // clearing interval, when unsubscribe action happens...
   return () => {
     clearInterval(interval);
-  };
+  };  
 });
 
 export const toNum = (num) => BigNumber(num.toString())
@@ -189,12 +209,12 @@ export function initialize(eth) {
   /* eslint-enable no-async-promise-executor */
 }
 
-export async function fetchStakingStats(eth) {
-  try {
+export async function fetchStakingStats(provider) {
+  try {    
     let dough = new ethers.Contract(
       smartcontracts.dough,
-      veDoughABI,
-      eth.signer || eth.provider,
+      DoughABI,
+      provider,
     );
 
     let totalSupply = await dough.totalSupply();
@@ -229,6 +249,8 @@ export async function fetchStakingStats(eth) {
       }
     );
 
+    console.log("response", response);
+
     return {
       totalHolders: response.stakersTrackers[0].counter,
       averageLockDUration: Math.floor(Number(response.globalStats[0].locksDuration) / AVG_SECONDS_MONTH),
@@ -237,8 +259,8 @@ export async function fetchStakingStats(eth) {
       totalDough: totalSupply
     };
   } catch (error) {
-    console.log("FUCK", error);
-    throw new Error(`fetchStakingDataGraph: ${error.message}`);
+    console.log("FUCK", error, provider);
+    throw new Error(`fetchStakingStats: ${error.message}`);
   }
 }  
 

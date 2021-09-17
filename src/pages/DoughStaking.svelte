@@ -3,10 +3,11 @@
   import { _ } from 'svelte-i18n';
   import images from '../config/images.json';
   import { formatToken } from '../components/helpers.js';
-  import { onDestroy, onMount } from 'svelte';
+  import { onDestroy } from 'svelte';
   import smartcontracts from '../config/smartcontracts.json';
   import displayNotification from '../notifications';
   import Calculator from '../classes/farming_simulator/Calculator.js';
+  import { stakingDataIntervalRunning } from '../stores/eth/writables.js';
   import {
     toNum,
     toBN,
@@ -21,6 +22,7 @@
   import StakingPositions from '../components/StakingPositions.svelte';
   import StakingSummary from '../components/StakingSummary.svelte';
   import StakingStats from '../components/StakingStats.svelte';
+  import StakedModal from '../components/elements/StakedModal.svelte';
 
   import ProgressBar from '@okrad/svelte-progressbar';
 
@@ -39,21 +41,29 @@
   let stakeDuration = 36;
   let receiver;
   let observer = null;
-  let refreshInterval = null;
-  let refreshValue = 0;
+  let currentAddress = null;
+  let stakedModal;
 
   onDestroy(() => {
     if (observer) {
+      $stakingDataIntervalRunning = false;
       observer.unsubscribe();
     }
   });
 
   $: if ($eth.address) {
-    if (receiver !== $eth.address) {
+    if (currentAddress !== $eth.address) {
+      currentAddress = $eth.address;
+
       if (!isLoading) {
         isLoading = true;
         init();
       }
+    }
+  } else {
+    if(observer) {
+      $stakingDataIntervalRunning = false;
+      observer.unsubscribe();      
     }
   }
 
@@ -65,11 +75,8 @@
         receiver = $eth.address;
 
         if (observer) {
+          $stakingDataIntervalRunning = false;
           observer.unsubscribe();
-        }
-
-        if (refreshInterval) {
-          clearInterval(refreshInterval);
         }
 
         observer = observable.subscribe({
@@ -78,28 +85,12 @@
           },
         });
 
-        refreshInterval = startLoadingInterval();
+        $stakingDataIntervalRunning = true;
       })
       .catch((error) => {
         isLoading = false;
         console.error(error);
       });
-  }
-
-  function startLoadingInterval() {
-    return setInterval(() => {
-      if (refreshValue < 100) {
-        refreshValue += 1;
-      } else {
-        clearInterval(refreshInterval);
-        setTimeout(() => {
-          refreshValue = 0;
-          setTimeout(() => {
-            refreshInterval = startLoadingInterval();
-          }, 1000);
-        }, 1000);
-      }
-    }, 30);
   }
 
   function handleUpdate(event) {
@@ -144,32 +135,14 @@
   }
 </script>
 
+<StakedModal bind:this={stakedModal}/>
+
 <div class="font-huge text-center">Dough Staking</div>
-<div class="font-thin text-lg text-center mt-10px mb-10px">Get paid for Governing the DAO</div>
+<div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
 
-<!-- TODO: Nico, please fix me :) -->
-<div style="position: absolute; top: 100px; right: 100px;">
-  <ProgressBar
-    style="radial"
-    width="50px"
-    series={[refreshValue]}
-    thickness={5}
-    thresholds={[
-      {
-        till: 50,
-        color: '#800000',
-      },
-      {
-        till: 100,
-        color: '#008000',
-      },
-    ]}
-  />
-</div>
-
-<div class="flex w-100pc py-20px flex flex-col items-center">
+<div class="flex w-100pc pt-0 pb-20px flex flex-col items-center">
   {#key data}
-    <StakingStats />
+    <StakingStats showLoader={true} />
   {/key}
   <div
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"
@@ -181,7 +154,7 @@
         <!-- END SUMMARY -->
 
         <!-- YOUR STAKING -->
-        <StakingPositions {data} {isLoading} itemsNumber="3" eth={$eth} on:update={handleUpdate} />
+        <StakingPositions {data} {isLoading} itemsNumber="3" eth={$eth} on:update={handleUpdate} scrollToTop={false}/>
         <!-- END YOUR STAKING -->
 
         <!-- PAST REWARDS -->
@@ -231,6 +204,7 @@
                 maxlength="79"
                 spellcheck="false"
                 disabled={isStaking || isApproving}
+                onfocus="this.placeholder=''" 
                 on:change={() => {
                   stakeAmount = formatToken(stakeAmount, '.', 18);
                 }}
@@ -265,7 +239,7 @@
                 title="Token Amount"
                 autocomplete="off"
                 autocorrect="off"
-                type="text"
+                type="number"
                 pattern="^[0-9]?[0-9]*$"
                 placeholder="36"
                 minlength="1"
@@ -332,7 +306,7 @@
             </div>
           </div>
 
-          <div class="md:h-32px flex items-center pt-4">
+          <div class="md:h-32px flex items-center pt-6">
             <div class="md:text-xs leading-3 font-thin mr-2">You will receive:</div>
             <div class="md:text-base mr-2">
               {veDOUGH}
@@ -411,6 +385,8 @@
                         data = updated_data;
                         data = data;
 
+                        stakedModal.showModal(stakeAmount, stakeDuration, data);
+
                         clearInterval(interval);
                         stakeButtonText = 'Success! 🥳';
 
@@ -456,7 +432,7 @@
 
           <button
             on:click={() => addToken()}
-            class="add-dough-metamask mt-4"
+            class="add-dough-metamask mb-4"
             data-aos="fade-up"
             data-aos-delay="300"
           >

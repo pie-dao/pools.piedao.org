@@ -3,6 +3,7 @@
   import images from '../config/images.json';
   import { formatFiat } from '../components/helpers.js';
   import * as animateScroll from 'svelte-scrollto';
+  import BoostedModal from '../components/elements/BoostedModal.svelte';
   import {
     toNum,
     calculateStakingEnds,
@@ -12,7 +13,8 @@
     getLockStatus,
     didLockExpired,
     unstakeDOUGH,
-    AVG_SECONDS_MONTH
+    AVG_SECONDS_MONTH,
+    canRestake
   } from '../helpers/staking.js';
   import { justBoosted, timestampBoosted } from '../stores/eth/writables';
 
@@ -22,8 +24,12 @@
   export let isLoading;
   export let data;
   export let eth;
+  export let scrollToTop;
   export let itemsNumber = data.accountLocks.length;
+  let boostedModal;
 </script>
+
+<BoostedModal bind:this={boostedModal}/>
 
 {#if eth.address}
   <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
@@ -83,8 +89,8 @@
                     <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                   </div>
                 </div>
-                {#if !lock.boosted} <!-- || if lockedAt > 1 months -->
-                  {#if !lock.ejected && !lock.withdrawn}  <!-- && if lockedAt > 1 months -->
+                {#if !lock.boosted || (lock.boosted && canRestake(lock.lockedAt))}
+                  {#if !lock.ejected && !lock.withdrawn}
                     <button
                       disabled={lock.lockId == $justBoosted}
                       on:click={() => {
@@ -95,15 +101,15 @@
 
                         boostToMax(lock.lockId, eth)
                           .then((updated_data) => {
-                            animateScroll.scrollToTop();
+                            if(scrollToTop) {
+                              animateScroll.scrollToTop();
+                            }
+
+                            boostedModal.showModalLock(lock);                            
 
                             // updating the data object...
                             data = updated_data;
                             data = data;
-
-                            dispatch('update', {
-                              data: data,
-                            });
 
                             setTimeout(() => {
                               $timestampBoosted = null;
@@ -156,7 +162,6 @@
                     {#if didLockExpired(lock)}
                       <div
                         on:click={() => {
-                          console.log('unstakeDOUGH', lock.lockId);
                           unstakeDOUGH(lock.lockId, toNum(lock.amount), eth)
                             .then((updated_data) => {
                               data = updated_data;

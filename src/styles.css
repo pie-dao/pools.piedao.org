@@ -30,7 +30,12 @@ button:focus {
   background-origin: border-box;
   background-clip: content-box, border-box;  
 } */
-
+.piedaologoheader {
+  min-width: 182px;
+  min-height: 36px;
+  width: 182px;
+  height: 36px;
+}
 .bg-button {
   display: inline-flex;
   border: solid 2px transparent;
@@ -323,6 +328,10 @@ right: 0px;
 
 .font-24px {
   font-size: 24px;
+}
+
+.font-22px {
+  font-size: 22px;
 }
 
 .border-t-1 {
@@ -744,6 +753,44 @@ right: 0px;
   min-width: 150px!important;
   letter-spacing: 3px;
   min-height: 70px;
+}
+
+.btnloader {
+  background: linear-gradient(-60deg, #cb1a8f, #fc02a7);
+  border-radius: 5px;
+  border-style: none;
+  color: #ffffff;
+  font-family: Rubik, sans-serif;
+  font-weight: 200;
+  min-width: 70px;
+  padding-left: 10px;
+  text-align: center;
+  transition-duration: 0.3s;
+  transition-property: background-color, color;
+}
+
+.arrowloader {
+  margin-top: 10%;
+  margin-left: 2%;
+}
+
+.animatearrowloader {
+  -webkit-animation:spin 4s linear infinite;
+  -moz-animation:spin 4s linear infinite;
+  animation:spin 4s linear infinite;    
+}
+
+@-moz-keyframes spin { 
+  100% { -moz-transform: rotate(360deg); } 
+}
+@-webkit-keyframes spin { 
+  100% { -webkit-transform: rotate(360deg); } 
+}
+@keyframes spin { 
+  100% { 
+      -webkit-transform: rotate(360deg); 
+      transform:rotate(360deg); 
+  } 
 }
 
 .btnbig {

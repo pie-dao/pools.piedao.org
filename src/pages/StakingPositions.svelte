@@ -56,7 +56,7 @@
     <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
       <!-- YOUR STAKING -->
       {#key data}
-        <StakingPositions data={data} isLoading={isLoading} eth={$eth} on:update={handleUpdate}></StakingPositions>
+        <StakingPositions data={data} isLoading={isLoading} eth={$eth} on:update={handleUpdate} scrollToTop={true}></StakingPositions>
       {/key}  
       <!-- END YOUR STAKING -->
     </div>

@@ -5,124 +5,151 @@
   import { toNum, fetchStakingStats } from '../helpers/staking.js';
   import images from '../config/images.json';
   import ProgressBar from '@okrad/svelte-progressbar';
+  import ArrowLoadingButton from "./ArrowLoadingButton.svelte";
 
+  export let showLoader = false;
   let stakedPercent = 0;
-  let quorumPercent = 0;
+  let quorumPercent = 100;
   let formattedTotalDough = 0;
+  let plotBars = false;
 
   $: stakingStats = {
       isLoading: true,
       totalHolders: 0,
-      averageLockDUration: 0,
+      averageLockDuration: 0,
       totalStakedDough: 0,
       totalVeDough: 0,
       totalDough: 0
     }
 
-  $: if($eth.signer && $eth.provider && stakingStats.isLoading) {
+  $: if($eth.provider && stakingStats.isLoading) {
     stakingStats.isLoading = false;
 
-    fetchStakingStats($eth).then(response => {
+    fetchStakingStats($eth.provider).then(response => {
         stakingStats = response;
         console.log("fetchStakingStats", stakingStats);
 
         formattedTotalDough = formatBigMoneyAmount(toNum(stakingStats.totalDough), ',', '');
-        //let stakedPercent = ((toNum(stakingStats.totalStakedDough) * 100) / toNum(stakingStats.totalDough)).toFixed(2);
-        stakedPercent = 25;
-        quorumPercent = 100;        
+        stakedPercent = ((toNum(stakingStats.totalStakedDough) * 100) / toNum(stakingStats.totalDough));
+        quorumPercent = 100; 
+        plotBars = true;       
       }).catch(error => {
         console.error(error);
       });  
+  }
+
+  function handleLoadingButtonClick() {
+    console.log("loading button has been clicked");
   }
 </script>
 
 <div
   class="w-full flex flex-col lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6"
 >
-  <div class="w-full flex flex-col w-full p-1px rounded-16" style="background-color: #e1f4f2;">
-    <div class="flex nowrap items-center p-1">
-      <span class="sc-iybRtq gjVeBU m-4">
+  <div class="w-full flex flex-col w-full rounded-16 p-6" style="background-color: #e1f4f2;">
+    <div class="flex flex-row nowrap w-full items-center">
+      <span class=" flex w-11/12">
         <img class="h-auto w-24px" src={images.cut_of_meat} alt="dough token" />
-        <div class="flex nowrap intems-center p-1 font-24px">Key Staking Stats</div>
+        <div class="flex intems-center p-1 font-20px">Key Staking Stats</div>
       </span>
+      {#if showLoader}
+        <span class=" flex w-1/12">
+          <ArrowLoadingButton on:clicked={handleLoadingButtonClick}/>
+        </span>
+      {/if}
     </div>
+    <div class="flex flex-col lg:flex-row wrap mt-4">
     <!-- TOTAL STAKED DOUGH -->
-    <div class="flex flex-col nowrap w-92pc m-4 swap-from rounded-20px bg-white p-16px">
-      <div class="flex nowrap items-center p-1">
-        <span class="sc-iybRtq gjVeBU mr-4">
+    <div class="flex rounded-20px bg-white p-16px mr-0 lg:mr-4 mb-4 lg:mb-0">
+      <div class="flex items-center p-1">
+        <span class=" flex items-center mr-8">
           <img class="h-auto w-24px" src={images.doughtoken} alt="dough token" />
-          <div class="flex nowrap intems-center p-1 font-thin">Total staked DOUGH</div>
-          <div class="font-24px">
+          <div class="flex intems-center p-1 font-thin whitespace-nowrap">Total staked DOUGH</div>
+          <div class="font-20px whitespace-nowrap">
             {formatFiat(toNum(stakingStats.totalStakedDough), ',', '.', '')} DOUGH
           </div>
         </span>
-        <ProgressBar
-        series={[stakedPercent, 100 - stakedPercent]} 
-        valueLabel={` ${stakedPercent}% of ${formattedTotalDough} Tot circulating DOUGH`}
-        width='350'
-        height='30'
-        textSize='100'
-        rx='10'
-        ry='10'
-        thresholds={[
-          {
-            till: stakedPercent,
-            color: '#38fe61'
-          },          
-          {
-            till: 100,
-            color: '#dbffdd'
-          }          
-        ]}
-      />    
+        <span class="hidden md:block">
+        {#if plotBars}
+          <ProgressBar
+            series={[stakedPercent.toFixed(0), 100 - stakedPercent.toFixed(0)]} 
+            valueLabel={` ${stakedPercent.toFixed(2)}% of ${formattedTotalDough} Tot circulating DOUGH`}
+            invLabelColor= true
+            width='240'
+            height='30'
+            textSize='70'
+            rx='10'
+            ry='10'
+            thresholds={[
+              {
+                till: stakedPercent.toFixed(0),
+                color: '#38fe61'
+              },          
+              {
+                till: 100,
+                color: '#dbffdd'
+              }          
+            ]}
+          />  
+        {/if}
+    </span>  
       </div>
     </div>
     <!-- Average Time Lock -->
-    <div class="flex flex-col nowrap w-92pc m-4 swap-from rounded-20px bg-white p-16px">
-      <div class="flex nowrap items-center p-1">
-        <span class="sc-iybRtq gjVeBU ">
+    <div class="flex flex-col  rounded-20px bg-white p-16px">
+      <div class="flex items-center p-1">
+        <span class=" flex items-center ">
           <img class="h-auto w-24px" src={images.locked_with_key} alt="dough token" />
-          <div class="flex nowrap intems-center p-1 font-thin">Average Time Lock</div>
-          <div class="font-24px">{stakingStats.averageLockDUration} Months</div>
+          <div class="flex intems-center p-1 font-thin whitespace-nowrap">Average Time Lock</div>
+          <div class="font-20px whitespace-nowrap">{stakingStats.averageLockDuration} Months</div>
         </span>    
       </div>
     </div>
+  </div>
+  <div class="flex flex-col lg:flex-row wrap mt-4">
     <!-- TOTAL veDOUGH -->
-    <div class="flex flex-col nowrap w-92pc m-4 swap-from rounded-20px bg-white p-16px">
-      <div class="flex nowrap items-center p-1">
-        <span class="sc-iybRtq gjVeBU mr-4">
+    <div class="flex flex-col  rounded-20px bg-white p-16px mr-0 lg:mr-4 mb-4 lg:mb-0">
+      <div class="flex items-center p-1">
+        <span class=" flex items-center mr-4">
           <img class="h-auto w-24px" src={images.veDough} alt="dough token" />
-          <div class="flex nowrap intems-center p-1 font-thin">Total veDOUGH</div>
-          <div class="font-24px">
+          <div class="flex intems-center p-1 font-thin whitespace-nowrap">Total veDOUGH</div>
+          <div class="font-20px whitespace-nowrap">
             {formatFiat(toNum(stakingStats.totalVeDough), ',', '.', '')} veDOUGH
           </div>
         </span>
-        <ProgressBar
-          series={quorumPercent} 
-          valueLabel={`5% Quorum = ${formatFiat((toNum(stakingStats.totalVeDough) * 5) / 100, ',', '.', '')} veDOUGH`}
-          width='350'
-          height='30'
-          textSize='100'
-          rx='10'
-          ry='10'
-          thresholds={[
-            {
-              till: 100,
-              color: '#fde502'
-            }
-          ]}
-        />
+        <span class="hidden md:block">
+        {#if plotBars}
+          <ProgressBar
+            series={quorumPercent} 
+            valueLabel={`5% Quorum = ${formatFiat((toNum(stakingStats.totalVeDough) * 5) / 100, ',', '.', '')} veDOUGH`}
+            width='250'
+            height='30'
+            textSize='90'
+            invLabelColor= true
+            rx='10'
+            ry='10'
+            thresholds={[
+              {
+                till: 100,
+                color: '#fde502'        
+              }
+            ]}
+          />
+        {/if}
+      </span>
       </div>
     </div>
     <!-- Voting Addresses -->
-    <div class="flex flex-col nowrap w-92pc m-4 swap-from rounded-20px bg-white p-16px">
-      <div class="flex nowrap items-center p-1">
-        <span class="sc-iybRtq gjVeBU">
+    <div class="flex flex-col  rounded-20px bg-white p-16px">
+      <div class="flex items-center p-1">
+        <span class=" flex items-center">
           <img class="h-auto w-24px" src={images.person_raising_hand} alt="dough token" />
-          <div class="flex nowrap intems-center p-1 font-thin">Voting Addresses</div>
-          <div class="font-24px">{stakingStats.totalHolders}</div>
+          <div class="flex intems-center p-1 font-thin whitespace-nowrap">Voting Addresses</div>
+          <div class="font-20px whitespace-nowrap">{stakingStats.totalHolders}</div>
         </span>
       </div>
     </div>
   </div>
+
+</div>
 </div>

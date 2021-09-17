@@ -17,3 +17,5 @@ export const eth = writable({ ...defaultEth, currentBlockNumber: 0 });
 export const pools = writable({ composition: [], nav: 0 });
 export const justBoosted = writable(null);
 export const timestampBoosted = writable(null);
+export const stakingDataIntervalRunning = writable(false);
+export const stakingDataInterval = writable(5000);
