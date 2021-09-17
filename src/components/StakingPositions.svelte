@@ -93,8 +93,6 @@
                     <button
                       disabled={lock.lockId == $justBoosted}
                       on:click={() => {
-                        boostedModal.showModalLock(lock);
-
                         // marking the lock as justBoosted...
                         $justBoosted = lock.lockId;
                         // saving the timestampBoosted for further uses...
@@ -105,6 +103,8 @@
                             if(scrollToTop) {
                               animateScroll.scrollToTop();
                             }
+
+                            boostedModal.showModalLock(lock);                            
 
                             // updating the data object...
                             data = updated_data;
