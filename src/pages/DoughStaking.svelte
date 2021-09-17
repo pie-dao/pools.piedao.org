@@ -367,43 +367,43 @@
                 <button
                   disabled={!receiver}
                   on:click={() => {
-                    stakedModal.showModal(stakeAmount, stakeDuration, data);
+                    stakeButtonText = 'Staking';
+                    isStaking = true;
 
-                    // stakeButtonText = 'Staking';
-                    // isStaking = true;
+                    let interval = setInterval(() => {
+                      let occurrences = stakeButtonText.split('.').length - 1;
 
-                    // let interval = setInterval(() => {
-                    //   let occurrences = stakeButtonText.split('.').length - 1;
+                      if (occurrences < 3) {
+                        stakeButtonText += '.';
+                      } else {
+                        stakeButtonText = 'Staking';
+                      }
+                    }, 1000);
 
-                    //   if (occurrences < 3) {
-                    //     stakeButtonText += '.';
-                    //   } else {
-                    //     stakeButtonText = 'Staking';
-                    //   }
-                    // }, 1000);
+                    stakeDOUGH(stakeAmount, stakeDuration, receiver, $eth)
+                      .then((updated_data) => {
+                        data = updated_data;
+                        data = data;
 
-                    // stakeDOUGH(stakeAmount, stakeDuration, receiver, $eth)
-                    //   .then((updated_data) => {
-                    //     data = updated_data;
-                    //     data = data;
+                        stakedModal.showModal(stakeAmount, stakeDuration, data);
+                        
+                        clearInterval(interval);
+                        stakeButtonText = 'Success! 🥳';
 
-                    //     clearInterval(interval);
-                    //     stakeButtonText = 'Success! 🥳';
+                        setTimeout(() => {
+                          stakeButtonText = 'Stake DOUGH';
+                          isStaking = false;
+                          stakeAmount = 0;
+                          calculateVeDOUGH();
+                        }, 5000);
+                      })
+                      .catch((error) => {
+                        console.error(error);
 
-                    //     setTimeout(() => {
-                    //       stakeButtonText = 'Stake DOUGH';
-                    //       isStaking = false;
-                    //       stakeAmount = 0;
-                    //       calculateVeDOUGH();
-                    //     }, 5000);
-                    //   })
-                    //   .catch((error) => {
-                    //     console.error(error);
-
-                    //     clearInterval(interval);
-                    //     stakeButtonText = 'Stake DOUGH';
-                    //     isStaking = false;
-                    //   });
+                        clearInterval(interval);
+                        stakeButtonText = 'Stake DOUGH';
+                        isStaking = false;
+                      });
                   }}
                   class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
                   >{stakeButtonText}</button
