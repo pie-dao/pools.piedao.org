@@ -4,7 +4,7 @@
   import Modal from './Modal.svelte';
   import { formatFiat } from '../helpers.js';
   import confetti from '../Confetti.js';
-  import { toNum, calculateVeDough } from '../../helpers/staking.js';
+  import { toNum, calculateVeDough, AVG_SECONDS_MONTH } from '../../helpers/staking.js';
 
   let boostedModal;
 
@@ -33,7 +33,7 @@
   export const showModalLock = (lock) => {
     modalLock.newAmount = Number(formatFiat(toNum(lock.amount), ',', '.', ''));
     modalLock.oldAmount = Number(
-      formatFiat(calculateVeDough(lock.amount, lock.lockDuration / 60), ',', '.', ''),
+      formatFiat(calculateVeDough(lock.amount, lock.lockDuration / AVG_SECONDS_MONTH), ',', '.', ''),
     );
     modalLock.animatedAmount = modalLock.oldAmount;
     modalLock.gained = (modalLock.newAmount / modalLock.oldAmount).toFixed(0);
