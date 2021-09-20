@@ -361,7 +361,10 @@ export const fetchStakingData = async (eth) => {
           }
         });
 
-        dataObj.accountAverageDuration = Math.floor((dataObj.accountAverageDuration / locks.length) / AVG_SECONDS_MONTH);
+        dataObj.accountAverageDuration = dataObj.accountAverageDuration 
+          ? Math.floor((dataObj.accountAverageDuration / locks.length) / AVG_SECONDS_MONTH)
+          : 0;
+          
         locks.sort((lockA, lockB) => lockB.lockedAt - lockA.lockedAt);
 
         dataObj[key] = locks;
@@ -370,7 +373,10 @@ export const fetchStakingData = async (eth) => {
   }
 
 
-  let votingPower = ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2);
+  let votingPower = dataObj.accountVeTokenBalance && dataObj.veTokenTotalSupply 
+    ? ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2)
+    : 0;
+
   dataObj.accountVotingPower = Number(votingPower);
 
   dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
