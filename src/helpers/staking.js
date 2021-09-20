@@ -249,17 +249,14 @@ export async function fetchStakingStats(provider) {
       }
     );
 
-    console.log("response", response);
-
     return {
-      totalHolders: response.stakersTrackers[0].counter,
-      averageLockDUration: Math.floor(Number(response.globalStats[0].locksDuration) / AVG_SECONDS_MONTH),
-      totalStakedDough: response.globalStats[0].totalStaked,
-      totalVeDough: response.globalStats[0].veTokenTotalSupply,
+      totalHolders: response.stakersTrackers.length ? response.stakersTrackers[0].counter : 0,
+      averageLockDuration: response.globalStats.length ? Math.floor(Number(response.globalStats[0].locksDuration) / AVG_SECONDS_MONTH) : 0,
+      totalStakedDough: response.globalStats.length ? response.globalStats[0].totalStaked : 0,
+      totalVeDough: response.globalStats.length ? response.globalStats[0].veTokenTotalSupply : 0,
       totalDough: totalSupply
     };
   } catch (error) {
-    console.log("FUCK", error, provider);
     throw new Error(`fetchStakingStats: ${error.message}`);
   }
 }  
@@ -321,12 +318,15 @@ export const fetchStakingData = async (eth) => {
     // using graph...
     response = await fetchStakingDataGraph(eth.address);
 
-    rewards = response.rewards;
-    /* eslint-disable prefer-destructuring */
-    staker = response.stakers[0];
-    /* eslint-enable prefer-destructuring */
+    if(response.stakers.length) {
+      rewards = response.rewards;
+      /* eslint-disable prefer-destructuring */
+      staker = response.stakers[0];
+      /* eslint-enable prefer-destructuring */
+    } else {
+      throw new Error("no data on subgraph yet, let's fallback to onchain datas");
+    }
   } catch (error) {
-    console.error(error);
     // using onchain as fallback...
     staker = await sharesTimeLock.getStakingData(eth.address);
     rewards = dataObj.rewards.length > 0 ? dataObj.rewards : [];
