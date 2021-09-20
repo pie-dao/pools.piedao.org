@@ -1,13 +1,14 @@
 <script>
-  import { eth, connectWeb3 } from '../stores/eth.js';
+  import { eth, connectWeb3, balances, balanceKey } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
   import images from '../config/images.json';
-  import { formatToken } from '../components/helpers.js';
+  import { formatToken, subscribeToBalance } from '../components/helpers.js';
   import { onDestroy } from 'svelte';
   import smartcontracts from '../config/smartcontracts.json';
   import displayNotification from '../notifications';
   import Calculator from '../classes/farming_simulator/Calculator.js';
   import { stakingDataIntervalRunning } from '../stores/eth/writables.js';
+  import BigNumber from 'bignumber.js';
   import {
     toNum,
     toBN,
@@ -24,8 +25,6 @@
   import StakingStats from '../components/StakingStats.svelte';
   import StakedModal from '../components/elements/StakedModal.svelte';
 
-  import ProgressBar from '@okrad/svelte-progressbar';
-
   // creating the Calculator class instance...
   let calculator = new Calculator();
   let veDOUGH = 0;
@@ -36,7 +35,11 @@
   $: isLoading = false;
   $: approveButtonText = 'Approve';
   $: isApproving = false;
-
+  $: keyDoughBalance = false;
+  $: getDoughBalance = (() => {
+    if(!keyDoughBalance) return BigNumber(0);
+    return $balances[keyDoughBalance] ? BigNumber($balances[keyDoughBalance].toString()).times(1e18) : BigNumber(0);
+  })();
   let stakeAmount;
   let stakeDuration = 36;
   let receiver;
@@ -52,6 +55,10 @@
   });
 
   $: if ($eth.address) {
+    subscribeToBalance(smartcontracts.dough, $eth.address);
+    keyDoughBalance = balanceKey(smartcontracts.dough, $eth.address);
+
+    // if address is first setup, or is changed...
     if (currentAddress !== $eth.address) {
       currentAddress = $eth.address;
 
@@ -174,18 +181,18 @@
           <div
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px"
             class:input-invalid={stakeAmount &&
-              toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
+              toBN(stakeAmount).isGreaterThan(getDoughBalance)}
           >
             <div class="flex items-center justify-between">
               <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
               <div class="font-thin" style="display: inline; cursor: pointer;">
                 <div
                   on:click={() => {
-                    stakeAmount = toNum(data.accountDepositTokenBalance);
+                    stakeAmount = toNum(getDoughBalance);
                     calculateVeDOUGH();
                   }}
                 >
-                  Balance: {toNum(data.accountDepositTokenBalance)} DOUGH
+                  Balance: {toNum(getDoughBalance)} DOUGH
                 </div>
               </div>
             </div>
@@ -316,12 +323,12 @@
           </div>
 
           {#if $eth.address}
-            {#if data.accountDepositTokenBalance.eq(0)}
+            {#if getDoughBalance.eq(0)}
               <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4"
                 >You don't own tokens
               </button>
             {:else if stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0}
-              {#if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenBalance)}
+              {#if toBN(stakeAmount).isGreaterThan(getDoughBalance)}
                 <button
                   disabled
                   class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
@@ -386,7 +393,6 @@
                         data = data;
 
                         stakedModal.showModal(stakeAmount, stakeDuration, data);
-
                         clearInterval(interval);
                         stakeButtonText = 'Success! 🥳';
 

@@ -2,10 +2,9 @@
   import images from '../../config/images.json';
   import smartcontracts from '../../config/smartcontracts.json';
   import Modal from './Modal.svelte';
-  import { formatFiat } from '../helpers.js';
   import confetti from '../Confetti.js';
   import { parseEther } from '@ethersproject/units';
-  import { toNum, calculateVeDough } from '../../helpers/staking.js';
+  import { calculateVeDough } from '../../helpers/staking.js';
 
   let boostedModal;
 
@@ -13,7 +12,7 @@
     amount: 0,
     animatedAmount: 0,
     move: 'first_move',
-    text: 'suca'
+    text: 'maxDuration_hasDough'
   };
 
   let messages = {
@@ -58,7 +57,6 @@
     }    
 
     if(stakeDuration < 36 && !data.accountDepositTokenBalance.eq(0)) {
-      console.log("HERE");
       modalStake.text = "smallDuration_noDough";
     }  
 

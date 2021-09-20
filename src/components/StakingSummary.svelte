@@ -3,6 +3,7 @@
   import { formatFiat } from '../components/helpers.js';
   import { toNum, claim , getParticipations} from '../helpers/staking.js';
   import images from '../config/images.json';
+  import smartcontracts from '../config/smartcontracts.json';
   import Modal from '../components/elements/Modal.svelte';
 
   import { createEventDispatcher } from 'svelte';
@@ -19,6 +20,37 @@
     let founded = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
     staker = founded ? founded : staker;
   }
+
+  const addToken = () => {
+    ethereum.sendAsync(
+      {
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: smartcontracts.reward,
+            symbol: 'SLICE',
+            decimals: 18,
+            image: images.rewardsPie,
+          },
+        },
+        id: Math.round(Math.random() * 100000),
+      },
+      (err, added) => {
+        if (added) {
+          displayNotification({
+            message: 'The SLICE token has been added to your Metamask!',
+            type: 'success',
+          });
+        } else {
+          displayNotification({
+            message: 'Sorry, something went wrong. Please try again later.',
+            type: 'error',
+          });
+        }
+      },
+    );
+  };   
 </script>
 
 <Modal title="You can't claim yet" backgroundColor="#f3f3f3" bind:this={modalinfo}>
@@ -130,7 +162,7 @@
         </div>
       </div>
     </div>
-    <div class="w-1/2 flex flex-col flex-shrink ml-2 mt-4 mb-6 rounded-20px bg-white p-16px"
+    <div class="w-1/2 flex flex-col flex-shrink ml-2 mt-4 mb-4 rounded-20px bg-white p-16px"
     >
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Your Voting Power</div>
@@ -145,5 +177,11 @@
         </div>
       </div>
     </div>    
-  </div>  
+  </div> 
+  <button
+    on:click={() => addToken()}
+    class="text-center pointer mx-auto object-bottom mb-4 font-thin"
+  >
+  🦊 Add SLICE to MetaMask
+</button> 
 </div>
