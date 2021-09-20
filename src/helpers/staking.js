@@ -343,10 +343,10 @@ export const fetchStakingData = async (eth) => {
 
         staker[key].forEach((lock, index) => {
           if (lock.amount.toString() !== '0') {
-            dataObj.accountTokenBalance = dataObj.accountTokenBalance.plus(new BigNumber(lock.amount.toString()));
-            // calculating accountAverageDuration, escluding those boosted/duplicated locks...
+            // calculating accountAverageDuration / accountTokenBalance, escluding those boosted/duplicated locks...
             // (this is because onchain we remove the old lock, and we create a new 36-months-duration one)
             if(lock.boostedPointer  == '') {
+              dataObj.accountTokenBalance = dataObj.accountTokenBalance.plus(new BigNumber(lock.amount.toString()));
               dataObj.accountAverageDuration += Number(lock.lockDuration);
             }
 
