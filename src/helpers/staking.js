@@ -36,6 +36,7 @@ export let dataObj = {
 export let sharesTimeLock = false;
 export let veDOUGH = false;
 export const minLockAmount = 1;
+export const AVG_SECONDS_MONTH = 60;
 let ETH = null;
 
 /* eslint-enable import/no-mutable-exports */
@@ -90,8 +91,7 @@ export function calculateStakingStarts(lock) {
 
 export function calculateStakingEnds(lock) {
   const endDate = new Date(lock.lockedAt * 1000);
-  const lockDuration = lock.lockDuration / 60;
-
+  const lockDuration = lock.lockDuration / AVG_SECONDS_MONTH;
   endDate.setMonth(endDate.getMonth() + lockDuration);
   //endDate.setMinutes(endDate.getMinutes() + lockDuration);
   return endDate;
@@ -250,10 +250,10 @@ export async function fetchStakingStats(provider) {
     );
 
     return {
-      totalHolders: response.stakersTrackers[0].counter,
-      averageLockDuration: Math.floor(Number(response.globalStats[0].locksDuration) / 60),
-      totalStakedDough: response.globalStats[0].totalStaked,
-      totalVeDough: response.globalStats[0].veTokenTotalSupply,
+      totalHolders: response.stakersTrackers.length ? response.stakersTrackers[0].counter : 0,
+      averageLockDuration: response.globalStats.length ? Math.floor(Number(response.globalStats[0].locksDuration) / AVG_SECONDS_MONTH) : 0,
+      totalStakedDough: response.globalStats.length ? response.globalStats[0].totalStaked : 0,
+      totalVeDough: response.globalStats.length ? response.globalStats[0].veTokenTotalSupply : 0,
       totalDough: totalSupply
     };
   } catch (error) {
@@ -318,12 +318,15 @@ export const fetchStakingData = async (eth) => {
     // using graph...
     response = await fetchStakingDataGraph(eth.address);
 
-    rewards = response.rewards;
-    /* eslint-disable prefer-destructuring */
-    staker = response.stakers[0];
-    /* eslint-enable prefer-destructuring */
+    if(response.stakers.length) {
+      rewards = response.rewards;
+      /* eslint-disable prefer-destructuring */
+      staker = response.stakers[0];
+      /* eslint-enable prefer-destructuring */
+    } else {
+      throw new Error("no data on subgraph yet, let's fallback to onchain datas");
+    }
   } catch (error) {
-    console.error(error);
     // using onchain as fallback...
     staker = await sharesTimeLock.getStakingData(eth.address);
     rewards = dataObj.rewards.length > 0 ? dataObj.rewards : [];
@@ -358,7 +361,7 @@ export const fetchStakingData = async (eth) => {
           }
         });
 
-        dataObj.accountAverageDuration = Math.floor((dataObj.accountAverageDuration / locks.length) / 60);
+        dataObj.accountAverageDuration = Math.floor((dataObj.accountAverageDuration / locks.length) / AVG_SECONDS_MONTH);
         locks.sort((lockA, lockB) => lockB.lockedAt - lockA.lockedAt);
 
         dataObj[key] = locks;
