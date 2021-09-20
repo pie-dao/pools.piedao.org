@@ -13,8 +13,8 @@
     getLockStatus,
     didLockExpired,
     unstakeDOUGH,
-    canRestake,
-    AVG_SECONDS_MONTH
+    AVG_SECONDS_MONTH,
+    canRestake
   } from '../helpers/staking.js';
   import { justBoosted, timestampBoosted } from '../stores/eth/writables';
 
