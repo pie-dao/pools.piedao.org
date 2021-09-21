@@ -38,7 +38,9 @@
   $: keyDoughBalance = false;
   $: getDoughBalance = (() => {
     if(!keyDoughBalance) return BigNumber(0);
-    return $balances[keyDoughBalance] ? BigNumber($balances[keyDoughBalance].toString()).times(1e18) : BigNumber(0);
+    // saving the real-time value of dough amount into data object, so we can use it in other components/modals...
+    data.accountDepositTokenBalance = $balances[keyDoughBalance] ? BigNumber($balances[keyDoughBalance].toString()).times(1e18) : BigNumber(0);
+    return data.accountDepositTokenBalance;
   })();
   let stakeAmount;
   let stakeDuration = 36;
@@ -88,7 +90,10 @@
 
         observer = observable.subscribe({
           next(updated_data) {
+            // saving updated data coming from subgraph...
             data = updated_data;
+            // and updating the accountDepositTokenBalance value in real time...
+            getDoughBalance;
           },
         });
 
