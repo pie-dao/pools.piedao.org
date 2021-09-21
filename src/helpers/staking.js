@@ -274,8 +274,6 @@ export async function fetchStakingDataGraph(address) {
           accountVeTokenBalance: true,
           accountWithdrawableRewards: true,
           accountWithdrawnRewards: true,
-          accountDepositTokenBalance: true,
-          accountDepositTokenAllowance: true,
           accountLocks: {
             id: true,
             lockId: true,
