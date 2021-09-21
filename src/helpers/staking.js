@@ -271,8 +271,6 @@ export async function fetchStakingDataGraph(address) {
             where: { id: address.toLowerCase() },
           },
           id: true,
-          totalStaked: true,
-          veTokenTotalSupply: true,
           accountVeTokenBalance: true,
           accountWithdrawableRewards: true,
           accountWithdrawnRewards: true,
@@ -299,6 +297,13 @@ export async function fetchStakingDataGraph(address) {
           amount: true,
           type: true,
         },
+        globalStats: {
+          __args: {
+            where: { id: "unique_stats_id" },
+          },           
+          totalStaked: true,
+          veTokenTotalSupply: true,
+        }         
       },
     );
 
@@ -332,6 +337,9 @@ export const fetchStakingData = async (eth) => {
     rewards = dataObj.rewards.length > 0 ? dataObj.rewards : [];
   }
 
+  dataObj.totalStaked = response.globalStats[0].totalStaked;
+  dataObj.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
+
   if (staker !== undefined) {
     Object.keys(staker).forEach((key) => {
       if (key !== 'accountLocks') {
@@ -340,12 +348,14 @@ export const fetchStakingData = async (eth) => {
         const locks = [];
         dataObj.accountAverageDuration = 0;
         dataObj.accountTokenBalance = new BigNumber('0');
+        let locksCounter = 0;
 
         staker[key].forEach((lock, index) => {
           if (lock.amount.toString() !== '0') {
             // calculating accountAverageDuration / accountTokenBalance, escluding those boosted/duplicated locks...
             // (this is because onchain we remove the old lock, and we create a new 36-months-duration one)
             if(lock.boostedPointer  == '') {
+              locksCounter++;
               dataObj.accountTokenBalance = dataObj.accountTokenBalance.plus(new BigNumber(lock.amount.toString()));
               dataObj.accountAverageDuration += Number(lock.lockDuration);
             }
@@ -366,7 +376,7 @@ export const fetchStakingData = async (eth) => {
         });
 
         dataObj.accountAverageDuration = dataObj.accountAverageDuration 
-          ? Math.floor((dataObj.accountAverageDuration / locks.length) / AVG_SECONDS_MONTH)
+          ? Math.floor((dataObj.accountAverageDuration / locksCounter) / AVG_SECONDS_MONTH)
           : 0;
 
         locks.sort((lockA, lockB) => lockB.lockedAt - lockA.lockedAt);
@@ -375,7 +385,6 @@ export const fetchStakingData = async (eth) => {
       }
     });
   }
-
 
   let votingPower = dataObj.accountVeTokenBalance && dataObj.veTokenTotalSupply 
     ? ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2)
