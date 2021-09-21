@@ -757,22 +757,16 @@ right: 0px;
 
 .btnloader {
   background: linear-gradient(-60deg, #cb1a8f, #fc02a7);
-  border-radius: 5px;
+  border-radius: 10px;
   border-style: none;
   color: #ffffff;
   font-family: Rubik, sans-serif;
   font-weight: 200;
-  min-width: 70px;
-  padding-left: 10px;
   text-align: center;
   transition-duration: 0.3s;
   transition-property: background-color, color;
 }
 
-.arrowloader {
-  margin-top: 10%;
-  margin-left: 2%;
-}
 
 .animatearrowloader {
   -webkit-animation:spin 4s linear infinite;

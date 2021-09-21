@@ -31,9 +31,9 @@
 on:click={() => {
   dispatch('clicked', {});
 }}
-class="pointer btnloader rounded-20px w-50px">
-  <span class="flex">
-    <div class="flex intems-center p-1 font-20px">{counter}s</div>
-    <img class={isCounting ? "h-20px w-20px arrowloader animatearrowloader" : "h-20px w-20px arrowloader"} src={images.reload_arrow} alt="reload arrow" />            
+class="pointer btnloader p-8px w-68px">
+  <span class="flex items-center">
+    <div class="w-1/2 font-20px">{counter}s</div>
+    <div class="w-1/2 flex items-center ml-1"><img class={isCounting ? "arrowloader animatearrowloader" : "arrowloader"} src={images.reload_arrow} alt="reload arrow" width="20px" height="20px" /></div>            
   </span>
 </button>
