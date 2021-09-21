@@ -16,7 +16,7 @@
   $: stakingStats = {
       isLoading: true,
       totalHolders: 0,
-      averageLockDuration: 0,
+      averageTimeLock: 0,
       totalStakedDough: 0,
       totalVeDough: 0,
       totalDough: 0
@@ -101,7 +101,7 @@
         <span class=" flex items-center ">
           <img class="h-auto w-24px" src={images.locked_with_key} alt="dough token" />
           <div class="flex intems-center p-1 font-thin whitespace-nowrap">Average Time Lock</div>
-          <div class="font-20px whitespace-nowrap">{stakingStats.averageLockDuration} Months</div>
+          <div class="font-20px whitespace-nowrap">{stakingStats.averageTimeLock} Months</div>
         </span>    
       </div>
     </div>
