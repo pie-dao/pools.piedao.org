@@ -2,7 +2,6 @@
   import BigNumber from "bignumber.js";
   import images from "../config/images.json";
   import { farming } from '../stores/eth/writables.js';
-  import TotDoughStaked from '../components/TotDoughStaked.svelte';
   import StakingStats from '../components/StakingStats.svelte';
   import Accordion from '../components/elements/Accordion.svelte'
   import AccordionGroup from '../components/elements/AccordionGroup.svelte'
@@ -134,7 +133,6 @@
 
 <div class="flex flex-col items-center text-center mt-4">
   <div class="w-full flex flex-col items-center px-8 max-w-1200px">
-    <TotDoughStaked />
   </div>
 </div>
 

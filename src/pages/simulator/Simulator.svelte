@@ -6,7 +6,6 @@
   import displayNotification from '../../notifications';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { formatFiat } from '../../components/helpers.js';
-  import TotDoughStaked from '../../components/TotDoughStaked.svelte';
   import { currentRoute } from "../../stores/routes.js";
   import InfoModal from '../../components/modals/infoModal.svelte';
   import StakingStats from '../../components/StakingStats.svelte';
@@ -336,12 +335,6 @@
       </div>
     </div>
 
-    <div class="flex flex-col items-center text-center mt-4">
-      <div class="w-full flex flex-col items-center px-4 max-w-1200px">
-        <TotDoughStaked />
-      </div>
-    </div>
-
     <div class="flex flex-col items-center text-center mt-6 md:mt-20">
     <div class="w-full max-w-1200px">
       <div class="bg-melanzanafritta min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
@@ -404,13 +397,14 @@
 </div>
 </div>
 
+<div class="flex flex-col items-center text-center mt-4 md:mt-20">
+  <div class="w-full max-w-1240px"><StakingStats /></div>
+</div>
+
 <div class="flex flex-col items-center text-center mt-4 md:mt-10">
 <div class="w-full max-w-1200px">
   <div class="font-huge">Rewards Simulator</div>
   <div class="text-base font-thin mx-4 md:mx-20pc mb-8">Tweak the parameters. We built these tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
-    <div class="flex flex-col md:flex-row mb-2">
-      <StakingStats />
-    </div>    
     <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
     <div class="flex flex-col md:flex-row gap-2 mb-2">
       <div class="w-92pc mx-4 md:w-1/3 md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
