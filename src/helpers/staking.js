@@ -20,7 +20,7 @@ import moment from 'moment';
 
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
-  totalStaked: BigNumber(0),
+  totalDoughStaked: BigNumber(0),
   veTokenTotalSupply: BigNumber(0),
   accountAverageDuration: 0,
   accountVotingPower: 0,
@@ -231,7 +231,9 @@ export async function fetchStakingStats(provider) {
         },
         globalStats: {
           __args: {
-            where: { id: "unique_stats_id" },
+            first: 1,
+            orderBy: "id", 
+            orderDirection: "desc"
           },           
           id: true,
           depositedLocksCounter: true,
@@ -242,17 +244,19 @@ export async function fetchStakingStats(provider) {
           ejectedLocksValue: true,
           boostedLocksCounter: true,
           boostedLocksValue: true,
-          locksDuration: true,
-          totalStaked: true,
+          averageTimeLock: true,
+          totalDoughStaked: true,
           veTokenTotalSupply: true,
         }       
       }
     );
 
+    console.log("inside fetchStakingStats", response);
+
     return {
       totalHolders: response.stakersTrackers.length ? response.stakersTrackers[0].counter : 0,
-      averageLockDuration: response.globalStats.length ? Math.floor(Number(response.globalStats[0].locksDuration) / AVG_SECONDS_MONTH) : 0,
-      totalStakedDough: response.globalStats.length ? response.globalStats[0].totalStaked : 0,
+      averageTimeLock: response.globalStats.length ? Math.floor(Number(response.globalStats[0].averageTimeLock) / AVG_SECONDS_MONTH) : 0,
+      totalStakedDough: response.globalStats.length ? response.globalStats[0].totalDoughStaked : 0,
       totalVeDough: response.globalStats.length ? response.globalStats[0].veTokenTotalSupply : 0,
       totalDough: totalSupply
     };
@@ -297,9 +301,11 @@ export async function fetchStakingDataGraph(address) {
         },
         globalStats: {
           __args: {
-            where: { id: "unique_stats_id" },
+            first: 1,
+            orderBy: "id", 
+            orderDirection: "desc"
           },           
-          totalStaked: true,
+          totalDoughStaked: true,
           veTokenTotalSupply: true,
         }         
       },
@@ -335,7 +341,7 @@ export const fetchStakingData = async (eth) => {
     rewards = dataObj.rewards.length > 0 ? dataObj.rewards : [];
   }
 
-  dataObj.totalStaked = response.globalStats[0].totalStaked;
+  dataObj.totalDoughStaked = response.globalStats[0].totalDoughStaked;
   dataObj.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
 
   if (staker !== undefined) {
