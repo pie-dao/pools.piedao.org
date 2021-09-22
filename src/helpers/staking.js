@@ -209,8 +209,8 @@ export function initialize(eth) {
   /* eslint-enable no-async-promise-executor */
 }
 
-export async function fetchStakingStats(provider) {
-  try {    
+export async function calculateDoughTotalSupply(provider) {
+  try {
     let dough = new ethers.Contract(
       smartcontracts.dough,
       DoughABI,
@@ -218,6 +218,20 @@ export async function fetchStakingStats(provider) {
     );
 
     let totalSupply = await dough.totalSupply();
+
+    let treasury = await dough.balanceOf(smartcontracts.treasury);
+    let multisig = await dough.balanceOf(smartcontracts.multisig);
+    let eDough = await dough.balanceOf(smartcontracts.eDOUGH);
+    
+    return totalSupply - treasury - multisig - eDough;    
+  } catch(error) {
+    return error;
+  }
+}
+
+export async function fetchStakingStats(provider) {
+  try {    
+    let totalSupply = await calculateDoughTotalSupply(provider);
 
     const response = await subgraphRequest(
       'https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop',
