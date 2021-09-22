@@ -52,7 +52,12 @@
     "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/YPIE.svg",
     "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/PLAY.svg",
     "0x69bbe2fa02b4d90a944ff328663667dc32786385": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x69BbE2FA02b4D90A944fF328663667DC32786385/logo.png", 
-    "0x0fe629d1e84e171f8ff0c1ded2cc2221caa48a3f": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x0fe629d1E84E171f8fF0C1Ded2Cc2221Caa48a3f/logo.png"
+    "0x0fe629d1e84e171f8ff0c1ded2cc2221caa48a3f": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x0fe629d1E84E171f8fF0C1Ded2Cc2221Caa48a3f/logo.png",
+    "0x767fe9edc9e0df98e07454847909b5e959d7ca0e": "https://assets.coingecko.com/coins/images/14468/small/ILV.JPG?1617182121",
+    "0x18aaa7115705e8be94bffebde57af9bfc265b998": "https://assets.coingecko.com/coins/images/12913/small/AudiusCoinLogo_2x.png?1603425727",
+    "0x15d4c048f83bd7e37d49ea4c83a07267ec4203da": "https://assets.coingecko.com/coins/images/12493/small/GALA-COINGECKO.png?1600233435",
+    "0xbbc2ae13b23d715c30720f079fcd9b4a74093505": "https://assets.coingecko.com/coins/images/14238/small/ethernity_logo.png?1615189750"
+
   },
   "amazingrewards":"https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards2.png",
   "votenow":"https://raw.githubusercontent.com/pie-dao/brand/master/misc/votenow.png",

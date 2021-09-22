@@ -177,7 +177,6 @@
           percentage: el.percentage
         })
       } else {
-
         let tokenInfo = find(poolsConfig[token].composition, (o) => Pie.map[address].underlying.address === o.address.toLowerCase());
         console.log('tokenInfo', tokenInfo)
         let lendingInfo = await getLendingInfo(Pie.map, address, compoundData, aaveData);
