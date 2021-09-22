@@ -6,7 +6,7 @@
   import { parseEther } from '@ethersproject/units';
   import { calculateVeDough } from '../../helpers/staking.js';
 
-  let boostedModal;
+  let stakedModal;
 
   let modalStake = {
     amount: 0,
@@ -69,7 +69,7 @@
     modalStake.animatedAmount = 0;
 
     confetti(button, config);
-    boostedModal.open();
+    stakedModal.open();
 
     setTimeout(() => {
       let interval = setInterval(() => {
@@ -117,7 +117,7 @@
 
 <div id="confetti" class="hidden md:block" />
 
-<Modal title={messages[modalStake.move].title} backgroundColor="white" bind:this={boostedModal}>
+<Modal title={messages[modalStake.move].title} backgroundColor="white" bind:this={stakedModal}>
   <div slot="content" class="font-thin text-center">
     <p class="pb-2 font-24px">You just staked</p>
 
@@ -141,7 +141,9 @@
     <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
     <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
       {#if modalStake.text == 'maxDuration_hasDough'}
-        <button>Stake more DOUGH</button>
+        <button
+        on:click={() => stakedModal.close()}
+        >Stake more DOUGH</button>
       {:else}
         {#if modalStake.text == 'maxDuration_noDough'}
           <button>Claim SLICE</button>
