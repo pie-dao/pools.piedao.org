@@ -265,8 +265,6 @@ export async function fetchStakingStats(provider) {
       }
     );
 
-    console.log("inside fetchStakingStats", response);
-
     return {
       totalHolders: response.stakersTrackers.length ? response.stakersTrackers[0].counter : 0,
       averageTimeLock: response.globalStats.length ? Math.floor(Number(response.globalStats[0].averageTimeLock) / AVG_SECONDS_MONTH) : 0,
