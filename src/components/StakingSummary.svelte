@@ -67,7 +67,7 @@
     <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
       <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
     </div>    
-    <p class="pt-2">2. At the end of the months rewards will<br />be recalculated  and you will able to claim those</p>
+    <p class="pt-2">2. Claim your rewards!<br />Rewards are calculated and available<br />for claiming at the start of every calendar month.</p>
     <div class="text-center mx-auto">
       <img
       class="w-100px h-100px mx-auto p-4 token-icon "
