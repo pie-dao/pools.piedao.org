@@ -99,12 +99,12 @@ export function calculateStakingEnds(lock) {
 
 export function getLockStatus(lock) {
   if (lock.withdrawn) {
-    return 'withdrawn';
+    return 'Withdrawn';
   }
   if (lock.ejected) {
-    return 'ejected';
+    return 'Ejected';
   }
-  return 'running';
+  return 'Running';
 }
 
 export function safeFlow(stakeAmount, stakeDuration, receiver, eth) {
