@@ -118,7 +118,7 @@
 <div id="confetti" class="hidden md:block" />
 
 <Modal title={messages[modalStake.move].title} backgroundColor="white" bind:this={stakedModal}>
-  <div slot="content" class="font-thin text-center">
+  <div slot="content" class="font-thin text-center hidescrollbar">
     <p class="pb-2 font-24px">You just staked</p>
 
     <div class="flex mt-4 mb-6 mx-12 rounded-20px bg-lightgrey p-16px">

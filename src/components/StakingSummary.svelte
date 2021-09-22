@@ -54,7 +54,7 @@
 </script>
 
 <Modal title="You can't claim yet" backgroundColor="#f3f3f3" bind:this={modalinfo}>
-  <div slot="content" class="font-thin text-center">
+  <div slot="content" class="font-thin text-center hidescrollbar">
     <p class="pb-2">Here's what you have to do:</p>
     <div class="text-center mx-auto">
       <img
