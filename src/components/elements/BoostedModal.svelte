@@ -88,7 +88,7 @@
 <div id="confetti" class="hidden md:block" />
 
 <Modal title={`You gained ${modalLock.gained}X`} backgroundColor="white" bind:this={boostedModal}>
-  <div slot="content" class="font-thin text-center">
+  <div slot="content" class="font-thin text-center hidescrollbar">
     <p class="pb-2 font-24px">more rewards and voting power!</p>
 
     <div class="flex mt-4 mb-6 mx-12 rounded-20px bg-lightgrey p-16px">
