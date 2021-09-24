@@ -267,7 +267,8 @@
                   calculateVeDOUGH();
                 }}
               />
-              <div
+              <button
+                disabled={isStaking || isApproving}
                 on:click={() => {
                   stakeDuration = 36;
 
@@ -283,7 +284,7 @@
                     alt="ETH"
                   />
                 </div>
-              </div>
+              </button>
             </div>
           </div>
 
@@ -341,6 +342,7 @@
                 >
               {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
                 <button
+                  disabled={isStaking || isApproving}
                   on:click={() => {
                     approveButtonText = 'Approving';
                     isApproving = true;
@@ -377,7 +379,7 @@
                 >
               {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
                 <button
-                  disabled={!receiver}
+                  disabled={!receiver || isStaking || isApproving}
                   on:click={() => {
                     stakeButtonText = 'Staking';
                     isStaking = true;
