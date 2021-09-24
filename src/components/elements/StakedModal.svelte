@@ -6,6 +6,9 @@
   import { parseEther } from '@ethersproject/units';
   import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
 
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
+
   let stakedModal;
   let restakeText = "Restake 3 years";
   let isRestaking = false;
@@ -76,16 +79,7 @@
     modalStake.animatedAmount = 0;    
   }
 
-  export const showModal = (stakeAmount, stakeDuration, data, eth) => {
-    _eth = eth;
-    _stakeAmount = stakeAmount;
-    _stakeDuration = stakeDuration;
-    _data = data;
-
-    refillData();
-    confetti(button, config);
-    stakedModal.open();
-
+  function animateStakeAmount() {
     setTimeout(() => {
       let interval = setInterval(() => {
         if (modalStake.animatedAmount < modalStake.amount) {
@@ -95,7 +89,19 @@
           clearInterval(interval);
         }
       }, 10);
-    }, 500);
+    }, 500);    
+  }
+
+  export const showModal = (stakeAmount, stakeDuration, data, eth) => {
+    _eth = eth;
+    _stakeAmount = stakeAmount;
+    _stakeDuration = stakeDuration;
+    _data = data;
+
+    refillData();
+    confetti(button, config);
+    stakedModal.open();
+    animateStakeAmount();
   };
 
   const addToken = () => {
@@ -139,8 +145,14 @@
       _data = updated_data;
       restakeText = "Restake 3 years";
       isRestaking = false;
-      confetti(button, config);
+
+      dispatch('update', {
+        data: _data,
+      });
+    
       refillData();
+      confetti(button, config);
+      animateStakeAmount();
     }).catch(error => {
       restakeText = "Restake 3 years";
       isRestaking = false;

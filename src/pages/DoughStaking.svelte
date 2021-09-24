@@ -147,7 +147,7 @@
   }
 </script>
 
-<StakedModal bind:this={stakedModal}/>
+<StakedModal bind:this={stakedModal} on:update={handleUpdate}/>
 
 <div class="font-huge text-center">Dough Staking</div>
 <div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
