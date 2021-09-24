@@ -29,6 +29,10 @@
           data = updated_data;
           isLoading = false;
 
+          if(observer) {
+            observer.unsubscribe();      
+          }          
+
           observer = observable.subscribe({
             next(updated_data) {
               data = updated_data;
@@ -38,6 +42,10 @@
           console.error(error);
         });        
       }
+    }
+  } else {
+    if(observer) {
+      observer.unsubscribe();      
     }
   }
 </script>

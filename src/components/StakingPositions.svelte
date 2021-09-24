@@ -44,9 +44,9 @@
           <div
             class={lock.ejected
               ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-1px opacity-60'
-              : $justBoosted == lock.lockId
+              : $justBoosted[lock.lockId]
               ? 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-1px opacity-40'
-              : $timestampBoosted && $timestampBoosted < lock.lockedAt
+              : $timestampBoosted[lock.lockId] && $timestampBoosted[lock.lockId] < lock.lockedAt
               ? 'fade-in-1 flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-1px cardbordergradient'
               : 'flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-1px'}
           >
@@ -92,15 +92,19 @@
                 {#if !lock.boosted || (lock.boosted && canRestake(lock.lockedAt))}
                   {#if !lock.ejected && !lock.withdrawn}
                     <button
-                      disabled={lock.lockId == $justBoosted}
+                      disabled={$justBoosted[lock.lockId]}
                       on:click={() => {
                         // marking the lock as justBoosted...
-                        $justBoosted = lock.lockId;
+                        $justBoosted[lock.lockId] = true;
+
                         // saving the timestampBoosted for further uses...
-                        $timestampBoosted = Math.floor(Number(Date.now()) / 1000);
+                        let boostingTimestamp = Math.floor(Number(Date.now()) / 1000);
 
                         boostToMax(lock.lockId, eth)
                           .then((updated_data) => {
+                            $timestampBoosted[updated_data.accountLocks[0].lockId] = boostingTimestamp;
+                            console.log("$timestampBoosted",$timestampBoosted);
+
                             if(scrollToTop) {
                               animateScroll.scrollToTop();
                             }
@@ -112,20 +116,19 @@
                             data = data;
 
                             setTimeout(() => {
-                              $timestampBoosted = null;
-                              $justBoosted = null;
+                              $timestampBoosted[data.accountLocks[0].lockId] = null;
+                              $justBoosted[lock.lockId] = false;
                             }, 15000);
                           })
                           .catch((error) => {
-                            $justBoosted = null;
-                            $timestampBoosted = null;
+                            $justBoosted[lock.lockId] = false;
                             console.error(error);
                           });
                       }}
                       class="flex items-center cardbordergradient -mr-2 pointer"
                     >
                       <div class="flex items-center p-2">
-                        {#if $justBoosted == lock.lockId}
+                        {#if $justBoosted[lock.lockId]}
                           <div class="mr-8px">Loading...</div>
                         {:else}
                           <div class="mr-8px">Restake 3 years</div>
