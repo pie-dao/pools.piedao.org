@@ -178,22 +178,26 @@ export function calculateVeDough(stakedDough, commitment) {
   return toNum(stakedDough * commitmentMultiplier);
 }
 
+export function initContracts(eth) {
+  sharesTimeLock = new ethers.Contract(
+    smartcontracts.doughStaking,
+    sharesTimeLockABI,
+    eth.signer || eth.provider,
+  );
+
+  veDOUGH = new ethers.Contract(
+    smartcontracts.veDOUGH,
+    veDoughABI,
+    eth.signer || eth.provider,
+  );  
+}
+
 export function initialize(eth) {
   ETH = eth;
   /* eslint-disable no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
     try {
-      sharesTimeLock = new ethers.Contract(
-        smartcontracts.doughStaking,
-        sharesTimeLockABI,
-        eth.signer || eth.provider,
-      );
-
-      veDOUGH = new ethers.Contract(
-        smartcontracts.veDOUGH,
-        veDoughABI,
-        eth.signer || eth.provider,
-      );
+      initContracts(eth);
 
       dataObj = await fetchStakingData(eth);
       resolve(dataObj);
@@ -207,6 +211,19 @@ export function initialize(eth) {
     }
   });
   /* eslint-enable no-async-promise-executor */
+}
+
+export async function getLastLockForAddress(eth) {
+  try {
+    if (!sharesTimeLock) {
+      initContracts(eth);
+    }
+
+    let totalLocks = await sharesTimeLock.getLocksOfLength(eth.address);
+    return totalLocks - 1;
+  } catch(error) {
+    return error;
+  }
 }
 
 export async function calculateDoughTotalSupply(provider) {
@@ -417,7 +434,9 @@ export const fetchStakingData = async (eth) => {
 export function boostToMax(id, eth) {
   /* eslint-disable no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
-    if (!sharesTimeLock) { reject(new Error('ShareTimeLock contract has not being initiated.')); }
+    if (!sharesTimeLock) {
+      initContracts(eth);
+    }
 
     try {
       const response = await sharesTimeLock.boostToMax(id);
@@ -456,7 +475,9 @@ export function boostToMax(id, eth) {
 export async function unstakeDOUGH(id, lockAmount, eth) {
   /* eslint-disable no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
-    if (!sharesTimeLock) { reject(new Error('ShareTimeLock contract has not being initiated.')); }
+    if (!sharesTimeLock) {
+      initContracts(eth);
+     }
 
     try {
       const response = await sharesTimeLock.withdraw(id);

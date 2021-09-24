@@ -4,9 +4,11 @@
   import Modal from './Modal.svelte';
   import confetti from '../Confetti.js';
   import { parseEther } from '@ethersproject/units';
-  import { calculateVeDough } from '../../helpers/staking.js';
+  import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
 
   let stakedModal;
+  let restakeText = "Restake 3 years";
+  let isRestaking = false;
 
   let modalStake = {
     amount: 0,
@@ -43,31 +45,44 @@
     colors: ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a'],
   };
 
+  let _eth;
+  let _stakeAmount;
+  let _stakeDuration;
+  let _data;
+
   const button = document.querySelector('#confetti');
 
-  export const showModal = (stakeAmount, stakeDuration, data) => {
-    modalStake.move = data.accountLocks.length == 1 ? "first_move" : "second_move";
+  function refillData() {
+    modalStake.move = _data.accountLocks.length == 1 ? "first_move" : "second_move";
 
-    if(stakeDuration == 36 && data.accountDepositTokenBalance.eq(0)) {
+    if(_stakeDuration == 36 && _data.accountDepositTokenBalance.eq(0)) {
       modalStake.text = "maxDuration_noDough";
     }
 
-    if(stakeDuration == 36 && !data.accountDepositTokenBalance.eq(0)) {
+    if(_stakeDuration == 36 && !_data.accountDepositTokenBalance.eq(0)) {
       modalStake.text = "maxDuration_hasDough";
     }    
 
-    if(stakeDuration < 36 && !data.accountDepositTokenBalance.eq(0)) {
+    if(_stakeDuration < 36 && !_data.accountDepositTokenBalance.eq(0)) {
       modalStake.text = "smallDuration_noDough";
     }  
 
-    if(stakeDuration < 36 && !data.accountDepositTokenBalance.eq(0)) {
+    if(_stakeDuration < 36 && !_data.accountDepositTokenBalance.eq(0)) {
       modalStake.text = "smallDuration_hasDough";
     }    
     
-    let veDOUGH = calculateVeDough(parseEther(stakeAmount.toString()), stakeDuration);
+    let veDOUGH = calculateVeDough(parseEther(_stakeAmount.toString()), _stakeDuration);
     modalStake.amount = Number(veDOUGH);
-    modalStake.animatedAmount = 0;
+    modalStake.animatedAmount = 0;    
+  }
 
+  export const showModal = (stakeAmount, stakeDuration, data, eth) => {
+    _eth = eth;
+    _stakeAmount = stakeAmount;
+    _stakeDuration = stakeDuration;
+    _data = data;
+
+    refillData();
     confetti(button, config);
     stakedModal.open();
 
@@ -112,7 +127,26 @@
         }
       },
     );
-  };  
+  }; 
+  
+  async function restakeLastLock() {
+    let lockId = await getLastLockForAddress(_eth);
+    restakeText = "Boosting...";
+    isRestaking = true;
+
+    boostToMax(lockId, _eth).then((updated_data) => {
+      _stakeDuration = 36;
+      _data = updated_data;
+      restakeText = "Restake 3 years";
+      isRestaking = false;
+      confetti(button, config);
+      refillData();
+    }).catch(error => {
+      restakeText = "Restake 3 years";
+      isRestaking = false;
+      console.error(error);
+    });
+  }
 </script>
 
 <div id="confetti" class="hidden md:block" />
@@ -148,7 +182,10 @@
         {#if modalStake.text == 'maxDuration_noDough'}
           <button>Claim SLICE</button>
         {:else}
-        <button>Restake 3 years</button>
+        <button
+        disabled={isRestaking}
+        on:click={() => restakeLastLock()}
+        >{restakeText}</button>
         {/if}
       {/if}
     </div>    

@@ -397,7 +397,7 @@
                         data = updated_data;
                         data = data;
 
-                        stakedModal.showModal(stakeAmount, stakeDuration, data);
+                        stakedModal.showModal(stakeAmount, stakeDuration, data, $eth);
                         
                         clearInterval(interval);
                         stakeButtonText = 'Success! 🥳';
@@ -448,7 +448,7 @@
             data-aos="fade-up"
             data-aos-delay="300"
           >
-            Add to MetaMask 🦊
+            Add veDOUGH to MetaMask 🦊
           </button>
           <!-- END STAKING FORM -->
         </div>
