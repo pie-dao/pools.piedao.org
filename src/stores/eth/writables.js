@@ -19,3 +19,10 @@ export const justBoosted = writable(null);
 export const timestampBoosted = writable(null);
 export const stakingDataIntervalRunning = writable(false);
 export const stakingDataInterval = writable(5000);
+export const stakingStats = writable({
+  totalHolders: 0,
+  averageTimeLock: 0,
+  totalStakedDough: 0,
+  totalVeDough: 0,
+  totalDough: 0
+});

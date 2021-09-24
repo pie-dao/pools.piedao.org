@@ -3,6 +3,7 @@
   import { eth } from '../stores/eth.js';
   import { formatFiat, formatBigMoneyAmount } from '../components/helpers.js';
   import { toNum, fetchStakingStats } from '../helpers/staking.js';
+  import { stakingStats } from '../stores/eth/writables';
   import images from '../config/images.json';
   import ProgressBar from '@okrad/svelte-progressbar';
   import ArrowLoadingButton from "./ArrowLoadingButton.svelte";
@@ -12,27 +13,20 @@
   let quorumPercent = 100;
   let formattedTotalDough = 0;
   let plotBars = false;
+  let isLoading = true;
 
-  $: stakingStats = {
-      isLoading: true,
-      totalHolders: 0,
-      averageTimeLock: 0,
-      totalStakedDough: 0,
-      totalVeDough: 0,
-      totalDough: 0
-    }
-
-  $: if($eth.provider && stakingStats.isLoading) {
-    stakingStats.isLoading = false;
+  $: if($eth.provider && isLoading) {
+    isLoading = false;
 
     fetchStakingStats($eth.provider).then(response => {
-        stakingStats = response;
-        console.log("fetchStakingStats", stakingStats);
+        $stakingStats = response;
+        console.log("fetchStakingStats", $stakingStats);
 
-        formattedTotalDough = formatBigMoneyAmount(toNum(stakingStats.totalDough), ',', '');
-        stakedPercent = ((toNum(stakingStats.totalStakedDough) * 100) / toNum(stakingStats.totalDough));
+        formattedTotalDough = formatBigMoneyAmount(toNum($stakingStats.totalDough), ',', '');
+        stakedPercent = ((toNum($stakingStats.totalStakedDough) * 100) / toNum($stakingStats.totalDough));
         quorumPercent = 100; 
-        plotBars = true;       
+
+        plotBars = true;  
       }).catch(error => {
         console.error(error);
       });  
@@ -66,7 +60,7 @@
           <img class="h-auto w-24px" src={images.doughtoken} alt="dough token" />
           <div class="flex intems-center p-1 font-thin whitespace-nowrap">Total staked DOUGH</div>
           <div class="font-20px whitespace-nowrap">
-            {formatFiat(toNum(stakingStats.totalStakedDough), ',', '.', '')} DOUGH
+            {formatFiat(toNum($stakingStats.totalStakedDough), ',', '.', '')} DOUGH
           </div>
         </span>
         <span class="hidden md:block">
@@ -90,7 +84,28 @@
                 color: '#dbffdd'
               }          
             ]}
-          />  
+          /> 
+        {:else}
+          <ProgressBar
+            series={[0]} 
+            valueLabel={'Loading...'}
+            invLabelColor= true
+            width='240'
+            height='30'
+            textSize='70'
+            rx='10'
+            ry='10'
+            thresholds={[
+              {
+                till: stakedPercent.toFixed(0),
+                color: '#38fe61'
+              },          
+              {
+                till: 100,
+                color: '#dbffdd'
+              }          
+            ]}
+          />          
         {/if}
     </span>  
       </div>
@@ -101,7 +116,7 @@
         <span class=" flex items-center ">
           <img class="h-auto w-24px" src={images.locked_with_key} alt="dough token" />
           <div class="flex intems-center p-1 font-thin whitespace-nowrap">Average Time Lock</div>
-          <div class="font-20px whitespace-nowrap">{stakingStats.averageTimeLock} Months</div>
+          <div class="font-20px whitespace-nowrap">{$stakingStats.averageTimeLock} Months</div>
         </span>    
       </div>
     </div>
@@ -114,17 +129,17 @@
           <img class="h-auto w-24px" src={images.veDough} alt="dough token" />
           <div class="flex intems-center p-1 font-thin whitespace-nowrap">Total veDOUGH</div>
           <div class="font-20px whitespace-nowrap">
-            {formatFiat(toNum(stakingStats.totalVeDough), ',', '.', '')} veDOUGH
+            {formatFiat(toNum($stakingStats.totalVeDough), ',', '.', '')} veDOUGH
           </div>
         </span>
         <span class="hidden md:block">
         {#if plotBars}
           <ProgressBar
             series={quorumPercent} 
-            valueLabel={`5% Quorum = ${formatFiat((toNum(stakingStats.totalVeDough) * 5) / 100, ',', '.', '')} veDOUGH`}
+            valueLabel={`5% Quorum = ${formatFiat((toNum($stakingStats.totalVeDough) * 5) / 100, ',', '.', '')} veDOUGH`}
             width='250'
             height='30'
-            textSize='90'
+            textSize='70'
             invLabelColor= true
             rx='10'
             ry='10'
@@ -135,6 +150,23 @@
               }
             ]}
           />
+        {:else}
+          <ProgressBar
+            series={[0]} 
+            valueLabel={`Loading...`}
+            width='250'
+            height='30'
+            textSize='70'
+            invLabelColor= true
+            rx='10'
+            ry='10'
+            thresholds={[
+              {
+                till: 100,
+                color: '#fde502'        
+              }
+            ]}
+          />        
         {/if}
       </span>
       </div>
@@ -145,7 +177,7 @@
         <span class=" flex items-center">
           <img class="h-auto w-24px" src={images.person_raising_hand} alt="dough token" />
           <div class="flex intems-center p-1 font-thin whitespace-nowrap">Voting Addresses</div>
-          <div class="font-20px whitespace-nowrap">{stakingStats.totalHolders}</div>
+          <div class="font-20px whitespace-nowrap">{$stakingStats.totalHolders}</div>
         </span>
       </div>
     </div>
