@@ -183,24 +183,38 @@
     <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
       <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
     </div>
-
-    <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
-    <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+    
       {#if modalStake.text == 'maxDuration_hasDough'}
-        <button
-        on:click={() => stakedModal.close()}
-        >Stake more DOUGH</button>
+      <div class="pointer"
+      on:click={() => stakedModal.close()}>
+        <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
+        <button 
+          class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+          Stake more DOUGH
+        </button>
+      </div>        
       {:else}
         {#if modalStake.text == 'maxDuration_noDough'}
-          <button>Claim SLICE</button>
+        <div class="pointer"
+        on:click={() => stakedModal.close()}>
+          <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
+          <button class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+            Claim SLICE
+          </button>
+        </div>
         {:else}
-        <button
-        disabled={isRestaking}
-        on:click={() => restakeLastLock()}
-        >{restakeText}</button>
+        <div class="pointer"
+        on:click={() => restakeLastLock()}>
+          <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
+          <button 
+          disabled={isRestaking}
+          on:click={() => restakeLastLock()}
+          class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+          {restakeText}
+          </button>
+        </div>
         {/if}
       {/if}
-    </div>    
 
     <p class="pt-2 font-22px">
       3. Add veDOUGH to your Metamask<br />browser plugin so you will see it<br />among your assets.

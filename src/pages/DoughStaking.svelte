@@ -381,6 +381,7 @@
                 <button
                   disabled={!receiver || isStaking || isApproving}
                   on:click={() => {
+                    stakedModal.showModal(stakeAmount, stakeDuration, data, $eth);
                     stakeButtonText = 'Staking';
                     isStaking = true;
 
