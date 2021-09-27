@@ -9,11 +9,11 @@
   } from '../helpers/staking.js';
   import StakingPositions from '../components/StakingPositions.svelte';
 
-  $: isLoading = true;
-  $: hasLoaded = false;
+  $: isLoading = false;
   $: data = dataObj;
 
   let observer = null;
+  let currentAddress = null;
 
   onDestroy(() => {
     if(observer) {
@@ -21,22 +21,36 @@
     }
   });
 
-  $: if ($eth.address && isLoading && !hasLoaded) {
-    hasLoaded = true;
+  $: if ($eth.address) {
+    // if address is first setup, or is changed...
+    if (currentAddress !== $eth.address) {
+      currentAddress = $eth.address;
 
-    initialize($eth).then((updated_data) => {
-      data = updated_data;
-      isLoading = false;
+      if (!isLoading) {
+        isLoading = true;
 
-      observer = observable.subscribe({
-        next(updated_data) {
+        initialize($eth).then((updated_data) => {
           data = updated_data;
-         }
-      });     
-    }).catch(error => {
-      hasLoaded = false;
-      console.error(error);
-    });
+          isLoading = false;
+
+          if(observer) {
+            observer.unsubscribe();      
+          }          
+
+          observer = observable.subscribe({
+            next(updated_data) {
+              data = updated_data;
+            }
+          });     
+        }).catch(error => {
+          console.error(error);
+        });        
+      }
+    }
+  } else {
+    if(observer) {
+      observer.unsubscribe();      
+    }
   }
 
 	function handleUpdate(event) {

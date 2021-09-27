@@ -147,7 +147,7 @@
   }
 </script>
 
-<StakedModal bind:this={stakedModal}/>
+<StakedModal bind:this={stakedModal} on:update={handleUpdate}/>
 
 <div class="font-huge text-center">Dough Staking</div>
 <div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
@@ -267,7 +267,8 @@
                   calculateVeDOUGH();
                 }}
               />
-              <div
+              <button
+                disabled={isStaking || isApproving}
                 on:click={() => {
                   stakeDuration = 36;
 
@@ -283,7 +284,7 @@
                     alt="ETH"
                   />
                 </div>
-              </div>
+              </button>
             </div>
           </div>
 
@@ -341,6 +342,7 @@
                 >
               {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
                 <button
+                  disabled={isStaking || isApproving}
                   on:click={() => {
                     approveButtonText = 'Approving';
                     isApproving = true;
@@ -377,7 +379,7 @@
                 >
               {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
                 <button
-                  disabled={!receiver}
+                  disabled={!receiver || isStaking || isApproving}
                   on:click={() => {
                     stakeButtonText = 'Staking';
                     isStaking = true;
@@ -397,7 +399,8 @@
                         data = updated_data;
                         data = data;
 
-                        stakedModal.showModal(stakeAmount, stakeDuration, data);
+                        stakedModal.showModal(stakeAmount, stakeDuration, data, $eth);
+                        
                         clearInterval(interval);
                         stakeButtonText = 'Success! 🥳';
 
@@ -447,7 +450,7 @@
             data-aos="fade-up"
             data-aos-delay="300"
           >
-            Add to MetaMask 🦊
+            Add veDOUGH to MetaMask 🦊
           </button>
           <!-- END STAKING FORM -->
         </div>
