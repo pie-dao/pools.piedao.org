@@ -4,7 +4,8 @@
   import { farming } from '../stores/eth/writables.js';
   import StakingStats from '../components/StakingStats.svelte';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
-  import { onMount } from 'svelte';
+  import moment from 'moment';
+  
   import {
     formatFiat,
     subscribeToBalance,
@@ -43,54 +44,7 @@
   let doughStaked;
   let price = 'n/a';
   let circulatingSupply = 0;
-  let proposals;
-
-  export async function fetchLastSnapshots() {
-    let res = await fetch('https://hub.snapshot.org/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `query {
-          proposals(
-            first: 2,
-            skip: 0,
-            where: {
-              space_in: ["piedao"]
-            },
-            orderBy: "created",
-            orderDirection: desc
-          ) {
-            id
-            state
-            title
-            body
-            choices
-            start
-            end
-            snapshot
-            state
-            author
-            link
-          }
-        }`
-      })
-    });
-
-    let response = await res.json();
-    return response.data.proposals;
-  }  
-
-
-  onMount(async() => {
-    try {
-      proposals = await fetchLastSnapshots();
-      console.log("proposals", proposals);
-    } catch(error) {
-      console.error(error);
-    }
-  });
+  
 
   const addToken = () => {
     ethereum.sendAsync({
@@ -136,7 +90,32 @@
       circulatingSupply = ts.minus(BigNumber(msBal)).minus(BigNumber(daoBal)).toFixed(2);
     }
   })()
+
+  // countdown component...
+  let countdown;
+  var eventTimeStamp = new Date('October 3, 2021 12:00:00');
+  var currentTimeStamp = Date.now();
+
+  var eventTime = new Date();
+  eventTime.setTime(eventTimeStamp.getTime());
+
+  var Offset = new Date(eventTime.getTimezoneOffset()*60000)
+
+  var Diff = eventTimeStamp - currentTimeStamp + (Offset.getTime() / 2);
+  var duration = moment.duration(Diff, 'milliseconds');
+  var interval = 1000;
+
+  setInterval(function() {
+    duration = moment.duration(duration.asMilliseconds() - interval, 'milliseconds');
+    countdown = moment(duration.asMilliseconds()).format('D[d]:H[h]:mm[m]:ss[s]');
+  }, interval);  
 </script>
+
+<div>
+  {#if countdown}
+    {countdown}
+  {/if}
+</div>
 
 <Meta 
     metadata={{
@@ -148,13 +127,11 @@
 />
 
 <div class="videocontainer">
-  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video">
-    <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4" data-aos="fade-up" data-aos-delay="500">
+  <video loop muted autoplay poster="https://github.com/pie-dao/brand/blob/master/misc/bg-tokenholder.jpg?raw=true" class="bg_video">
   </video>
   <div class="content flex flex-col spl px-4">
-    <div class="text-24px font-bold md:text-lg md:leading-8 text-center mb-4" data-aos="fade-up" data-aos-delay="100">PieDAO’s<br />Governance Token</div>
-    <img src={images.doughcolorful} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
-    <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organizazion and products.</div>
+    <img src={images.tokenholderherotype} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
+    <div class="text-lg text-white font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organizazion and products.</div>
     <button class="items-center stakinggradient shake text-black text-left mt-4 hover:opacity-80" onclick="location.href='#/swap'" data-aos="fade-up" data-aos-delay="250">
       <div class="w-100pc flex items-center">
       <div class="m-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
@@ -165,16 +142,16 @@
     </div>
     </button>
     <button on:click={() => addToken()} class="add-dough-metamask mt-4" data-aos="fade-up" data-aos-delay="300">
-      Add to MetaMask 🦊
+      <span class="text-white">Add to MetaMask 🦊</span>
     </button>
   </div>
 </div>
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
-    <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.hourglass} alt="hourglass" /><span>Long term<br />alignment</span></div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.farmerbenefitcampaign} alt="hourglass" /><span>Automated<br />farming</span></div>
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.gem} alt="gem" /><span>Rewarded<br />commitment</span></div>
-    <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.pirateflag} alt="pirate flag" /><span>Treasury revenues<br />distribution</span></div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.pirateflag} alt="pirate flag" /><span>Treasury APR<br />distribution</span></div>
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.womanlaptop} alt="woman laptop" /><span>The future of work<br />is DAO</span></div>
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.raisedhand} alt="raised hand" /><span>Hybrid governance<br />beyond coin vote</span></div>
   </div>
@@ -188,10 +165,15 @@
       <br /><br />
       If you stake DOUGH for a minimum of 6 months, you get in exchange veDOUGH, PieDAO’s governance token.
       <br /><br />  
-      With veDOUGH you can help the community steer the destiny of the DAO and its products, make proposals, vote on issues while being compensated for your commitment and effort.
+      With veDOUGH you can help the community steer the destiny of the DAO and its products, make proposals, vote on issues while <strong>being compensated</strong> for your commitment and effort.
       <br /><br />  
-      In fact PieDAO redistributes 60% of the revenues generated by its products and treasury management to active community members, proportionally to the amount of veDOUGH they hold.
-    </div>  
+      In fact <strong>PieDAO redistributes 60% of the revenues</strong> generated by its products and treasury management to active community members, proportionally to the amount of veDOUGH they hold.
+    </div> 
+    <button 
+    onclick="location.href='#/dough-staking'"
+    class="btnbig mt-8 text-white rounded-8px p-15px">
+  Stake DOUGH
+  </button> 
   </div>
 </div>
 
@@ -205,12 +187,12 @@
 
 <div class="flex flex-col items-center text-center md:mt-10 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
-    <div class="font-huge text-center mt-10">Doughconomics</div>
-    <div class="font-thin text-l text-center mt-20px">
-      This is how the DAO makes money and how is redestrebuting them to the system
+    <div class="w-full font-huge text-center mt-10">Token Economics</div>
+    <div class="w-full font-thin text-l text-center mt-20px">
+      This is how PieDAO (and You!) makes money
     </div> 
-    <a href="#/staking-simulator" class="font-bold text-base text-center">
-      Test your assumptions on the simulator >
+    <a href="#/simulator" class="font-bold text-base text-center">
+      Learn more about staking >
     </a>   
   </div>
   <div class="hidden md:block">
@@ -232,38 +214,36 @@
 </div>
 
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
-  <div class="flex flex-col justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
-    <div class="font-huge text-center mt-10">Active votes</div>
-    <div class="font-thin text-l text-center mt-20px">
-      Participate on the last Governance issues
+<div class="flex flex-col items-center text-center mt-6 md:mt-20">
+  <div class="w-full max-w-1200px">
+    <div class="bg-melanzanafritta min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
+      <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="vedough is the new black"/>
+      <div class="font-thin">
+        <div class="font-bold text-l md:text-xl text-center md:text-left mt-4 md:mt-0">veDOUGH Is The New Black</div>
+        <div class="text-justify mt-4 md:mt-0">Any DOUGH holder can choose to stake (in exchange for veDOUGH). The selected staking period and token amount will determine a user’s voting power and share of DAO profits. 
+          <br /><br />Active veDOUGH holders will get 60% (!) of DAO profits, while 25% will be used to compound the treasury and 15% will be allocated to development costs.
+          </div>
+      </div>
     </div>
-    <div class="font-thin text-l text-center mt-20px">
-      {#if proposals}
-        {#each proposals as proposal}
-          <a target="_blank" href="{proposal.link}">
-            <p>{proposal.author}</p>
-            <p>{proposal.title}</p>
-            <p>{proposal.state}</p>
-            <!-- <p>{@html proposal.body}</p> -->
-          </a>
-        {/each}
-      {/if}
-    </div> 
   </div>
-</div>
+  </div>
 
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
-  <div class="flex flex-wrap justify-center w-full max-w-1240px mb-4 px-10">
-    <img class="h-40px inline" src={images.hourglass} alt="hourglass" />
-    <img class="h-40px inline mx-4" src={images.gem} alt="gem" />
-    <img class="h-40px inline" src={images.pirateflag} alt="pirate flag" />
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
+    <div class="w-full font-huge text-center mt-10">Get paid for your work</div>
+    <div class="w-full font-thin text-l text-center mt-20px">
+      By staking DOUGH you have the right to get rewarded for being a PieDAO member
+      <br /><br />
+    </div> 
+    <button 
+    onclick="location.href='#/dough-staking'"
+    class="btnbig mt-8 text-white rounded-8px p-15px">
+  Stake DOUGH
+  </button> 
   </div>
-  <a target="_blank" href="https://medium.com/piedao/piedao-is-expanding-the-core-team-and-open-sourcing-the-search-for-talent-b22fce733293" class="font-bold text-pink text-base text-center">
-    We're hiring >
-  </a>   
 </div>
+
 
 
 
