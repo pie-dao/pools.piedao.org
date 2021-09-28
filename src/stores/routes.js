@@ -118,12 +118,12 @@ const formatRoute = (route) => {
       return { page: LPStakingV2 };
     case 'farm':
       return { page: Farm };
-    case 'dough-staking':
-      return { page: DoughStaking };
-    case 'staking_positions':
-      return { page: StakingPositions };
-    case 'staking_rewards':
-      return { page: StakingRewards };
+    // case 'dough-staking':
+    //   return { page: DoughStaking };
+    // case 'staking_positions':
+    //   return { page: StakingPositions };
+    // case 'staking_rewards':
+    //   return { page: StakingRewards };
     case 'staking-simulator':
       /* eslint-disable no-case-declarations */
       const simulation = (route[1] || '');
