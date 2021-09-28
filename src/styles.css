@@ -2080,7 +2080,7 @@ outline: none;
 .stakinggradient {
   display: inline-flex;
   border: double 1px transparent;
-  border-radius: 1.6rem;
+  border-radius: 10rem;
   background-image: linear-gradient(white, white), radial-gradient(circle at top left,#ff8932, #a50bce, #1fa6e0, #47d482);
   background-origin: border-box;
   background-clip: content-box, border-box;

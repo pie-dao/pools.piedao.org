@@ -5,7 +5,7 @@
   import confetti from '../Confetti.js';
   import { parseEther } from '@ethersproject/units';
   import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
-
+  import BigNumber from 'bignumber.js';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -58,21 +58,21 @@
   function refillData() {
     modalStake.move = _data.accountLocks.length == 1 ? "first_move" : "second_move";
 
-    if(_stakeDuration == 36 && _data.accountDepositTokenBalance.eq(0)) {
+    if(_stakeDuration == 36 && _data.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
       modalStake.text = "maxDuration_noDough";
     }
 
-    if(_stakeDuration == 36 && !_data.accountDepositTokenBalance.eq(0)) {
+    if(_stakeDuration == 36 && !_data.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
       modalStake.text = "maxDuration_hasDough";
-    }    
+    }
 
-    if(_stakeDuration < 36 && !_data.accountDepositTokenBalance.eq(0)) {
+    if(_stakeDuration < 36 && _data.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
       modalStake.text = "smallDuration_noDough";
-    }  
+    }
 
-    if(_stakeDuration < 36 && !_data.accountDepositTokenBalance.eq(0)) {
+    if(_stakeDuration < 36 && !_data.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
       modalStake.text = "smallDuration_hasDough";
-    }    
+    }
     
     let veDOUGH = calculateVeDough(parseEther(_stakeAmount.toString()), _stakeDuration);
     modalStake.amount = Number(veDOUGH);
@@ -88,7 +88,7 @@
           modalStake.animatedAmount = modalStake.amount;
           clearInterval(interval);
         }
-      }, 10);
+      }, 3);
     }, 500);    
   }
 
@@ -142,12 +142,11 @@
 
     boostToMax(lockId, _eth).then((updated_data) => {
       _stakeDuration = 36;
-      _data = updated_data;
       restakeText = "Restake 3 years";
       isRestaking = false;
 
       dispatch('update', {
-        data: _data,
+        data: updated_data,
       });
     
       refillData();
@@ -183,24 +182,38 @@
     <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
       <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
     </div>
-
-    <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
-    <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+    
       {#if modalStake.text == 'maxDuration_hasDough'}
-        <button
-        on:click={() => stakedModal.close()}
-        >Stake more DOUGH</button>
+        <div class="pointer"
+        on:click={() => stakedModal.close()}>
+          <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
+          <button 
+            class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+            Stake more DOUGH
+          </button>
+        </div>        
       {:else}
         {#if modalStake.text == 'maxDuration_noDough'}
-          <button>Claim SLICE</button>
+        <div class="pointer"
+        on:click={() => stakedModal.close()}>
+          <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
+          <button class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+            Claim SLICE
+          </button>
+        </div>
         {:else}
-        <button
-        disabled={isRestaking}
-        on:click={() => restakeLastLock()}
-        >{restakeText}</button>
+        <div class="pointer"
+        on:click={() => restakeLastLock()}>
+          <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
+          <button 
+          disabled={isRestaking}
+          on:click={() => restakeLastLock()}
+          class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+          {restakeText}
+          </button>
+        </div>
         {/if}
       {/if}
-    </div>    
 
     <p class="pt-2 font-22px">
       3. Add veDOUGH to your Metamask<br />browser plugin so you will see it<br />among your assets.
