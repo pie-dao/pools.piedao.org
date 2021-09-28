@@ -185,6 +185,31 @@
 </div>
 
 
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+  <div class="flex flex-col justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
+    <div class="font-huge text-center mt-10">Active votes</div>
+    <div class="font-thin text-l text-center mt-20px">
+      Participate on the last Governance issues
+    </div> 
+    <div class="font-thin text-l text-center mt-20px">
+      That's your job TOTO
+    </div> 
+  </div>
+</div>
+
+
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+  <div class="flex flex-wrap justify-center w-full max-w-1240px mb-4 px-10">
+    <img class="h-40px inline" src={images.hourglass} alt="hourglass" />
+    <img class="h-40px inline mx-4" src={images.gem} alt="gem" />
+    <img class="h-40px inline" src={images.pirateflag} alt="pirate flag" />
+  </div>
+  <a target="_blank" href="https://medium.com/piedao/piedao-is-expanding-the-core-team-and-open-sourcing-the-search-for-talent-b22fce733293" class="font-bold text-pink text-base text-center">
+    We're hiring >
+  </a>   
+</div>
+
+
 
 
 
