@@ -167,6 +167,7 @@
       <br />
       This is the amount waiting to be distributed the first month.
     </div> 
+    <span class="text-xs">*subject to market dynamics</span>
   </div>
 </div>
 
