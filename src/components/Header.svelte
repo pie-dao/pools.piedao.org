@@ -198,6 +198,12 @@ const outsideClicks = (event)  => {
     <a class="pl-3 ml-4 -mr-2 text-sm leading-5 font-medium text-gray-700 hidden lg:block" href='#/learn' rel="noopener noreferrer">
      Learn
     </a>
+
+    {#if $eth.address}
+      <button class="pl-3 ml-4 text-sm leading-5 font-medium text-gray-700 hidden md:block" on:click={disconnect} rel="noopener noreferrer">
+        Logout
+      </button>    
+    {/if}
     
     <div class="hidden md:block">
         <Web3Button />

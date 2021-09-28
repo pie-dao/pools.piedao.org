@@ -509,6 +509,104 @@ export const subscribeToAllowance = async (token, address, spender) => {
   bumpLifecycle();
 };
 
+export const subscribeToStakingEarnings = async (contractAddress, address, shouldBump = true) => {
+  const token = contractAddress;
+
+  validateIsAddress(token);
+  validateIsAddress(address);
+
+  const keyEarned = balanceKey(token, address, '.earned');
+
+  if (balanceSubscriptions.has(keyEarned)) {
+    return;
+  }
+  balanceSubscriptions.add(keyEarned);
+
+  const unipool = await contract({ address: contractAddress, abi: unipoolAbi });
+
+  const observableEarned = await unipool.trackEarnedBalance(address);
+  const decimals = 18;
+
+  observableEarned.subscribe({
+    next: async (updatedBalance) => {
+      const updates = {};
+      updates[keyEarned] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
+      balances.set({ ...get(balances), ...updates });
+    },
+  });
+
+  if (shouldBump) {
+    bumpLifecycle();
+  }
+};
+
+export const subscribeToStakingEarningsGeyser = async (
+  contractAddress,
+  address,
+  shouldBump = true,
+) => {
+  const token = contractAddress;
+
+  validateIsAddress(token);
+  validateIsAddress(address);
+
+  const keyEarned = balanceKey(token, address, '.geyserEarned');
+
+  if (balanceSubscriptions.has(keyEarned)) {
+    return;
+  }
+  balanceSubscriptions.add(keyEarned);
+
+  const unipool = await contract({ address: contractAddress, abi: geyserABI });
+
+  const observableEarned = await unipool.trackEarnedBalance(address);
+  const decimals = 18;
+
+  observableEarned.subscribe({
+    next: async (updatedBalance) => {
+      const updates = {};
+      updates[keyEarned] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
+      balances.set({ ...get(balances), ...updates });
+    },
+  });
+
+  if (shouldBump) {
+    bumpLifecycle();
+  }
+};
+
+export const subscribeToStaking = async (contractAddress, address, shouldBump = true) => {
+  const token = contractAddress;
+
+  validateIsAddress(token);
+  validateIsAddress(address);
+
+  const key = balanceKey(token, address);
+
+  if (balanceSubscriptions.has(key)) {
+    return;
+  }
+
+  balanceSubscriptions.add(key);
+
+  const unipool = await contract({ address: contractAddress, abi: unipoolAbi });
+
+  const observable = await unipool.trackStakedBalance(address);
+  const decimals = 18;
+
+  observable.subscribe({
+    next: async (updatedBalance) => {
+      const updates = {};
+      updates[key] = BigNumber(updatedBalance).dividedBy(10 ** decimals);
+      balances.set({ ...get(balances), ...updates });
+    },
+  });
+
+  if (shouldBump) {
+    bumpLifecycle();
+  }
+};
+
 export const subscribeToBalance = async (tokenAddress, address, shouldBump = true) => {
   let token = tokenAddress;
 
@@ -862,6 +960,32 @@ export const calculateAPRBalancer = async (
     };
   }
 
+  const updates = {};
+  updates[addressStakingPool] = res;
+  farming.set({ ...get(farming), ...updates });
+};
+
+export const calculateAPRPie = async (addressStakingPool, tokenToStake, nav) => {
+  const marketData = get(piesMarketDataStore);
+  const StakingPOOL = await contract({ address: addressStakingPool, abi: unipoolAbi });
+  const totalStakedBPTAmount = (await StakingPOOL.totalSupply()) / 1e18;
+
+  let res;
+  // Find out reward rate
+  const weekly_reward = await getPoolWeeklyReward(StakingPOOL);
+  const rewardPerToken = weekly_reward / totalStakedBPTAmount;
+  const RewardTokenPrice =
+    marketData[`0xad32A8e6220741182940c5aBF610bDE99E737b2D`].market_data.current_price;
+  const DOUGHWeeklyROI = (rewardPerToken * RewardTokenPrice * 100) / nav;
+
+  res = {
+    roi: DOUGHWeeklyROI,
+    weekly: `${toFixed(DOUGHWeeklyROI, 4)}%`,
+    apr: `${toFixed(DOUGHWeeklyROI * 52, 4)}%`,
+    totalStakedBPTAmount,
+    weekly_reward,
+    rewardPerToken,
+  };
   const updates = {};
   updates[addressStakingPool] = res;
   farming.set({ ...get(farming), ...updates });

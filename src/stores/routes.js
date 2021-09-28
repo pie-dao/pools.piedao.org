@@ -131,7 +131,7 @@ const formatRoute = (route) => {
       return { page: Simulator, params: { simulation } };
     case 'simulator-stats':
       return { page: SimulatorStats };
-    case 'stake':
+    case 'lp-legacy-farm':
       referral = route[1] || null;
 
       if (referral) {
