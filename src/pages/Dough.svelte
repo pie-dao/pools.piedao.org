@@ -4,7 +4,7 @@
   import { farming } from '../stores/eth/writables.js';
   import StakingStats from '../components/StakingStats.svelte';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
-  
+  import { onMount } from 'svelte';
   import {
     formatFiat,
     subscribeToBalance,
@@ -43,7 +43,54 @@
   let doughStaked;
   let price = 'n/a';
   let circulatingSupply = 0;
-  
+  let proposals;
+
+  export async function fetchLastSnapshots() {
+    let res = await fetch('https://hub.snapshot.org/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: `query {
+          proposals(
+            first: 2,
+            skip: 0,
+            where: {
+              space_in: ["piedao"]
+            },
+            orderBy: "created",
+            orderDirection: desc
+          ) {
+            id
+            state
+            title
+            body
+            choices
+            start
+            end
+            snapshot
+            state
+            author
+            link
+          }
+        }`
+      })
+    });
+
+    let response = await res.json();
+    return response.data.proposals;
+  }  
+
+
+  onMount(async() => {
+    try {
+      proposals = await fetchLastSnapshots();
+      console.log("proposals", proposals);
+    } catch(error) {
+      console.error(error);
+    }
+  });
 
   const addToken = () => {
     ethereum.sendAsync({
@@ -190,9 +237,18 @@
     <div class="font-huge text-center mt-10">Active votes</div>
     <div class="font-thin text-l text-center mt-20px">
       Participate on the last Governance issues
-    </div> 
+    </div>
     <div class="font-thin text-l text-center mt-20px">
-      That's your job TOTO
+      {#if proposals}
+        {#each proposals as proposal}
+          <a target="_blank" href="{proposal.link}">
+            <p>{proposal.author}</p>
+            <p>{proposal.title}</p>
+            <p>{proposal.state}</p>
+            <!-- <p>{@html proposal.body}</p> -->
+          </a>
+        {/each}
+      {/if}
     </div> 
   </div>
 </div>
