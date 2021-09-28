@@ -124,7 +124,7 @@ const formatRoute = (route) => {
       return { page: StakingPositions };
     case 'staking_rewards':
       return { page: StakingRewards };
-    case 'simulator':
+    case 'staking-simulator':
       /* eslint-disable no-case-declarations */
       const simulation = (route[1] || '');
       /* eslint-enable no-case-declarations */
