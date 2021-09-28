@@ -37,7 +37,8 @@
   }
 </script>
 
-<div
+<div 
+  style="display:none;"
   class="w-full flex flex-col lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6"
 >
   <div class="w-full flex flex-col w-full rounded-16 p-6" style="background-color: #e1f4f2;">
