@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 import { parseEther } from '@ethersproject/units';
 import { isAddress } from '@pie-dao/utils';
 import { Observable } from 'rxjs';
+import moment from 'moment';
 import sharesTimeLockABI from '../abis/sharesTimeLock.json';
 import veDoughABI from '../abis/veDoughABI.json';
 import DoughABI from '../abis/DoughABI.json';
@@ -16,7 +17,6 @@ import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
 import { stakingDataInterval } from '../stores/eth/writables.js';
-import moment from 'moment';
 
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
@@ -42,31 +42,28 @@ let ETH = null;
 /* eslint-enable import/no-mutable-exports */
 
 // in a very next future, this function will fetch directly from backend...
-export const getParticipations = () => {
-  return PartecipationJson;
-}
+export const getParticipations = () => PartecipationJson;
 
 export const canRestake = (lockedAt) => {
-  let start = lockedAt * 1000;
-  let end = moment().endOf('day');
-  
-  if(end.diff(start, 'days') > 30) {
+  const start = lockedAt * 1000;
+  const end = moment().endOf('day');
+
+  if (end.diff(start, 'days') > 30) {
     return true;
-  } else {
-    return false;
   }
-}
+  return false;
+};
 
 export const observable = new Observable((subscriber) => {
   let interval = null;
 
-  stakingDataInterval.subscribe(intervalRange => {
+  stakingDataInterval.subscribe((intervalRange) => {
     interval = setInterval(async () => {
-      let updated_data = await fetchStakingData(ETH);
-  
+      const updatedData = await fetchStakingData(ETH);
+
       // updating the stakingData just when needed...
-      if(JSON.stringify(dataObj) !== JSON.stringify(updated_data)) {
-        dataObj = updated_data;
+      if (JSON.stringify(dataObj) !== JSON.stringify(updatedData)) {
+        dataObj = updatedData;
         subscriber.next(dataObj);
       }
     }, intervalRange);
@@ -75,7 +72,7 @@ export const observable = new Observable((subscriber) => {
   // clearing interval, when unsubscribe action happens...
   return () => {
     clearInterval(interval);
-  };  
+  };
 });
 
 export const toNum = (num) => BigNumber(num.toString())
@@ -93,7 +90,7 @@ export function calculateStakingEnds(lock) {
   const endDate = new Date(lock.lockedAt * 1000);
   const lockDuration = lock.lockDuration / AVG_SECONDS_MONTH;
   endDate.setMonth(endDate.getMonth() + lockDuration);
-  //endDate.setMinutes(endDate.getMinutes() + lockDuration);
+  // endDate.setMinutes(endDate.getMinutes() + lockDuration);
   return endDate;
 }
 
@@ -189,7 +186,7 @@ export function initContracts(eth) {
     smartcontracts.veDOUGH,
     veDoughABI,
     eth.signer || eth.provider,
-  );  
+  );
 }
 
 export function initialize(eth) {
@@ -219,53 +216,53 @@ export async function getLastLockForAddress(eth) {
       initContracts(eth);
     }
 
-    let totalLocks = await sharesTimeLock.getLocksOfLength(eth.address);
+    const totalLocks = await sharesTimeLock.getLocksOfLength(eth.address);
     return totalLocks - 1;
-  } catch(error) {
+  } catch (error) {
     return error;
   }
 }
 
 export async function calculateDoughTotalSupply(provider) {
   try {
-    let dough = new ethers.Contract(
+    const dough = new ethers.Contract(
       smartcontracts.dough,
       DoughABI,
       provider,
     );
 
-    let totalSupply = await dough.totalSupply();
+    const totalSupply = await dough.totalSupply();
 
-    let treasury = await dough.balanceOf(smartcontracts.treasury);
-    let multisig = await dough.balanceOf(smartcontracts.multisig);
-    let eDough = await dough.balanceOf(smartcontracts.eDOUGH);
-    
-    return totalSupply - treasury - multisig - eDough;    
-  } catch(error) {
+    const treasury = await dough.balanceOf(smartcontracts.treasury);
+    const multisig = await dough.balanceOf(smartcontracts.multisig);
+    const eDough = await dough.balanceOf(smartcontracts.eDOUGH);
+
+    return totalSupply - treasury - multisig - eDough;
+  } catch (error) {
     return error;
   }
 }
 
 export async function fetchStakingStats(provider) {
-  try {    
-    let totalSupply = await calculateDoughTotalSupply(provider);
+  try {
+    const totalSupply = await calculateDoughTotalSupply(provider);
 
     const response = await subgraphRequest(
       'https://api.thegraph.com/subgraphs/name/pie-dao/vedough',
       {
         stakersTrackers: {
           __args: {
-            where: { id: "StakersTrackerID" },
-          },          
+            where: { id: 'StakersTrackerID' },
+          },
           id: true,
-          counter: true
+          counter: true,
         },
         globalStats: {
           __args: {
             first: 1,
-            orderBy: "id", 
-            orderDirection: "desc"
-          },           
+            orderBy: 'id',
+            orderDirection: 'desc',
+          },
           id: true,
           depositedLocksCounter: true,
           depositedLocksValue: true,
@@ -278,21 +275,22 @@ export async function fetchStakingStats(provider) {
           averageTimeLock: true,
           totalDoughStaked: true,
           veTokenTotalSupply: true,
-        }       
-      }
+        },
+      },
     );
 
     return {
       totalHolders: response.stakersTrackers.length ? response.stakersTrackers[0].counter : 0,
-      averageTimeLock: response.globalStats.length ? Math.floor(Number(response.globalStats[0].averageTimeLock) / AVG_SECONDS_MONTH) : 0,
+      averageTimeLock: response.globalStats.length
+        ? Math.floor(Number(response.globalStats[0].averageTimeLock) / AVG_SECONDS_MONTH) : 0,
       totalStakedDough: response.globalStats.length ? response.globalStats[0].totalDoughStaked : 0,
       totalVeDough: response.globalStats.length ? response.globalStats[0].veTokenTotalSupply : 0,
-      totalDough: totalSupply
+      totalDough: totalSupply,
     };
   } catch (error) {
     throw new Error(`fetchStakingStats: ${error.message}`);
   }
-}  
+}
 
 export async function fetchStakingDataGraph(address) {
   try {
@@ -331,12 +329,12 @@ export async function fetchStakingDataGraph(address) {
         globalStats: {
           __args: {
             first: 1,
-            orderBy: "id", 
-            orderDirection: "desc"
-          },           
+            orderBy: 'id',
+            orderDirection: 'desc',
+          },
           totalDoughStaked: true,
           veTokenTotalSupply: true,
-        }         
+        },
       },
     );
 
@@ -356,12 +354,12 @@ export const fetchStakingData = async (eth) => {
     // using graph...
     response = await fetchStakingDataGraph(eth.address);
 
-    if(response.stakers.length) {
+    if (response.stakers.length) {
       rewards = response.rewards;
       /* eslint-disable prefer-destructuring */
       staker = response.stakers[0];
       /* eslint-enable prefer-destructuring */
-    } else {
+    } else {
       throw new Error("no data on subgraph yet, let's fallback to onchain datas");
     }
   } catch (error) {
@@ -385,11 +383,14 @@ export const fetchStakingData = async (eth) => {
 
         staker[key].forEach((lock, index) => {
           if (lock.amount.toString() !== '0') {
-            // calculating accountAverageDuration / accountTokenBalance, escluding those boosted/duplicated locks...
-            // (this is because onchain we remove the old lock, and we create a new 36-months-duration one)
-            if(lock.boostedPointer  == '') {
-              locksCounter++;
-              dataObj.accountTokenBalance = dataObj.accountTokenBalance.plus(new BigNumber(lock.amount.toString()));
+            // calculating accountAverageDuration / accountTokenBalance,
+            // escluding those boosted/duplicated locks...
+            // (this is because onchain we remove the old lock,
+            // and we create a new 36-months-duration one)
+            if (lock.boostedPointer === '') {
+              locksCounter += 1;
+              dataObj.accountTokenBalance = dataObj.accountTokenBalance
+                .plus(new BigNumber(lock.amount.toString()));
               dataObj.accountAverageDuration += Number(lock.lockDuration);
             }
 
@@ -403,12 +404,12 @@ export const fetchStakingData = async (eth) => {
               withdrawn: lock.withdrawn,
               ejected: lock.ejected,
               boosted: lock.boosted,
-              boostedPointer: lock.boostedPointer
+              boostedPointer: lock.boostedPointer,
             });
           }
         });
 
-        dataObj.accountAverageDuration = dataObj.accountAverageDuration 
+        dataObj.accountAverageDuration = dataObj.accountAverageDuration
           ? Math.floor((dataObj.accountAverageDuration / locksCounter) / AVG_SECONDS_MONTH)
           : 0;
 
@@ -419,7 +420,7 @@ export const fetchStakingData = async (eth) => {
     });
   }
 
-  let votingPower = dataObj.accountVeTokenBalance && dataObj.veTokenTotalSupply 
+  const votingPower = dataObj.accountVeTokenBalance && dataObj.veTokenTotalSupply
     ? ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2)
     : 0;
 
@@ -477,7 +478,7 @@ export async function unstakeDOUGH(id, lockAmount, eth) {
   return new Promise(async (resolve, reject) => {
     if (!sharesTimeLock) {
       initContracts(eth);
-     }
+    }
 
     try {
       const response = await sharesTimeLock.withdraw(id);

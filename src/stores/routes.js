@@ -101,7 +101,7 @@ const formatRoute = (route) => {
     case 'dough-staking-campaign':
       return { page: DoughStakingCampaign };
     case 'dough':
-      return { page: Dough };      
+      return { page: Dough };
     case 'learn':
       return { page: Learn };
     case 'integrations':

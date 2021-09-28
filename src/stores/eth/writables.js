@@ -24,5 +24,5 @@ export const stakingStats = writable({
   averageTimeLock: 0,
   totalStakedDough: 0,
   totalVeDough: 0,
-  totalDough: 0
+  totalDough: 0,
 });
