@@ -4,6 +4,7 @@
   import { farming } from '../stores/eth/writables.js';
   import StakingStats from '../components/StakingStats.svelte';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
+  import moment from 'moment';
   
   import {
     formatFiat,
@@ -89,7 +90,32 @@
       circulatingSupply = ts.minus(BigNumber(msBal)).minus(BigNumber(daoBal)).toFixed(2);
     }
   })()
+
+  // countdown component...
+  let countdown;
+  var eventTimeStamp = new Date('October 3, 2021 12:00:00');
+  var currentTimeStamp = Date.now();
+
+  var eventTime = new Date();
+  eventTime.setTime(eventTimeStamp.getTime());
+
+  var Offset = new Date(eventTime.getTimezoneOffset()*60000)
+
+  var Diff = eventTimeStamp - currentTimeStamp + (Offset.getTime() / 2);
+  var duration = moment.duration(Diff, 'milliseconds');
+  var interval = 1000;
+
+  setInterval(function() {
+    duration = moment.duration(duration.asMilliseconds() - interval, 'milliseconds');
+    countdown = moment(duration.asMilliseconds()).format('D[d]:H[h]:mm[m]:ss[s]');
+  }, interval);  
 </script>
+
+<div>
+  {#if countdown}
+    {countdown}
+  {/if}
+</div>
 
 <Meta 
     metadata={{
