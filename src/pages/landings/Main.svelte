@@ -12,11 +12,28 @@
   import Newsletter from '../../components/Newsletter.svelte';
   import Change from '../../components/Change.svelte';
   import WhiteBox from '../../components/elements/WhiteBox.svelte';
+  import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
 
   import {
     getTokenImage,
     formatFiat,
   } from "../../components/helpers.js";
+
+      // lottie...
+      let controlsLayout = [
+    'previousFrame',
+    'playpause',
+    'stop',
+    'nextFrame',
+    'progress',
+    'frame',
+    'loop',
+    'spacer',
+    'background',
+    'snapshot',
+    'zoom',
+    'info',
+  ];
 
   $: pies = filter(poolsConfig.available.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
@@ -62,27 +79,48 @@
   }}
 />
 
-  <div class="w-100pc m-0 p-0 flex justify-center">
-    <div class="max-w-1200px flex flex-col items-center justify-center py-0 md:py-8 px-2">
-    <!-- <img class="w-90pc block md:hidden mb-2"  src={images.herolandingmobile} alt="PieDAO Hero" /> -->
-    <img class="md:w-90pc lg:w-80pc hidden md:block" src={images.herolanding} alt="PieDAO Hero" />
-    <div class="text-black font-bold text-center font-hero linear-wipe" >Wealth creation<br class="hidden md:block lg:block"/> automated</div>
-    <div class="text-lg text-black font-thin italic text-center mt-1" >Your path to <br class="block md:hidden lg:hidden"/>financial freedom</div>
-    <a href="#/swap" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get your pie</button></a>
-    <div class="w-100pc flex flex-col md:flex-row items-stretch text-left mt-6 mb-0 md:mt-10 md:mb-6 text-black font-bold text-base">
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4" data-aos="fade-up" data-aos-delay="200" >
-        <img class="w-40px" src={images.heroicon2} alt="PieDAO Hero" />
-        <span class="ml-4 leading-5">Set and forget strategies, <br class="hidden md:block" />maximum returns</span>
-      </div>
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4" data-aos="fade-down" data-aos-delay="100" >
-        <img class="w-40px" src={images.heroicon1} alt="PieDAO Hero" />
-        <span class="ml-4 leading-5">Diversified exposure to <br class="hidden md:block" />the best of crypto</span>  
-      </div>
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4" data-aos="fade-up" data-aos-delay="200" >
-        <img class="w-40px" src={images.heroicon3} alt="PieDAO Hero" />
-        <span class="ml-4 leading-5">Secure, transparent, <br class="hidden md:block" />and open-source</span>
+<div class="videocontainer">
+  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video">
+    <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4" data-aos="fade-up" data-aos-delay="500">
+  </video>
+  <div class="content flex flex-col spl px-4">
+    <div class="text-24px font-bold md:text-lg md:leading-8 text-center mb-4" data-aos="fade-up" data-aos-delay="100">PieDAO’s<br />Governance Token</div>
+    <img src={images.doughcolorful} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
+    <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organizazion and products.</div>
+    <button class="items-center stakinggradient shake text-black text-left mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
+      <div class="w-100pc flex items-center">
+      <div class="m-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
+      <div class="mr-20px">
+        <div class="text-base font-bold leading-5">Buy DOUGH</div>
+        <div class="text-sm font-thin">Current price: <strong>tanto</strong></div>
       </div>
     </div>
+    </button>
+  </div>
+</div>
+
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+  <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.hourglass} alt="hourglass" /><span>Long term<br />alignment</span></div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.gem} alt="gem" /><span>Rewarded<br />commitment</span></div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.pirateflag} alt="pirate flag" /><span>Treasury revenues<br />distribution</span></div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.womanlaptop} alt="woman laptop" /><span>The future of work<br />is DAO</span></div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.raisedhand} alt="raised hand" /><span>Hybrid governance<br />beyond coin vote</span></div>
+  </div>
+</div>
+
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
+    <div class="font-huge text-center mt-10">A new governance model</div>
+    <div class="font-thin text-l text-center mt-20px">
+      DOUGH is the basic element to start your journey and be part of the PieDAO family.
+      <br /><br />
+      If you stake DOUGH for a minimum of 6 months, you get in exchange veDOUGH, PieDAO’s governance token.
+      <br /><br />  
+      With veDOUGH you can help the community steer the destiny of the DAO and its products, make proposals, vote on issues while being compensated for your commitment and effort.
+      <br /><br />  
+      In fact PieDAO redistributes 60% of the revenues generated by its products and treasury management to active community members, proportionally to the amount of veDOUGH they hold.
+    </div>  
   </div>
 </div>
 
@@ -148,46 +186,6 @@
 </div>
 
 
-<section class="pt-8 px-4 text-center md:pt-8 lg:pt-12" data-aos="fade-up" data-aos-delay="0">
-  <div class="w-full max-w-2xl mx-auto">
-    <div class="text-lg text-center w-100pc block md:hidden leading-7 mb-6">Bake Together, save 97% Gas.<br /><a href="#/oven" class="underline"> Use the oven ></a></div>
-    <div class="font-huge text-center w-100pc pr-2 hidden md:block">Bake Together, save 97% Gas.</div>
-  </div>
-</section>
-
-<div class="w-100pc flex justify-center">
-  <div class="flex flex-col md:max-w-1200px p-0 p-4 md:p-6 mx-4 md:mx-0 mb-0 md:mb-4 items-center bg-lightgrey md:bg-white rounded">
-    <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
-
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center my-0 lg:m-10px p-0 md:p-20px" data-aos="fade-up" data-aos-delay="500">
-          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.depositeth} alt="deposit eth" />
-          <div class="flex flex-col text-left md:text-center md:mt-3">
-              <div class="text-lg">Deposit ETH</div>
-              <div class="font-thin mt-1 md:mt-2">When at least 10 ETH is deposited the Oven can begin.</div>
-          </div>
-        </div>
-
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px" data-aos="fade-up" data-aos-delay="500">
-          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.waitoven} alt="wait oven" />
-          <div class="flex flex-col text-left md:text-center md:mt-3">
-              <div class="text-lg">Wait</div>
-              <div class="font-thin mt-1 md:mt-2">Oven will bake when gas price is below 100 gwei, saving everyone money.</div>
-          </div>
-        </div>
-
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px" data-aos="fade-up" data-aos-delay="500">
-          <img class="w-50px md:w-80px mr-4 md:mr-0 mb-2 md:mb-0" src={images.sharegascost} alt="share gas cost" />
-          <div class="flex flex-col text-left md:text-center md:mt-3">
-            <div class="text-lg">Withdraw Your Pie</div>
-            <div class="font-thin mt-1 md:mt-2">Once the Pie is baked you can withdraw it to your wallet.</div>
-          </div>
-        </div>
-
-    </div>
-    <a href="#/oven" class="hidden md:block" data-aos="fade-up" data-aos-delay="700"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Oven</button></a>
-
-  </div>
-</div>
 
 
 <div class="content">
@@ -204,22 +202,46 @@
   </div>
 </div>
 
-
-<div class="videocontainer-landing mt-2 mb-6 md:my-6 py-20 md:py-30">
-  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video-landing hidden md:block">
-    <source class="hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4" data-aos="fade-up" data-aos-delay="500">
-  </video>
-  <div class="content flex flex-col spl px-4 z-50">
-    <!-- <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div> -->
-    <img src={images.doughcolorful} class="w-60pc md:w-30pc" alt="dough" data-aos="fade-up" data-aos-delay="200"/>
-    <div class="text-base md:text-lg font-thin text-center mt-2" data-aos="fade-up" data-aos-delay="400">The engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
-    <a href="#/dough" data-aos="fade-up" data-aos-delay="600"><button class="btnblack m-0 mt-4 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
+<div class="flex flex-col items-center text-center md:mt-10 mx-8 mb-20">
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
+    <div class="w-full font-huge text-center mt-10">Doughconomics</div>
+    <div class="w-full font-thin text-l text-center mt-20px">
+      This is how the DAO makes money and how is redestrebuting them to the system
+    </div> 
+    <a href="#/simulator" class="font-bold text-base text-center">
+      Learn more about staking >
+    </a>   
+  </div>
+  <div class="hidden md:block">
+    <LottiePlayer
+    src="https://assets10.lottiefiles.com/private_files/lf30_wksf88hl.json"
+    autoplay="{true}"
+    loop="{true}"
+    controls="{false}"
+    renderer="svg"
+    background="white"
+    height=""
+    width="100%"
+    controlsLayout="{controlsLayout}"
+    />
+  </div>
+  <div class="block md:hidden">
+    <img class="w-100% inline mb-4" src={images.doughconomics} alt="dough economics diagram" />
   </div>
 </div>
 
-
-<Contributors />
 <Newsletter />
 <FeaturedIn />
 <AuditedBy />
+
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+  <div class="flex flex-wrap justify-center w-full max-w-1240px mb-4 px-10">
+    <img class="h-40px inline" src={images.hourglass} alt="hourglass" />
+    <img class="h-40px inline mx-4" src={images.gem} alt="gem" />
+    <img class="h-40px inline" src={images.pirateflag} alt="pirate flag" />
+  </div>
+  <a target="_blank" href="https://medium.com/piedao/piedao-is-expanding-the-core-team-and-open-sourcing-the-search-for-talent-b22fce733293" class="font-bold text-pink text-base text-center">
+    We're hiring >
+  </a>   
+</div>
 
