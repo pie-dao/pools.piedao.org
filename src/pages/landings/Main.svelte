@@ -79,6 +79,12 @@
   }}
 />
 
+<a class="w-full flex justify-center items-center" href="#/simulator">
+  <div class="w-full mx-4">
+    <img src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner.jpg?raw=true" class="w-full crisp rounded" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
+  </div>
+</a>
+
 <div class="videocontainer">
   <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video">
     <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4" data-aos="fade-up" data-aos-delay="500">
@@ -234,7 +240,7 @@
 <FeaturedIn />
 <AuditedBy />
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+<div class="flex flex-col items-center text-center mt-4 md:mt-4 mb-8  mx-8">
   <div class="flex flex-wrap justify-center w-full max-w-1240px mb-4 px-10">
     <img class="h-40px inline" src={images.hourglass} alt="hourglass" />
     <img class="h-40px inline mx-4" src={images.gem} alt="gem" />
