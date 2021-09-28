@@ -330,7 +330,7 @@
         <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
         <div class="text-l md:text-lg font-thin text-justify mx-4 md:mx-10pc mt-8 mb-8">
           We believe that DAO profits should go to those who put in the hard work of driving this wealth creation machine forward: <strong>active governance members.</strong>
-          <br /><br />Should PIP-XX pass the community vote, only staked DOUGH (veDOUGH) will be used for governance votes. This means no free-riding, no swaying votes for short-term gain, and true long-term alignment for the future of PieDAO.
+          <br /><br />Should PIP-60 pass the community vote, only staked DOUGH (veDOUGH) will be used for governance votes. This means no free-riding, no swaying votes for short-term gain, and true long-term alignment for the future of PieDAO.
         </div>
       </div>
     </div>

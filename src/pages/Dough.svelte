@@ -209,7 +209,7 @@
     <div class="font-thin text-l text-center mt-20px">
       This is how the DAO makes money and how is redestrebuting them to the system
     </div> 
-    <a href="#/simulator" class="font-bold text-base text-center">
+    <a href="#/staking-simulator" class="font-bold text-base text-center">
       Test your assumptions on the simulator >
     </a>   
   </div>

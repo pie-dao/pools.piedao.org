@@ -43,7 +43,6 @@
     "0xe4f726adc8e89c6a6017f01eada77865db22da14": "https://github.com/pie-dao/brand/blob/master/PIE%20Tokens/BCP.png?raw=true",
     "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": "https://github.com/pie-dao/brand/blob/master/PIE%20Tokens/BCP.png?raw=true",
     "0xC7a8B45E184138114E6085C82936A8Db93DD156a": "https://assets.coingecko.com/coins/images/17046/small/Hashie.png?1626147674",
-
     "0x5d8d9f5b96f4438195be9b99eee6118ed4304286": "https://assets.coingecko.com/coins/images/13167/small/cover.png?1605839290",
     "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2": "https://assets.coingecko.com/coins/images/12271/small/512x512_Logo_no_chop.png?1606986688",
     "0x1ceb5cb57c4d4e2b2433641b95dd330a33185a44": "https://assets.coingecko.com/coins/images/12966/small/kp3r_logo.jpg?1607057458",
@@ -52,7 +51,12 @@
     "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/YPIE.svg",
     "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4": "https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/PLAY.svg",
     "0x69bbe2fa02b4d90a944ff328663667dc32786385": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x69BbE2FA02b4D90A944fF328663667DC32786385/logo.png", 
-    "0x0fe629d1e84e171f8ff0c1ded2cc2221caa48a3f": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x0fe629d1E84E171f8fF0C1Ded2Cc2221Caa48a3f/logo.png"
+    "0x0fe629d1e84e171f8ff0c1ded2cc2221caa48a3f": "https://raw.githubusercontent.com/sushiswap/assets/master/blockchains/ethereum/assets/0x0fe629d1E84E171f8fF0C1Ded2Cc2221Caa48a3f/logo.png",
+    "0x767fe9edc9e0df98e07454847909b5e959d7ca0e": "https://assets.coingecko.com/coins/images/14468/small/ILV.JPG?1617182121",
+    "0x18aaa7115705e8be94bffebde57af9bfc265b998": "https://assets.coingecko.com/coins/images/12913/small/AudiusCoinLogo_2x.png?1603425727",
+    "0x15d4c048f83bd7e37d49ea4c83a07267ec4203da": "https://assets.coingecko.com/coins/images/12493/small/GALA-COINGECKO.png?1600233435",
+    "0xbbc2ae13b23d715c30720f079fcd9b4a74093505": "https://assets.coingecko.com/coins/images/14238/small/ethernity_logo.png?1615189750"
+
   },
   "amazingrewards":"https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards2.png",
   "votenow":"https://raw.githubusercontent.com/pie-dao/brand/master/misc/votenow.png",
@@ -156,7 +160,4 @@
   "bgtokenholder": "https://github.com/pie-dao/brand/blob/master/misc/bg-tokenholder.jpg?raw=true",
   "tokenholderherotype": "https://raw.githubusercontent.com/pie-dao/brand/f20984ba47b2f0a9e4cf0bff4e7480c01dff875d/misc/tokenholderherotype.svg",
   "farmerbenefitcampaign": "  https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/farmer_1f9d1-200d-1f33e.png"
-
-
-
 }

@@ -124,14 +124,14 @@ const formatRoute = (route) => {
       return { page: StakingPositions };
     case 'staking_rewards':
       return { page: StakingRewards };
-    case 'simulator':
+    case 'staking-simulator':
       /* eslint-disable no-case-declarations */
       const simulation = (route[1] || '');
       /* eslint-enable no-case-declarations */
       return { page: Simulator, params: { simulation } };
     case 'simulator-stats':
       return { page: SimulatorStats };
-    case 'stake':
+    case 'lp-legacy-farm':
       referral = route[1] || null;
 
       if (referral) {
