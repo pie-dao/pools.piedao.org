@@ -234,22 +234,24 @@
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
   <div class="flex flex-col justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
-    <div class="font-huge text-center mt-10">Active votes</div>
+    <div class="font-huge text-center mt-10">Last votes</div>
     <div class="font-thin text-l text-center mt-20px">
       Participate on the last Governance issues
     </div>
-    <div class="font-thin text-l text-center mt-20px">
-      {#if proposals}
-        {#each proposals as proposal}
-          <a target="_blank" href="{proposal.link}">
-            <p>{proposal.author}</p>
-            <p>{proposal.title}</p>
-            <p>{proposal.state}</p>
-            <!-- <p>{@html proposal.body}</p> -->
-          </a>
-        {/each}
-      {/if}
-    </div> 
+      <div class="flex flex-row text-l mt-20px">
+        {#if proposals}
+          {#each proposals as proposal}
+          <div class="w-1/2 bg-white py-8 px-4 mx-2 rounded border-thin">
+            <a class="flex flex-col items-center" target="_blank" href="{proposal.link}">
+              <span class="font-thin text-xs">{proposal.author}</span>
+              <span class="my-10px">{proposal.title}</span>
+              <span class="w-70px bg-black rounded text-xs text-white p-1">{proposal.state}</span>
+              <!-- <p>{@html proposal.body}</p> -->
+            </a>
+          </div>
+          {/each}
+        {/if}
+      </div>
   </div>
 </div>
 
