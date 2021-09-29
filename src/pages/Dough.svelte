@@ -203,7 +203,7 @@
 </div>
 
 
-<div class="flex flex-col items-center text-center md:mt-10 mx-8">
+<div class="flex flex-col items-center text-center md:mt-4 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
     <div class="font-huge text-center mt-10">Doughconomics</div>
     <div class="font-thin text-l text-center mt-20px">

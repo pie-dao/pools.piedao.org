@@ -126,7 +126,13 @@
   </div>
 </div>
 
-<a class="w-full flex justify-center items-center pointer" href="/#/dough-staking-campaign">
+<a class="hidden md:block w-full flex justify-center items-center pointer" href="/#/dough-staking-campaign">
+  <div class="w-full mx-8">
+    <img src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner-Small.jpg?raw=true" class="w-full crisp rounded" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
+  </div>
+</a>
+
+<a class="block md:hidden w-full flex justify-center items-center pointer" href="/#/dough-staking-campaign">
   <div class="w-full mx-8">
     <img src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner-Small.jpg?raw=true" class="w-full crisp rounded" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
   </div>
