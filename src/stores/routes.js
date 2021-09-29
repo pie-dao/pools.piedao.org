@@ -200,7 +200,6 @@ window.addEventListener('hashchange', () => {
       page_path: trackPath,
     });
   }
-
   currentRoute.set({ ...formatRoute(newRoute) });
   window.scrollTo({
     top: 0,
