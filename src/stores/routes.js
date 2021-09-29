@@ -78,8 +78,8 @@ const formatRoute = (route) => {
   let referral;
   let method;
 
-  const _route = Object.assign({}, route);
-
+  const _route = route ? [...route] : [];
+  console.log('formatRoute before -> _route', _route, route);
   if (_route) {
     for (let i = 0; i < _route.length; i++) {
       if (_route[i] && _route[i].indexOf('?') >= 0) {
