@@ -120,9 +120,8 @@
     }}
 />
 
-<div class="videocontainer">
-  <video loop muted autoplay poster="https://github.com/pie-dao/brand/blob/master/misc/bg-tokenholder.jpg?raw=true" class="bg_video">
-  </video>
+<div class="bgtokenholdercontainer">
+
   <div class="content flex flex-col spl px-4">
     <div class="flex flex-col items-center text-white font-thin">
       <span class="text-l">Staking starts in </span>
@@ -212,7 +211,7 @@
 </div>
 
 
-<div class="flex flex-col items-center text-center md:mt-10 mx-8">
+<div class="flex flex-col items-center text-center md:mt-2 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
     <div class="w-full font-huge text-center mt-10">Token Economics</div>
     <div class="w-full font-thin text-l text-center mt-20px">

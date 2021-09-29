@@ -1985,6 +1985,31 @@ outline: none;
   display: flex;
 }
 
+.bgtokenholdercontainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  background: url(https://github.com/pie-dao/brand/blob/master/misc/bg-tokenholder.jpg?raw=true) no-repeat center center; 
+  -webkit-background-size: cover!important;
+  -moz-background-size: cover!important;
+  -o-background-size: cover!important;
+  background-size: cover!important;
+}
+
+@media screen and (max-width: 800px) {
+  .bgtokenholdercontainer {
+    width: 100%;
+    height: 100vh;
+  }
+
+}
+
+.bgtokenholdercontainer div {
+  z-index: 1;
+}
+
 .videocontainer-landing {
   width: 100%;
   height: 100%;
