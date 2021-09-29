@@ -17,6 +17,6 @@ if (query) {
   }
   // strip off all params from url
   /* eslint-disable prefer-destructuring */
-  window.location.href = url.split('?')[0];
+  // window.location.href = url.split('?')[0];
   /* eslint-enable prefer-destructuring */
 }

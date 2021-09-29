@@ -8,6 +8,7 @@ import Main from '../pages/landings/Main.svelte';
 import Tokensswap from '../pages/Tokensswap.svelte';
 import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
+import DoughStakingCampaign from '../pages/DoughStakingCampaign.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
 import LPStakingV2 from '../pages/LPStakingV2.svelte';
@@ -22,6 +23,9 @@ import PiePageSwitch from '../pages/PiePageSwitch.svelte';
 import Learn from '../pages/Learn.svelte';
 import Integrations from '../pages/Integrations.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
+// import DoughStaking from '../pages/DoughStaking.svelte';
+// import StakingPositions from '../pages/StakingPositions.svelte';
+// import StakingRewards from '../pages/StakingRewards.svelte';
 import Redirect from '../pages/Redirect.svelte';
 import Farm from '../pages/Farm.svelte';
 import Simulator from '../pages/simulator/Simulator.svelte';
@@ -73,11 +77,23 @@ const formatRoute = (route) => {
   let poolAction;
   let referral;
   let method;
+
+  const _route = route ? [...route] : [];
+  console.log('formatRoute before -> _route', _route, route);
+  if (_route) {
+    for (let i = 0; i < _route.length; i++) {
+      if (_route[i] && _route[i].indexOf('?') >= 0) {
+        _route[i] = _route[i].substring(0, _route[i].indexOf('?'));
+      }
+    }
+  }
+
+  console.log('formatRoute after -> _route', _route);
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
   // changeUrl(route);
 
-  switch (route[0] || 'root') {
+  switch (_route[0] || 'root') {
     case 'support':
       return { page: Redirect, params: { label: 'support page!', to: 'https://piedao.atlassian.net/servicedesk/customer/portals' } };
     case 'about':
@@ -89,11 +105,13 @@ const formatRoute = (route) => {
     case 'pies':
       return { page: Dashboard };
     case 'exp':
-      address = (route[1] || '0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5').toLowerCase();
+      address = (_route[1] || '0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5').toLowerCase();
       return { page: Experipie, params: { address } };
     case 'pie':
-      address = (route[1] || '').toLowerCase();
+      address = (_route[1] || '').toLowerCase();
       return { page: PiePageSwitch, params: { address } };
+    case 'dough-staking-campaign':
+      return { page: DoughStakingCampaign };
     case 'dough':
       return { page: Dough };
     case 'learn':
@@ -112,26 +130,32 @@ const formatRoute = (route) => {
       return { page: LPStakingV2 };
     case 'farm':
       return { page: Farm };
+    // case 'dough-staking':
+    //   return { page: DoughStaking };
+    // case 'staking_positions':
+    //   return { page: StakingPositions };
+    // case 'staking_rewards':
+    //   return { page: StakingRewards };
     case 'staking-simulator':
       /* eslint-disable no-case-declarations */
-      const simulation = (route[1] || '');
+      const simulation = (_route[1] || '');
       /* eslint-enable no-case-declarations */
       return { page: Simulator, params: { simulation } };
     case 'simulator-stats':
       return { page: SimulatorStats };
     case 'lp-legacy-farm':
-      referral = route[1] || null;
+      referral = _route[1] || null;
 
       if (referral) {
         window.localStorage.setItem('referral', referral);
       }
       return { page: LPStaking, params: { referral } };
     case 'staking':
-      return route[1] ? { page: StakingPageSingle, params: route } : { page: Staking };
+      return _route[1] ? { page: StakingPageSingle, params: _route } : { page: Staking };
     case 'pools':
-      address = (route[1] || '').toLowerCase();
-      poolAction = (route[2] || 'add').toLowerCase();
-      method = (route[3] || 'single').toLowerCase();
+      address = (_route[1] || '').toLowerCase();
+      poolAction = (_route[2] || 'add').toLowerCase();
+      method = (_route[3] || 'single').toLowerCase();
 
       if (pools.available.includes(address)) {
         return { page: Pool, params: { address, poolAction, method } };
@@ -159,6 +183,7 @@ const formatRoute = (route) => {
 };
 
 const route = deriveRoute();
+console.log("deriveRoute -> route", route);
 
 export const currentRoute = writable({ ...formatRoute(route) });
 
@@ -171,11 +196,10 @@ window.addEventListener('hashchange', () => {
       page_path: trackPath,
     });
   } else {
-    console.log('Analytics DEV', {
+    console.log('Routes Analytics DEV', {
       page_path: trackPath,
     });
   }
-
   currentRoute.set({ ...formatRoute(newRoute) });
   window.scrollTo({
     top: 0,

@@ -1863,6 +1863,11 @@
     mkdirp "^1.0.4"
     rimraf "^3.0.2"
 
+"@okrad/svelte-progressbar@^1.11.2":
+  version "1.11.2"
+  resolved "https://registry.yarnpkg.com/@okrad/svelte-progressbar/-/svelte-progressbar-1.11.2.tgz#d96e535d4e121115281a38f6f49d37b2ae16ca7a"
+  integrity sha512-gL6EFher4l1FwJ+7N7U7bRemKiIa9vtNMOfez4/S5IBpcb8i7t94B+GyTdrXVfvF1hf2KesjxsyjPGNJ0VFW8Q==
+
 "@parcel/fs@^1.11.0":
   version "1.11.0"
   resolved "https://registry.yarnpkg.com/@parcel/fs/-/fs-1.11.0.tgz#fb8a2be038c454ad46a50dc0554c1805f13535cd"
@@ -12541,6 +12546,13 @@ svelte-range-slider-pips@^1.8.0:
   resolved "https://registry.yarnpkg.com/svelte-range-slider-pips/-/svelte-range-slider-pips-1.8.0.tgz#cea0f95979e73918a21a4376b1d1a0cbcea2740e"
   integrity sha512-7tlTd5bXrGUbJBqL+6YJ8taN1opB2CcUSlBBh7mbpla/T6WH/CxblqnNcQX5Gwghhkol4/u4QjKLe65crLsbDg==
 
+svelte-scrollto@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/svelte-scrollto/-/svelte-scrollto-0.2.0.tgz#a1da47876466796bba4533a4346537f752f01680"
+  integrity sha512-l4K2E4jr6dXCODtZDCkpp/TzknVVoq8gecHM0UOOmihvLosczdyLuyDUhZ+U2HkhLWi7nnimuOstZSFKtXSpmA==
+  dependencies:
+    svelte "3.x"
+
 svelte-tabs@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/svelte-tabs/-/svelte-tabs-1.1.0.tgz#093c5fdac57cbb0e6ba81e717d68fb9da7239208"
@@ -12552,6 +12564,11 @@ svelte-watch-resize@^1.0.3:
   integrity sha512-ktqTnkdqfx4YRqeMJcX1jeSnQ2kJUVlj4/rLdaLbhM+RrxN87vS2EZ0cxlGZ7eXV86Ef05Q3dVqEiR+12PeoIw==
   dependencies:
     element-resize-detector "^1.1"
+
+svelte@3.x:
+  version "3.42.5"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.42.5.tgz#06c27ccdacebb4027b7a625633e7ca285bdff713"
+  integrity sha512-+y9ivcwMojAb0e87W7vR/UP7go44zc/3gtEciIMb8CUoIkUx6UJmPloBvVuO9MDXoGkUZM5SHr5PbLze9fJQVw==
 
 svelte@^3.32.0:
   version "3.35.0"

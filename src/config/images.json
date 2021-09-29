@@ -43,7 +43,6 @@
     "0xe4f726adc8e89c6a6017f01eada77865db22da14": "https://github.com/pie-dao/brand/blob/master/PIE%20Tokens/BCP.png?raw=true",
     "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": "https://github.com/pie-dao/brand/blob/master/PIE%20Tokens/BCP.png?raw=true",
     "0xC7a8B45E184138114E6085C82936A8Db93DD156a": "https://assets.coingecko.com/coins/images/17046/small/Hashie.png?1626147674",
-
     "0x5d8d9f5b96f4438195be9b99eee6118ed4304286": "https://assets.coingecko.com/coins/images/13167/small/cover.png?1605839290",
     "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2": "https://assets.coingecko.com/coins/images/12271/small/512x512_Logo_no_chop.png?1606986688",
     "0x1ceb5cb57c4d4e2b2433641b95dd330a33185a44": "https://assets.coingecko.com/coins/images/12966/small/kp3r_logo.jpg?1607057458",
@@ -69,7 +68,7 @@
   "stake": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/stake.png",
   "claim": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/claim.png",
   "withdraw": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/withdraw.png",
-  "herodough": "https://raw.githubusercontent.com/pie-dao/brand/master/dough_hero.png",
+  "herodough": "https://github.com/pie-dao/brand/blob/master/misc/stakingcampaignpreview.jpg?raw=true",
   "herolanding": "https://raw.githubusercontent.com/pie-dao/brand/d9481f58ba0550a9e7f5455cb93760783651f4e2/misc/hero-8.svg",
   "herolandingmobile": "https://raw.githubusercontent.com/pie-dao/brand/8c311b7cc2ab5002d6cef9562bc4ff37b022e5dc/misc/hero-8-mobile.svg",
   "heroicon1": "https://raw.githubusercontent.com/pie-dao/brand/2b47cee4fcc0fd814ff54e78ab9251345a521541/misc/hero-icon-1-black.svg",
@@ -145,5 +144,20 @@
   "simulator_info": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/info.svg",
   "simulator_customize": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/customize.svg",
   "veDough": "https://raw.githubusercontent.com/pie-dao/brand/fa037b10556371316c43ea0f0939fd35897f8443/DOUGH%20Token/veDOUGH.svg",
-  "rewardsPie": "https://raw.githubusercontent.com/pie-dao/brand/6adcf8b3a75380cc49ea119150b683a031afa016/PIE%20Tokens/RewardPie.svg"
+  "rewardsPie": "https://raw.githubusercontent.com/pie-dao/brand/6adcf8b3a75380cc49ea119150b683a031afa016/PIE%20Tokens/RewardPie.svg",
+  "slashed": "https://raw.githubusercontent.com/pie-dao/brand/86501f412e3c7bb62694ca0e962d6f86f2a278a6/misc/slashed.svg",
+  "claimed": "https://raw.githubusercontent.com/pie-dao/brand/86501f412e3c7bb62694ca0e962d6f86f2a278a6/misc/claimed.svg",
+  "person_raising_hand": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/person-raising-hand_1f64b.png",
+  "locked_with_key": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/locked-with-key_1f510.png",
+  "cut_of_meat": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/cut-of-meat_1f969.png",
+  "reload_arrow": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/reload-arrow.png",
+  "gem": "https://github.com/pie-dao/brand/blob/master/misc/Dough-benefits-icons/gem.png?raw=true",
+  "hourglass": "https://github.com/pie-dao/brand/blob/master/misc/Dough-benefits-icons/hourglass.png?raw=true",
+  "pirateflag": "https://github.com/pie-dao/brand/blob/master/misc/Dough-benefits-icons/pirates.png?raw=true",
+  "raisedhand": "https://github.com/pie-dao/brand/blob/master/misc/Dough-benefits-icons/raised-hand.png?raw=true",
+  "womanlaptop": "https://github.com/pie-dao/brand/blob/master/misc/Dough-benefits-icons/woman-laptop.png?raw=true",
+  "doughconomics": "https://github.com/pie-dao/brand/blob/master/misc/dougheconomics.png?raw=true",
+  "bgtokenholder": "https://github.com/pie-dao/brand/blob/master/misc/bg-tokenholder.jpg?raw=true",
+  "tokenholderherotype": "https://raw.githubusercontent.com/pie-dao/brand/f20984ba47b2f0a9e4cf0bff4e7480c01dff875d/misc/tokenholderherotype.svg",
+  "farmerbenefitcampaign": "  https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/farmer_1f9d1-200d-1f33e.png"
 }

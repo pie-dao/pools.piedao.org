@@ -17,6 +17,7 @@
     "@ethersproject/strings": "^5.0.5",
     "@ethersproject/units": "^5.0.3",
     "@lottiefiles/svelte-lottie-player": "^0.2.0",
+    "@okrad/svelte-progressbar": "^1.11.2",
     "@pie-dao/abis": "^1.0.0",
     "@pie-dao/eth-tailwind": "^1.0.0",
     "@pie-dao/tailwind": "^1.1.2",
@@ -45,6 +46,7 @@
     "svelte-apollo": "^0.3.0",
     "svelte-i18n": "^3.0.4",
     "svelte-range-slider-pips": "^1.8.0",
+    "svelte-scrollto": "^0.2.0",
     "svelte-tabs": "^1.1.0",
     "svelte-watch-resize": "^1.0.3",
     "tailwindcss": "^2.0.2"

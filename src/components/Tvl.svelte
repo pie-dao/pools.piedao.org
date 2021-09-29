@@ -69,6 +69,7 @@
 
             if( p.id == 3 || p.id == 4 ) {
                 const pieStaked = $farming[p.addressUniPoll].doughStaked;
+                console.log(p.containing[0].address, marketData)
                 partialTotal -= pieStaked * marketData[ p.containing[0].address ].market_data.current_price;
             } 
 

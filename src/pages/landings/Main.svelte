@@ -1,225 +1,395 @@
 <script>
-	import filter from 'lodash/filter';
+  import filter from 'lodash/filter';
   import get from 'lodash/get';
-  import poolsConfig from "../../config/pools.json";
+  import poolsConfig from '../../config/pools.json';
   import { piesMarketDataStore } from '../../stores/coingecko.js';
   import { pools } from '../../stores/eth.js';
   import Meta from '../../components/elements/meta.svelte';
-  import images from "../../config/images.json";
+  import images from '../../config/images.json';
   import FeaturedIn from '../../components/FeaturedIn.svelte';
   import AuditedBy from '../../components/AuditedBy.svelte';
   import Contributors from '../../components/Contributors.svelte';
   import Newsletter from '../../components/Newsletter.svelte';
   import Change from '../../components/Change.svelte';
   import WhiteBox from '../../components/elements/WhiteBox.svelte';
+  import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
+  import { farming } from '../../stores/eth/writables.js';
 
-  import {
-    getTokenImage,
-    formatFiat,
-  } from "../../components/helpers.js";
+  import { getTokenImage, formatFiat } from '../../components/helpers.js';
 
-  $: pies = filter(poolsConfig.available.map(address => {
-    let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
-    return {
-      ...poolsConfig[address],
-      address,
-      icon: getTokenImage(address),
-      totalLiquidity: $pools[`${address}-usd`] ? formatFiat( $pools[`${address}-usd`].toFixed(2).toString() ) : '-',
-      totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
-      change: change ? change : 0,
-      nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
-    };
-  }), {isExperipie: false}) || [];
+  // lottie...
+  let controlsLayout = [
+    'previousFrame',
+    'playpause',
+    'stop',
+    'nextFrame',
+    'progress',
+    'frame',
+    'loop',
+    'spacer',
+    'background',
+    'snapshot',
+    'zoom',
+    'info',
+  ];
 
-  $: piVaults = filter(poolsConfig.available.map(address => {
-    let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
-    let price = get($piesMarketDataStore, `${address}.market_data.current_price`, 0)
-    return {
-      ...poolsConfig[address],
-      address,
-      icon: getTokenImage(address),
-      totalLiquidity: $pools[`${address}-usd`] ? formatFiat( $pools[`${address}-usd`].toFixed(2).toString() ) : '-',
-      totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
-      change: change ? change : 0,
-      nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
-      price: price ? `$ ${price}` : `n/a`,
-      rawPrice: price
-    };
-  }), {isExperipie: true}) || [];
+  let price = 'n/a';
 
-  $: getNav =((token) => {
-    return formatFiat($pools[token+"-nav"] ? $pools[token+"-nav"] : '')
-  })
-  
+  $: pies =
+    filter(
+      poolsConfig.available.map((address) => {
+        let change = get(
+          $piesMarketDataStore,
+          `${address}.market_data.price_change_percentage_24h`,
+          0,
+        );
+        return {
+          ...poolsConfig[address],
+          address,
+          icon: getTokenImage(address),
+          totalLiquidity: $pools[`${address}-usd`]
+            ? formatFiat($pools[`${address}-usd`].toFixed(2).toString())
+            : '-',
+          totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
+          change: change ? change : 0,
+          nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
+        };
+      }),
+      { isExperipie: false },
+    ) || [];
+
+  $: piVaults =
+    filter(
+      poolsConfig.available.map((address) => {
+        let change = get(
+          $piesMarketDataStore,
+          `${address}.market_data.price_change_percentage_24h`,
+          0,
+        );
+        let price = get($piesMarketDataStore, `${address}.market_data.current_price`, 0);
+        return {
+          ...poolsConfig[address],
+          address,
+          icon: getTokenImage(address),
+          totalLiquidity: $pools[`${address}-usd`]
+            ? formatFiat($pools[`${address}-usd`].toFixed(2).toString())
+            : '-',
+          totalLiquidityNum: $pools[`${address}-usd`] ? $pools[`${address}-usd`].toNumber() : 0,
+          change: change ? change : 0,
+          nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
+          price: price ? `$ ${price}` : `n/a`,
+          rawPrice: price,
+        };
+      }),
+      { isExperipie: true },
+    ) || [];
+
+  $: getNav = (token) => {
+    return formatFiat($pools[token + '-nav'] ? $pools[token + '-nav'] : '');
+  };
+
+  $: (async () => {
+    price = $farming['0xB9a4Bca06F14A982fcD14907D31DFACaDC8ff88E'].DOUGHPrice.toFixed(2) || 0;
+  })();
 </script>
 
-<Meta 
+<Meta
   metadata={{
-    title: "PieDAO, the asset allocation DAO governing tokenized ETF products.",
-    description: "An overview of the PieDAO mission and core products, including BCP, DEFI+L and DEFI++ DEFI index. ",
+    title: 'PieDAO, the asset allocation DAO governing tokenized ETF products.',
+    description:
+      'An overview of the PieDAO mission and core products, including BCP, DEFI+L and DEFI++ DEFI index. ',
     image: images.defimadesimple,
-    imageAlt: "Investors examine spreadsheets and DEFI index opportunities"
+    imageAlt: 'Investors examine spreadsheets and DEFI index opportunities',
   }}
 />
 
-  <div class="w-100pc m-0 p-0 flex justify-center">
-    <div class="max-w-1200px flex flex-col items-center justify-center py-0 md:py-8 px-2">
-    <!-- <img class="w-90pc block md:hidden mb-2"  src={images.herolandingmobile} alt="PieDAO Hero" /> -->
-    <img class="md:w-90pc lg:w-80pc hidden md:block" src={images.herolanding} alt="PieDAO Hero" />
-    <div class="text-black font-bold text-center font-hero linear-wipe" >Wealth creation<br class="hidden md:block lg:block"/> automated</div>
-    <div class="text-lg text-black font-thin italic text-center mt-1" >Your path to <br class="block md:hidden lg:hidden"/>financial freedom</div>
-    <a href="#/swap" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get your pie</button></a>
-    <div class="w-100pc flex flex-col md:flex-row items-stretch text-left mt-6 mb-0 md:mt-10 md:mb-6 text-black font-bold text-base">
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4" data-aos="fade-up" data-aos-delay="200" >
-        <img class="w-40px" src={images.heroicon2} alt="PieDAO Hero" />
-        <span class="ml-4 leading-5">Set and forget strategies, <br class="hidden md:block" />maximum returns</span>
+<div class="videocontainer">
+  <video
+    loop
+    muted
+    autoplay
+    poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg"
+    class="bg_video"
+  >
+    <source
+      src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4"
+      type="video/mp4"
+      data-aos="fade-up"
+      data-aos-delay="500"
+    />
+  </video>
+  <div class="content flex flex-col spl px-4">
+    <div class="text-24px font-bold text-lg leading-8 text-center mb-4" data-aos="fade-up" data-aos-delay="100">PieDAO’s<br />Governance Token</div>
+    <img src={images.doughcolorful} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
+    <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organizazion and products.</div>
+    <button class="items-center stakinggradient shake text-black text-left mt-20 md:mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
+      <div class="w-100pc flex items-center">
+        <div class="m-10px">
+          <img class="h-50px inline" src={images.doughtoken} alt="doughtoken" />
+        </div>
+        <div class="mr-20px">
+          <div class="text-base font-bold leading-5">Buy DOUGH</div>
+          <div class="text-sm font-thin">Current price: <strong>${price}</strong></div>
+        </div>
       </div>
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4" data-aos="fade-down" data-aos-delay="100" >
-        <img class="w-40px" src={images.heroicon1} alt="PieDAO Hero" />
-        <span class="ml-4 leading-5">Diversified exposure to <br class="hidden md:block" />the best of crypto</span>  
-      </div>
-      <div class="flex w-100pc justify-start items-center md:justify-center mt-2 md:mx-3 md:mt-0 md:w-1/3 bg-black-alpha rounded py-4 px-4" data-aos="fade-up" data-aos-delay="200" >
-        <img class="w-40px" src={images.heroicon3} alt="PieDAO Hero" />
-        <span class="ml-4 leading-5">Secure, transparent, <br class="hidden md:block" />and open-source</span>
-      </div>
+    </button>
+  </div>
+</div>
+
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
+  <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
+      <img class="h-50px inline mb-4" src={images.hourglass} alt="hourglass" /><span
+        >Long term<br />alignment</span
+      >
+    </div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
+      <img class="h-50px inline mb-4" src={images.gem} alt="gem" /><span
+        >Rewarded<br />commitment</span
+      >
+    </div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
+      <img class="h-50px inline mb-4" src={images.pirateflag} alt="pirate flag" /><span
+        >Treasury revenues<br />distribution</span
+      >
+    </div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
+      <img class="h-50px inline mb-4" src={images.womanlaptop} alt="woman laptop" /><span
+        >The future of work<br />is DAO</span
+      >
+    </div>
+    <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
+      <img class="h-50px inline mb-4" src={images.raisedhand} alt="raised hand" /><span
+        >Hybrid governance<br />beyond coin vote</span
+      >
     </div>
   </div>
 </div>
 
-
-<div class="content text-center" style="padding-bottom: 0!important;">
-  <span class="mt-6 mb-0 px-2 md:px-8 italic text-lg block md:hidden leading-7 font-thin">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
-  <span class="mt-12 mb-4 px-8 italic font-huge hidden md:block" data-aos="fade-up" data-aos-delay="500">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
+<div class="flex flex-col items-center text-center mt-4 md:mt-8 mx-8">
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-6 px-10">
+    <div class="font-huge text-center mt-10">A new governance model</div>
+    <div class="font-thin text-l text-center mt-20px">
+      DOUGH is the basic element to start your journey and be part of the PieDAO family.
+      <br /><br />
+      If you stake DOUGH for a minimum of 6 months, you get in exchange veDOUGH, PieDAO’s governance
+      token.
+      <br /><br />
+      With veDOUGH you can help the community steer the destiny of the DAO and its products, make proposals,
+      vote on issues while being compensated for your commitment and effort.
+      <br /><br />
+      In fact PieDAO redistributes 60% of the revenues generated by its products and treasury management
+      to active community members, proportionally to the amount of veDOUGH they hold.
+    </div>
+  </div>
 </div>
 
+<a
+  class="hidden md:block w-full flex justify-center items-center pointer"
+  href="/#/dough-staking-campaign"
+>
+  <div class="w-full mx-8">
+    <img
+      src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner-Small.jpg?raw=true"
+      class="w-full crisp rounded"
+      alt="dough"
+      data-aos="fade-up"
+      data-aos-delay="150"
+    />
+  </div>
+</a>
 
-<div class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll md:overflow-x-hidden hidescrollbar">
-  <div class="w-100pc md:max-w-1200px flex items-start justify-start md:justify-center self-center pt-4 pb-0 md:py-4 px-4 hidescrollbar md:flex-wrap">  
-  
-  {#each piVaults as pie}
-    {#if pie.address !== '0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e'}
-      <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 rounded-xl flex pointer scale cardbordergradient">
-        <a href={`#/pie/${pie.address}`}>
+<a
+  class="block md:hidden w-full flex justify-center items-center pointer"
+  href="/#/dough-staking-campaign"
+>
+  <div class="w-full mx-8">
+    <img
+      src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner-Small.jpg?raw=true"
+      class="w-full crisp rounded"
+      alt="dough"
+      data-aos="fade-up"
+      data-aos-delay="150"
+    />
+  </div>
+</a>
 
-          <div class="px-4 py-2 flex flex-col">
-            <div class="flex items-center">
-            <img class="mt-2 mb-4 w-60px h-60px mr-3" src={pie.icon} alt={pie.symbol} />
-            <div class="flex flex-col">
-            <span class="text-lg leading-6">{pie.symbol}</span>
-            <span class="flex items-center font-base font-thin text-sm">{pie.price}&nbsp; &nbsp;<Change class="text-sm" value={pie.change} /></span>
-          </div>
+<div class="content text-center" style="padding-bottom: 0!important;">
+  <span class="mt-0 mb-0 px-2 md:px-8 italic text-lg block md:hidden leading-7 font-thin"
+    >"A decentralized asset manager for tokenized portfolios, with a mission to bring automated
+    wealth creation to everyone with an internet connection."</span
+  >
+  <span class="mt-12 mb-4 px-8 italic font-huge hidden md:block"
+    >"A decentralized asset manager for tokenized portfolios, with a mission to bring automated
+    wealth creation to everyone with an internet connection."</span
+  >
+</div>
+
+<div
+  class="w-100pc m-w-100pc mr-4 md:m-0 p-0 flex justify-center overflow-x-scroll md:overflow-x-hidden hidescrollbar"
+>
+  <div
+    class="w-100pc md:max-w-1200px flex items-start justify-start md:justify-center self-center pt-4 pb-0 md:py-4 px-4 hidescrollbar md:flex-wrap"
+  >
+    {#each piVaults as pie}
+      {#if pie.address !== '0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e'}
+        <div
+          class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 rounded-xl flex pointer scale cardbordergradient"
+        >
+          <a href={`#/pie/${pie.address}`}>
+            <div class="px-4 py-2 flex flex-col">
+              <div class="flex items-center">
+                <img class="mt-2 mb-4 w-60px h-60px mr-3" src={pie.icon} alt={pie.symbol} />
+                <div class="flex flex-col">
+                  <span class="text-lg leading-6">{pie.symbol}</span>
+                  <span class="flex items-center font-base font-thin text-sm"
+                    >{pie.price}&nbsp; &nbsp;<Change class="text-sm" value={pie.change} /></span
+                  >
+                </div>
+              </div>
+              <span class="font-thin text-sm mb-1 opacity-70"
+                >{poolsConfig[pie.address].description}</span
+              >
+              <div
+                class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top"
+              >
+                <span class="block md:hidden mr-1">🔥 </span>
+                <span class="flex items-center font-thin text-sm opacity-70 leading-4"
+                  ><span class="hidden md:block">🔥 </span>
+                  Since inception
+                  <strong class="ml-2 text-black"
+                    >{(parseFloat(pie.rawPrice - 1) * 100).toFixed(2)}%</strong
+                  ></span
+                ><a href={`#/swap`}
+                  ><button class="btn-text-pink min-w-70px mt-2 mb-2 text-right">BUY</button>
+                </a>
+              </div>
+            </div></a
+          >
         </div>
-            <span class="font-thin text-sm mb-1 opacity-70">{poolsConfig[pie.address].description}</span>
-            <div class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top">
-              <span class="block md:hidden mr-1">🔥 </span>
-              <span class="flex items-center font-thin text-sm opacity-70 leading-4"><span class="hidden md:block">🔥 </span>
-              Since inception <strong class="ml-2 text-black">{(parseFloat(pie.rawPrice-1)*100).toFixed(2)}%</strong></span><a href={`#/swap`}><button class="btn-text-pink min-w-70px mt-2 mb-2 text-right">BUY</button>
-          </div>
-        </a>
-      </div>
       {/if}
-  {/each}
+    {/each}
 
-  {#each pies as pie}
-    {#if pie.address !== '0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd'}
-      <div class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 rounded-xl flex pointer scale cardbordergradient">
-        <a href={`#/pie/${pie.address}`}>
-
-          <div class="px-4 py-2 flex flex-col">
-            <div class="flex items-center">
-            <img class="mt-2 mb-4 w-60px h-60px mr-3" src={pie.icon} alt={pie.symbol} />
-            <div class="flex flex-col">
-            <span class="text-lg leading-6">{pie.symbol}</span>
-            <span class="flex items-center font-base font-thin text-sm">{getNav(pie.address)}&nbsp; &nbsp;<Change class="text-sm" value={pie.change} /></span>
-          </div>
+    {#each pies as pie}
+      {#if pie.address !== '0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd'}
+        <div
+          class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 rounded-xl flex pointer scale cardbordergradient"
+        >
+          <a href={`#/pie/${pie.address}`}>
+            <div class="px-4 py-2 flex flex-col">
+              <div class="flex items-center">
+                <img class="mt-2 mb-4 w-60px h-60px mr-3" src={pie.icon} alt={pie.symbol} />
+                <div class="flex flex-col">
+                  <span class="text-lg leading-6">{pie.symbol}</span>
+                  <span class="flex items-center font-base font-thin text-sm"
+                    >{getNav(pie.address)}&nbsp; &nbsp;<Change
+                      class="text-sm"
+                      value={pie.change}
+                    /></span
+                  >
+                </div>
+              </div>
+              <span class="font-thin text-sm mb-1 opacity-70"
+                >{poolsConfig[pie.address].description}</span
+              >
+              <div
+                class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top"
+              >
+                <span class="block md:hidden mr-1">🔥 </span><span
+                  class="flex items-center font-thin text-sm opacity-70 leading-4"
+                  ><span class="hidden md:block">🔥 </span>Since inception
+                  <strong class="ml-2 text-black"
+                    >{(
+                      (parseFloat($pools[pie.address + '-nav'] ? $pools[pie.address + '-nav'] : 0) -
+                        1) *
+                      100
+                    ).toFixed(2)}%</strong
+                  ></span
+                >
+                <a href={`#/swap`}
+                  ><button class="btn-text-pink min-w-70px mt-2 mb-2 text-right">BUY</button>
+                </a>
+              </div>
+            </div></a
+          >
         </div>
-            <span class="font-thin text-sm mb-1 opacity-70">{poolsConfig[pie.address].description}</span>
-            <div class="text-left mt-2 pt-2 mb-0 flex items-center justify-between border-thin-top"><span class="block md:hidden mr-1">🔥 </span><span class="flex items-center font-thin text-sm opacity-70 leading-4"><span class="hidden md:block">🔥 </span>Since inception 
-              <strong class="ml-2 text-black">{((parseFloat($pools[pie.address+"-nav"] ? $pools[pie.address+"-nav"] : 0)-1) *100).toFixed(2)}%</strong></span>
-              <a href={`#/swap`}><button class="btn-text-pink min-w-70px mt-2 mb-2 text-right">BUY</button>
-          </div>
-        </a>
-      </div>
-    {/if}
-  {/each}
+      {/if}
+    {/each}
 
     <div class="block inline-block md:hidden" style="margin-right:2rem!important;">&nbsp;</div>
   </div>
 </div>
 
-
-<section class="pt-8 px-4 text-center md:pt-8 lg:pt-12" data-aos="fade-up" data-aos-delay="0">
-  <div class="w-full max-w-2xl mx-auto">
-    <div class="text-lg text-center w-100pc block md:hidden leading-7 mb-6">Bake Together, save 97% Gas.<br /><a href="#/oven" class="underline"> Use the oven ></a></div>
-    <div class="font-huge text-center w-100pc pr-2 hidden md:block">Bake Together, save 97% Gas.</div>
-  </div>
-</section>
-
-<div class="w-100pc flex justify-center">
-  <div class="flex flex-col md:max-w-1200px p-0 p-4 md:p-6 mx-4 md:mx-0 mb-0 md:mb-4 items-center bg-lightgrey md:bg-white rounded">
-    <div class="flex flex-col justify-between content-center lg:flex-row leading-5">
-
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center my-0 lg:m-10px p-0 md:p-20px" data-aos="fade-up" data-aos-delay="500">
-          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.depositeth} alt="deposit eth" />
-          <div class="flex flex-col text-left md:text-center md:mt-3">
-              <div class="text-lg">Deposit ETH</div>
-              <div class="font-thin mt-1 md:mt-2">When at least 10 ETH is deposited the Oven can begin.</div>
-          </div>
-        </div>
-
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px" data-aos="fade-up" data-aos-delay="500">
-          <img class="w-50px md:w-80px mr-4 md:mr-0" src={images.waitoven} alt="wait oven" />
-          <div class="flex flex-col text-left md:text-center md:mt-3">
-              <div class="text-lg">Wait</div>
-              <div class="font-thin mt-1 md:mt-2">Oven will bake when gas price is below 100 gwei, saving everyone money.</div>
-          </div>
-        </div>
-
-        <div class="flex flex-row md:flex-col w-100pc lg:w-1/3 md:min-h-150px items-center mt-4 md:my-0 lg:m-10px p-0 md:p-20px" data-aos="fade-up" data-aos-delay="500">
-          <img class="w-50px md:w-80px mr-4 md:mr-0 mb-2 md:mb-0" src={images.sharegascost} alt="share gas cost" />
-          <div class="flex flex-col text-left md:text-center md:mt-3">
-            <div class="text-lg">Withdraw Your Pie</div>
-            <div class="font-thin mt-1 md:mt-2">Once the Pie is baked you can withdraw it to your wallet.</div>
-          </div>
-        </div>
-
-    </div>
-    <a href="#/oven" class="hidden md:block" data-aos="fade-up" data-aos-delay="700"><button class="btnblack m-0 mt-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Oven</button></a>
-
-  </div>
-</div>
-
-
 <div class="content">
-  <div class="flex flex-col md:flex-row p-4 md:p-10 mx-2 md:mx-4 md:mx-0 rounded gradientbglightblue">
+  <div
+    class="flex flex-col md:flex-row p-4 md:p-10 mx-2 md:mx-4 md:mx-0 rounded gradientbglightblue"
+  >
     <!-- <img class="w-60px mb-4 block md:hidden" src={images.piechart_illustration} alt="PieDAO chart illustration" /> -->
-    <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-2">Pies are diversified portfolios of top performing crypto assets</div>
-    <div class="font-huge text-left w-1/2 pr-2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
+    <div class="text-lg text-left w-100pc block md:hidden leading-7 mb-2">
+      Pies are diversified portfolios of top performing crypto assets
+    </div>
+    <div class="font-huge text-left w-1/2 pr-2 hidden md:block">
+      Pies are diversified portfolios of top performing crypto assets
+    </div>
     <ul class="text-left font-thin font-base w-100pc md:w-1/2 md:pl-4 list-outside list-none">
-      <li class="mt-3 md:mt-0">✔️ Carefully handpicked by a decentralized community of economically incentivised talent.</li>
-      <li class="mt-3">✔️ Maximize returns with active yield-generating strategies behind the scenes. Staking, lending, yield-farming - completely automated. </li>
-      <li class="mt-3">✔️ Accessible. Save 97% of the minting gas costs by using the community Oven</li>
-      <li class="mt-3">✔️ Secure architecture and fully audited contracts </li>
+      <li class="mt-3 md:mt-0">
+        ✔️ Carefully handpicked by a decentralized community of economically incentivised talent.
+      </li>
+      <li class="mt-3">
+        ✔️ Returns maximized through active yield-generating strategies behind the scenes. Staking,
+        lending, yield-farming — completely automated.
+      </li>
+      <li class="mt-3">
+        ✔️ Accessible. Save 97% of the minting gas costs by using the community Oven.
+      </li>
+      <li class="mt-3">✔️ Secure architecture and fully audited contracts.</li>
     </ul>
   </div>
 </div>
 
-
-<div class="videocontainer-landing mt-2 mb-6 md:my-6 py-20 md:py-30">
-  <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video-landing hidden md:block">
-    <source class="hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4" data-aos="fade-up" data-aos-delay="500">
-  </video>
-  <div class="content flex flex-col spl px-4 z-50">
-    <!-- <div class="text-lg font-bold md:text-xl text-center mb-1 mt-6">Want a slice of the pie?</div> -->
-    <img src={images.doughcolorful} class="w-60pc md:w-30pc" alt="dough" data-aos="fade-up" data-aos-delay="200"/>
-    <div class="text-base md:text-lg font-thin text-center mt-2" data-aos="fade-up" data-aos-delay="400">The engine behind PieDAO’s self-driving <br class="hidden md:block" />wealth creation machine</div>
-    <a href="#/dough" data-aos="fade-up" data-aos-delay="600"><button class="btnblack m-0 mt-4 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Get started</button></a>
+<div class="flex flex-col items-center text-center md:pt-0 pb-10 mx-8 ">
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-8 md:pb-12 px-4 md:px-10">
+    <div class="w-full font-huge text-center mt-10">Doughconomics</div>
+    <div class="w-full font-thin text-l text-center mt-20px">
+      This is how the DAO makes money and how is redistributing them to the system
+    </div>
+    <a href="/#/dough-staking-campaign" class="font-bold text-base text-center">
+      Learn more about staking >
+    </a>
+  </div>
+  <div class="hidden md:block">
+    <LottiePlayer
+      src="https://assets10.lottiefiles.com/private_files/lf30_wksf88hl.json"
+      autoplay={true}
+      loop={true}
+      controls={false}
+      renderer="svg"
+      background="white"
+      height=""
+      width="100%"
+      {controlsLayout}
+    />
+  </div>
+  <div class="block md:hidden">
+    <img class="w-100% inline mb-4" src={images.doughconomics} alt="dough economics diagram" />
   </div>
 </div>
 
-
-<Contributors />
 <Newsletter />
 <FeaturedIn />
 <AuditedBy />
 
+<div class="flex flex-col items-center text-center mt-4 md:mt-4 mb-8  mx-8">
+  <div class="flex flex-wrap justify-center w-full max-w-1240px mb-4 px-10">
+    <img class="h-40px inline" src={images.hourglass} alt="hourglass" />
+    <img class="h-40px inline mx-4" src={images.gem} alt="gem" />
+    <img class="h-40px inline" src={images.pirateflag} alt="pirate flag" />
+  </div>
+  <a
+    target="_blank"
+    href="https://medium.com/piedao/piedao-is-expanding-the-core-team-and-open-sourcing-the-search-for-talent-b22fce733293"
+    class="font-bold text-pink text-base text-center"
+  >
+    We're hiring >
+  </a>
+</div>
