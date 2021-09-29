@@ -215,7 +215,7 @@
     <div class="w-full font-thin text-l text-center mt-20px">
       This is how the DAO makes money and how is redistributing them to the system
     </div> 
-    <a href="/#/staking-simulator" class="font-bold text-base text-center">
+    <a href="/#/dough-staking-campaign" class="font-bold text-base text-center">
       Learn more about staking >
     </a>   
   </div>
