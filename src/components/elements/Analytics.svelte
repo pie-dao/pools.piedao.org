@@ -18,6 +18,9 @@
                     page_path: window.location.href,
                 });
             } else {
+                window.gtag("config", id, {
+                    page_path: window.location.href,
+                });
                 console.log('Analytics DEV:', {
                     page_path: window.location.href
                 })
