@@ -152,10 +152,10 @@
     <source src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughbgvidlow.mp4" type="video/mp4" data-aos="fade-up" data-aos-delay="500">
   </video>
   <div class="content flex flex-col spl px-4">
-    <div class="text-24px font-bold md:text-lg md:leading-8 text-center mb-4" data-aos="fade-up" data-aos-delay="100">PieDAO’s<br />Governance Token</div>
+    <div class="text-24px font-bold text-lg leading-8 text-center mb-4" data-aos="fade-up" data-aos-delay="100">PieDAO’s<br />Governance Token</div>
     <img src={images.doughcolorful} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
     <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organization and products.</div>
-    <button class="items-center stakinggradient shake text-black text-left mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
+    <button class="items-center stakinggradient shake text-black text-left mt-20 md:mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
       <div class="w-100pc flex items-center">
       <div class="m-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
       <div class="mr-20px">
@@ -170,8 +170,8 @@
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
-  <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
+  <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-8 md:px-10">
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.hourglass} alt="hourglass" /><span>Long term<br />alignment</span></div>
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.gem} alt="gem" /><span>Rewarded<br />commitment</span></div>
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.pirateflag} alt="pirate flag" /><span>Treasury revenues<br />distribution</span></div>
@@ -180,8 +180,8 @@
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
-  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-4 md:px-10">
     <div class="font-huge text-center mt-10">A new governance model</div>
     <div class="font-thin text-l text-center mt-20px">
       DOUGH is the basic element to start your journey and be part of the PieDAO family.
@@ -203,9 +203,9 @@
 </div>
 
 
-<div class="flex flex-col items-center text-center md:mt-4 mx-8">
-  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
-    <div class="font-huge text-center mt-10">Doughconomics</div>
+<div class="flex flex-col items-center text-center md:pt-0 pb-10 mx-8 ">
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-8 md:pb-12 px-4 md:px-10">
+    <div class="font-huge text-center mt-4 md:mt-10">Doughconomics</div>
     <div class="font-thin text-l text-center mt-20px">
       This is how the DAO makes money and how is redistributing them to the system
     </div> 
@@ -232,13 +232,11 @@
 </div>
 
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
-  <div class="flex flex-col justify-around w-full max-w-1240px bg-lightgrey rounded pb-16 px-12">
+<div class="flex flex-col items-center justify-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
+  <div class="flex flex-col justify-center md:justify-around w-full max-w-1240px bg-lightgrey rounded pb-4 md:pb-16 px-4 md:px-12">
     <div class="font-huge text-center mt-10">Last votes</div>
-    <div class="font-thin text-l text-center mt-20px">
-      Participate on the last Governance decisions
-    </div>
-      <div class="flex flex-col md:flex-row flex-grow justify-around text-l mt-20px">
+    <div class="font-thin text-l text-center mt-20px">Participate on the last Governance decisions</div>
+      <div class="flex flex-col md:flex-row flex-grow items-center justify-center md:justify-around text-l mt-20px">
         {#if proposals}
           {#each proposals as proposal}
           <div class="w-full flex justify-center items-center flex-grow md:w-1/2 bg-white py-8 mt-4 md:mt-0 px-4 mx-4 rounded border-thin">
@@ -256,7 +254,7 @@
 </div>
 
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+<div class="flex flex-col items-center text-center mt-8 md:mt-10 mx-8">
   <div class="flex flex-wrap justify-center w-full max-w-1240px mb-4 px-10">
     <img class="h-40px inline" src={images.hourglass} alt="hourglass" />
     <img class="h-40px inline mx-4" src={images.gem} alt="gem" />
