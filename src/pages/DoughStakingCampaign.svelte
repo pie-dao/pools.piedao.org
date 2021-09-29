@@ -113,10 +113,10 @@
 
 <Meta 
     metadata={{
-        title: "PieDAO DOUGH, the DAO governance token, managing DEFI index products and high APR staking rewards",
-        description: "An overview of PieDAO's governance token DOUGH, the voting system, and the incentives mechanism.",
+        title: "Stake DOUGH, PieDAO Governance Token, and get a monthly income!",
+        description: "Contribute and be rewarded every month for building a better organization and products",
         image: images.herodough,
-        imageAlt: "Ready to diversify and logo, invest in a DEFI index and earn high yield today."
+        imageAlt: "Full-time Token Holder, the future of work is here."
     }}
 />
 
