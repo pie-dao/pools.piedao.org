@@ -131,7 +131,7 @@
       {/if}
     </div>
     <img src={images.tokenholderherotype} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
-    <div class="text-lg text-white font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organizazion and products.</div>
+    <div class="text-lg text-white font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organization and products.</div>
     <button class="items-center stakinggradient shake text-black text-left mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
       <div class="w-100pc flex items-center">
       <div class="m-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
@@ -173,7 +173,7 @@
 
 
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+<div class="flex flex-col items-center text-center mt-4 md:mt-0 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
     <div class="font-huge text-center mt-10">A new governance model</div>
     <div class="font-thin text-l text-center mt-20px">
@@ -196,12 +196,12 @@
   Join our Discord
   </button>
   </div>
-  <div class="flex items-center font-thin">
+  <!-- <div class="flex items-center font-thin">
     <span class="text-l">Staking starts in &nbsp;</span>
     {#if countdown}
       <span class="text-l">{countdown}</span>
     {/if}
-  </div>
+  </div> -->
 </div>
 
 
@@ -278,12 +278,12 @@
   </div>
   </button>
   </div>
-  <div class="flex items-center font-thin">
+  <!-- <div class="flex items-center font-thin">
     <span class="text-l">Staking starts in &nbsp;</span>
     {#if countdown}
       <span class="text-l">{countdown}</span>
     {/if}
-  </div>
+  </div> -->
 </div>
 
 

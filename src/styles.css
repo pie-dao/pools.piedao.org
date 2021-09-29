@@ -2321,3 +2321,9 @@ max-width: 100vw;
 .commitment-btn {
   background-image: linear-gradient(white, white), radial-gradient(circle at top left,#ff8932, #a50bce, #1fa6e0, #47d482);
 }
+
+
+
+.checklist li:before {
+  content: '✓';
+}

@@ -115,8 +115,8 @@
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
-  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
+<div class="flex flex-col items-center text-center mt-4 md:mt-8 mx-8">
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-6 px-10">
     <div class="font-huge text-center mt-10">A new governance model</div>
     <div class="font-thin text-l text-center mt-20px">
       DOUGH is the basic element to start your journey and be part of the PieDAO family.
@@ -132,8 +132,8 @@
 
 
 <div class="content text-center" style="padding-bottom: 0!important;">
-  <span class="mt-6 mb-0 px-2 md:px-8 italic text-lg block md:hidden leading-7 font-thin">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
-  <span class="mt-12 mb-4 px-8 italic font-huge hidden md:block" data-aos="fade-up" data-aos-delay="500">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
+  <span class="mt-0 mb-0 px-2 md:px-8 italic text-lg block md:hidden leading-7 font-thin">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
+  <span class="mt-12 mb-4 px-8 italic font-huge hidden md:block">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
 </div>
 
 
@@ -201,20 +201,20 @@
     <div class="font-huge text-left w-1/2 pr-2 hidden md:block">Pies are diversified portfolios of top performing crypto assets</div>
     <ul class="text-left font-thin font-base w-100pc md:w-1/2 md:pl-4 list-outside list-none">
       <li class="mt-3 md:mt-0">✔️ Carefully handpicked by a decentralized community of economically incentivised talent.</li>
-      <li class="mt-3">✔️ Maximize returns with active yield-generating strategies behind the scenes. Staking, lending, yield-farming - completely automated. </li>
-      <li class="mt-3">✔️ Accessible. Save 97% of the minting gas costs by using the community Oven</li>
-      <li class="mt-3">✔️ Secure architecture and fully audited contracts </li>
+      <li class="mt-3">✔️ Returns maximized through active yield-generating strategies behind the scenes. Staking, lending, yield-farming — completely automated. </li>
+      <li class="mt-3">✔️ Accessible. Save 97% of the minting gas costs by using the community Oven.</li>
+      <li class="mt-3">✔️ Secure architecture and fully audited contracts.</li>
     </ul>
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center md:mt-10 mx-8 mb-20">
+<div class="flex flex-col items-center text-center p-4 md:p-10 mx-8 ">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
     <div class="w-full font-huge text-center mt-10">Doughconomics</div>
     <div class="w-full font-thin text-l text-center mt-20px">
-      This is how the DAO makes money and how is redestrebuting them to the system
+      This is how the DAO makes money and how is redistributing them to the system
     </div> 
-    <a href="#/simulator" class="font-bold text-base text-center">
+    <a href="/#/staking-simulator" class="font-bold text-base text-center">
       Learn more about staking >
     </a>   
   </div>
