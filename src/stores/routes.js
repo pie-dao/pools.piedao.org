@@ -196,12 +196,12 @@ window.addEventListener('hashchange', () => {
       page_path: trackPath,
     });
   } else {
-    console.log('Analytics DEV', {
+    console.log('Routes Analytics DEV', {
       page_path: trackPath,
     });
   }
 
-  // currentRoute.set({ ...formatRoute(newRoute) });
+  currentRoute.set({ ...formatRoute(newRoute) });
   window.scrollTo({
     top: 0,
     left: 0,
