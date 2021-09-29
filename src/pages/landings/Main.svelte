@@ -79,11 +79,6 @@
   }}
 />
 
-<a class="w-full flex justify-center items-center" href="#/simulator">
-  <div class="w-full mx-4">
-    <img src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner.jpg?raw=true" class="w-full crisp rounded" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
-  </div>
-</a>
 
 <div class="videocontainer">
   <video loop muted autoplay poster="https://raw.githubusercontent.com/pie-dao/brand/master/misc/doughvideobg2.jpg" class="bg_video">
@@ -115,6 +110,7 @@
   </div>
 </div>
 
+
 <div class="flex flex-col items-center text-center mt-4 md:mt-8 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-6 px-10">
     <div class="font-huge text-center mt-10">A new governance model</div>
@@ -130,6 +126,11 @@
   </div>
 </div>
 
+<a class="w-full flex justify-center items-center pointer" href="/#/dough-staking-campaign">
+  <div class="w-full mx-8">
+    <img src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner-Small.jpg?raw=true" class="w-full crisp rounded" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
+  </div>
+</a>
 
 <div class="content text-center" style="padding-bottom: 0!important;">
   <span class="mt-0 mb-0 px-2 md:px-8 italic text-lg block md:hidden leading-7 font-thin">"A decentralized asset manager for tokenized portfolios, with a mission to bring automated wealth creation to everyone with an internet connection."</span>
