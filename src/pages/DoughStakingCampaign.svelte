@@ -113,16 +113,15 @@
 
 <Meta 
     metadata={{
-        title: "PieDAO DOUGH, the DAO governance token, managing DEFI index products and high APR staking rewards",
-        description: "An overview of PieDAO's governance token DOUGH, the voting system, and the incentives mechanism.",
+        title: "Stake DOUGH, PieDAO Governance Token, and get a monthly income!",
+        description: "Contribute and be rewarded every month for building a better organization and products",
         image: images.herodough,
-        imageAlt: "Ready to diversify and logo, invest in a DEFI index and earn high yield today."
+        imageAlt: "Full-time Token Holder, the future of work is here."
     }}
 />
 
-<div class="videocontainer">
-  <video loop muted autoplay poster="https://github.com/pie-dao/brand/blob/master/misc/bg-tokenholder.jpg?raw=true" class="bg_video">
-  </video>
+<div class="bgtokenholdercontainer">
+
   <div class="content flex flex-col spl px-4">
     <div class="flex flex-col items-center text-white font-thin">
       <span class="text-l">Staking starts in </span>
@@ -131,7 +130,7 @@
       {/if}
     </div>
     <img src={images.tokenholderherotype} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
-    <div class="text-lg text-white font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organizazion and products.</div>
+    <div class="text-lg text-white font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organization and products.</div>
     <button class="items-center stakinggradient shake text-black text-left mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
       <div class="w-100pc flex items-center">
       <div class="m-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
@@ -161,7 +160,7 @@
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
   <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-10">
     <img class="h-150px inline mb-4" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/money-mouth-face_1f911.png" alt="hourglass" />
-    <div class="font-hero text-center mt-10">$760,000</div>
+    <div class="font-hero text-center mt-10">$610,000</div>
     <div class="font-thin text-l text-center mt-20px">
       You are reading it right.
       <br />
@@ -173,7 +172,7 @@
 
 
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+<div class="flex flex-col items-center text-center mt-4 md:mt-0 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
     <div class="font-huge text-center mt-10">A new governance model</div>
     <div class="font-thin text-l text-center mt-20px">
@@ -196,12 +195,12 @@
   Join our Discord
   </button>
   </div>
-  <div class="flex items-center font-thin">
+  <!-- <div class="flex items-center font-thin">
     <span class="text-l">Staking starts in &nbsp;</span>
     {#if countdown}
       <span class="text-l">{countdown}</span>
     {/if}
-  </div>
+  </div> -->
 </div>
 
 
@@ -212,7 +211,7 @@
 </div>
 
 
-<div class="flex flex-col items-center text-center md:mt-10 mx-8">
+<div class="flex flex-col items-center text-center md:mt-2 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
     <div class="w-full font-huge text-center mt-10">Token Economics</div>
     <div class="w-full font-thin text-l text-center mt-20px">
@@ -278,12 +277,12 @@
   </div>
   </button>
   </div>
-  <div class="flex items-center font-thin">
+  <!-- <div class="flex items-center font-thin">
     <span class="text-l">Staking starts in &nbsp;</span>
     {#if countdown}
       <span class="text-l">{countdown}</span>
     {/if}
-  </div>
+  </div> -->
 </div>
 
 
