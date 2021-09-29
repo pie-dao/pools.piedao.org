@@ -78,30 +78,17 @@ const formatRoute = (route) => {
   let referral;
   let method;
 
-  console.log('route', route, typeof route);
-  if (window.gtag) {
-    const trackPath = `/${route.join('/')}`;
-    window.gtag('event', 'page_view', {
-      page_path: trackPath,
-    });
-    console.log('Analytics DEV jdshaf', {
-      page_path: route[0],
-    });
-  }
+  const _route = Object.assign({}, route);
 
-  const _route = route ? [...route] : [];
   if (_route) {
     for (let i = 0; i < _route.length; i++) {
       if (_route[i] && _route[i].indexOf('?') >= 0) {
         _route[i] = _route[i].substring(0, _route[i].indexOf('?'));
       }
     }
-    console.log('route[0]', _route[0])
-
-    
   }
 
-  console.log('_route', _route);
+  console.log('formatRoute after -> _route', _route);
   const notFound = { page: NotFound, params: { path: `/${route.join('/')}` } };
 
   // changeUrl(route);
@@ -196,6 +183,7 @@ const formatRoute = (route) => {
 };
 
 const route = deriveRoute();
+console.log("deriveRoute -> route", route);
 
 export const currentRoute = writable({ ...formatRoute(route) });
 
@@ -204,9 +192,9 @@ window.addEventListener('hashchange', () => {
   const trackPath = `/${newRoute.join('/')}`;
 
   if (window.location.origin !== 'http://localhost:8080') {
-    // window.gtag('event', 'page_view', {
-    //   page_path: trackPath,
-    // });
+    window.gtag('event', 'page_view', {
+      page_path: trackPath,
+    });
   } else {
     console.log('Analytics DEV', {
       page_path: trackPath,
