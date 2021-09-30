@@ -1,5 +1,5 @@
 <script>
-	import { Timeout, quoteRefreshSeconds } from './../classes/Timer.js';
+	import { Timeout } from './../classes/Timer.js';
   import { _ } from "svelte-i18n";
   import debounce from "lodash/debounce";
   import BigNumber from "bignumber.js";

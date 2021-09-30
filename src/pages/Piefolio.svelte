@@ -1,7 +1,6 @@
 <script>
 	import orderBy from 'lodash/orderBy';
   import BigNumber from 'bignumber.js';
-  import io from 'socket.io-client';
   import get from 'lodash/get';
   import find from 'lodash/find';
   import filter from 'lodash/filter';
@@ -16,8 +15,7 @@
   } from '../helpers/multicall';
 
   import {
-    getTokenImage,
-    formatFiat,
+    getTokenImage
   } from "../components/helpers.js";
 
 
@@ -26,9 +24,9 @@
   import Allocation from "../components/piefolio/Allocation.svelte";
   import Oven from "../components/piefolio/Oven.svelte";
   import Governance from "../components/piefolio/Governance.svelte";
-  import Farming from "../components/piefolio/Farming.svelte";
   import Banner from "../components/piefolio/Banner.svelte";
-  import Exchange from "../components/piefolio/Exchange.svelte";
+  // import Farming from "../components/piefolio/Farming.svelte";
+  // import Exchange from "../components/piefolio/Exchange.svelte";
 
   $: isLoading = false;
   $: initialized = {

@@ -1,6 +1,6 @@
 <script>
-    import { BigNumber, ethers } from "ethers";
-    import { formatEther, parseEther } from '@ethersproject/units';
+    import { ethers } from "ethers";
+    import { formatEther } from '@ethersproject/units';
     import Meta from '../components/elements/meta.svelte';
     import stakingPools from '../config/stakingPools.json';
     import rewardEscrowABI from '../config/rewardEscrowABI.json';
@@ -45,8 +45,8 @@ metadata={{
 />
 
 <div class="content flex flex-col">
-    <img class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
-    <img class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" />
+    <img alt="" class="banner-desktop" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png" />
+    <img alt="" class="banner-mobile" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4-mobile.png" />
     <div class="liquidity-container flex flex-col align-center bg-grey-243 rounded-4px p-4 my-0 md:p-6 w-full">
 
         {#if $eth.address}

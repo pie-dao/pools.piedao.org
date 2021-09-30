@@ -1,8 +1,8 @@
 <script>
   import { onMount } from 'svelte';
   import { get } from "svelte/store";
-  import { BigNumber, ethers } from "ethers";
-  import { formatEther, parseEther } from '@ethersproject/units';
+  import { ethers } from "ethers";
+  import { formatEther } from '@ethersproject/units';
 
 	import { getTokenImage } from './../components/helpers.js';
 
@@ -12,10 +12,9 @@
   import stakingPoolsABI from '../abis/stakingPoolsABI.json';
   import { eth } from "../stores/eth.js";
   import Farming from '../components/piefolio/Farming.svelte';
-  import Accordion from '../components/elements/Accordion.svelte';
-  import AccordionGroup from '../components/elements/AccordionGroup.svelte';
+  // import Accordion from '../components/elements/Accordion.svelte';
+  // import AccordionGroup from '../components/elements/AccordionGroup.svelte';
   import Meta from '../components/elements/meta.svelte';
-
 
   let doughInEscrow = "n/a";
   let escrowEntries = "n/a";

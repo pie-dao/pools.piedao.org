@@ -4,7 +4,7 @@
     import stakingPools from '../config/stakingPools.json';
     import smartcontracts from '../config/smartcontracts.json';
     import stakingPoolsABI from '../abis/stakingPoolsABI.json';
-    import { getTokenImage, toFixed } from './../components/helpers.js';
+    import { getTokenImage } from './../components/helpers.js';
     import ERC20ABI from '../abis/erc20ABI.json';
     import images from "../config/images.json";
     import { _ } from "svelte-i18n";

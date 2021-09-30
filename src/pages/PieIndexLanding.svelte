@@ -12,7 +12,6 @@
   import LiquidityModal from '../components/modals/LiquidityModal.svelte';
   import AddMetamaskBanner from '../components/AddMetamaskBanner.svelte';
   import CoinGeckoBanner from '../components/CoinGeckoBanner.svelte';
-  import SpreadBanner from '../components/SpreadBanner.svelte';
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import ovens from '../config/ovensConf.js';
@@ -33,6 +32,7 @@
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import TooltipButton from '../components/elements/TooltipButton.svelte';
+  // import SpreadBanner from '../components/SpreadBanner.svelte';
 
   export let params;
 
