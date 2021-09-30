@@ -13,12 +13,11 @@ import DoughABI from '../abis/DoughABI.json';
 import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
-import { AverageSecondsMonth, veDoughSubgraphUrl } from '../stores/eth/connection.js';
+import { AverageSecondsMonth, veDoughSubgraphUrl, environment } from '../stores/eth/connection.js';
 import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
 import { stakingDataInterval } from '../stores/eth/writables.js';
-import { environment } from '../stores/eth/connection.js';
 
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
@@ -647,10 +646,17 @@ export function approveToken(eth) {
         !dataObj.accountDepositTokenAllowance.isEqualTo(0)
         && !dataObj.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
       ) {
-        await approve(smartcontracts[environment].dough, smartcontracts[environment].doughStaking, 0);
+        await approve(
+          smartcontracts[environment].dough,
+          smartcontracts[environment].doughStaking, 0,
+        );
       }
 
-      await approveMax(smartcontracts[environment].dough, smartcontracts[environment].doughStaking, { gasLimit: 100000 });
+      await approveMax(
+        smartcontracts[environment].dough,
+        smartcontracts[environment].doughStaking, { gasLimit: 100000 },
+      );
+
       dataObj.accountDepositTokenAllowance = ethers.constants.MaxUint256;
       resolve(dataObj);
     } catch (error) {
