@@ -1,6 +1,5 @@
 <script>  
-  // import { getTokenImage } from '../helpers';
-  // import {addTokenToMM} from "../helpers/addTokenToMM.js";
+  import {addTokenToMM} from "../../helpers/addTokenToMM.js";
 
   export let address;
   export let symbol;
@@ -10,25 +9,7 @@
   export let darkMode;
 
   const addToken = () => {
-    ethereum.sendAsync({
-        method: 'wallet_watchAsset',
-        params: {
-          "type":"ERC20",
-          "options":{
-            "address": address,
-            "symbol": symbol,
-            "decimals": decimals,
-            "image": image,
-          },
-        },
-        id: Math.round(Math.random() * 100000),
-    }, (err, added) => {
-      if (added) {
-        console.log(`The ${symbol} token has been added to your Metamask!`)
-      } else {
-        alert('Something went wrong. Is Metamask there?')
-      }
-    })
+    addTokenToMM(symbol, address, decimals, image);
   };
 </script>
 
