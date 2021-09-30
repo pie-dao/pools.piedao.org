@@ -11,11 +11,26 @@ import { connectWeb3 } from '../eth.js';
 import { bumpLifecycle, updateCurrentBlock } from './lifecycle.js';
 import { resetContractCache } from './contracts.js';
 import env from '../../config/env.json';
-// whenever networkId == 1, we expect to be no production/mainnet environment,
+// whenever networkId == 1, we expect to be on production/mainnet environment,
 // otherwhise, we setup a rinkeby proider as defaultProvider...
 export const defaultProvider = env.blocknative.networkId === 1
   ? new ethers.providers.InfuraProvider('homestead', 'e106b2b27c0f4941be1f2c183a20b3ea')
   : new ethers.providers.JsonRpcProvider('https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5');
+
+export const etherscanUrl = env.blocknative.networkId === 1
+  ? 'https://etherscan.io'
+  : 'https://rinkeby.etherscan.io';
+
+export const AverageSecondsMonth = env.blocknative.networkId === 1
+  ? 2628000
+  : 60;
+
+export const veDoughSubgraphUrl = env.blocknative.networkId === 1
+  ? 'https://api.thegraph.com/subgraphs/name/pie-dao/vedough'
+  : 'https://api.thegraph.com/subgraphs/name/chiptuttofuso/piedaosubgraphdevelop';
+
+export const environment = env.blocknative.networkId === 1
+  ? 'prod' : 'dev';
 
 defaultProvider.on('block', updateCurrentBlock);
 

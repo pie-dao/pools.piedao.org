@@ -6,6 +6,8 @@
   import { parseEther } from '@ethersproject/units';
   import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
   import BigNumber from 'bignumber.js';
+  import { environment } from '../../stores/eth/connection.js';
+  
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -111,7 +113,7 @@
         params: {
           type: 'ERC20',
           options: {
-            address: smartcontracts.veDOUGH,
+            address: smartcontracts[environment].veDOUGH,
             symbol: 'veDOUGH',
             decimals: 18,
             image: images.simulator_veDough,

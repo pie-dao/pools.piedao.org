@@ -1,10 +1,11 @@
 import { CoinGecko } from '../../stores/coingecko.js';
+import smartcontracts from '../../config/smartcontracts.json';
+import { environment } from '../../stores/eth/connection.js';
 
 export default class Calculator {
   constructor() {
     // default treasury address, just a placeholder for now
-    // TODO: change it for real address before go live...
-    this.treasury_address = '0x4efD8CEad66bb0fA64C8d53eBE65f31663199C6d';
+    this.treasury_address = smartcontracts[environment].treasury;
 
     // default empty markets object, to be filled dynamically...
     this.markets = {

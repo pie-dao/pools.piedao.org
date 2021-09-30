@@ -16,6 +16,8 @@
   import displayNotification from "../../notifications.js";
   import TokenSelectModal from "./TokenSelectModal.svelte";
 
+  import { environment } from '../../stores/eth/connection.js';
+
   import {
     allowances,
     approveMax,
@@ -149,7 +151,7 @@
       return;
     }
 
-    const recipe = await contract({ address: smartcontracts.recipe, abi: recipeAbi });
+    const recipe = await contract({ address: smartcontracts[environment].recipe, abi: recipeAbi });
     const amountWei = requestedAmount.multipliedBy(10 ** 18).toFixed(0);
 
     let overrides = {

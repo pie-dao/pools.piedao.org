@@ -5,6 +5,7 @@
   import images from '../config/images.json';
   import smartcontracts from '../config/smartcontracts.json';
   import Modal from '../components/elements/Modal.svelte';
+  import { environment } from '../stores/eth/connection.js';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
@@ -28,7 +29,7 @@
         params: {
           type: 'ERC20',
           options: {
-            address: smartcontracts.reward,
+            address: smartcontracts[environment].reward,
             symbol: 'SLICE',
             decimals: 18,
             image: images.rewardsPie,

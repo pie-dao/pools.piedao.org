@@ -13,6 +13,7 @@ import unipoolAbi from '../config/unipoolABI.json';
 import geyserABI from '../config/geyser.json';
 import uniswapPair from '../config/uniswapPair.json';
 import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
+import { environment } from '../stores/eth/connection.js';
 
 import {
   allowances,
@@ -367,7 +368,7 @@ export const fetchCalcToPie = async (pieAddress, poolAmount) => {
 
   const { provider } = get(eth);
 
-  const recipe = new ethers.Contract(smartcontracts.recipe, recipeAbi, provider);
+  const recipe = new ethers.Contract(smartcontracts[environment].recipe, recipeAbi, provider);
 
   const amount = ethers.BigNumber.from(
     BigNumber(poolAmount)

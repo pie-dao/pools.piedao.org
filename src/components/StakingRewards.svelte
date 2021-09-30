@@ -3,7 +3,7 @@
   import images from '../config/images.json';
   import { formatFiat } from '../components/helpers.js';
   import { toNum } from '../helpers/staking.js';
-
+  import { etherscanUrl } from '../stores/eth/connection.js';
   import Modal from '../components/elements/Modal.svelte';
   let modalinfo;
 
@@ -44,7 +44,7 @@
               <div class="flex nowrap intems-center p-1 font-thin">
                 {new Date(reward.timestamp * 1000).toDateString()}
               </div>
-              <a class="" href="https://etherscan.io/tx/{reward.id}" target="_blank"
+              <a class="" href="{etherscanUrl}/tx/{reward.id}" target="_blank"
                 ><img
                   width="20px"
                   height="20px"

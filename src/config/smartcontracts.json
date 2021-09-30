@@ -1,4 +1,5 @@
 {
+  "prod": {
     "recipe": "0x2984F02e0Bf6cc21419b7f1D5081e53BA00fe458",
     "recipe_old": "0xE1F9E100cbF4aD6D546b196Af33E1129Dd0866b3",
     "recipev1": "0x6cb4b8669e23295563d3b34df4a760c0cee993c7",
@@ -9,5 +10,19 @@
     "doughStaking": "0x6Bd0D8c8aD8D3F1f97810d5Cc57E9296db73DC45",
     "veDOUGH": "0xE6136F2e90EeEA7280AE5a0a8e6F48Fb222AF945",
     "dough": "0xad32a8e6220741182940c5abf610bde99e737b2d",
-    "reward": "0x1083d743a1e53805a95249fef7310d75029f7cd6"
+    "reward": "0x1083d743a1e53805a95249fef7310d75029f7cd6"    
+  },
+  "dev": {
+    "recipe": "0x2984F02e0Bf6cc21419b7f1D5081e53BA00fe458",
+    "recipe_old": "0xE1F9E100cbF4aD6D546b196Af33E1129Dd0866b3",
+    "recipev1": "0x6cb4b8669e23295563d3b34df4a760c0cee993c7",
+    "stakingPools": "0x6de77A304609472A4811a0BFD47d8682Aebc29df",
+    "eDOUGH": "0x63cbd1858bd79de1a06c3c26462db360b834912d",
+    "treasury": "0x4efd8cead66bb0fa64c8d53ebe65f31663199c6d",
+    "multisig": "0x3bfda5285416eb06ebc8bc0abf7d105813af06d0",     
+    "doughStaking": "0x441658De8ebCB25d8D320Bd5C1Abb314b0CE195E",
+    "veDOUGH": "0xA4D4587480a61809Cbdee20F8E0d9a5c4A031d72",
+    "dough": "0x6503e51056C881Ebf463207f8E969fA45A1E0747",
+    "reward": "0xaf498e2391e7cf7a4c1ed2ea14a8c74136313e09"      
+  }
 }

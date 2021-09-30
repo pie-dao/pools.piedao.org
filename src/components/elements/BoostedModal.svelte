@@ -5,6 +5,7 @@
   import { formatFiat } from '../helpers.js';
   import confetti from '../Confetti.js';
   import { toNum, calculateVeDough, AVG_SECONDS_MONTH } from '../../helpers/staking.js';
+  import { environment } from '../../stores/eth/connection.js';
 
   let boostedModal;
 
@@ -60,7 +61,7 @@
         params: {
           type: 'ERC20',
           options: {
-            address: smartcontracts.reward,
+            address: smartcontracts[environment].reward,
             symbol: 'SLICE',
             decimals: 18,
             image: images.rewardsPie,
