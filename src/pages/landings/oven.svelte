@@ -6,7 +6,7 @@
   import Meta from '../../components/elements/meta.svelte';
   import { balances, balanceKey, eth } from '../../stores/eth.js';
 
-  import { getTokenImage, subscribeToBalance, toFixed } from '../../components/helpers.js';
+  import { subscribeToBalance, toFixed } from '../../components/helpers.js';
 
   import Modal from '../../components/elements/Modal.svelte';
   import LiquidityModal from '../../components/modals/LiquidityModal.svelte';

@@ -1,10 +1,5 @@
-<script>
-  import images from "../config/images.json";
-  </script>
-
 <h1 class="content text-lg md:text-xl text-left">👨🏽‍🎓 Hello fellow PieDAO students!</h1>
 
-  
   <div class="content">
     <div class="justify-start items-start flex-col text-left">
       <h2 class="text-lg">Learn about PieDAO</h2>

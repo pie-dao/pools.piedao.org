@@ -1,7 +1,3 @@
-<script>
-  import images from '../config/images.json';
-</script>
-
 <div class="content">
   <div class="justify-start items-start flex-col text-left">
     <h1 class="text-lg">Integrations</h1>

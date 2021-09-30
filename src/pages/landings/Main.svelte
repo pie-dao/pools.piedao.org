@@ -8,14 +8,11 @@
   import images from '../../config/images.json';
   import FeaturedIn from '../../components/FeaturedIn.svelte';
   import AuditedBy from '../../components/AuditedBy.svelte';
-  import Contributors from '../../components/Contributors.svelte';
   import Newsletter from '../../components/Newsletter.svelte';
   import Change from '../../components/Change.svelte';
-  import WhiteBox from '../../components/elements/WhiteBox.svelte';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
-  import { farming } from '../../stores/eth/writables.js';
-
   import { getTokenImage, formatFiat } from '../../components/helpers.js';
+  import BuyDoughButton from '../../components/elements/BuyDoughButton.svelte';
 
   // lottie...
   let controlsLayout = [
@@ -32,8 +29,6 @@
     'zoom',
     'info',
   ];
-
-  let price = 'n/a';
 
   $: pies =
     filter(
@@ -87,10 +82,6 @@
   $: getNav = (token) => {
     return formatFiat($pools[token + '-nav'] ? $pools[token + '-nav'] : '');
   };
-
-  $: (async () => {
-    price = $farming['0xB9a4Bca06F14A982fcD14907D31DFACaDC8ff88E'].DOUGHPrice.toFixed(2) || 0;
-  })();
 </script>
 
 <Meta
@@ -122,17 +113,7 @@
     <div class="text-24px font-bold text-lg leading-8 text-center mb-4" data-aos="fade-up" data-aos-delay="100">PieDAO’s<br />Governance Token</div>
     <img src={images.doughcolorful} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
     <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organizazion and products.</div>
-    <button class="items-center stakinggradient shake text-black text-left mt-20 md:mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
-      <div class="w-100pc flex items-center">
-        <div class="m-10px">
-          <img class="h-50px inline" src={images.doughtoken} alt="doughtoken" />
-        </div>
-        <div class="mr-20px">
-          <div class="text-base font-bold leading-5">Buy DOUGH</div>
-          <div class="text-sm font-thin">Current price: <strong>${price}</strong></div>
-        </div>
-      </div>
-    </button>
+    <BuyDoughButton />
   </div>
 </div>
 

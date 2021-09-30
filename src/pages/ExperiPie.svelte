@@ -13,18 +13,17 @@
   import TooltipButton from '../components/elements/TooltipButton.svelte';
   import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
   import stakingPools from '../config/stakingPools.json';
-
-  import SingleAssetModal from "../components/modals/SingleAssetModal.svelte"; 
-
-  import SnapshotBanner from "../components/SnapshotBanner.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
-  import PoolDescription from "../components/PoolDescription.svelte";
   import Modal from '../components/elements/Modal.svelte';
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import ovens from '../config/ovensConf.js';
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { amountFormatter, getTokenImage, formatFiat, subscribeToBalance } from '../components/helpers.js';
+
+  // import SingleAssetModal from "../components/modals/SingleAssetModal.svelte"; 
+  // import SnapshotBanner from "../components/SnapshotBanner.svelte";
+  // import PoolDescription from "../components/PoolDescription.svelte";  
 
   import {
     eth,

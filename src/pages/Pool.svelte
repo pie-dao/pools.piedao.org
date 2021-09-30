@@ -3,11 +3,9 @@
   import Balance from '../components/Balance.svelte';
   import Etherscan from '../components/Etherscan.svelte';
   import Farming from '../components/Farming.svelte';
-  import Info from '../components/Info.svelte';
+  // import Info from '../components/Info.svelte';
   import Liquidity from '../components/Liquidity.svelte';
   import Quantstamp from '../components/Quantstamp.svelte';
-
-  import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
 </script>
 

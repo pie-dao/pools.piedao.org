@@ -1,5 +1,3 @@
-
-
 <div class="is-boxed has-animations">
     <div class="body-wrap boxed-container">
         <header class="site-header">

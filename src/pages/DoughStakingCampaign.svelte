@@ -1,23 +1,12 @@
 <script>
-  import BigNumber from "bignumber.js";
   import images from "../config/images.json";
-  import { farming } from '../stores/eth/writables.js';
+  import smartcontracts from '../config/smartcontracts.json';
   import StakingStats from '../components/StakingStats.svelte';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
-  import moment from 'moment';
-  
-  import {
-    formatFiat,
-    subscribeToBalance,
-  } from "../components/helpers.js";
-
   import Meta from '../components/elements/meta.svelte';
-   
-   import {
-    balanceKey,
-    balances,
-    contract,
-  } from "../stores/eth.js";
+  import moment from 'moment';
+  import BuyDoughButton from '../components/elements/BuyDoughButton.svelte';
+  import AddToMetamaskButton from '../components/elements/AddToMetamaskButton.svelte';
 
     // lottie...
     let controlsLayout = [
@@ -34,62 +23,6 @@
     'zoom',
     'info',
   ];
-  
-  const DOUGH = '0xad32A8e6220741182940c5aBF610bDE99E737b2D';
-  const DAO = '0x4efD8CEad66bb0fA64C8d53eBE65f31663199C6d';
-  const MULTISIG = '0x3bFdA5285416eB06Ebc8bc0aBf7d105813af06d0';
-
-  let daoBalanceKey;
-  let msBalanceKey;
-  let doughStaked;
-  let price = 'n/a';
-  let circulatingSupply = 0;
-  
-
-  const addToken = () => {
-    ethereum.sendAsync({
-        method: 'wallet_watchAsset',
-        params: {
-          "type":"ERC20",
-          "options":{
-            "address": '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
-            "symbol": 'DOUGH',
-            "decimals": 18,
-            "image": 'https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png',
-          },
-        },
-        id: Math.round(Math.random() * 100000),
-    }, (err, added) => {
-      if (added) {
-        console.log('Thanks for your interest!')
-      } else {
-        alert('Something went wrong. Is Metamask there?')
-      }
-    })
-  };
-  
-  $: (async () => {
-
-    const doughToken = await contract({ address: DOUGH });
-    // DAO
-    subscribeToBalance(DOUGH, DAO, true);
-    // Multisig
-    subscribeToBalance(DOUGH, MULTISIG, true);
-
-    daoBalanceKey = balanceKey(DOUGH, DAO);
-    msBalanceKey = balanceKey(DOUGH, MULTISIG);
-
-    const totalSupply = await doughToken.totalSupply();
-    const daoBal = $balances[daoBalanceKey] || BigNumber(0);
-    const msBal = $balances[msBalanceKey] || BigNumber(0);
-    doughStaked = $farming['0xB9a4Bca06F14A982fcD14907D31DFACaDC8ff88E'].doughStaked.toFixed(2) || 0;
-    price = $farming['0xB9a4Bca06F14A982fcD14907D31DFACaDC8ff88E'].DOUGHPrice.toFixed(2) || 0;
-
-    if(daoBal > 0 && msBal > 0) {
-      const ts = BigNumber(totalSupply.toString()).dividedBy(10**18)
-      circulatingSupply = ts.minus(BigNumber(msBal)).minus(BigNumber(daoBal)).toFixed(2);
-    }
-  })()
 
   // countdown component...
   let countdown;
@@ -131,18 +64,8 @@
     </div>
     <img src={images.tokenholderherotype} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
     <div class="text-lg text-white font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organization and products.</div>
-    <button class="items-center stakinggradient shake text-black text-left mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
-      <div class="w-100pc flex items-center">
-      <div class="m-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
-      <div class="mr-20px">
-        <div class="text-base font-bold leading-5">Buy DOUGH</div>
-        <div class="text-sm font-thin">Current price: <strong>${price}</strong></div>
-      </div>
-    </div>
-    </button>
-    <button onclick="location.href='http://discord.link/PieDAO';" class="add-dough-metamask mt-4" data-aos="fade-up" data-aos-delay="300">
-      <span class="text-white">Add to MetaMask 🦊</span>
-    </button>
+    <BuyDoughButton />
+    <AddToMetamaskButton address={smartcontracts.dough} symbol='DOUGH' decimals=18 image={images.doughtoken} />
   </div>
 </div>
 
@@ -262,27 +185,9 @@
       By staking DOUGH you have the right to get rewarded for being a PieDAO member
       <br /><br />
     </div> 
-    <!-- <button 
-    onclick="location.href='#/dough-staking'"
-    class="btnbig mt-8 text-white rounded-8px p-15px">
-  Stake DOUGH
-  </button>  -->
-  <button class="items-center stakinggradient shake text-black text-left mt-4 hover:opacity-80" onclick="location.href='#/swap'" data-aos="fade-up" data-aos-delay="250">
-    <div class="w-100pc flex items-center">
-    <div class="m-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
-    <div class="mr-20px">
-      <div class="text-base font-bold leading-5">Buy DOUGH</div>
-      <div class="text-sm font-thin">Current price: <strong>${price}</strong></div>
-    </div>
+    <BuyDoughButton />
   </div>
-  </button>
-  </div>
-  <!-- <div class="flex items-center font-thin">
-    <span class="text-l">Staking starts in &nbsp;</span>
-    {#if countdown}
-      <span class="text-l">{countdown}</span>
-    {/if}
-  </div> -->
+
 </div>
 
 

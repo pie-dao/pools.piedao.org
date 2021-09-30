@@ -1,9 +1,3 @@
-<script>
-  import images from "../../config/images.json";
-  import SectionImageRight from "../../components/elements/SectionImageRight.svelte"
-  import SectionImageLeft from "../../components/elements/SectionImageLeft.svelte"
-</script>
-
 <section class="mt-5 px-4 text-center">
   <div class="w-full max-w-2xl mx-auto">
     <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Tokenized ETFs governed by a DAO</h2>

@@ -4,7 +4,7 @@
   import poolsConfig from "../config/pools.json";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
-  import ProductBox from '../components/elements/product-box.svelte';
+  // import ProductBox from '../components/elements/product-box.svelte';
   import Meta from '../components/elements/meta.svelte';
 
   import {

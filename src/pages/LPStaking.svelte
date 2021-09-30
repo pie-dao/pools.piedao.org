@@ -1,22 +1,16 @@
 <script>
   import { ethers } from "ethers";
-  import { onMount } from 'svelte';
   import BigNumber from "bignumber.js";
-  import { validateIsAddress } from '@pie-dao/utils';
   import { _ } from "svelte-i18n";
   import images from "../config/images.json";
   import { currentRoute } from '../stores/routes.js';
-  import orderBy from 'lodash/orderBy';
   import filter from 'lodash/filter';
-  import isNaN from 'lodash/isNaN';
   import rewardEscrewABI from '../config/rewardEscrowABI.json';
   import escrewRewardsStakingPool from '../config/escrewRewardsStakingPool.json';
   import recipeUnipool from '../config/unipoolABI.json';
-  import BALANCER_POOL_ABI from '../config/balancerPoolABI.json';
   import geyserABI from '../config/geyser.json';
   import { get } from "svelte/store";
   import displayNotification from "../notifications.js";
-  import { piesMarketDataStore } from '../stores/coingecko.js';
   import { farming } from '../stores/eth/writables.js';
   import Meta from '../components/elements/meta.svelte';
   
@@ -54,8 +48,6 @@
     && thing.length === 42
   );
 
-  let ethKey;
-  let ethBalance = 0;
   let intiated = false;
   let amountToStake = 0;
   $: amountToClaim = pool && $balances[pool.KeyUnipoolEarnedBalance] ? $balances[pool.KeyUnipoolEarnedBalance] : "0.00000000";
@@ -63,7 +55,6 @@
   let isReady = false;
   
   const referral = $currentRoute.params.referral || window.localStorage.getItem('referral');
-
 
   $: needAllowance = true;
 
@@ -73,8 +64,6 @@
   }
 
   $: pool = null;
-
-  $: geyserEarned = BigNumber(0);
 
   $: geyserApy = {
     apy: 0,

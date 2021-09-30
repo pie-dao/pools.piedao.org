@@ -1,6 +1,5 @@
 <script>
   import images from "../../config/images.json";
-  import Audits from '../../components/marketing-elements/audits.svelte';
   import HeroCentered from '../../components/elements/HeroCentered.svelte';
   import JoinPieDAO from '../../components/JoinPieDAO.svelte';
   import ProductBox from '../../components/elements/product-box.svelte';

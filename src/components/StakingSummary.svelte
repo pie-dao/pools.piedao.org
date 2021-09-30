@@ -5,6 +5,7 @@
   import images from '../config/images.json';
   import smartcontracts from '../config/smartcontracts.json';
   import Modal from '../components/elements/Modal.svelte';
+  import AddToMetamaskButton from '../components/elements/AddToMetamaskButton.svelte';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
@@ -20,37 +21,6 @@
     let founded = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
     staker = founded ? founded : staker;
   }
-
-  const addToken = () => {
-    ethereum.sendAsync(
-      {
-        method: 'wallet_watchAsset',
-        params: {
-          type: 'ERC20',
-          options: {
-            address: smartcontracts.reward,
-            symbol: 'SLICE',
-            decimals: 18,
-            image: images.rewardsPie,
-          },
-        },
-        id: Math.round(Math.random() * 100000),
-      },
-      (err, added) => {
-        if (added) {
-          displayNotification({
-            message: 'The SLICE token has been added to your Metamask!',
-            type: 'success',
-          });
-        } else {
-          displayNotification({
-            message: 'Sorry, something went wrong. Please try again later.',
-            type: 'error',
-          });
-        }
-      },
-    );
-  };   
 </script>
 
 <Modal title="You can't claim yet" backgroundColor="#f3f3f3" bind:this={modalinfo}>
@@ -181,10 +151,7 @@
       </div>
     </div>    
   </div> 
-  <button
-    on:click={() => addToken()}
-    class="text-center pointer mx-auto object-bottom mb-4 font-thin"
-  >
-  🦊 Add SLICE to MetaMask
-</button> 
+  <div class="mb-2">
+    <AddToMetamaskButton address={smartcontracts.reward} symbol='SLICE' decimals=18 image={images.rewardsPie} showSymbol=true darkMode=true />
+  </div>
 </div>
