@@ -1,11 +1,12 @@
 <script>
   import images from "../config/images.json";
-  import { farming } from '../stores/eth/writables.js';
+  import smartcontracts from '../config/smartcontracts.json';
   import StakingStats from '../components/StakingStats.svelte';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { onMount } from 'svelte';
   import Meta from '../components/elements/meta.svelte';
   import BuyDoughButton from '../components/elements/BuyDoughButton.svelte';
+  import AddToMetamaskButton from '../components/elements/AddToMetamaskButton.svelte';
 
     // lottie...
     let controlsLayout = [
@@ -71,28 +72,6 @@
       console.error(error);
     }
   });
-
-  const addToken = () => {
-    ethereum.sendAsync({
-        method: 'wallet_watchAsset',
-        params: {
-          "type":"ERC20",
-          "options":{
-            "address": '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
-            "symbol": 'DOUGH',
-            "decimals": 18,
-            "image": 'https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png',
-          },
-        },
-        id: Math.round(Math.random() * 100000),
-    }, (err, added) => {
-      if (added) {
-        console.log('Thanks for your interest!')
-      } else {
-        alert('Something went wrong. Is Metamask there?')
-      }
-    })
-  };
 </script>
 
 <Meta 
@@ -113,9 +92,7 @@
     <img src={images.doughcolorful} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
     <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organization and products.</div>
     <BuyDoughButton />
-    <button on:click={() => addToken()} class="add-dough-metamask mt-4" data-aos="fade-up" data-aos-delay="300">
-      Add to MetaMask 🦊
-    </button>
+    <AddToMetamaskButton address={smartcontracts.dough} symbol='DOUGH' decimals=18 image={images.doughtoken} darkMode=true />
   </div>
 </div>
 

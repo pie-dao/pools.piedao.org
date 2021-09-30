@@ -5,7 +5,7 @@
   import { formatToken, subscribeToBalance } from '../components/helpers.js';
   import { onDestroy } from 'svelte';
   import smartcontracts from '../config/smartcontracts.json';
-  import displayNotification from '../notifications';
+  import AddToMetamaskButton from '../components/elements/AddToMetamaskButton.svelte';
   import Calculator from '../classes/farming_simulator/Calculator.js';
   import { stakingDataIntervalRunning } from '../stores/eth/writables.js';
   import BigNumber from 'bignumber.js';
@@ -110,37 +110,6 @@
     data = data;
   }
 
-  const addToken = () => {
-    ethereum.sendAsync(
-      {
-        method: 'wallet_watchAsset',
-        params: {
-          type: 'ERC20',
-          options: {
-            address: smartcontracts.veDOUGH,
-            symbol: 'veDOUGH',
-            decimals: 18,
-            image: images.veDough,
-          },
-        },
-        id: Math.round(Math.random() * 100000),
-      },
-      (err, added) => {
-        if (added) {
-          displayNotification({
-            message: 'The veDOUGH token has been added to your Metamask!',
-            type: 'success',
-          });
-        } else {
-          displayNotification({
-            message: 'Sorry, something went wrong. Please try again later.',
-            type: 'error',
-          });
-        }
-      },
-    );
-  };
-
   function calculateVeDOUGH() {
     veDOUGH = calculator.calculateVeDough(stakeAmount, stakeDuration);
     veDOUGH = formatToken(veDOUGH, '.', 2);
@@ -150,7 +119,7 @@
 <StakedModal bind:this={stakedModal} on:update={handleUpdate}/>
 
 <div class="font-huge text-center">Dough Staking</div>
-<div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
+<div class="font-thin text-lg text-center mt-10px mb-4">Get paid for Governing the DAO</div>
 
 <div class="flex w-100pc pt-0 pb-20px flex flex-col items-center">
   {#key data}
@@ -444,14 +413,7 @@
           >
           {/if}
 
-          <button
-            on:click={() => addToken()}
-            class="add-dough-metamask mb-4"
-            data-aos="fade-up"
-            data-aos-delay="300"
-          >
-            Add veDOUGH to MetaMask 🦊
-          </button>
+          <AddToMetamaskButton address={smartcontracts.veDOUGH} symbol='veDOUGH' decimals=18 image={images.veDough} darkMode=true />
           <!-- END STAKING FORM -->
         </div>
       {:else}

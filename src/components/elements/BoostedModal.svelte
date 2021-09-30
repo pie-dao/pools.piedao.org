@@ -5,6 +5,7 @@
   import { formatFiat } from '../helpers.js';
   import confetti from '../Confetti.js';
   import { toNum, calculateVeDough, AVG_SECONDS_MONTH } from '../../helpers/staking.js';
+  import AddToMetamaskButton from '../../components/elements/AddToMetamaskButton.svelte';
 
   let boostedModal;
 
@@ -52,37 +53,6 @@
       }, 10);
     }, 500);
   };
-
-  const addToken = () => {
-    ethereum.sendAsync(
-      {
-        method: 'wallet_watchAsset',
-        params: {
-          type: 'ERC20',
-          options: {
-            address: smartcontracts.reward,
-            symbol: 'SLICE',
-            decimals: 18,
-            image: images.rewardsPie,
-          },
-        },
-        id: Math.round(Math.random() * 100000),
-      },
-      (err, added) => {
-        if (added) {
-          displayNotification({
-            message: 'The SLICE token has been added to your Metamask!',
-            type: 'success',
-          });
-        } else {
-          displayNotification({
-            message: 'Sorry, something went wrong. Please try again later.',
-            type: 'error',
-          });
-        }
-      },
-    );
-  };  
 </script>
 
 <div id="confetti" class="hidden md:block" />
@@ -105,11 +75,6 @@
     <p class="pt-2 font-24px">
       Add SLICE to your Metamask<br />browser plugin so you will see it<br />among your assets.
     </p>
-    <button
-      on:click={() => addToken()}
-      class="text-center pointer mx-auto object-bottom my-8 font-thin"
-    >
-      🦊 Add SLICE to MetaMask
-    </button>
+    <AddToMetamaskButton address={smartcontracts.reward} symbol='SLICE' decimals=18 image={images.rewardsPie} showSymbol=true darkMode=true />
   </div>
 </Modal>

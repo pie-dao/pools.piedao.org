@@ -6,6 +6,7 @@
   import { parseEther } from '@ethersproject/units';
   import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
   import BigNumber from 'bignumber.js';
+  import AddToMetamaskButton from '../../components/elements/AddToMetamaskButton.svelte';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -103,37 +104,6 @@
     stakedModal.open();
     animateStakeAmount();
   };
-
-  const addToken = () => {
-    ethereum.sendAsync(
-      {
-        method: 'wallet_watchAsset',
-        params: {
-          type: 'ERC20',
-          options: {
-            address: smartcontracts.veDOUGH,
-            symbol: 'veDOUGH',
-            decimals: 18,
-            image: images.simulator_veDough,
-          },
-        },
-        id: Math.round(Math.random() * 100000),
-      },
-      (err, added) => {
-        if (added) {
-          displayNotification({
-            message: 'The veDOUGH token has been added to your Metamask!',
-            type: 'success',
-          });
-        } else {
-          displayNotification({
-            message: 'Sorry, something went wrong. Please try again later.',
-            type: 'error',
-          });
-        }
-      },
-    );
-  }; 
   
   async function restakeLastLock() {
     let lockId = await getLastLockForAddress(_eth);
@@ -218,11 +188,6 @@
     <p class="pt-2 font-22px">
       3. Add veDOUGH to your Metamask<br />browser plugin so you will see it<br />among your assets.
     </p>
-    <button
-      on:click={() => addToken()}
-      class="text-center pointer mx-auto object-bottom my-8 font-thin"
-    >
-      🦊 Add veDOUGH to MetaMask
-    </button>
+    <AddToMetamaskButton address={smartcontracts.veDOUGH} symbol='veDOUGH' decimals=18 image={images.simulator_veDough} showSymbol=true darkMode=true />
   </div>
 </Modal>
