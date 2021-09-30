@@ -10,16 +10,16 @@ export const addTokenToMM = (symbol, address, decimals, image = null) => {
         type: 'ERC20',
         options: {
           address,
-          symbol: symbol,
-          decimals: decimals,
-          image: image ? image : getTokenImage(address),
+          symbol,
+          decimals,
+          image: image || getTokenImage(address),
         },
       },
       id: Math.round(Math.random() * 100000),
     },
     (err, added) => {
       if (added) {
-        console.log(`The ${symbol} token has been added to your Metamask!`)
+        console.log(`The ${symbol} token has been added to your Metamask!`);
       } else {
         /* eslint-disable no-alert */
         alert('Something went wrong. Is Metamask there?');
