@@ -15,6 +15,16 @@
   <div class="content flex flex-wrap">
 
     <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
+      <a class="" target="_blank" href={`#/staking-simulator`}>
+      <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://cdn-images-1.medium.com/fit/t/1600/480/1*myjApckPoKhMYLRTzboyDQ.png) no-repeat center center; background-size: cover!important;">
+        <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">Governance</span></div>
+      </div>
+      <div class="text-left font-bold text-lg px-6 leading-7 mb-4">DOUGH Staking = veDOUGH </div>
+      <div class="text-justify font-thin h-120px text-ellipsis overflow-hidden px-6 leading-6 mb-4">The Staking & Governance mining release has implications that reach far beyond PieDAO: if individuals from across the world are able to get compensated for their expertise, instead of selling hours of their life for salary, this means we are entering the future of work driven by DAOs.</div>
+      </a>
+    </div>
+
+    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://www.piedao.org/#/dough`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://raw.githubusercontent.com/pie-dao/brand/master/misc/metavote2.png) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">DOUGH</span></div>
