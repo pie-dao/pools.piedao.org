@@ -217,7 +217,7 @@
     <div class="w-full font-thin text-l text-center mt-20px">
       This is how PieDAO (and You!) makes money
     </div> 
-    <a href="#/simulator" class="font-bold text-base text-center">
+    <a href="#/staking-simulator" class="font-bold text-base text-center">
       Learn more about staking >
     </a>   
   </div>
