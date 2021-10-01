@@ -81,7 +81,7 @@ const formatRoute = (route) => {
   const _route = route ? [...route] : [];
   console.log('formatRoute before -> _route', _route, route);
   if (_route) {
-    for (let i = 0; i < _route.length; i++) {
+    for (let i = 0; i < _route.length; i += 1) {
       if (_route[i] && _route[i].indexOf('?') >= 0) {
         _route[i] = _route[i].substring(0, _route[i].indexOf('?'));
       }
@@ -184,7 +184,7 @@ const formatRoute = (route) => {
 };
 
 const route = deriveRoute();
-console.log("deriveRoute -> route", route);
+console.log('deriveRoute -> route', route);
 
 export const currentRoute = writable({ ...formatRoute(route) });
 
