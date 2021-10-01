@@ -1,4 +1,5 @@
 import { CoinGecko } from '../../stores/coingecko.js';
+import { fetchTreasuryBalance } from '../../helpers/zapper.js';
 
 export default class Calculator {
   constructor() {
@@ -100,15 +101,17 @@ export default class Calculator {
           this.markets.dough.marketCap = doughMarketData.market_cap.usd;
 
           // retrieving the balance of Treasury from address...
-          // TODO: remove the hardcoded number and use API (Zapper, Zerion)...
           CoinGecko.fetchPriceFromString('ethereum').then((response) => {
-            this.markets.treasuryLiquidity.amount = 15000000;
-            this.markets.treasuryLiquidity.eth_value = (
-              (this.markets.treasuryLiquidity.amount) / response.ethereum.usd
-            ).toFixed(2);
-
-            this.markets.initialized = true;
-            resolve(this.markets);
+            fetchTreasuryBalance().then(treasuryLiquidity => {
+              console.log("fetchTreasuryBalance", treasuryLiquidity);
+              this.markets.treasuryLiquidity.amount = Math.floor(treasuryLiquidity);
+              this.markets.treasuryLiquidity.eth_value = (
+                (this.markets.treasuryLiquidity.amount) / response.ethereum.usd
+              ).toFixed(2);
+  
+              this.markets.initialized = true;
+              resolve(this.markets);
+            }).catch(error => reject(error));            
           }).catch((error) => reject(error));
         }).catch((error) => reject(error));
       }

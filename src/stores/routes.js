@@ -184,7 +184,7 @@ const formatRoute = (route) => {
 };
 
 const route = deriveRoute();
-console.log("deriveRoute -> route", route);
+console.log('deriveRoute -> route', route);
 
 export const currentRoute = writable({ ...formatRoute(route) });
 

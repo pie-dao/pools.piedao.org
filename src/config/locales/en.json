@@ -64,7 +64,7 @@
     "single.asset.coming.soon": "Single Asset entry / exit coming soon!"
   },
   "simulator": {
-    "treasury.liquidity.deployed": "<b>Treasury Liquidity Deployed</b><br /><div class='font-thin'><div class='font-thin'>PieDAO is managing a treasury accruing funds  from product fees and other services the organisation offers. A committee of experts is deploying these assets into yield generating strategies, so you can also make $$$.<br /><br />$ 15,00 M<br />4549.88 ETH</div>",
+    "treasury.liquidity.deployed": "<b>Treasury Liquidity Deployed</b><br /><div class='font-thin'><div class='font-thin'>PieDAO is managing a treasury accruing funds  from product fees and other services the organisation offers. A committee of experts is deploying these assets into yield generating strategies, so you can also make $$$</div>",
     "rewards.distribution": "<b>Rewards Distribution</b><br /><div class='font-thin'>Revenue coming from fees and yield farming will be, for the most part, distributed monthly directly to veDOUGH holders in the form of rewardsPie that, among others, might contain BAL, SUSHI, CRV, and DOUGH.<br /><br />Distributed to veDOUGH holders 60%<br />Used to compound the treasury 25%</div>",
     "total.staked.ve.dough": "<b>Total Staked veDOUGH</b><br /><div class='font-thin'>Once staked, DOUGH becomes veDOUGH in proportion to the locking period. If locked for 3 years 1 DOUGH = 1 veDOUGH.</div>",
     "total.staking.commitment": "<b>Total Staking Commitment</b><br /><div class='font-thin'>Users can decide to stake their DOUGH within different locking periods, which will result in different amounts of veDOUGH held (the more veDOUGH you hold, the more voting power and monthly rewards you earn).</div>",
