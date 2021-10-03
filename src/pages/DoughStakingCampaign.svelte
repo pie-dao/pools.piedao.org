@@ -113,7 +113,7 @@
 
   <div class="content flex flex-col spl px-4">
     <div class="flex flex-col items-center text-white font-thin">
-      <span class="text-l">Staking starts in {countdown}</span>
+      <span class="text-l">Staking starts {countdown}</span>
       {#if countdown}
         <span class="text-xl">October 4th, 2021</span>
       {/if}
