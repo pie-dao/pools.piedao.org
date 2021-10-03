@@ -93,22 +93,11 @@
 
   // countdown component...
   let countdown;
-  var eventTimeStamp = new Date('October 3, 2021 12:00:00');
-  var currentTimeStamp = Date.now();
-
-  var eventTime = new Date();
-  eventTime.setTime(eventTimeStamp.getTime());
-
-  var Offset = new Date(eventTime.getTimezoneOffset()*60000)
-
-  var Diff = eventTimeStamp - currentTimeStamp + (Offset.getTime() / 2);
-  var duration = moment.duration(Diff, 'milliseconds');
-  var interval = 1000;
+  const end = moment('2021-10-04T13:00:00.000Z');
 
   setInterval(function() {
-    duration = moment.duration(duration.asMilliseconds() - interval, 'milliseconds');
-    countdown = moment(duration.asMilliseconds()).format('D[d]:H[h]:mm[m]:ss[s]');
-  }, interval);  
+    countdown = end.fromNow()
+  }, 1000);  
 </script>
 
 <Meta 
@@ -124,9 +113,9 @@
 
   <div class="content flex flex-col spl px-4">
     <div class="flex flex-col items-center text-white font-thin">
-      <span class="text-l">Staking starts in </span>
+      <span class="text-l">Staking starts in {countdown}</span>
       {#if countdown}
-        <span class="text-xl">{countdown}</span>
+        <span class="text-xl">October 4th, 2021</span>
       {/if}
     </div>
     <img src={images.tokenholderherotype} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
