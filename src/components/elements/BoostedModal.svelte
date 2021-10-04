@@ -5,6 +5,7 @@
   import { formatFiat } from '../helpers.js';
   import confetti from '../Confetti.js';
   import { toNum, calculateVeDough, AVG_SECONDS_MONTH } from '../../helpers/staking.js';
+  import { BoostedModalIsOpen } from '../../stores/eth/writables.js';
 
   let bindedModal;
 
@@ -53,6 +54,10 @@
     }, 500);
   };
 
+  const modalChanged = (event) => {
+    $BoostedModalIsOpen = event.detail.data.isOpen;
+  }
+
   const addToken = () => {
     ethereum.sendAsync(
       {
@@ -87,7 +92,7 @@
 
 <div id="confetti" class="hidden md:block" />
 
-<Modal title={`You gained ${modalLock.gained}X`} backgroundColor="white" bind:this={bindedModal}>
+<Modal title={`You gained ${modalLock.gained}X`} backgroundColor="white" bind:this={bindedModal} modalIsOpen={$BoostedModalIsOpen} on:modalChanged={modalChanged}>
   <div slot="content" class="font-thin text-center hidescrollbar">
     <p class="pb-2 font-24px">more rewards and voting power!</p>
 
