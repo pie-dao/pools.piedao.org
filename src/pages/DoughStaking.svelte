@@ -289,6 +289,7 @@
           </div>
 
           <div
+            style="display:none"
             class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from border rounded-20px border-grey p-16px mt-4"
           >
             <div class="flex items-center justify-between">
