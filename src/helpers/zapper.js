@@ -15,8 +15,8 @@ export async function fetchTreasuryBalance() {
       const balancesPromises = [];
 
       supportedBalances.forEach((supportedBalance) => {
-        supportedBalance.protocols.forEach((protocol) => {
-          balancesPromises.push(fetch(`${zapperApiUrl}/protocols/${protocol.protocol}/balances?addresses%5B%5D=${treasury}&network=${supportedBalance.network}&api_key=${zapperApiKey}`));
+        supportedBalance.apps.forEach((protocol) => {
+          balancesPromises.push(fetch(`${zapperApiUrl}/protocols/${protocol.appId}/balances?addresses%5B%5D=${treasury}&network=${supportedBalance.network}&api_key=${zapperApiKey}`));
         });
       });
 
@@ -45,6 +45,7 @@ export async function fetchTreasuryBalance() {
     }
     throw new Error(fetchSupported.status);
   } catch(e) {
+    console.error("ERROR on zapper", e);
     return Promise.resolve(17000000);
   }
 }
