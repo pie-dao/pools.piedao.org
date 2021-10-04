@@ -149,7 +149,7 @@
     {/if}
     </div>
   </div>
-  <div class="w-full flex px-6">
+  <div class="w-full flex px-4 md:px-6">
     <div class="w-1/2 flex flex-col flex-shrink mr-2 mt-4 mb-6 rounded-20px bg-white p-16px"
     >
       <div class="flex items-center justify-between">

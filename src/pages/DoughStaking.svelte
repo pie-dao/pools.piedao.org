@@ -159,7 +159,7 @@
   <div
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"
   >
-    <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
+    <div class="flex flex-col w-full mt-6 md:mt-0 lg:w-49pc md:mr-1pc">
       {#key data}
         <!-- SUMMARY -->
         <StakingSummary {data} eth={$eth} on:update={handleUpdate} />
