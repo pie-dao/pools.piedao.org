@@ -2,18 +2,28 @@
 import {mousedownOutside} from '../../helpers/mousedownOutside.js';
 import images from '../../config/images.json';
 
+import { createEventDispatcher } from 'svelte';
+const dispatch = createEventDispatcher();
+
 export let backgroundColor;
 export let title;
+export let modalIsOpen = false;
 
 export const open = () => {
     modalIsOpen = true;
+
+    dispatch('modalChanged', {
+      data: {isOpen: modalIsOpen},
+    });    
 }
 
 export const close = () => {
     modalIsOpen = false;
-}
+    dispatch('modalChanged', {
 
-let modalIsOpen = false;
+      data: {isOpen: modalIsOpen},
+    });     
+}
 </script>
 
 {#if modalIsOpen}
