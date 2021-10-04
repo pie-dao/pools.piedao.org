@@ -207,7 +207,6 @@
           <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
           <button 
           disabled={isRestaking}
-          on:click={() => restakeLastLock()}
           class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
           {restakeText}
           </button>
