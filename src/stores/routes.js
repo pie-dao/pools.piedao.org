@@ -110,7 +110,6 @@ const formatRoute = (route) => {
     case 'pie':
       address = (_route[1] || '').toLowerCase();
       return { page: PiePageSwitch, params: { address } };
-    case 'dough-staking':
     case 'dough-staking-campaign':
       return { page: DoughStakingCampaign };
     case 'dough':
