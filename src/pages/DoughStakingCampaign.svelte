@@ -113,10 +113,8 @@
 
   <div class="content flex flex-col spl px-4">
     <div class="flex flex-col items-center text-white font-thin">
-      <span class="text-l">Staking starts {countdown}</span>
-      {#if countdown}
+      <span class="text-l">Staking started</span>
         <span class="text-xl">October 4th, 2021</span>
-      {/if}
     </div>
     <img src={images.tokenholderherotype} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
     <div class="text-lg text-white font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organization and products.</div>
