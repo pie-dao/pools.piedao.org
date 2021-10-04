@@ -16,7 +16,7 @@
     AVG_SECONDS_MONTH,
     canRestake
   } from '../helpers/staking.js';
-  import { justBoosted, timestampBoosted } from '../stores/eth/writables';
+  import { justBoosted, timestampBoosted, fetchStakingDataLock } from '../stores/eth/writables';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
@@ -94,6 +94,9 @@
                     <button
                       disabled={$justBoosted[lock.lockId]}
                       on:click={() => {
+                        // locking the fetchStakingDataLock variable to avoid unexpected behaviors...
+                        $fetchStakingDataLock = true;
+
                         // marking the lock as justBoosted...
                         $justBoosted[lock.lockId] = true;
 
@@ -109,7 +112,10 @@
                               animateScroll.scrollToTop();
                             }
 
-                            boostedModal.showModalLock(lock);                            
+                            boostedModal.showModalLock(lock);
+                            
+                            // unlocking the fetchStakingDataLock, it's a must...
+                            $fetchStakingDataLock = false;
 
                             // updating the data object...
                             data = updated_data;

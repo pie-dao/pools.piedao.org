@@ -16,7 +16,7 @@ import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
-import { stakingDataInterval } from '../stores/eth/writables.js';
+import { stakingDataInterval, fetchStakingDataLock } from '../stores/eth/writables.js';
 
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
@@ -59,13 +59,15 @@ export const observable = new Observable((subscriber) => {
 
   stakingDataInterval.subscribe((intervalRange) => {
     interval = setInterval(async () => {
-      const updatedData = await fetchStakingData(ETH);
+      fetchStakingDataLock.subscribe(async (isLocked) => {
+        const updatedData = await fetchStakingData(ETH);
 
-      // updating the stakingData just when needed...
-      if (JSON.stringify(dataObj) !== JSON.stringify(updatedData)) {
-        dataObj = updatedData;
-        subscriber.next(dataObj);
-      }
+        // updating the stakingData just when needed...
+        if ((JSON.stringify(dataObj) !== JSON.stringify(updatedData)) && !isLocked) {
+          dataObj = updatedData;
+          subscriber.next(dataObj);
+        }        
+      });
     }, intervalRange);
   });
 
