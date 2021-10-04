@@ -133,9 +133,11 @@
         </div>
       </div>
     </button>
+    <a class="text-bold text-center text-pink mt-2 pointer" href="/#/dough-staking">Stake DOUGH</a>
   </div>
 </div>
 
+<a class="text-bold text-center mt-2 pointer" href="/#/dough-staking">
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
@@ -165,6 +167,7 @@
     </div>
   </div>
 </div>
+</a>
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-8 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-6 px-10">
