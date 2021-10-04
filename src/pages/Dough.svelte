@@ -164,12 +164,14 @@
       </div>
     </div>
     </button>
+    <a class="text-bold text-center text-pink mt-2 pointer" href="/#/dough-staking">Stake DOUGH</a>
     <button on:click={() => addToken()} class="add-dough-metamask mt-4" data-aos="fade-up" data-aos-delay="300">
       Add to MetaMask 🦊
     </button>
   </div>
 </div>
 
+<a class="text-bold text-center mt-2 pointer" href="/#/dough-staking">
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-8 md:px-10">
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.hourglass} alt="hourglass" /><span>Long term<br />alignment</span></div>
@@ -179,6 +181,7 @@
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.raisedhand} alt="raised hand" /><span>Hybrid governance<br />beyond coin vote</span></div>
   </div>
 </div>
+</a>
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-4 md:px-10">
