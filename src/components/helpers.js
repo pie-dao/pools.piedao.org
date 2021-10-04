@@ -183,7 +183,7 @@ export const formatBigMoneyAmount = (amount, separator = ',', fiat = '$') => {
   var r = unit%3;
   var x =  Math.abs(Number(amount))/Number('1.0e+'+(unit-r)).toFixed(2);
   var final_unit = units[Math.floor(unit / 3) - 2] ? units[Math.floor(unit / 3) - 2] : "";
-	var left = x.toFixed(0);
+	var left = Math.floor(x).toString();
   var right = x.toFixed(2).split(".")[1];  
   return fiat + ' ' + left + separator + right + ' ' + final_unit;
 };
