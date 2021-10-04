@@ -132,8 +132,8 @@
         <span class=" flex items-center mr-4">
           <img class="h-auto w-24px" src={images.veDough} alt="dough token" />
           <div class="flex flex-col md:flex-row ml-2">
-          <div class="flex intems-center font-thin whitespace-nowrap md:ml-2">Total veDOUGH</div>
-          <div class="font-20px whitespace-nowrap">
+          <div class="flex intems-center font-thin whitespace-nowrap">Total veDOUGH</div>
+          <div class="font-20px whitespace-nowrap md:ml-2">
             {formatFiat(toNum($stakingStats.totalVeDough), ',', '.', '')} veDOUGH
           </div>
         </div>
@@ -182,8 +182,8 @@
       <div class="flex items-center p-1">
         <span class=" flex items-center">
           <img class="h-auto w-24px" src={images.person_raising_hand} alt="dough token" />
-          <div class="flex flex-col md:flex-row ml-2">
-          <div class="flex intems-center font-thin whitespace-nowrap">Voting Addresses</div>
+          <div class="flex flex-col md:flex-row ml-2 text-left">
+          <div class="flex font-thin whitespace-nowrap">Voting Addresses</div>
           <div class="font-20px whitespace-nowrap md:ml-2">{$stakingStats.totalHolders}</div>
         </div>
         </span>
