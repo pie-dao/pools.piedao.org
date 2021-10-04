@@ -159,7 +159,7 @@
   <div
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"
   >
-    <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
+    <div class="flex flex-col w-full mt-6 md:mt-0 lg:w-49pc md:mr-1pc">
       {#key data}
         <!-- SUMMARY -->
         <StakingSummary {data} eth={$eth} on:update={handleUpdate} />
@@ -331,14 +331,14 @@
 
           {#if $eth.address}
             {#if getDoughBalance.eq(0)}
-              <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4"
+              <button disabled class="btn clear stake-button rounded-20px py-15px px-22px mx-4pc mt-4"
                 >You don't own tokens
               </button>
             {:else if stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0}
               {#if toBN(stakeAmount).isGreaterThan(getDoughBalance)}
                 <button
                   disabled
-                  class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
+                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                   >Insufficient Balance</button
                 >
               {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
@@ -375,7 +375,7 @@
                         isApproving = false;
                       });
                   }}
-                  class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
+                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                   >{approveButtonText}</button
                 >
               {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
@@ -420,27 +420,27 @@
                         isStaking = false;
                       });
                   }}
-                  class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
+                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                   >{stakeButtonText}</button
                 >
               {:else}
                 <button
                   disabled
-                  class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
+                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                   >Duration not correct</button
                 >
               {/if}
             {:else}
               <button
                 disabled
-                class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
+                class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
                 >Enter an amount</button
               >
             {/if}
           {:else}
           <button
             on:click={() => connectWeb3()}
-            class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
+            class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
             >Connect a Wallet</button
           >
           {/if}

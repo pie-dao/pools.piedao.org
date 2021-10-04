@@ -41,13 +41,13 @@
   class="w-full flex flex-col lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6"
 >
   <div class="w-full flex flex-col w-full rounded-16 p-6" style="background-color: #e1f4f2;">
-    <div class="flex flex-row nowrap w-full items-center">
-      <span class=" flex w-11/12">
-        <img class="h-auto w-24px" src={images.cut_of_meat} alt="dough token" />
+    <div class="flex flex-row nowrap w-full items-center justify-between">
+      <span class="w-full flex items-center">
+        <img class="h-24px w-24px" src={images.cut_of_meat} alt="dough token" />
         <div class="flex intems-center p-1 font-20px">Key Staking Stats</div>
       </span>
       {#if showLoader}
-        <span class=" flex w-1/12">
+        <span class="flex ">
           <ArrowLoadingButton on:clicked={handleLoadingButtonClick}/>
         </span>
       {/if}
@@ -56,12 +56,14 @@
     <!-- TOTAL STAKED DOUGH -->
     <div class="flex rounded-20px bg-white p-16px mr-0 lg:mr-4 mb-4 lg:mb-0">
       <div class="flex items-center p-1">
-        <span class=" flex items-center mr-8">
+        <span class="flex items-center mr-8">
           <img class="h-auto w-24px" src={images.doughtoken} alt="dough token" />
-          <div class="flex intems-center p-1 font-thin whitespace-nowrap">Total staked DOUGH</div>
-          <div class="font-20px whitespace-nowrap">
+          <div class="flex flex-col md:flex-row ml-2">
+          <div class="flex intems-center font-thin whitespace-nowrap">Total staked DOUGH</div>
+          <div class="font-20px whitespace-nowrap md:ml-2">
             {formatFiat(toNum($stakingStats.totalStakedDough), ',', '.', '')} DOUGH
           </div>
+        </div>
         </span>
         <span class="hidden md:block">
         {#if plotBars}
@@ -115,8 +117,10 @@
       <div class="flex items-center p-1">
         <span class=" flex items-center ">
           <img class="h-auto w-24px" src={images.locked_with_key} alt="dough token" />
-          <div class="flex intems-center p-1 font-thin whitespace-nowrap">Average Time Lock</div>
-          <div class="font-20px whitespace-nowrap">{$stakingStats.averageTimeLock} Months</div>
+          <div class="flex flex-col md:flex-row ml-2">
+          <div class="flex intems-center font-thin whitespace-nowrap">Average Time Lock</div>
+          <div class="font-20px whitespace-nowrap md:ml-2">{$stakingStats.averageTimeLock} Months</div>
+        </div>
         </span>    
       </div>
     </div>
@@ -127,10 +131,12 @@
       <div class="flex items-center p-1">
         <span class=" flex items-center mr-4">
           <img class="h-auto w-24px" src={images.veDough} alt="dough token" />
-          <div class="flex intems-center p-1 font-thin whitespace-nowrap">Total veDOUGH</div>
-          <div class="font-20px whitespace-nowrap">
+          <div class="flex flex-col md:flex-row ml-2">
+          <div class="flex intems-center font-thin whitespace-nowrap">Total veDOUGH</div>
+          <div class="font-20px whitespace-nowrap md:ml-2">
             {formatFiat(toNum($stakingStats.totalVeDough), ',', '.', '')} veDOUGH
           </div>
+        </div>
         </span>
         <span class="hidden md:block">
         {#if plotBars}
@@ -176,8 +182,10 @@
       <div class="flex items-center p-1">
         <span class=" flex items-center">
           <img class="h-auto w-24px" src={images.person_raising_hand} alt="dough token" />
-          <div class="flex intems-center p-1 font-thin whitespace-nowrap">Voting Addresses</div>
-          <div class="font-20px whitespace-nowrap">{$stakingStats.totalHolders}</div>
+          <div class="flex flex-col md:flex-row ml-2 text-left">
+          <div class="flex font-thin whitespace-nowrap">Voting Addresses</div>
+          <div class="font-20px whitespace-nowrap md:ml-2">{$stakingStats.totalHolders}</div>
+        </div>
         </span>
       </div>
     </div>

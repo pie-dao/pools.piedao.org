@@ -75,7 +75,7 @@
         {/if}
       {/each}
     {:else}
-      You have no rewards yet.
+    <span class="text-s text-center mx-8">You have no rewards yet.</span>
     {/if}
   {/if}
 

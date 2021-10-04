@@ -195,7 +195,7 @@
         {/if}
       {/each}
     {:else}
-      You haven't staked anything yet, what are you waiting for?
+      <span class="text-s text-center mx-8">You haven't staked anything yet, what are you waiting for?</span>
     {/if}
 
     {#if data.accountLocks.length > itemsNumber}

@@ -118,7 +118,7 @@
     </div>
     <img src={images.tokenholderherotype} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
     <div class="text-lg text-white font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organization and products.</div>
-    <button class="items-center stakinggradient shake text-black text-left mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
+    <button class="items-center stakinggradient shake text-black text-left mt-4 hover:opacity-80" onclick="location.href='#/swap';" data-aos="fade-up" data-aos-delay="250">
       <div class="w-100pc flex items-center">
       <div class="m-10px"><img class="h-50px inline" src={images.doughtoken} alt="doughtoken" /></div>
       <div class="mr-20px">
@@ -134,7 +134,7 @@
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.farmerbenefitcampaign} alt="hourglass" /><span>Automated<br />farming</span></div>
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12"><img class="h-50px inline mb-4" src={images.gem} alt="gem" /><span>Rewarded<br />commitment</span></div>
@@ -219,7 +219,7 @@
 
 <div class="flex flex-col items-center text-center mt-6 md:mt-20">
   <div class="w-full max-w-1200px">
-    <div class="bg-melanzanafritta min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
+    <div class="bg-melanzanafritta min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12 mx-4">
       <img class="w-180px h-180px md:mr-12" src={images.newblack} alt="vedough is the new black"/>
       <div class="font-thin">
         <div class="font-bold text-l md:text-xl text-center md:text-left mt-4 md:mt-0">veDOUGH Is The New Black</div>
