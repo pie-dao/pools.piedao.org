@@ -83,12 +83,12 @@
     setTimeout(() => {
       let interval = setInterval(() => {
         if (modalStake.animatedAmount < modalStake.amount) {
-          modalStake.animatedAmount++;
+          modalStake.animatedAmount+=20;
         } else {
           modalStake.animatedAmount = modalStake.amount;
           clearInterval(interval);
         }
-      }, 3);
+      }, 1);
     }, 500);    
   }
 
