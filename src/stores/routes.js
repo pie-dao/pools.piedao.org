@@ -23,9 +23,9 @@ import PiePageSwitch from '../pages/PiePageSwitch.svelte';
 import Learn from '../pages/Learn.svelte';
 import Integrations from '../pages/Integrations.svelte';
 import Piefolio from '../pages/Piefolio.svelte';
-// import DoughStaking from '../pages/DoughStaking.svelte';
-// import StakingPositions from '../pages/StakingPositions.svelte';
-// import StakingRewards from '../pages/StakingRewards.svelte';
+import DoughStaking from '../pages/DoughStaking.svelte';
+import StakingPositions from '../pages/StakingPositions.svelte';
+import StakingRewards from '../pages/StakingRewards.svelte';
 import Redirect from '../pages/Redirect.svelte';
 import Farm from '../pages/Farm.svelte';
 import Simulator from '../pages/simulator/Simulator.svelte';
@@ -130,12 +130,12 @@ const formatRoute = (route) => {
       return { page: LPStakingV2 };
     case 'farm':
       return { page: Farm };
-    // case 'dough-staking':
-    //   return { page: DoughStaking };
-    // case 'staking_positions':
-    //   return { page: StakingPositions };
-    // case 'staking_rewards':
-    //   return { page: StakingRewards };
+    case 'dough-staking':
+      return { page: DoughStaking };
+    case 'staking_positions':
+      return { page: StakingPositions };
+    case 'staking_rewards':
+      return { page: StakingRewards };
     case 'staking-simulator':
       /* eslint-disable no-case-declarations */
       const simulation = (_route[1] || '');
