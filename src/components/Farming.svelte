@@ -5,7 +5,7 @@
 </script>
 
 <div class="quantstamp-container">
-  <a href="#/farms" alt="Stale for rewards">
+  <a href="#/dough-staking" alt="Stale for rewards">
     <span>Get amazing rewards</span>
     <img src={images.logos.stakedough} alt="{$_('brands.stakedough')}" />
   </a>
