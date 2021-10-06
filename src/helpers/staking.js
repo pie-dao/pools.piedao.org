@@ -245,50 +245,74 @@ export async function calculateDoughTotalSupply(provider) {
   }
 }
 
-export async function fetchStakingStats(provider) {
+export async function fetchAllStakingStats() {
   try {
-    const totalSupply = await calculateDoughTotalSupply(provider);
+    let lastId = "";
+    let stats = [];
+
+    let response = await fetchStakingStats(null, 1000, lastId);
+    
+    while(response.globalStats.length > 0) {
+      stats = stats.concat(response.globalStats);
+      response = await fetchStakingStats(null, 1000, response.globalStats[response.globalStats.length - 1].id);
+    }
+    
+    return stats;
+  } catch(error) {
+    throw new Error(`fetchAllStakingStats: ${error.message}`);
+  }
+}
+
+export async function fetchStakingStats(provider, limit, fromId) {
+  try {
+    const totalSupply = provider ? await calculateDoughTotalSupply(provider) : 0;
+
+    let graphQuery = {
+      stakersTrackers: {
+        __args: {
+          where: { id: 'StakersTrackerID' },
+        },
+        id: true,
+        counter: true,
+      },
+      globalStats: {
+        __args: {
+          first: limit,
+          orderBy: 'timestamp',
+          orderDirection: 'desc',
+        },
+        id: true,
+        depositedLocksCounter: true,
+        depositedLocksValue: true,
+        withdrawnLocksCounter: true,
+        withdrawnLocksValue: true,
+        ejectedLocksCounter: true,
+        ejectedLocksValue: true,
+        boostedLocksCounter: true,
+        boostedLocksValue: true,
+        averageTimeLock: true,
+        totalDoughStaked: true,
+        veTokenTotalSupply: true,
+      },
+    };
+
+    if(fromId) {
+      graphQuery.globalStats.__args["where"] = {"id_lt": fromId};
+    }
 
     const response = await subgraphRequest(
       'https://api.thegraph.com/subgraphs/name/pie-dao/vedough',
-      {
-        stakersTrackers: {
-          __args: {
-            where: { id: 'StakersTrackerID' },
-          },
-          id: true,
-          counter: true,
-        },
-        globalStats: {
-          __args: {
-            first: 1,
-            orderBy: 'id',
-            orderDirection: 'desc',
-          },
-          id: true,
-          depositedLocksCounter: true,
-          depositedLocksValue: true,
-          withdrawnLocksCounter: true,
-          withdrawnLocksValue: true,
-          ejectedLocksCounter: true,
-          ejectedLocksValue: true,
-          boostedLocksCounter: true,
-          boostedLocksValue: true,
-          averageTimeLock: true,
-          totalDoughStaked: true,
-          veTokenTotalSupply: true,
-        },
-      },
+      graphQuery,
     );
 
-    return {
+    return provider ? {
       totalHolders: response.stakersTrackers.length ? response.stakersTrackers[0].counter : 0,
       averageTimeLock: response.globalStats.length
         ? Math.floor(Number(response.globalStats[0].averageTimeLock) / AVG_SECONDS_MONTH) : 0,
       totalStakedDough: response.globalStats.length ? response.globalStats[0].totalDoughStaked : 0,
       totalVeDough: response.globalStats.length ? response.globalStats[0].veTokenTotalSupply : 0,
       totalDough: totalSupply,
-    };
+    } : response;
   } catch (error) {
     throw new Error(`fetchStakingStats: ${error.message}`);
   }

@@ -18,7 +18,7 @@
   $: if($eth.provider && isLoading) {
     isLoading = false;
 
-    fetchStakingStats($eth.provider).then(response => {
+    fetchStakingStats($eth.provider, 1).then(response => {
         $stakingStats = response;
         console.log("fetchStakingStats", $stakingStats);
 
