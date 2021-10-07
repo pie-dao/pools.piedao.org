@@ -156,7 +156,6 @@ const formatRoute = (route) => {
       return _route[1] ? { page: StakingPageSingle, params: _route } : { page: Staking };
     case 'staking-charts':
       return { page: StakingCharts };
-      StakingCharts
     case 'pools':
       address = (_route[1] || '').toLowerCase();
       poolAction = (_route[2] || 'add').toLowerCase();

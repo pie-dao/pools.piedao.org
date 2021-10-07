@@ -44,8 +44,8 @@ export async function fetchTreasuryBalance() {
       });
     }
     throw new Error(fetchSupported.status);
-  } catch(e) {
-    console.error("ERROR on zapper", e);
+  } catch (e) {
+    console.error('ERROR on zapper', e);
     return Promise.resolve(17000000);
   }
 }
