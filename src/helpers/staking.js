@@ -66,7 +66,7 @@ export const observable = new Observable((subscriber) => {
         if ((JSON.stringify(dataObj) !== JSON.stringify(updatedData)) && !isLocked) {
           dataObj = updatedData;
           subscriber.next(dataObj);
-        }        
+        }
       });
     }, intervalRange);
   });
@@ -247,18 +247,22 @@ export async function calculateDoughTotalSupply(provider) {
 
 export async function fetchAllStakingStats() {
   try {
-    let lastId = "";
+    const lastId = '';
     let stats = [];
 
     let response = await fetchStakingStats(null, 1000, lastId);
-    
-    while(response.globalStats.length > 0) {
+
+    while (response.globalStats.length > 0) {
       stats = stats.concat(response.globalStats);
-      response = await fetchStakingStats(null, 1000, response.globalStats[response.globalStats.length - 1].id);
+      /* eslint-disable no-await-in-loop */
+      response = await fetchStakingStats(
+        null, 1000, response.globalStats[response.globalStats.length - 1].id,
+      );
+      /* eslint-enable no-await-in-loop */
     }
-    
+
     return stats;
-  } catch(error) {
+  } catch (error) {
     throw new Error(`fetchAllStakingStats: ${error.message}`);
   }
 }
@@ -267,7 +271,7 @@ export async function fetchStakingStats(provider, limit, fromId) {
   try {
     const totalSupply = provider ? await calculateDoughTotalSupply(provider) : 0;
 
-    let graphQuery = {
+    const graphQuery = {
       stakersTrackers: {
         __args: {
           where: { id: 'StakersTrackerID' },
@@ -296,8 +300,8 @@ export async function fetchStakingStats(provider, limit, fromId) {
       },
     };
 
-    if(fromId) {
-      graphQuery.globalStats.__args["where"] = {"id_lt": fromId};
+    if (fromId) {
+      graphQuery.globalStats.__args.where = { id_lt: fromId };
     }
 
     const response = await subgraphRequest(

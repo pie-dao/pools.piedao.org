@@ -102,16 +102,16 @@ export default class Calculator {
 
           // retrieving the balance of Treasury from address...
           CoinGecko.fetchPriceFromString('ethereum').then((response) => {
-            fetchTreasuryBalance().then(treasuryLiquidity => {
-              console.log("fetchTreasuryBalance", treasuryLiquidity);
+            fetchTreasuryBalance().then((treasuryLiquidity) => {
+              console.log('fetchTreasuryBalance', treasuryLiquidity);
               this.markets.treasuryLiquidity.amount = Math.floor(treasuryLiquidity);
               this.markets.treasuryLiquidity.eth_value = (
                 (this.markets.treasuryLiquidity.amount) / response.ethereum.usd
               ).toFixed(2);
-  
+
               this.markets.initialized = true;
               resolve(this.markets);
-            }).catch(error => reject(error));            
+            }).catch((error) => reject(error));
           }).catch((error) => reject(error));
         }).catch((error) => reject(error));
       }
