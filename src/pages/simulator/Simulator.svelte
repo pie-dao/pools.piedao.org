@@ -193,7 +193,7 @@
     commitment: "36 Months",
     rewardsUnclaimed: "10%",
     stakedVeDough: 0,
-    expectedApr: "10%"
+    expectedApr: "19%"
   };  
 
   // rewards distrubutions, hardcoded for now...
