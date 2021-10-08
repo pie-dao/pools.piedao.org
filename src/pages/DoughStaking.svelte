@@ -186,7 +186,7 @@
           <div
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px"
             class:input-invalid={stakeAmount &&
-              toBN(stakeAmount).isGreaterThan(getDoughBalance)}
+              stakeAmount > toNum(getDoughBalance)}
           >
             <div class="flex items-center justify-between">
               <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
