@@ -26,6 +26,7 @@ import Piefolio from '../pages/Piefolio.svelte';
 import DoughStaking from '../pages/DoughStaking.svelte';
 import StakingPositions from '../pages/StakingPositions.svelte';
 import StakingRewards from '../pages/StakingRewards.svelte';
+import StakingCharts from '../pages/charts/StakingCharts.svelte';
 import Redirect from '../pages/Redirect.svelte';
 import Farm from '../pages/Farm.svelte';
 import Simulator from '../pages/simulator/Simulator.svelte';
@@ -153,6 +154,8 @@ const formatRoute = (route) => {
       return { page: LPStaking, params: { referral } };
     case 'staking':
       return _route[1] ? { page: StakingPageSingle, params: _route } : { page: Staking };
+    case 'staking-charts':
+      return { page: StakingCharts };
     case 'pools':
       address = (_route[1] || '').toLowerCase();
       poolAction = (_route[2] || 'add').toLowerCase();
