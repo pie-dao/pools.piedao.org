@@ -335,7 +335,7 @@
                 >You don't own tokens
               </button>
             {:else if stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0}
-              {#if toBN(stakeAmount).isGreaterThan(getDoughBalance)}
+              {#if stakeAmount > toNum(getDoughBalance)}
                 <button
                   disabled
                   class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
