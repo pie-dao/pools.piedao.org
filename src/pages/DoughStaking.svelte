@@ -395,7 +395,7 @@
                       }
                     }, 1000);
 
-                    stakeDOUGH(stakeAmount, stakeDuration, receiver, $eth)
+                    stakeDOUGH(stakeAmount - 0.05, stakeDuration, receiver, $eth)
                       .then((updated_data) => {
                         data = updated_data;
                         data = data;
