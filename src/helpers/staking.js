@@ -77,9 +77,9 @@ export const observable = new Observable((subscriber) => {
   };
 });
 
-export const toNum = (num) => BigNumber(num.toString())
+export const toNum = (num, toFixed = 2) => BigNumber(num.toString())
   .dividedBy(10 ** 18)
-  .toFixed(2);
+  .toFixed(toFixed);
 
 export const toBN = (num) => BigNumber(num.toString()).multipliedBy(10 ** 18);
 

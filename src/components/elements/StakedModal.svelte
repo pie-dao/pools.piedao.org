@@ -4,14 +4,18 @@
   import Modal from './Modal.svelte';
   import confetti from '../Confetti.js';
   import { parseEther } from '@ethersproject/units';
-  import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
+  import { getLastLockForAddress, boostToMax, toNum } from '../../helpers/staking.js';
+  import { formatToken } from '../../components/helpers.js';
   import BigNumber from 'bignumber.js';
+  import Calculator from '../../classes/farming_simulator/Calculator.js';
+  
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
   let stakedModal;
   let restakeText = "Restake 3 years";
   let isRestaking = false;
+  let calculator = new Calculator();
 
   let modalStake = {
     amount: 0,
@@ -74,8 +78,8 @@
       modalStake.text = "smallDuration_hasDough";
     }
     
-    let veDOUGH = calculateVeDough(parseEther(_stakeAmount.toString()), _stakeDuration);
-    modalStake.amount = Number(veDOUGH);
+    let veDOUGH = calculator.calculateVeDough(_stakeAmount, _stakeDuration);
+    modalStake.amount = formatToken(veDOUGH.toFixed(4), '.', 18);
     modalStake.animatedAmount = 0;    
   }
 
@@ -168,7 +172,7 @@
 
     <div class="flex mt-4 mb-6 mx-12 rounded-20px bg-lightgrey p-16px">
       <div class="w-1/2 text-right font-bold font-24px mr-1">
-        {modalStake.animatedAmount.toFixed(2)}
+        {modalStake.animatedAmount}
       </div>
       <div class="w-1/2 text-left font-24px ml-1">veDOUGH</div>
     </div>

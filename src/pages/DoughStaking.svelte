@@ -143,7 +143,7 @@
 
   function calculateVeDOUGH() {
     veDOUGH = calculator.calculateVeDough(stakeAmount, stakeDuration);
-    veDOUGH = formatToken(veDOUGH, '.', 2);
+    veDOUGH = formatToken(veDOUGH.toFixed(4), '.', 18);
   }
 </script>
 
@@ -159,7 +159,7 @@
   <div
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"
   >
-    <div class="flex flex-col w-full mt-6 md:mt-0 lg:w-49pc md:mr-1pc">
+    <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
       {#key data}
         <!-- SUMMARY -->
         <StakingSummary {data} eth={$eth} on:update={handleUpdate} />
@@ -186,18 +186,18 @@
           <div
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px"
             class:input-invalid={stakeAmount &&
-              toBN(stakeAmount).isGreaterThan(getDoughBalance)}
+              stakeAmount > formatToken(toNum(getDoughBalance, 18), '.', 18)}
           >
             <div class="flex items-center justify-between">
               <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
               <div class="font-thin" style="display: inline; cursor: pointer;">
                 <div
                   on:click={() => {
-                    stakeAmount = toNum(getDoughBalance);
+                    stakeAmount = formatToken(toNum(getDoughBalance, 18), '.', 18);
                     calculateVeDOUGH();
                   }}
                 >
-                  Balance: {toNum(getDoughBalance)} DOUGH
+                  Balance: {formatToken(toNum(getDoughBalance, 18), '.', 4)} DOUGH
                 </div>
               </div>
             </div>
@@ -289,7 +289,6 @@
           </div>
 
           <div
-            style="display:none"
             class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from border rounded-20px border-grey p-16px mt-4"
           >
             <div class="flex items-center justify-between">
@@ -331,14 +330,14 @@
 
           {#if $eth.address}
             {#if getDoughBalance.eq(0)}
-              <button disabled class="btn clear stake-button rounded-20px py-15px px-22px mx-4pc mt-4"
+              <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4"
                 >You don't own tokens
               </button>
             {:else if stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0}
-              {#if stakeAmount > toNum(getDoughBalance)}
+            {#if stakeAmount > formatToken(toNum(getDoughBalance, 18), '.', 18)}
                 <button
                   disabled
-                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
+                  class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
                   >Insufficient Balance</button
                 >
               {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
@@ -375,7 +374,7 @@
                         isApproving = false;
                       });
                   }}
-                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
+                  class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
                   >{approveButtonText}</button
                 >
               {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
@@ -420,27 +419,27 @@
                         isStaking = false;
                       });
                   }}
-                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
+                  class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
                   >{stakeButtonText}</button
                 >
               {:else}
                 <button
                   disabled
-                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
+                  class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
                   >Duration not correct</button
                 >
               {/if}
             {:else}
               <button
                 disabled
-                class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
+                class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
                 >Enter an amount</button
               >
             {/if}
           {:else}
           <button
             on:click={() => connectWeb3()}
-            class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
+            class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
             >Connect a Wallet</button
           >
           {/if}
