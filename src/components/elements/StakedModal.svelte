@@ -168,7 +168,7 @@
 
     <div class="flex mt-4 mb-6 mx-12 rounded-20px bg-lightgrey p-16px">
       <div class="w-1/2 text-right font-bold font-24px mr-1">
-        {modalStake.animatedAmount.toFixed(2)}
+        {modalStake.animatedAmount.toFixed(4)}
       </div>
       <div class="w-1/2 text-left font-24px ml-1">veDOUGH</div>
     </div>

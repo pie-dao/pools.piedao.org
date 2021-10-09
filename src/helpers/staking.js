@@ -77,9 +77,9 @@ export const observable = new Observable((subscriber) => {
   };
 });
 
-export const toNum = (num) => BigNumber(num.toString())
+export const toNum = (num, toFixed = 2) => BigNumber(num.toString())
   .dividedBy(10 ** 18)
-  .toFixed(2);
+  .toFixed(toFixed);
 
 export const toBN = (num) => BigNumber(num.toString()).multipliedBy(10 ** 18);
 
@@ -172,9 +172,14 @@ export function didLockExpired(lock) {
 }
 
 export function calculateVeDough(stakedDough, commitment) {
-  const k = 56.0268900276223;
-  const commitmentMultiplier = (commitment / k) * Math.log10(commitment);
-  return toNum(stakedDough * commitmentMultiplier);
+  if(!Number.isNaN(Number(stakedDough.toString())) && commitment) {
+    const k = 56.0268900276223;
+    const commitmentMultiplier = (commitment / k) * Math.log10(commitment);
+    return toNum(stakedDough * commitmentMultiplier, 4);
+  } else {
+    return 0;    
+  }
+
 }
 
 export function initContracts(eth) {
