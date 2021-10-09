@@ -165,7 +165,11 @@ export const formatToken = (value, decimal = '.', toFixed = 2) => {
   if (!value) return 'n/a';
 
   try {
-    const values = value.toString().replace(/^-/, '').split('.');
+    let values = value.toString().replace(/^-/, '').split('.');
+    
+    if(values.length < 2) {
+      values = value.toString().replace(/^-/, '').split(',');
+    }
 
     const dollars = parseInt(values[0]);
     const cents = values[1] ? values[1].slice(0, toFixed) : "00";

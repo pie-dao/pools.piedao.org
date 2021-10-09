@@ -223,7 +223,7 @@
                   stakeAmount.label = formatToken(stakeAmount.label, '.', 18);
                 }}
                 on:keyup={() => {
-                  stakeAmount.bn = BigNumber(stakeAmount.label);
+                  stakeAmount.bn = BigNumber(formatToken(stakeAmount.label, '.', 18));
                   calculateVeDOUGH();
                 }}
               />
