@@ -172,7 +172,6 @@ export function didLockExpired(lock) {
 }
 
 export function calculateVeDough(stakedDough, commitment) {
-  console.log("calculateVeDough", commitment);
   if(!Number.isNaN(Number(stakedDough.toString())) && commitment) {
     const k = 56.0268900276223;
     const commitmentMultiplier = (commitment / k) * Math.log10(commitment);
@@ -573,7 +572,6 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
     }
 
     try {
-      console.log("going to stake", stakeAmount.toString());
       const { emitter } = displayNotification(
         await sharesTimeLock.depositByMonths(
           parseEther(stakeAmount.toString()),
