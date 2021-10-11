@@ -5,10 +5,8 @@
   import StakingStats from '../components/StakingStats.svelte';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { onMount } from 'svelte';
-  import {
-    formatFiat,
-    subscribeToBalance,
-  } from "../components/helpers.js";
+  import { subscribeToBalance } from "../components/helpers.js";
+  import { fetchLastSnapshots } from "../helpers/snapshopt.js";
 
   import Meta from '../components/elements/meta.svelte';
    
@@ -45,48 +43,9 @@
   let circulatingSupply = 0;
   let proposals;
 
-  export async function fetchLastSnapshots() {
-    let res = await fetch('https://hub.snapshot.org/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: `query {
-          proposals(
-            first: 2,
-            skip: 0,
-            where: {
-              space_in: ["piedao"]
-            },
-            orderBy: "created",
-            orderDirection: desc
-          ) {
-            id
-            state
-            title
-            body
-            choices
-            start
-            end
-            snapshot
-            state
-            author
-            link
-          }
-        }`
-      })
-    });
-
-    let response = await res.json();
-    return response.data.proposals;
-  }  
-
-
   onMount(async() => {
     try {
       proposals = await fetchLastSnapshots();
-      console.log("proposals", proposals);
     } catch(error) {
       console.error(error);
     }

@@ -44,6 +44,7 @@ button:focus {
   padding: 10px;
 }
 
+
 .input-invalid {
   border: solid 1px #f40a50 !important;
   -webkit-box-shadow: 0px 0px 8px 2px #f450a450;
@@ -282,6 +283,10 @@ right: 0px;
 
 .text-red {
   color: #FC4057;
+}
+
+.text-yellow {
+  color: #fec323;
 }
 
 .pointer {

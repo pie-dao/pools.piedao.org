@@ -17,6 +17,7 @@ import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
 import { stakingDataInterval, fetchStakingDataLock } from '../stores/eth/writables.js';
+import { fetchLastMonthVoteForVoter } from './snapshopt.js'; 
 
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
@@ -31,6 +32,7 @@ export let dataObj = {
   accountDepositTokenBalance: BigNumber(0),
   accountLocks: [],
   rewards: [],
+  votes: []
 };
 
 export let sharesTimeLock = false;
@@ -463,6 +465,9 @@ export const fetchStakingData = async (eth) => {
 
   dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
   console.log('fetchStakingData', dataObj);
+
+  // "0x7a7a5fAD8C4107ED0959191e7Ff36Ba82D4ea2F9"
+  dataObj.votes = await fetchLastMonthVoteForVoter(eth.address);
 
   return dataObj;
 };

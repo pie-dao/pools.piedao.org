@@ -5,7 +5,7 @@
   import images from '../config/images.json';
   import smartcontracts from '../config/smartcontracts.json';
   import Modal from '../components/elements/Modal.svelte';
-
+  import { onMount } from 'svelte';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -15,6 +15,13 @@
   let participations = getParticipations();
   let staker = {participation: 0};
   let modalinfo;
+  let votingInfos = "";
+
+  onMount(async() => {
+    votingInfos = data.votes.length > 0 
+      ? "You voted this month" 
+      : "You need to vote"
+  });  
 
   $: if (eth.address) {
     let founded = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
@@ -115,6 +122,9 @@
   >
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
+      {#if eth.address}
+      <div class={data.votes.length > 0 ? "flex nowrap intems-center p-1 text-green" : "flex nowrap intems-center p-1 text-yellow"}>{votingInfos}</div>
+      {/if}
     </div>
     <div class="flex nowrap items-center p-1">
       <div class="flex-1">
@@ -124,7 +134,7 @@
           </div>
           <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
           <span class="sc-kXeGPI jeVIZw token-symbol-container">SLICE</span>
-        </span>        
+        </span>
       </div>
       {#if eth.address}
       <button 
