@@ -6,6 +6,7 @@
   import smartcontracts from '../config/smartcontracts.json';
   import Modal from '../components/elements/Modal.svelte';
   import { onMount } from 'svelte';
+  import InfoModal from '../components/modals/infoModal.svelte';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -17,17 +18,22 @@
   let modalinfo;
   let votingInfos = "";
   let votingClass = "";
+  let modal;
+  let modal_content_key;
+  let voteKeyword;
 
   onMount(async() => {
     if(data.votes) {
       if(data.votes.length) {
         votingInfos = "You voted this month";
         votingClass = "text-green";
+        voteKeyword = "you_voted";
       } else {
         if(data.proposals) {
           if(data.proposals.length == 0) {
             votingInfos = "No open votes"; 
-            votingClass = "text-black"; 
+            votingClass = "text-black";
+            voteKeyword = "no_votes";
           } else {
             // filtering out the ejected/withdrawn lock...
             let oldestValidLock = data.accountLocks.map(lock => {
@@ -42,15 +48,21 @@
             if(data.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
               votingInfos = "You can't vote just yet";
               votingClass = "text-red";
+              voteKeyword = "cannot_votes";
             } else {
               votingInfos = "You need to vote";
-              votingClass = "text-yellow";
+              votingClass = "need_to_vote";
             }
           }
         }
       }
     }
   });  
+
+  function openModal(content_key) {
+    modal_content_key = content_key;
+    modal.open();
+  }  
 
   $: if (eth.address) {
     let founded = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
@@ -88,6 +100,12 @@
     );
   };   
 </script>
+
+<Modal backgroundColor="#f3f3f3" bind:this={modal}>
+  <span slot="content">
+    <InfoModal description_key={modal_content_key}/>
+  </span>
+</Modal>
 
 <Modal title="You can't claim yet" backgroundColor="#f3f3f3" bind:this={modalinfo}>
   <div slot="content" class="font-thin text-center hidescrollbar">
@@ -152,7 +170,9 @@
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
       {#if eth.address}
-        <div class={"flex nowrap intems-center p-1 " + votingClass}>
+        <div 
+        on:click={() => openModal('staking.claim.vote.' + voteKeyword)}
+        class={"flex nowrap intems-center p-1 " + votingClass}>
             {votingInfos}
         </div>
       {/if}
