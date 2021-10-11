@@ -148,7 +148,7 @@
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
   <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-10">
     <img class="h-150px inline mb-4" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/money-mouth-face_1f911.png" alt="hourglass" />
-    <div class="font-hero text-center mt-10">$610,000</div>
+    <div class="font-hero text-center mt-10">$ 1.350.000</div>
     <div class="font-thin text-l text-center mt-20px">
       You are reading it right.
       <br />
