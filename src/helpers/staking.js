@@ -17,7 +17,7 @@ import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
 import { stakingDataInterval, fetchStakingDataLock } from '../stores/eth/writables.js';
-import { fetchLastMonthVoteForVoter } from './snapshopt.js'; 
+import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js'; 
 
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
@@ -32,7 +32,8 @@ export let dataObj = {
   accountDepositTokenBalance: BigNumber(0),
   accountLocks: [],
   rewards: [],
-  votes: []
+  votes: null,
+  proposals: null
 };
 
 export let sharesTimeLock = false;
@@ -466,8 +467,16 @@ export const fetchStakingData = async (eth) => {
   dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
   console.log('fetchStakingData', dataObj);
 
-  // "0x7a7a5fAD8C4107ED0959191e7Ff36Ba82D4ea2F9"
+  // retrieving the votes in the last month for a given address...
   dataObj.votes = await fetchLastMonthVoteForVoter(eth.address);
+  
+  // retrieving the oldest active proposal from piedao, starting from 18/10/2021 (1634508000)...
+  dataObj.proposals = await fetchLastSnapshots(1, 'active', 'asc', 1634508000);
+  // and if there is at least one active proposal after the 18/10/2021, we add the
+  // block infos into that object, so we can easily get the timestamp or any other related info
+  if(dataObj.proposals[0]) {
+    dataObj.proposals[0].block = await eth.provider.getBlock(Number(dataObj.proposals[0].snapshot));
+  }
 
   return dataObj;
 };

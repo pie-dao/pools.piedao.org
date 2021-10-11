@@ -16,11 +16,40 @@
   let staker = {participation: 0};
   let modalinfo;
   let votingInfos = "";
+  let votingClass = "";
 
   onMount(async() => {
-    votingInfos = data.votes.length > 0 
-      ? "You voted this month" 
-      : "You need to vote"
+    if(data.votes) {
+      if(data.votes.length) {
+        votingInfos = "You voted this month";
+        votingClass = "text-green";
+      } else {
+        if(data.proposals) {
+          if(data.proposals.length == 0) {
+            votingInfos = "No open votes"; 
+            votingClass = "text-black"; 
+          } else {
+            // filtering out the ejected/withdrawn lock...
+            let oldestValidLock = data.accountLocks.map(lock => {
+              if(!lock.ejected && !lock.withdrawn) {
+                return lock;
+              }
+            });
+            // and getting the oldest one, by reversing the DESC order...
+            oldestValidLock = oldestValidLock.reverse()[0];
+            // finally checking if the user can vote on snapshot, or if the
+            // proposal is older than his oldest lock...
+            if(data.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
+              votingInfos = "You can't vote just yet";
+              votingClass = "text-red";
+            } else {
+              votingInfos = "You need to vote";
+              votingClass = "text-yellow";
+            }
+          }
+        }
+      }
+    }
   });  
 
   $: if (eth.address) {
@@ -123,7 +152,9 @@
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
       {#if eth.address}
-      <div class={data.votes.length > 0 ? "flex nowrap intems-center p-1 text-green" : "flex nowrap intems-center p-1 text-yellow"}>{votingInfos}</div>
+        <div class={"flex nowrap intems-center p-1 " + votingClass}>
+            {votingInfos}
+        </div>
       {/if}
     </div>
     <div class="flex nowrap items-center p-1">

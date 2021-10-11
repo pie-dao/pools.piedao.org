@@ -34,7 +34,7 @@ export async function fetchLastMonthVoteForVoter(voter) {
   }
 }
 
-export async function fetchLastSnapshots(limit = 2, state = "") {
+export async function fetchLastSnapshots(limit = 2, state = "", direction = "desc", fromDate = 0) {
   let graphqlQuery = `query {
     proposals(
       first: ${limit},
@@ -42,9 +42,10 @@ export async function fetchLastSnapshots(limit = 2, state = "") {
       where: {
         space: "piedao",
         state: "${state}"
+        start_gte: ${fromDate}
       },
       orderBy: "created",
-      orderDirection: desc
+      orderDirection: ${direction}
     ) {
       id
       state
