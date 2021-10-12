@@ -1,4 +1,5 @@
 import moment from 'moment';
+const PIEDAO_SNAPSHOT_SPACE = "piedao";
 
 export async function fetchLastMonthVoteForVoter(voter) {
   let createdAt = moment().subtract(1, 'months').unix();
@@ -7,7 +8,7 @@ export async function fetchLastMonthVoteForVoter(voter) {
     votes(
       first: 1,
       where: {
-        space: "piedao", 
+        space: "${PIEDAO_SNAPSHOT_SPACE}", 
         voter: "${voter}"
         created_gte: ${createdAt}
       }) {
@@ -40,7 +41,7 @@ export async function fetchLastSnapshots(limit = 2, state = "", direction = "des
       first: ${limit},
       skip: 0,
       where: {
-        space: "piedao",
+        space: "${PIEDAO_SNAPSHOT_SPACE}",
         state: "${state}"
         start_gte: ${fromDate}
       },
