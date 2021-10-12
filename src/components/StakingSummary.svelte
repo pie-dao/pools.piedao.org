@@ -148,7 +148,7 @@
       {#if eth.address}
         <div 
         on:click={() => openModal('staking.claim.vote.' + voteKeyword)}
-        class={"flex nowrap intems-center p-1 " + votingClass}>
+        class={"flex nowrap intems-center p-1 pointer text-xs " + votingClass}>
             {votingInfos}
         </div>
       {/if}
