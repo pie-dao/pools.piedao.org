@@ -1,5 +1,5 @@
 import moment from 'moment';
-const PIEDAO_SNAPSHOT_SPACE = "piedao";
+const PIEDAO_SNAPSHOT_SPACE = "piedao.eth";
 
 export async function fetchLastMonthVoteForVoter(voter) {
   let createdAt = moment().subtract(1, 'months').unix();
