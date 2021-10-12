@@ -430,6 +430,10 @@ right: 0px;
   background-color: #f7f7f7;
 }
 
+.bg-darkgrey {
+  background-color: #3c3c3c;
+}
+
 .bg-lightgrey-2 {
   background-color: rgb(228, 228, 228);
   ;
