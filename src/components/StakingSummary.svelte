@@ -20,6 +20,7 @@
   let staker = {participation: 0};
   let claimModal;
   let votingInfos = "";
+  let votingImage = "";
   let votingClass = "";
   let modal;
   let modal_content_key;
@@ -28,6 +29,7 @@
   onMount(async() => {
     if(data.votes) {
       if(data.votes.length) {
+        votingImage = "check-mark-button";
         votingInfos = "You voted this month";
         votingClass = "text-green";
         voteKeyword = "you_voted";
@@ -35,6 +37,7 @@
         if(data.proposals) {
           if(data.proposals.length == 0) {
             votingInfos = "No open votes"; 
+            votingImage = "hourglass-pending";
             votingClass = "text-black";
             voteKeyword = "no_votes";
           } else {
@@ -49,10 +52,12 @@
             // finally checking if the user can vote on snapshot, or if the
             // proposal is older than his oldest lock...
             if(data.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
+              votingImage = "warning";
               votingInfos = "You can't vote just yet";
               votingClass = "text-red";
               voteKeyword = "cannot_votes";
             } else {
+              votingImage = "warning";
               votingInfos = "You need to vote";
               votingClass = "need_to_vote";
             }
@@ -149,7 +154,10 @@
         <div 
         on:click={() => openModal('staking.claim.vote.' + voteKeyword)}
         class={"flex nowrap intems-center p-1 " + votingClass}>
-            {votingInfos}
+          {#if votingInfos}
+            <img class="summary-icon" src={images[votingImage]} alt=""/>
+          {/if}
+          <span>{votingInfos}</span>
         </div>
       {/if}
     </div>
