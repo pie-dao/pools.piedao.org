@@ -1,7 +1,7 @@
 <script>
-  import { formatFiat } from '../components/helpers.js';
-  import { toNum, claim , getParticipations} from '../helpers/staking.js';
-  import images from '../config/images.json';
+  import { formatFiat } from '../../../components/helpers.js';
+  import { toNum, claim , getParticipations} from '../../../helpers/staking.js';
+  import images from '../../../config/images.json';
 
   export let accountVeTokenBalance;
 </script>

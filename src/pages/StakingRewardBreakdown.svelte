@@ -8,9 +8,9 @@
     observable
   } from '../helpers/staking.js';
   import { currentRoute } from "../stores/routes.js";
-  import StakingRewardActivity from '../components/StakingRewardActivity.svelte';
-  import StakingRewardGovernance from '../components/StakingRewardGovernance.svelte';
-  import StakingRewardRevenues from '../components/StakingRewardRevenues.svelte';
+  import StakingRewardActivity from '../components/staking/rewards/Activity.svelte';
+  import StakingRewardGovernance from '../components/staking/rewards/Governance.svelte';
+  import StakingRewardRevenues from '../components/staking/rewards/Revenues.svelte';
 
   console.log("PARAMS", $currentRoute.params.block);
   $: isLoading = false;

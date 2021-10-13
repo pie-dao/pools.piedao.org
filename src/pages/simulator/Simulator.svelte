@@ -8,7 +8,7 @@
   import { formatFiat } from '../../components/helpers.js';
   import { currentRoute } from "../../stores/routes.js";
   import InfoModal from '../../components/modals/infoModal.svelte';
-  import StakingStats from '../../components/StakingStats.svelte';
+  import StakingStats from '../../components/staking/Stats.svelte';
   import StakingCommitmentModal from '../../components/modals/stakingCommitmentModal.svelte';
   import Modal from '../../components/elements/Modal.svelte';
   import confetti from '../../components/Confetti.js';

@@ -1,10 +1,10 @@
 <script>
   import { _ } from 'svelte-i18n';
-  import images from '../config/images.json';
-  import { formatFiat } from '../components/helpers.js';
-  import { toNum } from '../helpers/staking.js';
+  import images from '../../config/images.json';
+  import { formatFiat } from '../../components/helpers.js';
+  import { toNum } from '../../helpers/staking.js';
 
-  import Modal from '../components/elements/Modal.svelte';
+  import Modal from '../../components/elements/Modal.svelte';
   let modalinfo;
 
   export let isLoading;
