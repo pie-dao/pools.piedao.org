@@ -1,35 +1,105 @@
 {
   "epochs": [{
     "proposals": [
-      "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
-      "QmSbx636cXdGYYKXLnHHb3TGdgUJMt3Nd6TXVMDpTaXxEW",
-      "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
-      "QmYYo1CWXBtasWCNK1Qgb2XWno7acUzJCkdP6vEA7oNwEE"
+      {
+        "id": "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+        "snapshot": 12970475,
+        "title": "proposal 1",
+        "url": "https://snapshot.org/#/piedao/proposal/QmcnFgsGmE5DazNxUaorm4XTRkf61QJ8iFxVoVBMKFW1EL"
+      },
+      {
+        "id": "QmSbx636cXdGYYKXLnHHb3TGdgUJMt3Nd6TXVMDpTaXxEW",
+        "snapshot": 12970475,
+        "title": "proposal 2",
+        "url": "https://snapshot.org/#/piedao/proposal/QmcnFgsGmE5DazNxUaorm4XTRkf61QJ8iFxVoVBMKFW1EL"
+      },
+      {
+        "id": "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+        "snapshot": 12970475,
+        "title": "proposal 3",
+        "url": "https://snapshot.org/#/piedao/proposal/QmcnFgsGmE5DazNxUaorm4XTRkf61QJ8iFxVoVBMKFW1EL"
+      },
+      {
+        "id": "QmYYo1CWXBtasWCNK1Qgb2XWno7acUzJCkdP6vEA7oNwEE",
+        "snapshot": 12970475,
+        "title": "proposal 4",
+        "url": "https://snapshot.org/#/piedao/proposal/QmcnFgsGmE5DazNxUaorm4XTRkf61QJ8iFxVoVBMKFW1EL"
+      }
     ],
     "participants": [
       {
-        "address": "0x00ba3ca0b6df1486c912893d9f288311a60ed753",
-        "score": 7498.463335269285
+        "address": "0x42556f667Dfc74704914F98d1e0c0aC4Ea2f492e",
+        "score": 7498.463335269285,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]
       },
       {
         "address": "0x00c67d9d6d3d13b42a87424e145826c467cccd84",
-        "score": 723.3679947200367
+        "score": 723.3679947200367,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]
       },      
       {
         "address": "0x01e6fd0ae73d9194b19f9b376065577927a0d5f5",
-        "score": 28284.92080681872
+        "score": 28284.92080681872,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]        
       },
       {
         "address": "0x0430605323465e26dc21fbaaa9a1a4be6ae9d496",
-        "score": 903.5348196651365
+        "score": 903.5348196651365,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]
       },
       {
         "address": "0x0be93c61df823779e7cc50d1430f6e0c44b14fe3",
-        "score": 16608.19072195771
+        "score": 16608.19072195771,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]        
       }
     ],
-    "startDate": 1628240233224,
-    "endDate": 1630918633224,
+    "startDate": 1627768800000,
+    "endDate": 1630360800000,
     "startBlock": 12970475,
     "endBlock": 13171232,
     "merkleTree": {
@@ -88,7 +158,7 @@
           "staker": {
             "accountLocks": [],
             "accountRewards": [],
-            "accountVeTokenBalance": "10000000000000000000000",
+            "accountVeTokenBalance": "2122114213453910000000",
             "accountWithdrawableRewards": "0",
             "accountWithdrawnRewards": "0",
             "id": "0x42556f667Dfc74704914F98d1e0c0aC4Ea2f492e"
@@ -114,6 +184,26 @@
       "veTokenTotalSupply": "5765804412618793913896939",
       "withdrawnLocksCounter": "0",
       "withdrawnLocksValue": "0"
+    },
+    "slice": {
+      "usd": 1.23,
+      "underlying": [
+        {
+          "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+          "symbol": "WBTC",
+          "amount": 424
+        },
+        {
+          "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "symbol": "WETH",
+          "amount": 123213.45
+        },
+        {
+          "address": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+          "symbol": "DEFI++",
+          "amount": 12354.476
+        }        
+      ]
     }
   }]
 }
