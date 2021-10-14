@@ -160,7 +160,7 @@
             "accountRewards": [],
             "accountVeTokenBalance": "2122114213453910000000",
             "accountWithdrawableRewards": "0",
-            "accountWithdrawnRewards": "0",
+            "accountWithdrawnRewards": "2122114213453910000000",
             "id": "0x42556f667Dfc74704914F98d1e0c0aC4Ea2f492e"
           },
           "votes": [],
@@ -186,7 +186,7 @@
       "withdrawnLocksValue": "0"
     },
     "slice": {
-      "usd": 1.23,
+      "usd": 0.5,
       "underlying": [
         {
           "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",

@@ -8,9 +8,10 @@
 
   export let timestamp;
   let currentAddress;
-  let report;
+  let epoch;
   let currentAccount;
   let votingPower;
+  let accountWithdrawnRewards;
 
   $: if ($eth.address) {
     // if address is first setup, or is changed...
@@ -18,32 +19,45 @@
       currentAddress = $eth.address;
 
       // TODO: this should be changed, fetch the epochs from backend
-      report = epochsJSON.epochs.find(epoch => epoch.startDate <= timestamp && epoch.endDate >= timestamp);
-      currentAccount = report.merkleTree.leafs.find(leaf => leaf.staker.id == $eth.address);
-      currentAccount.participant = report.participants.find(participant => participant.address == $eth.address);
+      epoch = epochsJSON.epochs.find(epoch => epoch.startDate <= timestamp && epoch.endDate >= timestamp);
+      currentAccount = epoch.merkleTree.leafs.find(leaf => leaf.staker.id == $eth.address);
+      currentAccount.participant = epoch.participants.find(participant => participant.address == $eth.address);
       
       let accountVeTokenBalance = new BigNumber(currentAccount.staker.accountVeTokenBalance);
-      let veTokenTotalSupply = new BigNumber(report.stakingStats.veTokenTotalSupply);
-      
+      let veTokenTotalSupply = new BigNumber(epoch.stakingStats.veTokenTotalSupply);      
       votingPower = ((accountVeTokenBalance.times(100)).div(veTokenTotalSupply)).toFixed(2);
+
+      accountWithdrawnRewards = new BigNumber(currentAccount.staker.accountWithdrawnRewards);
+      accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.usd);      
     }
   }
 </script>
 
 <div class="flex flex-col items-center w-full md:w-1/2 p-1px bg-lightgrey rounded-16 m-10px">
   <div class="flex flex-col nowrap w-96pc m-2pc swap-from rounded-20px bg-white p-16px">
-    <div class="font-huge text-left">Your Activity</div>
+    <div class="font-huge text-left pb-4">Your Activity</div>
     {#if $eth.address}
       {#if currentAccount}
+        <div class="flex flex-row p-1 justify-between items-center">
+          <div class="flex items-center">
+            <span class="font-thin">Rewards value USD</span>          
+          </div>
+          <div class="flex flex-col items-right">
+            <div class="font-24px">
+              {formatFiat(toNum(accountWithdrawnRewards), ',', '.', '$')}
+            </div>        
+          </div>
+        </div>
+
         <div class="text-l text-left pt-4">Slice Breakdown</div>
-        {#each report.slice.underlying as underlying}
+        {#each epoch.slice.underlying as underlying}
           <div class="flex flex-row p-1 justify-between items-center">
             <div class="flex items-center">
               <img class="h-auto w-24px mr-10px" src={images.logos[underlying.address]} alt={underlying.symbol} />
-              <span class="token-symbol-container">{underlying.symbol}</span>          
+              <span class="token-symbol-container font-thin">{underlying.symbol}</span>          
             </div>
             <div class="flex flex-col items-right">
-              <div class="font-24px">
+              <div class="">
                 {underlying.amount}
               </div>        
             </div>
@@ -54,10 +68,10 @@
         <div class="flex flex-row p-1 justify-between items-center">
           <div class="flex items-center">
             <img class="h-auto w-24px mr-10px" src={images.veDough} alt="dough token" />
-            <span class="token-symbol-container">Your veDOUGH</span>          
+            <span class="token-symbol-container font-thin">Your veDOUGH</span>          
           </div>
           <div class="flex flex-col items-right">
-            <div class="font-24px">
+            <div class="">
               {formatFiat(toNum(currentAccount.staker.accountVeTokenBalance), ',', '.', '')}
             </div>        
           </div>
@@ -65,22 +79,22 @@
 
         <div class="flex flex-row p-1 justify-between items-center">
           <div class="flex items-center">
-            <span class="token-symbol-container">Voting Power</span>          
+            <span class="token-symbol-container font-thin">Voting Power</span>          
           </div>
           <div class="flex flex-col items-right">
-            <div class="font-24px">
+            <div class="">
               {Number(votingPower)}%
             </div>        
           </div>
         </div>  
         
-        {#each report.proposals as proposal}
+        {#each epoch.proposals as proposal}
           <div class="flex flex-row p-1 justify-between items-center">
             <div class="flex items-center">
-              <span class="token-symbol-container">{proposal.title}</span>          
+              <span class="token-symbol-container font-thin">{proposal.title}</span>          
             </div>
             <div class="flex flex-col items-right">
-              <div class="font-24px">
+              <div class="">
                 {#if currentAccount.participant.votes.find(vote => vote.proposal == proposal.id)}
                   Voted
                 {:else}

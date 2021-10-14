@@ -38,10 +38,10 @@
         <div class="flex flex-row p-1 justify-between items-center">
           <div class="flex items-center">
             <img class="h-auto w-24px mr-10px" src={images.veDough} alt="dough token" />
-            <span class="token-symbol-container">Total veDOUGH</span>          
+            <span class="token-symbol-container font-thin">Total veDOUGH</span>          
           </div>
           <div class="flex flex-col items-right">
-            <div class="font-24px">
+            <div class="">
               {formatFiat(toNum(report.stakingStats.veTokenTotalSupply), ',', '.', '')}
             </div>        
           </div>
@@ -49,10 +49,10 @@
 
         <div class="flex flex-row p-1 justify-between items-center">
           <div class="flex items-center">
-            <span class="token-symbol-container">Avg Lock Time</span>          
+            <span class="token-symbol-container font-thin">Avg Lock Time</span>          
           </div>
           <div class="flex flex-col items-right">
-            <div class="font-24px">
+            <div class="">
               {Math.floor(report.stakingStats.averageTimeLock / AVG_SECONDS_MONTH)}
             </div>        
           </div>
@@ -60,10 +60,10 @@
         
         <div class="flex flex-row p-1 justify-between items-center">
           <div class="flex items-center">
-            <span class="token-symbol-container">N of proposals this months</span>          
+            <span class="token-symbol-container font-thin">N of proposals this months</span>          
           </div>
           <div class="flex flex-col items-right">
-            <div class="font-24px">
+            <div class="">
               {report.proposals.length}
             </div>        
           </div>
@@ -71,10 +71,10 @@
         
         <div class="flex flex-row p-1 justify-between items-center">
           <div class="flex items-center">
-            <span class="token-symbol-container">Participation Ration</span>          
+            <span class="token-symbol-container font-thin">Participation Ration</span>          
           </div>
           <div class="flex flex-col items-right">
-            <div class="font-24px">
+            <div class="">
               {participationRatio}%
             </div>        
           </div>
@@ -82,10 +82,10 @@
         
         <div class="flex flex-row p-1 justify-between items-center">
           <div class="flex items-center">
-            <span class="token-symbol-container">Total veDOUGH Voted</span>          
+            <span class="token-symbol-container font-thin">Total veDOUGH Voted</span>          
           </div>
           <div class="flex flex-col items-right">
-            <div class="font-24px">
+            <div class="">
               {formatFiat(totalVeDoughVoted.score, ',', '.', '')}
             </div>        
           </div>
