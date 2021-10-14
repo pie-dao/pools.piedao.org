@@ -18,7 +18,7 @@
         <div class="flex flex-col items-right">
           <div class="font-24px">
             {formatFiat(revenue.total, ',', '.', '$')}
-          </div>        
+          </div>
         </div>
       </div>
 

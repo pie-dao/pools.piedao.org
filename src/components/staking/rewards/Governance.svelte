@@ -9,14 +9,14 @@
   let totalVeDoughVoted;
   let participationRatio;
 
-      // TODO: this should be changed, fetch the epochs from backend
-      report = epochsJSON.epochs.find(epoch => epoch.startDate <= timestamp && epoch.endDate >= timestamp);
-      
-      totalVeDoughVoted = report.participants.reduce((previousValue, currentValue) => {
-        return {score: previousValue.score + currentValue.score};
-      });
+  // TODO: this should be changed, fetch the epochs from backend
+  report = epochsJSON.epochs.find(epoch => epoch.startDate <= timestamp && epoch.endDate >= timestamp);
+  
+  totalVeDoughVoted = report.participants.reduce((previousValue, currentValue) => {
+    return {score: previousValue.score + currentValue.score};
+  });
 
-      participationRatio = ((totalVeDoughVoted.score * 100) / toNum(report.stakingStats.veTokenTotalSupply)).toFixed(2);
+  participationRatio = ((totalVeDoughVoted.score * 100) / toNum(report.stakingStats.veTokenTotalSupply)).toFixed(2);
 </script>
 
 <div class="flex flex-col items-center w-full md:w-1/2 p-1px bg-lightgrey rounded-16 m-10px">

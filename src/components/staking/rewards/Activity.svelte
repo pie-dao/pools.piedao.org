@@ -22,17 +22,23 @@
       epoch = epochsJSON.epochs.find(
         (epoch) => epoch.startDate <= timestamp && epoch.endDate >= timestamp,
       );
+
       currentAccount = epoch.merkleTree.leafs.find((leaf) => leaf.staker.id == $eth.address);
-      currentAccount.participant = epoch.participants.find(
-        (participant) => participant.address == $eth.address,
-      );
 
-      let accountVeTokenBalance = new BigNumber(currentAccount.staker.accountVeTokenBalance);
-      let veTokenTotalSupply = new BigNumber(epoch.stakingStats.veTokenTotalSupply);
-      votingPower = accountVeTokenBalance.times(100).div(veTokenTotalSupply).toFixed(2);
+      if(currentAccount) {
+        currentAccount.participant = epoch.participants.find(
+          (participant) => participant.address == $eth.address,
+        );  
+        
+        let accountVeTokenBalance = new BigNumber(currentAccount.staker.accountVeTokenBalance);
+        let veTokenTotalSupply = new BigNumber(epoch.stakingStats.veTokenTotalSupply);
+        votingPower = accountVeTokenBalance.times(100).div(veTokenTotalSupply).toFixed(2);
 
-      accountWithdrawnRewards = new BigNumber(currentAccount.staker.accountWithdrawnRewards);
-      accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.usd);
+        accountWithdrawnRewards = new BigNumber(currentAccount.staker.accountWithdrawnRewards);
+        accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.usd);        
+      }
+
+      console.log("account has changed, currentAccount is now", currentAccount);
     }
   }
 </script>
