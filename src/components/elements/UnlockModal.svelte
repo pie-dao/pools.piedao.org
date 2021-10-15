@@ -39,7 +39,7 @@
     </div>
     <p class="pt-2 font-24px font-bold">{formatFiat(withdrawnRewards, ',', '.', '')} SLICE</p>
     <p class="pt-2 font-24px">
-      Rewards you claimed so far
+      Rewards claimed to date
     </p>
   </div>
 </Modal>
