@@ -31,7 +31,6 @@
     "swapEnabled": false,
     "swapFees": "0.2",
     "streamingFees": "1%",
-    "coingeckoId": "metaverse-nft-index",
     "composition": [
       {"symbol":"MANA","coingeckoId":"decentraland", "address":"0x0f5d2fb29fb7d3cfee444a200298f468908cc942", "coingeckoImageId": ""},
       {"symbol":"ENJ","coingeckoId":"enjincoin","address":"0xf629cbd94d3791c9250152bd8dfbdf380e2a3b9c", "coingeckoImageId": ""},
