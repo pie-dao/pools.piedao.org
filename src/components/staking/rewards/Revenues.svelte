@@ -44,7 +44,7 @@
           </div>
           <div class="flex flex-col items-right">
             <div class="">
-              {underlying.amount}
+              {(underlying.fiat ? underlying.fiat: "") + " " + underlying.amount} 
             </div>        
           </div>
         </div>

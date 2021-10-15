@@ -17,10 +17,11 @@
             },
             {
               "symbol": "SLICE Nav",
-              "amount": 456456
+              "amount": 456456,
+              "fiat": "$"
             },
             {
-              "symbol": "SLICE Ridistributed",
+              "symbol": "SLICE Redistributed",
               "amount": 789789
             },
             {
@@ -47,17 +48,20 @@
             {
               "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
               "symbol": "WBTC",
-              "amount": 424
+              "amount": 424,
+              "fiat": "$"
             },
             {
               "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
               "symbol": "WETH",
-              "amount": 123213.45
+              "amount": 123213.45,
+              "fiat": "$"
             },
             {
               "address": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
               "symbol": "DEFI++",
-              "amount": 12354.476
+              "amount": 12354.476,
+              "fiat": "$"
             }         
           ]
         },
@@ -67,15 +71,18 @@
           "underlyings": [
             {
               "symbol": "Strategies Performance Fees",
-              "amount": 424123431
+              "amount": 424123431,
+              "fiat": "$"
             },
             {
               "symbol": "Linear Finance DEFI++",
-              "amount": 123213.45
+              "amount": 123213.45,
+              "fiat": "$"
             },
             {
               "symbol": "Withdrawal Fees on Farming",
-              "amount": 12354.476
+              "amount": 12354.476,
+              "fiat": "$"
             }         
           ]
         },
@@ -85,11 +92,13 @@
           "underlyings": [
             {
               "symbol": "Treasury Vaults Management",
-              "amount": 424123431
+              "amount": 424123431,
+              "fiat": "$"
             },
             {
-              "symbol": "Treasury Vaults Performances",
-              "amount": 123213.45
+              "symbol": "Treasury Vaults Performance",
+              "amount": 123213.45,
+              "fiat": "$"
             }     
           ]
         }        

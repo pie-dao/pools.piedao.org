@@ -47,7 +47,7 @@
     
     <div class="flex flex-row p-1 justify-between items-center">
       <div class="flex items-center">
-        <span class="token-symbol-container font-thin">N. of proposals this months</span>          
+        <span class="token-symbol-container font-thin">N° of proposals this months</span>          
       </div>
       <div class="flex flex-col items-right">
         <div class="">
