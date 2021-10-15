@@ -1,10 +1,10 @@
 <script>
   import { _ } from 'svelte-i18n';
-  import images from '../config/images.json';
-  import { formatFiat } from '../components/helpers.js';
+  import images from '../../config/images.json';
+  import { formatFiat } from '../helpers.js';
   import * as animateScroll from 'svelte-scrollto';
-  import BoostedModal from '../components/elements/BoostedModal.svelte';
-  import UnlockModal from '../components/elements/UnlockModal.svelte';
+  import BoostedModal from '../elements/BoostedModal.svelte';
+  import UnlockModal from '../elements/UnlockModal.svelte';
   import {
     toNum,
     calculateStakingEnds,
@@ -16,8 +16,8 @@
     unstakeDOUGH,
     AVG_SECONDS_MONTH,
     canRestake
-  } from '../helpers/staking.js';
-  import { justBoosted, timestampBoosted, fetchStakingDataLock } from '../stores/eth/writables';
+  } from '../../helpers/staking.js';
+  import { justBoosted, timestampBoosted, fetchStakingDataLock } from '../../stores/eth/writables';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();

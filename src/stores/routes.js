@@ -26,6 +26,7 @@ import Piefolio from '../pages/Piefolio.svelte';
 import DoughStaking from '../pages/DoughStaking.svelte';
 import StakingPositions from '../pages/StakingPositions.svelte';
 import StakingRewards from '../pages/StakingRewards.svelte';
+import StakingRewardBreakdown from '../pages/StakingRewardBreakdown.svelte';
 import StakingCharts from '../pages/charts/StakingCharts.svelte';
 import Redirect from '../pages/Redirect.svelte';
 import Farm from '../pages/Farm.svelte';
@@ -137,6 +138,11 @@ const formatRoute = (route) => {
       return { page: StakingPositions };
     case 'staking_rewards':
       return { page: StakingRewards };
+    case 'staking_reward_breakdown':
+      /* eslint-disable no-case-declarations */
+      const timestamp = (_route[1] || '');
+      /* eslint-enable no-case-declarations */      
+      return { page: StakingRewardBreakdown, params: { timestamp } };
     case 'simulator':
     case 'staking-simulator':
       /* eslint-disable no-case-declarations */

@@ -1,0 +1,108 @@
+{
+  "revenues": [
+    {
+      "startDate": 1627768800000,
+      "endDate": 1630360800000,
+      "startBlock": 12970475,
+      "endBlock": 13171232,      
+      "total": 1320238.56,
+      "breakdowns": [
+        {
+          "title": "Actively Managed Treasury",
+          "total": 432123,
+          "underlyings": [
+            {
+              "symbol": "SLICE Issued",
+              "amount": 123123
+            },
+            {
+              "symbol": "SLICE Nav",
+              "amount": 456456,
+              "fiat": "$"
+            },
+            {
+              "symbol": "SLICE Redistributed",
+              "amount": 789789
+            },
+            {
+              "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+              "symbol": "WBTC",
+              "amount": 424
+            },
+            {
+              "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+              "symbol": "WETH",
+              "amount": 123213.45
+            },
+            {
+              "address": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+              "symbol": "DEFI++",
+              "amount": 12354.476
+            }         
+          ]
+        },
+        {
+          "title": "Products Streaming Fees",
+          "total": 123321,
+          "underlyings": [
+            {
+              "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+              "symbol": "WBTC",
+              "amount": 424,
+              "fiat": "$"
+            },
+            {
+              "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+              "symbol": "WETH",
+              "amount": 123213.45,
+              "fiat": "$"
+            },
+            {
+              "address": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+              "symbol": "DEFI++",
+              "amount": 12354.476,
+              "fiat": "$"
+            }         
+          ]
+        },
+        {
+          "title": "Misc",
+          "total": 44321234,
+          "underlyings": [
+            {
+              "symbol": "Strategies Performance Fees",
+              "amount": 424123431,
+              "fiat": "$"
+            },
+            {
+              "symbol": "Linear Finance DEFI++",
+              "amount": 123213.45,
+              "fiat": "$"
+            },
+            {
+              "symbol": "Withdrawal Fees on Farming",
+              "amount": 12354.476,
+              "fiat": "$"
+            }         
+          ]
+        },
+        {
+          "title": "Treasury Vaults",
+          "total": 12123412341,
+          "underlyings": [
+            {
+              "symbol": "Treasury Vaults Management",
+              "amount": 424123431,
+              "fiat": "$"
+            },
+            {
+              "symbol": "Treasury Vaults Performance",
+              "amount": 123213.45,
+              "fiat": "$"
+            }     
+          ]
+        }        
+      ]
+    }    
+  ]
+}

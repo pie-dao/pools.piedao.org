@@ -2,7 +2,7 @@
   import BigNumber from "bignumber.js";
   import images from "../config/images.json";
   import { farming } from '../stores/eth/writables.js';
-  import StakingStats from '../components/StakingStats.svelte';
+  import StakingStats from '../components/staking/Stats.svelte';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import moment from 'moment';
   

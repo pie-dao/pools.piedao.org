@@ -3,7 +3,7 @@
   import { _ } from 'svelte-i18n';
   import { onDestroy } from 'svelte';
   import { initialize, dataObj, observable } from '../helpers/staking.js';
-  import StakingRewards from '../components/StakingRewards.svelte';
+  import StakingRewards from '../components/staking/Rewards.svelte';
 
   $: isLoading = false;
   $: data = dataObj;
