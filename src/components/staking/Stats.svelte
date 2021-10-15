@@ -1,12 +1,12 @@
 <script>
   import { _ } from 'svelte-i18n';
-  import { eth } from '../stores/eth.js';
-  import { formatFiat, formatBigMoneyAmount } from '../components/helpers.js';
-  import { toNum, fetchStakingStats } from '../helpers/staking.js';
-  import { stakingStats } from '../stores/eth/writables';
-  import images from '../config/images.json';
+  import { eth } from '../../stores/eth.js';
+  import { formatFiat, formatBigMoneyAmount } from '../../components/helpers.js';
+  import { toNum, fetchStakingStats } from '../../helpers/staking.js';
+  import { stakingStats } from '../../stores/eth/writables';
+  import images from '../../config/images.json';
   import ProgressBar from '@okrad/svelte-progressbar';
-  import ArrowLoadingButton from "./ArrowLoadingButton.svelte";
+  import ArrowLoadingButton from "../ArrowLoadingButton.svelte";
 
   export let showLoader = false;
   let stakedPercent = 0;
