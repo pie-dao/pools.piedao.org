@@ -20,13 +20,7 @@
     <div class="flex flex-col nowrap w-96pc m-2pc swap-from rounded-20px bg-white p-16px">
       <div class="font-huge text-center pb-4">{date.format('MMMM YYYY')}</div>
       <div class="text-center p-1 font-thin">
-        Epoch Blocks
-      </div>
-      <div class="text-center p-1 font-thin">
-        Start: {epoch.startBlock}
-      </div>
-      <div class="text-center p-1 font-thin">
-        End: {epoch.endBlock}
+        Epoch Blocks Start: {epoch.startBlock} - Epoch Blocks End: {epoch.endBlock}
       </div>
     </div>
   </div>
