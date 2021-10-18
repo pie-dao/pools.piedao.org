@@ -47,11 +47,7 @@
   //   null,
   // );
 
-  $: nav = 'n/a';
-  $: PieAPR = 'n/a';
-  $: marketCap = 'n/a';
   $: composition = (poolsConfig[token] || {}).composition;
-  $: metadata = {};
 
   $: lendingData = {
     compound: {},
@@ -72,140 +68,39 @@
 
   const initialize = async () => {
     let res = [];
-    let globalAPR = 0;
-    const compoundData = await fetchCompoundData();
-    const aaveData = await fetchAaveData();
 
     Pie = new Experipie(token, $eth.provider);
     await Pie.initialize($piesMarketDataStore);
-
+    
     for (const el of Pie.composition) {
       let address = el.address.toLowerCase();
+
       let tokenInfo = find(
         poolsConfig[token].composition,
         (o) => address === o.address.toLowerCase(),
       );
 
-      if (tokenInfo) {
-        res.push({
+      res.push({
           ...tokenInfo,
           balance: el.balance,
           price: el.price,
           productive: false,
           percentage: el.percentage,
         });
-      } else {
-        let tokenInfo = find(
-          poolsConfig[token].composition,
-          (o) => Pie.map[address].underlying.address === o.address.toLowerCase(),
-        );
-
-        let lendingInfo = await getLendingInfo(Pie.map, address, compoundData, aaveData);
-        console.log(lendingInfo.apy, el.percentage, lendingInfo.apy * el.percentage);
-        globalAPR += lendingInfo.apy * el.percentage;
-
-        res.push({
-          ...tokenInfo,
-          balance: el.balance,
-          price: el.price,
-          productive: true,
-          percentage: el.percentage,
-          productiveAs: {
-            ...Pie.map[address],
-            metadata: lendingInfo,
-          },
-        });
-      }
     }
 
-    console.log('globalAPR', globalAPR);
-    console.log('Pie inside init', Pie);
-
-    nav = formatFiat(Pie.nav.toFixed(2));
-    marketCap = formatFiat(Pie.marketCap.toFixed(2));
-    PieAPR = `${(globalAPR / 100).toFixed(2)}%`;
     composition = res;
+    console.log('INIT COMPOSITION', composition);
 
-    console.log('res', res);
     initialized = true;
     loadings.init = false;
 
     return initialized;
   };
 
-  const getLendingInfo = async (map, address, compoundData, aaveData) => {
-    let lendingInfo = {};
-    const protocolNamePie = map[address].protocol.name;
-    const underlyingAddress = map[address].underlying.address;
-
-    console.log('---> ', protocolNamePie);
-    switch (protocolNamePie) {
-      case 'Aave':
-        lendingInfo = find(aaveData, (o) => underlyingAddress === o.underlyingAsset.toLowerCase());
-        lendingInfo.apy = (
-          parseFloat(getNormalizedNumber(lendingInfo.liquidityRate, 27).toString()) * 100
-        ).toFixed(2);
-        break;
-
-      case 'Compound':
-        lendingInfo = find(compoundData, (o) => {
-          if (!o.underlying_address) return false;
-          return underlyingAddress === o.underlying_address.toLowerCase();
-        });
-        lendingInfo.apy = (parseFloat(lendingInfo.supply_rate.value) * 100).toFixed(2);
-        break;
-
-      case 'C.R.E.A.M.':
-        let creamToken = new cToken(address, $eth.provider);
-        await creamToken.initialize();
-        lendingInfo.apy = creamToken.apr;
-        break;
-
-      case 'SushiBar':
-        lendingInfo.apy = await doXSusi(map[address].underlying.price);
-        break;
-
-      case 'yGOV':
-        lendingInfo.apy = 0.36;
-        break;
-
-      default:
-        lendingInfo.apy = 0;
-        break;
-    }
-
-    return lendingInfo;
-  };
-
   onMount(async () => {
     initialize();
   });
-
-  const fetchAaveData = async () => {
-    const response = await subgraphRequest(
-      'https://api.thegraph.com/subgraphs/name/aave/protocol-multy-raw',
-      {
-        reserves: {
-          symbol: true,
-          name: true,
-          underlyingAsset: true,
-          liquidityRate: true,
-        },
-      },
-    );
-
-    lendingData.aave = response.reserves;
-    loadings.aave = true;
-    return response.reserves;
-  };
-
-  const fetchCompoundData = async () => {
-    const response = await fetch('https://api.compound.finance/api/v2/ctoken');
-    const result = await response.json();
-    lendingData.compound = result.cToken;
-    loadings.compound = true;
-    return result.cToken;
-  };
 </script>
 
 <div class="content flex flex-col spl">
@@ -218,8 +113,8 @@
           <h2 class="text-md leading-none font-black mb-4px">{name}</h2>
           {#if tokenPrice}
             <div class="flex items-center mincontent">
-              <div class="text-xl leading-none font-thin whitespace-nowrap mincontent">
-                {formatFiat(tokenPrice)}
+              <div class="text-l md:text-xl leading-none font-thin whitespace-nowrap mincontent">
+                NAV {formatFiat(tokenPrice)}
               </div>
               <span class="text-base whitespace-nowrap font-black mincontent ml-2"
                 ><Change showLabel={true} value={change24H} /></span
@@ -258,7 +153,7 @@
 
   {#if initialized}
     <h1 class="mt-8 mb-4 text-base md:text-3xl">Allocation breakdown</h1>
-
+    <!-- allocation breakdown for mobile -->
     <div class="w-full block md:hidden lg:hidden flex flex-col bg-white rounded border-grey">
       {#each orderBy(composition, ['percentage'], ['desc']) as pooledToken}
         <div class="mx-4 thinborderbottom">
@@ -273,7 +168,7 @@
             <div class="flex flex-col justify-around">
               <span class="text-lg leading-6">{pooledToken.symbol}</span>
               <div
-                style={`width: ${15 * (pooledToken.percentage / 100)}rem`}
+                style={`width: ${10 * (pooledToken.percentage / 100)}rem`}
                 class="flex items-center bg-pink roundedxs min-w-50px"
               >
                 <span class="text-xs text-white px-1"
@@ -305,6 +200,7 @@
       {/each}
     </div>
 
+    <!-- allocation breakdown for desktop -->
     <div class="w-99pc m-4 hidden md:block lg:block">
       <table class="breakdown-table table-auto w-full">
         <thead>
@@ -312,8 +208,8 @@
             <th class="font-thin border-b-2 px-4 py-2 text-left">Asset name</th>
             <th class="font-thin border-b-2 px-4 py-2 text-left">Allocation</th>
             <th class="font-thin border-b-2 px-4 py-2">Price</th>
-            <th class="font-thin border-b-2 px-4 py-2">APY</th>
-            <th class="font-thin border-b-2 px-4 py-2">Strategy</th>
+            <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
+            <th class="font-thin border-b-2 px-4 py-2"></th>
           </tr>
         </thead>
         <tbody>
@@ -364,22 +260,35 @@
               </td>
 
               <td class="border text-center px-4 py-2 font-thin">
-                {#if pooledToken.productive}
-                  {pooledToken.productiveAs.metadata.apy}%
-                {:else}
-                  None
-                {/if}
+                <Change
+                  value={get(
+                    $piesMarketDataStore,
+                    `${pooledToken.address}.market_data.price_change_percentage_24h`,
+                    '-',
+                  )}
+                />
               </td>
 
-              <td class="flex items-center justify-center border text-center px-4 py-2">
-                {#if pooledToken.productive}
-                  <StrategyInUse
-                    token={pooledToken}
-                    protocol={pooledToken.productiveAs.protocol.name}
-                  />
-                {:else}
-                  <StrategyInUse protocol={'none'} />
-                {/if}
+              <td class="border text-center px-4 py-2">
+                {#if pooledToken.isPie}
+                <a
+                  href=''
+                  on:click={() => {
+                    initialized = false;
+                    window.location.hash = `#/pie/${pooledToken.address}`;
+                    window.location.reload();
+                  }}
+                >
+                  <button class="table-btn highlight-box min-w-70px"> Visit </button>
+                </a>
+              {:else}
+                <img
+                  class="w-30 spark greyoutImage mx-0"
+                  alt="Sparkline"
+                  src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline"
+                  style="margin: auto;"
+                />
+              {/if}
               </td>
             </tr>
           {/each}
