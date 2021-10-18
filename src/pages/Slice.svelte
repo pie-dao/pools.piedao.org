@@ -5,7 +5,6 @@
   import get from 'lodash/get';
   import orderBy from 'lodash/orderBy';
   import { onMount } from "svelte";
-  import { currentRoute } from "../stores/routes.js";
   import Etherscan from "../components/Etherscan.svelte";
   import Farming from "../components/Farming.svelte";
   import MixBytes from "../components/MixBytes.svelte";
@@ -13,30 +12,18 @@
   import TooltipButton from '../components/elements/TooltipButton.svelte';
   import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
   import stakingPools from '../config/stakingPools.json';
-
-  import SingleAssetModal from "../components/modals/SingleAssetModal.svelte"; 
-
-  import SnapshotBanner from "../components/SnapshotBanner.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
-  import PoolDescription from "../components/PoolDescription.svelte";
   import Modal from '../components/elements/Modal.svelte';
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import ovens from '../config/ovensConf.js';
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { amountFormatter, getTokenImage, formatFiat, subscribeToBalance } from '../components/helpers.js';
-
-  import {
-    eth,
-  } from "../stores/eth.js";
-
-  import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
-  import Change from '../components/Change.svelte'
-  import Apy from '../components/Apy.svelte'
+  import { eth } from "../stores/eth.js";
+  import Change from '../components/Change.svelte';
   import StrategyInUse from '../components/StrategyInUse.svelte'
   import ModalBig from '../components/elements/ModalBig.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
-  import Snapshot from '../components/Snapshot.svelte';
   import Experipie, { getNormalizedNumber } from '../classes/Experipie.js';
   import cToken from '../classes/CToken.js';
   import sushiData from '@sushiswap/sushi-data';
@@ -49,7 +36,15 @@
     title: "Add Liquidity"
   }
 
-  $: token = "0x1083d743a1e53805a95249fef7310d75029f7cd6";
+  let token = '0x1083d743a1e53805a95249fef7310d75029f7cd6';
+
+  const isBakingPie = (address) => {
+    return ovens.find((oven) => {
+      if (oven.baking.address == address) {
+        return oven;
+      }
+    });
+  };
 
   const farmingPie = (address) => {
     return stakingPools.find((stakingPool) => {
@@ -61,9 +56,10 @@
     });
   };
 
-  let farmingPieObj = farmingPie(params.address);
+  let farmingPieObj = farmingPie(token);
   farmingPieObj = farmingPieObj;
 
+  let pieOfPies = false;
   let initialized = false;
   let Pie;
   let dropdownOpen = false;
@@ -93,11 +89,12 @@
     `${token}.market_data.price_change_percentage_24h`,
     null,
   );
-  $: tokenPrice = get(
-    $piesMarketDataStore,
-    `${token.toLowerCase()}.market_data.current_price`,
-    null,
-  );
+  $: tokenPrice = 4;
+  // get(
+  //   $piesMarketDataStore,
+  //   `${token.toLowerCase()}.market_data.current_price`,
+  //   null,
+  // );
 
   $: nav = "n/a";
   $: PieAPR = "n/a";
@@ -124,6 +121,7 @@
   }
 
   $: getSpread = ( () => {
+    console.log("getSpread", nav, tokenPrice);
     if(!nav || !tokenPrice || !Pie || !Pie.nav) {
       return {
         label: 'Spread',
@@ -186,9 +184,9 @@
       }
     }
 
-    console.log('globalAPR', globalAPR)
+    console.log('globalAPR', globalAPR);
+    console.log('Pie inside init', Pie);
 
-    console.log('Pie.nav', Pie.nav)
     nav = formatFiat(Pie.nav.toFixed(2));
     marketCap = formatFiat(Pie.marketCap.toFixed(2));
     PieAPR = `${(globalAPR / 100).toFixed(2)}%`;
@@ -242,7 +240,6 @@
 
     return lendingInfo;
   }
-
 
   async function doXSusi(price) {
     let sushiDailyVolume = 0;
@@ -328,8 +325,6 @@
 
 </script>
 
-<!-- <SnapshotBanner /> -->
-
 <ModalBig title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
   <span slot="content">
     <LiquidityModal 
@@ -338,7 +333,6 @@
       method={modalOption.method} 
       poolAction={modalOption.poolAction}
     />
-    <!-- <SingleAssetModal /> -->
   </span>
 </ModalBig>
 
@@ -406,6 +400,17 @@
             </div>
             {/if}
         </div>
+        
+        {#if isBakingPie(token)}
+          <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 md:mr-2 hover:opacity-80" onclick="location.href='#/oven'">
+            <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+            <div class="">
+              <div class="text-base font-bold leading-5">Bake your Pie</div>
+              <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
+              <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
+            </div>
+          </button>
+        {/if}
 
         <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
           <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
@@ -416,44 +421,6 @@
         </button>
 
       </div>
-    </div>
-  </div>
-  
-  <div class="flex w-full mt-2 md:mt-8 hidden md:flex">
-    <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black text-pink">
-        {nav}
-      </div>
-      <a on:click={() => {
-        modalinfo.open()
-      }} class="cursor-pointer hover:opacity-60" role="menuitem">
-      <div class="flex items-center font-bold text-xs md:text-base text-pink">
-        NAV
-            <img src={images.InfoIcon} class="ml-1" alt="info" width="16px" />
-      </div>
-    </div>
-
-    <div class="p-0 flex-initial self-start mr-8">
-      <div class="text-md md:text-md font-black text-black">
-        {getSpread.number}
-      </div>
-      <TooltipButton tooltip="Difference between NAV and the Pie current price on exchanges">
-      <div class="font-thin text-xs md:text-base text-black">{getSpread.label}</div>
-      </TooltipButton>
-    </div>
-
-    <div class="p-0 flex-initial self-start mr-8">
-      <div class="font-bold text-md md:text-md text-black">
-        {PieAPR}
-      </div>
-      <div class="font-thin text-black text-xs md:text-base">Tot APY 🔥</div>
-    </div>
-
-    <div class="p-0 flex-initial self-start mr-6">
-      <div class="text-md md:text-md font-black">
-        {marketCap}
-      </div>
-      <div class="font-thin text-xs md:text-base">Market Cap</div>
     </div>
   </div>
 
@@ -542,6 +509,10 @@
             <td class="border px-4 ml-8 py-2 font-thin text-center">
               {formatFiat(get($piesMarketDataStore, `${pooledToken.address}.market_data.current_price`, '-'))}
             </td>
+            
+            <!-- {#if !pieOfPies }
+              <td class="border text-center px-4 py-2 font-thin">{formatFiat(pooledToken.balance ? pooledToken.balance.label : '0', ',', '.', '')}</td>
+            {/if} -->
 
             <td class="border text-center px-4 py-2 font-thin">
               {#if pooledToken.productive}
@@ -579,14 +550,14 @@
   
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
     <div class="p-0 mt-2 md:w-1/4 md:mr-10px">
-      <Farming token={$currentRoute.params.address} />
+      <Farming token={token} />
     </div>  
     <div class="p-0 mt-2 md:w-1/4 md:mr-10px">
-      <Etherscan token={$currentRoute.params.address} />
+      <Etherscan token={token} />
     </div>
 
     <div class="p-0 mt-2 md:w-1/4 md:mr-10px">
-      <MixBytes token={$currentRoute.params.address} />
+      <MixBytes token={token} />
     </div>
     <div class="p-0 mt-2 md:w-1/4 md:mr-10px">
       <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />
