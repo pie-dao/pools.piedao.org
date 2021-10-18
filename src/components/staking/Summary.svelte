@@ -1,14 +1,13 @@
 <script>
   import { _ } from 'svelte-i18n';
-  import { formatFiat } from '../components/helpers.js';
-  import { toNum, claim , getParticipations} from '../helpers/staking.js';
-  import images from '../config/images.json';
-  import smartcontracts from '../config/smartcontracts.json';
-  import Modal from '../components/elements/Modal.svelte';
+  import { formatFiat } from '../../components/helpers.js';
+  import { toNum, claim , getParticipations} from '../../helpers/staking.js';
+  import images from '../../config/images.json';
+  import smartcontracts from '../../config/smartcontracts.json';
+  import Modal from '../../components/elements/Modal.svelte';
   import { onMount } from 'svelte';
-  import InfoModal from '../components/modals/infoModal.svelte';
-  import ClaimModal from '../components/elements/ClaimModal.svelte';
-  import SvelteMarkdown from 'svelte-markdown';
+  import InfoModal from '../../components/modals/infoModal.svelte';
+  import ClaimModal from '../../components/elements/ClaimModal.svelte';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();

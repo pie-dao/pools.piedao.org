@@ -8,7 +8,7 @@
   import { formatFiat } from '../../components/helpers.js';
   import { currentRoute } from "../../stores/routes.js";
   import InfoModal from '../../components/modals/infoModal.svelte';
-  import StakingStats from '../../components/StakingStats.svelte';
+  import StakingStats from '../../components/staking/Stats.svelte';
   import StakingCommitmentModal from '../../components/modals/stakingCommitmentModal.svelte';
   import Modal from '../../components/elements/Modal.svelte';
   import confetti from '../../components/Confetti.js';
@@ -405,6 +405,19 @@
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-20">
   <div class="w-full max-w-1240px"><StakingStats /></div>
+  <a class="hidden md:block mt-8" href="https://forum.piedao.org/t/pip-62-uma-kpi-options-for-dough-staking/1004" target="_blank">
+    <LottiePlayer
+    src="https://assets7.lottiefiles.com/private_files/lf30_wvaae9to.json"
+    autoplay="{true}"
+    loop="{true}"
+    controls="{false}"
+    renderer="svg"
+    background="white"
+    height=""
+    width="100%"
+    controlsLayout="{controlsLayout}"
+    />
+  </a>
 </div>
 
 <div class="w-full flex justify-center">
