@@ -465,19 +465,19 @@ export const fetchStakingData = async (eth) => {
   dataObj.accountVotingPower = Number(votingPower);
 
   dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
-  console.log('fetchStakingData', dataObj);
 
   // retrieving the votes in the last month for a given address...
   dataObj.votes = await fetchLastMonthVoteForVoter(eth.address);
   
-  // retrieving the oldest active proposal from piedao.eth space...
-  dataObj.proposals = await fetchLastSnapshots(1, 'active', 'asc');
+  // retrieving the oldest active proposal from piedao.eth space after the 18/10/2021...
+  dataObj.proposals = await fetchLastSnapshots(1, 'active', 'asc', moment("2021-11-18").unix());
   // and if there is at least one active proposal after the 18/10/2021, we add the
   // block infos into that object, so we can easily get the timestamp or any other related info
   if(dataObj.proposals[0]) {
     dataObj.proposals[0].block = await eth.provider.getBlock(Number(dataObj.proposals[0].snapshot));
   }
 
+  console.log('fetchStakingData', dataObj);
   return dataObj;
 };
 
