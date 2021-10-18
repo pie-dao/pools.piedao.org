@@ -1,5 +1,6 @@
 <script>
-  import BigNumber from 'bignumber.js';
+  import ModalBig from '../components/elements/ModalBig.svelte';
+  import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
   import { _ } from 'svelte-i18n';
   import find from 'lodash/find';
   import get from 'lodash/get';
@@ -27,6 +28,13 @@
 
   let initialized = false;
   let Pie;
+
+  let modal;
+  let modalOption = {
+    method: "single",
+    poolAction: "add",
+    title: "Add Liquidity"
+  }
 
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: name = (poolsConfig[token] || {}).name;
@@ -99,6 +107,18 @@
   });
 </script>
 
+<ModalBig title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
+  <span slot="content">
+    <LiquidityModal 
+      pie={Pie}
+      composition={composition}
+      method={modalOption.method} 
+      poolAction={modalOption.poolAction}
+    />
+    <!-- <SingleAssetModal /> -->
+  </span>
+</ModalBig>
+
 <div class="content flex flex-col spl">
   <div class="flex w-full items-center justify-between">
     <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
@@ -125,7 +145,12 @@
       >
         <button
           class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80"
-          onclick="location.href='#/swap'"
+          on:click={() => {
+            modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
+            modalOption.poolAction = "add";
+            modalOption.title = "Add Liquidity";
+            modal.open();
+          }}
         >
           <div class="">
             <div class="text-base font-bold leading-5">Redeem SLICE</div>
@@ -334,7 +359,12 @@
 >
   <button
     class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc"
-    onclick="location.href='#/swap'"
+    on:click={() => {
+      modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
+      modalOption.poolAction = "add";
+      modalOption.title = "Add Liquidity";
+      modal.open();
+    }}
   >
     <div class="">
       <div class="text-base font-bold leading-5">Redeem SLICE</div>
