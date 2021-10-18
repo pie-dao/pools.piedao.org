@@ -58,7 +58,8 @@
             } else {
               votingImage = "warning";
               votingInfos = "You need to vote";
-              votingClass = "need_to_vote";
+              votingClass = "text-yellow";
+              voteKeyword = "need_to_vote";
             }
           }
         }
