@@ -1,5 +1,5 @@
 <script>
-  import { subgraphRequest } from '../helpers/subgraph.js';
+  import BigNumber from 'bignumber.js';
   import { _ } from 'svelte-i18n';
   import find from 'lodash/find';
   import get from 'lodash/get';
@@ -20,10 +20,8 @@
   } from '../components/helpers.js';
   import { eth } from '../stores/eth.js';
   import Change from '../components/Change.svelte';
-  import StrategyInUse from '../components/StrategyInUse.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
-  import Experipie, { getNormalizedNumber } from '../classes/Experipie.js';
-  import cToken from '../classes/CToken.js';
+  import Experipie from '../classes/Experipie.js';
 
   let token = '0x1083d743a1e53805a95249fef7310d75029f7cd6';
 
@@ -33,26 +31,11 @@
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: name = (poolsConfig[token] || {}).name;
   $: tokenLogo = images.logos[token];
-  $: change24H = 6;
-  // get(
-  //   $piesMarketDataStore,
-  //   `${token}.market_data.price_change_percentage_24h`,
-  //   null,
-  // );
 
-  $: tokenPrice = 4;
-  // get(
-  //   $piesMarketDataStore,
-  //   `${token.toLowerCase()}.market_data.current_price`,
-  //   null,
-  // );
+  $: change24H = 0;
+  $: nav = 0;
 
   $: composition = (poolsConfig[token] || {}).composition;
-
-  $: lendingData = {
-    compound: {},
-    aave: {},
-  };
 
   $: loadings = {
     init: false,
@@ -90,8 +73,21 @@
     }
 
     composition = res;
-    console.log('INIT COMPOSITION', composition);
+    nav = Pie.nav;
 
+    let slice24Change = 0;
+
+    composition.forEach(asset => {
+      let change24 = get(
+        $piesMarketDataStore,
+        `${asset.address}.market_data.price_change_percentage_24h`,
+        '-',
+      );
+      console.log("change24", asset.address, change24);
+      slice24Change += asset.percentage * change24;
+    });
+
+    change24H = slice24Change / 100;
     initialized = true;
     loadings.init = false;
 
@@ -111,10 +107,10 @@
         <div class="mx-3 flex flex-col">
           <h1 class="text-xl leading-none font-black">{symbol}</h1>
           <h2 class="text-md leading-none font-black mb-4px">{name}</h2>
-          {#if tokenPrice}
+          {#if nav}
             <div class="flex items-center mincontent">
               <div class="text-l md:text-xl leading-none font-thin whitespace-nowrap mincontent">
-                NAV {formatFiat(tokenPrice)}
+                NAV {formatFiat(nav)}
               </div>
               <span class="text-base whitespace-nowrap font-black mincontent ml-2"
                 ><Change showLabel={true} value={change24H} /></span
