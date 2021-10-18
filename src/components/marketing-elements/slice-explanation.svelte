@@ -15,7 +15,7 @@
     
     <h1 class="font-lg">Summary:</h1>
     <span class="font-thin">
-      SLICE is the rewards token for distributing PieDAO’s revenues as described by the new governance mining initiative launched on 4th  October 2021.
+      SLICE is the rewards token for distributing PieDAO’s revenues as described by the new governance mining initiative <a href="https://medium.com/piedao/own-the-dao-walkthrough-of-vedough-3f76534fd271" target="_blank" class="font-bold">launched on 4th October 2021</a>.
     </span>
     <br/><br/>
     <span class="font-thin">
