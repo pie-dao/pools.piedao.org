@@ -7,7 +7,8 @@
     "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+    "0x1083d743a1e53805a95249fef7310d75029f7cd6"
     
     
   ],
@@ -18,20 +19,18 @@
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+    "0x1083d743a1e53805a95249fef7310d75029f7cd6"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
   "0x1083d743a1e53805a95249fef7310d75029f7cd6": {
     "symbol": "SLICE",
+    "isExperipie": true,
+    "useMintOverBuy": true,
     "name": "PieDAO Reward Pie",
     "description": "The Official Reward Pie for Dough Staking",
     "composition": [
-      {
-        "symbol":"DOUGH",
-        "coingeckoId":"piedao-dough-v2",
-        "address":"0xad32a8e6220741182940c5abf610bde99e737b2d",
-        "coingeckoImageId": "12693"
-      }
+      {"symbol":"DOUGH", "coingeckoId":"piedao-dough-v2", "address":"0xad32a8e6220741182940c5abf610bde99e737b2d", "coingeckoImageId": "12693"}
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
   },  
