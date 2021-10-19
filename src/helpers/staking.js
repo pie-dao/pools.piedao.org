@@ -470,7 +470,7 @@ export const fetchStakingData = async (eth) => {
   dataObj.votes = await fetchLastMonthVoteForVoter(eth.address);
   
   // retrieving the oldest active proposal from piedao.eth space after the 18/10/2021...
-  dataObj.proposals = await fetchLastSnapshots(1, 'active', 'asc', moment("2021-11-18").unix());
+  dataObj.proposals = await fetchLastSnapshots(1, 'active', 'asc', moment("2021-10-18").unix());
   // and if there is at least one active proposal after the 18/10/2021, we add the
   // block infos into that object, so we can easily get the timestamp or any other related info
   if(dataObj.proposals[0]) {

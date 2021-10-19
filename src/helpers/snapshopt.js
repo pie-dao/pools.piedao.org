@@ -3,7 +3,7 @@ const PIEDAO_SNAPSHOT_SPACE = "piedao.eth";
 
 export async function fetchLastMonthVoteForVoter(voter) {
   let lastMonth = moment().subtract(1, 'months').unix();
-  let startingFrom = moment("2021-11-18").unix();
+  let startingFrom = moment("2021-10-18").unix();
 
   // if the last month proposals are "younger" than the 18th of October 2021
   // then we use the 18th of October as a time limit to fetch the votes...
