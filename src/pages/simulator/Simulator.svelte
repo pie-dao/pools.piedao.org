@@ -12,6 +12,8 @@
   import StakingCommitmentModal from '../../components/modals/stakingCommitmentModal.svelte';
   import Modal from '../../components/elements/Modal.svelte';
   import confetti from '../../components/Confetti.js';
+  import { fetchStakingStats, toNum } from '../../helpers/staking.js';
+  import { eth } from '../../stores/eth.js';
 
   import Tab1 from "./charts/Tab1.svelte";
 	import Tab2 from "./charts/Tab2.svelte";
@@ -204,19 +206,20 @@
 
   // rewards distrubutions, hardcoded for now...
   let rewards = [
-    {commitment: "6 Months", months: 6, percentage: 12},
-    {commitment: "1 Year", months: 12, percentage: 18},
-    {commitment: "2 Years", months: 24, percentage: 23},
-    {commitment: "3 Years", months: 36, percentage: 47}
+    {commitment: "6 Months", months: 6, percentage: 0},
+    {commitment: "1 Year", months: 12, percentage: 0},
+    {commitment: "2 Years", months: 24, percentage: 1},
+    {commitment: "3 Years", months: 36, percentage: 99}
   ];
 
   // retrieving default markets infos...
   let markets = simulator.getMarkets();
   
   // fetching real market infos...
-  simulator.retrieveMarkets().then(response => {
+  simulator.retrieveMarkets().then(async(response) => {
   markets = response;
-  estimated_dough_value = markets.dough.circSupply * 0.2;
+  let stakingStats = await fetchStakingStats($eth.provider, 1);
+  estimated_dough_value = toNum(stakingStats.totalStakedDough);
 
   if(!$currentRoute.params.simulation) {
     let stakedVeDough = 0;
