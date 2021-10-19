@@ -38,8 +38,16 @@
       .add({inputs: inputs, rewards: rewards, name: simulation.name, author: simulation.author})
       .then(response => {
       simulationChanged = false;
-      permalink_url = window.location + '/' + response.id;
-      console.log(permalink_url);
+
+      let baseUrl = "";
+
+      if($currentRoute.params.simulation) {
+        baseUrl = window.location.href.replace($currentRoute.params.simulation, "");
+      } else {
+        baseUrl = window.location + '/';
+      }
+      
+      permalink_url = baseUrl + response.id;
     }).catch(error => {
       console.error(error);
     });  
@@ -59,32 +67,30 @@
   */
 
   function loadSimulation() {
-    if($currentRoute.params.simulation != '') {
-      firebase.firestore().collection('staking_simulations').doc($currentRoute.params.simulation).get().then(response => {
-        if(response.exists) {
-          permalink_url = window.location;
-          let data = response.data();
+    firebase.firestore().collection('staking_simulations').doc($currentRoute.params.simulation).get().then(response => {
+      if(response.exists) {
+        permalink_url = window.location;
+        let data = response.data();
 
-          inputs = data.inputs;
-          rewards = data.rewards;
-          simulation.name = data.name;
-          simulation.author = data.author;
+        inputs = data.inputs;
+        rewards = data.rewards;
+        simulation.name = data.name;
+        simulation.author = data.author;
 
-          simulation = simulation;
-          inputs = inputs;
-          rewards = rewards;
-        } else {
-          history.replaceState({}, document.title, window.location.href.replace($currentRoute.params.simulation, "")); 
+        simulation = simulation;
+        inputs = inputs;
+        rewards = rewards;
+      } else {
+        history.replaceState({}, document.title, window.location.href.replace($currentRoute.params.simulation, "")); 
 
-          displayNotification({
-          message: 'Sorry, this simulation does not exist on our database.',
-          type: "error",
-          });   
-        }
-      }).catch(error => {
-        console.error(error);
-      });    
-    }    
+        displayNotification({
+        message: 'Sorry, this simulation does not exist on our database.',
+        type: "error",
+        });   
+      }
+    }).catch(error => {
+      console.error(error);
+    });    
   }
 
   function updateSimulator(event) {
@@ -209,9 +215,10 @@
   
   // fetching real market infos...
   simulator.retrieveMarkets().then(response => {
-    markets = response;
-    estimated_dough_value = markets.dough.circSupply * 0.2;
+  markets = response;
+  estimated_dough_value = markets.dough.circSupply * 0.2;
 
+  if(!$currentRoute.params.simulation) {
     let stakedVeDough = 0;
 
     rewards.forEach(reward => {
@@ -220,7 +227,10 @@
     });
 
     inputs.stakedVeDough = formatFiat(stakedVeDough, ',', '.', '');
-  });
+  } else {
+    loadSimulation();
+  }
+});
 
   // retrieving default outputs object...
   let outputs = simulator.getOutputs();
@@ -263,9 +273,6 @@
   } else {
     firebase_app = firebase.app();
   }
-
-  // checking if we have to load an already-existing configuration...
-  loadSimulation();
 
   const config = {
     angle: 180,
