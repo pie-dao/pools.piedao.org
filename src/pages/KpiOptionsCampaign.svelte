@@ -1,38 +1,30 @@
 <script>
-  import BigNumber from "bignumber.js";
   import images from "../config/images.json";
-  import { farming } from '../stores/eth/writables.js';
   import StakingStats from '../components/staking/Stats.svelte';
-  import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
-  import moment from 'moment';
-  
-  import {
-    subscribeToBalance,
-  } from "../components/helpers.js";
-
   import Meta from '../components/elements/meta.svelte';
-   
-   import {
-    balanceKey,
-    balances,
-    contract,
-  } from "../stores/eth.js";
+  import ProgressBar from '@okrad/svelte-progressbar';
+  import { stakingStats } from '../stores/eth/writables';
+  import { toNum } from '../helpers/staking.js';
+  import { formatFiat } from '../components/helpers.js';
 
-    // lottie...
-    let controlsLayout = [
-    'previousFrame',
-    'playpause',
-    'stop',
-    'nextFrame',
-    'progress',
-    'frame',
-    'loop',
-    'spacer',
-    'background',
-    'snapshot',
-    'zoom',
-    'info',
-  ];
+  let progressBarText = "";
+  let progressBarPlot = false;
+  let maxBarValue = 15000000;
+  let currentBarPercentage = 0;
+  let progressBarWidth = window.innerWidth * 0.9;
+  let totalStakedDough = 0;
+
+  $: if($stakingStats.totalStakedDough) {
+    totalStakedDough = toNum($stakingStats.totalStakedDough)
+    progressBarText = `already staked 	&nbsp; <b>${formatFiat(totalStakedDough, ',', '.', '')} DOUGH</b>`;
+    currentBarPercentage = (totalStakedDough * 100) / maxBarValue;
+    progressBarPlot = true;
+  }
+
+  window.addEventListener('resize', function(event) {
+    console.log("RESIZE", event, window.innerWidth, window.innerHeight);
+  });
+
 </script>
 
 <Meta 
@@ -48,7 +40,7 @@
   <div class="content flex flex-col spl px-4">
     <div class="flex flex-col items-center font-thin">
       <span class="text-l">
-        <img src={images.umaprotocol} alt="umaprotocol"/>
+        <img src={images.umaprotocol} alt="umaprotocol" class="w-1/2 ml-25pc"/>
       </span>
       <span class="text-xl">KPI Options</span>
     </div>
@@ -57,17 +49,74 @@
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
-  <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded p-6">
-    <div class="min-w-150px flex flex-col items-center leading-5">
-      <span>progress bar goes here</span>
-    </div>
+<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8 min-h-50px">  
+  <div class="flex flex-wrap justify-around w-full rounded inner">
+    {#if progressBarPlot}
+      <ProgressBar
+        series={[currentBarPercentage]} 
+        valueLabel={`<img src="${images.doughtoken}" alt="dough" width="10%" class="p-5"/> ${progressBarText}`}
+        invLabelColor= true
+        width={progressBarWidth}
+        height='50'
+        textSize='100'
+        rx='25'
+        ry='25'
+        labelAlignX='left'
+        thresholds={[
+          {
+            till: currentBarPercentage,
+            color: '#38fe61'
+          }         
+        ]}
+      /> 
+    {:else}
+      <ProgressBar
+        series={[0]} 
+        valueLabel={`<img src="${images.doughtoken}" alt="dough" width="10%" class="p-5"/>Loading...`}
+        invLabelColor= true
+        width={progressBarWidth}
+        height='50'
+        textSize='100'
+        rx='25'
+        ry='25'
+        labelAlignX='left'
+      />  
+    {/if}   
+  </div> 
 
-  </div>
+  {#if progressBarPlot}
+    <div class="bg-transparent rounded h-50px w-90pc inner">
+      <table class="w-full text-right">
+        <tr>
+          <td class="inner text-center" style="margin-left: 44%;">
+            {#if totalStakedDough >= 7000000}
+              <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
+            {:else}
+              <img src={images.hourglass} alt="dough" class="w-25px pt-3"/>
+            {/if}
+          </td>
+          <td class="inner text-center" style="margin-left: 64%;">
+            {#if totalStakedDough >= 10000000}
+            <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
+          {:else}
+            <img src={images.hourglass} alt="dough" class="w-25px pt-3"/>
+          {/if}
+          </td>
+          <td class="inner text-center" style="margin-left: 94%;">
+            {#if totalStakedDough >= 15000000}
+            <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
+          {:else}
+            <img src={images.hourglass} alt="dough" class="w-25px pt-3"/>
+          {/if}
+          </td>
+        </tr>
+      </table>
+    </div>  
+  {/if} 
 </div>
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-0 mx-8">
-  <div class="flex flex-wrap justify-around w-1/2 max-w-1100px px-10">
+  <div class="flex flex-wrap justify-around w-full md:w-1/2 max-w-1100px">
     <div class="text-l text-center mt-20px">
       <p class="p-4">
         if we managed to hit the milestone of over 20% DOUGH staked in under a week by the efforts of a handful of individuals, can you imagine where we can get by coordinated efforts or several-thousand people community? Sky is the limit.
@@ -99,7 +148,7 @@
       veDOUGH you hold versus the total (up-to-date totals can be found here).</p>
       <br />
       <ul>
-        <li>• To learn how to stake DOUGH, go to our <a target="_blank" href="https://discord.gg/DpZ2tMt6" class="pointer"><u>user guide for Staking</u></a></li>
+        <li>• To learn how to stake DOUGH, go to our <a target="_blank" href="https://piedao.notion.site/Staking-User-Manual-dc84c8c2ca194e34ac0775fc2485ab14" class="pointer"><u>user guide for Staking</u></a></li>
         <li>• To learn more about UMA KPI options, <a target="_blank" href="https://discord.gg/DpZ2tMt6" class="pointer"><u>head here</u></a></li>
         <li>• For any other questions or help, <a target="_blank" href="https://discord.gg/DpZ2tMt6" class="pointer"><u>join our Discord</u></a></li>
       </ul>

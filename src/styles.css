@@ -15,6 +15,10 @@ button:focus {
   outline: none;
 }
 
+.inner {
+  position: absolute;
+}
+
 /* .bg-button {
   display: inline-flex;
   border: double 1px transparent;
