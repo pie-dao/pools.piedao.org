@@ -149,6 +149,24 @@
     {/if}
     </div>
   </div>
+  <div
+  class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px"
+>
+  <div class="flex items-center justify-between">
+    <div class="flex nowrap intems-center p-1 font-thin">Estimated UMA Kpi Options</div>
+  </div>
+  <div class="flex nowrap items-center p-1">
+    <div class="flex-1">
+      <span class="sc-iybRtq gjVeBU">
+        <div class="font-24px">
+          {eth.address ? formatFiat(toNum(data.estimatedKpiOptions), ',', '.', '') : 0}
+        </div>
+        <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
+        <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+      </span>        
+    </div>
+  </div>
+</div>
   <div class="w-full flex px-4 md:px-6">
     <div class="w-1/2 flex flex-col flex-shrink mr-2 mt-4 mb-6 rounded-20px bg-white p-16px"
     >

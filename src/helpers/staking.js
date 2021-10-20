@@ -29,8 +29,9 @@ export let dataObj = {
   accountWithdrawableRewards: BigNumber(0),
   accountWithdrawnRewards: BigNumber(0),
   accountDepositTokenBalance: BigNumber(0),
+  estimatedKpiOptions: BigNumber(0),
   accountLocks: [],
-  rewards: [],
+  rewards: []
 };
 
 export let sharesTimeLock = false;
@@ -462,6 +463,8 @@ export const fetchStakingData = async (eth) => {
   dataObj.accountVotingPower = Number(votingPower);
 
   dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
+  
+  dataObj.estimatedKpiOptions = BigNumber(100 * 1e18);
   console.log('fetchStakingData', dataObj);
 
   return dataObj;
