@@ -206,10 +206,10 @@
 
   // rewards distrubutions, hardcoded for now...
   let rewards = [
-    {commitment: "6 Months", months: 6, percentage: 0},
-    {commitment: "1 Year", months: 12, percentage: 0},
+    {commitment: "6 Months", months: 6, percentage: 1},
+    {commitment: "1 Year", months: 12, percentage: 1},
     {commitment: "2 Years", months: 24, percentage: 1},
-    {commitment: "3 Years", months: 36, percentage: 99}
+    {commitment: "3 Years", months: 36, percentage: 97}
   ];
 
   // retrieving default markets infos...
@@ -233,6 +233,9 @@
   } else {
     loadSimulation();
   }
+
+  // calculating real outputs...
+  calculate(false);
 });
 
   // retrieving default outputs object...
@@ -240,10 +243,7 @@
   let projections = simulator.getProjections();
 
   // List of tab items with labels, values and assigned components
-  let tabs = [];  
-
-  // calculating real outputs...
-  calculate(false);
+  let tabs = [];
 
   // lottie...
   let controlsLayout = [
