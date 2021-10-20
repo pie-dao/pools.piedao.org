@@ -8,6 +8,7 @@ import { isAddress } from '@pie-dao/utils';
 import { Observable } from 'rxjs';
 import moment from 'moment';
 import sharesTimeLockABI from '../abis/sharesTimeLock.json';
+import kpiOptionsABI from '../abis/kpiOptions.json';
 import veDoughABI from '../abis/veDoughABI.json';
 import DoughABI from '../abis/DoughABI.json';
 import smartcontracts from '../config/smartcontracts.json';
@@ -35,6 +36,7 @@ export let dataObj = {
 };
 
 export let sharesTimeLock = false;
+export let kpiOptions = false;
 export let veDOUGH = false;
 export const minLockAmount = 1;
 export const AVG_SECONDS_MONTH = 2628000;
@@ -180,7 +182,27 @@ export function calculateVeDough(stakedDough, commitment) {
   } else {
     return 0;    
   }
+}
 
+export async function calculateKpiOptions(eth) {
+  let doughPayouts = [
+    {threshold: 15000000, value: 0.3},
+    {threshold: 10000000, value: 0.2},
+    {threshold: 7500000, value: 0.1}
+  ];
+
+  // fetchking the kpiOption holded by current address...
+  let userKpiOptions = BigNumber((await kpiOptions.balanceOf(eth.address)).toString());
+  // fetching updated staking stats...
+  let stakingStats = await fetchStakingStats(eth.provider, 1);
+  // taking thte stakedDough amount from stats...
+  let stakedDough = BigNumber(toNum(stakingStats.totalStakedDough));
+  // finding the payout by its threshold...
+  let payout = doughPayouts.find(payout => Number(stakedDough.toString()) >= payout.threshold);
+  // finally multiplying the userKpiOptions by the payout value...
+  let kpiReward = userKpiOptions.times(payout.value);
+  // and returning the calculated kpiReward for current address...
+  return kpiReward;
 }
 
 export function initContracts(eth) {
@@ -193,6 +215,12 @@ export function initContracts(eth) {
   veDOUGH = new ethers.Contract(
     smartcontracts.veDOUGH,
     veDoughABI,
+    eth.signer || eth.provider,
+  );
+
+  kpiOptions = new ethers.Contract(
+    smartcontracts.kpiOptions,
+    kpiOptionsABI,
     eth.signer || eth.provider,
   );
 }
@@ -464,7 +492,7 @@ export const fetchStakingData = async (eth) => {
 
   dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
   
-  dataObj.estimatedKpiOptions = BigNumber(100 * 1e18);
+  dataObj.estimatedKpiOptions = await calculateKpiOptions(eth);
   console.log('fetchStakingData', dataObj);
 
   return dataObj;

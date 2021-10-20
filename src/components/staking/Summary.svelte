@@ -159,7 +159,7 @@
     <div class="flex-1">
       <span class="sc-iybRtq gjVeBU">
         <div class="font-24px">
-          {eth.address ? formatFiat(toNum(data.estimatedKpiOptions), ',', '.', '') : 0}
+          {eth.address ? formatFiat(data.estimatedKpiOptions, ',', '.', '') : 0}
         </div>
         <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
