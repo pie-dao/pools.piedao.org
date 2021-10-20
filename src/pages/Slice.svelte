@@ -91,7 +91,7 @@
         `${asset.address}.market_data.price_change_percentage_24h`,
         '-',
       );
-      console.log("change24", asset.address, change24);
+
       slice24Change += asset.percentage * change24;
     });
 
@@ -146,9 +146,9 @@
         <button
           class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80"
           on:click={() => {
-            modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
-            modalOption.poolAction = "add";
-            modalOption.title = "Add Liquidity";
+            modalOption.method = "multi";
+            modalOption.poolAction = "withdraw";
+            modalOption.title = "Redeem";
             modal.open();
           }}
         >

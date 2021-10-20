@@ -133,18 +133,20 @@
                 {pie.price}
               </td>
               <td class="border px-4 ml-8 py-2 font-thin text-center">
-                {#if pie.useMintOverBuy}
-                    <a href={pie.symbol == "SLICE" ? '#/slice' : `#/pie/${pie.address}`}>
+                {#if pie.buyButton}
+                  {#if pie.useMintOverBuy}
+                      <a href={pie.symbol == "SLICE" ? '#/slice' : `#/pie/${pie.address}`}>
+                        <button class="table-btn highlight-box min-w-70px">
+                          {pie.symbol}
+                        </button>
+                      </a>
+                  {:else}
+                    <a href={`#/swap`}>
                       <button class="table-btn highlight-box min-w-70px">
                         {pie.symbol}
                       </button>
                     </a>
-                {:else}
-                  <a href={`#/swap`}>
-                    <button class="table-btn highlight-box min-w-70px">
-                      {pie.symbol}
-                    </button>
-                  </a>
+                  {/if}
                 {/if}
               </td>
               
