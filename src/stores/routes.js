@@ -141,7 +141,7 @@ const formatRoute = (route) => {
     case 'staking_reward_breakdown':
       /* eslint-disable no-case-declarations */
       const timestamp = (_route[1] || '');
-      /* eslint-enable no-case-declarations */      
+      /* eslint-enable no-case-declarations */
       return { page: StakingRewardBreakdown, params: { timestamp } };
     case 'simulator':
     case 'staking-simulator':

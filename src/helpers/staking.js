@@ -32,7 +32,7 @@ export let dataObj = {
   accountDepositTokenBalance: BigNumber(0),
   estimatedKpiOptions: BigNumber(0),
   accountLocks: [],
-  rewards: []
+  rewards: [],
 };
 
 export let sharesTimeLock = false;
@@ -175,32 +175,33 @@ export function didLockExpired(lock) {
 }
 
 export function calculateVeDough(stakedDough, commitment) {
-  if(!Number.isNaN(Number(stakedDough.toString())) && commitment) {
+  if (!Number.isNaN(Number(stakedDough.toString())) && commitment) {
     const k = 56.0268900276223;
     const commitmentMultiplier = (commitment / k) * Math.log10(commitment);
     return toNum(stakedDough * commitmentMultiplier, 4);
-  } else {
-    return 0;    
   }
+  return 0;
 }
 
 export async function calculateKpiOptions(eth) {
-  let doughPayouts = [
-    {threshold: 15000000, value: 0.3},
-    {threshold: 10000000, value: 0.2},
-    {threshold: 7500000, value: 0.1}
+  const doughPayouts = [
+    { threshold: 15000000, value: 0.3 },
+    { threshold: 10000000, value: 0.2 },
+    { threshold: 7500000, value: 0.1 },
   ];
 
   // fetchking the kpiOption holded by current address...
-  let userKpiOptions = BigNumber((await kpiOptions.balanceOf(eth.address)).toString());
+  const userKpiOptions = BigNumber((await kpiOptions.balanceOf(eth.address)).toString());
   // fetching updated staking stats...
-  let stakingStats = await fetchStakingStats(eth.provider, 1);
+  const stakingStats = await fetchStakingStats(eth.provider, 1);
   // taking thte stakedDough amount from stats...
-  let stakedDough = BigNumber(toNum(stakingStats.totalStakedDough));
+  const stakedDough = BigNumber(toNum(stakingStats.totalStakedDough));
   // finding the payout by its threshold...
-  let payout = doughPayouts.find(payout => Number(stakedDough.toString()) >= payout.threshold);
+  const payout = doughPayouts.find(
+    (_payout) => Number(stakedDough.toString()) >= _payout.threshold,
+  );
   // finally multiplying the userKpiOptions by the payout value...
-  let kpiReward = userKpiOptions.times(payout.value);
+  const kpiReward = userKpiOptions.times(payout.value);
   // and returning the calculated kpiReward for current address...
   return kpiReward;
 }
@@ -491,7 +492,7 @@ export const fetchStakingData = async (eth) => {
   dataObj.accountVotingPower = Number(votingPower);
 
   dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
-  
+
   dataObj.estimatedKpiOptions = await calculateKpiOptions(eth);
   console.log('fetchStakingData', dataObj);
 

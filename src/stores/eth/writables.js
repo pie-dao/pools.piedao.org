@@ -31,6 +31,6 @@ export const UnlockModalStatus = writable({
   isOpen: false,
   lock: null,
   withdrawnRewards: null,
-  countdown: null
+  countdown: null,
 });
 export const fetchStakingDataLock = writable(false);
