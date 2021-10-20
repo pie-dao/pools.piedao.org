@@ -11,7 +11,7 @@
   let progressBarPlot = false;
   let maxBarValue = 15000000;
   let currentBarPercentage = 0;
-  let progressBarWidth = window.innerWidth * 0.9;
+  let progressBarWidth = window.innerWidth * 0.6;
   let totalStakedDough = 0;
 
   $: if($stakingStats.totalStakedDough) {
@@ -85,7 +85,7 @@
   </div> 
 
   {#if progressBarPlot}
-    <div class="bg-transparent rounded h-50px w-90pc inner">
+    <div class="bg-transparent rounded h-50px w-60pc inner">
       <table class="w-full text-right">
         <tr>
           <td class="inner text-center" style="margin-left: 44%;">
@@ -149,7 +149,7 @@
       <br />
       <ul>
         <li>• To learn how to stake DOUGH, go to our <a target="_blank" href="https://piedao.notion.site/Staking-User-Manual-dc84c8c2ca194e34ac0775fc2485ab14" class="pointer"><u>user guide for Staking</u></a></li>
-        <li>• To learn more about UMA KPI options, <a target="_blank" href="https://discord.gg/DpZ2tMt6" class="pointer"><u>head here</u></a></li>
+        <li>• To learn more about UMA KPI options, <a target="_blank" href="https://medium.com/piedao/announcing-dough-staking-6dab2561626a" class="pointer"><u>head here</u></a></li>
         <li>• For any other questions or help, <a target="_blank" href="https://discord.gg/DpZ2tMt6" class="pointer"><u>join our Discord</u></a></li>
       </ul>
       <br />
