@@ -17,7 +17,7 @@
 
   $: if($stakingStats.totalStakedDough) {
     totalStakedDough = toNum($stakingStats.totalStakedDough);
-    progressBarText = `already staked 	&nbsp; <b>${formatFiat(totalStakedDough, ',', '.', '')} DOUGH</b>`;
+    progressBarText = `Already staked 	&nbsp; <b>${formatFiat(totalStakedDough, ',', '.', '')} DOUGH</b>`;
     currentBarPercentage = (totalStakedDough * 100) / maxBarValue;
     progressBarPlot = true;
 
@@ -175,7 +175,7 @@
   <div class="flex flex-wrap justify-around w-full md:w-1/2 max-w-1100px">
     <div class="text-l text-center mt-20px">
       <p class="p-4">
-        if we managed to hit the milestone of over 20% DOUGH staked in under a week by the efforts of a handful of individuals, can you imagine where we can get by coordinated efforts or several-thousand people community? Sky is the limit.
+        If we managed to hit the milestone of over 20% DOUGH staked in under a week by the efforts of a handful of individuals, can you imagine where we can get by coordinated efforts for several-thousand people community? Sky is the limit.
       </p>
       <img class="h-150px inline mb-4" src={images.astronaut} alt="hourglass_rounded" />
     </div> 
@@ -197,7 +197,7 @@
 
 <div class="flex flex-col items-center text-center">
   <div class="flex flex-wrap justify-around w-full max-w-1100px px-10">
-    <div class="w-full font-huge text-center mt-4">How can i participate?</div>
+    <div class="w-full font-huge text-center mt-4">How can I participate?</div>
     <div class="w-full font-thin text-l text-left mt-20px">
       <p>To be eligible for the KPI option airdrop, you need to have veDOUGH (i.e. stake your DOUGH)
       by the 31st of October. The amount of KPI options you will receive will be pro-rata to the share of 
