@@ -9,16 +9,21 @@
 
   let progressBarText = "";
   let progressBarPlot = false;
+  let greenBallPlot = false;
   let maxBarValue = 15000000;
   let currentBarPercentage = 0;
   let progressBarWidth = window.innerWidth * 0.6;
   let totalStakedDough = 0;
 
   $: if($stakingStats.totalStakedDough) {
-    totalStakedDough = toNum($stakingStats.totalStakedDough)
+    totalStakedDough = toNum($stakingStats.totalStakedDough);
     progressBarText = `already staked 	&nbsp; <b>${formatFiat(totalStakedDough, ',', '.', '')} DOUGH</b>`;
     currentBarPercentage = (totalStakedDough * 100) / maxBarValue;
     progressBarPlot = true;
+
+    setTimeout(() => {
+      greenBallPlot = true;
+    }, 1000);
   }
 
   window.addEventListener('resize', function(event) {
@@ -80,7 +85,7 @@
     {#if progressBarPlot}
       <ProgressBar
         series={[currentBarPercentage]} 
-        valueLabel={`<img src="${images.doughtoken}" alt="dough" width="75px" class="m-5"/> ${progressBarText}`}
+        valueLabel={`<img src="${images.arrow_right}" alt="dough" width="75px" class="m-5"/> ${progressBarText}`}
         invLabelColor= true
         width={progressBarWidth}
         height='50'
@@ -98,7 +103,7 @@
     {:else}
       <ProgressBar
         series={[0]} 
-        valueLabel={`<img src="${images.doughtoken}" alt="dough" width="75px" class="m-5"/>Loading...`}
+        valueLabel={`<img src="${images.arrow_right}" alt="dough" width="75px" class="m-5"/>Loading...`}
         invLabelColor= true
         width={progressBarWidth}
         height='50'
@@ -111,6 +116,11 @@
   </div> 
 
   {#if progressBarPlot}
+    {#if greenBallPlot}
+      <div class="bg-transparent rounded h-50px w-60pc inner">
+        <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.floor(currentBarPercentage) - 2}pc`}/>
+      </div>
+    {/if}
     <div class="bg-transparent rounded h-50px w-60pc inner">
       <table class="w-full text-right">
         <tr>
