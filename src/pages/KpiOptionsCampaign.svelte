@@ -44,22 +44,34 @@
       </span>
       <span class="text-xl">KPI Options</span>
     </div>
-    <img src={images.tokenholderherotype} class="crisp bg-black" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
+    <img src={images.five_m_prize} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
     <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">if 15M DOUGH is staked<br />by 30th March 2022</div>
   </div>
 </div>
 
 <div class="flex flex-col items-center text-center mt-4 mb-4 md:mt-10 mx-4 md:mx-8 min-h-80px"> 
   <div class="rounded h-80px inner" style={`width: ${progressBarWidth}px;`}>
-    <div class={totalStakedDough >= 7000000 ? "inner ml-43pc w-80px kpiStepBg" : "inner ml-43pc w-80px"}>
-      1 MILLION DOUGH PRIZE
+    <div class="inner ml-43pc w-80px">
+      {#if totalStakedDough >= 7000000}
+        <img src={images.one_m_prize_text_bg} alt="" style="margin-top: -25%;" />
+      {:else}
+        <img src={images.one_m_prize_text} alt="" />
+      {/if}
     </div>
-    <div class={totalStakedDough >= 10000000 ? "inner ml-63pc w-80px kpiStepBg" : "inner ml-63pc w-80px"}>
-      1 MILLION DOUGH PRIZE
+    <div class="inner ml-63pc w-80px">
+      {#if totalStakedDough >= 10000000}
+        <img src={images.two_m_prize_text_bg} alt="" style="margin-top: -25%;" />
+      {:else}
+        <img src={images.two_m_prize_text} alt="" />
+      {/if}
     </div>
-    <div class={totalStakedDough >= 15000000 ? "inner ml-93pc w-80px kpiStepBg" : "inner ml-93pc w-80px"}>
-      1 MILLION DOUGH PRIZE
-    </div>        
+    <div class="inner ml-93pc w-80px">
+      {#if totalStakedDough >= 15000000}
+        <img src={images.five_m_prize_text_bg} alt="" style="margin-top: -25%;" />
+      {:else}
+        <img src={images.five_m_prize_text} alt="" />
+      {/if}
+    </div>           
   </div>   
 </div>
 
@@ -102,38 +114,32 @@
     <div class="bg-transparent rounded h-50px w-60pc inner">
       <table class="w-full text-right">
         <tr>
-          <td class="inner text-center" style="margin-left: 45%;">            
+          <td class="inner text-center" style="margin-left: 45%;">
+            <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
             {#if totalStakedDough >= 7000000}
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
               <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
             {:else}
-              <div class="border-dashed border-r-2 h-30px w-14px mt-1 inner" style="top: -28px;"></div>
-              <img src={images.hourglass} alt="dough" class="w-26px pt-3"/>
-              <div class="border-dashed border-r-2 h-30px w-14px mt-1"></div>
+              <img src={images.hourglass_rounded} alt="dough" class="w-30px pt-2"/>
             {/if}
+            <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
           </td>
           <td class="inner text-center" style="margin-left: 65%;">
-            {#if totalStakedDough >= 10000000}
             <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
+            {#if totalStakedDough >= 10000000}
               <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
             {:else}
-            <div class="border-dashed border-r-2 h-30px w-14px mt-1 inner" style="top: -28px;"></div>
-              <img src={images.hourglass} alt="dough" class="w-26px pt-3"/>
-              <div class="border-dashed border-r-2 h-30px w-14px mt-1"></div>
+              <img src={images.hourglass_rounded} alt="dough" class="w-30px pt-2"/>
             {/if}
+            <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
           </td>
           <td class="inner text-center" style="margin-left: 95%;">
-            {#if totalStakedDough >= 15000000}
             <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
+            {#if totalStakedDough >= 15000000}
               <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
             {:else}
-            <div class="border-dashed border-r-2 h-30px w-14px mt-1 inner" style="top: -28px;"></div>
-              <img src={images.hourglass} alt="dough" class="w-26px pt-3"/>
-              <div class="border-dashed border-r-2 h-30px w-14px mt-1"></div>
+              <img src={images.hourglass_rounded} alt="dough" class="w-30px pt-2"/>
             {/if}
+            <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
           </td>
         </tr>
       </table>
@@ -161,7 +167,7 @@
       <p class="p-4">
         if we managed to hit the milestone of over 20% DOUGH staked in under a week by the efforts of a handful of individuals, can you imagine where we can get by coordinated efforts or several-thousand people community? Sky is the limit.
       </p>
-      <img class="h-150px inline mb-4" src={images.astronaut} alt="hourglass" />
+      <img class="h-150px inline mb-4" src={images.astronaut} alt="hourglass_rounded" />
     </div> 
   <button 
     onclick="location.href='/#/dough-staking';"
@@ -189,7 +195,7 @@
       <br />
       <ul>
         <li>• To learn how to stake DOUGH, go to our <a target="_blank" href="https://piedao.notion.site/Staking-User-Manual-dc84c8c2ca194e34ac0775fc2485ab14" class="pointer"><u>user guide for Staking</u></a></li>
-        <li>• To learn more about UMA KPI options, <a target="_blank" href="https://medium.com/piedao/announcing-dough-staking-6dab2561626a" class="pointer"><u>head here</u></a></li>
+        <li>• To learn more about UMA KPI options, <a target="_blank" href="https://medium.com/piedao/launching-uma-kpi-options-for-dough-staked-ee57ed6a10e7" class="pointer"><u>head here</u></a></li>
         <li>• For any other questions or help, <a target="_blank" href="https://discord.gg/DpZ2tMt6" class="pointer"><u>join our Discord</u></a></li>
       </ul>
       <br />
