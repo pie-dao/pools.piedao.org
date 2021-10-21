@@ -2084,6 +2084,13 @@ outline: none;
   box-shadow: rgb(0 0 0 / 15%) 0px 10px 10px 0px;
 }
 
+.kpiStepBg {
+  background-image: url(https://raw.githubusercontent.com/pie-dao/brand/master/misc/red_bg_circle.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .invertcolor {
   filter: invert(1);
 }

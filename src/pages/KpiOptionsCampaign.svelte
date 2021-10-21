@@ -22,7 +22,7 @@
   }
 
   window.addEventListener('resize', function(event) {
-    console.log("RESIZE", event, window.innerWidth, window.innerHeight);
+    progressBarWidth = window.innerWidth;
   });
 
 </script>
@@ -49,12 +49,26 @@
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8 min-h-50px">  
+<div class="flex flex-col items-center text-center mt-4 mb-4 md:mt-10 mx-4 md:mx-8 min-h-80px"> 
+  <div class="rounded h-80px inner" style={`width: ${progressBarWidth}px;`}>
+    <div class={totalStakedDough >= 7000000 ? "inner ml-43pc w-80px kpiStepBg" : "inner ml-43pc w-80px"}>
+      1 MILLION DOUGH PRIZE
+    </div>
+    <div class={totalStakedDough >= 10000000 ? "inner ml-63pc w-80px kpiStepBg" : "inner ml-63pc w-80px"}>
+      1 MILLION DOUGH PRIZE
+    </div>
+    <div class={totalStakedDough >= 15000000 ? "inner ml-93pc w-80px kpiStepBg" : "inner ml-93pc w-80px"}>
+      1 MILLION DOUGH PRIZE
+    </div>        
+  </div>   
+</div>
+
+<div class="flex flex-col items-center text-center mx-4 md:mx-8 min-h-50px">  
   <div class="flex flex-wrap justify-around w-full rounded inner">
     {#if progressBarPlot}
       <ProgressBar
         series={[currentBarPercentage]} 
-        valueLabel={`<img src="${images.doughtoken}" alt="dough" width="10%" class="p-5"/> ${progressBarText}`}
+        valueLabel={`<img src="${images.doughtoken}" alt="dough" width="75px" class="m-5"/> ${progressBarText}`}
         invLabelColor= true
         width={progressBarWidth}
         height='50'
@@ -72,7 +86,7 @@
     {:else}
       <ProgressBar
         series={[0]} 
-        valueLabel={`<img src="${images.doughtoken}" alt="dough" width="10%" class="p-5"/>Loading...`}
+        valueLabel={`<img src="${images.doughtoken}" alt="dough" width="75px" class="m-5"/>Loading...`}
         invLabelColor= true
         width={progressBarWidth}
         height='50'
@@ -88,26 +102,38 @@
     <div class="bg-transparent rounded h-50px w-60pc inner">
       <table class="w-full text-right">
         <tr>
-          <td class="inner text-center" style="margin-left: 44%;">
+          <td class="inner text-center" style="margin-left: 45%;">            
             {#if totalStakedDough >= 7000000}
+              <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
               <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
+              <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
             {:else}
-              <img src={images.hourglass} alt="dough" class="w-25px pt-3"/>
+              <div class="border-dashed border-r-2 h-30px w-14px mt-1 inner" style="top: -28px;"></div>
+              <img src={images.hourglass} alt="dough" class="w-26px pt-3"/>
+              <div class="border-dashed border-r-2 h-30px w-14px mt-1"></div>
             {/if}
           </td>
-          <td class="inner text-center" style="margin-left: 64%;">
+          <td class="inner text-center" style="margin-left: 65%;">
             {#if totalStakedDough >= 10000000}
-            <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
-          {:else}
-            <img src={images.hourglass} alt="dough" class="w-25px pt-3"/>
-          {/if}
+            <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
+              <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
+              <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
+            {:else}
+            <div class="border-dashed border-r-2 h-30px w-14px mt-1 inner" style="top: -28px;"></div>
+              <img src={images.hourglass} alt="dough" class="w-26px pt-3"/>
+              <div class="border-dashed border-r-2 h-30px w-14px mt-1"></div>
+            {/if}
           </td>
-          <td class="inner text-center" style="margin-left: 94%;">
+          <td class="inner text-center" style="margin-left: 95%;">
             {#if totalStakedDough >= 15000000}
-            <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
-          {:else}
-            <img src={images.hourglass} alt="dough" class="w-25px pt-3"/>
-          {/if}
+            <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
+              <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
+              <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
+            {:else}
+            <div class="border-dashed border-r-2 h-30px w-14px mt-1 inner" style="top: -28px;"></div>
+              <img src={images.hourglass} alt="dough" class="w-26px pt-3"/>
+              <div class="border-dashed border-r-2 h-30px w-14px mt-1"></div>
+            {/if}
           </td>
         </tr>
       </table>
@@ -115,7 +141,21 @@
   {/if} 
 </div>
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-0 mx-8">
+<div class="flex flex-col items-center text-center mt-8 mx-4 md:mx-8 min-h-80px"> 
+  <div class="rounded h-80px inner" style={`width: ${progressBarWidth}px;`}>
+    <div class="inner ml-42pc w-100px">
+      7M DOUGH Staked
+    </div>
+    <div class="inner ml-62pc w-100px">
+      10M DOUGH Staked
+    </div>
+    <div class="inner ml-92pc w-100px">
+      15M DOUGH Staked
+    </div>        
+  </div>   
+</div>
+
+<div class="flex flex-col items-center text-center mt-4 mx-8">
   <div class="flex flex-wrap justify-around w-full md:w-1/2 max-w-1100px">
     <div class="text-l text-center mt-20px">
       <p class="p-4">
@@ -126,7 +166,7 @@
   <button 
     onclick="location.href='/#/dough-staking';"
     class="btnbig mt-4 text-white rounded-8px p-15px">
-  Stake DOUGH
+    Stake DOUGH
   </button>
   </div>
 </div>
