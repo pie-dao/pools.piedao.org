@@ -29,7 +29,18 @@
   }
 
   window.addEventListener('resize', function(event) {
-    progressBarWidth = window.innerWidth;
+    progressBarPlot = false;
+    greenBallPlot = false;
+    progressBarWidth = window.innerWidth * 0.6;
+
+    setTimeout(() => {
+      progressBarPlot = true;
+      setTimeout(() => {
+        if(currentBarPercentage < 100) {
+          greenBallPlot = true;
+        }
+      }, 1000);
+    }, 1000);
   });
 
 </script>
@@ -57,6 +68,7 @@
 
 </div>
 
+{#key progressBarWidth}
 <!-- PROGRESS BAR FOR MOBILE -->
 <div class="md:hidden flex flex-row m-55pc">
   <div class="md:hidden verticalProgressBar min-h-50px flex flex-col items-center text-center pt-10px"> 
@@ -243,7 +255,7 @@
   {#if progressBarPlot}
     {#if greenBallPlot}
       <div class="bg-transparent rounded h-50px w-60pc inner">
-        <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.floor(currentBarPercentage) - 4}pc`}/>
+        <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.floor(currentBarPercentage) - 3}pc`}/>
       </div>
     {/if}
     <div class="bg-transparent rounded h-50px w-60pc inner">
@@ -296,6 +308,7 @@
   </div>   
 </div>
 <!-- PROGRESS BAR FOR DESKTOP -->
+{/key}
 
 <div class="flex flex-col items-center text-center mx-8 mt-4">
   <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">

@@ -238,7 +238,7 @@
     <img class="w-100% inline mb-4" src={images.doughconomics} alt="dough economics diagram" />
   </div>
 
-<a class="hidden md:block mt-8" href="https://forum.piedao.org/t/pip-62-uma-kpi-options-for-dough-staking/1004" target="_blank">
+<a class="hidden md:block mt-8" href="#/kpi-options-campaign" target="_blank">
   <LottiePlayer
   src="https://assets7.lottiefiles.com/private_files/lf30_wvaae9to.json"
   autoplay="{true}"
