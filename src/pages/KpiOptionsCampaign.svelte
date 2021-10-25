@@ -43,17 +43,18 @@
     }}
 />
 
-<div>
-  <div class="content flex flex-col spl px-4">
+
+  
+<div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
+  <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
     <div class="flex flex-col items-center font-thin">
-      <span class="text-l">
-        <img src={images.umaprotocol} alt="umaprotocol" class="w-1/2 ml-25pc"/>
-      </span>
-      <span class="text-xl">KPI Options</span>
+        <img class="w-40pc md:w-80pc" src={images.umaprotocol} alt="umaprotocol" data-aos="fade-up" data-aos-delay="50"/>
+      <span class="text-base md:text-xl mb-2" data-aos="fade-up" data-aos-delay="100">KPI Options</span>
     </div>
-    <img src={images.five_m_prize} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
-    <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">if 15M DOUGH is staked<br />by 30th March 2022</div>
+    <img class="crisp" src={images.five_m_prize} alt="kpi options" data-aos="fade-up" data-aos-delay="150"/>
+    <div class="text-base md:text-lg font-thin text-center mt-4" data-aos="fade-up" data-aos-delay="200">if 15M DOUGH is staked<br />by 30th March 2022</div>
   </div>
+
 </div>
 
 <!-- PROGRESS BAR FOR MOBILE -->
@@ -296,10 +297,10 @@
 </div>
 <!-- PROGRESS BAR FOR DESKTOP -->
 
-<div class="flex flex-col items-center text-center mt-4 mx-8">
-  <div class="flex flex-wrap justify-around w-full md:w-1/2 max-w-1100px">
-    <div class="text-l text-center mt-20px">
-      <p class="p-4">
+<div class="flex flex-col items-center text-center mx-8 mt-4">
+  <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
+    <div class="text-base text-center">
+      <p class="my-4">
         If we managed to hit the milestone of over 20% DOUGH staked in under a week by the efforts of a handful of individuals, can you imagine where we can get by coordinated efforts for several-thousand people community? Sky is the limit.
       </p>
       <img class="h-150px inline mb-4" src={images.astronaut} alt="hourglass_rounded" />
@@ -318,8 +319,8 @@
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center">
-  <div class="flex flex-wrap justify-around w-full max-w-1100px px-10">
+<div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
+  <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
     <div class="w-full font-huge text-center mt-4">How can I participate?</div>
     <div class="w-full font-thin text-l text-left mt-20px">
       <p>To be eligible for the KPI option airdrop, you need to have veDOUGH (i.e. stake your DOUGH)
@@ -338,7 +339,7 @@
     </div>
     <button 
       onclick="location.href='/#/staking-simulator';"
-      class="btnbig mt-4 text-white rounded-8px p-15px">
+      class="btnbig mt-8 text-white rounded-8px p-15px">
       Staking Simulator
     </button>  
   </div>
