@@ -15,8 +15,8 @@
   let progressBarWidth = window.innerWidth * 0.6;
   let totalStakedDough = 0;
 
-  // $: if($stakingStats.totalStakedDough) {
-    totalStakedDough = 7000000; // toNum($stakingStats.totalStakedDough);
+  $: if($stakingStats.totalStakedDough) {
+    totalStakedDough = toNum($stakingStats.totalStakedDough);
     progressBarText = `<b>${formatFiat(totalStakedDough, ',', '.', '')} DOUGH</b>`;
     currentBarPercentage = (totalStakedDough * 100) / maxBarValue;
     progressBarPlot = true;
@@ -26,7 +26,7 @@
         greenBallPlot = true;
       }
     }, 1000);
-  // }
+  }
 
   window.addEventListener('resize', function(event) {
     progressBarWidth = window.innerWidth;
@@ -58,7 +58,7 @@
 </div>
 
 <!-- PROGRESS BAR FOR MOBILE -->
-<div class="flex flex-row m-55pc">
+<div class="md:hidden flex flex-row m-55pc">
   <div class="md:hidden verticalProgressBar min-h-50px flex flex-col items-center text-center pt-10px"> 
     <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px; margin-top: -100px;`}>
       <div class="inner ml-38pc w-80px horizontalText">
