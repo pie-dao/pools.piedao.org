@@ -295,10 +295,10 @@
 </div>
 <!-- PROGRESS BAR FOR DESKTOP -->
 
-<div class="flex flex-col items-center text-center mt-4 mx-8">
-  <div class="flex flex-wrap justify-around w-full md:w-1/2 max-w-1100px">
-    <div class="text-l text-center mt-20px">
-      <p class="p-4">
+<div class="flex flex-col items-center text-center mx-8 mt-4">
+  <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
+    <div class="text-base text-center">
+      <p class="my-4">
         If we managed to hit the milestone of over 20% DOUGH staked in under a week by the efforts of a handful of individuals, can you imagine where we can get by coordinated efforts for several-thousand people community? Sky is the limit.
       </p>
       <img class="h-150px inline mb-4" src={images.astronaut} alt="hourglass_rounded" />
