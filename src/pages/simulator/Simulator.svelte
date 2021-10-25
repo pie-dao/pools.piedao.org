@@ -446,19 +446,13 @@ Stake DOUGH
     <div class="font-huge">Rewards Simulator</div>
     <div class="text-base font-thin mx-4 md:mx-20pc mb-8">Tweak the parameters. We built these tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
       
-    <div class="flex justify-center items-center max-w-1200px w-100pc h-100pc min-h-screen" style="position:absolute;">
-      <div  
-          class="bg-black opacity-80 flex flex-col justify-start modalcontent w-100pc h-100pc min-h-screen overflow-x-hidden overflow-y-auto" >
-          <div class="flex">
-              <h1 class="pl-50px text-center text-xl w-100pc"> Title Here </h1>
-        </div>
-          <slot name="content">
-              Loading Data...
-          </slot>
+    <div class="flex justify-center items-center max-w-1200px w-100pc mt-20" style="position:absolute;">
+      <div class="bg-transparent flex flex-col justify-center z-40" >
+              <div class="rounded bg-white text-black z-50 p-20"> Loading data... </div>
       </div>
     </div> 
 
-    <div class="flex flex-col">
+    <div class="flex flex-col opacity-10">
       <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
       <div class="flex flex-col md:flex-row gap-2 mb-2">
         <div class="w-92pc mx-4 md:w-1/3 md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
