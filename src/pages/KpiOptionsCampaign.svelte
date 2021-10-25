@@ -191,7 +191,7 @@
 <!-- PROGRESS BAR FOR MOBILE -->
 
 <!-- PROGRESS BAR FOR DESKTOP -->
-<div class="hidden md:flex flex-col items-center text-center mt-4 mb-4 md:mt-10 mx-4 md:mx-8 min-h-80px"> 
+<div class="hidden md:flex flex-col items-center text-center mt-4 mb-4 md:mt-10 mx-4 md:mx-0 min-h-80px"> 
   <div class="rounded h-80px inner" style={`width: ${progressBarWidth}px;`}>
     <div class="inner ml-43pc w-80px">
       {#if totalStakedDough >= 7000000}
@@ -310,6 +310,68 @@
 <!-- PROGRESS BAR FOR DESKTOP -->
 {/key}
 
+
+<!-- nico PROGRESS BAR FOR DESKTOP -->
+<div class="hidden md:block">
+  <div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
+    <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
+      <div class="w-full h-100px p-0 m-0 relative">
+        <div class="z-50 flex items-center absolute w-100pc h-100px">
+          <div class="flex flex-col items-center absolute ml-42pc lg:ml-44pc text-center">
+            <img src={images.one_m_prize_text_bg} alt="" width="80px"/>
+            <div class="w-1px h-30px dashed"></div>
+          </div>
+          <div class="flex flex-col items-center absolute ml-58pc lg:ml-60pc text-center">
+            <img src={images.two_m_prize_text} alt="" width="80px"/>
+            <div class="w-1px h-30px dashed mt-22px"></div>
+          </div>
+          <div class="flex flex-col items-center absolute ml-86pc lg:ml-90pc text-center">
+            <img src={images.five_m_prize_text} alt="" width="80px"/>
+            <div class="w-1px h-30px dashed mt-22px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center text-center mx-8">
+    <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
+      <div class="w-full bg-lightgrey rounded-circle h-44px p-0 m-0 relative">
+        <div class="z-40 flex items-center absolute w-100pc h-44px max-w-100pc">
+          <div class="px-25px absolute ml-42pc lg:ml-44pc"><img src={images.checkmark_rounded} alt="checked" width="30px"/></div>
+          <div class="px-25px absolute ml-58pc lg:ml-60pc"><img src={images.hourglass_rounded} alt="hourglass" width="30px"/></div>
+          <div class="pl-25px absolute ml-86pc lg:ml-90pc"><img src={images.hourglass_rounded} alt="hourglass" width="30px"/></div>
+        </div>
+        <div class="flex items-center w-56pc bg-electricgreen rounded-circle h-44px m-0">
+          <img src="{images.arrow_right}" alt="dough" width="75px" class="ml-4 mr-2 hidden lg:block"/>
+          <span class="font-thin ml-4 lg:ml-0 mr-2 hidden lg:block">Already staked</span>
+          <span class="font-bold ml-4 lg:ml-0">7.890.090 DOUGH</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center text-center mx-8 -mt-10px">
+    <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
+      <div class="w-full h-90px p-0 m-0 relative">
+        <div class="z-50 flex items-center absolute w-100pc h-90px text-center leading-5">
+          <div class="w-80px flex flex-col items-center absolute ml-42pc lg:ml-44pc">
+            <div class="w-1px h-30px dashed"></div><span>7M DOUGH<br />Staked</span>
+          </div>
+          <div class="w-80px flex flex-col items-center absolute ml-58pc lg:ml-60pc">
+            <div class="w-1px h-30px dashed"></div><span>10M DOUGH<br />Staked</span>
+          </div>
+          <div class="w-80px flex flex-col items-center absolute ml-86pc lg:ml-90pc">
+            <div class="w-1px h-30px dashed"></div><span>15M DOUGH<br />Staked</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- nico PROGRESS BAR FOR DESKTOP -->
+
+
 <div class="flex flex-col items-center text-center mx-8 mt-4">
   <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
     <div class="text-base text-center">
@@ -357,4 +419,7 @@
     </button>  
   </div>
 </div>
+
+
+
   

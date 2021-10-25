@@ -19,6 +19,10 @@ button:focus {
   position: absolute;
 }
 
+.rounded-circle {
+  border-radius: 10000px;
+}
+
 /* .bg-button {
   display: inline-flex;
   border: double 1px transparent;
@@ -251,6 +255,10 @@ right: 0px;
   background-color: #B7F1E2;
 }
 
+.bg-electricgreen {
+  background-color: #80FF77;
+}
+
 .bg-peppermint {
   background-color: #7EE999;
 }
@@ -340,6 +348,10 @@ right: 0px;
 
 .border-t-1 {
   border-top: solid 1px;
+}
+
+.dashed {
+  border: dashed 1px black;
 }
 
 .font-huge {
