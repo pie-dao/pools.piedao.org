@@ -43,17 +43,18 @@
     }}
 />
 
-<div>
-  <div class="content flex flex-col spl px-4">
+
+  
+<div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
+  <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
     <div class="flex flex-col items-center font-thin">
-      <span class="text-l">
-        <img src={images.umaprotocol} alt="umaprotocol" class="w-1/2 ml-25pc"/>
-      </span>
-      <span class="text-xl">KPI Options</span>
+        <img class="w-40pc md:w-80pc" src={images.umaprotocol} alt="umaprotocol" data-aos="fade-up" data-aos-delay="50"/>
+      <span class="text-base md:text-xl mb-2" data-aos="fade-up" data-aos-delay="100">KPI Options</span>
     </div>
-    <img src={images.five_m_prize} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
-    <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">if 15M DOUGH is staked<br />by 30th March 2022</div>
+    <img class="crisp" src={images.five_m_prize} alt="kpi options" data-aos="fade-up" data-aos-delay="150"/>
+    <div class="text-base md:text-lg font-thin text-center mt-4" data-aos="fade-up" data-aos-delay="200">if 15M DOUGH is staked<br />by 30th March 2022</div>
   </div>
+
 </div>
 
 <!-- PROGRESS BAR FOR MOBILE -->
