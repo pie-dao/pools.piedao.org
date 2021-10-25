@@ -172,6 +172,8 @@
         component: Tab3
         }
       ];      
+
+      isLoading = false;
     }).catch(error => console.error(error));  
   }
 
@@ -180,11 +182,23 @@
     modal.open();
   }
 
-  // modal instance...
+  // variables...
   let modal;
   let sliderModal;
   let modal_content_key;
   let estimated_dough_value;
+  let isLoading = true;
+  let isLoadingText = "loading data";
+
+  setInterval(() => {
+    let occurrences = isLoadingText.split('.').length - 1;
+
+    if (occurrences < 3) {
+      isLoadingText += '.';
+    } else {
+      isLoadingText = 'loading data';
+    } 
+  }, 500);
   
   // creating the Simulator class instance...
   let simulator = new Simulator();
@@ -446,13 +460,15 @@ Stake DOUGH
     <div class="font-huge">Rewards Simulator</div>
     <div class="text-base font-thin mx-4 md:mx-20pc mb-8">Tweak the parameters. We built these tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
       
-    <div class="flex justify-center items-center max-w-1200px w-100pc mt-20" style="position:absolute;">
-      <div class="bg-transparent flex flex-col justify-center z-40" >
-              <div class="rounded bg-white text-black z-50 p-20"> Loading data... </div>
+    {#if isLoading}
+      <div class="flex justify-center items-center max-w-1200px w-100pc mt-20" style="position:absolute;">
+        <div class="bg-transparent flex flex-col justify-center z-40" >
+          <div class="rounded bg-transparent text-black z-50 p-20"> {isLoadingText} </div>
+        </div>
       </div>
-    </div> 
+    {/if}
 
-    <div class="flex flex-col opacity-10">
+    <div class={isLoading ? "flex flex-col opacity-10" : "flex flex-col"}>
       <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
       <div class="flex flex-col md:flex-row gap-2 mb-2">
         <div class="w-92pc mx-4 md:w-1/3 md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
