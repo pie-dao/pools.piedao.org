@@ -2092,6 +2092,14 @@ outline: none;
   transform: rotate(-90deg);
 }
 
+.horizontalText {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
 .invertcolor {
   filter: invert(1);
 }
