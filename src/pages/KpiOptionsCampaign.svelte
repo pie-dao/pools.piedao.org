@@ -22,7 +22,9 @@
     progressBarPlot = true;
 
     setTimeout(() => {
-      greenBallPlot = true;
+      if(currentBarPercentage < 100) {
+        greenBallPlot = true;
+      }
     }, 1000);
   // }
 
@@ -119,7 +121,7 @@
   {#if progressBarPlot}
     {#if greenBallPlot}
       <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px;`}>
-        <!-- <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.round(currentBarPercentage) - 5}pc`}/> -->
+        <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.round(currentBarPercentage) - 5}pc`}/>
       </div>
     {/if}
     <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px;`}>
@@ -238,7 +240,7 @@
   {#if progressBarPlot}
     {#if greenBallPlot}
       <div class="bg-transparent rounded h-50px w-60pc inner">
-        <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.floor(currentBarPercentage) - 2}pc`}/>
+        <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.floor(currentBarPercentage) - 4}pc`}/>
       </div>
     {/if}
     <div class="bg-transparent rounded h-50px w-60pc inner">
