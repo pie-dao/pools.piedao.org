@@ -72,5 +72,11 @@
     "rewards.unclaimed": "<b>Rewards Unclaimed</b><br /><div class='font-thin'>Rewards will be calculated monthly and become claimable to veDOUGH holders who have been actively participating in governance. If a member does not participate for more than three months, they lose the right to claim rewards from the previous months - those rewards will instead be distributed to active members.</div>",
     "your.staked.dough": "<b>Your Staked DOUGH</b><br /><div class='font-thin'>The amount of DOUGH you are going to stake. Please note that the resulting amount of veDOUGH will be determined by the commitment period.</div>",
     "your.staking.commitment": "<b>Your Staking Commitment</b><br /><div class='font-thin'>This is the amount of time you stake your DOUGH. The higher the commitment, the higher the amount of veDOUGH received - therefore the higher the voting power and monthly rewards.</ br>You will receive: 100000.00 veDOUGH | For a 3 year commitment: 1 DOUGH = 1 veDOUGH</div>"
-  }  
+  },
+  "staking": {
+    "claim.vote.you_voted": "<b>You voted</b><br /><div class='font-thin'><div class='font-thin'>You are eligible for next month's reward distribution as you participated on PieDAO governance through voting.</div>",
+    "claim.vote.no_votes": "<b>No open votes</b><br /><div class='font-thin'><div class='font-thin'>Check this page later to find open votes. Remember you will need to vote on at least one issue per month in order to be eligible to claim rewards.</div>",
+    "claim.vote.cannot_votes": "<b>You can't vote</b><br /><div class='font-thin'><div class='font-thin'>There are some open votes. However they were created before you staked DOUGH therefore you can't vote on the current issues. <br />Check this page later to find open votes. Remember you will need to vote on at least one issue per month in odred to be eligible to claim rewards. </div>",
+    "claim.vote.need_to_vote": "<b>You need to vote</b><br /><div class='font-thin'><div class='font-thin'>Hurry up, you did not vote this month yet. Remember you will need to vote on at least one issue per month in order to be eligible to claim rewards.</div>"
+  }
 }

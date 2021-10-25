@@ -6,6 +6,7 @@
   import { parseEther } from '@ethersproject/units';
   import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
   import BigNumber from 'bignumber.js';
+  import Proposals from './Proposals.svelte';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -179,9 +180,13 @@
     <p class="pt-2 font-24px font-bold">what's next?</p>
 
     <p class="pt-2 font-22px">1. Vote on the current proposals<br />to be eligible to claim rewards</p>
-    <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
-      <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
-    </div>
+    {#if _data.proposals && _data.proposals.length}
+      <Proposals proposals={_data.proposals} />
+    {:else}
+      <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+        <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
+      </div>
+    {/if}
     
       {#if modalStake.text == 'maxDuration_hasDough'}
         <div class="pointer"
