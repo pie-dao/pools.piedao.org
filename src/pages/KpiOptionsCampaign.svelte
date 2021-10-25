@@ -317,8 +317,8 @@
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center">
-  <div class="flex flex-wrap justify-around w-full max-w-1100px px-10">
+<div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
+  <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
     <div class="w-full font-huge text-center mt-4">How can I participate?</div>
     <div class="w-full font-thin text-l text-left mt-20px">
       <p>To be eligible for the KPI option airdrop, you need to have veDOUGH (i.e. stake your DOUGH)
@@ -337,7 +337,7 @@
     </div>
     <button 
       onclick="location.href='/#/staking-simulator';"
-      class="btnbig mt-4 text-white rounded-8px p-15px">
+      class="btnbig mt-8 text-white rounded-8px p-15px">
       Staking Simulator
     </button>  
   </div>
