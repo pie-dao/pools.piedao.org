@@ -9,40 +9,17 @@
 
   let progressBarText = "";
   let progressBarPlot = false;
-  let greenBallPlot = false;
   let maxBarValue = 15000000;
   let currentBarPercentage = 0;
   let progressBarWidth = window.innerWidth * 0.6;
   let totalStakedDough = 0;
 
   $: if($stakingStats.totalStakedDough) {
-    totalStakedDough = toNum($stakingStats.totalStakedDough);
+    totalStakedDough = 15000000; //toNum($stakingStats.totalStakedDough);
     progressBarText = `<b>${formatFiat(totalStakedDough, ',', '.', '')} DOUGH</b>`;
-    currentBarPercentage = (totalStakedDough * 100) / maxBarValue;
+    currentBarPercentage = Math.round((totalStakedDough * 100) / maxBarValue);
     progressBarPlot = true;
-
-    setTimeout(() => {
-      if(currentBarPercentage < 100) {
-        greenBallPlot = true;
-      }
-    }, 1000);
   }
-
-  window.addEventListener('resize', function(event) {
-    progressBarPlot = false;
-    greenBallPlot = false;
-    progressBarWidth = window.innerWidth * 0.6;
-
-    setTimeout(() => {
-      progressBarPlot = true;
-      setTimeout(() => {
-        if(currentBarPercentage < 100) {
-          greenBallPlot = true;
-        }
-      }, 1000);
-    }, 1000);
-  });
-
 </script>
 
 <Meta 
@@ -133,11 +110,9 @@
     </div> 
 
     {#if progressBarPlot}
-      {#if greenBallPlot}
-        <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px;`}>
-          <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.round(currentBarPercentage) - 5}pc`}/>
-        </div>
-      {/if}
+      <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px;`}>
+        <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.round(currentBarPercentage) - 5}pc`}/>
+      </div>
       <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px;`}>
         <table class="w-full text-right">
           <tr>
@@ -189,125 +164,6 @@
   </div>
 </div>  
 <!-- PROGRESS BAR FOR MOBILE -->
-
-<!-- PROGRESS BAR FOR DESKTOP -->
-<div class="hidden md:flex flex-col items-center text-center mt-4 mb-4 md:mt-10 mx-4 md:mx-0 min-h-80px"> 
-  <div class="rounded h-80px inner" style={`width: ${progressBarWidth}px;`}>
-    <div class="inner ml-43pc w-80px">
-      {#if totalStakedDough >= 7000000}
-        <img src={images.one_m_prize_text_bg} alt="" style="margin-top: -25%;" />
-      {:else}
-        <img src={images.one_m_prize_text} alt="" />
-      {/if}
-    </div>
-    <div class="inner ml-63pc w-80px">
-      {#if totalStakedDough >= 10000000}
-        <img src={images.two_m_prize_text_bg} alt="" style="margin-top: -25%;" />
-      {:else}
-        <img src={images.two_m_prize_text} alt="" />
-      {/if}
-    </div>
-    <div class="inner ml-93pc w-80px">
-      {#if totalStakedDough >= 15000000}
-        <img src={images.five_m_prize_text_bg} alt="" style="margin-top: -25%;" />
-      {:else}
-        <img src={images.five_m_prize_text} alt="" />
-      {/if}
-    </div>           
-  </div>   
-</div>
-
-<div class="hidden md:flex flex-col items-center text-center mx-4 md:mx-8 min-h-50px">  
-  <div class="flex flex-wrap justify-around w-full rounded inner">
-    {#if progressBarPlot}
-      <ProgressBar
-        series={[currentBarPercentage]} 
-        valueLabel={`<img src="${images.arrow_right}" alt="dough" width="75px" class="m-5"/> Already staked 	&nbsp; ${progressBarText}`}
-        invLabelColor= true
-        width={progressBarWidth}
-        height='50'
-        textSize='100'
-        rx='25'
-        ry='25'
-        labelAlignX='left'
-        thresholds={[
-          {
-            till: currentBarPercentage,
-            color: '#38fe61'
-          }         
-        ]}
-      /> 
-    {:else}
-      <ProgressBar
-        series={[0]} 
-        valueLabel={`<img src="${images.arrow_right}" alt="dough" width="75px" class="m-5"/>Loading...`}
-        invLabelColor= true
-        width={progressBarWidth}
-        height='50'
-        textSize='100'
-        rx='25'
-        ry='25'
-        labelAlignX='left'
-      />  
-    {/if}   
-  </div> 
-
-  {#if progressBarPlot}
-    {#if greenBallPlot}
-      <div class="bg-transparent rounded h-50px w-60pc inner">
-        <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.floor(currentBarPercentage) - 3}pc`}/>
-      </div>
-    {/if}
-    <div class="bg-transparent rounded h-50px w-60pc inner">
-      <table class="w-full text-right">
-        <tr>
-          <td class="inner text-center" style="margin-left: 45%;">
-            <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
-            {#if totalStakedDough >= 7000000}
-              <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
-            {:else}
-              <img src={images.hourglass_rounded} alt="dough" class="w-30px pt-2"/>
-            {/if}
-            <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
-          </td>
-          <td class="inner text-center" style="margin-left: 65%;">
-            <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
-            {#if totalStakedDough >= 10000000}
-              <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
-            {:else}
-              <img src={images.hourglass_rounded} alt="dough" class="w-30px pt-2"/>
-            {/if}
-            <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
-          </td>
-          <td class="inner text-center" style="margin-left: 95%;">
-            <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
-            {#if totalStakedDough >= 15000000}
-              <img src={images.checkmark_rounded} alt="dough" class="w-30px pt-2"/>
-            {:else}
-              <img src={images.hourglass_rounded} alt="dough" class="w-30px pt-2"/>
-            {/if}
-            <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
-          </td>
-        </tr>
-      </table>
-    </div>  
-  {/if} 
-</div>
-
-<div class="hidden md:flex flex-col items-center text-center mt-8 mx-4 md:mx-8 min-h-80px"> 
-  <div class="rounded h-80px inner" style={`width: ${progressBarWidth}px;`}>
-    <div class="inner ml-42pc w-100px">
-      7M DOUGH Staked
-    </div>
-    <div class="inner ml-62pc w-100px">
-      10M DOUGH Staked
-    </div>
-    <div class="inner ml-92pc w-100px">
-      15M DOUGH Staked
-    </div>        
-  </div>   
-</div>
-<!-- PROGRESS BAR FOR DESKTOP -->
 {/key}
 
 
@@ -317,16 +173,28 @@
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full h-100px p-0 m-0 relative">
         <div class="z-50 flex items-center absolute w-100pc h-100px">
-          <div class="flex flex-col items-center absolute ml-42pc lg:ml-44pc text-center">
-            <img src={images.one_m_prize_text_bg} alt="" width="80px"/>
+          <div class="flex flex-col items-center absolute ml-41pc text-center">
+            {#if totalStakedDough >= 7000000}
+              <img src={images.one_m_prize_text_bg} alt="" width="80px"/>
+            {:else}
+              <img src={images.one_m_prize_text} alt="" width="80px"/>
+            {/if}
             <div class="w-1px h-30px dashed"></div>
           </div>
-          <div class="flex flex-col items-center absolute ml-58pc lg:ml-60pc text-center">
-            <img src={images.two_m_prize_text} alt="" width="80px"/>
+          <div class="flex flex-col items-center absolute ml-61pc text-center">
+            {#if totalStakedDough >= 10000000}
+              <img src={images.two_m_prize_text_bg} alt="" width="80px"/>
+            {:else}
+              <img src={images.two_m_prize_text} alt="" width="80px"/>
+            {/if}
             <div class="w-1px h-30px dashed mt-22px"></div>
           </div>
-          <div class="flex flex-col items-center absolute ml-86pc lg:ml-90pc text-center">
-            <img src={images.five_m_prize_text} alt="" width="80px"/>
+          <div class="flex flex-col items-center absolute ml-90pc text-center">
+            {#if totalStakedDough >= 15000000}
+              <img src={images.five_m_prize_text_bg} alt="" width="80px"/>
+            {:else}
+              <img src={images.five_m_prize_text} alt="" width="80px"/>
+            {/if}
             <div class="w-1px h-30px dashed mt-22px"></div>
           </div>
         </div>
@@ -338,14 +206,32 @@
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full bg-lightgrey rounded-circle h-44px p-0 m-0 relative">
         <div class="z-40 flex items-center absolute w-100pc h-44px max-w-100pc">
-          <div class="px-25px absolute ml-42pc lg:ml-44pc"><img src={images.checkmark_rounded} alt="checked" width="30px"/></div>
-          <div class="px-25px absolute ml-58pc lg:ml-60pc"><img src={images.hourglass_rounded} alt="hourglass" width="30px"/></div>
-          <div class="pl-25px absolute ml-86pc lg:ml-90pc"><img src={images.hourglass_rounded} alt="hourglass" width="30px"/></div>
+          <div class="px-25px absolute ml-41pc">
+            {#if totalStakedDough >= 7000000}
+              <img src={images.checkmark_rounded} alt="checked" width="30px"/>
+            {:else}
+              <img src={images.hourglass_rounded} alt="checked" width="30px"/>
+            {/if}
+            </div>
+          <div class="px-25px absolute ml-59pc lg:ml-61pc">
+            {#if totalStakedDough >= 10000000}
+              <img src={images.checkmark_rounded} alt="checked" width="30px"/>
+            {:else}
+              <img src={images.hourglass_rounded} alt="checked" width="30px"/>
+            {/if}
+          </div>
+          <div class="pl-25px absolute ml-90pc">
+            {#if totalStakedDough >= 15000000}
+              <img src={images.checkmark_rounded} alt="checked" width="30px"/>
+            {:else}
+              <img src={images.hourglass_rounded} alt="checked" width="30px"/>
+            {/if}
+          </div>
         </div>
-        <div class="flex items-center w-56pc bg-electricgreen rounded-circle h-44px m-0">
+        <div class={`flex items-center w-${currentBarPercentage}pc bg-electricgreen rounded-circle h-44px m-0`}>
           <img src="{images.arrow_right}" alt="dough" width="75px" class="ml-4 mr-2 hidden lg:block"/>
           <span class="font-thin ml-4 lg:ml-0 mr-2 hidden lg:block">Already staked</span>
-          <span class="font-bold ml-4 lg:ml-0">7.890.090 DOUGH</span>
+          <span class="font-bold ml-4 lg:ml-0">{formatFiat(totalStakedDough, ',', '.', '')} DOUGH</span>
         </div>
       </div>
     </div>
@@ -354,15 +240,15 @@
   <div class="flex flex-col items-center text-center mx-8 -mt-10px">
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full h-90px p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-100pc h-90px text-center leading-5">
-          <div class="w-80px flex flex-col items-center absolute ml-42pc lg:ml-44pc">
-            <div class="w-1px h-30px dashed"></div><span>7M DOUGH<br />Staked</span>
+        <div class="z-50 flex items-center absolute w-100pc h-90px text-center leading-5 mt-3">
+          <div class="w-80px flex flex-col items-center absolute ml-41pc">
+            <div class="w-1px h-30px dashed"></div><span class="mt-2">7M DOUGH<br />Staked</span>
           </div>
-          <div class="w-80px flex flex-col items-center absolute ml-58pc lg:ml-60pc">
-            <div class="w-1px h-30px dashed"></div><span>10M DOUGH<br />Staked</span>
+          <div class="w-80px flex flex-col items-center absolute ml-61pc">
+            <div class="w-1px h-30px dashed"></div><span class="mt-2">10M DOUGH<br />Staked</span>
           </div>
-          <div class="w-80px flex flex-col items-center absolute ml-86pc lg:ml-90pc">
-            <div class="w-1px h-30px dashed"></div><span>15M DOUGH<br />Staked</span>
+          <div class="w-80px flex flex-col items-center absolute ml-90pc">
+            <div class="w-1px h-30px dashed"></div><span class="mt-2">15M DOUGH<br />Staked</span>
           </div>
         </div>
       </div>
@@ -419,7 +305,3 @@
     </button>  
   </div>
 </div>
-
-
-
-  
