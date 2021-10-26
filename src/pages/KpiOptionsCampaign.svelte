@@ -156,7 +156,7 @@
               <div class="w-1px h-30px dashed mt-10px"></div>
             {/if}
           </div>
-          <div class="flex flex-col items-center absolute ml-90pc text-center">
+          <div class="flex flex-col items-center absolute pl-91pc lg:pl-90pc text-center">
             {#if totalStakedDough >= 15000000}
               <img src={images.five_m_prize_text_bg} alt="" width="80px"/>
               <div class="w-1px h-30px dashed mb-22px"></div>
@@ -181,7 +181,7 @@
               <img src={images.hourglass_rounded} alt="checked" width="30px"/>
             {/if}
             </div>
-          <div class="px-25px absolute ml-59pc lg:ml-61pc">
+          <div class="px-25px absolute ml-61pc lg:ml-61pc">
             {#if totalStakedDough >= 10000000}
               <img src={images.checkmark_rounded} alt="checked" width="30px"/>
             {:else}
