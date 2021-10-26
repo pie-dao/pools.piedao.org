@@ -20,7 +20,7 @@
     <br/><br/>
     <span class="font-thin">
       From a technical perspective, SLICE is a regular <a href="https://github.com/pie-dao/PieVaults" target="_blank" class="font-bold">PieVault</a> with the only difference that the function joinPool is disabled, which means only the treasury can mint SLICE.<br/>
-      Inside SLICE your find protocol fees coming from products like PLAY and BCP, as well as Alpha and farmed tokens from yield generating strategies by the <a href="https://forum.piedao.org/t/treasury-farming-initialization/892/9" target="_blank" class="font-bold">Treasury</a>.
+      Inside SLICE you will find protocol fees coming from products like PLAY and BCP, as well as Alpha and farmed tokens from yield generating strategies by the <a href="https://forum.piedao.org/t/treasury-farming-initialization/892/9" target="_blank" class="font-bold">Treasury</a>.
     </span>
     <span class="font-thin">
       The underlying assets inside the RewardsPie will not be used productively and are therefore enabled for meta-governance at any time.
