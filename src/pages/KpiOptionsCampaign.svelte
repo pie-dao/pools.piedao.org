@@ -12,7 +12,7 @@
   let totalStakedDough = 0;
 
   $: if($stakingStats.totalStakedDough) {
-    totalStakedDough = 15000000; //toNum($stakingStats.totalStakedDough);
+    totalStakedDough = toNum($stakingStats.totalStakedDough);
     currentBarPercentage = Math.round((totalStakedDough * 100) / maxBarValue);
   }
 </script>
