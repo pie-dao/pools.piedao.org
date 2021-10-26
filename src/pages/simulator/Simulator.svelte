@@ -397,7 +397,6 @@
       </div>
     </div>
     
-
     <div class="flex flex-col items-center text-center mt-4 md:mt-20">
       <div class="w-full max-w-1200px">
         <div class="bg-melanzana min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
@@ -411,7 +410,6 @@
         </div>
       </div>
       </div>
-
 
     <div class="font-huge mt-12 hidden md:block">How it works</div>
     <div class="hidden md:block">
