@@ -25,6 +25,7 @@
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
   "0x1083d743a1e53805a95249fef7310d75029f7cd6": {
     "symbol": "SLICE",
+    "useMintOverBuy": true,
     "isExperipie": true,
     "buyButton": false,
     "name": "PieDAO Reward Pie",
