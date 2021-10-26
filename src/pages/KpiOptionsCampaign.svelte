@@ -7,18 +7,13 @@
   import { toNum } from '../helpers/staking.js';
   import { formatFiat } from '../components/helpers.js';
 
-  let progressBarText = "";
-  let progressBarPlot = false;
   let maxBarValue = 15000000;
-  let currentBarPercentage = 0;
-  let progressBarWidth = window.innerWidth * 0.6;
+  let currentBarPercentage = 100;
   let totalStakedDough = 0;
 
   $: if($stakingStats.totalStakedDough) {
-    totalStakedDough = toNum($stakingStats.totalStakedDough);
-    progressBarText = `<b>${formatFiat(totalStakedDough, ',', '.', '')} DOUGH</b>`;
+    totalStakedDough = 15000000; //toNum($stakingStats.totalStakedDough);
     currentBarPercentage = Math.round((totalStakedDough * 100) / maxBarValue);
-    progressBarPlot = true;
   }
 </script>
 
@@ -31,10 +26,8 @@
     }}
 />
 
-
-  
 <div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
-  <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
+  <div class="flex flex-col items-center w-full max-w-1100px pb-10 px-0 md:px-10">
     <div class="flex flex-col items-center font-thin">
         <img class="w-40pc md:w-80pc" src={images.umaprotocol} alt="umaprotocol" data-aos="fade-up" data-aos-delay="50"/>
       <span class="text-base md:text-xl mb-2" data-aos="fade-up" data-aos-delay="100">KPI Options</span>
@@ -42,130 +35,102 @@
     <img class="crisp" src={images.five_m_prize} alt="kpi options" data-aos="fade-up" data-aos-delay="150"/>
     <div class="text-base md:text-lg font-thin text-center mt-4" data-aos="fade-up" data-aos-delay="200">if 15M DOUGH is staked<br />by 30th March 2022</div>
   </div>
-
 </div>
 
-{#key progressBarWidth}
 <!-- PROGRESS BAR FOR MOBILE -->
-<div class="md:hidden flex flex-row m-55pc">
-  <div class="md:hidden verticalProgressBar min-h-50px flex flex-col items-center text-center pt-10px"> 
-    <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px; margin-top: -100px;`}>
-      <div class="inner ml-38pc w-80px horizontalText">
-        {#if totalStakedDough >= 7000000}
-          <img src={images.one_m_prize_text_bg} alt="" style="position:relative; left: -25%;" />
-        {:else}
-          <img src={images.one_m_prize_text} alt="" />
-        {/if}
-      </div>
-      <div class="inner ml-60pc w-80px horizontalText">
-        {#if totalStakedDough >= 10000000}
-          <img src={images.two_m_prize_text_bg} alt="" style="position:relative; left: -25%;" />
-        {:else}
-          <img src={images.two_m_prize_text} alt="" />
-        {/if}
-      </div>
-      <div class="inner ml-88pc w-80px horizontalText">
-        {#if totalStakedDough >= 15000000}
-          <img src={images.five_m_prize_text_bg} alt="" style="position:relative; left: -25%;" />
-        {:else}
-          <img src={images.five_m_prize_text} alt="" />
-        {/if}
-      </div>           
-    </div>   
+<div class="md:hidden flex flex-row w-70pc ml-15pc">
+  <div class="text-center w-full">
+    <div class="flex flex-col items-center text-center">
+      <div class="w-full h-500px p-0 m-0 relative">
+        <div class="z-50 flex items-center absolute w-100pc h-500px">
+          {#if totalStakedDough >= 7000000}
+            <div class="flex flex-row items-center absolute bottom-35pc text-center">
+              <img src={images.one_m_prize_text_bg} alt="" width="80px"/>
+              <div class="h-1px w-35px dashed"></div>
+            </div>
+          {:else}
+            <div class="flex flex-row items-center absolute bottom-38pc text-center">
+              <img src={images.one_m_prize_text} alt="" width="80px"/>
+              <div class="h-1px w-35px dashed"></div>
+            </div>            
+          {/if}
+          {#if totalStakedDough >= 10000000}
+            <div class="flex flex-row items-center absolute bottom-55pc text-center">
+              <img src={images.two_m_prize_text_bg} alt="" width="80px"/>
+              <div class="h-1px w-35px dashed"></div>
+            </div>
+          {:else}
+            <div class="flex flex-row items-center absolute bottom-58pc text-center">
+              <img src={images.two_m_prize_text} alt="" width="80px"/>
+              <div class="h-1px w-35px dashed"></div>
+            </div>            
+          {/if}
+          {#if totalStakedDough >= 15000000}
+            <div class="flex flex-row items-center absolute bottom-86pc text-center">
+              <img src={images.five_m_prize_text_bg} alt="" width="80px"/>
+              <div class="h-1px w-35px dashed"></div>
+            </div>
+          {:else}
+            <div class="flex flex-row items-center absolute bottom-90pc text-center">
+              <img src={images.five_m_prize_text} alt="" width="80px"/>
+              <div class="h-1px w-35px dashed"></div>
+            </div>            
+          {/if}          
+        </div>
+      </div>     
+    </div>
   </div>
 
-  <div class="md:hidden min-h-50px mt-55pc mb-55pc verticalProgressBar flex flex-col items-center text-center">  
-    <div class="flex flex-wrap justify-around w-full rounded inner">
-      {#if progressBarPlot}
-        <ProgressBar
-          series={[currentBarPercentage]} 
-          valueLabel={'	&nbsp;	&nbsp;	&nbsp; ' + progressBarText}
-          invLabelColor= true
-          width={Math.round(progressBarWidth * 2.1)}
-          height='50'
-          textSize='100'
-          rx='25'
-          ry='25'
-          labelAlignX='leftOf400'
-          thresholds={[
-            {
-              till: currentBarPercentage,
-              color: '#38fe61'
-            }         
-          ]}
-        /> 
-      {:else}
-        <ProgressBar
-          series={[0]} 
-          valueLabel={`	&nbsp;	&nbsp;	&nbsp; Loading...`}
-          invLabelColor= true
-          width={Math.round(progressBarWidth * 2.1)}
-          height='50'
-          textSize='100'
-          rx='25'
-          ry='25'
-          labelAlignX='left'
-        />  
-      {/if}   
-    </div> 
-
-    {#if progressBarPlot}
-      <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px;`}>
-        <img src={images.green_ball} alt="dough" class={`w-50px ml-${Math.round(currentBarPercentage) - 5}pc`}/>
+  <div class="text-center w-50px">
+    <div class="w-50px bg-lightgrey rounded-circle h-full p-0 m-0 relative">
+      <div class="z-40 flex items-center absolute w-50px h-100pc">
+        <div class={`absolute mb-1 left-12px bottom-40pc`}>
+          {#if totalStakedDough >= 7000000}
+            <img src={images.checkmark_rounded} alt="checked" width="25px"/>
+          {:else}
+            <img src={images.hourglass_rounded} alt="checked" width="25px"/>
+          {/if}
+          </div>
+          <div class={`absolute mb-1 left-12px bottom-60pc`}>
+          {#if totalStakedDough >= 10000000}
+            <img src={images.checkmark_rounded} alt="checked" width="25px"/>
+          {:else}
+            <img src={images.hourglass_rounded} alt="checked" width="25px"/>
+          {/if}
+        </div>
+        <div class={`absolute mb-1 left-12px bottom-91pc`}>
+          {#if totalStakedDough >= 15000000}
+            <img src={images.checkmark_rounded} alt="checked" width="25px"/>
+          {:else}
+            <img src={images.hourglass_rounded} alt="checked" width="25px"/>
+          {/if}
+        </div>
       </div>
-      <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px;`}>
-        <table class="w-full text-right">
-          <tr>
-            <td class="inner text-center" style="margin-left: 44%;">
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
-              {#if totalStakedDough >= 7000000}
-                <img src={images.checkmark_rounded} alt="dough" class="w-30px mt-2 horizontalText"/>
-              {:else}
-                <img src={images.hourglass_rounded} alt="dough" class="w-30px mt-2 horizontalText"/>
-              {/if}
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
-            </td>
-            <td class="inner text-center" style="margin-left: 64%;">
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
-              {#if totalStakedDough >= 10000000}
-                <img src={images.checkmark_rounded} alt="dough" class="w-30px mt-2 horizontalText"/>
-              {:else}
-                <img src={images.hourglass_rounded} alt="dough" class="w-30px mt-2 horizontalText"/>
-              {/if}
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
-            </td>
-            <td class="inner text-center" style="margin-left: 92%;">
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1 inner" style="top: -28px;"></div>
-              {#if totalStakedDough >= 15000000}
-                <img src={images.checkmark_rounded} alt="dough" class="w-30px mt-2 horizontalText"/>
-              {:else}
-                <img src={images.hourglass_rounded} alt="dough" class="w-30px mt-2 horizontalText"/>
-              {/if}
-              <div class="border-dashed border-r-2 h-30px w-15px mt-1"></div>
-            </td>
-          </tr>
-        </table>
-      </div>  
-    {/if} 
+      <div class={`absolute bottom-0 flex items-center h-${currentBarPercentage}pc bg-electricgreen rounded-circle w-50px m-0`}>
+        <span class="font-bold w-50px m-25pc text-left items-left h-100pc mb-50px rotate180" style="writing-mode: vertical-lr; text-orientation: sideways-left;">{formatFiat(totalStakedDough, ',', '.', '')} DOUGH</span>
+      </div>
+    </div>
   </div>
 
-  <div class="md:hidden verticalProgressBar min-h-50px flex flex-col items-center text-center mt-55pc mb-55pc pt-100px"> 
-    <div class="rounded h-50px inner" style={`width: ${Math.round(progressBarWidth * 2.1)}px;`}>
-      <div class="inner ml-36pc w-100px horizontalText">
-        7M DOUGH Staked
+  <div class="text-center w-full">
+    <div class="flex flex-col items-center h-full">
+      <div class="h-full w-full p-0 m-0 relative">
+        <div class="z-50 flex items-center absolute w-full h-full text-center leading-5">
+          <div class="w-80px flex flex-row items-center absolute bottom-38pc">
+            <div class="h-1px w-30px dashed"></div><span>7M DOUGH<br />Staked</span>
+          </div>
+          <div class="w-80px flex flex-row items-center absolute bottom-57pc">
+            <div class="h-1px w-30px dashed"></div><span>10M DOUGH<br />Staked</span>
+          </div>
+          <div class="w-80px flex flex-row items-center absolute bottom-88pc">
+            <div class="h-1px w-30px dashed"></div><span>15M DOUGH<br />Staked</span>
+          </div>
+        </div>
       </div>
-      <div class="inner ml-56pc w-100px horizontalText">
-        10M DOUGH Staked
-      </div>
-      <div class="inner ml-86pc w-100px horizontalText">
-        15M DOUGH Staked
-      </div>        
-    </div>   
-  </div>
+    </div>
+  </div>    
 </div>  
 <!-- PROGRESS BAR FOR MOBILE -->
-{/key}
-
 
 <!-- nico PROGRESS BAR FOR DESKTOP -->
 <div class="hidden md:block">
