@@ -15,7 +15,7 @@
   let totalStakedDough = 0;
 
   $: if($stakingStats.totalStakedDough) {
-    totalStakedDough = 15000000; //toNum($stakingStats.totalStakedDough);
+    totalStakedDough = toNum($stakingStats.totalStakedDough);
     progressBarText = `<b>${formatFiat(totalStakedDough, ',', '.', '')} DOUGH</b>`;
     currentBarPercentage = Math.round((totalStakedDough * 100) / maxBarValue);
     progressBarPlot = true;
@@ -172,30 +172,33 @@
   <div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full h-100px p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-100pc h-100px">
+        <div class="z-50 flex items-center absolute w-100pc h-100px top-8pc">
           <div class="flex flex-col items-center absolute ml-41pc text-center">
             {#if totalStakedDough >= 7000000}
               <img src={images.one_m_prize_text_bg} alt="" width="80px"/>
+              <div class="w-1px h-30px dashed mb-22px"></div>
             {:else}
               <img src={images.one_m_prize_text} alt="" width="80px"/>
+              <div class="w-1px h-30px dashed mt-10px"></div>
             {/if}
-            <div class="w-1px h-30px dashed"></div>
           </div>
           <div class="flex flex-col items-center absolute ml-61pc text-center">
             {#if totalStakedDough >= 10000000}
               <img src={images.two_m_prize_text_bg} alt="" width="80px"/>
+              <div class="w-1px h-30px dashed mb-20px"></div>
             {:else}
               <img src={images.two_m_prize_text} alt="" width="80px"/>
+              <div class="w-1px h-30px dashed mt-10px"></div>
             {/if}
-            <div class="w-1px h-30px dashed mt-22px"></div>
           </div>
           <div class="flex flex-col items-center absolute ml-90pc text-center">
             {#if totalStakedDough >= 15000000}
               <img src={images.five_m_prize_text_bg} alt="" width="80px"/>
+              <div class="w-1px h-30px dashed mb-22px"></div>
             {:else}
               <img src={images.five_m_prize_text} alt="" width="80px"/>
+              <div class="w-1px h-30px dashed mt-12px"></div>
             {/if}
-            <div class="w-1px h-30px dashed mt-22px"></div>
           </div>
         </div>
       </div>
