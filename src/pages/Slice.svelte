@@ -4,6 +4,7 @@
   import { _ } from 'svelte-i18n';
   import find from 'lodash/find';
   import get from 'lodash/get';
+  import isEmpty from 'lodash/isEmpty';
   import orderBy from 'lodash/orderBy';
   import { onMount } from 'svelte';
   import Etherscan from '../components/Etherscan.svelte';
@@ -51,7 +52,7 @@
     defiSDK: false,
   };
 
-  $: if ($eth.provider && $eth.address && !loadings.init && !initialized) {
+  $: if(!isEmpty($piesMarketDataStore) && $eth.provider && $eth.address && !loadings.init && !initialized) {
     loadings.init = true;
     subscribeToBalance(token, $eth.address, true);
     initialize();
@@ -62,6 +63,9 @@
 
     Pie = new Experipie(token, $eth.provider);
     await Pie.initialize($piesMarketDataStore);
+
+    console.log("initialize", $piesMarketDataStore);
+    console.log("PIE", Pie);
     
     for (const el of Pie.composition) {
       let address = el.address.toLowerCase();
@@ -102,9 +106,9 @@
     return initialized;
   };
 
-  onMount(async () => {
+  $: if(!isEmpty($piesMarketDataStore)) {
     initialize();
-  });
+  }
 </script>
 
 <ModalBig title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
