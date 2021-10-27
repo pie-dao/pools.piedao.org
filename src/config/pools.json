@@ -7,7 +7,8 @@
     "0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+    "0x1083d743a1e53805a95249fef7310d75029f7cd6"
     
     
   ],
@@ -18,15 +19,29 @@
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e"
+    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
+    "0x1083d743a1e53805a95249fef7310d75029f7cd6"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+  "0x1083d743a1e53805a95249fef7310d75029f7cd6": {
+    "symbol": "SLICE",
+    "useMintOverBuy": true,
+    "isExperipie": true,
+    "buyButton": false,
+    "name": "PieDAO Reward Pie",
+    "description": "The Official Reward Pie for Dough Staking",
+    "composition": [
+      {"symbol":"DOUGH", "coingeckoId":"piedao-dough-v2", "address":"0xad32a8e6220741182940c5abf610bde99e737b2d", "coingeckoImageId": "12693"}
+    ],
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
+  },  
   "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4": {
     "symbol": "PLAY",
     "isExperipie": true,
     "name": "Metaverse NFT Index",
     "description": "Complete exposure to the Metaverse and NFTs. In collab with NFTX",
     "useMintOverBuy": true,
+    "buyButton": true,
     "useRecipe": true,
     "swapEnabled": false,
     "swapFees": "0.2",
@@ -59,6 +74,7 @@
     "isExperipie": false,
     "name": "Bitcoin Index Pie",
     "useMintOverBuy": true,
+    "buyButton": true,
     "useRecipe": false,
     "swapEnabled": false,
     "swapFees": "0.2",
@@ -105,6 +121,7 @@
     "symbol": "USD++",
     "isExperipie": true,
     "useMintOverBuy": true,
+    "buyButton": true,
     "name": "USD Index Pie",
     "useRecipe": false,
     "swapEnabled": false,
@@ -171,6 +188,7 @@
     "description": "Complete exposure to the growing Yearn network.",
     "coingeckoId": "piedao-yearn-ecosystem-pie",
     "useMintOverBuy": false,
+    "buyButton": true,
     "useRecipe": true,
     "streamingFees": "0",
     "isExperipie": true,
@@ -249,6 +267,7 @@
     "symbol": "DXY",
     "name": "DeFi Index Yield",
     "useMintOverBuy": true,
+    "buyButton": true,
     "useRecipe": true,
     "streamingFees": "0",
     "isExperipie": true,
@@ -335,6 +354,7 @@
     "name": "DeFi Large Cap",
     "description": "Large market cap projects. A premium selection of blue chip only tokens.",
     "isExperipie": true,
+    "buyButton": true,
     "mapDynamicTradingViewFormula": {
       "0xc00e94Cb662C3520282E6f5717214004A7f26888": "KRAKEN:COMPUSD",
       "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": "GEMINI:AAVEUSD",
@@ -544,6 +564,7 @@
     "description": "Balanced Crypto Pie. An even split between BTC, ETH, and the best of DEFI.",
     "useRecipe": true,
     "useMintOverBuy": false,
+    "buyButton": true,
     "swapEnabled": true,
     "streamingFees": "0.46",
     "swapFees": "1",
@@ -585,6 +606,7 @@
     "useRecipe": true,
     "streamingFees": "0",
     "useMintOverBuy": true,
+    "buyButton": true,
     "swapEnabled": true,
     "coingeckoId": "piedao-defi",
     "swapFees": "1",
