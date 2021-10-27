@@ -153,7 +153,7 @@
   class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px"
 >
   <div class="flex items-center justify-between">
-    <div class="flex nowrap intems-center p-1 font-thin">Estimated UMA Kpi Options</div>
+    <div class="flex nowrap intems-center p-1 font-thin">Estimated UMA KPI Options</div>
   </div>
   <div class="flex nowrap items-center p-1">
     <div class="flex-1">
