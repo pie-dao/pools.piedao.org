@@ -33,7 +33,7 @@
       <span class="text-base md:text-xl mb-2" data-aos="fade-up" data-aos-delay="100">KPI Options</span>
     </div>
     <img class="crisp" src={images.five_m_prize} alt="kpi options" data-aos="fade-up" data-aos-delay="150"/>
-    <div class="text-base md:text-lg font-thin text-center mt-4" data-aos="fade-up" data-aos-delay="200">if 15M DOUGH is staked<br />by 30th March 2022</div>
+    <div class="text-base md:text-lg font-thin text-center mt-4" data-aos="fade-up" data-aos-delay="200">if 15M DOUGH are staked<br />by 30th March 2022</div>
   </div>
 </div>
 
@@ -263,7 +263,7 @@
       </ul>
       <br />
       <p>
-        Try our staking simulator here to estimate how much monthly cashflows you can get for a given DOUGH amount and your desired lock-up period.
+        Try our staking simulator to estimate how much monthly cashflows you can get for a given DOUGH amount and your desired lock-up period.
       </p>
     </div>
     <button 
