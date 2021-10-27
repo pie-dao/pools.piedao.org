@@ -4,6 +4,7 @@
   export let showLabel;
 
   $: displayLabel = showLabel || false;
+  console.log(value)
 </script>
 
 {#if value === '-' || value === null}

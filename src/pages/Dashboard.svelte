@@ -78,11 +78,12 @@
     </span>
   </Modal>
 
-  <a class="h-100pc" target="_blank" href="/#/dough-staking-campaign">
-    <img class="inline hidden md:block" src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner-Small.jpg?raw=true" alt="We are hiring banner" />
-    <img class="inline block md:hidden" src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner-Small.jpg?raw=true" alt="We are hiring banner" />
+  <a class="h-100pc" target="_blank" href="https://medium.com/piedao/piedao-is-expanding-the-core-team-and-open-sourcing-the-search-for-talent-b22fce733293">
+    <img class="inline hidden md:block" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/wearehiringdesktop.png" alt="We are hiring banner" />
+    <img class="inline block md:hidden" src="https://raw.githubusercontent.com/pie-dao/brand/master/misc/wearehiringmobile.png" alt="We are hiring banner" />
 
   </a>
+
 
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
@@ -107,8 +108,8 @@
         <tbody>
           {#each piVaults as pie}
             <tr class="row-highlight">
-              <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-180px" on:click={() => window.location.hash = pie.symbol == "SLICE" ? '#/slice' : `#/pie/${pie.address}`}>
-                <a class="flex items-center px-2 py-2" href={pie.symbol == "SLICE" ? '#/slice' : `#/pie/${pie.address}`}>
+              <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-180px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+                <a class="flex items-center px-2 py-2" href={`#/pie/${pie.address}`}>
                   <img
                     class="inline icon ml-2 mr-2"
                     src={pie.icon}
@@ -116,8 +117,8 @@
                     <span class="md:block">{pie.symbol}</span>
                 </a>
               </td>
-              <td class="pointer border px-4 ml-8 py-2 font-thin text-center min-w-200px" on:click={() => window.location.hash = pie.symbol == "SLICE" ? '#/slice' : `#/pie/${pie.address}`}>
-                <a class="" href={pie.symbol == "SLICE" ? '#/slice' : `#/pie/${pie.address}`}>
+              <td class="pointer border px-4 ml-8 py-2 font-thin text-center min-w-200px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
+                <a class="" href={`#/pie/${pie.address}`}>
                   {#each pie.composition as coin}
                     <img
                       class="close-icons inline icon"
@@ -126,27 +127,25 @@
                   {/each}
                 </a>
               </td>
-              <td class="border text-center w-12pc px-4 py-2" on:click={() => window.location.hash = pie.symbol == "SLICE" ? '#/slice' : `#/pie/${pie.address}`}>
+              <td class="border text-center w-12pc px-4 py-2" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
                 <Change value={pie.change} />
               </td>
-              <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = pie.symbol == "SLICE" ? '#/slice' : `#/pie/${pie.address}`}>
+              <td class="pointer border px-4 ml-8 py-2 font-thin text-center" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
                 {pie.price}
               </td>
               <td class="border px-4 ml-8 py-2 font-thin text-center">
-                {#if pie.buyButton}
-                  {#if pie.useMintOverBuy}
-                      <a href={pie.symbol == "SLICE" ? '#/slice' : `#/pie/${pie.address}`}>
-                        <button class="table-btn highlight-box min-w-70px">
-                          {pie.symbol}
-                        </button>
-                      </a>
-                  {:else}
-                    <a href={`#/swap`}>
+                {#if pie.useMintOverBuy}
+                    <a href={`#/pie/${pie.address}`}>
                       <button class="table-btn highlight-box min-w-70px">
                         {pie.symbol}
                       </button>
                     </a>
-                  {/if}
+                {:else}
+                  <a href={`#/swap`}>
+                    <button class="table-btn highlight-box min-w-70px">
+                      {pie.symbol}
+                    </button>
+                  </a>
                 {/if}
               </td>
               

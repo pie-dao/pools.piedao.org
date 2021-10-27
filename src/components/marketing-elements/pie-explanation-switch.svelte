@@ -7,7 +7,6 @@ import USD from './usdp-explanation.svelte'
 import BCP from './bcp-explanation.svelte';
 import YPIE from './ypie-explanation.svelte';
 import PLAY from './play-explanation.svelte';
-import SLICE from './slice-explanation.svelte';
 
 
 export let address;
@@ -30,7 +29,5 @@ export let address;
         <YPIE />
     {:else if address === '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4'}
         <PLAY />
-    {:else if address === '0x1083d743a1e53805a95249fef7310d75029f7cd6'}
-        <SLICE />        
     {/if}
 </div>
