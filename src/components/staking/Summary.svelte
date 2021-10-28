@@ -67,6 +67,14 @@
     }
   });  
 
+  function handleUpdate(event) {
+    data = event.detail.data;
+
+    dispatch('update', {
+        data: data,
+      });
+  }
+
   function openModal(content_key) {
     modal_content_key = content_key;
     modal.open();
@@ -115,7 +123,7 @@
   </span>
 </Modal>
 
-<ClaimModal bind:this={claimModal}/>
+<ClaimModal bind:this={claimModal} on:update={handleUpdate}/>
 
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
   <div class="font-huge text-center mt-6">Summary</div>
