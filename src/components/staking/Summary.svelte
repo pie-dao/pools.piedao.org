@@ -174,22 +174,7 @@
       {#if eth.address}
       <button 
       class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
-      on:click={() => {
-        if(!data.accountWithdrawableRewards.eq(0) && staker.participation == 1) {
-          claim(eth).then(updated_data => {
-          data = updated_data;
-          data = data;
-
-          dispatch('update', {
-            data: data,
-          });          
-        }).catch(error => {
-          console.error(error);
-        });
-        } else {
-          claimModal.showModal(data);
-        }
-      }}
+      on:click={() => {claimModal.showModal(data, staker);}}
       > Claim</button>
     {/if}
     </div>
