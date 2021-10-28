@@ -6,8 +6,7 @@
   import { parseEther } from '@ethersproject/units';
   import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
   import BigNumber from 'bignumber.js';
-  import { environment } from '../../stores/eth/connection.js';
-  
+  import Proposals from './Proposals.svelte';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -85,12 +84,12 @@
     setTimeout(() => {
       let interval = setInterval(() => {
         if (modalStake.animatedAmount < modalStake.amount) {
-          modalStake.animatedAmount++;
+          modalStake.animatedAmount+=20;
         } else {
           modalStake.animatedAmount = modalStake.amount;
           clearInterval(interval);
         }
-      }, 3);
+      }, 1);
     }, 500);    
   }
 
@@ -170,7 +169,7 @@
 
     <div class="flex mt-4 mb-6 mx-12 rounded-20px bg-lightgrey p-16px">
       <div class="w-1/2 text-right font-bold font-24px mr-1">
-        {modalStake.animatedAmount.toFixed(2)}
+        {modalStake.animatedAmount.toFixed(4)}
       </div>
       <div class="w-1/2 text-left font-24px ml-1">veDOUGH</div>
     </div>
@@ -181,9 +180,13 @@
     <p class="pt-2 font-24px font-bold">what's next?</p>
 
     <p class="pt-2 font-22px">1. Vote on the current proposals<br />to be eligible to claim rewards</p>
-    <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
-      <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
-    </div>
+    {#if _data.proposals && _data.proposals.length}
+      <Proposals proposals={_data.proposals} />
+    {:else}
+      <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+        <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
+      </div>
+    {/if}
     
       {#if modalStake.text == 'maxDuration_hasDough'}
         <div class="pointer"
@@ -209,7 +212,6 @@
           <p class="pt-2 font-22px">2. {@html messages.text[modalStake.text]}</p>
           <button 
           disabled={isRestaking}
-          on:click={() => restakeLastLock()}
           class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
           {restakeText}
           </button>

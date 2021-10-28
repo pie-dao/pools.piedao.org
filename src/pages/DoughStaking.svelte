@@ -6,7 +6,6 @@
   import { onDestroy } from 'svelte';
   import smartcontracts from '../config/smartcontracts.json';
   import displayNotification from '../notifications';
-  import Calculator from '../classes/farming_simulator/Calculator.js';
   import { stakingDataIntervalRunning } from '../stores/eth/writables.js';
   import BigNumber from 'bignumber.js';
   import {
@@ -16,18 +15,17 @@
     dataObj,
     initialize,
     approveToken,
-    observable
+    observable,
+    calculateVeDough
   } from '../helpers/staking.js';
 
-  import StakingRewards from '../components/StakingRewards.svelte';
-  import StakingPositions from '../components/StakingPositions.svelte';
-  import StakingSummary from '../components/StakingSummary.svelte';
-  import StakingStats from '../components/StakingStats.svelte';
+  import StakingRewards from '../components/staking/Rewards.svelte';
+  import StakingPositions from '../components/staking/Positions.svelte';
+  import StakingSummary from '../components/staking/Summary.svelte';
+  import StakingStats from '../components/staking/Stats.svelte';
   import StakedModal from '../components/elements/StakedModal.svelte';
   import { environment } from '../stores/eth/connection.js';
 
-  // creating the Calculator class instance...
-  let calculator = new Calculator();
   let veDOUGH = 0;
 
   $: data = dataObj;
@@ -40,10 +38,13 @@
   $: getDoughBalance = (() => {
     if(!keyDoughBalance) return BigNumber(0);
     // saving the real-time value of dough amount into data object, so we can use it in other components/modals...
-    data.accountDepositTokenBalance = $balances[keyDoughBalance] ? BigNumber($balances[keyDoughBalance].toString()).times(1e18) : BigNumber(0);
+    data.accountDepositTokenBalance = $balances[keyDoughBalance] ? BigNumber($balances[keyDoughBalance].toString()) : BigNumber(0);
     return data.accountDepositTokenBalance;
   })();
-  let stakeAmount;
+  let stakeAmount = {
+    label: "",
+    bn: BigNumber(0)
+  };
   let stakeDuration = 36;
   let receiver;
   let observer = null;
@@ -143,8 +144,8 @@
   };
 
   function calculateVeDOUGH() {
-    veDOUGH = calculator.calculateVeDough(stakeAmount, stakeDuration);
-    veDOUGH = formatToken(veDOUGH, '.', 2);
+    veDOUGH = calculateVeDough(toBN(stakeAmount.bn.toString()), stakeDuration);
+    veDOUGH = formatToken(veDOUGH, '.', 4);
   }
 </script>
 
@@ -160,7 +161,7 @@
   <div
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"
   >
-    <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
+    <div class="flex flex-col w-full mt-6 md:mt-0 lg:w-49pc md:mr-1pc">
       {#key data}
         <!-- SUMMARY -->
         <StakingSummary {data} eth={$eth} on:update={handleUpdate} />
@@ -186,25 +187,26 @@
           <div class="font-huge text-center mt-6">Stake</div>
           <div
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from border rounded-20px border-grey p-16px"
-            class:input-invalid={stakeAmount &&
-              toBN(stakeAmount).isGreaterThan(getDoughBalance)}
+            class:input-invalid={stakeAmount.label &&
+              stakeAmount.bn.isGreaterThan(getDoughBalance)}
           >
             <div class="flex items-center justify-between">
               <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
               <div class="font-thin" style="display: inline; cursor: pointer;">
                 <div
                   on:click={() => {
-                    stakeAmount = toNum(getDoughBalance);
+                    stakeAmount.bn = getDoughBalance;
+                    stakeAmount.label = getDoughBalance.toFixed(4);
                     calculateVeDOUGH();
                   }}
                 >
-                  Balance: {toNum(getDoughBalance)} DOUGH
+                  Balance: {getDoughBalance.toFixed(4)} DOUGH
                 </div>
               </div>
             </div>
             <div class="flex nowrap items-center p-1">
               <input
-                bind:value={stakeAmount}
+                bind:value={stakeAmount.label}
                 class="swap-input-from"
                 inputmode="decimal"
                 title="Token Amount"
@@ -212,16 +214,17 @@
                 autocorrect="off"
                 type="string"
                 pattern="^[0-9]*[.]?[0-9]*$"
-                placeholder="0.0"
+                placeholder="0.00"
                 minlength="1"
                 maxlength="79"
                 spellcheck="false"
                 disabled={isStaking || isApproving}
                 onfocus="this.placeholder=''" 
                 on:change={() => {
-                  stakeAmount = formatToken(stakeAmount, '.', 18);
+                  stakeAmount.label = formatToken(stakeAmount.label, '.', 18);
                 }}
                 on:keyup={() => {
+                  stakeAmount.bn = BigNumber(formatToken(stakeAmount.label, '.', 18));
                   calculateVeDOUGH();
                 }}
               />
@@ -290,6 +293,7 @@
           </div>
 
           <div
+            style="display:none"
             class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from border rounded-20px border-grey p-16px mt-4"
           >
             <div class="flex items-center justify-between">
@@ -331,17 +335,17 @@
 
           {#if $eth.address}
             {#if getDoughBalance.eq(0)}
-              <button disabled class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-4"
+              <button disabled class="btn clear stake-button rounded-20px py-15px px-22px mx-4pc mt-4"
                 >You don't own tokens
               </button>
-            {:else if stakeAmount !== null && stakeAmount !== undefined && stakeAmount > 0}
-              {#if toBN(stakeAmount).isGreaterThan(getDoughBalance)}
+            {:else if stakeAmount.bn && stakeAmount.bn.isGreaterThan(0)}
+              {#if stakeAmount.bn.isGreaterThan(getDoughBalance)}
                 <button
                   disabled
-                  class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
+                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                   >Insufficient Balance</button
                 >
-              {:else if toBN(stakeAmount).isGreaterThan(data.accountDepositTokenAllowance)}
+              {:else if stakeAmount.bn.isGreaterThan(data.accountDepositTokenAllowance)}
                 <button
                   disabled={isStaking || isApproving}
                   on:click={() => {
@@ -375,7 +379,7 @@
                         isApproving = false;
                       });
                   }}
-                  class="btn clear stake-button rounded-20px p-15px w-92pc mx-4pc mt-6 border-white"
+                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                   >{approveButtonText}</button
                 >
               {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
@@ -395,12 +399,12 @@
                       }
                     }, 1000);
 
-                    stakeDOUGH(stakeAmount, stakeDuration, receiver, $eth)
+                    stakeDOUGH(stakeAmount.bn, stakeDuration, receiver, $eth)
                       .then((updated_data) => {
                         data = updated_data;
                         data = data;
 
-                        stakedModal.showModal(stakeAmount, stakeDuration, data, $eth);
+                        stakedModal.showModal(stakeAmount.label, stakeDuration, data, $eth);
                         
                         clearInterval(interval);
                         stakeButtonText = 'Success! 🥳';
@@ -408,7 +412,10 @@
                         setTimeout(() => {
                           stakeButtonText = 'Stake DOUGH';
                           isStaking = false;
-                          stakeAmount = 0;
+                          stakeAmount = {
+                            label: "",
+                            bn: BigNumber(0)
+                          };
                           calculateVeDOUGH();
                         }, 5000);
                       })
@@ -420,27 +427,27 @@
                         isStaking = false;
                       });
                   }}
-                  class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
+                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                   >{stakeButtonText}</button
                 >
               {:else}
                 <button
                   disabled
-                  class="btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6 border-white"
+                  class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                   >Duration not correct</button
                 >
               {/if}
             {:else}
               <button
                 disabled
-                class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
+                class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
                 >Enter an amount</button
               >
             {/if}
           {:else}
           <button
             on:click={() => connectWeb3()}
-            class="pointer btn clear stake-button rounded-20px p-15px w-50pc mx-4pc mt-6"
+            class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
             >Connect a Wallet</button
           >
           {/if}

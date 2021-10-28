@@ -1,9 +1,10 @@
 <script>
   import { _ } from 'svelte-i18n';
-  import images from '../config/images.json';
-  import { formatFiat } from '../components/helpers.js';
+  import images from '../../config/images.json';
+  import { formatFiat } from '../helpers.js';
   import * as animateScroll from 'svelte-scrollto';
-  import BoostedModal from '../components/elements/BoostedModal.svelte';
+  import BoostedModal from '../elements/BoostedModal.svelte';
+  import UnlockModal from '../elements/UnlockModal.svelte';
   import {
     toNum,
     calculateStakingEnds,
@@ -15,8 +16,8 @@
     unstakeDOUGH,
     AVG_SECONDS_MONTH,
     canRestake
-  } from '../helpers/staking.js';
-  import { justBoosted, timestampBoosted } from '../stores/eth/writables';
+  } from '../../helpers/staking.js';
+  import { justBoosted, timestampBoosted, fetchStakingDataLock } from '../../stores/eth/writables';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
@@ -27,9 +28,11 @@
   export let scrollToTop;
   export let itemsNumber = data.accountLocks.length;
   let boostedModal;
+  let unlockModal;
 </script>
 
 <BoostedModal bind:this={boostedModal}/>
+<UnlockModal bind:this={unlockModal}/>
 
 {#if eth.address}
   <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
@@ -89,11 +92,14 @@
                     <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                   </div>
                 </div>
-                {#if !lock.boosted || (lock.boosted && canRestake(lock.lockedAt))}
+                {#if (!lock.boosted && canRestake(lock.lockedAt)) || (lock.boosted && canRestake(lock.lockedAt))}
                   {#if !lock.ejected && !lock.withdrawn}
                     <button
                       disabled={$justBoosted[lock.lockId]}
                       on:click={() => {
+                        // locking the fetchStakingDataLock variable to avoid unexpected behaviors...
+                        $fetchStakingDataLock = true;
+
                         // marking the lock as justBoosted...
                         $justBoosted[lock.lockId] = true;
 
@@ -103,13 +109,15 @@
                         boostToMax(lock.lockId, eth)
                           .then((updated_data) => {
                             $timestampBoosted[updated_data.accountLocks[0].lockId] = boostingTimestamp;
-                            console.log("$timestampBoosted",$timestampBoosted);
 
                             if(scrollToTop) {
                               animateScroll.scrollToTop();
                             }
 
-                            boostedModal.showModalLock(lock);                            
+                            boostedModal.showModalLock(lock);
+                            
+                            // unlocking the fetchStakingDataLock, it's a must...
+                            $fetchStakingDataLock = false;
 
                             // updating the data object...
                             data = updated_data;
@@ -183,7 +191,11 @@
                         <span>Unstake</span>
                       </div>
                     {:else}
-                      <div class="mt-2 flex justify-end opacity-30 pointer">
+                      <div 
+                      on:click={() => {
+                        unlockModal.showModalLock(lock, data.accountWithdrawnRewards);
+                      }}
+                      class="mt-2 flex justify-end opacity-30 pointer">
                         <span>Unstake</span>
                       </div>
                     {/if}
@@ -195,7 +207,7 @@
         {/if}
       {/each}
     {:else}
-      You haven't staked anything yet, what are you waiting for?
+      <span class="text-s text-center mx-8">You haven't staked anything yet, what are you waiting for?</span>
     {/if}
 
     {#if data.accountLocks.length > itemsNumber}

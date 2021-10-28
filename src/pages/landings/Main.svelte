@@ -121,8 +121,8 @@
   <div class="content flex flex-col spl px-4">
     <div class="text-24px font-bold text-lg leading-8 text-center mb-4" data-aos="fade-up" data-aos-delay="100">PieDAO’s<br />Governance Token</div>
     <img src={images.doughcolorful} class="crisp" alt="dough" data-aos="fade-up" data-aos-delay="150"/>
-    <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organizazion and products.</div>
-    <button class="items-center stakinggradient shake text-black text-left mt-20 md:mt-4 hover:opacity-80" onclick="location.href='https://app.1inch.io/#/1/swap/ETH/DOUGH';" data-aos="fade-up" data-aos-delay="250">
+    <div class="text-lg font-thin text-center mt-4 leading-8" data-aos="fade-up" data-aos-delay="200">Contribute and be rewarded<br />for building a better organization and products.</div>
+    <button class="items-center stakinggradient shake text-black text-left mt-20 md:mt-4 hover:opacity-80" onclick="location.href='#/swap';" data-aos="fade-up" data-aos-delay="250">
       <div class="w-100pc flex items-center">
         <div class="m-10px">
           <img class="h-50px inline" src={images.doughtoken} alt="doughtoken" />
@@ -133,9 +133,11 @@
         </div>
       </div>
     </button>
+    <a class="text-bold text-center text-pink mt-2 pointer" href="/#/dough-staking">Stake DOUGH</a>
   </div>
 </div>
 
+<a class="text-bold text-center mt-2 pointer" href="/#/dough-staking">
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-4 md:mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
@@ -165,6 +167,7 @@
     </div>
   </div>
 </div>
+</a>
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-8 mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1100px pb-6 px-10">

@@ -166,7 +166,11 @@ export const formatToken = (value, decimal = '.', toFixed = 2) => {
   if (!value) return 'n/a';
 
   try {
-    const values = value.toString().replace(/^-/, '').split('.');
+    let values = value.toString().replace(/^-/, '').split('.');
+    
+    if(values.length < 2) {
+      values = value.toString().replace(/^-/, '').split(',');
+    }
 
     const dollars = parseInt(values[0]);
     const cents = values[1] ? values[1].slice(0, toFixed) : "00";
@@ -179,13 +183,14 @@ export const formatToken = (value, decimal = '.', toFixed = 2) => {
 };
 
 export const formatBigMoneyAmount = (amount, separator = ',', fiat = '$') => {
-  var decimals = amount.toString().split(".").length == 2 ? amount.toString().split(".")[1] : "00";
   var units = ["M","B","T","Q"];
   var unit = Math.floor((amount / 1.0e+1).toFixed(0).toString().length);
   var r = unit%3;
   var x =  Math.abs(Number(amount))/Number('1.0e+'+(unit-r)).toFixed(2);
   var final_unit = units[Math.floor(unit / 3) - 2] ? units[Math.floor(unit / 3) - 2] : "";
-  return fiat + ' ' + x.toFixed(0) + separator + decimals + ' ' + final_unit;
+	var left = Math.floor(x).toString();
+  var right = x.toFixed(2).split(".")[1];  
+  return fiat + ' ' + left + separator + right + ' ' + final_unit;
 };
 
 export const amountFormatter = ({

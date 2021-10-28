@@ -1,10 +1,10 @@
 <script>
   import { _ } from 'svelte-i18n';
-  import images from '../config/images.json';
-  import { formatFiat } from '../components/helpers.js';
-  import { toNum } from '../helpers/staking.js';
-  import { etherscanUrl } from '../stores/eth/connection.js';
-  import Modal from '../components/elements/Modal.svelte';
+  import images from '../../config/images.json';
+  import { formatFiat } from '../../components/helpers.js';
+  import { toNum } from '../../helpers/staking.js';
+  import { etherscanUrl } from '../../stores/eth/connection.js';
+  import Modal from '../../components/elements/Modal.svelte';
   let modalinfo;
 
   export let isLoading;
@@ -34,10 +34,9 @@
     {#if data.rewards && data.rewards.length > 0}
       {#each data.rewards.slice(0, itemsNumber) as reward}
         {#if reward.type != 'distributed'}
-          <div
-            on:click={() => {
-              reward.type == 'slashed' ? modalinfo.open() : null;
-            }}
+          <a
+            href={"#/staking_reward_breakdown/" + reward.timestamp * 1000}
+            target="_blank"
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px"
           >
             <div class="flex items-center justify-between">
@@ -62,7 +61,11 @@
                   alt="rewardspie token"
                 />
               </span>
-              <div class="flex items-center justify-between">
+              <div 
+              on:click={() => {
+                reward.type == 'slashed' ? modalinfo.open() : null;
+              }}
+              class="flex items-center justify-between">
                 <img
                   class="h-auto w-24px mx-5px"
                   src={reward.type == 'claimed' ? images.claimed : images.slashed}
@@ -71,11 +74,11 @@
                 <span>{reward.type}</span>
               </div>
             </div>
-          </div>
+          </a>
         {/if}
       {/each}
     {:else}
-      You have no rewards yet.
+    <span class="text-s text-center mx-8">You have no rewards yet.</span>
     {/if}
   {/if}
 

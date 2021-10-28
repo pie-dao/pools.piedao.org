@@ -26,3 +26,11 @@ export const stakingStats = writable({
   totalVeDough: 0,
   totalDough: 0,
 });
+export const BoostedModalIsOpen = writable(false);
+export const UnlockModalStatus = writable({
+  isOpen: false,
+  lock: null,
+  withdrawnRewards: null,
+  countdown: null
+});
+export const fetchStakingDataLock = writable(false);

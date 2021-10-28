@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import WalletConnectProvider from '@walletconnect/web3-provider';
+import WalletConnectProvider from '@walletconnect/web3-provider/dist/cjs/index';
 
 import { erc20 } from '@pie-dao/abis';
 import { ethers } from 'ethers';

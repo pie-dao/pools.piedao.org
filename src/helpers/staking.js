@@ -17,7 +17,8 @@ import { AverageSecondsMonth, veDoughSubgraphUrl, environment } from '../stores/
 import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
-import { stakingDataInterval } from '../stores/eth/writables.js';
+import { stakingDataInterval, fetchStakingDataLock } from '../stores/eth/writables.js';
+import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js'; 
 
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
@@ -32,6 +33,8 @@ export let dataObj = {
   accountDepositTokenBalance: BigNumber(0),
   accountLocks: [],
   rewards: [],
+  votes: null,
+  proposals: null
 };
 
 export let sharesTimeLock = false;
@@ -60,13 +63,15 @@ export const observable = new Observable((subscriber) => {
 
   stakingDataInterval.subscribe((intervalRange) => {
     interval = setInterval(async () => {
-      const updatedData = await fetchStakingData(ETH);
+      fetchStakingDataLock.subscribe(async (isLocked) => {
+        const updatedData = await fetchStakingData(ETH);
 
-      // updating the stakingData just when needed...
-      if (JSON.stringify(dataObj) !== JSON.stringify(updatedData)) {
-        dataObj = updatedData;
-        subscriber.next(dataObj);
-      }
+        // updating the stakingData just when needed...
+        if ((JSON.stringify(dataObj) !== JSON.stringify(updatedData)) && !isLocked) {
+          dataObj = updatedData;
+          subscriber.next(dataObj);
+        }
+      });
     }, intervalRange);
   });
 
@@ -76,9 +81,9 @@ export const observable = new Observable((subscriber) => {
   };
 });
 
-export const toNum = (num) => BigNumber(num.toString())
+export const toNum = (num, toFixed = 2) => BigNumber(num.toString())
   .dividedBy(10 ** 18)
-  .toFixed(2);
+  .toFixed(toFixed);
 
 export const toBN = (num) => BigNumber(num.toString()).multipliedBy(10 ** 18);
 
@@ -171,9 +176,14 @@ export function didLockExpired(lock) {
 }
 
 export function calculateVeDough(stakedDough, commitment) {
-  const k = 56.0268900276223;
-  const commitmentMultiplier = (commitment / k) * Math.log10(commitment);
-  return toNum(stakedDough * commitmentMultiplier);
+  if(!Number.isNaN(Number(stakedDough.toString())) && commitment) {
+    const k = 56.0268900276223;
+    const commitmentMultiplier = (commitment / k) * Math.log10(commitment);
+    return toNum(stakedDough * commitmentMultiplier, 4);
+  } else {
+    return 0;    
+  }
+
 }
 
 export function initContracts(eth) {
@@ -244,50 +254,78 @@ export async function calculateDoughTotalSupply(provider) {
   }
 }
 
-export async function fetchStakingStats(provider) {
+export async function fetchAllStakingStats() {
   try {
-    const totalSupply = await calculateDoughTotalSupply(provider);
+    const lastId = '';
+    let stats = [];
+
+    let response = await fetchStakingStats(null, 1000, lastId);
+
+    while (response.globalStats.length > 0) {
+      stats = stats.concat(response.globalStats);
+      /* eslint-disable no-await-in-loop */
+      response = await fetchStakingStats(
+        null, 1000, response.globalStats[response.globalStats.length - 1].id,
+      );
+      /* eslint-enable no-await-in-loop */
+    }
+
+    return stats;
+  } catch (error) {
+    throw new Error(`fetchAllStakingStats: ${error.message}`);
+  }
+}
+
+export async function fetchStakingStats(provider, limit, fromId) {
+  try {
+    const totalSupply = provider ? await calculateDoughTotalSupply(provider) : 0;
+
+    const graphQuery = {
+      stakersTrackers: {
+        __args: {
+          where: { id: 'StakersTrackerID' },
+        },
+        id: true,
+        counter: true,
+      },
+      globalStats: {
+        __args: {
+          first: limit,
+          orderBy: 'timestamp',
+          orderDirection: 'desc',
+        },
+        id: true,
+        depositedLocksCounter: true,
+        depositedLocksValue: true,
+        withdrawnLocksCounter: true,
+        withdrawnLocksValue: true,
+        ejectedLocksCounter: true,
+        ejectedLocksValue: true,
+        boostedLocksCounter: true,
+        boostedLocksValue: true,
+        averageTimeLock: true,
+        totalDoughStaked: true,
+        veTokenTotalSupply: true,
+      },
+    };
+
+    if (fromId) {
+      graphQuery.globalStats.__args.where = { id_lt: fromId };
+    }
 
     const response = await subgraphRequest(
-      veDoughSubgraphUrl,
-      {
-        stakersTrackers: {
-          __args: {
-            where: { id: 'StakersTrackerID' },
-          },
-          id: true,
-          counter: true,
-        },
-        globalStats: {
-          __args: {
-            first: 1,
-            orderBy: 'id',
-            orderDirection: 'desc',
-          },
-          id: true,
-          depositedLocksCounter: true,
-          depositedLocksValue: true,
-          withdrawnLocksCounter: true,
-          withdrawnLocksValue: true,
-          ejectedLocksCounter: true,
-          ejectedLocksValue: true,
-          boostedLocksCounter: true,
-          boostedLocksValue: true,
-          averageTimeLock: true,
-          totalDoughStaked: true,
-          veTokenTotalSupply: true,
-        },
-      },
+      'https://api.thegraph.com/subgraphs/name/pie-dao/vedough',
+      graphQuery,
     );
 
-    return {
+    return provider ? {
       totalHolders: response.stakersTrackers.length ? response.stakersTrackers[0].counter : 0,
       averageTimeLock: response.globalStats.length
         ? Math.floor(Number(response.globalStats[0].averageTimeLock) / AVG_SECONDS_MONTH) : 0,
       totalStakedDough: response.globalStats.length ? response.globalStats[0].totalDoughStaked : 0,
       totalVeDough: response.globalStats.length ? response.globalStats[0].veTokenTotalSupply : 0,
       totalDough: totalSupply,
-    };
+    } : response;
   } catch (error) {
     throw new Error(`fetchStakingStats: ${error.message}`);
   }
@@ -428,8 +466,19 @@ export const fetchStakingData = async (eth) => {
   dataObj.accountVotingPower = Number(votingPower);
 
   dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
-  console.log('fetchStakingData', dataObj);
 
+  // retrieving the votes in the last month for a given address...
+  dataObj.votes = await fetchLastMonthVoteForVoter(eth.address);
+  
+  // retrieving the oldest active proposal from piedao.eth space after the 18/10/2021...
+  dataObj.proposals = await fetchLastSnapshots(1, 'active', 'asc', moment("2021-10-18").unix());
+  // and if there is at least one active proposal after the 18/10/2021, we add the
+  // block infos into that object, so we can easily get the timestamp or any other related info
+  if(dataObj.proposals[0]) {
+    dataObj.proposals[0].block = await eth.provider.getBlock(Number(dataObj.proposals[0].snapshot));
+  }
+
+  console.log('fetchStakingData', dataObj);
   return dataObj;
 };
 

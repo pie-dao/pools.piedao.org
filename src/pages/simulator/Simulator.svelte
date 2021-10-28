@@ -8,10 +8,12 @@
   import { formatFiat } from '../../components/helpers.js';
   import { currentRoute } from "../../stores/routes.js";
   import InfoModal from '../../components/modals/infoModal.svelte';
-  import StakingStats from '../../components/StakingStats.svelte';
+  import StakingStats from '../../components/staking/Stats.svelte';
   import StakingCommitmentModal from '../../components/modals/stakingCommitmentModal.svelte';
   import Modal from '../../components/elements/Modal.svelte';
   import confetti from '../../components/Confetti.js';
+  import { fetchStakingStats, toNum } from '../../helpers/staking.js';
+  import { eth } from '../../stores/eth.js';
 
   import Tab1 from "./charts/Tab1.svelte";
 	import Tab2 from "./charts/Tab2.svelte";
@@ -38,8 +40,16 @@
       .add({inputs: inputs, rewards: rewards, name: simulation.name, author: simulation.author})
       .then(response => {
       simulationChanged = false;
-      permalink_url = window.location + '/' + response.id;
-      console.log(permalink_url);
+
+      let baseUrl = "";
+
+      if($currentRoute.params.simulation) {
+        baseUrl = window.location.href.replace($currentRoute.params.simulation, "");
+      } else {
+        baseUrl = window.location + '/';
+      }
+      
+      permalink_url = baseUrl + response.id;
     }).catch(error => {
       console.error(error);
     });  
@@ -59,32 +69,32 @@
   */
 
   function loadSimulation() {
-    if($currentRoute.params.simulation != '') {
-      firebase.firestore().collection('staking_simulations').doc($currentRoute.params.simulation).get().then(response => {
-        if(response.exists) {
-          permalink_url = window.location;
-          let data = response.data();
+    firebase.firestore().collection('staking_simulations').doc($currentRoute.params.simulation).get().then(response => {
+      if(response.exists) {
+        permalink_url = window.location;
+        let data = response.data();
 
-          inputs = data.inputs;
-          rewards = data.rewards;
-          simulation.name = data.name;
-          simulation.author = data.author;
+        inputs = data.inputs;
+        rewards = data.rewards;
+        simulation.name = data.name;
+        simulation.author = data.author;
 
-          simulation = simulation;
-          inputs = inputs;
-          rewards = rewards;
-        } else {
-          history.replaceState({}, document.title, window.location.href.replace($currentRoute.params.simulation, "")); 
+        simulation = simulation;
+        inputs = inputs;
+        rewards = rewards;
 
-          displayNotification({
-          message: 'Sorry, this simulation does not exist on our database.',
-          type: "error",
-          });   
-        }
-      }).catch(error => {
-        console.error(error);
-      });    
-    }    
+        calculate();
+      } else {
+        history.replaceState({}, document.title, window.location.href.replace($currentRoute.params.simulation, "")); 
+
+        displayNotification({
+        message: 'Sorry, this simulation does not exist on our database.',
+        type: "error",
+        });   
+      }
+    }).catch(error => {
+      console.error(error);
+    });    
   }
 
   function updateSimulator(event) {
@@ -162,6 +172,8 @@
         component: Tab3
         }
       ];      
+
+      isLoading = false;
     }).catch(error => console.error(error));  
   }
 
@@ -170,11 +182,23 @@
     modal.open();
   }
 
-  // modal instance...
+  // variables...
   let modal;
   let sliderModal;
   let modal_content_key;
   let estimated_dough_value;
+  let isLoading = true;
+  let isLoadingText = "loading data";
+
+  setInterval(() => {
+    let occurrences = isLoadingText.split('.').length - 1;
+
+    if (occurrences < 3) {
+      isLoadingText += '.';
+    } else {
+      isLoadingText = 'loading data';
+    } 
+  }, 500);
   
   // creating the Simulator class instance...
   let simulator = new Simulator();
@@ -185,7 +209,7 @@
     rewardsUnclaimed: 100,
     stakedVeDough: 15000000,
     expectedApr: 100
-  } ;
+  };
 
   // filling the first default values...
   let inputs = {
@@ -193,25 +217,27 @@
     commitment: "36 Months",
     rewardsUnclaimed: "10%",
     stakedVeDough: 0,
-    expectedApr: "50%"
+    expectedApr: "19%"
   };  
 
   // rewards distrubutions, hardcoded for now...
   let rewards = [
-    {commitment: "6 Months", months: 6, percentage: 12},
-    {commitment: "1 Year", months: 12, percentage: 18},
-    {commitment: "2 Years", months: 24, percentage: 23},
-    {commitment: "3 Years", months: 36, percentage: 47}
+    {commitment: "6 Months", months: 6, percentage: 1},
+    {commitment: "1 Year", months: 12, percentage: 1},
+    {commitment: "2 Years", months: 24, percentage: 1},
+    {commitment: "3 Years", months: 36, percentage: 97}
   ];
 
   // retrieving default markets infos...
   let markets = simulator.getMarkets();
   
   // fetching real market infos...
-  simulator.retrieveMarkets().then(response => {
-    markets = response;
-    estimated_dough_value = markets.dough.circSupply * 0.2;
+  simulator.retrieveMarkets().then(async(response) => {
+  markets = response;
+  let stakingStats = await fetchStakingStats($eth.provider, 1);
+  estimated_dough_value = toNum(stakingStats.totalStakedDough);
 
+  if(!$currentRoute.params.simulation) {
     let stakedVeDough = 0;
 
     rewards.forEach(reward => {
@@ -220,17 +246,21 @@
     });
 
     inputs.stakedVeDough = formatFiat(stakedVeDough, ',', '.', '');
-  });
+
+    calculate(false);    
+  } else {
+    loadSimulation();
+  }
+
+  loadingModal.close();
+});
 
   // retrieving default outputs object...
   let outputs = simulator.getOutputs();
   let projections = simulator.getProjections();
 
   // List of tab items with labels, values and assigned components
-  let tabs = [];  
-
-  // calculating real outputs...
-  calculate(false);
+  let tabs = [];
 
   // lottie...
   let controlsLayout = [
@@ -263,9 +293,6 @@
   } else {
     firebase_app = firebase.app();
   }
-
-  // checking if we have to load an already-existing configuration...
-  loadSimulation();
 
   const config = {
     angle: 180,
@@ -306,6 +333,12 @@
     <div class="text-l md:text-lg font-thin mx-4 md:mx-10pc mt-4 md:mt-8 mb-8">
       A complete redesign of the governance system with token holders in mind: vote on key DAO matters and get compensated for your work every month.
     </div>
+
+    <button 
+    onclick="location.href='/#/dough-staking';"
+    class="btnbig mt-0 text-white rounded-8px p-15px">
+  Stake DOUGH
+  </button>
 
     <div class="flex flex-col items-center text-center mt-12 md:mt-20">
       <img class="w-300px -mb-50px z-50" src={images.d_top} alt="dollar-in"/>
@@ -364,7 +397,6 @@
       </div>
     </div>
     
-
     <div class="flex flex-col items-center text-center mt-4 md:mt-20">
       <div class="w-full max-w-1200px">
         <div class="bg-melanzana min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12">
@@ -378,7 +410,6 @@
         </div>
       </div>
       </div>
-
 
     <div class="font-huge mt-12 hidden md:block">How it works</div>
     <div class="hidden md:block">
@@ -399,220 +430,251 @@
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-20">
   <div class="w-full max-w-1240px"><StakingStats /></div>
+  <a class="hidden md:block mt-8" href="https://forum.piedao.org/t/pip-62-uma-kpi-options-for-dough-staking/1004" target="_blank">
+    <LottiePlayer
+    src="https://assets7.lottiefiles.com/private_files/lf30_wvaae9to.json"
+    autoplay="{true}"
+    loop="{true}"
+    controls="{false}"
+    renderer="svg"
+    background="white"
+    height=""
+    width="100%"
+    controlsLayout="{controlsLayout}"
+    />
+  </a>
+</div>
+
+<div class="w-full flex justify-center">
+<button 
+onclick="location.href='/#/dough-staking';"
+class="btnbig mt-8 text-white rounded-8px p-15px">
+Stake DOUGH
+</button>
 </div>
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-10">
-<div class="w-full max-w-1200px">
-  <div class="font-huge">Rewards Simulator</div>
-  <div class="text-base font-thin mx-4 md:mx-20pc mb-8">Tweak the parameters. We built these tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
-    <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
-    <div class="flex flex-col md:flex-row gap-2 mb-2">
-      <div class="w-92pc mx-4 md:w-1/3 md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
-        <div class="font-thin md:text-xs mb-4 text-left">
-          <span class="float-left">Treasury Liquidity Deployed</span>
-          <img
-          on:click={() => openModal('simulator.treasury.liquidity.deployed')}
-          class="token-icon w-18px h-18px pl-4px"
-          src={images.simulator_info}
-          alt="ETH"
-        />
+  <div class="w-full max-w-1200px h-100pc">
+    <div class="font-huge">Rewards Simulator</div>
+    <div class="text-base font-thin mx-4 md:mx-20pc mb-8">Tweak the parameters. We built these tools so you can play being rich until you finally buy DOUGH and become rich for real.</div>
+      
+    {#if isLoading}
+      <div class="flex justify-center items-center max-w-1200px w-100pc mt-20" style="position:absolute;">
+        <div class="bg-transparent flex flex-col justify-center z-40" >
+          <div class="rounded bg-transparent text-black z-50 p-20"> {isLoadingText} </div>
         </div>
-        <div class="w-100pc font-huge md:font-veryhuge tracking-tight text-left mb-4">{formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
-        <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
       </div>
+    {/if}
 
-      <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-1 flex-col md:flex-row items-left">
-        <div class="w-full md:w-2/3">
-          <div class="font-thin md:text-xs mb-8 text-left">
-            <span class="float-left">Rewards Distrubutions</span>
+    <div class={isLoading ? "flex flex-col opacity-10" : "flex flex-col"}>
+      <!-- FIRST FLEX ROW - TREASURY AND DISTRIBUTIONS -->
+      <div class="flex flex-col md:flex-row gap-2 mb-2">
+        <div class="w-92pc mx-4 md:w-1/3 md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-shrink-0 flex-col items-left">
+          <div class="font-thin md:text-xs mb-4 text-left">
+            <span class="float-left">Treasury Liquidity Deployed</span>
             <img
-            on:click={() => openModal('simulator.rewards.distribution')}
+            on:click={() => openModal('simulator.treasury.liquidity.deployed')}
             class="token-icon w-18px h-18px pl-4px"
             src={images.simulator_info}
             alt="ETH"
-          />            
+          />
           </div>
-          <div class="w-full">
-            <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
-              Distributed to veDOUGH holders 
-              <button style="background-color: #24D897;" class="ml-4 oven-withdraw-button">60%</button>
-            </div>
-          </div>
-          <div class="w-full">
-            <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
-              Used to compound the treasury 
-              <button  style="background-color: #CF4EB7;" class="ml-4 oven-withdraw-button">25%</button>
-            </div>
-          </div>
-          <div class="w-full">
-            <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
-              used to cover costs 
-              <button  style="background-color: #67BDF0;" class="ml-4 oven-withdraw-button">15%</button>
-            </div>
-          </div>
+          <div class="w-100pc font-huge md:font-veryhuge tracking-tight text-left mb-4">{formatBigMoneyAmount(markets.treasuryLiquidity.amount)}</div>
+          <div class="font-bold leading-2 text-left mb-4">{markets.treasuryLiquidity.eth_value} ETH</div>
         </div>
-        
-        <div class="w-full md:w-1/3 align-center hidden md:block">       
-          <img
-            class="token-icon w-180px"
-            src={images.simulator_chart}
-            alt="ETH"
-          />
-        </div>          
-      </div>      
-    </div>
-    <!-- SECOND FLEX ROW - TOTAL STAKED veDOUGH | REWARDS | APR -->
-    <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
-      <div class="w-full flex flex-col md:flex-row">
-        <!-- Total Staked veDOUGH -->
-        <div class="w-full md:w-2/6 md:mr-8">
-          <div class="md:text-xs font-thin mb-4 text-left">
-            <span class="float-left">Total veDOUGH</span>
-            <img
-            on:click={() => openModal('simulator.total.staked.ve.dough')}
-            class="token-icon w-18px h-18px pl-4px"
-            src={images.simulator_info}
-            alt="ETH"
-          />
-          </div>
-          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
-            <div class="flex nowrap items-center p-1" on:click={() => sliderModal.open()}>
-              <input
-                disabled
-                class="swap-input-from"
-                inputmode="decimal"
-                autocomplete="off"
-                autocorrect="off"
-                type="string"
-                pattern="^[0-9]*[.,]?[0-9]*$"
-                minlength="1"
-                maxlength="16"
-                spellcheck="false"
-                placeholder={inputs.stakedVeDough}
-                bind:value={inputs.stakedVeDough}
-                on:keyup={calculate}
-                on:change={format}
-              />
-              <div class="h-32px flex items-center">
-                <img
-                  class="token-icon w-30px h-30px"
-                  src={images.veDough}
-                  alt="ETH"
-                />
-                <div class="py-2px px-4px">veDOUGH</div>
+
+        <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black p-8 flex flex-1 flex-col md:flex-row items-left">
+          <div class="w-full md:w-2/3">
+            <div class="font-thin md:text-xs mb-8 text-left">
+              <span class="float-left">Rewards Distrubutions</span>
+              <img
+              on:click={() => openModal('simulator.rewards.distribution')}
+              class="token-icon w-18px h-18px pl-4px"
+              src={images.simulator_info}
+              alt="ETH"
+            />            
+            </div>
+            <div class="w-full">
+              <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
+                Distributed to veDOUGH holders 
+                <button style="background-color: #24D897;" class="ml-4 oven-withdraw-button">60%</button>
               </div>
             </div>
-          </div>            
-        </div>
-        <!-- Total Staking Commitment -->
-        <div class="flex flex-col w-full md:w-2/6 md:mr-8">
-          <div class="md:text-xs font-thin text-left">
-            <span class="float-left">Total Staking Commitment</span>
+            <div class="w-full">
+              <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
+                Used to compound the treasury 
+                <button  style="background-color: #CF4EB7;" class="ml-4 oven-withdraw-button">25%</button>
+              </div>
+            </div>
+            <div class="w-full">
+              <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
+                used to cover costs 
+                <button  style="background-color: #67BDF0;" class="ml-4 oven-withdraw-button">15%</button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="w-full md:w-1/3 align-center hidden md:block">       
             <img
-            on:click={() => openModal('simulator.total.staking.commitment')}
+              class="token-icon w-180px"
+              src={images.simulator_chart}
+              alt="ETH"
+            />
+          </div>          
+        </div>      
+      </div>
+      <!-- SECOND FLEX ROW - TOTAL STAKED veDOUGH | REWARDS | APR -->
+      <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
+        <div class="w-full flex flex-col md:flex-row">
+          <!-- Total Staked veDOUGH -->
+          <div class="w-full md:w-2/6 md:mr-8">
+            <div class="md:text-xs font-thin mb-4 text-left">
+              <span class="float-left">Total veDOUGH</span>
+              <img
+              on:click={() => openModal('simulator.total.staked.ve.dough')}
               class="token-icon w-18px h-18px pl-4px"
               src={images.simulator_info}
               alt="ETH"
             />
-          </div>
-          <div on:click={() => sliderModal.open()} class="flex pt-2 md:pt-7 mb-8 md:mb-0 justify-between">
-            <div class="flex flex-col justify-between w-1/2 md:w-2/3">
-              {#each rewards as reward}
-              <div class="flex h-18px">
-                <div style={`width: ${18 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">       
+            </div>
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
+              <div class="flex nowrap items-center p-1" on:click={() => sliderModal.open()}>
+                <input
+                  disabled
+                  class="swap-input-from"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  autocorrect="off"
+                  type="string"
+                  pattern="^[0-9]*[.,]?[0-9]*$"
+                  minlength="1"
+                  maxlength="16"
+                  spellcheck="false"
+                  placeholder={inputs.stakedVeDough}
+                  bind:value={inputs.stakedVeDough}
+                  on:keyup={calculate}
+                  on:change={format}
+                />
+                <div class="h-32px flex items-center">
+                  <img
+                    class="token-icon w-30px h-30px"
+                    src={images.veDough}
+                    alt="ETH"
+                  />
+                  <div class="py-2px px-4px">veDOUGH</div>
                 </div>
               </div>
-            {/each}
-            </div>
-            <div class="w-full md:w-1/3 md:pl-2">
-              {#each rewards as reward}
-              <div class="md:text-xs font-thin text-right h-18px">
-                <span class="font-bold">{reward.percentage}%</span>
-                {reward.commitment}
-              </div>
-            {/each}
-            </div> 
+            </div>            
           </div>
-        </div>
-        <!-- Expected APR -->
-        <div class="w-full md:w-1/6 md:mr-8">
-          <div class="md:text-xs font-thin mb-4 text-left">
-            <span class="float-left">Expected Treasury APR</span>
-            <img
-            on:click={() => openModal('simulator.expected.apr')}
-              class="token-icon w-18px h-18px pl-4px"
-              src={images.simulator_info}
-              alt="ETH"
-            />
-          </div>
-          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
-            <div class="flex nowrap items-center p-1">
-              <input
-                class="swap-input-from"
-                inputmode="decimal"
-                autocomplete="off"
-                autocorrect="off"
-                type="string"
-                pattern="^[0-9]*?[0-9]*$"
-                minlength="1"
-                maxlength="4"
-                spellcheck="false"
-                placeholder={inputs.expectedApr}
-                bind:value={inputs.expectedApr}
-                on:keyup={calculate}
-                on:change={format}
+          <!-- Total Staking Commitment -->
+          <div class="flex flex-col w-full md:w-2/6 md:mr-8">
+            <div class="md:text-xs font-thin text-left">
+              <span class="float-left">Total Staking Commitment</span>
+              <img
+              on:click={() => openModal('simulator.total.staking.commitment')}
+                class="token-icon w-18px h-18px pl-4px"
+                src={images.simulator_info}
+                alt="ETH"
               />
-              <div class="h-32px flex items-center">
-                <img
-                  class="token-icon w-30px h-30px"
-                  src={images.simulator_launch}
-                  alt="ETH"
-                />
-              </div>
             </div>
-          </div>            
-        </div>
-        <!-- Rewards Unclaimed -->
-        <div class="w-full md:w-1/6 md:mr-8">
-          <div class="md:text-xs font-thin mb-4 text-left">
-            <span class="float-left">Rewards Unclaimed</span>
-            <img
-            on:click={() => openModal('simulator.rewards.unclaimed')}
-              class="token-icon w-18px h-18px pl-4px"
-              src={images.simulator_info}
-              alt="ETH"
-            />
+            <div on:click={() => sliderModal.open()} class="flex pt-2 md:pt-7 mb-8 md:mb-0 justify-between">
+              <div class="flex flex-col justify-between w-1/2 md:w-2/3">
+                {#each rewards as reward}
+                <div class="flex h-18px">
+                  <div style={`width: ${18 * (reward.percentage/100)}rem`} class="mt-8px percentage-bar bg-black h-2 roundedxs">       
+                  </div>
+                </div>
+              {/each}
+              </div>
+              <div class="w-full md:w-1/3 md:pl-2">
+                {#each rewards as reward}
+                <div class="md:text-xs font-thin text-right h-18px">
+                  <span class="font-bold">{reward.percentage}%</span>
+                  {reward.commitment}
+                </div>
+              {/each}
+              </div> 
+            </div>
           </div>
-          <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
-            <div class="flex nowrap items-center p-1">
-              <input
-                class="swap-input-from"
-                inputmode="decimal"
-                autocomplete="off"
-                autocorrect="off"
-                type="string"
-                pattern="^[0-9]*?[0-9]*$"
-                minlength="1"
-                maxlength="4"
-                spellcheck="false"
-                placeholder={inputs.rewardsUnclaimed}
-                bind:value={inputs.rewardsUnclaimed}
-                on:keyup={calculate}
-                on:change={format}
+          <!-- Expected APR -->
+          <div class="w-full md:w-1/6 md:mr-8">
+            <div class="md:text-xs font-thin mb-4 text-left">
+              <span class="float-left">Expected Treasury APR</span>
+              <img
+              on:click={() => openModal('simulator.expected.apr')}
+                class="token-icon w-18px h-18px pl-4px"
+                src={images.simulator_info}
+                alt="ETH"
               />
-              <div class="h-32px flex items-center">
-                <img
-                  class="token-icon w-30px h-30px"
-                  src={images.simulator_sword}
-                  alt="ETH"
-                />
-              </div>
             </div>
-          </div>                
-        </div>  
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
+              <div class="flex nowrap items-center p-1">
+                <input
+                  class="swap-input-from"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  autocorrect="off"
+                  type="string"
+                  pattern="^[0-9]*?[0-9]*$"
+                  minlength="1"
+                  maxlength="4"
+                  spellcheck="false"
+                  placeholder={inputs.expectedApr}
+                  bind:value={inputs.expectedApr}
+                  on:keyup={calculate}
+                  on:change={format}
+                />
+                <div class="h-32px flex items-center">
+                  <img
+                    class="token-icon w-30px h-30px"
+                    src={images.simulator_launch}
+                    alt="ETH"
+                  />
+                </div>
+              </div>
+            </div>            
+          </div>
+          <!-- Rewards Unclaimed -->
+          <div class="w-full md:w-1/6 md:mr-8">
+            <div class="md:text-xs font-thin mb-4 text-left">
+              <span class="float-left">Rewards Unclaimed</span>
+              <img
+              on:click={() => openModal('simulator.rewards.unclaimed')}
+                class="token-icon w-18px h-18px pl-4px"
+                src={images.simulator_info}
+                alt="ETH"
+              />
+            </div>
+            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px bg-white mb-8 md:mt-8">
+              <div class="flex nowrap items-center p-1">
+                <input
+                  class="swap-input-from"
+                  inputmode="decimal"
+                  autocomplete="off"
+                  autocorrect="off"
+                  type="string"
+                  pattern="^[0-9]*?[0-9]*$"
+                  minlength="1"
+                  maxlength="4"
+                  spellcheck="false"
+                  placeholder={inputs.rewardsUnclaimed}
+                  bind:value={inputs.rewardsUnclaimed}
+                  on:keyup={calculate}
+                  on:change={format}
+                />
+                <div class="h-32px flex items-center">
+                  <img
+                    class="token-icon w-30px h-30px"
+                    src={images.simulator_sword}
+                    alt="ETH"
+                  />
+                </div>
+              </div>
+            </div>                
+          </div>  
+        </div>
       </div>
-    </div>
-    <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
+      <!-- THIRD FLEX ROW - YOUR STAKED DOUGH | COMMITMENT -->
       <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
         <div class="w-full flex flex-col md:flex-row">
           <div class="w-full md:w-1/2 md:mr-4">
@@ -716,7 +778,7 @@
               You will receive: 
             </div>   
             <div class="md:text-base mr-2">
-             {outputs.user.expectedVeDough}
+            {outputs.user.expectedVeDough}
             </div>       
             <img
               class="token-icon w-30px h-30px"
@@ -727,124 +789,123 @@
           </div>
           <div class="font-thin mx-6 hidden md:block">|</div>  
           <div class="md:text-xs mt-2 md:mt-0 font-thin">For 3 years commitment: 1 DOUGH = 1 veDOUGH</div>
-           
+          
         </div>
       </div>
+      <!-- FOURTH FLEX ROW - SUMMARY -->
+      <div class="flex flex-row gap-2 mb-2">
+        <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey  rounded text-black p-8 flex flex-auto flex-col items-left">
+          <div class="font-huge leading-2 mb-8 text-center">Summary</div>
+          <div class="flex flex-col md:flex-row pb-4">
+            <div class="flex-initial w-full md:w-1/3">
+              <div class="font-thin">Your Expected Returns (Yearly)</div>
+              <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.user.expectedYearlyReturns)}</div>
+            </div>
+            <div class="flex-initial w-full md:w-1/3 mt-2 md:mt-0">
+              <div class="font-thin">Your Expected Returns (Monthly)</div>
+              <div class="md:text-base mb-4  mt-2">{formatFiat(outputs.user.expectedAverageMontlyReturns)}</div>
+            </div>
+            <div class="flex-initial w-full md:w-1/3 mt-2 md:mt-0">
+              <div class="font-thin">Your Expected APR</div>
+              <div class="md:text-base mb-4 mt-2">{outputs.user.expectedApr}%</div>
+            </div>
+          </div>     
+          <div class="flex flex-col md:flex-row pt-4 border-t-1 border-gray-50">
+            <div class="flex-initial w-full md:w-1/3 mt-4">
+              <div class="font-thin">Treasury Expected Returns (Yearly)</div>
+              <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.treasury.expectedYearlyReturns)}</div>
+            </div>
+            <div class="flex-initialw-full md:w-1/3 mt-4">
+              <div class="font-thin">Treasury Expected Returns (Monthly)</div>
+              <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.treasury.expectedAverageMontlyReturns)}</div>
+            </div>
 
-    <!-- FOURTH FLEX ROW - SUMMARY -->
-    <div class="flex flex-row gap-2 mb-2">
-      <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey  rounded text-black p-8 flex flex-auto flex-col items-left">
-        <div class="font-huge leading-2 mb-8 text-center">Summary</div>
-        <div class="flex flex-col md:flex-row pb-4">
-          <div class="flex-initial w-full md:w-1/3">
-            <div class="font-thin">Your Expected Returns (Yearly)</div>
-            <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.user.expectedYearlyReturns)}</div>
-          </div>
-          <div class="flex-initial w-full md:w-1/3 mt-2 md:mt-0">
-            <div class="font-thin">Your Expected Returns (Monthly)</div>
-            <div class="md:text-base mb-4  mt-2">{formatFiat(outputs.user.expectedAverageMontlyReturns)}</div>
-          </div>
-          <div class="flex-initial w-full md:w-1/3 mt-2 md:mt-0">
-            <div class="font-thin">Your Expected APR</div>
-            <div class="md:text-base mb-4 mt-2">{outputs.user.expectedApr}%</div>
-          </div>
-        </div>     
-        <div class="flex flex-col md:flex-row pt-4 border-t-1 border-gray-50">
-          <div class="flex-initial w-full md:w-1/3 mt-4">
-            <div class="font-thin">Treasury Expected Returns (Yearly)</div>
-            <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.treasury.expectedYearlyReturns)}</div>
-          </div>
-          <div class="flex-initialw-full md:w-1/3 mt-4">
-            <div class="font-thin">Treasury Expected Returns (Monthly)</div>
-            <div class="md:text-base mb-4 mt-2">{formatFiat(outputs.treasury.expectedAverageMontlyReturns)}</div>
-          </div>
+            <div class="w-full md:w-1/3 mt-4">
+              <div class="font-thin">Tot veDOUGH (Yours + Others)</div>
+              <div class="flex items-center justify-center w-full mt-2">
+                <div class="mr-2">{formatFiat(projections.median.farming.totalStakedVeDough)}</div>
+                <img
+                class="token-icon w-30px h-30px"
+                src={images.veDough}
+                alt="ETH"
+                />
+                <div class="px-4px font-thin">veDOUGH</div>               
+              </div> 
+            </div>
 
-          <div class="w-full md:w-1/3 mt-4">
-            <div class="font-thin">Tot veDOUGH (Yours + Others)</div>
-            <div class="flex items-center justify-center w-full mt-2">
-              <div class="mr-2">{formatFiat(projections.median.farming.totalStakedVeDough)}</div>
-              <img
-              class="token-icon w-30px h-30px"
-              src={images.veDough}
-              alt="ETH"
-              />
-              <div class="px-4px font-thin">veDOUGH</div>               
-             </div> 
+          </div>      
+        </div>
+      </div>
+      <!-- CHARTS SECTION -->
+      <div class="w-92pc mx-4 md:w-full md:mx-0">
+        {#key projections}
+          <Tabs tabs={tabs} projections={projections}/>
+        {/key}
+      </div>
+      <!-- PERMALINK SECTION -->
+      <div class="flex flex-row gap-2 mb-2">
+        <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
+          <div class="w-full flex flex-col md:flex-row">
+            <div class="w-full md:w-1/2 md:mr-4">
+              <div class="w-full font-thin text-left md:text-xs mb-4">
+                <span class="float-left">Name Yourself</span>
+              </div>
+              <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8">
+                <div class="w-full flex nowrap items-center">
+                  <input
+                  class="w-full swap-input-from"
+                  inputmode="text"
+                  autocomplete="off"
+                  autocorrect="off"
+                  type="string"
+                  spellcheck="false"
+                  placeholder={simulation.author}
+                  bind:value={simulation.author}
+                  on:keyup={permalink_url = null}
+                  />
+                </div>
+              </div>                 
+            </div>
+            <div class="w-full md:w-1/2 md:ml-4">
+              <div class="w-full font-thin text-left md:text-xs mb-4">
+                <span class="float-left">Name Your Simulation</span>
+              </div>  
+              <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8">
+                <div class="w-full flex nowrap items-center">
+                  <input
+                  class="w-full swap-input-from"
+                  inputmode="text"
+                  autocomplete="off"
+                  autocorrect="off"
+                  type="string"
+                  spellcheck="false"
+                  placeholder={simulation.name}
+                  bind:value={simulation.name}
+                  on:keyup={permalink_url = null}
+                  />
+                </div>
+              </div>
+            </div>
+          </div> 
+          <div class="flex flex-col md:flex-row items-center">
+            <button 
+            on:click={() => getPermalink()}
+            class="w-full btnbig text-white rounded-8px p-15px">
+            {#if permalink_url}
+              {#if simulationChanged}
+                Save your simulation, get a permalink!
+              {:else}
+                <a target="_blank" href={permalink_url}>
+                  Your Simulation link is: {permalink_url}
+                </a>
+              {/if}
+            {:else}
+              Save your simulation, get a permalink!
+            {/if}
+          </button>
           </div>
-
         </div>      
       </div>
     </div>
-    <!-- CHARTS SECTION -->
-    <div class="w-92pc mx-4 md:w-full md:mx-0">
-    {#key projections}
-      <Tabs tabs={tabs} projections={projections}/>
-    {/key}
-  </div>
-
-    <div class="flex flex-row gap-2 mb-2">
-      <div class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col">
-        <div class="w-full flex flex-col md:flex-row">
-          <div class="w-full md:w-1/2 md:mr-4">
-            <div class="w-full font-thin text-left md:text-xs mb-4">
-              <span class="float-left">Name Yourself</span>
-            </div>
-            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8">
-              <div class="w-full flex nowrap items-center">
-                <input
-                class="w-full swap-input-from"
-                inputmode="text"
-                autocomplete="off"
-                autocorrect="off"
-                type="string"
-                spellcheck="false"
-                placeholder={simulation.author}
-                bind:value={simulation.author}
-                on:keyup={permalink_url = null}
-                />
-              </div>
-            </div>                 
-          </div>
-          <div class="w-full md:w-1/2 md:ml-4">
-            <div class="w-full font-thin text-left md:text-xs mb-4">
-              <span class="float-left">Name Your Simulation</span>
-            </div>  
-            <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8">
-              <div class="w-full flex nowrap items-center">
-                <input
-                class="w-full swap-input-from"
-                inputmode="text"
-                autocomplete="off"
-                autocorrect="off"
-                type="string"
-                spellcheck="false"
-                placeholder={simulation.name}
-                bind:value={simulation.name}
-                on:keyup={permalink_url = null}
-                />
-              </div>
-            </div>
-          </div>
-        </div> 
-        <div class="flex flex-col md:flex-row items-center">
-          <button 
-          on:click={() => getPermalink()}
-          class="w-full btnbig text-white rounded-8px p-15px">
-          {#if permalink_url}
-            {#if simulationChanged}
-              Save your simulation, get a permalink!
-            {:else}
-              <a target="_blank" href={permalink_url}>
-                Your Simulation link is: {permalink_url}
-              </a>
-            {/if}
-          {:else}
-            Save your simulation, get a permalink!
-          {/if}
-        </button>
-        </div>
-      </div>      
-    </div>
-    
   </div>
 </div>

@@ -114,6 +114,9 @@ export const registerConnection = async (newWeb3) => {
 };
 
 export const resetConnection = () => {
+  window.localStorage.removeItem('address');
+  window.localStorage.removeItem('walletconnect');
+
   resetWeb3Listeners();
   resetContractCache();
   eth.set({ ...defaultEth, provider: defaultProvider });
