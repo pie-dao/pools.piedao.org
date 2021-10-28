@@ -13,6 +13,7 @@
 
   export const showModal = (data) => {
     _data = data;
+    console.log("showModal", _data.votes);
     claimModal.open();
   };
 </script>
@@ -23,14 +24,19 @@
   <div slot="content" class="font-thin text-center hidescrollbar">
     <p class="pb-2">Here's what you have to do:</p>
 
-    {#if _data.proposals && _data.proposals.length}
-      <Proposals proposals={_data.proposals} />
+    {#if _data.votes.length == 0}
+      {#if _data.proposals && _data.proposals.length}
+        <Proposals proposals={_data.proposals} />
+      {:else}
+        <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
+          <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
+        </div>
+      {/if}   
+      <p class="pt-2 mb-8">1. Vote on the current proposals<br />to be eligible to claim rewards</p>
     {:else}
-      <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
-        <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
-      </div>
-    {/if}   
-    <p class="pt-2 mb-8">1. Vote on the current proposals<br />to be eligible to claim rewards</p>
+      <p class="pt-2 mb-8">1. You voted already, so you just need to wait!<br />
+        The SLICE reward distribution will happen every first week of the month.</p>
+    {/if}
    
     <div class="text-center mx-auto">
       <img
