@@ -109,7 +109,7 @@
   };   
 </script>
 
-<Modal backgroundColor="#f3f3f3" bind:this={modal}>
+<Modal title=" " backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
     <InfoModal description_key={modal_content_key}/>
   </span>
