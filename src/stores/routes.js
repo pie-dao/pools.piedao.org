@@ -9,6 +9,7 @@ import Tokensswap from '../pages/Tokensswap.svelte';
 import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
 import DoughStakingCampaign from '../pages/DoughStakingCampaign.svelte';
+import KpiOptionsCampaign from '../pages/KpiOptionsCampaign.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
 import LPStakingV2 from '../pages/LPStakingV2.svelte';
@@ -114,6 +115,8 @@ const formatRoute = (route) => {
       return { page: PiePageSwitch, params: { address } };
     case 'dough-staking-campaign':
       return { page: DoughStakingCampaign };
+    case 'kpi-options-campaign':
+      return { page: KpiOptionsCampaign };      
     case 'dough':
       return { page: Dough };
     case 'learn':
