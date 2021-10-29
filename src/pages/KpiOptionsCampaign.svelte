@@ -158,7 +158,7 @@
               <img src={images.two_m_prize_text_bg} alt="" width="80px"/>
               <div class="w-1px h-30px dashed mb-20px"></div>
             {:else}
-              <img src={images.two_m_prize_text} alt="" width="80px"/>
+              <img class="pb-4px" src={images.two_m_prize_text} alt="" width="80px"/>
               <div class="w-1px h-30px dashed mt-15px"></div>
             {/if}
           </div>
@@ -167,7 +167,7 @@
               <img src={images.five_m_prize_text_bg} alt="" width="80px"/>
               <div class="w-1px h-30px dashed mb-22px"></div>
             {:else}
-              <img src={images.five_m_prize_text} alt="" width="80px"/>
+              <img class="pb-4px" src={images.five_m_prize_text} alt="" width="80px"/>
               <div class="w-1px h-30px dashed mt-15px"></div>
             {/if}
           </div>
