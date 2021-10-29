@@ -14,6 +14,7 @@
   $: if($stakingStats.totalStakedDough) {
     totalStakedDough = toNum($stakingStats.totalStakedDough);
     currentBarPercentage = Math.round((totalStakedDough * 100) / maxBarValue);
+    console.log("currentBarPercentage", currentBarPercentage);
   }
 </script>
 
