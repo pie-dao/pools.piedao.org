@@ -12,7 +12,10 @@
   let totalStakedDough = 0;
 
   $: if($stakingStats.totalStakedDough) {
-    totalStakedDough = toNum($stakingStats.totalStakedDough);
+    totalStakedDough = toNum($stakingStats.totalStakedDough) <= maxBarValue 
+      ? toNum($stakingStats.totalStakedDough)
+      : maxBarValue;
+
     currentBarPercentage = Math.round((totalStakedDough * 100) / maxBarValue);
     console.log("currentBarPercentage", currentBarPercentage);
   }
@@ -107,7 +110,9 @@
           {/if}
         </div>
       </div>
-      <div class={`absolute bottom-0 flex items-center h-${currentBarPercentage}pc bg-electricgreen rounded-circle w-50px m-0`}>
+      <div 
+        style="height: {currentBarPercentage}%;"
+        class={`absolute bottom-0 flex items-center bg-electricgreen rounded-circle w-50px m-0`}>
         <span class="font-bold w-50px m-25pc text-left items-left h-100pc mb-50px rotate180" style="writing-mode: vertical-lr; text-orientation: sideways-left;">{formatFiat(totalStakedDough, ',', '.', '')} DOUGH</span>
       </div>
     </div>
@@ -197,7 +202,9 @@
             {/if}
           </div>
         </div>
-        <div class={`flex items-center w-${currentBarPercentage}pc bg-electricgreen rounded-circle h-44px m-0`}>
+        <div 
+          style={`width: ${currentBarPercentage}%;`}
+          class={`flex items-center bg-electricgreen rounded-circle h-44px m-0`}>
           <img src="{images.arrow_right}" alt="dough" width="75px" class="ml-4 mr-2 hidden lg:block"/>
           <span class="font-thin ml-4 lg:ml-0 mr-2 hidden lg:block">Already staked</span>
           <span class="font-bold ml-4 lg:ml-0">{formatFiat(totalStakedDough, ',', '.', '')} DOUGH</span>
