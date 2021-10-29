@@ -35,7 +35,7 @@ export const close = () => {
              {#if title}
                 <h1 class="pl-50px text-center text-xl w-100pc"> {title} </h1>
             {/if}
-            <button on:click={close} class="w-30px h-30px mr-20px self-center">
+            <button on:click={close} class="w-30px h-30px self-center">
                 <img src={images.closebutton} alt="closebutton" />
             </button>
         </div>
