@@ -37,7 +37,7 @@
       <span class="text-base md:text-xl mb-2" data-aos="fade-up" data-aos-delay="100">KPI Options</span>
     </div>
     <img class="crisp" src={images.five_m_prize} alt="kpi options" data-aos="fade-up" data-aos-delay="150"/>
-    <div class="text-base md:text-lg font-thin text-center mt-4" data-aos="fade-up" data-aos-delay="200">if 15M DOUGH are staked<br />by 30th March 2022</div>
+    <div class="text-base md:text-lg font-thin text-center mt-4" data-aos="fade-up" data-aos-delay="200">If 15M DOUGH are staked<br />by March 30th, 2022</div>
   </div>
 </div>
 
@@ -159,7 +159,7 @@
               <div class="w-1px h-30px dashed mb-20px"></div>
             {:else}
               <img src={images.two_m_prize_text} alt="" width="80px"/>
-              <div class="w-1px h-30px dashed mt-10px"></div>
+              <div class="w-1px h-30px dashed mt-15px"></div>
             {/if}
           </div>
           <div class="flex flex-col items-center absolute pl-91pc lg:pl-90pc text-center">
@@ -168,7 +168,7 @@
               <div class="w-1px h-30px dashed mb-22px"></div>
             {:else}
               <img src={images.five_m_prize_text} alt="" width="80px"/>
-              <div class="w-1px h-30px dashed mt-12px"></div>
+              <div class="w-1px h-30px dashed mt-15px"></div>
             {/if}
           </div>
         </div>
