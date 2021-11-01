@@ -26,7 +26,7 @@
   "0x1083d743a1e53805a95249fef7310d75029f7cd6": {
     "symbol": "SLICE",
     "useMintOverBuy": true,
-    "isExperipie": true,
+    "isGoverningMining": true,
     "buyButton": false,
     "name": "PieDAO Reward Pie",
     "description": "The Official Reward Pie for Dough Staking",
