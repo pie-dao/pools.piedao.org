@@ -8,7 +8,6 @@ import { isAddress } from '@pie-dao/utils';
 import { Observable } from 'rxjs';
 import moment from 'moment';
 import sharesTimeLockABI from '../abis/sharesTimeLock.json';
-import kpiOptionsABI from '../abis/kpiOptions.json';
 import veDoughABI from '../abis/veDoughABI.json';
 import DoughABI from '../abis/DoughABI.json';
 import smartcontracts from '../config/smartcontracts.json';
@@ -16,6 +15,7 @@ import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import PartecipationJson from '../config/rewards/test.json';
+import KPIOptionsJson from '../config/rewards/kpi_options.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
 import { stakingDataInterval, fetchStakingDataLock } from '../stores/eth/writables.js';
 
@@ -36,7 +36,6 @@ export let dataObj = {
 };
 
 export let sharesTimeLock = false;
-export let kpiOptions = false;
 export let veDOUGH = false;
 export const minLockAmount = 1;
 export const AVG_SECONDS_MONTH = 2628000;
@@ -191,7 +190,10 @@ export async function calculateKpiOptions(eth) {
   ];
 
   // fetchking the kpiOption holded by current address...
-  const userKpiOptions = BigNumber((await kpiOptions.balanceOf(eth.address)).toString());
+  let balanceOf = KPIOptionsJson.find(account => 
+    account.address.toLowerCase() == eth.address.toLowerCase());
+    
+  const userKpiOptions = balanceOf ? BigNumber(balanceOf.balance) : BigNumber(0);
   // fetching updated staking stats...
   const stakingStats = await fetchStakingStats(eth.provider, 1);
   // taking thte stakedDough amount from stats...
@@ -216,12 +218,6 @@ export function initContracts(eth) {
   veDOUGH = new ethers.Contract(
     smartcontracts.veDOUGH,
     veDoughABI,
-    eth.signer || eth.provider,
-  );
-
-  kpiOptions = new ethers.Contract(
-    smartcontracts.kpiOptions,
-    kpiOptionsABI,
     eth.signer || eth.provider,
   );
 }
