@@ -67,6 +67,14 @@
     }
   });  
 
+  function handleUpdate(event) {
+    data = event.detail.data;
+
+    dispatch('update', {
+        data: data,
+      });
+  }
+
   function openModal(content_key) {
     modal_content_key = content_key;
     modal.open();
@@ -115,7 +123,7 @@
   </span>
 </Modal>
 
-<ClaimModal bind:this={claimModal}/>
+<ClaimModal bind:this={claimModal} on:update={handleUpdate}/>
 
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
   <div class="font-huge text-center mt-6">Summary</div>
@@ -174,22 +182,7 @@
       {#if eth.address}
       <button 
       class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
-      on:click={() => {
-        if(!data.accountWithdrawableRewards.eq(0) && staker.participation == 1) {
-          claim(eth).then(updated_data => {
-          data = updated_data;
-          data = data;
-
-          dispatch('update', {
-            data: data,
-          });          
-        }).catch(error => {
-          console.error(error);
-        });
-        } else {
-          claimModal.showModal(data);
-        }
-      }}
+      on:click={() => {claimModal.showModal(data, staker);}}
       > Claim</button>
     {/if}
     </div>
