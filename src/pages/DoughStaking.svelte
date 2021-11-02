@@ -19,10 +19,10 @@
     calculateVeDough
   } from '../helpers/staking.js';
 
-  import StakingRewards from '../components/StakingRewards.svelte';
-  import StakingPositions from '../components/StakingPositions.svelte';
-  import StakingSummary from '../components/StakingSummary.svelte';
-  import StakingStats from '../components/StakingStats.svelte';
+  import StakingRewards from '../components/staking/Rewards.svelte';
+  import StakingPositions from '../components/staking/Positions.svelte';
+  import StakingSummary from '../components/staking/Summary.svelte';
+  import StakingStats from '../components/staking/Stats.svelte';
   import StakedModal from '../components/elements/StakedModal.svelte';
 
   let veDOUGH = 0;

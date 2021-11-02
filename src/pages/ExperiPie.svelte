@@ -743,14 +743,16 @@
       {/if}
   </div>
   
-  <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3" onclick="location.href='#/oven'">
-    <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
-    <div class="">
-      <div class="text-base font-bold leading-5">Bake your Pie</div>
-      <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
-      <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
-    </div>
-  </button>
+  {#if isBakingPie(params.address)}
+    <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3" onclick="location.href='#/oven'">
+      <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+      <div class="">
+        <div class="text-base font-bold leading-5">Bake your Pie</div>
+        <div class="text-sm font-thin block md:hidden">Save 97% gas</div>
+        <div class="text-sm font-thin hidden md:block">Wait and save 97% gas</div>
+      </div>
+    </button>
+  {/if}
 
 
   <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc" onclick="location.href='#/swap'">

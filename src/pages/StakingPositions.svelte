@@ -7,7 +7,7 @@
     dataObj,
     observable
   } from '../helpers/staking.js';
-  import StakingPositions from '../components/StakingPositions.svelte';
+  import StakingPositions from '../components/staking/Positions.svelte';
 
   $: isLoading = false;
   $: data = dataObj;

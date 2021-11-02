@@ -45,6 +45,7 @@
     "svelte": "^3.32.0",
     "svelte-apollo": "^0.3.0",
     "svelte-i18n": "^3.0.4",
+    "svelte-markdown": "^0.1.12",
     "svelte-range-slider-pips": "^1.8.0",
     "svelte-scrollto": "^0.2.0",
     "svelte-tabs": "^1.1.0",

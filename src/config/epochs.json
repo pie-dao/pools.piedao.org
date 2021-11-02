@@ -1,0 +1,209 @@
+{
+  "epochs": [{
+    "proposals": [
+      {
+        "id": "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+        "snapshot": 12970475,
+        "title": "proposal 1",
+        "url": "https://snapshot.org/#/piedao/proposal/QmcnFgsGmE5DazNxUaorm4XTRkf61QJ8iFxVoVBMKFW1EL"
+      },
+      {
+        "id": "QmSbx636cXdGYYKXLnHHb3TGdgUJMt3Nd6TXVMDpTaXxEW",
+        "snapshot": 12970475,
+        "title": "proposal 2",
+        "url": "https://snapshot.org/#/piedao/proposal/QmcnFgsGmE5DazNxUaorm4XTRkf61QJ8iFxVoVBMKFW1EL"
+      },
+      {
+        "id": "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+        "snapshot": 12970475,
+        "title": "proposal 3",
+        "url": "https://snapshot.org/#/piedao/proposal/QmcnFgsGmE5DazNxUaorm4XTRkf61QJ8iFxVoVBMKFW1EL"
+      },
+      {
+        "id": "QmYYo1CWXBtasWCNK1Qgb2XWno7acUzJCkdP6vEA7oNwEE",
+        "snapshot": 12970475,
+        "title": "proposal 4",
+        "url": "https://snapshot.org/#/piedao/proposal/QmcnFgsGmE5DazNxUaorm4XTRkf61QJ8iFxVoVBMKFW1EL"
+      }
+    ],
+    "participants": [
+      {
+        "address": "0x42556f667Dfc74704914F98d1e0c0aC4Ea2f492e",
+        "score": 7498.463335269285,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]
+      },
+      {
+        "address": "0x00c67d9d6d3d13b42a87424e145826c467cccd84",
+        "score": 723.3679947200367,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]
+      },      
+      {
+        "address": "0x01e6fd0ae73d9194b19f9b376065577927a0d5f5",
+        "score": 28284.92080681872,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]        
+      },
+      {
+        "address": "0x0430605323465e26dc21fbaaa9a1a4be6ae9d496",
+        "score": 903.5348196651365,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]
+      },
+      {
+        "address": "0x0be93c61df823779e7cc50d1430f6e0c44b14fe3",
+        "score": 16608.19072195771,
+        "votes": [
+          {
+            "proposal" : "QmSPg29Rgqkx95tioYew13q5FYekiNNMMbPhZ8hTPC3ERK",
+            "vote": "yes"
+          },
+          {
+            "proposal" : "QmWw21mShD2EPtWd9tzy7ZFrz9pLVwTHsBmnrNbQ1mcJ42",
+            "vote": "nop"
+          }
+        ]        
+      }
+    ],
+    "startDate": 1627768800000,
+    "endDate": 1630360800000,
+    "startBlock": 12970475,
+    "endBlock": 13171232,
+    "merkleTree": {
+      "elements": [
+        "0x30fa2548da7765171a31929b719b6eaa41ee82302e721bea779be4a377be3a2a",
+        "0x5bb4976c8976653c37f1b60d85707a27390fa243a83148cf7f70fb5b7e3fd48e",
+        "0x63aa17553ed27b5535759d550ebe046268ca2579bce2cebd85ad3adf9f01270b",
+        "0x8fb5631245b6d0aa2eb8dad8b6ec2c766cc227e22c1691cc5a09b77c9146e028",
+        "0x95707c19e80ff95eacfe466b7193c590288d8a7e598cfb20eac4771229046516",
+        "0x96cacbfd1c62bbb30092901328c816991f38fdfd46bc6c9543c37e4ac5d662f3",
+        "0x9d1165196932daa7779a0a3d5a0aea21400d58ba34ccec30a3a2117140111a25",
+        "0xb5170bac6827ca2b82934888d528533829568933fddbc3f02b0345b9378839ab",
+        "0xccf4345208a217faccca6d9132effa531cbb9cce16ab196395b8d9d1da4ff7a6",
+        "0xf473f2a6acb3cd16b6bf5643eb4277aa174029f95ccfa0b623d084e32b0b3083",
+        "0xf6a10d9b9339d775308947c539173b11cf25368931eb8e4139a90f9c0fddf471"
+      ],
+      "layers": [
+        [
+          "0x30fa2548da7765171a31929b719b6eaa41ee82302e721bea779be4a377be3a2a",
+          "0x5bb4976c8976653c37f1b60d85707a27390fa243a83148cf7f70fb5b7e3fd48e",
+          "0x63aa17553ed27b5535759d550ebe046268ca2579bce2cebd85ad3adf9f01270b",
+          "0x8fb5631245b6d0aa2eb8dad8b6ec2c766cc227e22c1691cc5a09b77c9146e028",
+          "0x95707c19e80ff95eacfe466b7193c590288d8a7e598cfb20eac4771229046516",
+          "0x96cacbfd1c62bbb30092901328c816991f38fdfd46bc6c9543c37e4ac5d662f3",
+          "0x9d1165196932daa7779a0a3d5a0aea21400d58ba34ccec30a3a2117140111a25",
+          "0xb5170bac6827ca2b82934888d528533829568933fddbc3f02b0345b9378839ab",
+          "0xccf4345208a217faccca6d9132effa531cbb9cce16ab196395b8d9d1da4ff7a6",
+          "0xf473f2a6acb3cd16b6bf5643eb4277aa174029f95ccfa0b623d084e32b0b3083",
+          "0xf6a10d9b9339d775308947c539173b11cf25368931eb8e4139a90f9c0fddf471"
+        ],
+        [
+          "0x9d4b2fa24366c412bfc7ddd328c87ad2c8e987c56dd74894ea9fc309a0687659",
+          "0x3772d5a32883bb57041bc381ee90a2ddffc624cb9b06f432eea82c763fdedaa1",
+          "0x20e6193165592ff8c65cf4fc4130e1444d204df6f27a63745db7b7a73af34981",
+          "0x3fd2424b8fb973bf831d842a09cf043e12f92215888e6cb97f4e0a82d57c0622",
+          "0x7c5f7458fecc01dee1e46d2acb9d7f63b540b8e2b504c08687dc7bb442232ee9",
+          "0xf6a10d9b9339d775308947c539173b11cf25368931eb8e4139a90f9c0fddf471"
+        ],
+        [
+          "0xa4933e7d3ec14b4d84f60ef7b606cc00f6e93b59d8093afe6ce3f5f5218be91c",
+          "0xa368395d8447cd911e688c6602037f73a9508b2e872ba93b51d44d9e32d9302f",
+          "0x87e74fabe19279391fe3a93e96e3862f86f3d67276b118e182d76687534136fc"
+        ],
+        [
+          "0x6efbfc38cf838bc672d3329ff407d4f487f4b716be45f9f60e894fcdb4b03bcc",
+          "0x87e74fabe19279391fe3a93e96e3862f86f3d67276b118e182d76687534136fc"
+        ],
+        [
+          "0x0e5a0ea3a8369f1b976957d699d13b057b6c9fc5077984e4e595da4ea825d967"
+        ]
+      ],
+      "leafs": [
+        {
+          "address": "0x42556f667Dfc74704914F98d1e0c0aC4Ea2f492e",
+          "participation": 0,
+          "staker": {
+            "accountLocks": [],
+            "accountRewards": [],
+            "accountVeTokenBalance": "2122114213453910000000",
+            "accountWithdrawableRewards": "0",
+            "accountWithdrawnRewards": "2122114213453910000000",
+            "id": "0x42556f667Dfc74704914F98d1e0c0aC4Ea2f492e"
+          },
+          "votes": [],
+          "leaf": "0xf473f2a6acb3cd16b6bf5643eb4277aa174029f95ccfa0b623d084e32b0b3083"
+        }
+      ],
+      "root": "0x0e5a0ea3a8369f1b976957d699d13b057b6c9fc5077984e4e595da4ea825d967"
+    },
+    "stakingStats": {
+      "averageTimeLock": "92418000",
+      "boostedLocksCounter": "9",
+      "boostedLocksValue": "15231080000000000000000",
+      "depositedLocksCounter": "183",
+      "depositedLocksValue": "5777199924280545277253281",
+      "ejectedLocksCounter": "0",
+      "ejectedLocksValue": "0",
+      "id": "1634128071",
+      "stakersCounter": "146",
+      "timestamp": "1634128071",
+      "totalDoughStaked": "5777199924280545277253281",
+      "veTokenTotalSupply": "5765804412618793913896939",
+      "withdrawnLocksCounter": "0",
+      "withdrawnLocksValue": "0"
+    },
+    "slice": {
+      "usd": 0.5,
+      "underlying": [
+        {
+          "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+          "symbol": "WBTC",
+          "amount": 424
+        },
+        {
+          "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "symbol": "WETH",
+          "amount": 123213.45
+        },
+        {
+          "address": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+          "symbol": "DEFI++",
+          "amount": 12354.476
+        }        
+      ]
+    }
+  }]
+}

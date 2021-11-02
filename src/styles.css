@@ -15,6 +15,14 @@ button:focus {
   outline: none;
 }
 
+.inner {
+  position: absolute;
+}
+
+.rounded-circle {
+  border-radius: 10000px;
+}
+
 /* .bg-button {
   display: inline-flex;
   border: double 1px transparent;
@@ -43,6 +51,7 @@ button:focus {
   background-color: white;
   padding: 10px;
 }
+
 
 .input-invalid {
   border: solid 1px #f40a50 !important;
@@ -247,10 +256,13 @@ right: 0px;
   background-color: #B7F1E2;
 }
 
+.bg-electricgreen {
+  background-color: #80FF77;
+}
+
 .bg-peppermint {
   background-color: #7EE999;
 }
-
 
 .bg-purple {
   background-color: #8B60F8;
@@ -282,6 +294,10 @@ right: 0px;
 
 .text-red {
   color: #FC4057;
+}
+
+.text-yellow {
+  color: #fec323;
 }
 
 .pointer {
@@ -336,6 +352,10 @@ right: 0px;
 
 .border-t-1 {
   border-top: solid 1px;
+}
+
+.dashed {
+  border: dashed 1px black;
 }
 
 .font-huge {
@@ -423,6 +443,10 @@ right: 0px;
 
 .bg-lightgrey {
   background-color: #f7f7f7;
+}
+
+.bg-darkgrey {
+  background-color: #3c3c3c;
 }
 
 .bg-lightgrey-2 {
@@ -925,6 +949,12 @@ img.oven-illustration {
 
 .spl img.icon {
   @apply h-34px;
+}
+
+.summary-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;  
 }
 
 .spark:hover {
@@ -2078,6 +2108,22 @@ outline: none;
   background-repeat: no-repeat;
   background-size: cover;
   box-shadow: rgb(0 0 0 / 15%) 0px 10px 10px 0px;
+}
+
+.rotate180 {
+  -webkit-transform: rotate(-180deg);
+  -moz-transform: rotate(-180deg);
+  -o-transform: rotate(-180deg);
+  -ms-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+}
+
+.rotate90 {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 .invertcolor {
