@@ -301,13 +301,13 @@
       <p class="font-thin">ℹ️ APR does not account for gains or losses from holding liquidity tokens.</p>
     </div> -->
 
-    {#if governingMining.length }
-    <div class="mt-0 mb-4 md:my-4 lg:my-6">
-      <h1 class="text-lg">💎 Governing Mining</h1>
+  {#if governingMining.length }
+    <div class="mt-10 mb-4 md:mb-0 lg:mb-0">
+      <h1 class="text-lg">💎 Governance Mining</h1>
       <p class="font-thin">Governance Mining Rewards</p>
     </div>
 
-    <div class="flex flex-col justify-around w-100pc content-center lg:flex-row hidden md:flex lg:flex">
+    <div class="flex flex-col justify-around w-99pc content-center lg:flex-row hidden md:flex lg:flex">
       <table class="breakdown-table table-auto w-full">
         <thead>
           <tr>
@@ -371,7 +371,7 @@
     </div>
 
     <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
-      {#each piVaults as pie}
+      {#each governingMining as pie}
       <a class="mx-4 thinborderbottom" href={`#/pie/${pie.address}`}>
         <div class="flex items-center w-100pc py-4">
               <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
