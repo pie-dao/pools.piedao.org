@@ -443,6 +443,9 @@
     controlsLayout="{controlsLayout}"
     />
   </a>
+  <a class="block mt-4 md:hidden" href="#/kpi-options-campaign">
+    <img class="w-100% inline mb-4" src={images.kpi_options} alt="kpi options" />
+  </a>
 </div>
 
 <div class="w-full flex justify-center">

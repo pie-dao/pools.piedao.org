@@ -48,6 +48,7 @@
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
     };
   }) || [];
+  console.log("HERE", pies);
 
   $: featured = [];
   $: tokens = [];
