@@ -14,13 +14,14 @@ import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
-import PartecipationJson from '../config/rewards/test.json';
+import EpochJson from '../config/rewards/epoch.json';
 import { createParticipationTree } from '../classes/MerkleTreeUtils';
 import { stakingDataInterval, fetchStakingDataLock } from '../stores/eth/writables.js';
 import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js'; 
 
 /* eslint-disable import/no-mutable-exports */
 export let dataObj = {
+  address: null,
   totalDoughStaked: BigNumber(0),
   veTokenTotalSupply: BigNumber(0),
   accountAverageDuration: 0,
@@ -45,7 +46,7 @@ let ETH = null;
 /* eslint-enable import/no-mutable-exports */
 
 // in a very next future, this function will fetch directly from backend...
-export const getParticipations = () => PartecipationJson;
+export const getParticipations = () => EpochJson.merkleTree.leafs;
 
 export const canRestake = (lockedAt) => {
   const start = lockedAt * 1000;
@@ -458,6 +459,8 @@ export const fetchStakingData = async (eth) => {
     });
   }
 
+  dataObj.address = eth.address;
+
   const votingPower = dataObj.accountVeTokenBalance && dataObj.veTokenTotalSupply
     ? ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2)
     : 0;
@@ -662,17 +665,15 @@ export async function claim(eth) {
 
 export function prepareProofs(eth) {
   if (!eth.address) return;
-  const merkleTree = createParticipationTree(PartecipationJson);
 
-  console.log('merkleTree', merkleTree);
-  const leaf = merkleTree.leafs.find(
-    (item) => item.address.toLowerCase() === eth.address.toLowerCase(),
+  const leaf = getParticipations().find(
+    (item) => item.address.toLowerCase() === eth.address.toLowerCase()
   );
 
   /* eslint-disable consistent-return */
   return {
     valid: !!leaf,
-    proof: leaf ? merkleTree.merkleTree.getProof(leaf.leaf) : null,
+    proof: leaf ? leaf.proof : null,
   };
   /* eslint-enable consistent-return */
 }

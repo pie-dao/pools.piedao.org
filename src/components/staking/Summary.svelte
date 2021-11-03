@@ -1,7 +1,7 @@
 <script>
   import { _ } from 'svelte-i18n';
   import { formatFiat } from '../../components/helpers.js';
-  import { toNum, claim , getParticipations} from '../../helpers/staking.js';
+  import { toNum } from '../../helpers/staking.js';
   import images from '../../config/images.json';
   import smartcontracts from '../../config/smartcontracts.json';
   import Modal from '../../components/elements/Modal.svelte';
@@ -15,8 +15,6 @@
   export let data;
   export let eth;
 
-  let participations = getParticipations();
-  let staker = {participation: 0};
   let claimModal;
   let votingInfos = "";
   let votingImage = "";
@@ -78,11 +76,6 @@
   function openModal(content_key) {
     modal_content_key = content_key;
     modal.open();
-  }  
-
-  $: if (eth.address) {
-    let founded = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
-    staker = founded ? founded : staker;
   }
 
   const addToken = () => {
@@ -182,7 +175,7 @@
       {#if eth.address}
       <button 
       class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
-      on:click={() => {claimModal.showModal(data, staker);}}
+      on:click={() => {claimModal.showModal(data);}}
       > Claim</button>
     {/if}
     </div>

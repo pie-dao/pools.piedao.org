@@ -2,7 +2,7 @@
   import images from '../../config/images.json';
   import Modal from './Modal.svelte';
   import { formatFiat } from '../../components/helpers.js';
-  import { toNum, claim } from '../../helpers/staking.js';
+  import { toNum, claim, getParticipations} from '../../helpers/staking.js';
   import Proposals from './Proposals.svelte';
   import { piesMarketDataStore } from '../../stores/coingecko.js';
   import { eth } from "../../stores/eth.js";
@@ -13,6 +13,7 @@
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
+  const participations = getParticipations();
 
   let _data;
   let _staker;
@@ -39,7 +40,7 @@
 
   export const showModal = (data, staker) => {
     _data = data;
-    _staker = staker;
+    _staker = participations.find(staker => staker.address.toLowerCase() == _data.address.toLowerCase());
 
     // TODO: remove me
     // _data.accountWithdrawableRewards = new BigNumber(123000000000000000000);
