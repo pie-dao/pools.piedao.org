@@ -10,6 +10,7 @@ import moment from 'moment';
 import sharesTimeLockABI from '../abis/sharesTimeLock.json';
 import veDoughABI from '../abis/veDoughABI.json';
 import DoughABI from '../abis/DoughABI.json';
+import MerkleTreeDistributorABI from '../abis/MerkleTreeDistributorABI.json';
 import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
@@ -636,7 +637,27 @@ export async function claim(eth) {
     console.log('proof', proof);
 
     try {
-      const { emitter } = displayNotification(await veDOUGH.claim(proof.proof));
+      const merkleTreeDistributor = new ethers.Contract(
+        smartcontracts.merkleTreeDistributor,
+        MerkleTreeDistributorABI,
+        eth.signer || eth.provider,
+      );
+
+      const leaf = retrieveLeaf(eth.address);
+
+      const params = {
+        windowIndex: leaf.windowIndex,
+        amount: ethers.BigNumber.from(leaf.amount),
+        accountIndex: leaf.accountIndex,
+        account: ethers.utils.getAddress(eth.address.toLowerCase()),
+        merkleProof: leaf.proof
+      };
+
+      console.log("params", params);
+
+      const { emitter } = displayNotification(
+        await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
+      );
 
       emitter.on('txConfirmed', async () => {
         const subscription = subject('blockNumber').subscribe({
