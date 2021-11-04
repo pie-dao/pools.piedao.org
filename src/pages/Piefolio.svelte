@@ -122,6 +122,7 @@
     })
 
     tokens = orderBy(filtered, ['usdValue'], ['desc']);
+    console.log("tokens", tokens);
   }
 
 </script>
