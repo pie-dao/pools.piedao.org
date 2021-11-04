@@ -45,9 +45,10 @@ const web3Modal = new Web3Modal({
 export const connectWeb3Cached = async () => {
   try {
     console.log("Web3Button -> connectWeb3Cached");
-    resetConnection();
-    console.log("Web3Button -> connectWeb3Cached -> resetConnection");
+    // resetConnection();
+    // console.log("Web3Button -> connectWeb3Cached -> resetConnection");
 
+    console.log("Web3Button -> connectWeb3Cached -> injecting");
     const web3 = await web3Modal.connectTo('injected');
     console.log("Web3Button -> connectWeb3Cached -> injected");
 
