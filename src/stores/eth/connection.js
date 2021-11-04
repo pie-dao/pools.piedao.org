@@ -55,52 +55,47 @@ const setWeb3Listeners = () => {
 };
 
 export const registerConnection = async (newWeb3) => {
-  try {
-    console.log("Web3Button -> registerConnection");
-    const web3 = newWeb3 || get(eth).web3;
-    console.log('newWeb3', newWeb3);
-    if (!web3) {
-      throw new Error('Unable to find a web3 object. Was one passed?');
-    }
-  
-    const provider = new ethers.providers.Web3Provider(web3);
-    const signer = provider.getSigner();
-  
-    const [currentBlockNumber, network, address] = await Promise.all([
-      provider.getBlockNumber(),
-      provider.getNetwork(),
-      signer.getAddress(),
-    ]);
-  
-    window.localStorage.setItem('address', address);
-  
-    const shortAddress = shortenAddress(address);
-    let icon;
-    try {
-      icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
-    } catch (e) {
-      icon = '';
-    }
-  
-    const ens = await provider.lookupAddress(address);
-  
-    eth.set({
-      address,
-      ens,
-      currentBlockNumber,
-      icon,
-      network,
-      provider,
-      shortAddress,
-      signer,
-      web3,
-    });
-  
-    setWeb3Listeners();
-    bumpLifecycle();
-  } catch(error) {
-    console.log("Web3Button -> registerConnection:Error", error);
+  const web3 = newWeb3 || get(eth).web3;
+  console.log('newWeb3', newWeb3);
+  if (!web3) {
+    throw new Error('Unable to find a web3 object. Was one passed?');
   }
+
+  const provider = new ethers.providers.Web3Provider(web3);
+  const signer = provider.getSigner();
+
+  const [currentBlockNumber, network, address] = await Promise.all([
+    provider.getBlockNumber(),
+    provider.getNetwork(),
+    signer.getAddress(),
+  ]);
+
+  window.localStorage.setItem('address', address);
+
+  const shortAddress = shortenAddress(address);
+  let icon;
+  try {
+    icon = jazzicon(16, parseInt(address.slice(2, 10), 16)).outerHTML;
+  } catch (e) {
+    icon = '';
+  }
+
+  const ens = await provider.lookupAddress(address);
+
+  eth.set({
+    address,
+    ens,
+    currentBlockNumber,
+    icon,
+    network,
+    provider,
+    shortAddress,
+    signer,
+    web3,
+  });
+
+  setWeb3Listeners();
+  bumpLifecycle();
 };
 
 export const resetConnection = () => {
