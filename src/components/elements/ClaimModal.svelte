@@ -83,8 +83,9 @@
       buttonText = "Claimed";
 
       setTimeout(() => {
+        claimModal.close();
         buttonText = "Claim SLICE";
-      }, 3000);
+      }, 5000);
     }).catch(error => {
       clearInterval(interval);
       buttonText = "Claim SLICE";
