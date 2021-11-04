@@ -2,7 +2,7 @@
   import images from '../../config/images.json';
   import Modal from './Modal.svelte';
   import { formatFiat } from '../../components/helpers.js';
-  import { toNum, claim, getParticipations} from '../../helpers/staking.js';
+  import { toNum, claim, retrieveLeaf } from '../../helpers/staking.js';
   import Proposals from './Proposals.svelte';
   import { piesMarketDataStore } from '../../stores/coingecko.js';
   import { eth } from "../../stores/eth.js";
@@ -10,13 +10,13 @@
   import smartcontracts from '../../config/smartcontracts.json';
   import isEmpty from 'lodash/isEmpty';
   import BigNumber from 'bignumber.js';
+  import { ethers } from 'ethers';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
-  const participations = getParticipations();
 
   let _data;
-  let _staker;
+  let _staker = {participation: 0};
   let claimModal;
   let modalTitle;
   let initialized = false;
@@ -40,7 +40,10 @@
 
   export const showModal = (data, staker) => {
     _data = data;
-    _staker = participations.find(staker => staker.address.toLowerCase() == _data.address.toLowerCase());
+
+    if(retrieveLeaf(_data.address)) {
+      _staker.participation = 1;
+    }
 
     // TODO: remove me
     // _data.accountWithdrawableRewards = new BigNumber(123000000000000000000);
