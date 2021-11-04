@@ -8,6 +8,7 @@
   import poolsConfig from "../config/pools.json";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools, eth } from '../stores/eth.js';
+  import StakingSummary from '../components/staking/Summary.svelte';
 
   import {
     fetchBalances,
@@ -20,7 +21,10 @@
     formatFiat,
   } from "../components/helpers.js";
 
-
+  import {
+    dataObj,
+    initialize
+  } from '../helpers/staking.js';
 
   import Holdings from "../components/piefolio/Holdings.svelte";
   import Allocation from "../components/piefolio/Allocation.svelte";
@@ -30,6 +34,7 @@
   import Banner from "../components/piefolio/Banner.svelte";
   import Exchange from "../components/piefolio/Exchange.svelte";
 
+  $: data = dataObj;
   $: isLoading = false;
   $: initialized = {
     onMount: false,
@@ -58,10 +63,21 @@
         isLoading = true;
         await fetchOnchainData();
         await fetchTokenList($eth.address);
+        await initStakingSummary();
         initialized.onChainData = true;
         isLoading = false;
       })()
     }
+  }
+
+  async function initStakingSummary() {
+    initialize($eth)
+      .then((updated_data) => {
+        data = updated_data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });    
   }
 
   async function fetchOnchainData() {
@@ -135,7 +151,8 @@
       <span class="mt-2 mb-2"><Allocation totalVal={portfolioUSD} tokenList={tokens}/></span>
     </div>
     <div class="flex flex-col w-38pc">
-      <span class="mb-1"><Banner /></span>
+      <StakingSummary {data} eth={$eth} />
+      <span class="mt-2 mb-1"><Banner /></span>
       <span class="mt-1 mb-1"><Oven /></span>
       <!-- <span class="mt-1 mb-1"><Farming /></span> -->
       <!-- <span class="mt-1 mb-1"><Exchange /></span> -->
@@ -148,7 +165,10 @@
   <span class="mb-2"><Banner /></span>
   <span class="mb-2"><Holdings /></span>
   <span class="mb-2"><Allocation /></span>
-  <span class="-mt-20px mb-2"><Oven /></span>
+  <span>
+    <StakingSummary {data} eth={$eth} />
+  </span>
+  <span class="mt-2 mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>
   <!-- <span class="-mt-20px mb-2"><Farming /></span> -->
   <!-- <span class="-mt-20px"><Exchange /></span> -->
