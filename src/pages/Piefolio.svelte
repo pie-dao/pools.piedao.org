@@ -87,7 +87,6 @@
         usdValue
       }
     }), ['usdValue'], ['desc']);
-    console.log('featured', featured)
   }
 
   async function fetchTokenList(address) {
