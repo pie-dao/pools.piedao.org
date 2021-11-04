@@ -44,9 +44,12 @@ const web3Modal = new Web3Modal({
 
 export const connectWeb3Cached = async () => {
   try {
+    console.log("Web3Button -> connectWeb3Cached");
     resetConnection();
+    console.log("Web3Button -> connectWeb3Cached -> resetConnection");
 
     const web3 = await web3Modal.connectTo('injected');
+    console.log("Web3Button -> connectWeb3Cached -> injected");
 
     if (!web3) {
       console.log('NOT CONNECTED');
@@ -54,7 +57,7 @@ export const connectWeb3Cached = async () => {
     }
 
     console.log('CONNECTED', web3);
-
+    
     registerConnection(web3);
   } catch (e) {
     console.error('ERROR CONNECTION TO WEB3', e);

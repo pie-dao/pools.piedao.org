@@ -9,7 +9,6 @@
   $: ( async () => {
     console.log("Web3Button -> localStorage", window.localStorage.getItem('address'));
     if(window.localStorage.getItem('address')) {
-      console.log("Web3Button -> connectWeb3Cached");
       await connectWeb3Cached();
     }
   })()
