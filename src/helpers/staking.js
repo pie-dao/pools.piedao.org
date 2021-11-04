@@ -39,6 +39,7 @@ export let dataObj = {
 
 export let sharesTimeLock = false;
 export let veDOUGH = false;
+export let merkleTreeDistributor = false;
 export const minLockAmount = 1;
 export const AVG_SECONDS_MONTH = 2628000;
 let ETH = null;
@@ -196,6 +197,12 @@ export function initContracts(eth) {
   veDOUGH = new ethers.Contract(
     smartcontracts.veDOUGH,
     veDoughABI,
+    eth.signer || eth.provider,
+  );
+
+  merkleTreeDistributor = new ethers.Contract(
+    smartcontracts.merkleTreeDistributor,
+    MerkleTreeDistributorABI,
     eth.signer || eth.provider,
   );
 }
@@ -411,11 +418,16 @@ export const fetchStakingData = async (eth) => {
   dataObj.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
 
   if (staker !== undefined) {
+    let leaf = retrieveLeaf(eth.address);
+
+    let isClaimed = await merkleTreeDistributor["isClaimed(uint256,uint256)"](
+      ethers.BigNumber.from(leaf.windowIndex), 
+      ethers.BigNumber.from(leaf.accountIndex));
+
     Object.keys(staker).forEach((key) => {
       if (key !== 'accountLocks') {
         if(key == 'accountWithdrawableRewards') {
-          let leaf = retrieveLeaf(eth.address);
-          dataObj[key] = leaf ? new BigNumber(leaf.amount) : new BigNumber(0);
+          dataObj[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
         } else {
           dataObj[key] = new BigNumber(staker[key].toString());
         }
@@ -637,12 +649,6 @@ export async function claim(eth) {
     console.log('proof', proof);
 
     try {
-      const merkleTreeDistributor = new ethers.Contract(
-        smartcontracts.merkleTreeDistributor,
-        MerkleTreeDistributorABI,
-        eth.signer || eth.provider,
-      );
-
       const leaf = retrieveLeaf(eth.address);
 
       const params = {
@@ -652,8 +658,6 @@ export async function claim(eth) {
         account: ethers.utils.getAddress(eth.address.toLowerCase()),
         merkleProof: leaf.proof
       };
-
-      console.log("params", params);
 
       const { emitter } = displayNotification(
         await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
