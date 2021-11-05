@@ -87,7 +87,6 @@
         usdValue
       }
     }), ['usdValue'], ['desc']);
-    console.log('featured', featured)
   }
 
   async function fetchTokenList(address) {
@@ -123,6 +122,7 @@
     })
 
     tokens = orderBy(filtered, ['usdValue'], ['desc']);
+    console.log("tokens", tokens);
   }
 
 </script>
@@ -146,8 +146,8 @@
 
 <div class="flex md:hidden flex-col mx-2">
   <span class="mb-2"><Banner /></span>
-  <span class="mb-2"><Holdings /></span>
-  <span class="mb-2"><Allocation /></span>
+  <span class="mb-2"><Holdings totalVal={portfolioUSD} tokenList={featured} /></span>
+  <span class="mb-7"><Allocation totalVal={portfolioUSD} tokenList={tokens} /></span>
   <span class="-mt-20px mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>
   <!-- <span class="-mt-20px mb-2"><Farming /></span> -->
