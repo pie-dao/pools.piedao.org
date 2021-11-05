@@ -45,6 +45,8 @@
   $: nav = 0;
 
   $: composition = (poolsConfig[token] || {}).composition;
+  
+  console.log("foobar", poolsConfig, token, poolsConfig[token]);
 
   $: loadings = {
     init: false,

@@ -36,12 +36,14 @@ const allowanceSubscriptions = new Set();
 const balanceSubscriptions = new Set();
 
 export const getTokenImage = (tokenAddress) => {
-  if (images.logos[tokenAddress]) {
-    return images.logos[tokenAddress];
-  } else if (images.logos[tokenAddress.toLowerCase()]) {
-    return images.logos[tokenAddress.toLowerCase()];
-  } else {
-    return `https://s3.amazonaws.com/token-icons/${tokenAddress.toLowerCase()}.png`;
+  if(tokenAddress) {
+    if (images.logos[tokenAddress]) {
+      return images.logos[tokenAddress];
+    } else if (images.logos[tokenAddress.toLowerCase()]) {
+      return images.logos[tokenAddress.toLowerCase()];
+    } else {
+      return `https://s3.amazonaws.com/token-icons/${tokenAddress.toLowerCase()}.png`;
+    }
   }
 };
 
