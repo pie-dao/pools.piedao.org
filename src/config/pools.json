@@ -31,7 +31,7 @@
     "name": "PieDAO Reward Pie",
     "description": "The Official Reward Pie for Dough Staking",
     "composition": [
-      {"symbol":"DOUGH", "coingeckoId":"piedao-dough-v2", "address":"0xad32a8e6220741182940c5abf610bde99e737b2d", "coingeckoImageId": "12693"}
+      {"symbol":"PLAY", "coingeckoId":"metaverse-nft-index", "address":"0x33e18a092a93ff21ad04746c7da12e35d34dc7c4", "coingeckoImageId": "14590"}
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
   },  
