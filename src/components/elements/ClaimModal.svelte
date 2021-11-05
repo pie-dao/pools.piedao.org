@@ -10,7 +10,7 @@
   import smartcontracts from '../../config/smartcontracts.json';
   import isEmpty from 'lodash/isEmpty';
   import { claimModalIsOpen, stakingData } from '../../stores/eth/writables.js';
-
+  import BigNumber from 'bignumber.js';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -41,25 +41,29 @@
   }
 
   export const showModal = (data) => {
-    $stakingData = data;
+    console.log("showModal", $claimModalIsOpen);
+    if(!$claimModalIsOpen) {
+      $claimModalIsOpen = true;
+      $stakingData = data;
 
-    if(retrieveLeaf($stakingData.address)) {
+      if(retrieveLeaf($stakingData.address)) {
+        _staker.participation = 1;
+      }
+
+      // TODO: remove me
+      $stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
       _staker.participation = 1;
+
+      rewardNAV = $stakingData.accountWithdrawableRewards.times(rewardPie.nav);
+
+      if (!$stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
+        modalTitle = "Pie day is best day";
+      } else {
+        modalTitle = "You can't claim yet";
+      }
+
+      claimModal.open();
     }
-
-    // TODO: remove me
-    // $stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
-    // _staker.participation = 1;
-
-    rewardNAV = $stakingData.accountWithdrawableRewards.times(rewardPie.nav);
-
-    if (!$stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
-      modalTitle = "Pie day is best day";
-    } else {
-      modalTitle = "You can't claim yet";
-    }
-
-    claimModal.open();
   };
 
   function claimRewards() {
@@ -75,25 +79,33 @@
       }
     }, 1000);
 
-    claim($eth).then(updated$stakingData => {
-      $stakingData = updated$stakingData;
+    setTimeout(() => {
+      $stakingData.accountWithdrawableRewards = new BigNumber(0);
       $stakingData = $stakingData;
 
       dispatch('update', {
         data: $stakingData,
       });
 
-      buttonText = "Claimed";
-
-      setTimeout(() => {
-        // claimModal.close();
-        buttonText = "Claim SLICE";
-      }, 5000);
-    }).catch(error => {
       clearInterval(interval);
-      buttonText = "Claim SLICE";
-      console.error(error);
-    });    
+      buttonText = "Claimed";
+    }, 5000);
+
+    // claim($eth).then(updated_data => {
+    //   $stakingData = updated_data;
+    //   $stakingData = $stakingData;
+
+    //   dispatch('update', {
+    //     data: $stakingData,
+    //   });
+
+    //   clearInterval(interval);
+    //   buttonText = "Claimed";
+    // }).catch(error => {
+    //   clearInterval(interval);
+    //   buttonText = "Claim SLICE";
+    //   console.error(error);
+    // });    
   }
 </script>
 
@@ -131,10 +143,11 @@
           <div class="flex items-center pr-6 pt-3 pb-3">
             {buttonText}
           </div>
-        {/if}
+        {:else}
         <div class="flex items-center pl-6 pr-6 pt-3 pb-3">
           {buttonText}
         </div>
+        {/if}
       </button>      
     {:else}
       <p class="pb-2">Here's what you have to do:</p>
