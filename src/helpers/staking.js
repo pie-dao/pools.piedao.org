@@ -420,9 +420,10 @@ export const fetchStakingData = async (eth) => {
   if (staker !== undefined) {
     let leaf = retrieveLeaf(eth.address);
 
-    let isClaimed = await merkleTreeDistributor["isClaimed(uint256,uint256)"](
+    let isClaimed = leaf ? await merkleTreeDistributor["isClaimed(uint256,uint256)"](
       ethers.BigNumber.from(leaf.windowIndex), 
-      ethers.BigNumber.from(leaf.accountIndex));
+      ethers.BigNumber.from(leaf.accountIndex))
+      : false;
 
     Object.keys(staker).forEach((key) => {
       if (key !== 'accountLocks') {
@@ -651,34 +652,38 @@ export async function claim(eth) {
     try {
       const leaf = retrieveLeaf(eth.address);
 
-      const params = {
-        windowIndex: leaf.windowIndex,
-        amount: ethers.BigNumber.from(leaf.amount),
-        accountIndex: leaf.accountIndex,
-        account: ethers.utils.getAddress(eth.address.toLowerCase()),
-        merkleProof: leaf.proof
-      };
-
-      const { emitter } = displayNotification(
-        await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
-      );
-
-      emitter.on('txConfirmed', async () => {
-        const subscription = subject('blockNumber').subscribe({
-          next: async () => {
-            displayNotification({
-              autoDismiss: 15000,
-              message: 'Pay day baby!',
-              type: 'success',
-            });
-
-            subscription.unsubscribe();
-
-            dataObj = await fetchStakingData(eth);
-            resolve(dataObj);
-          },
-        });
-      });
+      if(leaf) {
+        const params = {
+          windowIndex: leaf.windowIndex,
+          amount: ethers.BigNumber.from(leaf.amount),
+          accountIndex: leaf.accountIndex,
+          account: ethers.utils.getAddress(eth.address.toLowerCase()),
+          merkleProof: leaf.proof
+        };
+  
+        const { emitter } = displayNotification(
+          await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
+        );
+  
+        emitter.on('txConfirmed', async () => {
+          const subscription = subject('blockNumber').subscribe({
+            next: async () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: 'Pay day baby!',
+                type: 'success',
+              });
+  
+              subscription.unsubscribe();
+  
+              dataObj = await fetchStakingData(eth);
+              resolve(dataObj);
+            },
+          });
+        });        
+      } else {
+        reject("cannot claim, address not valid in merkleTree");
+      }
     } catch (error) {
       displayNotification({
         autoDismiss: 15000,
