@@ -383,7 +383,7 @@
   >
     <div class="">
       <div class="text-base font-bold leading-5">Stake DOUGH</div>
-      <div class="text-sm font-thin">And earn SLICE</div>
+      <div class="text-sm font-thin">and earn SLICE</div>
     </div>
   </button>
 </div>
