@@ -9,14 +9,11 @@
   import Experipie from '../../classes/Experipie.js';
   import smartcontracts from '../../config/smartcontracts.json';
   import isEmpty from 'lodash/isEmpty';
-  import { claimModalIsOpen } from '../../stores/eth/writables.js';
-  import BigNumber from 'bignumber.js';
-  import { ethers } from 'ethers';
+  import { claimModalIsOpen, stakingData } from '../../stores/eth/writables.js';
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
-  let _data;
   let _staker = {participation: 0};
   let claimModal;
   let modalTitle;
@@ -43,20 +40,20 @@
     }
   }
 
-  export const showModal = (data, staker) => {
-    _data = data;
+  export const showModal = (data) => {
+    $stakingData = data;
 
-    if(retrieveLeaf(_data.address)) {
+    if(retrieveLeaf($stakingData.address)) {
       _staker.participation = 1;
     }
 
     // TODO: remove me
-    // _data.accountWithdrawableRewards = new BigNumber(123000000000000000000);
+    // $stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
     // _staker.participation = 1;
 
-    rewardNAV = _data.accountWithdrawableRewards.times(rewardPie.nav);
+    rewardNAV = $stakingData.accountWithdrawableRewards.times(rewardPie.nav);
 
-    if (!_data.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
+    if (!$stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
       modalTitle = "Pie day is best day";
     } else {
       modalTitle = "You can't claim yet";
@@ -78,12 +75,12 @@
       }
     }, 1000);
 
-    claim($eth).then(updated_data => {
-      _data = updated_data;
-      _data = _data;
+    claim($eth).then(updated$stakingData => {
+      $stakingData = updated$stakingData;
+      $stakingData = $stakingData;
 
       dispatch('update', {
-        data: _data,
+        data: $stakingData,
       });
 
       buttonText = "Claimed";
@@ -104,7 +101,7 @@
 
 <Modal modalIsOpen={$claimModalIsOpen} on:modalChanged={modalChanged} title={modalTitle} backgroundColor="#f3f3f3" bind:this={claimModal}>
   <div slot="content" class="font-thin text-center hidescrollbar">
-    {#if (!_data.accountWithdrawableRewards.eq(0) && _staker.participation == 1)}
+    {#if (!$stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1)}
       <p class="pb-2">Like every month, freshly baked<br />rewards for you.</p>
 
       <div class="text-center mx-auto">
@@ -115,7 +112,7 @@
       /> 
       </div>    
       <p class="pt-2 font-24px"><b>
-        {formatFiat(toNum(_data.accountWithdrawableRewards), ',', '.', '')} SLICE
+        {formatFiat(toNum($stakingData.accountWithdrawableRewards), ',', '.', '')} SLICE
       </b></p>
       <p class="mb-4">
         {formatFiat(toNum(rewardNAV), ',', '.', '$')} (Net Asset Value)
@@ -142,9 +139,9 @@
     {:else}
       <p class="pb-2">Here's what you have to do:</p>
 
-      {#if _data.votes.length == 0}
-        {#if _data.proposals && _data.proposals.length}
-          <Proposals proposals={_data.proposals} />
+      {#if $stakingData.votes.length == 0}
+        {#if $stakingData.proposals && $stakingData.proposals.length}
+          <Proposals proposals={$stakingData.proposals} />
         {:else}
           <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
             <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
