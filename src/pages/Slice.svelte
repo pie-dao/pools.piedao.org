@@ -365,9 +365,9 @@
   <button
     class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc"
     on:click={() => {
-      modalOption.method =  poolsConfig[token].useRecipe ? "single" : "multi";
-      modalOption.poolAction = "add";
-      modalOption.title = "Add Liquidity";
+      modalOption.method = "multi";
+      modalOption.poolAction = "withdraw";
+      modalOption.title = "Redeem";
       modal.open();
     }}
   >
