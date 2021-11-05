@@ -153,21 +153,21 @@
     <div class="flex flex-col w-38pc">
       <StakingSummary {data} eth={$eth} />
       <span class="mt-2 mb-1"><Banner /></span>
-      <span class="mt-1 mb-1"><Oven /></span>
+      <span class="mt-1"><Oven /></span>
       <!-- <span class="mt-1 mb-1"><Farming /></span> -->
       <!-- <span class="mt-1 mb-1"><Exchange /></span> -->
-      <span class="mt-1 mb-1"><Governance /></span>
+      <span><Governance /></span>
     </div>
 </div>
 </div>
 
 <div class="flex md:hidden flex-col mx-2">
-  <span class="mb-2"><Banner /></span>
-  <span class="mb-2"><Holdings totalVal={portfolioUSD} tokenList={featured} /></span>
-  <span class="mb-7"><Allocation totalVal={portfolioUSD} tokenList={tokens} /></span>
-  <span>
+  <span class="flex flex-col mb-2"><Banner /></span>
+  <span class="flex flex-col mb-2"><Holdings totalVal={portfolioUSD} tokenList={featured} /></span>
+  <span class="flex flex-col mb-2 h-100pc"><Allocation totalVal={portfolioUSD} tokenList={tokens} /></span>
+  <div class="flex flex-col mb-7">
     <StakingSummary {data} eth={$eth} />
-  </span>
+  </div>
   <span class="-mt-20px mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>
   <!-- <span class="-mt-20px mb-2"><Farming /></span> -->
