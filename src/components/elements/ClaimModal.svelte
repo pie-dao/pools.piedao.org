@@ -33,7 +33,7 @@
     $claimModalIsOpen = event.detail.data.isOpen;
   }
 
-  async function initialize() {
+  async function initialize() { 
     try {
       rewardPie = new Experipie(smartcontracts.reward, $eth.provider);
       await rewardPie.initialize($piesMarketDataStore);     
