@@ -27,22 +27,6 @@ export const stakingStats = writable({
   totalVeDough: 0,
   totalDough: 0,
 });
-export const stakingData = writable({
-  address: null,
-  totalDoughStaked: BigNumber(0),
-  veTokenTotalSupply: BigNumber(0),
-  accountAverageDuration: 0,
-  accountVotingPower: 0,
-  accountVeTokenBalance: BigNumber(0),
-  accountTokenBalance: BigNumber(0),
-  accountWithdrawableRewards: BigNumber(0),
-  accountWithdrawnRewards: BigNumber(0),
-  accountDepositTokenBalance: BigNumber(0),
-  accountLocks: [],
-  rewards: [],
-  votes: null,
-  proposals: null
-});
 export const BoostedModalIsOpen = writable(false);
 export const claimModalIsOpen = writable(false);
 

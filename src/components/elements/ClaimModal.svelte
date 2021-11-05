@@ -9,17 +9,19 @@
   import Experipie from '../../classes/Experipie.js';
   import smartcontracts from '../../config/smartcontracts.json';
   import isEmpty from 'lodash/isEmpty';
-  import { claimModalIsOpen, stakingData } from '../../stores/eth/writables.js';
+  import { claimModalIsOpen } from '../../stores/eth/writables.js';
   import BigNumber from 'bignumber.js';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
+  let _data;
   let _staker = {participation: 0};
   let claimModal;
   let modalTitle;
   let initialized = false;
   let rewardPie;
   let rewardNAV;
+  let hasClaimed = false;
   let buttonText = "Claim SLICE";
 
   $: if($eth.provider && !initialized && !isEmpty($piesMarketDataStore)) {
@@ -41,29 +43,25 @@
   }
 
   export const showModal = (data) => {
-    console.log("showModal", $claimModalIsOpen);
-    if(!$claimModalIsOpen) {
-      $claimModalIsOpen = true;
-      $stakingData = data;
+    _data = data;
 
-      if(retrieveLeaf($stakingData.address)) {
-        _staker.participation = 1;
-      }
-
-      // TODO: remove me
-      $stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
+    if(retrieveLeaf(_data.address)) {
       _staker.participation = 1;
-
-      rewardNAV = $stakingData.accountWithdrawableRewards.times(rewardPie.nav);
-
-      if (!$stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
-        modalTitle = "Pie day is best day";
-      } else {
-        modalTitle = "You can't claim yet";
-      }
-
-      claimModal.open();
     }
+
+    // TODO: remove me
+    // _data.accountWithdrawableRewards = new BigNumber(123000000000000000000);
+    // _staker.participation = 1;
+
+    rewardNAV = _data.accountWithdrawableRewards.times(rewardPie.nav);
+
+    if (!_data.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
+      modalTitle = "Pie day is best day";
+    } else {
+      modalTitle = "You can't claim yet";
+    }
+
+    claimModal.open();
   };
 
   function claimRewards() {
@@ -79,33 +77,22 @@
       }
     }, 1000);
 
-    setTimeout(() => {
-      $stakingData.accountWithdrawableRewards = new BigNumber(0);
-      $stakingData = $stakingData;
+    claim($eth).then(updated_data => {
+      // _data = updated_data;
+      // _data = _data;
 
-      dispatch('update', {
-        data: $stakingData,
-      });
+      // dispatch('update', {
+      //   data: _data,
+      // });
 
       clearInterval(interval);
       buttonText = "Claimed";
-    }, 5000);
-
-    // claim($eth).then(updated_data => {
-    //   $stakingData = updated_data;
-    //   $stakingData = $stakingData;
-
-    //   dispatch('update', {
-    //     data: $stakingData,
-    //   });
-
-    //   clearInterval(interval);
-    //   buttonText = "Claimed";
-    // }).catch(error => {
-    //   clearInterval(interval);
-    //   buttonText = "Claim SLICE";
-    //   console.error(error);
-    // });    
+      hasClaimed = true;
+    }).catch(error => {
+      clearInterval(interval);
+      buttonText = "Claim SLICE";
+      console.error(error);
+    });    
   }
 </script>
 
@@ -113,7 +100,7 @@
 
 <Modal modalIsOpen={$claimModalIsOpen} on:modalChanged={modalChanged} title={modalTitle} backgroundColor="#f3f3f3" bind:this={claimModal}>
   <div slot="content" class="font-thin text-center hidescrollbar">
-    {#if (!$stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1)}
+    {#if (!_data.accountWithdrawableRewards.eq(0) && _staker.participation == 1)}
       <p class="pb-2">Like every month, freshly baked<br />rewards for you.</p>
 
       <div class="text-center mx-auto">
@@ -124,14 +111,14 @@
       /> 
       </div>    
       <p class="pt-2 font-24px"><b>
-        {formatFiat(toNum($stakingData.accountWithdrawableRewards), ',', '.', '')} SLICE
+        {formatFiat(toNum(_data.accountWithdrawableRewards), ',', '.', '')} SLICE
       </b></p>
       <p class="mb-4">
         {formatFiat(toNum(rewardNAV), ',', '.', '$')} (Net Asset Value)
       </p>
 
       <button
-      disabled={false}
+      disabled={hasClaimed}
       on:click={() => {claimRewards()}}
       class="pointer flex items-center stakinggradient"
       style="border-radius: 15px !important;"
@@ -152,9 +139,9 @@
     {:else}
       <p class="pb-2">Here's what you have to do:</p>
 
-      {#if $stakingData.votes.length == 0}
-        {#if $stakingData.proposals && $stakingData.proposals.length}
-          <Proposals proposals={$stakingData.proposals} />
+      {#if _data.votes.length == 0}
+        {#if _data.proposals && _data.proposals.length}
+          <Proposals proposals={_data.proposals} />
         {:else}
           <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
             <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
