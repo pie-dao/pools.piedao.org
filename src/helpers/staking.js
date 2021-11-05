@@ -10,12 +10,12 @@ import moment from 'moment';
 import sharesTimeLockABI from '../abis/sharesTimeLock.json';
 import veDoughABI from '../abis/veDoughABI.json';
 import DoughABI from '../abis/DoughABI.json';
+import MerkleTreeDistributorABI from '../abis/MerkleTreeDistributorABI.json';
 import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
-import EpochJson from '../config/rewards/epoch.json';
-import { createParticipationTree } from '../classes/MerkleTreeUtils';
+import EpochJson from '../config/rewards/distribution.json';
 import { stakingDataInterval, fetchStakingDataLock } from '../stores/eth/writables.js';
 import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js'; 
 
@@ -39,6 +39,7 @@ export let dataObj = {
 
 export let sharesTimeLock = false;
 export let veDOUGH = false;
+export let merkleTreeDistributor = false;
 export const minLockAmount = 1;
 export const AVG_SECONDS_MONTH = 2628000;
 let ETH = null;
@@ -46,7 +47,7 @@ let ETH = null;
 /* eslint-enable import/no-mutable-exports */
 
 // in a very next future, this function will fetch directly from backend...
-export const getParticipations = () => EpochJson.merkleTree.leafs;
+export const getParticipations = () => EpochJson.claims;
 
 export const canRestake = (lockedAt) => {
   const start = lockedAt * 1000;
@@ -196,6 +197,12 @@ export function initContracts(eth) {
   veDOUGH = new ethers.Contract(
     smartcontracts.veDOUGH,
     veDoughABI,
+    eth.signer || eth.provider,
+  );
+
+  merkleTreeDistributor = new ethers.Contract(
+    smartcontracts.merkleTreeDistributor,
+    MerkleTreeDistributorABI,
     eth.signer || eth.provider,
   );
 }
@@ -411,9 +418,19 @@ export const fetchStakingData = async (eth) => {
   dataObj.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
 
   if (staker !== undefined) {
+    let leaf = retrieveLeaf(eth.address);
+
+    let isClaimed = await merkleTreeDistributor["isClaimed(uint256,uint256)"](
+      ethers.BigNumber.from(leaf.windowIndex), 
+      ethers.BigNumber.from(leaf.accountIndex));
+
     Object.keys(staker).forEach((key) => {
       if (key !== 'accountLocks') {
-        dataObj[key] = new BigNumber(staker[key].toString());
+        if(key == 'accountWithdrawableRewards') {
+          dataObj[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
+        } else {
+          dataObj[key] = new BigNumber(staker[key].toString());
+        }
       } else {
         const locks = [];
         dataObj.accountAverageDuration = 0;
@@ -632,7 +649,19 @@ export async function claim(eth) {
     console.log('proof', proof);
 
     try {
-      const { emitter } = displayNotification(await veDOUGH.claim(proof.proof));
+      const leaf = retrieveLeaf(eth.address);
+
+      const params = {
+        windowIndex: leaf.windowIndex,
+        amount: ethers.BigNumber.from(leaf.amount),
+        accountIndex: leaf.accountIndex,
+        account: ethers.utils.getAddress(eth.address.toLowerCase()),
+        merkleProof: leaf.proof
+      };
+
+      const { emitter } = displayNotification(
+        await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
+      );
 
       emitter.on('txConfirmed', async () => {
         const subscription = subject('blockNumber').subscribe({
@@ -663,12 +692,15 @@ export async function claim(eth) {
   /* eslint-enable  no-async-promise-executor */
 }
 
+export function retrieveLeaf(address) {
+  const participations = getParticipations();
+  return participations[ethers.utils.getAddress(address.toLowerCase())];
+}
+
 export function prepareProofs(eth) {
   if (!eth.address) return;
 
-  const leaf = getParticipations().find(
-    (item) => item.address.toLowerCase() === eth.address.toLowerCase()
-  );
+  const leaf = retrieveLeaf(eth.address);
 
   /* eslint-disable consistent-return */
   return {
