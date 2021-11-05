@@ -67,6 +67,7 @@
 
   function handleUpdate(event) {
     data = event.detail.data;
+    data = data;
 
     dispatch('update', {
         data: data,

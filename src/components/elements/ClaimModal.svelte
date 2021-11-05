@@ -9,6 +9,7 @@
   import Experipie from '../../classes/Experipie.js';
   import smartcontracts from '../../config/smartcontracts.json';
   import isEmpty from 'lodash/isEmpty';
+  import { claimModalIsOpen } from '../../stores/eth/writables.js';
   import BigNumber from 'bignumber.js';
   import { ethers } from 'ethers';
 
@@ -27,6 +28,10 @@
   $: if($eth.provider && !initialized && !isEmpty($piesMarketDataStore)) {
     initialized = true;
     initialize();
+  }
+
+  const modalChanged = (event) => {
+    $claimModalIsOpen = event.detail.data.isOpen;
   }
 
   async function initialize() {
@@ -75,6 +80,7 @@
 
     claim($eth).then(updated_data => {
       _data = updated_data;
+      _data = _data;
 
       dispatch('update', {
         data: _data,
@@ -83,7 +89,7 @@
       buttonText = "Claimed";
 
       setTimeout(() => {
-        claimModal.close();
+        // claimModal.close();
         buttonText = "Claim SLICE";
       }, 5000);
     }).catch(error => {
@@ -96,7 +102,7 @@
 
 <div id="confetti" class="hidden md:block" />
 
-<Modal title={modalTitle} backgroundColor="#f3f3f3" bind:this={claimModal}>
+<Modal modalIsOpen={$claimModalIsOpen} on:modalChanged={modalChanged} title={modalTitle} backgroundColor="#f3f3f3" bind:this={claimModal}>
   <div slot="content" class="font-thin text-center hidescrollbar">
     {#if (!_data.accountWithdrawableRewards.eq(0) && _staker.participation == 1)}
       <p class="pb-2">Like every month, freshly baked<br />rewards for you.</p>

@@ -27,6 +27,8 @@ export const stakingStats = writable({
   totalDough: 0,
 });
 export const BoostedModalIsOpen = writable(false);
+export const claimModalIsOpen = writable(false);
+
 export const UnlockModalStatus = writable({
   isOpen: false,
   lock: null,
