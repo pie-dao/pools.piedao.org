@@ -9,7 +9,7 @@
   <div class="wrap flex flex-col w-full">
       <div class="w-full flex items-center justify-between">
         <div class="font-bold text-xs bg-darkgrey py-4px px-10px rounded text-white truncate overflow-ellipsis text-xs">{proposal.author}</div>
-        <div class="ml-4 w-80px bg-pink rounded text-xs text-white p-1">{proposal.state}</div>
+        <div class="ml-4 w-80px bg-pink rounded text-xs text-white p-1 capitalize">{proposal.state}</div>
       </div>
       <div class="mt-3 break-words text-left leading-6">{proposal.title}</div>
       <div class="mt-2 max-h-100px break-words font-thin text-xs text-left overflow-ellipsis overflow-hidden"><SvelteMarkdown source={proposal.body} /></div>
