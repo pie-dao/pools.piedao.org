@@ -2,7 +2,7 @@ import moment from 'moment';
 const PIEDAO_SNAPSHOT_SPACE = "piedao.eth";
 
 export async function fetchLastMonthVoteForVoter(voter) {
-  let lastMonth = moment().subtract(1, 'months').unix();
+  let lastMonth = moment().startOf('month').unix();
   let startingFrom = moment("2021-10-18").unix();
 
   // if the last month proposals are "younger" than the 18th of October 2021
