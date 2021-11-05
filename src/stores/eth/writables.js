@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import BigNumber from 'bignumber.js';
 
 export const defaultEth = {
   address: undefined,
@@ -27,6 +28,8 @@ export const stakingStats = writable({
   totalDough: 0,
 });
 export const BoostedModalIsOpen = writable(false);
+export const claimModalIsOpen = writable(false);
+
 export const UnlockModalStatus = writable({
   isOpen: false,
   lock: null,

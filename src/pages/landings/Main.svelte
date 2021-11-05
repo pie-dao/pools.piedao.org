@@ -235,7 +235,7 @@
     class="w-100pc md:max-w-1200px flex items-start justify-start md:justify-center self-center pt-4 pb-0 md:py-4 px-4 hidescrollbar md:flex-wrap"
   >
     {#each piVaults as pie}
-      {#if pie.address !== '0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e'}
+      {#if (pie.address !== '0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e') && (pie.address !== '0x1083d743a1e53805a95249fef7310d75029f7cd6')}
         <div
           class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 rounded-xl flex pointer scale cardbordergradient"
         >

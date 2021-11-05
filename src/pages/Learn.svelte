@@ -148,7 +148,7 @@
   <div class="content">
     <div class="justify-start items-start flex-col text-left  mt-8">
       <h2 class="text-lg">Miscellaneous</h2>
-      <p class="font-thin">DeFi is growing fast, better keepinb up to date</p>
+      <p class="font-thin">DeFi is growing fast, better keeping up to date</p>
     </div>
   </div>
   
