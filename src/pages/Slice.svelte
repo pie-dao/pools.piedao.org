@@ -83,6 +83,7 @@
           price: el.price,
           productive: false,
           percentage: el.percentage,
+          address: address
         });
     }
 
@@ -92,6 +93,8 @@
     let slice24Change = 0;
 
     composition.forEach(asset => {
+      console.log("calculating change", $piesMarketDataStore, asset);
+
       let change24 = get(
         $piesMarketDataStore,
         `${asset.address}.market_data.price_change_percentage_24h`,
@@ -101,6 +104,7 @@
       slice24Change += asset.percentage * change24;
     });
 
+    // console.log("calculating change", slice24Change);
     change24H = slice24Change / 100;
     initialized = true;
     loadings.init = false;
