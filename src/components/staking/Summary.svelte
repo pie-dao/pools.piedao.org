@@ -22,8 +22,11 @@
   let modal;
   let modal_content_key;
   let voteKeyword;
+  let isLoading = true;
 
-  $: if(data && !isEmpty(data)) {
+  $: if(data && !isEmpty(data) && data.address) {
+    isLoading = false;
+
     if(data.votes) {
       if(data.votes.length) {
         votingImage = "check-mark-button";
@@ -118,7 +121,6 @@
 </Modal>
 
 <ClaimModal bind:this={claimModal} on:update={handleUpdate}/>
-
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
   <div class="font-huge text-center mt-6">Summary</div>
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
@@ -127,7 +129,11 @@
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
-        <div class="font-24px">{eth.address ? formatFiat(toNum(data.accountTokenBalance), ',', '.', '') : 0}</div>
+        {#if isLoading && eth.address}
+          <div class="mr-2">Loading...</div>
+        {:else}
+          <div class="font-24px">{eth.address ? formatFiat(toNum(data.accountTokenBalance), ',', '.', '') : 0}</div>
+        {/if}
         <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
       </span>
@@ -139,9 +145,13 @@
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
-        <div class="font-24px">
-          {eth.address ? formatFiat(toNum(data.accountVeTokenBalance), ',', '.', '') : 0}
-        </div>
+        {#if isLoading && eth.address}
+          <div class="mr-2">Loading...</div>
+        {:else}
+          <div class="font-24px">
+            {eth.address ? formatFiat(toNum(data.accountVeTokenBalance), ',', '.', '') : 0}
+          </div>
+        {/if}
         <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
       </span>
@@ -166,17 +176,26 @@
     <div class="flex nowrap items-center p-1">
       <div class="flex-1">
         <span class="sc-iybRtq gjVeBU">
-          <div class="font-24px">
-            {eth.address ? formatFiat(toNum(data.accountWithdrawableRewards), ',', '.', '') : 0}
-          </div>
+          {#if isLoading && eth.address}
+            <div class="mr-2">Loading...</div>
+          {:else}          
+            <div class="font-24px">
+              {eth.address ? formatFiat(toNum(data.accountWithdrawableRewards), ',', '.', '') : 0}
+            </div>
+          {/if}
           <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
           <span class="sc-kXeGPI jeVIZw token-symbol-container">SLICE</span>
         </span>
       </div>
       {#if eth.address}
       <button 
+      disabled={isLoading}
       class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
-      on:click={() => {claimModal.showModal(data);}}
+      on:click={() => {
+        if(eth.address) {
+          claimModal.showModal(data);
+        }
+      }}
       > Claim</button>
     {/if}
     </div>
@@ -190,9 +209,13 @@
       <div class="flex nowrap items-center p-1">
         <div class="flex-1">
           <span class="sc-iybRtq gjVeBU">
-            <div class="font-24px">
-              {eth.address ? data.accountAverageDuration : "0"} Months
-            </div>
+            {#if isLoading && eth.address}
+              <div class="mr-2">Loading...</div>
+            {:else}            
+              <div class="font-24px">
+                {eth.address ? data.accountAverageDuration : "0"} Months
+              </div>
+            {/if}
           </span>        
         </div>
       </div>
@@ -205,9 +228,13 @@
       <div class="flex nowrap items-center p-1">
         <div class="flex-1">
           <span class="sc-iybRtq gjVeBU">
-            <div class="font-24px">
-              {eth.address ? data.accountVotingPower : 0} %
-            </div>
+            {#if isLoading && eth.address}
+              <div class="mr-2">Loading...</div>
+            {:else}             
+              <div class="font-24px">
+                {eth.address ? data.accountVotingPower : 0} %
+              </div>
+            {/if}
           </span>        
         </div>
       </div>
@@ -217,6 +244,6 @@
     on:click={() => addToken()}
     class="text-center pointer mx-auto object-bottom mb-4 font-thin"
   >
-  🦊 Add SLICE to MetaMask
-</button> 
+    🦊 Add SLICE to MetaMask
+  </button> 
 </div>

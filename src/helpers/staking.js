@@ -477,8 +477,6 @@ export const fetchStakingData = async (eth) => {
     });
   }
 
-  dataObj.address = eth.address;
-
   const votingPower = dataObj.accountVeTokenBalance && dataObj.veTokenTotalSupply
     ? ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2)
     : 0;
@@ -498,6 +496,7 @@ export const fetchStakingData = async (eth) => {
     dataObj.proposals[0].block = await eth.provider.getBlock(Number(dataObj.proposals[0].snapshot));
   }
 
+  dataObj.address = eth.address;
   console.log('fetchStakingData', dataObj);
   return dataObj;
 };
