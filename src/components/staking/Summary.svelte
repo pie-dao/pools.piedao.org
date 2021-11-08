@@ -175,8 +175,13 @@
       </div>
       {#if eth.address}
       <button 
+      disabled={false}
       class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
-      on:click={() => {claimModal.showModal(data);}}
+      on:click={() => {
+        if(data.address) {
+          claimModal.showModal(data);
+        }
+      }}
       > Claim</button>
     {/if}
     </div>
