@@ -9,10 +9,12 @@ import Tokensswap from '../pages/Tokensswap.svelte';
 import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
 import DoughStakingCampaign from '../pages/DoughStakingCampaign.svelte';
+import KpiOptionsCampaign from '../pages/KpiOptionsCampaign.svelte';
 import Dashboard from '../pages/Dashboard.svelte';
 import LPStaking from '../pages/LPStaking.svelte';
 import LPStakingV2 from '../pages/LPStakingV2.svelte';
 import Staking from '../pages/Staking.svelte';
+import Slice from '../pages/Slice.svelte';
 import StakingPageSingle from '../pages/StakingPageSingle.svelte';
 import Markets from '../pages/Markets.svelte';
 import DefiPie from '../pages/landings/defiPie.svelte';
@@ -109,11 +111,15 @@ const formatRoute = (route) => {
     case 'exp':
       address = (_route[1] || '0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5').toLowerCase();
       return { page: Experipie, params: { address } };
+    case 'slice':
+      return { page: Slice };      
     case 'pie':
       address = (_route[1] || '').toLowerCase();
       return { page: PiePageSwitch, params: { address } };
     case 'dough-staking-campaign':
       return { page: DoughStakingCampaign };
+    case 'kpi-options-campaign':
+      return { page: KpiOptionsCampaign };      
     case 'dough':
       return { page: Dough };
     case 'learn':

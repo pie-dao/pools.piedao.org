@@ -37,12 +37,14 @@ const allowanceSubscriptions = new Set();
 const balanceSubscriptions = new Set();
 
 export const getTokenImage = (tokenAddress) => {
-  if (images.logos[tokenAddress]) {
-    return images.logos[tokenAddress];
-  } else if (images.logos[tokenAddress.toLowerCase()]) {
-    return images.logos[tokenAddress.toLowerCase()];
-  } else {
-    return `https://s3.amazonaws.com/token-icons/${tokenAddress.toLowerCase()}.png`;
+  if(tokenAddress) {
+    if (images.logos[tokenAddress]) {
+      return images.logos[tokenAddress];
+    } else if (images.logos[tokenAddress.toLowerCase()]) {
+      return images.logos[tokenAddress.toLowerCase()];
+    } else {
+      return `https://s3.amazonaws.com/token-icons/${tokenAddress.toLowerCase()}.png`;
+    }
   }
 };
 
@@ -754,8 +756,8 @@ export const calculateAPRUniswap = async (
   //console.log('Uniswap Finished reading smart contracts... Looking up prices... \n');
 
   // Look up prices
-  const DOUGHPrice = marketData[DOUGH].market_data.current_price;
-  const ETHPrice = marketData[WETH].market_data.current_price;
+  const DOUGHPrice = marketData[DOUGH.toLowerCase()].market_data.current_price;
+  const ETHPrice = marketData[WETH.toLowerCase()].market_data.current_price;
   const BPTPrice = DOUGHperBPT * DOUGHPrice + WETHperBPT * ETHPrice;
   const totalLiquidity = BPTPrice * totalBPTAmount;
   // Finished. Start printing
@@ -855,8 +857,8 @@ export const calculateAPRBalancer = async (
   const WETHperBPT = totalWETHAmount / totalBPTAmount;
 
   // Look up prices
-  const DOUGHPrice = marketData[DOUGH].market_data.current_price;
-  const ETHPrice = marketData[WETH].market_data.current_price;
+  const DOUGHPrice = marketData[DOUGH.toLowerCase()].market_data.current_price;
+  const ETHPrice = marketData[WETH.toLowerCase()].market_data.current_price;
 
   const $assetOnePerBPT = DOUGHperBPT * DOUGHPrice;
   const $assetTwoPerBPT = WETHperBPT * ETHPrice;

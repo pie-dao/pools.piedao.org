@@ -430,7 +430,7 @@
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-20">
   <div class="w-full max-w-1240px"><StakingStats /></div>
-  <a class="hidden md:block mt-8" href="https://forum.piedao.org/t/pip-62-uma-kpi-options-for-dough-staking/1004" target="_blank">
+  <a class="hidden md:block mt-8" href="#/kpi-options-campaign">
     <LottiePlayer
     src="https://assets7.lottiefiles.com/private_files/lf30_wvaae9to.json"
     autoplay="{true}"
@@ -442,6 +442,9 @@
     width="100%"
     controlsLayout="{controlsLayout}"
     />
+  </a>
+  <a class="block mt-4 md:hidden" href="#/kpi-options-campaign">
+    <img class="w-100% inline mb-4" src={images.kpi_options} alt="kpi options" />
   </a>
 </div>
 

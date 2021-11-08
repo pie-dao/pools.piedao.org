@@ -8,6 +8,7 @@
   import poolsConfig from "../config/pools.json";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools, eth } from '../stores/eth.js';
+  import StakingSummary from '../components/staking/Summary.svelte';
 
   import {
     fetchBalances,
@@ -20,7 +21,10 @@
     formatFiat,
   } from "../components/helpers.js";
 
-
+  import {
+    dataObj,
+    initialize
+  } from '../helpers/staking.js';
 
   import Holdings from "../components/piefolio/Holdings.svelte";
   import Allocation from "../components/piefolio/Allocation.svelte";
@@ -30,6 +34,7 @@
   import Banner from "../components/piefolio/Banner.svelte";
   import Exchange from "../components/piefolio/Exchange.svelte";
 
+  $: data = dataObj;
   $: isLoading = false;
   $: initialized = {
     onMount: false,
@@ -48,6 +53,7 @@
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
     };
   }) || [];
+  console.log("HERE", pies);
 
   $: featured = [];
   $: tokens = [];
@@ -58,10 +64,21 @@
         isLoading = true;
         await fetchOnchainData();
         await fetchTokenList($eth.address);
+        await initStakingSummary();
         initialized.onChainData = true;
         isLoading = false;
       })()
     }
+  }
+
+  async function initStakingSummary() {
+    initialize($eth)
+      .then((updated_data) => {
+        data = updated_data;
+      })
+      .catch((error) => {
+        console.error(error);
+      });    
   }
 
   async function fetchOnchainData() {
@@ -87,7 +104,6 @@
         usdValue
       }
     }), ['usdValue'], ['desc']);
-    console.log('featured', featured)
   }
 
   async function fetchTokenList(address) {
@@ -123,6 +139,7 @@
     })
 
     tokens = orderBy(filtered, ['usdValue'], ['desc']);
+    console.log("tokens", tokens);
   }
 
 </script>
@@ -135,19 +152,23 @@
       <span class="mt-2 mb-2"><Allocation totalVal={portfolioUSD} tokenList={tokens}/></span>
     </div>
     <div class="flex flex-col w-38pc">
-      <span class="mb-1"><Banner /></span>
-      <span class="mt-1 mb-1"><Oven /></span>
+      <StakingSummary {data} eth={$eth} />
+      <span class="mt-2 mb-1"><Banner /></span>
+      <span class="mt-1"><Oven /></span>
       <!-- <span class="mt-1 mb-1"><Farming /></span> -->
       <!-- <span class="mt-1 mb-1"><Exchange /></span> -->
-      <span class="mt-1 mb-1"><Governance /></span>
+      <span><Governance /></span>
     </div>
 </div>
 </div>
 
 <div class="flex md:hidden flex-col mx-2">
-  <span class="mb-2"><Banner /></span>
-  <span class="mb-2"><Holdings /></span>
-  <span class="mb-2"><Allocation /></span>
+  <span class="flex flex-col mb-2"><Banner /></span>
+  <span class="flex flex-col mb-2"><Holdings totalVal={portfolioUSD} tokenList={featured} /></span>
+  <span class="flex flex-col mb-2 h-100pc"><Allocation totalVal={portfolioUSD} tokenList={tokens} /></span>
+  <div class="flex flex-col mb-7">
+    <StakingSummary {data} eth={$eth} />
+  </div>
   <span class="-mt-20px mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>
   <!-- <span class="-mt-20px mb-2"><Farming /></span> -->

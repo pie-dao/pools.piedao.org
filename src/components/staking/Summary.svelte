@@ -2,22 +2,20 @@
   import { _ } from 'svelte-i18n';
   import { formatFiat } from '../../components/helpers.js';
   import { environment } from '../../stores/eth/connection.js';
-  import { toNum, claim , getParticipations} from '../../helpers/staking.js';
+  import { toNum } from '../../helpers/staking.js';
   import images from '../../config/images.json';
   import smartcontracts from '../../config/smartcontracts.json';
   import Modal from '../../components/elements/Modal.svelte';
   import { onMount } from 'svelte';
   import InfoModal from '../../components/modals/infoModal.svelte';
   import ClaimModal from '../../components/elements/ClaimModal.svelte';
-
+  import isEmpty from 'lodash/isEmpty';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
   export let data;
   export let eth;
 
-  let participations = getParticipations();
-  let staker = {participation: 0};
   let claimModal;
   let votingInfos = "";
   let votingImage = "";
@@ -26,7 +24,7 @@
   let modal_content_key;
   let voteKeyword;
 
-  onMount(async() => {
+  $: if(data && !isEmpty(data)) {
     if(data.votes) {
       if(data.votes.length) {
         votingImage = "check-mark-button";
@@ -66,16 +64,20 @@
         }
       }
     }
-  });  
+  }
+
+  function handleUpdate(event) {
+    data = event.detail.data;
+    data = data;
+
+    dispatch('update', {
+        data: data,
+      });
+  }
 
   function openModal(content_key) {
     modal_content_key = content_key;
     modal.open();
-  }  
-
-  $: if (eth.address) {
-    let founded = participations.find(staker => staker.address.toLowerCase() == eth.address.toLowerCase());
-    staker = founded ? founded : staker;
   }
 
   const addToken = () => {
@@ -110,13 +112,13 @@
   };   
 </script>
 
-<Modal backgroundColor="#f3f3f3" bind:this={modal}>
+<Modal title=" " backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
     <InfoModal description_key={modal_content_key}/>
   </span>
 </Modal>
 
-<ClaimModal bind:this={claimModal}/>
+<ClaimModal bind:this={claimModal} on:update={handleUpdate}/>
 
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
   <div class="font-huge text-center mt-6">Summary</div>
@@ -175,22 +177,7 @@
       {#if eth.address}
       <button 
       class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
-      on:click={() => {
-        if(!data.accountWithdrawableRewards.eq(0) && staker.participation == 1) {
-          claim(eth).then(updated_data => {
-          data = updated_data;
-          data = data;
-
-          dispatch('update', {
-            data: data,
-          });          
-        }).catch(error => {
-          console.error(error);
-        });
-        } else {
-          claimModal.showModal(data);
-        }
-      }}
+      on:click={() => {claimModal.showModal(data);}}
       > Claim</button>
     {/if}
     </div>

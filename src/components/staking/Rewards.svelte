@@ -27,7 +27,7 @@
 
 {#if eth.address}
 <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
-  <div class="font-huge text-center mt-6">Rewards History</div>
+  <div class="font-huge text-center mt-6">Claimed Rewards</div>
   {#if isLoading}
     Loading...
   {:else}        
@@ -78,7 +78,7 @@
         {/if}
       {/each}
     {:else}
-    <span class="text-s text-center mx-8">You have no rewards yet.</span>
+    <span class="text-s text-center mx-8">you haven't claimed any reward yet.</span>
     {/if}
   {/if}
 
