@@ -177,7 +177,8 @@
         alt="ETH"
       /> 
       </div>    
-      <p class="pt-2 pb-2">3. Remember, rewards unclaimed for 3 months<br />are going  to be slashed and redestributed to active participants</p>
+      <p class="pt-2 pb-2">3. Remember, if you're inactive for 3 consecutive months <br />
+        your rewards are going to be slashed <br />and redestributed to active participants.</p>
     {/if}
   </div>
 </Modal>
