@@ -13,9 +13,11 @@ import { resetContractCache } from './contracts.js';
 import env from '../../config/env.json';
 // whenever networkId == 1, we expect to be on production/mainnet environment,
 // otherwhise, we setup a rinkeby proider as defaultProvider...
+export const prodProvider = new ethers.providers.InfuraProvider('homestead', 'e106b2b27c0f4941be1f2c183a20b3ea');
+export const devProvider = new ethers.providers.JsonRpcProvider('https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5');
 export const defaultProvider = env.blocknative.networkId === 1
-  ? new ethers.providers.InfuraProvider('homestead', 'e106b2b27c0f4941be1f2c183a20b3ea')
-  : new ethers.providers.JsonRpcProvider('https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5');
+  ? prodProvider
+  : devProvider;
 
 export const etherscanUrl = env.blocknative.networkId === 1
   ? 'https://etherscan.io'

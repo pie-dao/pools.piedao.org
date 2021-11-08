@@ -202,7 +202,7 @@ export function initContracts(eth) {
   );
 
   merkleTreeDistributor = new ethers.Contract(
-    smartcontracts.merkleTreeDistributor,
+    smartcontracts[environment].merkleTreeDistributor,
     MerkleTreeDistributorABI,
     eth.signer || eth.provider,
   );

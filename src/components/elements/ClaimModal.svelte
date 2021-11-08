@@ -10,7 +10,7 @@
   import smartcontracts from '../../config/smartcontracts.json';
   import isEmpty from 'lodash/isEmpty';
   import { claimModalIsOpen, stakingData } from '../../stores/eth/writables.js';
-  import BigNumber from 'bignumber.js';
+  import { prodProvider } from '../../stores/eth/connection.js';
   import { onMount } from 'svelte';
 
   import { createEventDispatcher } from 'svelte';
@@ -43,8 +43,12 @@
 
   async function initialize() {
     try {
-      rewardPie = new Experipie(smartcontracts.reward, $eth.provider);
-      await rewardPie.initialize($piesMarketDataStore);     
+      rewardPie = new Experipie(
+        smartcontracts['prod'].reward, 
+        prodProvider
+      );
+      await rewardPie.initialize($piesMarketDataStore);    
+      console.log("rewardPie", rewardPie);
     } catch(error) {
       console.error(error);
     }
