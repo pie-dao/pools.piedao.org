@@ -8,7 +8,7 @@
   import { onMount } from 'svelte';
   import InfoModal from '../../components/modals/infoModal.svelte';
   import ClaimModal from '../../components/elements/ClaimModal.svelte';
-
+  import isEmpty from 'lodash/isEmpty';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
 
@@ -23,7 +23,7 @@
   let modal_content_key;
   let voteKeyword;
 
-  onMount(async() => {
+  $: if(data && !isEmpty(data)) {
     if(data.votes) {
       if(data.votes.length) {
         votingImage = "check-mark-button";
@@ -63,7 +63,7 @@
         }
       }
     }
-  });  
+  }
 
   function handleUpdate(event) {
     data = event.detail.data;
