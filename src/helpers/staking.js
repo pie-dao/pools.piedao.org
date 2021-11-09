@@ -16,22 +16,19 @@ import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import EpochJson from '../config/rewards/distribution.json';
-import { stakingDataInterval, fetchStakingDataLock, stakingData } from '../stores/eth/writables.js';
+import { stakingDataInterval, stakingData } from '../stores/eth/writables.js';
 import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js'; 
+import { get } from 'svelte/store';
 
 export let sharesTimeLock = false;
 export let veDOUGH = false;
 export let merkleTreeDistributor = false;
 export const minLockAmount = 1;
 export const AVG_SECONDS_MONTH = 2628000;
+
 let ETH = null;
-
-let _stakingData = null;
-stakingData.subscribe(stakingDataObj => {
-  _stakingData = stakingDataObj;
-});
-
-/* eslint-enable import/no-mutable-exports */
+let _stakingData = get(stakingData);
+let observer = null;
 
 // in a very next future, this function will fetch directly from backend...
 export const getParticipations = () => EpochJson.claims;
@@ -49,19 +46,12 @@ export const canRestake = (lockedAt) => {
 export const observable = new Observable((subscriber) => {
   let interval = null;
 
-  stakingDataInterval.subscribe((intervalRange) => {
-    interval = setInterval(async () => {
-      fetchStakingDataLock.subscribe(async (isLocked) => {
-        const updatedData = await fetchStakingData(ETH);
+  let intervalRange = get(stakingDataInterval);
 
-        // updating the stakingData just when needed...
-        if ((JSON.stringify(_stakingData) !== JSON.stringify(updatedData)) && !isLocked) {
-          _stakingData = updatedData;
-          subscriber.next(_stakingData);
-        }
-      });
-    }, intervalRange);
-  });
+  interval = setInterval(async () => {
+    const updatedData = await fetchStakingData(ETH);
+    subscriber.next(_stakingData);
+  }, intervalRange);  
 
   // clearing interval, when unsubscribe action happens...
   return () => {
@@ -203,7 +193,17 @@ export function initialize(eth) {
       initContracts(eth);
 
       _stakingData = await fetchStakingData(eth);
-      stakingData.set(_stakingData);
+
+      if(observer) {
+        observer.unsubscribe();
+      }
+
+      observer = observable.subscribe({
+        next(updated_data) {
+          console.log("data updated", updated_data);
+        }
+      }); 
+
       resolve(_stakingData);
     } catch (error) {
       displayNotification({
@@ -488,7 +488,9 @@ export const fetchStakingData = async (eth) => {
   _stakingData.address = eth.address;
   _stakingData.hasLoaded = true;
   
+  stakingData.set(_stakingData);
   console.log('fetchStakingData', _stakingData);
+  
   return _stakingData;
 };
 
