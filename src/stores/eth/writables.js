@@ -48,6 +48,3 @@ export const stakingData = writable({
 
 export const justBoosted = writable({});
 export const timestampBoosted = writable({});
-export const BoostedModalIsOpen = writable(false);
-
-export const fetchStakingDataLock = writable(false);

@@ -17,7 +17,7 @@
     AVG_SECONDS_MONTH,
     canRestake
   } from '../../helpers/staking.js';
-  import { justBoosted, timestampBoosted, fetchStakingDataLock, stakingData } from '../../stores/eth/writables';
+  import { justBoosted, timestampBoosted, stakingData } from '../../stores/eth/writables';
   import { eth } from '../../stores/eth.js';
   
   export let scrollToTop;
@@ -102,9 +102,6 @@
                     <button
                       disabled={$justBoosted[lock.lockId]}
                       on:click={() => {
-                        // locking the fetchStakingDataLock variable to avoid unexpected behaviors...
-                        $fetchStakingDataLock = true;
-
                         // marking the lock as justBoosted...
                         $justBoosted[lock.lockId] = true;
 
@@ -120,9 +117,6 @@
                             }
 
                             boostedModal.showModalLock(lock);
-                            
-                            // unlocking the fetchStakingDataLock, it's a must...
-                            $fetchStakingDataLock = false;
 
                             setTimeout(() => {
                               $timestampBoosted[$stakingData.accountLocks[0].lockId] = null;
