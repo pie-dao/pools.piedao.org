@@ -49,7 +49,7 @@ export const observable = new Observable((subscriber) => {
   let intervalRange = get(stakingDataInterval);
 
   interval = setInterval(async () => {
-    const updatedData = await fetchStakingData(ETH);
+    await fetchStakingData(ETH);
     subscriber.next(_stakingData);
   }, intervalRange);  
 
@@ -198,11 +198,7 @@ export function initialize(eth) {
         observer.unsubscribe();
       }
 
-      observer = observable.subscribe({
-        next(updated_data) {
-          console.log("data updated", updated_data);
-        }
-      }); 
+      observer = observable.subscribe({}); 
 
       resolve(_stakingData);
     } catch (error) {
