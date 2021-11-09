@@ -150,11 +150,10 @@
     <img class="h-150px inline mb-4" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/money-mouth-face_1f911.png" alt="hourglass" />
     <div class="font-hero text-center mt-10">$ 1,350,000</div>
     <div class="font-thin text-l text-center mt-20px">
-      You are reading it right.
+      Distsributed during the first month distribution!
       <br />
-      This is the amount waiting to be distributed the first month.
-    </div> 
-    <span class="text-xs">*subject to market dynamics</span>
+      +200 full time token holders rewarded on November 5th, 2021.
+    </div>
   </div>
 </div>
 
