@@ -9,9 +9,7 @@
   import Experipie from '../../classes/Experipie.js';
   import smartcontracts from '../../config/smartcontracts.json';
   import isEmpty from 'lodash/isEmpty';
-  import { claimModalIsOpen, stakingData } from '../../stores/eth/writables.js';
-  import { onMount } from 'svelte';
-
+  import { stakingData } from '../../stores/eth/writables.js';
 
   let _staker = {participation: 0};
   let claimModalTitle;
@@ -25,17 +23,6 @@
   $: if($eth.provider && !initialized && !isEmpty($piesMarketDataStore)) {
     initialized = true;
     initialize();
-  }
-
-  onMount(async() => {
-    if($claimModalIsOpen) {
-      await initialize();
-      showModal($stakingData);
-    }
-  });
-
-  const modalChanged = (event, force = true) => {
-    $claimModalIsOpen = event.detail.data.isOpen;
   }
 
   async function initialize() {
@@ -53,10 +40,6 @@
     if(retrieveLeaf($stakingData.address)) {
       _staker.participation = 1;
     }
-
-    // TODO: remove me
-    // $stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
-    // _staker.participation = 1;
 
     rewardNAV = $stakingData.accountWithdrawableRewards.times(rewardPie.nav);
 
@@ -94,9 +77,7 @@
   }
 </script>
 
-<div id="confetti" class="hidden md:block" />
-
-<Modal modalIsOpen={$claimModalIsOpen} on:modalChanged={modalChanged} title={claimModalTitle} backgroundColor="#f3f3f3" bind:this={claimModal}>
+<Modal title={claimModalTitle} backgroundColor="#f3f3f3" bind:this={claimModal}>
   <div slot="content" class="font-thin text-center hidescrollbar">
     {#if (!$stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1)}
       <p class="pb-2">Like every month, freshly baked<br />rewards for you.</p>

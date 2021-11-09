@@ -108,6 +108,7 @@
 </Modal>
 
 <ClaimModal bind:this={claimModal}/>
+
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
   <div class="font-huge text-center mt-6">Summary</div>
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">

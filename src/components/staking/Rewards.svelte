@@ -6,10 +6,11 @@
   import { stakingData } from '../../stores/eth/writables.js';
   import { eth } from '../../stores/eth.js';
   import Modal from '../../components/elements/Modal.svelte';
-  let modalinfo;
 
-  let isLoading = true;
   export let itemsNumber;
+
+  let modalinfo;
+  let isLoading = true;
 
   $: if($stakingData && $stakingData.hasLoaded) {
     if(!itemsNumber) {
