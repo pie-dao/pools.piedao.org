@@ -17,31 +17,36 @@
     AVG_SECONDS_MONTH,
     canRestake
   } from '../../helpers/staking.js';
-  import { justBoosted, timestampBoosted, fetchStakingDataLock } from '../../stores/eth/writables';
-
-  import { createEventDispatcher } from 'svelte';
-  const dispatch = createEventDispatcher();
-
-  export let isLoading;
-  export let data;
-  export let eth;
+  import { justBoosted, timestampBoosted, fetchStakingDataLock, stakingData } from '../../stores/eth/writables';
+  import { eth } from '../../stores/eth.js';
+  
   export let scrollToTop;
-  export let itemsNumber = data.accountLocks.length;
+  export let itemsNumber;
+  
+  let isLoading = true;
   let boostedModal;
   let unlockModal;
+
+  $: if($stakingData && $stakingData.hasLoaded) {
+    if(!itemsNumber) {
+      itemsNumber = $stakingData.accountLocks.length;
+    }
+
+    isLoading = false;
+  }
 </script>
 
 <BoostedModal bind:this={boostedModal}/>
 <UnlockModal bind:this={unlockModal}/>
 
-{#if eth.address}
+{#if $eth.address}
   <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
     <div class="font-huge text-center mt-6">Your Staking</div>
 
     {#if isLoading}
       Loading...
-    {:else if data.accountLocks && data.accountLocks.length > 0}
-      {#each data.accountLocks.slice(0, itemsNumber) as lock, id}
+    {:else if $stakingData.accountLocks && $stakingData.accountLocks.length > 0}
+      {#each $stakingData.accountLocks.slice(0, itemsNumber) as lock, id}
         <!-- Let's show just the normal stakes, and the boosted ones. The stakes having a boostedPointer are obsolete stakes, so we won't show them -->
         {#if lock.boostedPointer == ''}
           <div
@@ -106,7 +111,7 @@
                         // saving the timestampBoosted for further uses...
                         let boostingTimestamp = Math.floor(Number(Date.now()) / 1000);
 
-                        boostToMax(lock.lockId, eth)
+                        boostToMax(lock.lockId, $eth)
                           .then((updated_data) => {
                             $timestampBoosted[updated_data.accountLocks[0].lockId] = boostingTimestamp;
 
@@ -119,12 +124,8 @@
                             // unlocking the fetchStakingDataLock, it's a must...
                             $fetchStakingDataLock = false;
 
-                            // updating the data object...
-                            data = updated_data;
-                            data = data;
-
                             setTimeout(() => {
-                              $timestampBoosted[data.accountLocks[0].lockId] = null;
+                              $timestampBoosted[$stakingData.accountLocks[0].lockId] = null;
                               $justBoosted[lock.lockId] = false;
                             }, 15000);
                           })
@@ -173,14 +174,9 @@
                     {#if didLockExpired(lock)}
                       <div
                         on:click={() => {
-                          unstakeDOUGH(lock.lockId, toNum(lock.amount), eth)
+                          unstakeDOUGH(lock.lockId, toNum(lock.amount), $eth)
                             .then((updated_data) => {
-                              data = updated_data;
-                              data = data;
-
-                              dispatch('update', {
-                                data: data,
-                              });
+                              console.log("unstaked", updated_data);
                             })
                             .catch((error) => {
                               console.error(error.message);
@@ -193,7 +189,7 @@
                     {:else}
                       <div 
                       on:click={() => {
-                        unlockModal.showModalLock(lock, data.accountWithdrawnRewards);
+                        unlockModal.showModalLock(lock, $stakingData.accountWithdrawnRewards);
                       }}
                       class="mt-2 flex justify-end opacity-30 pointer">
                         <span>Unstake</span>
@@ -210,7 +206,7 @@
       <span class="text-s text-center mx-8">You haven't staked anything yet, what are you waiting for?</span>
     {/if}
 
-    {#if data.accountLocks.length > itemsNumber}
+    {#if $stakingData.accountLocks.length > itemsNumber}
       <a class="pt-6" href="#/staking_positions"> See all staking positions </a>
     {/if}
   </div>

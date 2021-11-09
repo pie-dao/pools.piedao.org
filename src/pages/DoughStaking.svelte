@@ -6,13 +6,11 @@
   import { onDestroy } from 'svelte';
   import smartcontracts from '../config/smartcontracts.json';
   import displayNotification from '../notifications';
-  import { stakingDataIntervalRunning } from '../stores/eth/writables.js';
+  import { stakingDataIntervalRunning, stakingData } from '../stores/eth/writables.js';
   import BigNumber from 'bignumber.js';
   import {
-    toNum,
     toBN,
     stakeDOUGH,
-    dataObj,
     initialize,
     approveToken,
     observable,
@@ -27,7 +25,6 @@
 
   let veDOUGH = 0;
 
-  $: data = dataObj;
   $: stakeButtonText = 'Stake DOUGH';
   $: isStaking = false;
   $: isLoading = false;
@@ -36,9 +33,9 @@
   $: keyDoughBalance = false;
   $: getDoughBalance = (() => {
     if(!keyDoughBalance) return BigNumber(0);
-    // saving the real-time value of dough amount into data object, so we can use it in other components/modals...
-    data.accountDepositTokenBalance = $balances[keyDoughBalance] ? BigNumber($balances[keyDoughBalance].toString()) : BigNumber(0);
-    return data.accountDepositTokenBalance;
+    // saving the real-time value of dough amount into $stakingData object, so we can use it in other components/modals...
+    $stakingData.accountDepositTokenBalance = $balances[keyDoughBalance] ? BigNumber($balances[keyDoughBalance].toString()) : BigNumber(0);
+    return $stakingData.accountDepositTokenBalance;
   })();
   let stakeAmount = {
     label: "",
@@ -78,10 +75,10 @@
   }
 
   function init() {
+    // TODO: maybe remove me from here...
     initialize($eth)
       .then((updated_data) => {
         isLoading = false;
-        data = updated_data;
         receiver = $eth.address;
 
         if (observer) {
@@ -91,9 +88,7 @@
 
         observer = observable.subscribe({
           next(updated_data) {
-            // saving updated data coming from subgraph...
-            data = updated_data;
-            // and updating the accountDepositTokenBalance value in real time...
+            // updating the accountDepositTokenBalance value in real time...
             getDoughBalance;
           },
         });
@@ -104,11 +99,6 @@
         isLoading = false;
         console.error(error);
       });
-  }
-
-  function handleUpdate(event) {
-    data = event.detail.data;
-    data = data;
   }
 
   const addToken = () => {
@@ -148,32 +138,28 @@
   }
 </script>
 
-<StakedModal bind:this={stakedModal} on:update={handleUpdate}/>
+<StakedModal bind:this={stakedModal} />
 
 <div class="font-huge text-center">Dough Staking</div>
 <div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
 
 <div class="flex w-100pc pt-0 pb-20px flex flex-col items-center">
-  {#key data}
-    <StakingStats showLoader={true} />
-  {/key}
+  <StakingStats showLoader={true} />
   <div
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"
   >
     <div class="flex flex-col w-full mt-6 md:mt-0 lg:w-49pc md:mr-1pc">
-      {#key data}
-        <!-- SUMMARY -->
-        <StakingSummary {data} eth={$eth} on:update={handleUpdate} />
-        <!-- END SUMMARY -->
+      <!-- SUMMARY -->
+      <StakingSummary eth={$eth} />
+      <!-- END SUMMARY -->
 
-        <!-- YOUR STAKING -->
-        <StakingPositions {data} {isLoading} itemsNumber="3" eth={$eth} on:update={handleUpdate} scrollToTop={false}/>
-        <!-- END YOUR STAKING -->
+      <!-- YOUR STAKING -->
+      <StakingPositions {isLoading} itemsNumber="3" scrollToTop={false}/>
+      <!-- END YOUR STAKING -->
 
-        <!-- PAST REWARDS -->
-        <StakingRewards {data} {isLoading} itemsNumber="3" eth={$eth}/>
-        <!-- END PAST REWARDS -->
-      {/key}
+      <!-- PAST REWARDS -->
+      <StakingRewards {isLoading} itemsNumber="3" eth={$eth}/>
+      <!-- END PAST REWARDS -->
     </div>
 
     <!-- STAKING FORM -->
@@ -344,7 +330,7 @@
                   class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                   >Insufficient Balance</button
                 >
-              {:else if stakeAmount.bn.isGreaterThan(data.accountDepositTokenAllowance)}
+              {:else if stakeAmount.bn.isGreaterThan($stakingData.accountDepositTokenAllowance)}
                 <button
                   disabled={isStaking || isApproving}
                   on:click={() => {
@@ -363,9 +349,7 @@
 
                     approveToken($eth)
                       .then((updated_data) => {
-                        data = updated_data;
-                        data = data;
-
+                        console.log("approved", updated_data);
                         clearInterval(interval);
                         approveButtonText = 'Approve';
                         isApproving = false;
@@ -400,10 +384,8 @@
 
                     stakeDOUGH(stakeAmount.bn, stakeDuration, receiver, $eth)
                       .then((updated_data) => {
-                        data = updated_data;
-                        data = data;
-
-                        stakedModal.showModal(stakeAmount.label, stakeDuration, data, $eth);
+                        console.log("staked", updated_data);
+                        stakedModal.showModal(stakeAmount.label, stakeDuration, $eth);
                         
                         clearInterval(interval);
                         stakeButtonText = 'Success! 🥳';

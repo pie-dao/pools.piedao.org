@@ -3,7 +3,7 @@ import jazzicon from 'jazzicon';
 import { ethers } from 'ethers';
 import { get } from 'svelte/store';
 import { shortenAddress } from '@pie-dao/utils';
-
+import { initialize } from '../../helpers/staking.js';
 import { defaultEth, eth } from './writables.js';
 /* eslint-disable import/no-cycle */
 import { connectWeb3 } from '../eth.js';
@@ -96,6 +96,9 @@ export const registerConnection = async (newWeb3) => {
 
   setWeb3Listeners();
   bumpLifecycle();
+
+  // initialize the stakingData store object...
+  await initialize(get(eth));
 };
 
 export const resetConnection = () => {

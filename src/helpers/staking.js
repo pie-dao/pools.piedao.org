@@ -16,26 +16,8 @@ import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import EpochJson from '../config/rewards/distribution.json';
-import { stakingDataInterval, fetchStakingDataLock } from '../stores/eth/writables.js';
+import { stakingDataInterval, fetchStakingDataLock, stakingData } from '../stores/eth/writables.js';
 import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js'; 
-
-/* eslint-disable import/no-mutable-exports */
-export let dataObj = {
-  address: null,
-  totalDoughStaked: BigNumber(0),
-  veTokenTotalSupply: BigNumber(0),
-  accountAverageDuration: 0,
-  accountVotingPower: 0,
-  accountVeTokenBalance: BigNumber(0),
-  accountTokenBalance: BigNumber(0),
-  accountWithdrawableRewards: BigNumber(0),
-  accountWithdrawnRewards: BigNumber(0),
-  accountDepositTokenBalance: BigNumber(0),
-  accountLocks: [],
-  rewards: [],
-  votes: null,
-  proposals: null
-};
 
 export let sharesTimeLock = false;
 export let veDOUGH = false;
@@ -43,6 +25,11 @@ export let merkleTreeDistributor = false;
 export const minLockAmount = 1;
 export const AVG_SECONDS_MONTH = 2628000;
 let ETH = null;
+
+let _stakingData = null;
+stakingData.subscribe(stakingDataObj => {
+  _stakingData = stakingDataObj;
+});
 
 /* eslint-enable import/no-mutable-exports */
 
@@ -68,9 +55,9 @@ export const observable = new Observable((subscriber) => {
         const updatedData = await fetchStakingData(ETH);
 
         // updating the stakingData just when needed...
-        if ((JSON.stringify(dataObj) !== JSON.stringify(updatedData)) && !isLocked) {
-          dataObj = updatedData;
-          subscriber.next(dataObj);
+        if ((JSON.stringify(_stakingData) !== JSON.stringify(updatedData)) && !isLocked) {
+          _stakingData = updatedData;
+          subscriber.next(_stakingData);
         }
       });
     }, intervalRange);
@@ -209,13 +196,15 @@ export function initContracts(eth) {
 
 export function initialize(eth) {
   ETH = eth;
+
   /* eslint-disable no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
     try {
       initContracts(eth);
 
-      dataObj = await fetchStakingData(eth);
-      resolve(dataObj);
+      _stakingData = await fetchStakingData(eth);
+      stakingData.set(_stakingData);
+      resolve(_stakingData);
     } catch (error) {
       displayNotification({
         message: error.message,
@@ -411,11 +400,11 @@ export const fetchStakingData = async (eth) => {
   } catch (error) {
     // using onchain as fallback...
     staker = await sharesTimeLock.getStakingData(eth.address);
-    rewards = dataObj.rewards.length > 0 ? dataObj.rewards : [];
+    rewards = _stakingData.rewards.length > 0 ? _stakingData.rewards : [];
   }
 
-  dataObj.totalDoughStaked = response.globalStats[0].totalDoughStaked;
-  dataObj.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
+  _stakingData.totalDoughStaked = response.globalStats[0].totalDoughStaked;
+  _stakingData.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
 
   if (staker !== undefined) {
     let leaf = retrieveLeaf(eth.address);
@@ -428,14 +417,14 @@ export const fetchStakingData = async (eth) => {
     Object.keys(staker).forEach((key) => {
       if (key !== 'accountLocks') {
         if(key == 'accountWithdrawableRewards') {
-          dataObj[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
+          _stakingData[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
         } else {
-          dataObj[key] = new BigNumber(staker[key].toString());
+          _stakingData[key] = new BigNumber(staker[key].toString());
         }
       } else {
         const locks = [];
-        dataObj.accountAverageDuration = 0;
-        dataObj.accountTokenBalance = new BigNumber('0');
+        _stakingData.accountAverageDuration = 0;
+        _stakingData.accountTokenBalance = new BigNumber('0');
         let locksCounter = 0;
 
         staker[key].forEach((lock, index) => {
@@ -446,9 +435,9 @@ export const fetchStakingData = async (eth) => {
             // and we create a new 36-months-duration one)
             if (lock.boostedPointer === '') {
               locksCounter += 1;
-              dataObj.accountTokenBalance = dataObj.accountTokenBalance
+              _stakingData.accountTokenBalance = _stakingData.accountTokenBalance
                 .plus(new BigNumber(lock.amount.toString()));
-              dataObj.accountAverageDuration += Number(lock.lockDuration);
+              _stakingData.accountAverageDuration += Number(lock.lockDuration);
             }
 
             locks.push({
@@ -466,39 +455,41 @@ export const fetchStakingData = async (eth) => {
           }
         });
 
-        dataObj.accountAverageDuration = dataObj.accountAverageDuration
-          ? Math.floor((dataObj.accountAverageDuration / locksCounter) / AVG_SECONDS_MONTH)
+        _stakingData.accountAverageDuration = _stakingData.accountAverageDuration
+          ? Math.floor((_stakingData.accountAverageDuration / locksCounter) / AVG_SECONDS_MONTH)
           : 0;
 
         locks.sort((lockA, lockB) => lockB.lockedAt - lockA.lockedAt);
 
-        dataObj[key] = locks;
+        _stakingData[key] = locks;
       }
     });
   }
 
-  const votingPower = dataObj.accountVeTokenBalance && dataObj.veTokenTotalSupply
-    ? ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2)
+  const votingPower = _stakingData.accountVeTokenBalance && _stakingData.veTokenTotalSupply
+    ? ((_stakingData.accountVeTokenBalance.times(100)).div(_stakingData.veTokenTotalSupply)).toFixed(2)
     : 0;
 
-  dataObj.accountVotingPower = Number(votingPower);
+  _stakingData.accountVotingPower = Number(votingPower);
 
-  dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
+  _stakingData.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
 
   // retrieving the votes in the last month for a given address...
-  dataObj.votes = await fetchLastMonthVoteForVoter(eth.address);
+  _stakingData.votes = await fetchLastMonthVoteForVoter(eth.address);
   
   // retrieving the oldest active proposal from piedao.eth space after the 18/10/2021...
-  dataObj.proposals = await fetchLastSnapshots(1, 'active', 'asc', moment("2021-10-18").unix());
+  _stakingData.proposals = await fetchLastSnapshots(1, 'active', 'asc', moment("2021-10-18").unix());
   // and if there is at least one active proposal after the 18/10/2021, we add the
   // block infos into that object, so we can easily get the timestamp or any other related info
-  if(dataObj.proposals[0]) {
-    dataObj.proposals[0].block = await eth.provider.getBlock(Number(dataObj.proposals[0].snapshot));
+  if(_stakingData.proposals[0]) {
+    _stakingData.proposals[0].block = await eth.provider.getBlock(Number(_stakingData.proposals[0].snapshot));
   }
 
-  dataObj.address = eth.address;
-  console.log('fetchStakingData', dataObj);
-  return dataObj;
+  _stakingData.address = eth.address;
+  _stakingData.hasLoaded = true;
+  
+  console.log('fetchStakingData', _stakingData);
+  return _stakingData;
 };
 
 export function boostToMax(id, eth) {
@@ -523,10 +514,10 @@ export function boostToMax(id, eth) {
 
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
-            dataObj = await fetchStakingData(eth);
+            _stakingData = await fetchStakingData(eth);
             subscription.unsubscribe();
 
-            resolve(dataObj);
+            resolve(_stakingData);
           },
         });
       });
@@ -564,10 +555,10 @@ export async function unstakeDOUGH(id, lockAmount, eth) {
 
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
-            dataObj = await fetchStakingData(eth);
+            _stakingData = await fetchStakingData(eth);
             subscription.unsubscribe();
 
-            resolve(dataObj);
+            resolve(_stakingData);
           },
         });
       });
@@ -624,8 +615,8 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
             });
 
             subscription.unsubscribe();
-            dataObj = await fetchStakingData(eth);
-            resolve(dataObj);
+            _stakingData = await fetchStakingData(eth);
+            resolve(_stakingData);
           },
         });
       });
@@ -675,8 +666,8 @@ export async function claim(eth) {
   
               subscription.unsubscribe();
   
-              dataObj = await fetchStakingData(eth);
-              resolve(dataObj);
+              _stakingData = await fetchStakingData(eth);
+              resolve(_stakingData);
             },
           });
         });        
@@ -728,15 +719,15 @@ export function approveToken(eth) {
     try {
       // resetting the approve to zero, before initiating a new approval...
       if (
-        !dataObj.accountDepositTokenAllowance.isEqualTo(0)
-        && !dataObj.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
+        !_stakingData.accountDepositTokenAllowance.isEqualTo(0)
+        && !_stakingData.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
       ) {
         await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
       }
 
       await approveMax(smartcontracts.dough, smartcontracts.doughStaking, { gasLimit: 100000 });
-      dataObj.accountDepositTokenAllowance = ethers.constants.MaxUint256;
-      resolve(dataObj);
+      _stakingData.accountDepositTokenAllowance = ethers.constants.MaxUint256;
+      resolve(_stakingData);
     } catch (error) {
       displayNotification({
         autoDismiss: 15000,

@@ -10,11 +10,8 @@
   import smartcontracts from '../../config/smartcontracts.json';
   import isEmpty from 'lodash/isEmpty';
   import { claimModalIsOpen, stakingData } from '../../stores/eth/writables.js';
-  import BigNumber from 'bignumber.js';
   import { onMount } from 'svelte';
 
-  import { createEventDispatcher } from 'svelte';
-  const dispatch = createEventDispatcher();
 
   let _staker = {participation: 0};
   let claimModalTitle;
@@ -86,13 +83,6 @@
     }, 1000);
 
     claim($eth).then(updated_data => {
-      // $stakingData = updated_data;
-      // $stakingData = $stakingData;
-
-      // dispatch('update', {
-      //   data: $stakingData,
-      // });
-
       clearInterval(interval);
       buttonText = "Claimed";
       hasClaimed = true;

@@ -3,14 +3,13 @@
   import images from '../../config/images.json';
   import { formatFiat } from '../../components/helpers.js';
   import { toNum } from '../../helpers/staking.js';
-
+  import { stakingData } from '../../stores/eth/writables';
   import Modal from '../../components/elements/Modal.svelte';
   let modalinfo;
 
   export let isLoading;
-  export let data;
   export let eth;
-  export let itemsNumber = data.rewards.length;
+  export let itemsNumber = $stakingData.rewards.length;
 </script>
 
 <Modal title="Slashed Rewards" backgroundColor="#f3f3f3" bind:this={modalinfo}>
@@ -31,8 +30,8 @@
   {#if isLoading}
     Loading...
   {:else}        
-    {#if data.rewards && data.rewards.length > 0}
-      {#each data.rewards.slice(0, itemsNumber) as reward}
+    {#if $stakingData.rewards && $stakingData.rewards.length > 0}
+      {#each $stakingData.rewards.slice(0, itemsNumber) as reward}
         {#if reward.type != 'distributed'}
           <!-- <a
             href={"#/staking_reward_breakdown/" + reward.timestamp * 1000}
@@ -86,7 +85,7 @@
     {/if}
   {/if}
 
-  {#if data.rewards.length > itemsNumber}
+  {#if $stakingData.rewards.length > itemsNumber}
   <a class="pt-6" href="#/staking_rewards"> See all rewards </a>
 {/if}
 </div>

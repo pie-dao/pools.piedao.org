@@ -28,6 +28,7 @@ export const stakingStats = writable({
   totalDough: 0,
 });
 export const stakingData = writable({
+  hasLoaded: false,
   address: null,
   totalDoughStaked: BigNumber(0),
   veTokenTotalSupply: BigNumber(0),
