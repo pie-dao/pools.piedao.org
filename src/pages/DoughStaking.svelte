@@ -334,7 +334,7 @@
                   stakeDOUGH(stakeAmount.bn, stakeDuration, receiver, $eth)
                     .then((updated_data) => {
                       console.log('staked', updated_data);
-                      stakedModal.showModal(stakeAmount.label, stakeDuration, $eth);
+                      stakedModal.showModal(stakeAmount.label, stakeDuration);
 
                       clearInterval(interval);
                       stakeButtonText = 'Success! 🥳';

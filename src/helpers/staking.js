@@ -583,6 +583,10 @@ export async function unstakeDOUGH(id, lockAmount, eth) {
 export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
   /* eslint-disable  no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
+    if (!sharesTimeLock) {
+      initContracts(eth);
+    }
+    
     const error = safeFlow(stakeAmount, stakeDuration, receiver, eth);
 
     if (error) {

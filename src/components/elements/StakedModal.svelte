@@ -6,6 +6,7 @@
   import { parseEther } from '@ethersproject/units';
   import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
   import { stakingData } from '../../stores/eth/writables.js';
+  import { eth } from '../../stores/eth.js';
   import BigNumber from 'bignumber.js';
   import Proposals from './Proposals.svelte';
 
@@ -48,7 +49,6 @@
     colors: ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a'],
   };
 
-  let _eth;
   let _stakeAmount;
   let _stakeDuration;
 
@@ -91,8 +91,7 @@
     }, 500);    
   }
 
-  export const showModal = (stakeAmount, stakeDuration, eth) => {
-    _eth = eth;
+  export const showModal = (stakeAmount, stakeDuration) => {
     _stakeAmount = stakeAmount;
     _stakeDuration = stakeDuration;
 
@@ -134,11 +133,11 @@
   }; 
   
   async function restakeLastLock() {
-    let lockId = await getLastLockForAddress(_eth);
+    let lockId = await getLastLockForAddress($eth);
     restakeText = "Boosting...";
     isRestaking = true;
 
-    boostToMax(lockId, _eth).then((updated_data) => {
+    boostToMax(lockId, $eth).then((updated_data) => {
       _stakeDuration = 36;
       restakeText = "Restake 3 years";
       isRestaking = false;
