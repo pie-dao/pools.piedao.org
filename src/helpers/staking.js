@@ -586,7 +586,7 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
     if (!sharesTimeLock) {
       initContracts(eth);
     }
-    
+
     const error = safeFlow(stakeAmount, stakeDuration, receiver, eth);
 
     if (error) {
@@ -639,6 +639,10 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
 export async function claim(eth) {
   /* eslint-disable  no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
+    if (!merkleTreeDistributor) {
+      initContracts(eth);
+    }
+
     const proof = prepareProofs(eth);
     console.log('proof', proof);
 

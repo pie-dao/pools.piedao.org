@@ -9,8 +9,10 @@
   import Experipie from '../../classes/Experipie.js';
   import smartcontracts from '../../config/smartcontracts.json';
   import isEmpty from 'lodash/isEmpty';
+  import BigNumber from 'bignumber.js';
   import { stakingData } from '../../stores/eth/writables.js';
 
+  let _stakingData = $stakingData;
   let _staker = {participation: 0};
   let claimModalTitle;
   let claimModal;
@@ -35,15 +37,15 @@
   }
 
   export const showModal = (data) => {
-    $stakingData = data;
+    _stakingData = data;
 
-    if(retrieveLeaf($stakingData.address)) {
+    if(retrieveLeaf(_stakingData.address)) {
       _staker.participation = 1;
     }
 
-    rewardNAV = $stakingData.accountWithdrawableRewards.times(rewardPie.nav);
+    rewardNAV = _stakingData.accountWithdrawableRewards.times(rewardPie.nav);
 
-    if (!$stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
+    if (!_stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
       claimModalTitle = "Pie day is best day";
     } else {
       claimModalTitle = "You can't claim yet";
@@ -79,7 +81,7 @@
 
 <Modal title={claimModalTitle} backgroundColor="#f3f3f3" bind:this={claimModal}>
   <div slot="content" class="font-thin text-center hidescrollbar">
-    {#if (!$stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1)}
+    {#if (!_stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1)}
       <p class="pb-2">Like every month, freshly baked<br />rewards for you.</p>
 
       <div class="text-center mx-auto">
@@ -90,7 +92,7 @@
       /> 
       </div>    
       <p class="pt-2 font-24px"><b>
-        {formatFiat(toNum($stakingData.accountWithdrawableRewards), ',', '.', '')} SLICE
+        {formatFiat(toNum(_stakingData.accountWithdrawableRewards), ',', '.', '')} SLICE
       </b></p>
       <p class="mb-4">
         {formatFiat(toNum(rewardNAV), ',', '.', '$')} (Net Asset Value)
@@ -118,9 +120,9 @@
     {:else}
       <p class="pb-2">Here's what you have to do:</p>
 
-      {#if $stakingData.votes.length == 0}
-        {#if $stakingData.proposals && $stakingData.proposals.length}
-          <Proposals proposals={$stakingData.proposals} />
+      {#if _stakingData.votes.length == 0}
+        {#if _stakingData.proposals && _stakingData.proposals.length}
+          <Proposals proposals={_stakingData.proposals} />
         {:else}
           <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
             <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
