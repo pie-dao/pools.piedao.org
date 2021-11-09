@@ -7,6 +7,7 @@
   $: shortAddress = address ? shortenAddress(address) : '';
 
   $: ( async () => {
+    console.log("web3button async", window.localStorage.getItem('address'));
     if(window.localStorage.getItem('address')) {
       await connectWeb3Cached();
     }

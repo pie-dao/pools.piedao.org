@@ -26,7 +26,7 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
-      infuraId: 'e106b2b27c0f4941be1f2c183a20b3ea', // required
+      infuraId: '1ec103a49691457aa6dff30aa8ab73d0', // e106b2b27c0f4941be1f2c183a20b3ea
     },
   },
   injected: {
@@ -36,7 +36,7 @@ const providerOptions = {
 
 const web3Modal = new Web3Modal({
   network: 'mainnet', // optional
-  cacheProvider: false, // optional
+  cacheProvider: true, // optional
   providerOptions, // required
 });
 
@@ -46,7 +46,7 @@ export const connectWeb3Cached = async () => {
   try {
     resetConnection();
 
-    const web3 = await web3Modal.connectTo('injected');
+    const web3 = await web3Modal.connect(); //connectTo('injected');
 
     if (!web3) {
       console.log('NOT CONNECTED');

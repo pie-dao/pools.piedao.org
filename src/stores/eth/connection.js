@@ -14,7 +14,7 @@ import env from '../../config/env.json';
 // whenever networkId == 1, we expect to be no production/mainnet environment,
 // otherwhise, we setup a rinkeby proider as defaultProvider...
 export const defaultProvider = env.blocknative.networkId === 1
-  ? new ethers.providers.InfuraProvider('homestead', 'e106b2b27c0f4941be1f2c183a20b3ea')
+  ? new ethers.providers.InfuraProvider('homestead', '1ec103a49691457aa6dff30aa8ab73d0') // e106b2b27c0f4941be1f2c183a20b3ea
   : new ethers.providers.JsonRpcProvider('https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5');
 
 defaultProvider.on('block', updateCurrentBlock);
@@ -57,6 +57,7 @@ const setWeb3Listeners = () => {
 export const registerConnection = async (newWeb3) => {
   const web3 = newWeb3 || get(eth).web3;
   console.log('newWeb3', newWeb3);
+
   if (!web3) {
     throw new Error('Unable to find a web3 object. Was one passed?');
   }
@@ -99,9 +100,6 @@ export const registerConnection = async (newWeb3) => {
 };
 
 export const resetConnection = () => {
-  window.localStorage.removeItem('address');
-  window.localStorage.removeItem('walletconnect');
-
   resetWeb3Listeners();
   resetContractCache();
   eth.set({ ...defaultEth, provider: defaultProvider });

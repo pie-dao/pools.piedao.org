@@ -15,6 +15,9 @@
   let dropdownOpen2 = false;
 
   const disconnect = () => {
+    window.localStorage.removeItem('address');
+    window.localStorage.removeItem('walletconnect');
+    
     $eth.address = null;
     resetConnection();
   }
