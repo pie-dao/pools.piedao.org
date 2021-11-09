@@ -3,13 +3,21 @@
   import images from '../../config/images.json';
   import { formatFiat } from '../../components/helpers.js';
   import { toNum } from '../../helpers/staking.js';
-  import { stakingData } from '../../stores/eth/writables';
+  import { stakingData } from '../../stores/eth/writables.js';
+  import { eth } from '../../stores/eth.js';
   import Modal from '../../components/elements/Modal.svelte';
   let modalinfo;
 
-  export let isLoading;
-  export let eth;
-  export let itemsNumber = $stakingData.rewards.length;
+  let isLoading = true;
+  export let itemsNumber;
+
+  $: if($stakingData && $stakingData.hasLoaded) {
+    if(!itemsNumber) {
+      itemsNumber = $stakingData.rewards.length;
+    }
+
+    isLoading = false;
+  }  
 </script>
 
 <Modal title="Slashed Rewards" backgroundColor="#f3f3f3" bind:this={modalinfo}>
@@ -24,7 +32,7 @@
   </span>
 </Modal>
 
-{#if eth.address}
+{#if $eth.address}
 <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
   <div class="font-huge text-center mt-6">Claimed Rewards</div>
   {#if isLoading}

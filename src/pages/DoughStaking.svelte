@@ -75,30 +75,22 @@
   }
 
   function init() {
-    // TODO: maybe remove me from here...
-    initialize($eth)
-      .then((updated_data) => {
-        isLoading = false;
-        receiver = $eth.address;
+    isLoading = false;
+    receiver = $eth.address;
 
-        if (observer) {
-          $stakingDataIntervalRunning = false;
-          observer.unsubscribe();
-        }
+    if (observer) {
+      $stakingDataIntervalRunning = false;
+      observer.unsubscribe();
+    }
 
-        observer = observable.subscribe({
-          next(updated_data) {
-            // updating the accountDepositTokenBalance value in real time...
-            getDoughBalance;
-          },
-        });
+    observer = observable.subscribe({
+      next(updated_data) {
+        // updating the accountDepositTokenBalance value in real time...
+        getDoughBalance;
+      },
+    });
 
-        $stakingDataIntervalRunning = true;
-      })
-      .catch((error) => {
-        isLoading = false;
-        console.error(error);
-      });
+    $stakingDataIntervalRunning = true;
   }
 
   const addToken = () => {
@@ -150,15 +142,15 @@
   >
     <div class="flex flex-col w-full mt-6 md:mt-0 lg:w-49pc md:mr-1pc">
       <!-- SUMMARY -->
-      <StakingSummary eth={$eth} />
+      <StakingSummary />
       <!-- END SUMMARY -->
 
       <!-- YOUR STAKING -->
-      <StakingPositions {isLoading} itemsNumber="3" scrollToTop={false}/>
+      <StakingPositions itemsNumber="3" scrollToTop={false} />
       <!-- END YOUR STAKING -->
 
       <!-- PAST REWARDS -->
-      <StakingRewards {isLoading} itemsNumber="3" eth={$eth}/>
+      <StakingRewards itemsNumber="3" />
       <!-- END PAST REWARDS -->
     </div>
 

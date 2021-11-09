@@ -132,7 +132,7 @@
       <span class="mt-2 mb-2"><Allocation totalVal={portfolioUSD} tokenList={tokens}/></span>
     </div>
     <div class="flex flex-col w-38pc">
-      <StakingSummary {$stakingData} eth={$eth} />
+      <StakingSummary />
       <span class="mt-2 mb-1"><Banner /></span>
       <span class="mt-1"><Oven /></span>
       <!-- <span class="mt-1 mb-1"><Farming /></span> -->
@@ -147,7 +147,7 @@
   <span class="flex flex-col mb-2"><Holdings totalVal={portfolioUSD} tokenList={featured} /></span>
   <span class="flex flex-col mb-2 h-100pc"><Allocation totalVal={portfolioUSD} tokenList={tokens} /></span>
   <div class="flex flex-col mb-7">
-    <StakingSummary {$stakingData} eth={$eth} />
+    <StakingSummary />
   </div>
   <span class="-mt-20px mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>

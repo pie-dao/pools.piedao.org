@@ -1,29 +1,6 @@
 <script>
-  import { eth } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
-  import { initialize } from '../helpers/staking.js';
   import StakingRewards from '../components/staking/Rewards.svelte';
-
-  $: isLoading = false;
-  let currentAddress = null;
-
-  $: if ($eth.address) {
-    // if address is first setup, or is changed...
-    if (currentAddress !== $eth.address) {
-      currentAddress = $eth.address;
-
-      if (!isLoading) {
-        isLoading = true;
-
-        // TODO: maybe remove me from here...
-        initialize($eth).then((updated_data) => {
-          isLoading = false;    
-        }).catch(error => {
-          console.error(error);
-        });        
-      }
-    }
-  }
 </script>
 
 <div class="font-huge text-center">Dough Staking</div>
@@ -36,7 +13,7 @@
   >
     <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
       <!-- PAST REWARDS -->
-      <StakingRewards sLoading={isLoading} eth={$eth} />
+      <StakingRewards />
       <!-- END PAST REWARDS -->
     </div>
   </div>

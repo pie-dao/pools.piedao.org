@@ -7,10 +7,9 @@
   import Modal from '../../components/elements/Modal.svelte';
   import InfoModal from '../../components/modals/infoModal.svelte';
   import ClaimModal from '../../components/elements/ClaimModal.svelte';
-  import { stakingData } from '../..//stores/eth/writables';
+  import { stakingData } from '../../stores/eth/writables.js';
+  import { eth } from '../../stores/eth.js';
   import isEmpty from 'lodash/isEmpty';
-
-  export let eth;
 
   let claimModal;
   let votingInfos = "";
@@ -117,10 +116,10 @@
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
-        {#if isLoading && eth.address}
+        {#if isLoading && $eth.address}
           <div class="mr-2">Loading...</div>
         {:else}
-          <div class="font-24px">{eth.address ? formatFiat(toNum($stakingData.accountTokenBalance), ',', '.', '') : 0}</div>
+          <div class="font-24px">{$eth.address ? formatFiat(toNum($stakingData.accountTokenBalance), ',', '.', '') : 0}</div>
         {/if}
         <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
@@ -133,11 +132,11 @@
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
-        {#if isLoading && eth.address}
+        {#if isLoading && $eth.address}
           <div class="mr-2">Loading...</div>
         {:else}
           <div class="font-24px">
-            {eth.address ? formatFiat(toNum($stakingData.accountVeTokenBalance), ',', '.', '') : 0}
+            {$eth.address ? formatFiat(toNum($stakingData.accountVeTokenBalance), ',', '.', '') : 0}
           </div>
         {/if}
         <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
@@ -150,7 +149,7 @@
   >
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
-      {#if eth.address}
+      {#if $eth.address}
         <div 
         on:click={() => openModal('staking.claim.vote.' + voteKeyword)}
         class={"flex nowrap intems-center p-1 pointer text-xs " + votingClass}>
@@ -164,23 +163,23 @@
     <div class="flex nowrap items-center p-1">
       <div class="flex-1">
         <span class="sc-iybRtq gjVeBU">
-          {#if isLoading && eth.address}
+          {#if isLoading && $eth.address}
             <div class="mr-2">Loading...</div>
           {:else}          
             <div class="font-24px">
-              {eth.address ? formatFiat(toNum($stakingData.accountWithdrawableRewards), ',', '.', '') : 0}
+              {$eth.address ? formatFiat(toNum($stakingData.accountWithdrawableRewards), ',', '.', '') : 0}
             </div>
           {/if}
           <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
           <span class="sc-kXeGPI jeVIZw token-symbol-container">SLICE</span>
         </span>
       </div>
-      {#if eth.address}
+      {#if $eth.address}
       <button 
       disabled={isLoading}
       class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
       on:click={() => {
-        if(eth.address) {
+        if($eth.address) {
           claimModal.showModal($stakingData);
         }
       }}
@@ -197,11 +196,11 @@
       <div class="flex nowrap items-center p-1">
         <div class="flex-1">
           <span class="sc-iybRtq gjVeBU">
-            {#if isLoading && eth.address}
+            {#if isLoading && $eth.address}
               <div class="mr-2">Loading...</div>
             {:else}            
               <div class="font-24px">
-                {eth.address ? $stakingData.accountAverageDuration : "0"} Months
+                {$eth.address ? $stakingData.accountAverageDuration : "0"} Months
               </div>
             {/if}
           </span>        
@@ -216,11 +215,11 @@
       <div class="flex nowrap items-center p-1">
         <div class="flex-1">
           <span class="sc-iybRtq gjVeBU">
-            {#if isLoading && eth.address}
+            {#if isLoading && $eth.address}
               <div class="mr-2">Loading...</div>
             {:else}             
               <div class="font-24px">
-                {eth.address ? $stakingData.accountVotingPower : 0} %
+                {$eth.address ? $stakingData.accountVotingPower : 0} %
               </div>
             {/if}
           </span>        

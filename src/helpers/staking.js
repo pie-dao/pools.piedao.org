@@ -400,7 +400,7 @@ export const fetchStakingData = async (eth) => {
   } catch (error) {
     // using onchain as fallback...
     staker = await sharesTimeLock.getStakingData(eth.address);
-    rewards = _stakingData.rewards.length > 0 ? _stakingData.rewards : [];
+    rewards = [];
   }
 
   _stakingData.totalDoughStaked = response.globalStats[0].totalDoughStaked;
