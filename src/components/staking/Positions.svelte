@@ -189,7 +189,7 @@
                     {:else}
                       <div 
                       on:click={() => {
-                        unlockModal.showModalLock(lock, $stakingData.accountWithdrawnRewards);
+                        unlockModal.showModalUnock(lock, $stakingData.accountWithdrawnRewards);
                       }}
                       class="mt-2 flex justify-end opacity-30 pointer">
                         <span>Unstake</span>

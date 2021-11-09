@@ -412,11 +412,17 @@ export const fetchStakingData = async (eth) => {
 
     Object.keys(staker).forEach((key) => {
       if (key !== 'accountLocks') {
-        if(key == 'accountWithdrawableRewards') {
-          // _stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
-          _stakingData[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
-        } else {
-          _stakingData[key] = new BigNumber(staker[key].toString());
+        switch(key) {
+          case 'accountWithdrawableRewards':
+            // _stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
+            _stakingData[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
+            break;
+          case 'accountWithdrawnRewards':
+            _stakingData[key] = new BigNumber(toNum(staker[key]));
+            break;
+          default:
+            _stakingData[key] = new BigNumber(staker[key].toString());
+            break;
         }
       } else {
         const locks = [];

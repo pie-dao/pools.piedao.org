@@ -2,7 +2,7 @@
   import images from '../../config/images.json';
   import Modal from './Modal.svelte';
   import { formatFiat } from '../helpers.js';
-  import { calculateStakingEnds, toNum } from '../../helpers/staking.js';
+  import { calculateStakingEnds } from '../../helpers/staking.js';
   import { UnlockModalStatus } from '../../stores/eth/writables.js';
   import moment from 'moment';
 
@@ -11,8 +11,8 @@
   let withdrawnRewards;
   let countdown;
 
-  export const showModalLock = (lock, accountWithdrawnRewards) => {
-    console.log("showModalLock", $UnlockModalStatus, lock, accountWithdrawnRewards);
+  export const showModalUnock = (lock, accountWithdrawnRewards) => {
+    console.log("showModalUnock", $UnlockModalStatus, lock, accountWithdrawnRewards);
     if(!$UnlockModalStatus.isOpen) {
       $UnlockModalStatus.withdrawnRewards = accountWithdrawnRewards;
       $UnlockModalStatus.lock = lock;
