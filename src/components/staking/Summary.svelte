@@ -5,7 +5,7 @@
   import images from '../../config/images.json';
   import smartcontracts from '../../config/smartcontracts.json';
   import Modal from '../../components/elements/Modal.svelte';
-  import { onMount } from 'svelte';
+  import displayNotification from '../../notifications';
   import InfoModal from '../../components/modals/infoModal.svelte';
   import ClaimModal from '../../components/elements/ClaimModal.svelte';
   import isEmpty from 'lodash/isEmpty';
