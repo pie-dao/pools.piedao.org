@@ -27,18 +27,22 @@
 
 {#if eth.address}
 <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
-  <div class="font-huge text-center mt-6">Rewards History</div>
+  <div class="font-huge text-center mt-6">Claimed Rewards</div>
   {#if isLoading}
     Loading...
   {:else}        
     {#if data.rewards && data.rewards.length > 0}
       {#each data.rewards.slice(0, itemsNumber) as reward}
         {#if reward.type != 'distributed'}
-          <a
+          <!-- <a
             href={"#/staking_reward_breakdown/" + reward.timestamp * 1000}
             target="_blank"
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px"
-          >
+          > -->
+          <a 
+            target="_blank"
+            href="https://etherscan.io/tx/{reward.id}" 
+            class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
             <div class="flex items-center justify-between">
               <div class="flex nowrap intems-center p-1 font-thin">
                 {new Date(reward.timestamp * 1000).toDateString()}
@@ -78,7 +82,7 @@
         {/if}
       {/each}
     {:else}
-    <span class="text-s text-center mx-8">You have no rewards yet.</span>
+    <span class="text-s text-center mx-8">you haven't claimed any reward yet.</span>
     {/if}
   {/if}
 
