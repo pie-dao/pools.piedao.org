@@ -2,7 +2,7 @@
   import { _ } from 'svelte-i18n';
   import { eth } from '../../stores/eth.js';
   import { formatFiat, formatBigMoneyAmount } from '../../components/helpers.js';
-  import { toNum, fetchStakingStats } from '../../helpers/staking.js';
+  import { toNum, fetchStakingStats, initContracts } from '../../helpers/staking.js';
   import { stakingStats } from '../../stores/eth/writables';
   import images from '../../config/images.json';
   import ProgressBar from '@okrad/svelte-progressbar';
@@ -17,6 +17,8 @@
 
   $: if($eth.provider && isLoading) {
     isLoading = false;
+
+    initContracts($eth);
 
     fetchStakingStats($eth.provider, 1).then(response => {
         $stakingStats = response;

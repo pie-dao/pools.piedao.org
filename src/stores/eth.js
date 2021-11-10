@@ -36,12 +36,22 @@ const providerOptions = {
 
 const web3Modal = new Web3Modal({
   network: 'mainnet', // optional
-  cacheProvider: false, // optional
+  cacheProvider: true, // optional
   providerOptions, // required
 });
 
 // CONNECTION MANAGEMENT
 
+export const isChachedProvider = () => {
+  console.log("web3Button -> isChachedProvider", web3Modal.cachedProvider);
+  return web3Modal.cachedProvider;
+}
+
+export const clearChachedProvider = () => {
+  web3Modal.clearCachedProvider();
+}
+
+// DEPRECATED FUNCTION
 export const connectWeb3Cached = async () => {
   try {
     resetConnection();
