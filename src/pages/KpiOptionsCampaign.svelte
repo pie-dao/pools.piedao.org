@@ -6,6 +6,8 @@
   import { toNum } from '../helpers/staking.js';
   import { formatFiat } from '../components/helpers.js';
 
+  import StakingSummary from '../components/kpi-options/Summary.svelte';
+
   let maxBarValue = 15000000;
   let currentBarPercentage = 100;
   let totalStakedDough = 0;
@@ -253,6 +255,15 @@
   <div class="flex w-full justify-center">
     <StakingStats />
   </div>
+  <div class="w-full flex flex-row lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
+    <div class="flex flex-col w-full pr-3 justify-center">
+      <StakingSummary />
+    </div>
+    <!-- <div class="flex flex-col w-full justify-center">
+      <StakingSummary />
+    </div> -->
+  </div>  
+  
 </div>
 
 <div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
