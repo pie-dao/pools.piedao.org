@@ -178,23 +178,26 @@
           <span class="sc-kXeGPI jeVIZw token-symbol-container">WKPI</span>
         </span>
       </div>
-      {#if $eth.address}
-      <button 
-      disabled={isLoading}
-      class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
-      on:click={() => {
-        claim()
-      }}
-      > Claim</button>
-    {:else}
-      <button
-        on:click={() => connectWeb3()}
-        class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
-        >Connect a Wallet</button
-      >    
-    {/if}
     </div>
   </div>
+
+  {#if $eth.address}
+    {#if !kpiOptionsData.claimableKpiOptions.eq(0)}
+      <button 
+        disabled={isLoading}
+        class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
+        on:click={() => {
+          claim()
+        }}
+      > Claim</button> 
+    {/if}
+  {:else}
+    <button
+      on:click={() => connectWeb3()}
+      class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
+      >Connect a Wallet</button
+    >   
+  {/if}
   <button
     on:click={() => addToken()}
     class="text-center pointer mx-auto object-bottom mb-4 mt-4 font-thin"
