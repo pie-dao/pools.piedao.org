@@ -51,7 +51,7 @@
             oldestValidLock = oldestValidLock.reverse()[0];
             // finally checking if the user can vote on snapshot, or if the
             // proposal is older than his oldest lock...
-            if(data.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
+            if(oldestValidLock && data.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
               votingImage = "warning";
               votingInfos = "You can't vote just yet";
               votingClass = "text-red";
