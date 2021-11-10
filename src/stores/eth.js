@@ -42,11 +42,21 @@ const web3Modal = new Web3Modal({
 
 // CONNECTION MANAGEMENT
 
+export const isChachedProvider = () => {
+  console.log("web3Button -> isChachedProvider", web3Modal.cachedProvider);
+  return web3Modal.cachedProvider;
+}
+
+export const clearChachedProvider = () => {
+  web3Modal.clearCachedProvider();
+}
+
+// DEPRECATED FUNCTION
 export const connectWeb3Cached = async () => {
   try {
     resetConnection();
 
-    const web3 = await web3Modal.connect(); //connectTo('injected');
+    const web3 = await web3Modal.connectTo('injected');
 
     if (!web3) {
       console.log('NOT CONNECTED');

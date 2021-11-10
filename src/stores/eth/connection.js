@@ -6,7 +6,7 @@ import { shortenAddress } from '@pie-dao/utils';
 
 import { defaultEth, eth } from './writables.js';
 /* eslint-disable import/no-cycle */
-import { connectWeb3 } from '../eth.js';
+import { connectWeb3, clearChachedProvider } from '../eth.js';
 /* eslint-enable import/no-cycle */
 import { bumpLifecycle, updateCurrentBlock } from './lifecycle.js';
 import { resetContractCache } from './contracts.js';
