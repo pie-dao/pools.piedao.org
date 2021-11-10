@@ -254,8 +254,9 @@ export async function calculateDoughTotalSupply(provider) {
     const treasury = await dough.balanceOf(smartcontracts.treasury);
     const multisig = await dough.balanceOf(smartcontracts.multisig);
     const eDough = await dough.balanceOf(smartcontracts.eDOUGH);
+    const kpi = await dough.balanceOf(smartcontracts.kpi_options);
 
-    return totalSupply - treasury - multisig - eDough;
+    return totalSupply - treasury - multisig - eDough - kpi;
   } catch (error) {
     return error;
   }
