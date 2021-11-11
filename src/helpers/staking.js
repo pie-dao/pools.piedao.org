@@ -400,8 +400,10 @@ export const fetchStakingData = async (eth) => {
     rewards = [];
   }
 
-  _stakingData.totalDoughStaked = response.globalStats[0].totalDoughStaked;
-  _stakingData.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
+  if(response.globalStats.length) {
+    _stakingData.totalDoughStaked = response.globalStats[0].totalDoughStaked;
+    _stakingData.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
+  }
 
   if (staker !== undefined) {
     let leaf = retrieveLeaf(eth.address);
