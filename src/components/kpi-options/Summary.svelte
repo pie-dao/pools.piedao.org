@@ -153,8 +153,8 @@
             {$eth.address ? formatFiat(toNum(kpiOptionsData.estimatedKpiOptions), ',', '.', '') : 0}
           </div>
         {/if}
-        <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-        <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+        <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
+        <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
       </span>
     </div>
   </div>
@@ -183,13 +183,22 @@
 
   {#if $eth.address}
     {#if !kpiOptionsData.claimableKpiOptions.eq(0)}
-      <button 
+      <div class="flow flow-col">
+        <button 
         disabled={isLoading}
-        class="pointer btn clear stake-button rounded-20px py-15px px-22px mt-6"
+        class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
         on:click={() => {
           claim()
         }}
-      > Claim</button> 
+      >Claim</button> 
+      <button 
+        disabled={isLoading}
+        class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
+        on:click={() => {
+          alert("this should bring to uma kpi page, to allow user to redeem...");
+        }}
+      >Redeem</button> 
+      </div>      
     {/if}
   {:else}
     <button

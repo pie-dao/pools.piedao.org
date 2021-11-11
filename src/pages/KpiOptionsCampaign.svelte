@@ -256,7 +256,7 @@
     <StakingStats />
   </div>
   <div class="w-full flex flex-row lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
-    <div class="flex flex-col w-full pr-3 justify-center">
+    <div class="flex flex-col w-full justify-center">
       <StakingSummary />
     </div>
     <!-- <div class="flex flex-col w-full justify-center">
