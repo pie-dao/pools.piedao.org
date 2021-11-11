@@ -77,7 +77,8 @@
                   >
                 </div>
               </div>
-              <div class="flex nowrap items-center p-1 justify-between mt-2">
+
+              <div class="flow-root md:flex nowrap items-center p-1 justify-between mt-2">
                 <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
                   <div class="gjVeBU">
                     <div class="font-24px">{formatFiat(toNum(lock.amount), ',', '.', '')}</div>
@@ -128,7 +129,7 @@
                             console.error(error);
                           });
                       }}
-                      class="flex items-center cardbordergradient -mr-2 pointer"
+                      class="flex items-center cardbordergradient -mr-2 pointer mt-2 ml-15pc md:ml-0"
                     >
                       <div class="flex items-center p-2">
                         {#if $justBoosted[lock.lockId]}
@@ -145,7 +146,7 @@
                     </button>
                   {/if}
                 {:else}
-                  <div class="flex items-center cardbordergradient -mr-2 opacity-30">
+                  <div class="flex items-center cardbordergradient mt-2 ml-15pc md:ml-0 md:-mr-2 opacity-30">
                     <div class="flex items-center p-2">
                       <div class="mr-8px">Restake 3 years</div>
                       <img
@@ -157,6 +158,7 @@
                   </div>
                 {/if}
               </div>
+
               <div class="flex items-center justify-between">
                 <div class="flex intems-center">
                   <div class="mt-2 flex justify-start opacity-30 pointer">
