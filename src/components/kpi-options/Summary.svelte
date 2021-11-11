@@ -8,6 +8,7 @@
   import { eth, connectWeb3 } from '../../stores/eth.js';
   import BigNumber from 'bignumber.js';
   import { ethers } from 'ethers';
+  import MerkleTreeDistributorABI from '../../abis/MerkleTreeDistributorABI.json';
   import DoughABI from '../../abis/DoughABI.json';
   import WkpiJson from '../../config/rewards/wkpi.json';
   import get from 'lodash/get';
@@ -49,10 +50,6 @@
     }
   }
 
-  async function claim() {
-    alert("to be completed");
-  }
-
   async function init() {
     isLoading = true;
     
@@ -69,7 +66,7 @@
     isLoading = false;
   }
 
-  const addToken = () => {
+  const addToken = () => {  
     ethereum.sendAsync(
       {
         method: 'wallet_watchAsset',
@@ -119,7 +116,86 @@
     const kpiReward = claimableKpiOptions.times(payout.value);
     // and returning the calculated kpiReward for current address...
     return kpiReward;
-  }  
+  }
+
+  export function retrieveLeaf(address) {
+    const participations = WkpiJson.claims;
+    return participations[ethers.utils.getAddress(address.toLowerCase())];
+  }
+
+  export function prepareProofs() {
+    if (!$eth.address) return;
+
+    const leaf = retrieveLeaf($eth.address);
+
+    /* eslint-disable consistent-return */
+    return {
+      leaf: leaf,
+      valid: !!leaf,
+      proof: leaf ? leaf.proof : null,
+    };
+    /* eslint-enable consistent-return */
+  }
+
+  export async function claim() {
+    let merkleTreeDistributor = new ethers.Contract(
+      smartcontracts.merkleTreeDistributor,
+      MerkleTreeDistributorABI,
+      $eth.signer || $eth.provider,
+    );
+
+    const proof = prepareProofs($eth);
+    console.log('proof', proof);
+
+    try {
+      const leaf = retrieveLeaf($eth.address);
+
+      if(proof.leaf) {
+        const params = {
+          windowIndex: proof.leaf.windowIndex,
+          amount: ethers.BigNumber.from(proof.leaf.amount),
+          accountIndex: proof.leaf.accountIndex,
+          account: ethers.utils.getAddress($eth.address.toLowerCase()),
+          merkleProof: proof.leaf.proof
+        };
+  
+        const { emitter } = displayNotification(
+          await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
+        );
+  
+        emitter.on('txConfirmed', async () => {
+          const subscription = subject('blockNumber').subscribe({
+            next: async () => {
+              displayNotification({
+                autoDismiss: 15000,
+                message: 'WKPI-DOUGH has been claimed!',
+                type: 'success',
+              });
+  
+              subscription.unsubscribe();
+              
+              // update the kpiOptionsData object...
+              init();
+            },
+          });
+        });        
+      } else {
+        displayNotification({
+        autoDismiss: 15000,
+        message: 'cannot claim, address not valid in merkleTree',
+        type: 'error',
+      });
+      }
+    } catch (error) {
+      console.error(error);
+
+      displayNotification({
+        autoDismiss: 15000,
+        message: 'Sorry, an error occurred while claiming your rewards. Please try again later.',
+        type: 'error',
+      });
+    }
+  }
 </script>
 
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
@@ -186,18 +262,16 @@
       <div class="flow flow-col">
         <button 
         disabled={isLoading}
-        class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
+        class="pointer btn stake-button rounded-20px py-15px px-22px mt-6 mr-6"
         on:click={() => {
           claim()
         }}
       >Claim</button> 
-      <button 
-        disabled={isLoading}
-        class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
-        on:click={() => {
-          alert("this should bring to uma kpi page, to allow user to redeem...");
-        }}
-      >Redeem</button> 
+      <a
+        href="https://claim.umaproject.org/"
+        target="_blank"
+        class="pointer btn stake-button rounded-20px py-21px px-30px mt-6"
+      >Redeem</a> 
       </div>      
     {/if}
   {:else}
