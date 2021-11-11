@@ -11,7 +11,7 @@
 
   onMount(async () => {
     if(initialized) return;
-    proposals = await fetchLastSnapshots(2, '', 'asc', moment("2021-10-18").unix());
+    proposals = await fetchLastSnapshots(2, '', 'desc', moment("2021-10-18").unix());
     console.log('proposals', proposals);
     initialized = true;
   });
