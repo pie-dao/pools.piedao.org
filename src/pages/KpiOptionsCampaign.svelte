@@ -2,7 +2,6 @@
   import images from "../config/images.json";
   import StakingStats from '../components/staking/Stats.svelte';
   import Meta from '../components/elements/meta.svelte';
-  import ProgressBar from '@okrad/svelte-progressbar';
   import { stakingStats } from '../stores/eth/writables';
   import { toNum } from '../helpers/staking.js';
   import { formatFiat } from '../components/helpers.js';

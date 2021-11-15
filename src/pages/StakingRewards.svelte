@@ -1,53 +1,6 @@
 <script>
-  import { eth } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
-  import { onDestroy } from 'svelte';
-  import { initialize, dataObj, observable } from '../helpers/staking.js';
   import StakingRewards from '../components/staking/Rewards.svelte';
-
-  $: isLoading = false;
-  $: data = dataObj;
-
-  let observer = null;
-  let currentAddress = null;
-
-  onDestroy(() => {
-    if(observer) {
-      observer.unsubscribe();
-    }
-  });  
-
-  $: if ($eth.address) {
-    // if address is first setup, or is changed...
-    if (currentAddress !== $eth.address) {
-      currentAddress = $eth.address;
-
-      if (!isLoading) {
-        isLoading = true;
-
-        initialize($eth).then((updated_data) => {
-          data = updated_data;
-          isLoading = false;
-
-          if(observer) {
-            observer.unsubscribe();      
-          }          
-
-          observer = observable.subscribe({
-            next(updated_data) {
-              data = updated_data;
-            }
-          });     
-        }).catch(error => {
-          console.error(error);
-        });        
-      }
-    }
-  } else {
-    if(observer) {
-      observer.unsubscribe();      
-    }
-  }
 </script>
 
 <div class="font-huge text-center">Dough Staking</div>
@@ -60,9 +13,7 @@
   >
     <div class="flex flex-col w-full m-0 lg:w-49pc md:mr-1pc">
       <!-- PAST REWARDS -->
-      {#key data}
-        <StakingRewards data={data} isLoading={isLoading} eth={$eth}></StakingRewards>
-      {/key}
+      <StakingRewards />
       <!-- END PAST REWARDS -->
     </div>
   </div>

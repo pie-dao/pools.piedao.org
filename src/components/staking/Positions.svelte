@@ -17,31 +17,36 @@
     AVG_SECONDS_MONTH,
     canRestake
   } from '../../helpers/staking.js';
-  import { justBoosted, timestampBoosted, fetchStakingDataLock } from '../../stores/eth/writables';
-
-  import { createEventDispatcher } from 'svelte';
-  const dispatch = createEventDispatcher();
-
-  export let isLoading;
-  export let data;
-  export let eth;
+  import { justBoosted, timestampBoosted, stakingData } from '../../stores/eth/writables';
+  import { eth } from '../../stores/eth.js';
+  
   export let scrollToTop;
-  export let itemsNumber = data.accountLocks.length;
+  export let itemsNumber;
+  
+  let isLoading = true;
   let boostedModal;
   let unlockModal;
+
+  $: if($stakingData && $stakingData.hasLoaded) {
+    if(!itemsNumber) {
+      itemsNumber = $stakingData.accountLocks.length;
+    }
+
+    isLoading = false;
+  }
 </script>
 
 <BoostedModal bind:this={boostedModal}/>
 <UnlockModal bind:this={unlockModal}/>
 
-{#if eth.address}
+{#if $eth.address}
   <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
     <div class="font-huge text-center mt-6">Your Staking</div>
 
     {#if isLoading}
       Loading...
-    {:else if data.accountLocks && data.accountLocks.length > 0}
-      {#each data.accountLocks.slice(0, itemsNumber) as lock, id}
+    {:else if $stakingData.accountLocks && $stakingData.accountLocks.length > 0}
+      {#each $stakingData.accountLocks.slice(0, itemsNumber) as lock, id}
         <!-- Let's show just the normal stakes, and the boosted ones. The stakes having a boostedPointer are obsolete stakes, so we won't show them -->
         {#if lock.boostedPointer == ''}
           <div
@@ -72,7 +77,8 @@
                   >
                 </div>
               </div>
-              <div class="flex nowrap items-center p-1 justify-between mt-2">
+
+              <div class="flow-root md:flex nowrap items-center p-1 justify-between mt-2">
                 <div class="grid grid-flow-col grid-cols-1 grid-rows-2">
                   <div class="gjVeBU">
                     <div class="font-24px">{formatFiat(toNum(lock.amount), ',', '.', '')}</div>
@@ -97,16 +103,13 @@
                     <button
                       disabled={$justBoosted[lock.lockId]}
                       on:click={() => {
-                        // locking the fetchStakingDataLock variable to avoid unexpected behaviors...
-                        $fetchStakingDataLock = true;
-
                         // marking the lock as justBoosted...
                         $justBoosted[lock.lockId] = true;
 
                         // saving the timestampBoosted for further uses...
                         let boostingTimestamp = Math.floor(Number(Date.now()) / 1000);
 
-                        boostToMax(lock.lockId, eth)
+                        boostToMax(lock.lockId, $eth)
                           .then((updated_data) => {
                             $timestampBoosted[updated_data.accountLocks[0].lockId] = boostingTimestamp;
 
@@ -115,16 +118,9 @@
                             }
 
                             boostedModal.showModalLock(lock);
-                            
-                            // unlocking the fetchStakingDataLock, it's a must...
-                            $fetchStakingDataLock = false;
-
-                            // updating the data object...
-                            data = updated_data;
-                            data = data;
 
                             setTimeout(() => {
-                              $timestampBoosted[data.accountLocks[0].lockId] = null;
+                              $timestampBoosted[$stakingData.accountLocks[0].lockId] = null;
                               $justBoosted[lock.lockId] = false;
                             }, 15000);
                           })
@@ -133,7 +129,7 @@
                             console.error(error);
                           });
                       }}
-                      class="flex items-center cardbordergradient -mr-2 pointer"
+                      class="flex items-center cardbordergradient -mr-2 pointer mt-2 ml-15pc md:ml-0"
                     >
                       <div class="flex items-center p-2">
                         {#if $justBoosted[lock.lockId]}
@@ -150,7 +146,7 @@
                     </button>
                   {/if}
                 {:else}
-                  <div class="flex items-center cardbordergradient -mr-2 opacity-30">
+                  <div class="flex items-center cardbordergradient mt-2 ml-15pc md:ml-0 md:-mr-2 opacity-30">
                     <div class="flex items-center p-2">
                       <div class="mr-8px">Restake 3 years</div>
                       <img
@@ -162,6 +158,7 @@
                   </div>
                 {/if}
               </div>
+
               <div class="flex items-center justify-between">
                 <div class="flex intems-center">
                   <div class="mt-2 flex justify-start opacity-30 pointer">
@@ -173,14 +170,9 @@
                     {#if didLockExpired(lock)}
                       <div
                         on:click={() => {
-                          unstakeDOUGH(lock.lockId, toNum(lock.amount), eth)
+                          unstakeDOUGH(lock.lockId, toNum(lock.amount), $eth)
                             .then((updated_data) => {
-                              data = updated_data;
-                              data = data;
-
-                              dispatch('update', {
-                                data: data,
-                              });
+                              console.log("unstaked", updated_data);
                             })
                             .catch((error) => {
                               console.error(error.message);
@@ -193,7 +185,7 @@
                     {:else}
                       <div 
                       on:click={() => {
-                        unlockModal.showModalLock(lock, data.accountWithdrawnRewards);
+                        unlockModal.showModalUnock(lock, $stakingData.accountWithdrawnRewards);
                       }}
                       class="mt-2 flex justify-end opacity-30 pointer">
                         <span>Unstake</span>
@@ -210,7 +202,7 @@
       <span class="text-s text-center mx-8">You haven't staked anything yet, what are you waiting for?</span>
     {/if}
 
-    {#if data.accountLocks.length > itemsNumber}
+    {#if $stakingData.accountLocks.length > itemsNumber}
       <a class="pt-6" href="#/staking_positions"> See all staking positions </a>
     {/if}
   </div>
