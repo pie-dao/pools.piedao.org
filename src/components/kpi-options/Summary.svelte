@@ -200,51 +200,58 @@
 
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
   <div class="font-huge text-center mt-6">Summary</div>
-  <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
-    <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">Total Distributed Rewards</div>
-    </div>
-    <div class="flex nowrap items-center p-1">
-      <span class="sc-iybRtq gjVeBU">
-        {#if isLoadingTotal && $eth.provider}
-          <div class="mr-2">Loading...</div>
-        {:else}
-          <div class="font-24px">{$eth.provider ? formatFiat(toNum(kpiOptionsData.totalDistributedRewards), ',', '.', '') : 0}</div>
-        {/if}
-        <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-        <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
-      </span>
-    </div>
-  </div>
+
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">Your Estimated UMA KPI Options</div>
+      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Total Distributed Rewards</div>
     </div>
-    <div class="flex nowrap items-center p-1">
-      <span class="sc-iybRtq gjVeBU">
-        {#if isLoading && $eth.address}
-          <div class="mr-2">Loading...</div>
-        {:else}
-          <div class="font-24px">
-            {$eth.address ? formatFiat(toNum(kpiOptionsData.estimatedKpiOptions), ',', '.', '') : 0}
-          </div>
-        {/if}
-        <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-        <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
-      </span>
+    <div class="flex nowrap items-center md:items-left p-1">
+      <div class="flex-1">
+        <span class="flex-col md:flex-row sc-iybRtq gjVeBU">
+          {#if isLoadingTotal && $eth.address}
+            <div class="md:mr-2">Loading...</div>
+          {:else}          
+            <div class="font-24px">
+              {$eth.address ? formatFiat(toNum(kpiOptionsData.totalDistributedRewards), ',', '.', '') : 0}
+            </div>
+          {/if}
+          <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+        </span>
+      </div>
+    </div>
+  </div>  
+
+  <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
+    <div class="flex items-center justify-between">
+      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Your Estimated UMA KPI Options</div>
+    </div>
+    <div class="flex nowrap items-center md:items-left p-1">
+      <div class="flex-1">
+        <span class="flex-col md:flex-row sc-iybRtq gjVeBU">
+          {#if isLoading && $eth.address}
+            <div class="md:mr-2">Loading...</div>
+          {:else}          
+            <div class="font-24px">
+              {$eth.address ? formatFiat(toNum(kpiOptionsData.estimatedKpiOptions), ',', '.', '') : 0}
+            </div>
+          {/if}
+          <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+        </span>
+      </div>
     </div>
   </div>
-  <div
-    class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px"
-  >
+  
+  <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">Your Claimable KPI Tokens</div>
+      <div class="flex-1 md:flex nowrap intems-center text-center p-1 font-thin">Your Claimable KPI Tokens</div>
     </div>
-    <div class="flex nowrap items-center p-1">
+    <div class="flex nowrap items-center md:items-left p-1">
       <div class="flex-1">
-        <span class="sc-iybRtq gjVeBU">
+        <span class="flex-col md:flex-row sc-iybRtq gjVeBU">
           {#if isLoading && $eth.address}
-            <div class="mr-2">Loading...</div>
+            <div class="md:mr-2">Loading...</div>
           {:else}          
             <div class="font-24px">
               {$eth.address ? formatFiat(toNum(kpiOptionsData.claimableKpiOptions), ',', '.', '') : 0}
