@@ -40,7 +40,7 @@
             voteKeyword = "no_votes";
           } else {
             // filtering out the ejected/withdrawn lock...
-            let oldestValidLock = data.accountLocks.filter(lock => {
+            let oldestValidLock = $stakingData.accountLocks.filter(lock => {
               if(!lock.ejected && !lock.withdrawn) {
                 return lock;
               }
@@ -49,13 +49,13 @@
             oldestValidLock = get(oldestValidLock, 0);            
             // finally checking if the user can vote on snapshot, or if the
             // proposal is older than his oldest lock...
-            if(data.proposals.length == 0) {
+            if($stakingData.proposals.length == 0) {
               votingImage = "warning";
               votingInfos = "No active proposals to vote on";
               votingClass = "text-red";
               voteKeyword = "cannot_votes";
             } else {
-              if(oldestValidLock && data.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
+              if(oldestValidLock && $stakingData.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
                 votingImage = "warning";
                 votingInfos = "You can't vote just yet";
                 votingClass = "text-red";

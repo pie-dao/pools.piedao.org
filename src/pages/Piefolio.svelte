@@ -50,7 +50,6 @@
         portfolioUSD = 0;
         await fetchOnchainData();
         await fetchTokenList($eth.address);
-        await initStakingSummary();
       })()
     }
   }
