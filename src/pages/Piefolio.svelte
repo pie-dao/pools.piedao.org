@@ -7,7 +7,6 @@
   import poolsConfig from "../config/pools.json";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools, eth } from '../stores/eth.js';
-  import { stakingData } from '../stores/eth/writables';
   import StakingSummary from '../components/staking/Summary.svelte';
 
   import {
