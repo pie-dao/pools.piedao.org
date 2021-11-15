@@ -6,7 +6,7 @@ import { shortenAddress } from '@pie-dao/utils';
 import { initialize } from '../../helpers/staking.js';
 import { defaultEth, eth } from './writables.js';
 /* eslint-disable import/no-cycle */
-import { connectWeb3 } from '../eth.js';
+import { connectWeb3, clearChachedProvider } from '../eth.js';
 /* eslint-enable import/no-cycle */
 import { bumpLifecycle, updateCurrentBlock } from './lifecycle.js';
 import { resetContractCache } from './contracts.js';
@@ -61,6 +61,7 @@ const setWeb3Listeners = () => {
 export const registerConnection = async (newWeb3) => {
   const web3 = newWeb3 || get(eth).web3;
   console.log('newWeb3', newWeb3);
+
   if (!web3) {
     throw new Error('Unable to find a web3 object. Was one passed?');
   }
@@ -106,9 +107,6 @@ export const registerConnection = async (newWeb3) => {
 };
 
 export const resetConnection = () => {
-  window.localStorage.removeItem('address');
-  window.localStorage.removeItem('walletconnect');
-
   resetWeb3Listeners();
   resetContractCache();
   eth.set({ ...defaultEth, provider: defaultProvider });
