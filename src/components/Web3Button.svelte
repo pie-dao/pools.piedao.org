@@ -1,14 +1,13 @@
 <script>
-  import { connectWeb3, eth, connectWeb3Cached } from '../stores/eth.js';
+  import { connectWeb3, eth, isChachedProvider } from '../stores/eth.js';
   import { shortenAddress } from "@pie-dao/utils";
-  import { get } from 'svelte/store';
   const address = null;
 
   $: shortAddress = address ? shortenAddress(address) : '';
 
   $: ( async () => {
-    if(window.localStorage.getItem('address')) {
-      await connectWeb3Cached();
+    if (isChachedProvider()) {
+      connectWeb3();
     }
   })()
 

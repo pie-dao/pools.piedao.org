@@ -255,8 +255,9 @@ export async function calculateDoughTotalSupply(provider) {
     const treasury = await dough.balanceOf(smartcontracts[environment].treasury);
     const multisig = await dough.balanceOf(smartcontracts[environment].multisig);
     const eDough = await dough.balanceOf(smartcontracts[environment].eDOUGH);
+    const kpi = await dough.balanceOf(smartcontracts[environment].kpi_options);
 
-    return totalSupply - treasury - multisig - eDough;
+    return totalSupply - treasury - multisig - eDough - kpi;
   } catch (error) {
     return error;
   }
@@ -478,8 +479,6 @@ export const fetchStakingData = async (eth) => {
     });
   }
 
-  dataObj.address = eth.address;
-
   const votingPower = dataObj.accountVeTokenBalance && dataObj.veTokenTotalSupply
     ? ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2)
     : 0;
@@ -499,6 +498,7 @@ export const fetchStakingData = async (eth) => {
     dataObj.proposals[0].block = await eth.provider.getBlock(Number(dataObj.proposals[0].snapshot));
   }
 
+  dataObj.address = eth.address;
   console.log('fetchStakingData', dataObj);
   return dataObj;
 };
