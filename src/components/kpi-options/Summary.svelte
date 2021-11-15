@@ -226,7 +226,7 @@
   
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex-1 md:flex nowrap intems-center text-center p-1 font-thin">Your Claimable KPI Tokens</div>
+      <div class="flex-1 md:flex nowrap intems-center text-center p-1 font-thin">Your Claimable KPI Options</div>
     </div>
     <div class="flex nowrap items-center md:items-left p-1">
       <div class="flex-1">
