@@ -25,23 +25,25 @@
   };
 
   $: if($eth.provider) {
-    initDistributedRewards();
+    //initDistributedRewards();
+    kpiOptionsData.totalDistributedRewards = WkpiJson.totalRewardsDistributed;
+    isLoadingTotal = false;
   }
 
-  async function initDistributedRewards() {
-    if(!doughContract) {
-      isLoadingTotal = true;
+  // async function initDistributedRewards() {
+  //   if(!doughContract) {
+  //     isLoadingTotal = true;
 
-      doughContract = new ethers.Contract(
-        smartcontracts.dough,
-        DoughABI,
-        $eth.provider,
-      );
+  //     doughContract = new ethers.Contract(
+  //       smartcontracts.dough,
+  //       DoughABI,
+  //       $eth.provider,
+  //     );
 
-      kpiOptionsData.totalDistributedRewards = await doughContract.balanceOf(smartcontracts.kpi_options);
-      isLoadingTotal = false;
-    }
-  }
+  //     kpiOptionsData.totalDistributedRewards = await doughContract.balanceOf(smartcontracts.kpi_options);
+  //     isLoadingTotal = false;
+  //   }
+  // }
 
   $: if($eth.address) {
     if(currentAddress != $eth.address) {
@@ -99,14 +101,14 @@
 
   async function calculateKpiOptions(claimableKpiOptions) {
     const doughPayouts = [
-      { threshold: 15000000, value: 0.3 },
+      { threshold: 15000000, value: 0.5 },
       { threshold: 10000000, value: 0.2 },
       { threshold: 7500000, value: 0.1 },
     ];
 
     // fetching updated staking stats...
     const stakingStats = await fetchStakingStats($eth.provider, 1);
-    // taking thte stakedDough amount from stats...
+    // taking the stakedDough amount from stats...
     const stakedDough = toNum(stakingStats.totalStakedDough);
     // finding the payout by its threshold...
     const payout = doughPayouts.find(
@@ -203,7 +205,7 @@
 
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Total Distributed Rewards</div>
+      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Total Distributed KPI Options</div>
     </div>
     <div class="flex nowrap items-center md:items-left p-1">
       <div class="flex-1">
@@ -215,33 +217,12 @@
               {$eth.address ? formatFiat(toNum(kpiOptionsData.totalDistributedRewards), ',', '.', '') : 0}
             </div>
           {/if}
-          <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
-          <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
+          <img class="h-auto w-24px mx-5px" src={images.wkpi} alt="dough token" />
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">wDOUGH-kpi</span>
         </span>
       </div>
     </div>
   </div>  
-
-  <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
-    <div class="flex items-center justify-between">
-      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Your Estimated UMA KPI Options</div>
-    </div>
-    <div class="flex nowrap items-center md:items-left p-1">
-      <div class="flex-1">
-        <span class="flex-col md:flex-row sc-iybRtq gjVeBU">
-          {#if isLoading && $eth.address}
-            <div class="md:mr-2">Loading...</div>
-          {:else}          
-            <div class="font-24px">
-              {$eth.address ? formatFiat(toNum(kpiOptionsData.estimatedKpiOptions), ',', '.', '') : 0}
-            </div>
-          {/if}
-          <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-          <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
-        </span>
-      </div>
-    </div>
-  </div>
   
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
     <div class="flex items-center justify-between">
@@ -259,6 +240,27 @@
           {/if}
           <img class="h-auto w-24px mx-5px" src={images.wkpi} alt="dough token" />
           <span class="sc-kXeGPI jeVIZw token-symbol-container">wDOUGH-kpi</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
+    <div class="flex items-center justify-between">
+      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Your Estimated Payout</div>
+    </div>
+    <div class="flex nowrap items-center md:items-left p-1">
+      <div class="flex-1">
+        <span class="flex-col md:flex-row sc-iybRtq gjVeBU">
+          {#if isLoading && $eth.address}
+            <div class="md:mr-2">Loading...</div>
+          {:else}          
+            <div class="font-24px">
+              {$eth.address ? formatFiat(toNum(kpiOptionsData.estimatedKpiOptions), ',', '.', '') : 0}
+            </div>
+          {/if}
+          <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
         </span>
       </div>
     </div>
