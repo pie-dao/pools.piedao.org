@@ -258,7 +258,7 @@
             </div>
           {/if}
           <!-- <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" /> -->
-          <span class="sc-kXeGPI jeVIZw token-symbol-container">WKPI</span>
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">wDOUGH-kpi</span>
         </span>
       </div>
     </div>
