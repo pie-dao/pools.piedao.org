@@ -271,16 +271,16 @@
       <div class="flow flow-col">
         <button 
         disabled={isLoading}
-        class="pointer btn stake-button rounded-20px py-15px px-22px mt-6 mr-6"
+        class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
         on:click={() => {
           claim()
         }}
       >Claim</button> 
-      <a
+      <!-- <a
         href="https://claim.umaproject.org/"
         target="_blank"
         class="pointer btn stake-button rounded-20px py-21px px-30px mt-6"
-      >Redeem</a> 
+      >Redeem</a>  -->
       </div>      
     {/if}
   {:else}
