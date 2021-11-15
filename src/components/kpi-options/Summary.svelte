@@ -9,14 +9,14 @@
   import BigNumber from 'bignumber.js';
   import { ethers } from 'ethers';
   import MerkleTreeDistributorABI from '../../abis/MerkleTreeDistributorABI.json';
-  import DoughABI from '../../abis/DoughABI.json';
   import WkpiJson from '../../config/rewards/wkpi.json';
   import get from 'lodash/get';
+
+  let merkleTreeDistributor;
 
   let isLoadingTotal = true;
   let isLoading = true;
   let currentAddress;
-  let doughContract;
 
   $: kpiOptionsData = {
     totalDistributedRewards: BigNumber(0),
@@ -25,25 +25,9 @@
   };
 
   $: if($eth.provider) {
-    //initDistributedRewards();
     kpiOptionsData.totalDistributedRewards = WkpiJson.totalRewardsDistributed;
     isLoadingTotal = false;
   }
-
-  // async function initDistributedRewards() {
-  //   if(!doughContract) {
-  //     isLoadingTotal = true;
-
-  //     doughContract = new ethers.Contract(
-  //       smartcontracts.dough,
-  //       DoughABI,
-  //       $eth.provider,
-  //     );
-
-  //     kpiOptionsData.totalDistributedRewards = await doughContract.balanceOf(smartcontracts.kpi_options);
-  //     isLoadingTotal = false;
-  //   }
-  // }
 
   $: if($eth.address) {
     if(currentAddress != $eth.address) {
@@ -55,9 +39,20 @@
   async function init() {
     isLoading = true;
     
+    merkleTreeDistributor = new ethers.Contract(
+    smartcontracts.merkleTreeDistributor,
+    MerkleTreeDistributorABI,
+    $eth.signer || $eth.provider,
+  );
+
     let claimAddress = get(WkpiJson.claims, $eth.address);
+
+    let isClaimed = await merkleTreeDistributor["isClaimed(uint256,uint256)"](
+      ethers.BigNumber.from(claimAddress.windowIndex), 
+      ethers.BigNumber.from(claimAddress.accountIndex)
+    );
     
-    if(claimAddress) {
+    if(claimAddress && !isClaimed) {
       kpiOptionsData.claimableKpiOptions = BigNumber(claimAddress.amount);
       kpiOptionsData.estimatedKpiOptions = await calculateKpiOptions(kpiOptionsData.claimableKpiOptions);
     } else {
@@ -140,12 +135,6 @@
   }
 
   export async function claim() {
-    let merkleTreeDistributor = new ethers.Contract(
-      smartcontracts.merkleTreeDistributor,
-      MerkleTreeDistributorABI,
-      $eth.signer || $eth.provider,
-    );
-
     const proof = prepareProofs($eth);
     console.log('proof', proof);
 
