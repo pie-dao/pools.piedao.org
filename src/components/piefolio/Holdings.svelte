@@ -36,9 +36,9 @@
           <div class="flex flex-col justify-around text-right ml-auto font-thin">
             <span class="text-lg leading-6">{formatFiat(token.usdValue)}</span>
 
-            {#if token.change.toFixed(0) === 0}
+            {#if token.change.toFixed(2) == 0.00}
             <span class="text-sm px-1 text-black">{token.change.toFixed(2)}%</span>
-          {:else if token.change.toFixed(0) > 0}
+          {:else if token.change.toFixed(2) > 0}
             <span class="text-sm px-1 text-green">+ {token.change.toFixed(2)}%</span>
           {:else}
             <span class="text-sm px-1 text-red">{token.change.toFixed(2)}%</span>
