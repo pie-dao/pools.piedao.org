@@ -35,12 +35,6 @@
   import Exchange from "../components/piefolio/Exchange.svelte";
 
   $: data = dataObj;
-  $: isLoading = false;
-  $: initialized = {
-    onMount: false,
-    onChainData: false
-  };
-
   $: portfolioUSD = 0;
 
   $: pies = poolsConfig.available.map(address => {
@@ -53,20 +47,20 @@
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
     };
   }) || [];
-  console.log("HERE", pies);
+  let currentAddress = null;
 
   $: featured = [];
   $: tokens = [];
 
   $: if($eth.address) {
-    if(!initialized.onChainData && !isLoading) {
+    if(currentAddress != $eth.address) {
+      currentAddress = $eth.address;
+
       (async () => {
-        isLoading = true;
+        portfolioUSD = 0;
         await fetchOnchainData();
         await fetchTokenList($eth.address);
         await initStakingSummary();
-        initialized.onChainData = true;
-        isLoading = false;
       })()
     }
   }
@@ -109,7 +103,10 @@
   async function fetchTokenList(address) {
     const response = await fetch(`https://api.ethplorer.io/getAddressInfo/${address}?apiKey=scwf7425sUxrtI106`)
     const result = await response.json();
-    if (!result.tokens) return [];
+    if (!result.tokens) {
+      tokens = [];
+      return tokens;
+    };
 
     const allTokens = result.tokens.map( t => {
       const decimal = parseInt(t.tokenInfo.decimals, 10)
@@ -139,7 +136,6 @@
     })
 
     tokens = orderBy(filtered, ['usdValue'], ['desc']);
-    console.log("tokens", tokens);
   }
 
 </script>
