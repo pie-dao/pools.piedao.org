@@ -7,6 +7,7 @@
 
   import {clickOutside} from '../helpers/clickOutside.js';
   import { resetConnection } from '../stores/eth/connection';
+  import { clearChachedProvider } from '../stores/eth.js';
   import Web3Button from "./Web3Button.svelte";
   import TVL from "./Tvl.svelte";
 
@@ -15,7 +16,11 @@
   let dropdownOpen2 = false;
 
   const disconnect = () => {
+    window.localStorage.removeItem('address');
+    window.localStorage.removeItem('walletconnect');
+
     $eth.address = null;
+    clearChachedProvider();
     resetConnection();
   }
 

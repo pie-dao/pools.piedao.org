@@ -7,7 +7,6 @@
   import poolsConfig from "../config/pools.json";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools, eth } from '../stores/eth.js';
-  import { stakingData } from '../stores/eth/writables';
   import StakingSummary from '../components/staking/Summary.svelte';
 
   import {
@@ -26,12 +25,6 @@
   import Governance from "../components/piefolio/Governance.svelte";
   import Banner from "../components/piefolio/Banner.svelte";
 
-  $: isLoading = false;
-  $: initialized = {
-    onMount: false,
-    onChainData: false
-  };
-
   $: portfolioUSD = 0;
 
   $: pies = poolsConfig.available.map(address => {
@@ -44,19 +37,19 @@
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
     };
   }) || [];
-  console.log("HERE", pies);
+  let currentAddress = null;
 
   $: featured = [];
   $: tokens = [];
 
   $: if($eth.address) {
-    if(!initialized.onChainData && !isLoading) {
+    if(currentAddress != $eth.address) {
+      currentAddress = $eth.address;
+
       (async () => {
-        isLoading = true;
+        portfolioUSD = 0;
         await fetchOnchainData();
         await fetchTokenList($eth.address);
-        initialized.onChainData = true;
-        isLoading = false;
       })()
     }
   }
@@ -89,7 +82,10 @@
   async function fetchTokenList(address) {
     const response = await fetch(`https://api.ethplorer.io/getAddressInfo/${address}?apiKey=scwf7425sUxrtI106`)
     const result = await response.json();
-    if (!result.tokens) return [];
+    if (!result.tokens) {
+      tokens = [];
+      return tokens;
+    };
 
     const allTokens = result.tokens.map( t => {
       const decimal = parseInt(t.tokenInfo.decimals, 10)
@@ -119,7 +115,6 @@
     })
 
     tokens = orderBy(filtered, ['usdValue'], ['desc']);
-    console.log("tokens", tokens);
   }
 
 </script>
