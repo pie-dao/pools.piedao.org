@@ -257,7 +257,7 @@
               {$eth.address ? formatFiat(toNum(kpiOptionsData.claimableKpiOptions), ',', '.', '') : 0}
             </div>
           {/if}
-          <!-- <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" /> -->
+          <img class="h-auto w-24px mx-5px" src={images.wkpi} alt="dough token" />
           <span class="sc-kXeGPI jeVIZw token-symbol-container">wDOUGH-kpi</span>
         </span>
       </div>
