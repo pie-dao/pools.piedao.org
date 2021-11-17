@@ -247,27 +247,33 @@
          <b>Now its time to pump those numbers up!</b>
         </p>
       <br />
-      <div class="mt-8 w-full flex flex-row lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
-        <div class="flex flex-col w-1/3 justify-center">
-          <div class="flex flex-row w-full text-center items-center mb-2">
+      <div class="mt-8 w-full flex flex-col md:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
+        <div class="flex flex-col w-full md:w-1/3 justify-center m-2">
+          <div class="flex flex-row w-full text-center items-center">
             <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/1.svg?raw=true" 
             alt="" data-aos="fade-up" data-aos-delay="50"/>  
           </div>
-          Stake DOUGH<br />by October 31st 2021<br />and claim kDOUGH
+          <div class="flex flex-row w-full text-center items-center md:p-12">
+            Stake DOUGH by October 31st 2021 and claim kDOUGH
+          </div>
         </div>
-        <div class="flex flex-col w-1/3 justify-center">
-          <div class="flex flex-row w-full text-center items-center mb-2">
+        <div class="flex flex-col w-full md:w-1/3 justify-center m-2">
+          <div class="flex flex-row w-full text-center items-center">
             <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/2.svg?raw=true" 
             alt="" data-aos="fade-up" data-aos-delay="50"/>  
           </div>
-          Invite as many people<br />as possible to stake<br />by March 30th 2022
+          <div class="flex flex-row w-full text-center items-center md:p-12">
+            Invite as many people as possible to stake by March 30th 2022
+          </div>
         </div>
-        <div class="flex flex-col w-1/3 justify-center">     
-          <div class="flex flex-row w-full text-center items-center mb-2">
-            <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/3.svg?raw=true" 
+        <div class="flex flex-col w-full md:w-1/3 justify-center m-2">     
+          <div class="flex flex-row w-full text-center items-center">
+            <img class="w-90pc md:w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/3.svg?raw=true" 
             alt="" data-aos="fade-up" data-aos-delay="50"/>  
           </div>
-          ue your kDOUGH to<br />redeem the<br />DOUGH payout
+          <div class="flex flex-row w-full text-center items-center md:p-12">
+            Use your kDOUGH to redeem the DOUGH payout
+          </div>
         </div>                
       </div> 
     </div>
@@ -275,7 +281,7 @@
 </div>
 
 <div class="w-full flex flex-col items-center text-center">
-  <div class="w-full font-huge text-center mt-4">Where we are right now</div>
+  <div class="w-full font-huge text-center p-4 md:mt-4">Where we are right now</div>
   <div class="flex w-full justify-center">
     <StakingStats />
   </div>
@@ -286,11 +292,11 @@
   </div>  
 
 
-  <div class="mt-8 w-full flex flex-row lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
+  <div class="mt-8 w-full flex flex-col md:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
     <a 
     style="background-color: #4dd5de; color: white;"
       target="_blank" href="https://piedao.notion.site/Staking-User-Manual-dc84c8c2ca194e34ac0775fc2485ab14"
-      class="flex flex-col w-1/3 justify-center pointer rounded h-200px m-2">
+      class="flex flex-col w-full md:w-1/3 justify-center pointer rounded h-200px m-2">
       <div class="flex flex-row w-full text-center items-center mb-8 pl-8 pr-8">
         <img class="ml-40pc max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/cut-of-meat_1f969.png?raw=true" 
         alt="" data-aos="fade-up" data-aos-delay="50"/>  
@@ -300,8 +306,8 @@
     <a 
       style="background-color: #ff4b4a; color: white;"
       target="_blank" href="https://medium.com/piedao/launching-uma-kpi-options-for-dough-staked-ee57ed6a10e7"
-      class="flex flex-col w-1/3 justify-center pointer p-8 rounded h-200px m-2">
-      <div class="flex flex-row w-full text-center items-center mb-12 pl-8 pr-8">
+      class="flex flex-col w-full md:w-1/3 justify-center pointer p-8 rounded h-200px m-2">
+      <div class="flex flex-row w-full text-center items-center mb-8 md:mb-12 md:pl-8 md:pr-8">
         <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/uma-uma-logo_1.svg?raw=true" 
         alt="" data-aos="fade-up" data-aos-delay="50"/>  
       </div>
@@ -310,7 +316,7 @@
     <a
       style="background-color: #5a65ea; color: white;"
       target="_blank" href="hhttps://discord.gg/DpZ2tMt6"
-      class="flex flex-col w-1/3 justify-center pointer p-8 rounded h-200px m-2">     
+      class="flex flex-col w-full md:w-1/3 justify-center pointer p-8 rounded h-200px m-2">     
       <div class="flex flex-row w-full text-center items-center mb-8">
         <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/discord_1.svg?raw=true" 
         alt="" data-aos="fade-up" data-aos-delay="50"/>  
