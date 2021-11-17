@@ -1,7 +1,6 @@
 <script>
 	import orderBy from 'lodash/orderBy';
   import BigNumber from 'bignumber.js';
-  import io from 'socket.io-client';
   import get from 'lodash/get';
   import find from 'lodash/find';
   import filter from 'lodash/filter';
@@ -18,28 +17,13 @@
 
   import {
     getTokenImage,
-    formatFiat,
   } from "../components/helpers.js";
-
-  import {
-    dataObj,
-    initialize
-  } from '../helpers/staking.js';
 
   import Holdings from "../components/piefolio/Holdings.svelte";
   import Allocation from "../components/piefolio/Allocation.svelte";
   import Oven from "../components/piefolio/Oven.svelte";
   import Governance from "../components/piefolio/Governance.svelte";
-  import Farming from "../components/piefolio/Farming.svelte";
   import Banner from "../components/piefolio/Banner.svelte";
-  import Exchange from "../components/piefolio/Exchange.svelte";
-
-  $: data = dataObj;
-  $: isLoading = false;
-  $: initialized = {
-    onMount: false,
-    onChainData: false
-  };
 
   $: portfolioUSD = 0;
 
@@ -53,32 +37,21 @@
       nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
     };
   }) || [];
-  console.log("HERE", pies);
+  let currentAddress = null;
 
   $: featured = [];
   $: tokens = [];
 
   $: if($eth.address) {
-    if(!initialized.onChainData && !isLoading) {
+    if(currentAddress != $eth.address) {
+      currentAddress = $eth.address;
+
       (async () => {
-        isLoading = true;
+        portfolioUSD = 0;
         await fetchOnchainData();
         await fetchTokenList($eth.address);
-        await initStakingSummary();
-        initialized.onChainData = true;
-        isLoading = false;
       })()
     }
-  }
-
-  async function initStakingSummary() {
-    initialize($eth)
-      .then((updated_data) => {
-        data = updated_data;
-      })
-      .catch((error) => {
-        console.error(error);
-      });    
   }
 
   async function fetchOnchainData() {
@@ -109,7 +82,10 @@
   async function fetchTokenList(address) {
     const response = await fetch(`https://api.ethplorer.io/getAddressInfo/${address}?apiKey=scwf7425sUxrtI106`)
     const result = await response.json();
-    if (!result.tokens) return [];
+    if (!result.tokens) {
+      tokens = [];
+      return tokens;
+    };
 
     const allTokens = result.tokens.map( t => {
       const decimal = parseInt(t.tokenInfo.decimals, 10)
@@ -139,7 +115,6 @@
     })
 
     tokens = orderBy(filtered, ['usdValue'], ['desc']);
-    console.log("tokens", tokens);
   }
 
 </script>
@@ -152,7 +127,7 @@
       <span class="mt-2 mb-2"><Allocation totalVal={portfolioUSD} tokenList={tokens}/></span>
     </div>
     <div class="flex flex-col w-38pc">
-      <StakingSummary {data} eth={$eth} />
+      <StakingSummary />
       <span class="mt-2 mb-1"><Banner /></span>
       <span class="mt-1"><Oven /></span>
       <!-- <span class="mt-1 mb-1"><Farming /></span> -->
@@ -167,7 +142,7 @@
   <span class="flex flex-col mb-2"><Holdings totalVal={portfolioUSD} tokenList={featured} /></span>
   <span class="flex flex-col mb-2 h-100pc"><Allocation totalVal={portfolioUSD} tokenList={tokens} /></span>
   <div class="flex flex-col mb-7">
-    <StakingSummary {data} eth={$eth} />
+    <StakingSummary />
   </div>
   <span class="-mt-20px mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>

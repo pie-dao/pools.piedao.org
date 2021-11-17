@@ -5,15 +5,13 @@
   import images from '../../config/images.json';
   import smartcontracts from '../../config/smartcontracts.json';
   import Modal from '../../components/elements/Modal.svelte';
-  import { onMount } from 'svelte';
+  import displayNotification from '../../notifications';
   import InfoModal from '../../components/modals/infoModal.svelte';
   import ClaimModal from '../../components/elements/ClaimModal.svelte';
+  import { stakingData } from '../../stores/eth/writables.js';
+  import { eth } from '../../stores/eth.js';
   import isEmpty from 'lodash/isEmpty';
-  import { createEventDispatcher } from 'svelte';
-  const dispatch = createEventDispatcher();
-
-  export let data;
-  export let eth;
+  import get from 'lodash/get';
 
   let claimModal;
   let votingInfos = "";
@@ -24,57 +22,55 @@
   let voteKeyword;
   let isLoading = true;
 
-  $: if(data && !isEmpty(data) && data.address) {
+  $: if($stakingData && !isEmpty($stakingData) && $stakingData.address) {
     isLoading = false;
 
-    if(data.votes) {
-      if(data.votes.length) {
+    if($stakingData.votes) {
+      if($stakingData.votes.length) {
         votingImage = "check-mark-button";
         votingInfos = "You voted this month";
         votingClass = "text-green";
         voteKeyword = "you_voted";
       } else {
-        if(data.proposals) {
-          if(data.proposals.length == 0) {
+        if($stakingData.proposals) {
+          if($stakingData.proposals.length == 0) {
             votingInfos = "No open votes"; 
             votingImage = "hourglass-pending";
             votingClass = "text-black";
             voteKeyword = "no_votes";
           } else {
             // filtering out the ejected/withdrawn lock...
-            let oldestValidLock = data.accountLocks.map(lock => {
+            let oldestValidLock = $stakingData.accountLocks.filter(lock => {
               if(!lock.ejected && !lock.withdrawn) {
                 return lock;
               }
-            });
+            }).reverse();
             // and getting the oldest one, by reversing the DESC order...
-            oldestValidLock = oldestValidLock.reverse()[0];
+            oldestValidLock = get(oldestValidLock, 0);            
             // finally checking if the user can vote on snapshot, or if the
             // proposal is older than his oldest lock...
-            if(oldestValidLock && data.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
+            if($stakingData.proposals.length == 0) {
               votingImage = "warning";
-              votingInfos = "You can't vote just yet";
+              votingInfos = "No active proposals to vote on";
               votingClass = "text-red";
               voteKeyword = "cannot_votes";
             } else {
-              votingImage = "warning";
-              votingInfos = "You need to vote";
-              votingClass = "text-yellow";
-              voteKeyword = "need_to_vote";
+              if(oldestValidLock && $stakingData.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
+                votingImage = "warning";
+                votingInfos = "You can't vote just yet";
+                votingClass = "text-red";
+                voteKeyword = "cannot_votes";
+              } else {
+                votingImage = "warning";
+                votingInfos = "You need to vote";
+                votingClass = "text-yellow";
+                voteKeyword = "need_to_vote";
+              }
             }
           }
         }
       }
     }
-  }
-
-  function handleUpdate(event) {
-    data = event.detail.data;
-    data = data;
-
-    dispatch('update', {
-        data: data,
-      });
   }
 
   function openModal(content_key) {
@@ -120,7 +116,8 @@
   </span>
 </Modal>
 
-<ClaimModal bind:this={claimModal} on:update={handleUpdate}/>
+<ClaimModal bind:this={claimModal}/>
+
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
   <div class="font-huge text-center mt-6">Summary</div>
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
@@ -129,10 +126,10 @@
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
-        {#if isLoading && eth.address}
+        {#if isLoading && $eth.address}
           <div class="mr-2">Loading...</div>
         {:else}
-          <div class="font-24px">{eth.address ? formatFiat(toNum(data.accountTokenBalance), ',', '.', '') : 0}</div>
+          <div class="font-24px">{$eth.address ? formatFiat(toNum($stakingData.accountTokenBalance), ',', '.', '') : 0}</div>
         {/if}
         <img class="h-auto w-24px mx-5px" src={images.doughtoken} alt="dough token" />
         <span class="sc-kXeGPI jeVIZw token-symbol-container">DOUGH</span>
@@ -145,11 +142,11 @@
     </div>
     <div class="flex nowrap items-center p-1">
       <span class="sc-iybRtq gjVeBU">
-        {#if isLoading && eth.address}
+        {#if isLoading && $eth.address}
           <div class="mr-2">Loading...</div>
         {:else}
           <div class="font-24px">
-            {eth.address ? formatFiat(toNum(data.accountVeTokenBalance), ',', '.', '') : 0}
+            {$eth.address ? formatFiat(toNum($stakingData.accountVeTokenBalance), ',', '.', '') : 0}
           </div>
         {/if}
         <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
@@ -162,7 +159,7 @@
   >
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
-      {#if eth.address}
+      {#if $eth.address}
         <div 
         on:click={() => openModal('staking.claim.vote.' + voteKeyword)}
         class={"flex nowrap intems-center p-1 pointer text-xs " + votingClass}>
@@ -176,24 +173,24 @@
     <div class="flex nowrap items-center p-1">
       <div class="flex-1">
         <span class="sc-iybRtq gjVeBU">
-          {#if isLoading && eth.address}
+          {#if isLoading && $eth.address}
             <div class="mr-2">Loading...</div>
           {:else}          
             <div class="font-24px">
-              {eth.address ? formatFiat(toNum(data.accountWithdrawableRewards), ',', '.', '') : 0}
+              {$eth.address ? formatFiat(toNum($stakingData.accountWithdrawableRewards), ',', '.', '') : 0}
             </div>
           {/if}
           <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
           <span class="sc-kXeGPI jeVIZw token-symbol-container">SLICE</span>
         </span>
       </div>
-      {#if eth.address}
+      {#if $eth.address}
       <button 
       disabled={isLoading}
       class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
       on:click={() => {
-        if(eth.address) {
-          claimModal.showModal(data);
+        if($eth.address) {
+          claimModal.showModal($stakingData);
         }
       }}
       > Claim</button>
@@ -209,11 +206,11 @@
       <div class="flex nowrap items-center p-1">
         <div class="flex-1">
           <span class="sc-iybRtq gjVeBU">
-            {#if isLoading && eth.address}
+            {#if isLoading && $eth.address}
               <div class="mr-2">Loading...</div>
             {:else}            
               <div class="font-24px">
-                {eth.address ? data.accountAverageDuration : "0"} Months
+                {$eth.address ? $stakingData.accountAverageDuration : "0"} Months
               </div>
             {/if}
           </span>        
@@ -228,11 +225,11 @@
       <div class="flex nowrap items-center p-1">
         <div class="flex-1">
           <span class="sc-iybRtq gjVeBU">
-            {#if isLoading && eth.address}
+            {#if isLoading && $eth.address}
               <div class="mr-2">Loading...</div>
             {:else}             
               <div class="font-24px">
-                {eth.address ? data.accountVotingPower : 0} %
+                {$eth.address ? $stakingData.accountVotingPower : 0} %
               </div>
             {/if}
           </span>        

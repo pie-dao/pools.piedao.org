@@ -3,14 +3,22 @@
   import images from '../../config/images.json';
   import { formatFiat } from '../../components/helpers.js';
   import { toNum } from '../../helpers/staking.js';
-
+  import { stakingData } from '../../stores/eth/writables.js';
+  import { eth } from '../../stores/eth.js';
   import Modal from '../../components/elements/Modal.svelte';
-  let modalinfo;
 
-  export let isLoading;
-  export let data;
-  export let eth;
-  export let itemsNumber = data.rewards.length;
+  export let itemsNumber;
+
+  let modalinfo;
+  let isLoading = true;
+
+  $: if($stakingData && $stakingData.hasLoaded) {
+    if(!itemsNumber) {
+      itemsNumber = $stakingData.rewards.length;
+    }
+
+    isLoading = false;
+  }  
 </script>
 
 <Modal title="Slashed Rewards" backgroundColor="#f3f3f3" bind:this={modalinfo}>
@@ -25,14 +33,14 @@
   </span>
 </Modal>
 
-{#if eth.address}
+{#if $eth.address}
 <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
   <div class="font-huge text-center mt-6">Claimed Rewards</div>
   {#if isLoading}
     Loading...
   {:else}        
-    {#if data.rewards && data.rewards.length > 0}
-      {#each data.rewards.slice(0, itemsNumber) as reward}
+    {#if $stakingData.rewards && $stakingData.rewards.length > 0}
+      {#each $stakingData.rewards.slice(0, itemsNumber) as reward}
         {#if reward.type != 'distributed'}
           <!-- <a
             href={"#/staking_reward_breakdown/" + reward.timestamp * 1000}
@@ -86,7 +94,7 @@
     {/if}
   {/if}
 
-  {#if data.rewards.length > itemsNumber}
+  {#if $stakingData.rewards.length > itemsNumber}
   <a class="pt-6" href="#/staking_rewards"> See all rewards </a>
 {/if}
 </div>

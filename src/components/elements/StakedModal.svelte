@@ -5,10 +5,10 @@
   import confetti from '../Confetti.js';
   import { parseEther } from '@ethersproject/units';
   import { calculateVeDough, getLastLockForAddress, boostToMax } from '../../helpers/staking.js';
+  import { stakingData } from '../../stores/eth/writables.js';
+  import { eth } from '../../stores/eth.js';
   import BigNumber from 'bignumber.js';
   import Proposals from './Proposals.svelte';
-  import { createEventDispatcher } from 'svelte';
-  const dispatch = createEventDispatcher();
 
   let stakedModal;
   let restakeText = "Restake 3 years";
@@ -49,29 +49,27 @@
     colors: ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a'],
   };
 
-  let _eth;
   let _stakeAmount;
   let _stakeDuration;
-  let _data;
 
   const button = document.querySelector('#confetti');
 
   function refillData() {
-    modalStake.move = _data.accountLocks.length == 1 ? "first_move" : "second_move";
+    modalStake.move = $stakingData.accountLocks.length == 1 ? "first_move" : "second_move";
 
-    if(_stakeDuration == 36 && _data.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
+    if(_stakeDuration == 36 && $stakingData.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
       modalStake.text = "maxDuration_noDough";
     }
 
-    if(_stakeDuration == 36 && !_data.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
+    if(_stakeDuration == 36 && !$stakingData.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
       modalStake.text = "maxDuration_hasDough";
     }
 
-    if(_stakeDuration < 36 && _data.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
+    if(_stakeDuration < 36 && $stakingData.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
       modalStake.text = "smallDuration_noDough";
     }
 
-    if(_stakeDuration < 36 && !_data.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
+    if(_stakeDuration < 36 && !$stakingData.accountDepositTokenBalance.minus(BigNumber(_stakeAmount).times(1e18)).eq(0)) {
       modalStake.text = "smallDuration_hasDough";
     }
     
@@ -93,11 +91,9 @@
     }, 500);    
   }
 
-  export const showModal = (stakeAmount, stakeDuration, data, eth) => {
-    _eth = eth;
+  export const showModal = (stakeAmount, stakeDuration) => {
     _stakeAmount = stakeAmount;
     _stakeDuration = stakeDuration;
-    _data = data;
 
     refillData();
     confetti(button, config);
@@ -137,18 +133,14 @@
   }; 
   
   async function restakeLastLock() {
-    let lockId = await getLastLockForAddress(_eth);
+    let lockId = await getLastLockForAddress($eth);
     restakeText = "Boosting...";
     isRestaking = true;
 
-    boostToMax(lockId, _eth).then((updated_data) => {
+    boostToMax(lockId, $eth).then((updated_data) => {
       _stakeDuration = 36;
       restakeText = "Restake 3 years";
       isRestaking = false;
-
-      dispatch('update', {
-        data: updated_data,
-      });
     
       refillData();
       confetti(button, config);
@@ -180,8 +172,8 @@
     <p class="pt-2 font-24px font-bold">what's next?</p>
 
     <p class="pt-2 font-22px">1. Vote on the current proposals<br />to be eligible to claim rewards</p>
-    {#if _data.proposals && _data.proposals.length}
-      <Proposals proposals={_data.proposals} />
+    {#if $stakingData.proposals && $stakingData.proposals.length}
+      <Proposals proposals={$stakingData.proposals} />
     {:else}
       <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
         <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>

@@ -17,19 +17,22 @@
 
   $: if($eth.provider && isLoading) {
     isLoading = false;
+    updateStats();
+  }
 
+  function updateStats() {
     fetchStakingStats($eth.provider, 1).then(response => {
-        $stakingStats = response;
-        console.log("fetchStakingStats", $stakingStats);
+      $stakingStats = response;
+      console.log("fetchStakingStats", $stakingStats);
 
-        formattedTotalDough = formatBigMoneyAmount(toNum($stakingStats.totalDough), ',', '');
-        stakedPercent = ((toNum($stakingStats.totalStakedDough) * 100) / toNum($stakingStats.totalDough));
-        quorumPercent = 100; 
+      formattedTotalDough = formatBigMoneyAmount(toNum($stakingStats.totalDough), ',', '');
+      stakedPercent = ((toNum($stakingStats.totalStakedDough) * 100) / toNum($stakingStats.totalDough));
+      quorumPercent = 100; 
 
-        plotBars = true;  
-      }).catch(error => {
-        console.error(error);
-      });  
+      plotBars = true;  
+    }).catch(error => {
+      console.error(error);
+    });    
   }
 
   function handleLoadingButtonClick() {

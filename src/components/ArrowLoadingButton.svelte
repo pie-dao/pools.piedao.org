@@ -1,10 +1,10 @@
 <script>
   import images from '../config/images.json';
-  import { stakingDataIntervalRunning } from '../stores/eth/writables.js';
+  import { stakingDataIntervalRunning, stakingDataInterval } from '../stores/eth/writables.js';
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
   
-  let counter = 5;
+  let counter = $stakingDataInterval / 1000;
   let interval = null;
   let isCounting = false;
 
@@ -16,13 +16,13 @@
           if(counter > 0) {
             counter--;
           } else {
-            counter = 5;
+            counter = $stakingDataInterval / 1000;
           }
         }, 1000);
       }
   } else {
     isCounting = false;
-    counter = 5;
+    counter = $stakingDataInterval / 1000;
     clearInterval(interval);
   }
 </script>

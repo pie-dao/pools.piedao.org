@@ -16,10 +16,10 @@ export const balances = writable({});
 export const farming = writable({});
 export const eth = writable({ ...defaultEth, currentBlockNumber: 0 });
 export const pools = writable({ composition: [], nav: 0 });
-export const justBoosted = writable({});
-export const timestampBoosted = writable({});
+
 export const stakingDataIntervalRunning = writable(false);
 export const stakingDataInterval = writable(5000);
+
 export const stakingStats = writable({
   totalHolders: 0,
   averageTimeLock: 0,
@@ -27,7 +27,9 @@ export const stakingStats = writable({
   totalVeDough: 0,
   totalDough: 0,
 });
+
 export const stakingData = writable({
+  hasLoaded: false,
   address: null,
   totalDoughStaked: BigNumber(0),
   veTokenTotalSupply: BigNumber(0),
@@ -43,13 +45,6 @@ export const stakingData = writable({
   votes: null,
   proposals: null
 });
-export const BoostedModalIsOpen = writable(false);
-export const claimModalIsOpen = writable(false);
 
-export const UnlockModalStatus = writable({
-  isOpen: false,
-  lock: null,
-  withdrawnRewards: null,
-  countdown: null
-});
-export const fetchStakingDataLock = writable(false);
+export const justBoosted = writable({});
+export const timestampBoosted = writable({});
