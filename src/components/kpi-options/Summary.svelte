@@ -182,7 +182,7 @@
 
       displayNotification({
         autoDismiss: 15000,
-        message: 'Sorry, an error occurred while claiming your rewards. Please try again later.',
+        message: error.data.message,
         type: 'error',
       });
     }
