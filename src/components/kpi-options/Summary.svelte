@@ -54,12 +54,13 @@
     
     if(claimAddress && !isClaimed) {
       kpiOptionsData.claimableKpiOptions = BigNumber(claimAddress.amount);
-      kpiOptionsData.estimatedKpiOptions = await calculateKpiOptions(kpiOptionsData.claimableKpiOptions);
+      // kpiOptionsData.estimatedKpiOptions = await calculateKpiOptions(kpiOptionsData.claimableKpiOptions);
     } else {
       kpiOptionsData.claimableKpiOptions = BigNumber(0);
-      kpiOptionsData.estimatedKpiOptions = BigNumber(0);
+      // kpiOptionsData.estimatedKpiOptions = BigNumber(0);
     }
 
+    kpiOptionsData.estimatedKpiOptions = await calculateKpiOptions(BigNumber(claimAddress.amount));
     isLoading = false;
   }
 
