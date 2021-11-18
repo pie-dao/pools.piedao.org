@@ -6,6 +6,7 @@
   import { stakingData } from '../../stores/eth/writables.js';
   import { eth } from '../../stores/eth.js';
   import Modal from '../../components/elements/Modal.svelte';
+  import smartcontracts from '../../config/smartcontracts.json';
 
   export let itemsNumber;
 
@@ -67,11 +68,21 @@
             <div class="flex nowrap items-center justify-between p-1">
               <span class="sc-iybRtq gjVeBU">
                 <div class="font-24px">{formatFiat(toNum(reward.amount), ',', '.', '')}</div>
-                <img
-                  class="h-auto w-24px mx-5px"
-                  src={images.rewardsPie}
-                  alt="rewardspie token"
-                />
+                {#if reward.rewardToken == smartcontracts.reward}
+                  <img
+                    class="h-auto w-24px mx-5px"
+                    src={images.rewardsPie}
+                    alt="SLICE token"
+                  />
+                  SLICE
+                {:else}
+                  <img
+                    class="h-auto w-24px mx-5px"
+                    src={images.wkpi}
+                    alt="wDOUGH-kpi token"
+                  />
+                  wDOUGH-kpi                
+                {/if}
               </span>
               <div 
               on:click={() => {

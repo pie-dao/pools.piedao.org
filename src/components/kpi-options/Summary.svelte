@@ -5,7 +5,7 @@
   import images from '../../config/images.json';
   import smartcontracts from '../../config/smartcontracts.json';
   import displayNotification from '../../notifications';
-  import { eth, connectWeb3 } from '../../stores/eth.js';
+  import { eth, connectWeb3, subject } from '../../stores/eth.js';
   import BigNumber from 'bignumber.js';
   import { ethers } from 'ethers';
   import MerkleTreeDistributorABI from '../../abis/MerkleTreeDistributorABI.json';
@@ -54,12 +54,13 @@
     
     if(claimAddress && !isClaimed) {
       kpiOptionsData.claimableKpiOptions = BigNumber(claimAddress.amount);
-      kpiOptionsData.estimatedKpiOptions = await calculateKpiOptions(kpiOptionsData.claimableKpiOptions);
+      // kpiOptionsData.estimatedKpiOptions = await calculateKpiOptions(kpiOptionsData.claimableKpiOptions);
     } else {
       kpiOptionsData.claimableKpiOptions = BigNumber(0);
-      kpiOptionsData.estimatedKpiOptions = BigNumber(0);
+      // kpiOptionsData.estimatedKpiOptions = BigNumber(0);
     }
 
+    kpiOptionsData.estimatedKpiOptions = await calculateKpiOptions(BigNumber(claimAddress.amount));
     isLoading = false;
   }
 
@@ -199,11 +200,11 @@
     <div class="flex nowrap items-center md:items-left p-1">
       <div class="flex-1">
         <span class="flex-col md:flex-row sc-iybRtq gjVeBU">
-          {#if isLoadingTotal && $eth.address}
+          {#if isLoadingTotal && $eth.provider}
             <div class="md:mr-2">Loading...</div>
           {:else}          
             <div class="font-24px">
-              {$eth.address ? formatFiat(toNum(kpiOptionsData.totalDistributedRewards), ',', '.', '') : 0}
+              {$eth.provider ? formatFiat(toNum(kpiOptionsData.totalDistributedRewards), ',', '.', '') : 0}
             </div>
           {/if}
           <img class="h-auto w-24px mx-5px" src={images.wkpi} alt="dough token" />
