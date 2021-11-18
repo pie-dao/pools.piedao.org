@@ -146,10 +146,10 @@
 
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
-  <div class="flex flex-col items-center w-full max-w-1100px pb-4 px-10">
+  <div class="flex flex-col items-center w-full max-w-1100px pb-4 px-2 md:px-10">
     <img class="h-150px inline mb-4" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/money-mouth-face_1f911.png" alt="hourglass" />
     <div class="font-hero text-center mt-10">Earn rewards<br />in three easy steps</div>
-    <div class="font-thin text-l text-center mt-20px">
+    <div class="font-thin text-l text-justify md:text-center mt-20px">
       Stake your DOUGH, vote on proposals and claim your monthly rewards. 250+ members joined in the first month!
       <br />
       <b>Stake DOUGH to start earning rewards</b>
@@ -165,9 +165,9 @@
 
 
 <div class="flex flex-col items-center text-center mt-0 md:mt-0 mx-8">
-  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-2 md:px-10">
     <div class="font-huge text-center mt-10">A new governance model</div>
-    <div class="font-thin text-l text-center mt-20px">
+    <div class="font-thin text-l text-justify md:text-center mt-20px">
       If you stake DOUGH for a minimum of 6 months, you get in exchange veDOUGH, PieDAO’s new governance token.
       <br /><br />  
       With veDOUGH you can help the community steer the destiny of the DAO and its products, make proposals, vote on issues while <strong>being compensated</strong> for your commitment and effort.
@@ -229,9 +229,9 @@
 
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
-  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-10">
+  <div class="flex flex-wrap justify-around w-full max-w-1100px pb-12 px-2 md:px-10">
     <div class="w-full font-huge text-center mt-10">Get paid for your work</div>
-    <div class="w-full font-thin text-l text-center mt-20px">
+    <div class="w-full font-thin text-l text-justify md:text-center mt-20px">
       Your time and insight is valuable to our community. It is only fair that you get rewarded for your part in the growth of PieDAO. Staking along with being an active voter entitles you to monthly rewards. Amazing right? Welcome to the future of work, full time token holder.      <br /><br />
     </div> 
     <button 
