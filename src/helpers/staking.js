@@ -357,6 +357,7 @@ export async function fetchStakingDataGraph(address) {
           timestamp: true,
           amount: true,
           type: true,
+          rewardToken: true
         },
         globalStats: {
           __args: {
