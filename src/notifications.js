@@ -29,7 +29,7 @@ if(env.customRPC.enabled) {
         let tnxReceipt = await provider.getTransactionReceipt(transaction);
         // if status = 1 it means success, then we can trigger the event for it...
         if(tnxReceipt.status == 1) {
-          tnx.emitter.emit('tnxConfirmed');
+          tnx.emitter.emit('txConfirmed');
         }
       }
     });

@@ -253,7 +253,7 @@
             <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/1.svg?raw=true" 
             alt="" data-aos="fade-up" data-aos-delay="50"/>  
           </div>
-          <div class="flex flex-row w-full text-center items-center md:p-12">
+          <div class="flex flex-row w-full text-center items-center md:pl-12 md:pr-12 md:pt-4">
             Stake DOUGH by October 31st 2021 and claim kDOUGH
           </div>
         </div>
@@ -262,7 +262,7 @@
             <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/2.svg?raw=true" 
             alt="" data-aos="fade-up" data-aos-delay="50"/>  
           </div>
-          <div class="flex flex-row w-full text-center items-center md:p-12">
+          <div class="flex flex-row w-full text-center items-center md:pl-12 md:pr-12 md:pt-4">
             Invite as many people as possible to stake by March 30th 2022
           </div>
         </div>
@@ -271,8 +271,8 @@
             <img class="w-90pc md:w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/3.svg?raw=true" 
             alt="" data-aos="fade-up" data-aos-delay="50"/>  
           </div>
-          <div class="flex flex-row w-full text-center items-center md:p-12">
-            Use your kDOUGH to redeem the DOUGH payout
+          <div class="flex flex-row w-full text-center items-center md:pl-12 md:pr-12 md:pt-4">
+            Use your kDOUGH to redeem the veDOUGH payout
           </div>
         </div>                
       </div> 
@@ -315,7 +315,7 @@
     </a>
     <a
       style="background-color: #5a65ea; color: white;"
-      target="_blank" href="hhttps://discord.gg/DpZ2tMt6"
+      target="_blank" href="https://discord.link/PieDAO"
       class="flex flex-col w-full md:w-1/3 justify-center pointer p-8 rounded h-200px m-2">     
       <div class="flex flex-row w-full text-center items-center mb-8">
         <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/discord_1.svg?raw=true" 
@@ -337,7 +337,7 @@
     </div> 
     <a 
       target="_blank"
-      href="https://twitter.com/share?ref_src=twsrc%5Etfw" 
+      href="https://twitter.com/intent/tweet?text=Stake%20%24Dough%20and%20get%20monthly%20income%20%F0%9F%92%B8%21%20Stake%20your%20DOUGH%2C%20vote%20on%20proposals%20and%20claim%20your%20monthly%20rewards.%20250%2B%20members%20joined%20in%20the%20first%20month%21%20%F0%9F%99%8B%E2%80%8D%E2%99%82%EF%B8%8F%F0%9F%99%8B%E2%80%8D%E2%99%80%EF%B8%8F%F0%9F%99%8B%0A%0AGo%20to%20https%3A%2F%2Fwww.piedao.org%2F%23%2Fdough-staking-campaign%20to%20find%20out%20more%0A%0A%40PieDAO_DeFi%0A%23fulltimetokenholder" 
       class="btnbig mt-4 w-200px text-white rounded-8px p-15px"
       data-url="https://www.piedao.org/#/dough-staking-campaign" 
       data-hashtags="fulltimetokenholder" 
