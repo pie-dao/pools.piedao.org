@@ -122,7 +122,7 @@
           <img class="h-auto w-24px" src={images.locked_with_key} alt="dough token" />
           <div class="flex flex-col md:flex-row ml-2">
           <div class="flex intems-center font-thin whitespace-nowrap">Average Time Lock</div>
-          <div class="font-20px whitespace-nowrap md:ml-2">{$stakingStats.averageTimeLock} Months</div>
+          <div class="font-20px whitespace-nowrap md:ml-2 text-left">{$stakingStats.averageTimeLock} Months</div>
         </div>
         </span>    
       </div>
