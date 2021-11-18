@@ -199,11 +199,11 @@
     <div class="flex nowrap items-center md:items-left p-1">
       <div class="flex-1">
         <span class="flex-col md:flex-row sc-iybRtq gjVeBU">
-          {#if isLoadingTotal && $eth.address}
+          {#if isLoadingTotal && $eth.provider}
             <div class="md:mr-2">Loading...</div>
           {:else}          
             <div class="font-24px">
-              {$eth.address ? formatFiat(toNum(kpiOptionsData.totalDistributedRewards), ',', '.', '') : 0}
+              {$eth.provider ? formatFiat(toNum(kpiOptionsData.totalDistributedRewards), ',', '.', '') : 0}
             </div>
           {/if}
           <img class="h-auto w-24px mx-5px" src={images.wkpi} alt="dough token" />
