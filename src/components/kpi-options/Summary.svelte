@@ -5,7 +5,7 @@
   import images from '../../config/images.json';
   import smartcontracts from '../../config/smartcontracts.json';
   import displayNotification from '../../notifications';
-  import { eth, connectWeb3 } from '../../stores/eth.js';
+  import { eth, connectWeb3, subject } from '../../stores/eth.js';
   import BigNumber from 'bignumber.js';
   import { ethers } from 'ethers';
   import MerkleTreeDistributorABI from '../../abis/MerkleTreeDistributorABI.json';
