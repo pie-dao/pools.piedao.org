@@ -148,11 +148,11 @@
 <div class="flex flex-col items-center text-center mt-4 md:mt-10 mx-8">
   <div class="flex flex-col items-center w-full max-w-1100px pb-4 px-10">
     <img class="h-150px inline mb-4" src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/money-mouth-face_1f911.png" alt="hourglass" />
-    <div class="font-hero text-center mt-10">Long term<br />growth</div>
+    <div class="font-hero text-center mt-10">Earn rewards<br />in three easy steps</div>
     <div class="font-thin text-l text-center mt-20px">
-      Short term profit seekers do not care about a project's long term success. They only care about what is in their pockets. This only hurts you, the true believers in PieDAO's mission. Staking DOUGH ensures power is in the hands of members who share your goals and will responsibly govern.
+      Stake your DOUGH, vote on proposals and claim your monthly rewards. 250+ members joined in the first month!
       <br />
-      So our community can continue to focus on creating the most diversified PIEs in web3.
+      <b>Stake DOUGH to start earning rewards</b>
     </div>
     <button 
     onclick="location.href='/#/dough-staking';"
