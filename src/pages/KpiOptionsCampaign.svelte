@@ -47,7 +47,7 @@
   <div class="text-center w-full">
     <div class="flex flex-col items-center text-center">
       <div class="w-full h-500px p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-100pc h-500px">
+        <div class="z-40 flex items-center absolute w-100pc h-500px">
           {#if totalStakedDough >= 7000000}
             <div class="flex flex-row items-center absolute bottom-35pc text-center">
               <img src={images.one_m_prize_text_bg} alt="" width="80px"/>
@@ -88,7 +88,7 @@
 
   <div class="text-center w-50px">
     <div class="w-50px bg-lightgrey rounded-circle h-full p-0 m-0 relative">
-      <div class="z-40 flex items-center absolute w-50px h-100pc">
+      <div class="z-30 flex items-center absolute w-50px h-100pc">
         <div class={`absolute mb-1 left-12px bottom-40pc`}>
           {#if totalStakedDough >= 7000000}
             <img src={images.checkmark_rounded} alt="checked" width="25px"/>
@@ -122,7 +122,7 @@
   <div class="text-center w-full">
     <div class="flex flex-col items-center h-full">
       <div class="h-full w-full p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-full h-full text-center leading-5">
+        <div class="z-40 flex items-center absolute w-full h-full text-center leading-5">
           <div class="w-80px flex flex-row items-center absolute bottom-38pc">
             <div class="h-1px w-30px dashed"></div><span>7M DOUGH<br />Staked</span>
           </div>
@@ -144,7 +144,7 @@
   <div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full h-100px p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-100pc h-100px top-8pc">
+        <div class="z-40 flex items-center absolute w-100pc h-100px top-8pc">
           <div class="flex flex-col items-center absolute ml-41pc text-center">
             {#if totalStakedDough >= 7000000}
               <img src={images.one_m_prize_text_bg} alt="" width="80px"/>
@@ -180,7 +180,7 @@
   <div class="flex flex-col items-center text-center mx-8">
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full bg-lightgrey rounded-circle h-44px p-0 m-0 relative">
-        <div class="z-40 flex items-center absolute w-100pc h-44px max-w-100pc">
+        <div class="z-30 flex items-center absolute w-100pc h-44px max-w-100pc">
           <div class="px-25px absolute ml-41pc">
             {#if totalStakedDough >= 7000000}
               <img src={images.checkmark_rounded} alt="checked" width="30px"/>
@@ -217,7 +217,7 @@
   <div class="flex flex-col items-center text-center mx-8 -mt-10px">
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full h-90px p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-100pc h-90px text-center leading-5 mt-3">
+        <div class="z-40 flex items-center absolute w-100pc h-90px text-center leading-5 mt-3">
           <div class="w-80px flex flex-col items-center absolute ml-41pc">
             <div class="w-1px h-30px dashed"></div><span class="mt-2">7M DOUGH<br />Staked</span>
           </div>
