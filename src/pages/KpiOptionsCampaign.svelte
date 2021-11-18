@@ -6,6 +6,8 @@
   import { toNum } from '../helpers/staking.js';
   import { formatFiat } from '../components/helpers.js';
 
+  import StakingSummary from '../components/kpi-options/Summary.svelte';
+
   let maxBarValue = 15000000;
   let currentBarPercentage = 100;
   let totalStakedDough = 0;
@@ -45,7 +47,7 @@
   <div class="text-center w-full">
     <div class="flex flex-col items-center text-center">
       <div class="w-full h-500px p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-100pc h-500px">
+        <div class="z-40 flex items-center absolute w-100pc h-500px">
           {#if totalStakedDough >= 7000000}
             <div class="flex flex-row items-center absolute bottom-35pc text-center">
               <img src={images.one_m_prize_text_bg} alt="" width="80px"/>
@@ -86,7 +88,7 @@
 
   <div class="text-center w-50px">
     <div class="w-50px bg-lightgrey rounded-circle h-full p-0 m-0 relative">
-      <div class="z-40 flex items-center absolute w-50px h-100pc">
+      <div class="z-30 flex items-center absolute w-50px h-100pc">
         <div class={`absolute mb-1 left-12px bottom-40pc`}>
           {#if totalStakedDough >= 7000000}
             <img src={images.checkmark_rounded} alt="checked" width="25px"/>
@@ -120,7 +122,7 @@
   <div class="text-center w-full">
     <div class="flex flex-col items-center h-full">
       <div class="h-full w-full p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-full h-full text-center leading-5">
+        <div class="z-40 flex items-center absolute w-full h-full text-center leading-5">
           <div class="w-80px flex flex-row items-center absolute bottom-38pc">
             <div class="h-1px w-30px dashed"></div><span>7M DOUGH<br />Staked</span>
           </div>
@@ -142,7 +144,7 @@
   <div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full h-100px p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-100pc h-100px top-8pc">
+        <div class="z-40 flex items-center absolute w-100pc h-100px top-8pc">
           <div class="flex flex-col items-center absolute ml-41pc text-center">
             {#if totalStakedDough >= 7000000}
               <img src={images.one_m_prize_text_bg} alt="" width="80px"/>
@@ -178,7 +180,7 @@
   <div class="flex flex-col items-center text-center mx-8">
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full bg-lightgrey rounded-circle h-44px p-0 m-0 relative">
-        <div class="z-40 flex items-center absolute w-100pc h-44px max-w-100pc">
+        <div class="z-30 flex items-center absolute w-100pc h-44px max-w-100pc">
           <div class="px-25px absolute ml-41pc">
             {#if totalStakedDough >= 7000000}
               <img src={images.checkmark_rounded} alt="checked" width="30px"/>
@@ -215,7 +217,7 @@
   <div class="flex flex-col items-center text-center mx-8 -mt-10px">
     <div class="flex flex-col items-center w-full max-w-1100px px-0 md:px-10">
       <div class="w-full h-90px p-0 m-0 relative">
-        <div class="z-50 flex items-center absolute w-100pc h-90px text-center leading-5 mt-3">
+        <div class="z-40 flex items-center absolute w-100pc h-90px text-center leading-5 mt-3">
           <div class="w-80px flex flex-col items-center absolute ml-41pc">
             <div class="w-1px h-30px dashed"></div><span class="mt-2">7M DOUGH<br />Staked</span>
           </div>
@@ -232,6 +234,98 @@
 </div>
 <!-- nico PROGRESS BAR FOR DESKTOP -->
 
+<div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
+  <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
+    <div class="w-full font-huge text-center mt-4">How can I participate?</div>
+    <div class="w-full font-thin text-l text-center mt-20px">
+      <p>Everyone that has staked Dough during October 2021 is eligible! 
+        If you did check your address 
+        <u><a href="https://bafybeifonjk7bchsdlljsbf4gywpcyuyn4634fddu2iccd6uzfyxmmkow4.ipfs.infura-ipfs.io/">here</a></u>
+        <br />
+         The options have been distributed already, check your balance in the summary below. 
+         <br />
+         <b>Now its time to pump those numbers up!</b>
+        </p>
+      <br />
+      <div class="mt-8 w-full flex flex-col md:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
+        <div class="flex flex-col w-full md:w-1/3 justify-center m-2">
+          <div class="flex flex-row w-full text-center items-center">
+            <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/1.svg?raw=true" 
+            alt="" data-aos="fade-up" data-aos-delay="50"/>  
+          </div>
+          <div class="flex flex-row w-full text-center items-center md:pl-12 md:pr-12 md:pt-4">
+            Stake DOUGH by October 31st 2021 and claim kDOUGH
+          </div>
+        </div>
+        <div class="flex flex-col w-full md:w-1/3 justify-center m-2">
+          <div class="flex flex-row w-full text-center items-center">
+            <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/2.svg?raw=true" 
+            alt="" data-aos="fade-up" data-aos-delay="50"/>  
+          </div>
+          <div class="flex flex-row w-full text-center items-center md:pl-12 md:pr-12 md:pt-4">
+            Invite as many people as possible to stake by March 30th 2022
+          </div>
+        </div>
+        <div class="flex flex-col w-full md:w-1/3 justify-center m-2">     
+          <div class="flex flex-row w-full text-center items-center">
+            <img class="w-90pc md:w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/3.svg?raw=true" 
+            alt="" data-aos="fade-up" data-aos-delay="50"/>  
+          </div>
+          <div class="flex flex-row w-full text-center items-center md:pl-12 md:pr-12 md:pt-4">
+            Use your kDOUGH to redeem the veDOUGH payout
+          </div>
+        </div>                
+      </div> 
+    </div>
+  </div>
+</div>
+
+<div class="w-full flex flex-col items-center text-center">
+  <div class="w-full font-huge text-center p-4 md:mt-4">Where we are right now</div>
+  <div class="flex w-full justify-center">
+    <StakingStats />
+  </div>
+  <div class="w-full flex flex-row lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
+    <div class="flex flex-col w-full justify-center">
+      <StakingSummary />
+    </div>
+  </div>  
+
+
+  <div class="mt-8 w-full flex flex-col md:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px">
+    <a 
+    style="background-color: #4dd5de; color: white;"
+      target="_blank" href="https://piedao.notion.site/Staking-User-Manual-dc84c8c2ca194e34ac0775fc2485ab14"
+      class="flex flex-col w-full md:w-1/3 justify-center pointer rounded h-200px m-2">
+      <div class="flex flex-row w-full text-center items-center mb-8 pl-8 pr-8">
+        <img class="ml-40pc max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/cut-of-meat_1f969.png?raw=true" 
+        alt="" data-aos="fade-up" data-aos-delay="50"/>  
+      </div>
+      Staking<br />User Guide
+    </a>
+    <a 
+      style="background-color: #ff4b4a; color: white;"
+      target="_blank" href="https://medium.com/piedao/launching-uma-kpi-options-for-dough-staked-ee57ed6a10e7"
+      class="flex flex-col w-full md:w-1/3 justify-center pointer p-8 rounded h-200px m-2">
+      <div class="flex flex-row w-full text-center items-center mb-8 md:mb-12 md:pl-8 md:pr-8">
+        <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/uma-uma-logo_1.svg?raw=true" 
+        alt="" data-aos="fade-up" data-aos-delay="50"/>  
+      </div>
+      Learn about<br />UMA KPI Options
+    </a>
+    <a
+      style="background-color: #5a65ea; color: white;"
+      target="_blank" href="https://discord.link/PieDAO"
+      class="flex flex-col w-full md:w-1/3 justify-center pointer p-8 rounded h-200px m-2">     
+      <div class="flex flex-row w-full text-center items-center mb-8">
+        <img class="w-full max-h-80px" src="https://github.com/pie-dao/brand/blob/master/misc/discord_1.svg?raw=true" 
+        alt="" data-aos="fade-up" data-aos-delay="50"/>  
+      </div>
+      Join our<br />Discord
+    </a>                
+  </div> 
+
+</div>
 
 <div class="flex flex-col items-center text-center mx-8 mt-4">
   <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
@@ -241,42 +335,16 @@
       </p>
       <img class="h-150px inline mb-4" src={images.astronaut} alt="hourglass_rounded" />
     </div> 
-  <button 
-    onclick="location.href='/#/dough-staking';"
-    class="btnbig mt-4 text-white rounded-8px p-15px">
-    Stake DOUGH
-  </button>
-  </div>
-</div>
+    <a 
+      target="_blank"
+      href="https://twitter.com/intent/tweet?text=Stake%20%24Dough%20and%20get%20monthly%20income%20%F0%9F%92%B8%21%20Stake%20your%20DOUGH%2C%20vote%20on%20proposals%20and%20claim%20your%20monthly%20rewards.%20250%2B%20members%20joined%20in%20the%20first%20month%21%20%F0%9F%99%8B%E2%80%8D%E2%99%82%EF%B8%8F%F0%9F%99%8B%E2%80%8D%E2%99%80%EF%B8%8F%F0%9F%99%8B%0A%0AGo%20to%20https%3A%2F%2Fwww.piedao.org%2F%23%2Fdough-staking-campaign%20to%20find%20out%20more%0A%0A%40PieDAO_DeFi%0A%23fulltimetokenholder" 
+      class="btnbig mt-4 w-200px text-white rounded-8px p-15px"
+      data-url="https://www.piedao.org/#/dough-staking-campaign" 
+      data-hashtags="fulltimetokenholder" 
+      data-related="PieDAO_DeFi" 
+      data-show-count="false">
+      Share
+    </a>
 
-<div class="w-full flex flex-col items-center text-center">
-  <div class="flex w-full justify-center">
-    <StakingStats />
-  </div>
-</div>
-
-<div class="flex flex-col items-center text-center mt-6 md:mt-10 mx-8">
-  <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
-    <div class="w-full font-huge text-center mt-4">How can I participate?</div>
-    <div class="w-full font-thin text-l text-left mt-20px">
-      <p>To be eligible for the KPI option airdrop, you need to have veDOUGH (i.e. stake your DOUGH)
-      by the 31st of October. The amount of KPI options you will receive will be pro-rata to the share of 
-      veDOUGH you hold versus the total (up-to-date totals can be found here).</p>
-      <br />
-      <ul>
-        <li>• To learn how to stake DOUGH, go to our <a target="_blank" href="https://piedao.notion.site/Staking-User-Manual-dc84c8c2ca194e34ac0775fc2485ab14" class="pointer"><u>user guide for Staking</u></a></li>
-        <li>• To learn more about UMA KPI options, <a target="_blank" href="https://medium.com/piedao/launching-uma-kpi-options-for-dough-staked-ee57ed6a10e7" class="pointer"><u>head here</u></a></li>
-        <li>• For any other questions or help, <a target="_blank" href="https://discord.gg/DpZ2tMt6" class="pointer"><u>join our Discord</u></a></li>
-      </ul>
-      <br />
-      <p>
-        Try our staking simulator to estimate how much monthly cashflows you can get for a given DOUGH amount and your desired lock-up period.
-      </p>
-    </div>
-    <button 
-      onclick="location.href='/#/staking-simulator';"
-      class="btnbig mt-8 text-white rounded-8px p-15px">
-      Staking Simulator
-    </button>  
   </div>
 </div>

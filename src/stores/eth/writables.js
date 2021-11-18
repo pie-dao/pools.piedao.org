@@ -48,3 +48,4 @@ export const stakingData = writable({
 
 export const justBoosted = writable({});
 export const timestampBoosted = writable({});
+export const emitters = writable([]);
