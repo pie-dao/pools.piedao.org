@@ -65,6 +65,7 @@
       };
 
       let now = moment().unix();
+      veDoughInEscrow = BigNumber(0);
 
       accountSchedule.forEach(schedule => {
         if(now >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()) {
