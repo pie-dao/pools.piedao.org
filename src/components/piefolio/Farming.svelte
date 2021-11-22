@@ -247,28 +247,28 @@
     {#if accountSchedule.length}
       <div class="flex flex-row">
         <div class="flex text-center items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 ml-2 w-full">
-          <div class="overflow-y-scroll h-100">
-            <table>
+          <div class="overflow-y-scroll h-100 w-full">
+            <table class="w-full overflow-x-scroll min-w-400px">
               <tr>
-                <th class="gray_border p-2 border-r-2 w-1/5">Amount</th>
-                <th class="gray_border p-2 border-r-2 w-2/5">vest in DOUGH</th>
-                <th class="gray_border p-2 w-2/5">vest in veDOUGH</th>
+                <th class="gray_border p-2 border-r-2 w-1/5 text-left">Amount</th>
+                <th class="gray_border p-2 border-r-2 w-2/5 text-left">vest in DOUGH</th>
+                <th class="gray_border p-2 w-2/5 text-right">vest in veDOUGH</th>
               </tr>
               {#each accountSchedule as schedule}
-                <tr class="gray_border border-t-2">
-                <td class="gray_border p-2 border-r-2 w-1/5">{formatFiat(toNum(schedule.amount), ',', '.', '')}</td>
-                  <td class="gray_border p-2 border-r-2 w-2/5">
-                    <img class="float-left" width="20px" height="20px" src={images.calendar} alt="token name" />
+                <tr class="gray_border border-t-2 w-full">
+                <td class="gray_border p-2 border-r-2 min-w-1/5 w-1/5 text-left">{formatFiat(toNum(schedule.amount), ',', '.', '')}</td>
+                  <td class="gray_border p-2 border-r-2 min-w-2/5 w-2/5 font-thin text-left">
+                    <img class="float-left mr-1" width="20px" height="20px" src={images.calendar} alt="token name" />
                     {(moment(moment.unix(schedule.timestamp.toString()))).format('DD/mm/yy')}
                   </td>
                   {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()}
-                    <td class="gray_border p-2 w-2/5">
-                      <img class="float-left" width="20px" height="20px" src={images.gem_stone} alt="token name" />
+                    <td class="gray_border p-2 text-right flex items-center justify-end">
+                      <img class="mr-1" width="20px" height="20px" src={images.gem_stone} alt="token name" />
                       Stake now
                     </td>
                   {:else}
-                    <td class="gray_border p-2 w-2/5">
-                      <img class="float-left" width="20px" height="20px" src={images.calendar} alt="token name" />
+                    <td class="gray_border p-2 font-thin text-right flex items-center justify-end">
+                      <img class=" mr-1" width="20px" height="20px" src={images.calendar} alt="token name" />
                       {(moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').format('DD/mm/yy')}
                     </td>                
                   {/if}
