@@ -15,8 +15,8 @@
   import BigNumber from "bignumber.js";
 
   let rewardEscrowContract;
-  let doughInEscrow = "n/a";
-  let veDoughInEscrow = "n/a";
+  let doughInEscrow = BigNumber(0);
+  let veDoughInEscrow = BigNumber(0);
   let escrowEntries = "n/a";
   let accountSchedule = [];
 
@@ -45,8 +45,8 @@
   }  
 
   async function fetchRewardEscrowData() {
-      // const address = "0x5ce583b0431794f65ee97fbd6fffacf2adad344c";
-      const address = $eth.address;
+      const address = "0x5ce583b0431794f65ee97fbd6fffacf2adad344c";
+      // const address = $eth.address;
 
       if(!address) {
           return;
@@ -65,7 +65,6 @@
       };
 
       let now = moment().unix();
-      veDoughInEscrow = BigNumber(0);
 
       accountSchedule.forEach(schedule => {
         if(now >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()) {
@@ -258,15 +257,18 @@
                 <tr class="gray_border border-t-2">
                 <td class="gray_border p-2 border-r-2 w-1/5">{formatFiat(toNum(schedule.amount), ',', '.', '')}</td>
                   <td class="gray_border p-2 border-r-2 w-2/5">
-                    {(moment(moment.unix(schedule.timestamp.toString()))).format('MMM Do YYYY')}
+                    <img class="float-left" width="20px" height="20px" src={images.calendar} alt="token name" />
+                    {(moment(moment.unix(schedule.timestamp.toString()))).format('DD/mm/yy')}
                   </td>
                   {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()}
                     <td class="gray_border p-2 w-2/5">
+                      <img class="float-left" width="20px" height="20px" src={images.gem_stone} alt="token name" />
                       Stake now
                     </td>
                   {:else}
                     <td class="gray_border p-2 w-2/5">
-                      {(moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').format('MMM Do YYYY')}
+                      <img class="float-left" width="20px" height="20px" src={images.calendar} alt="token name" />
+                      {(moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').format('DD/mm/yy')}
                     </td>                
                   {/if}
                 </tr>
