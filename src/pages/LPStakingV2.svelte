@@ -1,24 +1,18 @@
 <script>
   import { onMount } from 'svelte';
   import { get } from "svelte/store";
-  import { BigNumber, ethers } from "ethers";
-  import { formatEther, parseEther } from '@ethersproject/units';
+  import { ethers } from "ethers";
+  import { formatEther } from '@ethersproject/units';
 
 	import { getTokenImage } from './../components/helpers.js';
 
   import stakingPools from '../config/stakingPools.json';
   import smartcontracts from '../config/smartcontracts.json';
-  import rewardEscrowABI from '../config/rewardEscrowABI.json';
   import stakingPoolsABI from '../abis/stakingPoolsABI.json';
   import { eth } from "../stores/eth.js";
   import Farming from '../components/piefolio/Farming.svelte';
-  import Accordion from '../components/elements/Accordion.svelte';
-  import AccordionGroup from '../components/elements/AccordionGroup.svelte';
   import Meta from '../components/elements/meta.svelte';
 
-
-  let doughInEscrow = "n/a";
-  let escrowEntries = "n/a";
   let userPools = [];
 
   $: initialised = false;
@@ -29,20 +23,6 @@
       p.withdrawFee = 'n/a';
       return p;
   });
-
-  const fetchRewardEscrowData = async () => {
-      const address = $eth.address
-
-      if(!address) {
-          return;
-      }
-
-      const { provider, signer } = get(eth);
-      const rewardEscrow = new ethers.Contract(smartcontracts.eDOUGH, rewardEscrowABI,  signer || provider);
-
-      doughInEscrow = Number(formatEther(await rewardEscrow.totalEscrowedAccountBalance(address))).toFixed(4);
-      escrowEntries = (await rewardEscrow.numVestingEntries(address)).toString();
-  }
 
   const getEscrowPercentages = async (poolId) => {
       const { provider, signer } = get(eth);
@@ -83,8 +63,6 @@
     }
   }
 
-  fetchRewardEscrowData();
-
   onMount( async () => {
     await fetchEscrowPercentages();
     initialised = true;
@@ -93,7 +71,6 @@
   // update data on address or block change
   $: if($eth.address || $eth.currentBlockNumber) {
     $eth.address || !$eth.signer
-    fetchRewardEscrowData();
     getPoolsUser()
   };
 
@@ -252,8 +229,6 @@
           <span class="-mt-4 mb-2 md:mb-1">
             {#if $eth.address}
             <Farming
-              doughInEscrow={doughInEscrow}
-              escrowEntries={escrowEntries}
               pools={userPools}
             />
             {:else}

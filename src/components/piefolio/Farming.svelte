@@ -1,12 +1,159 @@
 <script>
   import images from "../../config/images.json";
   import { getTokenImage } from '../helpers.js';
+  import { formatFiat } from '../../components/helpers.js';
+  import { toNum } from '../../helpers/staking.js';  
+  import rewardEscrowABI from '../../config/rewardEscrowABI.json';
+  import { subject, eth } from '../../stores/eth.js';
+  import { get } from "svelte/store";
+  import smartcontracts from '../../config/smartcontracts.json';
+  import { ethers } from "ethers";
+  import displayNotification from '../../notifications.js';
+  import Modal from '../../components/elements/Modal.svelte';
+  import InfoModal from '../../components/modals/infoModal.svelte';
+  import moment from 'moment';
+  import BigNumber from "bignumber.js";
 
-  export let doughInEscrow;
-  export let escrowEntries;
+  let rewardEscrowContract;
+  let doughInEscrow = "n/a";
+  let veDoughInEscrow = "n/a";
+  let escrowEntries = "n/a";
+  let accountSchedule = [];
+
   export let pools;
+
+  let isClaiming = false;
+  let isStaking = false;
+  let modal = null;
+  let modal_content_key = "vesting_ve_dough";
+
+  $: if($eth.address || $eth.currentBlockNumber) {
+    $eth.address || !$eth.signer
+    fetchRewardEscrowData();
+  };
+
+  function mapAccountSchedule(accountSchedule) {
+    let mappedAccountSchedule = [];
+
+    for(var i = 0; i < accountSchedule.length / 2; i += 2) {
+      if(!accountSchedule[i].eq(0) && !accountSchedule[i+1].eq(0)) {
+        mappedAccountSchedule.push({timestamp: accountSchedule[i], amount: accountSchedule[i+1]});
+      }
+    }
+
+    return mappedAccountSchedule;
+  }  
+
+  async function fetchRewardEscrowData() {
+      // const address = "0x5ce583b0431794f65ee97fbd6fffacf2adad344c";
+      const address = $eth.address;
+
+      if(!address) {
+          return;
+      }
+
+      const { provider, signer } = get(eth);
+      rewardEscrowContract = new ethers.Contract(smartcontracts.eDOUGH, rewardEscrowABI,  signer || provider);
+
+      doughInEscrow = await rewardEscrowContract.totalEscrowedAccountBalance(address);
+      accountSchedule = mapAccountSchedule(await rewardEscrowContract.checkAccountSchedule(address));
+
+      let vestingEntries = (await rewardEscrowContract.numVestingEntries(address)).toString();
+      escrowEntries = {
+        vesting: accountSchedule.length,
+        claimed: vestingEntries - accountSchedule.length
+      };
+
+      let now = moment().unix();
+      veDoughInEscrow = BigNumber(0);
+
+      accountSchedule.forEach(schedule => {
+        if(now >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()) {
+          console.log(schedule.amount);
+          veDoughInEscrow = veDoughInEscrow.plus(schedule.amount.toString());
+        }
+      });
+  }
+
+  async function stake() {
+    isStaking = true;
+
+    try {
+      const { emitter } = displayNotification(
+        await rewardEscrowContract.migrateToVeDOUGH()
+      );
+
+      emitter.on('txConfirmed', async () => {
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: 'You staked for veDOUGH',
+              type: 'success',
+            });
+
+            subscription.unsubscribe();
+
+            isStaking = false;
+            fetchRewardEscrowData();
+          },
+        });
+      });      
+    } catch(error) {
+      console.error(error);
+      isStaking = false;
+      
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.message,
+        type: 'error',
+      });      
+    }    
+  }
+
+  async function claim() {
+    isClaiming = true;
+
+    try {
+      const { emitter } = displayNotification(
+        await rewardEscrowContract.vest()
+      );
+
+      emitter.on('txConfirmed', async () => {
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: 'You claimed DOUGH',
+              type: 'success',
+            });
+
+            subscription.unsubscribe();
+
+            isClaiming = false;
+            fetchRewardEscrowData();
+          },
+        });
+      });      
+    } catch(error) {
+      console.error(error);
+      isClaiming = false;
+      
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.message,
+        type: 'error',
+      });      
+    }
+  }
   
 </script>
+
+<Modal backgroundColor="#f3f3f3" bind:this={modal}>
+  <span slot="content">
+    <InfoModal description_key={modal_content_key} />
+  </span>
+</Modal>
 
 <span class="-mt-20px">
   <!-- <a class="" href="#/farms" target="_blank"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a> -->
@@ -15,33 +162,125 @@
     <div class="font-huge text-center">Farm Positions</div>
 
     <div class="flex">
-
-      <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-6 mr-1 md:mr-2 w-1/2">
-        <div class="flex items-center mr-4 text-xl">💰
-          <!-- <img class="" width="40px" height="40px" src={images.doughtoken} alt="token name" /> -->
-        </div>
-        <div class="flex flex-col justify-around">
-            <span class="text-xs font-thin opacity-80">DOUGH in Escrow</span>
-            <span class="font-bold leading-6">{doughInEscrow || 0}</span>
-        </div>
-      </div>
-
-      <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-6 ml-1 md:ml-2 w-1/2">
+      <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 md:mr-2 w-1/2">
         <div class="flex items-center mr-4 text-xl">🧮
           <!-- <img class="" width="40px" height="40px" src={images.doughtoken} alt="token name" /> -->
         </div>
         <div class="flex flex-col justify-around">
             <span class="text-xs font-thin opacity-80">Vesting Entries</span>
-            <span class="font-bold leading-6">{escrowEntries || 0 }</span>
+            <span class="font-bold leading-6">{escrowEntries.vesting || 0 }</span>
         </div>
       </div>
 
+      <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 mr-1 ml-2 w-1/2">
+        <div class="flex items-center mr-2 text-xl">💰
+          <!-- <img class="" width="40px" height="40px" src={images.doughtoken} alt="token name" /> -->
+        </div>
+        <div class="flex flex-col justify-around">
+          <span class="text-xs font-thin opacity-80">Claimed Entries</span>
+          <span class="font-bold leading-6">{escrowEntries.claimed || 0 }</span>
+      </div>
+      </div>
     </div>
+
+    <div class="flex flex-row">
+      <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 ml-2 w-full">
+        <div class="flex items-center mr-2 text-xl">
+          <img class="" width="40px" height="40px" src={images.doughtoken} alt="dough" />
+        </div>
+        <div class="flex flex-col justify-around w-full">
+          <span class="text-xs font-thin opacity-80">Vest in DOUGH</span>
+          <span class="font-bold leading-6">{formatFiat(toNum(doughInEscrow), ',', '.', '') || 0} DOUGH</span>
+        </div>
+    
+        {#if !doughInEscrow.eq(0)}
+          <button 
+          disabled={isClaiming}
+          class="flex items-center bg-black rounded-xl pointer px-4 py-2 text-white"
+          on:click={() => {
+            claim();
+          }}
+          >Claim</button>
+        {/if}
+      </div> 
+    </div>
+
+    <div class="flex flex-row">
+      <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 md:ml-2 w-full">
+        <div class="flex items-center mr-4 text-xl">
+          <img class="" width="40px" height="40px" src={images.veDough} alt="ve-dough" />
+        </div>
+        <div class="flex flex-col justify-around w-full">
+          <div class="font-thin md:text-xs text-left">
+            <span class="float-left">Vest in veDOUGH</span>
+            <img
+              on:click={() => modal.open()}
+              class="token-icon w-18px h-18px pl-4px"
+              src={images.simulator_info}
+              alt="ETH"
+            />
+          </div>                    
+          <span class="font-bold leading-6">{formatFiat(toNum(veDoughInEscrow), ',', '.', '') || 0} veDOUGH</span>
+        </div>
+
+        {#if !veDoughInEscrow.eq(0)}
+          <button
+            disabled={isStaking}
+            on:click={() => {
+              stake();
+            }}
+            class="pointer flex items-center stakinggradient w-180px"
+          >
+            <div class="flex items-center p-2">
+              <div class="ml-4px md:ml-8px mr-4px md:mr-8px">Stake</div>
+              <img
+                class="w-30px h-30px"
+                src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
+                alt="ETH"
+              />
+            </div>
+          </button>
+        {/if}    
+      </div>      
+    </div>
+
+    {#if accountSchedule.length}
+      <div class="flex flex-row">
+        <div class="flex text-center items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 ml-2 w-full">
+          <div class="overflow-y-scroll h-100">
+            <table>
+              <tr>
+                <th class="gray_border p-2 border-r-2 w-1/5">Amount</th>
+                <th class="gray_border p-2 border-r-2 w-2/5">vest in DOUGH</th>
+                <th class="gray_border p-2 w-2/5">vest in veDOUGH</th>
+              </tr>
+              {#each accountSchedule as schedule}
+                <tr class="gray_border border-t-2">
+                <td class="gray_border p-2 border-r-2 w-1/5">{formatFiat(toNum(schedule.amount), ',', '.', '')}</td>
+                  <td class="gray_border p-2 border-r-2 w-2/5">
+                    {(moment(moment.unix(schedule.timestamp.toString()))).format('MMM Do YYYY')}
+                  </td>
+                  {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()}
+                    <td class="gray_border p-2 w-2/5">
+                      Stake now
+                    </td>
+                  {:else}
+                    <td class="gray_border p-2 w-2/5">
+                      {(moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').format('MMM Do YYYY')}
+                    </td>                
+                  {/if}
+                </tr>
+              {/each}
+            </table>
+          </div>
+        </div> 
+      </div>    
+    {/if}
     
     {#if pools.length > 0 }
       {#each pools as stakingPool}
         <a href={`#/staking/${stakingPool.slug}`}>
-          <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-6 mt-2 md:mt-4">
+          <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-2 md:mt-4">
             <div class="flex items-center mr-4">
               {#each stakingPool.containing as asset, i}
                 <img

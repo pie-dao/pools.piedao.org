@@ -942,6 +942,10 @@ img.oven-illustration {
     color: #fc02a7;
 }
 
+.gray_border {
+  border-color: #e4e4e4;
+}
+
 
 .spl table td, .spl table th {
   border-color: #edf2f7;
