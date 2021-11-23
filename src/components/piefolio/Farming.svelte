@@ -298,8 +298,8 @@
               </tr>
               {#each accountSchedule as schedule}
                 <tr class="gray_border border-t-2 w-full">
-                <td class="gray_border p-2 border-r-2 min-w-1/5 w-1/5 text-left">{formatFiat(toNum(schedule.amount), ',', '.', '')}</td>
-                  <td class="gray_border p-2 border-r-2 min-w-2/5 w-2/5 font-thin text-left">
+                  <td class="gray_border p-2 border-r-2 min-w-1/5 w-1/5 text-left">{formatFiat(toNum(schedule.amount), ',', '.', '')}</td>
+                  <td class="text-center gray_border p-2 border-r-2 min-w-2/5 w-2/5 font-thin text-left">
                     <img class="float-left mr-1 hidden md:block" width="20px" height="20px" src={images.calendar} alt="token name" />
                     {(moment(moment.unix(schedule.timestamp.toString()))).format('DD/MM/YY')}
                   </td>
