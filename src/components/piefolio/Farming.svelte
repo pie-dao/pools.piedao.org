@@ -146,10 +146,41 @@
       });      
     }
   }
+
+  const addToken = () => {
+    ethereum.sendAsync(
+      {
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: smartcontracts.veDOUGH,
+            symbol: 'veDOUGH',
+            decimals: 18,
+            image: images.simulator_veDough,
+          },
+        },
+        id: Math.round(Math.random() * 100000),
+      },
+      (err, added) => {
+        if (added) {
+          displayNotification({
+            message: 'The veDOUGH token has been added to your Metamask!',
+            type: 'success',
+          });
+        } else {
+          displayNotification({
+            message: 'Sorry, something went wrong. Please try again later.',
+            type: 'error',
+          });
+        }
+      },
+    );
+  }; 
   
 </script>
 
-<Modal backgroundColor="#f3f3f3" bind:this={modal}>
+<Modal title="Vest in veDOUGH" backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
     <InfoModal description_key={modal_content_key} />
   </span>
@@ -206,41 +237,52 @@
     </div>
 
     <div class="flex flex-row">
-      <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 md:ml-2 w-full">
-        <div class="flex items-center mr-4 text-xl">
-          <img class="" width="40px" height="40px" src={images.veDough} alt="ve-dough" />
-        </div>
-        <div class="flex flex-col justify-around w-full">
-          <div class="font-thin md:text-xs text-left">
-            <span class="float-left">Vest in veDOUGH</span>
-            <img
-              on:click={() => modal.open()}
-              class="token-icon w-18px h-18px pl-4px"
-              src={images.simulator_info}
-              alt="ETH"
-            />
-          </div>                    
-          <span class="font-bold leading-6">{formatFiat(toNum(veDoughInEscrow), ',', '.', '') || 0} veDOUGH</span>
-        </div>
-
-        {#if !veDoughInEscrow.eq(0)}
-          <button
-            disabled={isStaking}
-            on:click={() => {
-              stake();
-            }}
-            class="pointer flex items-center stakinggradient w-180px"
-          >
-            <div class="flex items-center p-2">
-              <div class="ml-4px md:ml-8px mr-4px md:mr-8px">Stake</div>
+      <div class="flex flex-col items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 md:ml-2 w-full">
+        <div class="flex flex-row w-full">
+          <div class="flex items-center mr-4 text-xl">
+            <img class="" width="40px" height="40px" src={images.veDough} alt="ve-dough" />
+          </div>
+          <div class="flex flex-col justify-around w-full">
+            <div class="font-thin md:text-xs text-left">
+              <span class="float-left">Vest in veDOUGH</span>
               <img
-                class="w-30px h-30px"
-                src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
+                on:click={() => modal.open()}
+                class="token-icon w-18px h-18px pl-4px"
+                src={images.simulator_info}
                 alt="ETH"
               />
-            </div>
-          </button>
-        {/if}    
+            </div>                    
+            <span class="font-bold leading-6">{formatFiat(toNum(veDoughInEscrow), ',', '.', '') || 0} veDOUGH</span>
+          </div>
+  
+          {#if !veDoughInEscrow.eq(0)}
+            <button
+              disabled={isStaking}
+              on:click={() => {
+                stake();
+              }}
+              class="pointer flex items-center stakinggradient w-180px"
+            >
+              <div class="flex items-center p-2">
+                <div class="ml-4px md:ml-8px mr-4px md:mr-8px">Stake</div>
+                <img
+                  class="w-30px h-30px"
+                  src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
+                  alt="ETH"
+                />
+              </div>
+            </button>
+          {/if}          
+        </div>
+
+        <div class="flex flex-row w-full">
+          <button
+            on:click={() => addToken()}
+            class="text-center pointer mx-auto object-bottom mt-4 font-thin"
+          >
+            🦊 Add veDOUGH to MetaMask
+          </button>  
+      </div>
       </div>      
     </div>
 
@@ -251,15 +293,15 @@
             <table class="w-full overflow-x-scroll min-w-400px">
               <tr>
                 <th class="gray_border p-2 border-r-2 w-1/5 text-left">Amount</th>
-                <th class="gray_border p-2 border-r-2 w-2/5 text-left">vest in DOUGH</th>
-                <th class="gray_border p-2 w-2/5 text-right">vest in veDOUGH</th>
+                <th class="gray_border p-2 border-r-2 w-2/5 text-left">Vest in DOUGH</th>
+                <th class="gray_border p-2 w-2/5 text-right">Vest in veDOUGH</th>
               </tr>
               {#each accountSchedule as schedule}
                 <tr class="gray_border border-t-2 w-full">
                 <td class="gray_border p-2 border-r-2 min-w-1/5 w-1/5 text-left">{formatFiat(toNum(schedule.amount), ',', '.', '')}</td>
                   <td class="gray_border p-2 border-r-2 min-w-2/5 w-2/5 font-thin text-left">
                     <img class="float-left mr-1" width="20px" height="20px" src={images.calendar} alt="token name" />
-                    {(moment(moment.unix(schedule.timestamp.toString()))).format('DD/mm/yy')}
+                    {(moment(moment.unix(schedule.timestamp.toString()))).format('DD/MM/YY')}
                   </td>
                   {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()}
                     <td class="gray_border p-2 text-right flex items-center justify-end">
@@ -269,7 +311,7 @@
                   {:else}
                     <td class="gray_border p-2 font-thin text-right flex items-center justify-end">
                       <img class=" mr-1" width="20px" height="20px" src={images.calendar} alt="token name" />
-                      {(moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').format('DD/mm/yy')}
+                      {(moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').format('DD/MM/YY')}
                     </td>                
                   {/if}
                 </tr>
