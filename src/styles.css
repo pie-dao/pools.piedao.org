@@ -145,6 +145,10 @@ flex: 1 1 0;
   color: #EC1EA0;
 }
 
+.text-little {
+  font-size: 0.8rem;
+}
+
 
 .bg-cream {
   background-color: #afa3ff;
