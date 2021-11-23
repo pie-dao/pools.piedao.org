@@ -194,21 +194,21 @@
 
     <div class="flex">
       <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 md:mr-2 w-1/2">
-        <div class="flex items-center mr-4 text-xl">🧮
+        <div class="flex items-center mr-4 text-l md:text-xl hidden md:block">🧮
           <!-- <img class="" width="40px" height="40px" src={images.doughtoken} alt="token name" /> -->
         </div>
-        <div class="flex flex-col justify-around">
-            <span class="text-xs font-thin opacity-80">Vesting Entries</span>
+        <div class="flex flex-col justify-around text-little md:text-xs">
+            <span class="font-thin opacity-80">Vesting Entries</span>
             <span class="font-bold leading-6">{escrowEntries.vesting || 0 }</span>
         </div>
       </div>
 
       <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 mr-1 ml-2 w-1/2">
-        <div class="flex items-center mr-2 text-xl">💰
+        <div class="flex items-center mr-2 text-l md:text-xl hidden md:block">💰
           <!-- <img class="" width="40px" height="40px" src={images.doughtoken} alt="token name" /> -->
         </div>
-        <div class="flex flex-col justify-around">
-          <span class="text-xs font-thin opacity-80">Claimed Entries</span>
+        <div class="flex flex-col justify-around text-little md:text-xs">
+          <span class="font-thin opacity-80">Claimed Entries</span>
           <span class="font-bold leading-6">{escrowEntries.claimed || 0 }</span>
       </div>
       </div>
@@ -216,18 +216,18 @@
 
     <div class="flex flex-row">
       <div class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 ml-2 w-full">
-        <div class="flex items-center mr-2 text-xl">
+        <div class="flex items-center mr-2 text-little md:text-xs">
           <img class="" width="40px" height="40px" src={images.doughtoken} alt="dough" />
         </div>
-        <div class="flex flex-col justify-around w-full">
-          <span class="text-xs font-thin opacity-80">Vest in DOUGH</span>
+        <div class="flex flex-col justify-around w-full text-little md:text-base">
+          <span class="font-thin opacity-80">Vest in DOUGH</span>
           <span class="font-bold leading-6">{formatFiat(toNum(doughInEscrow), ',', '.', '') || 0} DOUGH</span>
         </div>
     
         {#if !doughInEscrow.eq(0)}
           <button 
           disabled={isClaiming}
-          class="flex items-center bg-black rounded-xl pointer px-4 py-2 text-white"
+          class="flex items-center bg-black rounded-xl pointer px-4 py-2 text-white text-little md:text-xs"
           on:click={() => {
             claim();
           }}
@@ -238,16 +238,16 @@
 
     <div class="flex flex-row">
       <div class="flex flex-col items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 md:ml-2 w-full">
-        <div class="flex flex-row w-full">
-          <div class="flex items-center mr-4 text-xl">
-            <img class="" width="40px" height="40px" src={images.veDough} alt="ve-dough" />
+        <div class="flex flex-row w-full text-little md:text-base">
+          <div class="flex items-center mr-2">
+            <img class="" width="50px" height="50px" src={images.veDough} alt="ve-dough" />
           </div>
-          <div class="flex flex-col justify-around w-full">
-            <div class="font-thin md:text-xs text-left">
+          <div class="flex flex-col justify-around w-full text-little md:text-base">
+            <div class="font-thin text-left flex items-center">
               <span class="float-left">Vest in veDOUGH</span>
               <img
                 on:click={() => modal.open()}
-                class="token-icon w-18px h-18px pl-4px"
+                class="token-icon w-18px h-18px pl-4px pointer"
                 src={images.simulator_info}
                 alt="ETH"
               />
@@ -261,12 +261,12 @@
               on:click={() => {
                 stake();
               }}
-              class="pointer flex items-center stakinggradient w-180px"
+              class="pointer flex items-center stakinggradient w-180px justify-center"
             >
-              <div class="flex items-center p-2">
-                <div class="ml-4px md:ml-8px mr-4px md:mr-8px">Stake</div>
+              <div class="flex items-center p-1 md:p-2">
+                <div class="mr-4px md:mr-8px text-little md:text-xs">Stake</div>
                 <img
-                  class="w-30px h-30px"
+                  class="w-20px h-20px md:w-30px md:h-30px"
                   src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
                   alt="ETH"
                 />
@@ -278,7 +278,7 @@
         <div class="flex flex-row w-full">
           <button
             on:click={() => addToken()}
-            class="text-center pointer mx-auto object-bottom mt-4 font-thin"
+            class="text-center pointer mx-auto object-bottom mt-4 font-thin text-little md:text-xs"
           >
             🦊 Add veDOUGH to MetaMask
           </button>  
