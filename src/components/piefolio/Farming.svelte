@@ -301,17 +301,17 @@
                   <td class="gray_border p-2 border-r-2 min-w-1/5 w-1/5 text-left">{formatFiat(toNum(schedule.amount), ',', '.', '')}</td>
                   <td class="text-center gray_border p-2 border-r-2 min-w-2/5 w-2/5 font-thin text-left">
                     <img class="float-left mr-1 hidden md:block" width="20px" height="20px" src={images.calendar} alt="token name" />
-                    {(moment(moment.unix(schedule.timestamp.toString()))).format('DD/MM/YY')}
+                    <span class="w-90px">{(moment(moment.unix(schedule.timestamp.toString()))).format('DD/MM/YY')}</span>
                   </td>
                   {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()}
                     <td class="gray_border p-2 text-right flex items-center justify-end">
                       <img class="mr-1 hidden md:block" width="20px" height="20px" src={images.gem_stone} alt="token name" />
-                      Stake now
+                      <span class="w-90px">Stake now</span>
                     </td>
                   {:else}
                     <td class="gray_border p-2 font-thin text-right flex items-center justify-end">
                       <img class=" mr-1 hidden md:block" width="20px" height="20px" src={images.calendar} alt="token name" />
-                      {(moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').format('DD/MM/YY')}
+                      <span class="w-90px">{(moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').format('DD/MM/YY')}</span>
                     </td>                
                   {/if}
                 </tr>
