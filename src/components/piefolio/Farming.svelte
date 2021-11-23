@@ -293,7 +293,7 @@
             <table class="w-full overflow-x-scroll md:min-w-400px">
               <tr>
                 <th class="gray_border p-2 border-r-2 w-1/5 text-left">Amount</th>
-                <th class="gray_border p-2 border-r-2 w-2/5 text-left">Vest in DOUGH</th>
+                <th class="gray_border p-2 border-r-2 w-2/5 text-center">Vest in DOUGH</th>
                 <th class="gray_border p-2 w-2/5 text-right">Vest in veDOUGH</th>
               </tr>
               {#each accountSchedule as schedule}
