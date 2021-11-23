@@ -84,10 +84,10 @@
     }}
 />
     
-<div class="w-100pc m-0 p-0 flex justify-center">
+<div class="w-100pc m-0 p-0 flex justify-center items-center">
   <div class="w-100pc lg:max-w-1280px flex flex-col-reverse lg:flex-row items-center lg:items-start justify-center py-0 md:py-8 px-2"> 
-        <div class="flex flex-col w-100pc lg:w-60pc lg:mr-2pc">
-          <span class="mt-0 md:mt-1 mb-2">
+        <div class="flex flex-col w-100pc lg:w-45pc lg:mr-2pc">
+          <span class="mt-0 md:mt-0 mb-2">
             <!-- Farms List -->
             <div class="w-100pc flex flex-col cardbordergradient">
               <div class="w-100pc bg-lightgrey rounded-xl text-black pt-8 pb-2 md:pt-8 pb-6 px-2 md:px-6 flex flex-col items-center">
@@ -225,8 +225,8 @@
           </span>
         </div>
         <!-- YOUR FARMING POSITIONS -->
-        <div class="flex flex-col w-100pc lg:w-38pc">
-          <span class="-mt-4 mb-2 md:mb-1">
+        <div class="flex flex-col w-100pc lg:w-45pc">
+          <span class="mt-2 mb-2 md:mb-1">
             {#if $eth.address}
             <Farming
               pools={userPools}
