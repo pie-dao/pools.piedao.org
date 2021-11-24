@@ -18,6 +18,7 @@
 
     import { get } from "svelte/store";
     import { formatEther, parseEther } from '@ethersproject/units';
+    import { environment } from '../stores/eth/connection.js';
 
     export let params;
 
@@ -50,7 +51,7 @@
     const getStakingPoolData = async () => {
       // put address in config
       const { provider, signer } = get(eth);
-      stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI, signer || provider);
+      stakingContract = new ethers.Contract(smartcontracts[environment].stakingPools, stakingPoolsABI, signer || provider);
       let res = (await stakingContract.getPools($eth.address))[poolId] || data;
 
       const percentage = Number(formatEther(data.escrowPercentage)) * 100;;

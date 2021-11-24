@@ -108,7 +108,7 @@
         params: {
           type: 'ERC20',
           options: {
-            address: smartcontracts.veDOUGH,
+            address: smartcontracts[environment].veDOUGH,
             symbol: 'veDOUGH',
             decimals: 18,
             image: images.simulator_veDough,

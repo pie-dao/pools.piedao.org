@@ -14,6 +14,7 @@ import MerkleTreeDistributorABI from '../abis/MerkleTreeDistributorABI.json';
 import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
+import { AverageSecondsMonth, veDoughSubgraphUrl, environment } from '../stores/eth/connection.js';
 import displayNotification from '../notifications';
 import EpochJson from '../config/rewards/distribution.json';
 import { stakingDataInterval, stakingData } from '../stores/eth/writables.js';
@@ -24,8 +25,7 @@ export let sharesTimeLock = false;
 export let veDOUGH = false;
 export let merkleTreeDistributor = false;
 export const minLockAmount = 1;
-export const AVG_SECONDS_MONTH = 2628000;
-
+export const AVG_SECONDS_MONTH = AverageSecondsMonth;
 let ETH = null;
 let _stakingData = get(stakingData);
 let observer = null;
@@ -166,19 +166,19 @@ export function calculateVeDough(stakedDough, commitment) {
 
 export function initContracts(eth) {
   sharesTimeLock = new ethers.Contract(
-    smartcontracts.doughStaking,
+    smartcontracts[environment].doughStaking,
     sharesTimeLockABI,
     eth.signer || eth.provider,
   );
 
   veDOUGH = new ethers.Contract(
-    smartcontracts.veDOUGH,
+    smartcontracts[environment].veDOUGH,
     veDoughABI,
     eth.signer || eth.provider,
   );
 
   merkleTreeDistributor = new ethers.Contract(
-    smartcontracts.merkleTreeDistributor,
+    smartcontracts[environment].merkleTreeDistributor,
     MerkleTreeDistributorABI,
     eth.signer || eth.provider,
   );
@@ -229,17 +229,17 @@ export async function getLastLockForAddress(eth) {
 export async function calculateDoughTotalSupply(provider) {
   try {
     const dough = new ethers.Contract(
-      smartcontracts.dough,
+      smartcontracts[environment].dough,
       DoughABI,
       provider,
     );
 
     const totalSupply = await dough.totalSupply();
 
-    const treasury = await dough.balanceOf(smartcontracts.treasury);
-    const multisig = await dough.balanceOf(smartcontracts.multisig);
-    const eDough = await dough.balanceOf(smartcontracts.eDOUGH);
-    const kpi = await dough.balanceOf(smartcontracts.kpi_options);
+    const treasury = await dough.balanceOf(smartcontracts[environment].treasury);
+    const multisig = await dough.balanceOf(smartcontracts[environment].multisig);
+    const eDough = await dough.balanceOf(smartcontracts[environment].eDOUGH);
+    const kpi = await dough.balanceOf(smartcontracts[environment].kpi_options);
 
     return totalSupply - treasury - multisig - eDough - kpi;
   } catch (error) {
@@ -327,7 +327,7 @@ export async function fetchStakingStats(provider, limit, fromId) {
 export async function fetchStakingDataGraph(address) {
   try {
     const response = await subgraphRequest(
-      'https://api.thegraph.com/subgraphs/name/pie-dao/vedough',
+      veDoughSubgraphUrl,
       {
         stakers: {
           __args: {
@@ -739,10 +739,17 @@ export function approveToken(eth) {
         !_stakingData.accountDepositTokenAllowance.isEqualTo(0)
         && !_stakingData.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
       ) {
-        await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
+        await approve(
+          smartcontracts[environment].dough,
+          smartcontracts[environment].doughStaking, 0,
+        );
       }
 
-      await approveMax(smartcontracts.dough, smartcontracts.doughStaking, { gasLimit: 100000 });
+      await approveMax(
+        smartcontracts[environment].dough,
+        smartcontracts[environment].doughStaking, { gasLimit: 100000 },
+      );
+
       _stakingData.accountDepositTokenAllowance = ethers.constants.MaxUint256;
       resolve(_stakingData);
     } catch (error) {

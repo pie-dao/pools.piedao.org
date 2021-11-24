@@ -1,6 +1,7 @@
 <script>
   import { _ } from 'svelte-i18n';
   import { formatFiat } from '../../components/helpers.js';
+  import { environment } from '../../stores/eth/connection.js';
   import { toNum } from '../../helpers/staking.js';
   import images from '../../config/images.json';
   import smartcontracts from '../../config/smartcontracts.json';
@@ -85,7 +86,7 @@
         params: {
           type: 'ERC20',
           options: {
-            address: smartcontracts.reward,
+            address: smartcontracts[environment].reward,
             symbol: 'SLICE',
             decimals: 18,
             image: images.rewardsPie,

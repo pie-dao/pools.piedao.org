@@ -15,7 +15,7 @@
   import Accordion from '../components/elements/Accordion.svelte';
   import AccordionGroup from '../components/elements/AccordionGroup.svelte';
   import Meta from '../components/elements/meta.svelte';
-
+  import { environment } from '../stores/eth/connection.js';
 
   let doughInEscrow = "n/a";
   let escrowEntries = "n/a";
@@ -38,7 +38,7 @@
       }
 
       const { provider, signer } = get(eth);
-      const rewardEscrow = new ethers.Contract(smartcontracts.eDOUGH, rewardEscrowABI,  signer || provider);
+      const rewardEscrow = new ethers.Contract(smartcontracts[environment].eDOUGH, rewardEscrowABI,  signer || provider);
 
       doughInEscrow = Number(formatEther(await rewardEscrow.totalEscrowedAccountBalance(address))).toFixed(4);
       escrowEntries = (await rewardEscrow.numVestingEntries(address)).toString();
@@ -46,13 +46,13 @@
 
   const getEscrowPercentages = async (poolId) => {
       const { provider, signer } = get(eth);
-      const stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI,  signer || provider);
+      const stakingContract = new ethers.Contract(smartcontracts[environment].stakingPools, stakingPoolsABI,  signer || provider);
       return Number(formatEther(await stakingContract.getPoolEscrowPercentage(poolId))) * 100;
   }
 
   const getPoolsUser = async () => {
       const { provider, signer } = get(eth);
-      const stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI,  signer || provider);
+      const stakingContract = new ethers.Contract(smartcontracts[environment].stakingPools, stakingPoolsABI,  signer || provider);
       let pools = await stakingContract.getPools($eth.address);
       const res = [];
       

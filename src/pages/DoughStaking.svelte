@@ -15,6 +15,7 @@
   import StakingSummary from '../components/staking/Summary.svelte';
   import StakingStats from '../components/staking/Stats.svelte';
   import StakedModal from '../components/elements/StakedModal.svelte';
+  import { environment } from '../stores/eth/connection.js';
 
   let veDOUGH = 0;
 
@@ -41,8 +42,8 @@
   let stakedModal;
 
   $: if ($eth.address) {
-    subscribeToBalance(smartcontracts.dough, $eth.address);
-    keyDoughBalance = balanceKey(smartcontracts.dough, $eth.address);
+    subscribeToBalance(smartcontracts[environment].dough, $eth.address);
+    keyDoughBalance = balanceKey(smartcontracts[environment].dough, $eth.address);
 
     // if address is first setup, or is changed...
     if (currentAddress !== $eth.address) {
@@ -59,7 +60,7 @@
         params: {
           type: 'ERC20',
           options: {
-            address: smartcontracts.veDOUGH,
+            address: smartcontracts[environment].veDOUGH,
             symbol: 'veDOUGH',
             decimals: 18,
             image: images.veDough,
