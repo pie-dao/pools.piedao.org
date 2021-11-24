@@ -108,6 +108,8 @@ const outsideClicks = (event)  => {
               <a href="#/swap" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">🔀 Exchange</a>
               <a href="#/oven" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">⏲️ Ovens <span class="font-thin">(Buy Gas Free)</span></a>
               <a href="#/farms" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">🚜 Farms + DOUGHpamine</a>
+              <a href="#/piefolio" on:click={toggleDropdow} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">👛 Piefolio</a>
+              
             </div>
             <div class="borderDiveder"></div>
             <div class="py-1">
@@ -166,6 +168,7 @@ const outsideClicks = (event)  => {
               <a href="#/swap" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">🔀 Exchange</a>
               <a href="#/oven" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">⏲️ Ovens <span class="font-thin">(Buy Gas Free)</a>
               <a href="#/farms" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">🚜 Farms + DOUGHpamine</a>
+              <a href="#/piefolio" on:click={toggleMobileMenu} class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">👛 Piefolio</a>
               <a href="#/dough" on:click={toggleMobileMenu} class="block px-4 py-2 mb-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">🟣 Token</a>
             </div>
             <div class="thinborderbottom"></div>
