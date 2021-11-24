@@ -19,6 +19,7 @@
   let rewardEscrowContract;
   let doughInEscrow = BigNumber(0);
   let veDoughInEscrow = BigNumber(0);
+  let claimableDoughInEscrow = BigNumber(0);
   let escrowEntries = 'n/a';
   let accountSchedule = [];
   let stakedModal = null;
@@ -53,7 +54,8 @@
 
   async function fetchRewardEscrowData() {
     try {
-      const address = '0x5ce583b0431794f65ee97fbd6fffacf2adad344c';
+      // const address = '0x5ce583b0431794f65ee97fbd6fffacf2adad344c';
+      const address = '0xc96265c36F6D77747f9c259946a1eF55FcE946b7';
       // const address = $eth.address;
 
       if (!address) {
@@ -78,11 +80,16 @@
 
       let now = moment().unix();
       veDoughInEscrow = BigNumber(0);
+      claimableDoughInEscrow = BigNumber(0);
 
       accountSchedule.forEach((schedule) => {
         if (now >= moment(moment.unix(schedule.timestamp.toString())).subtract(26, 'week').unix()) {
           veDoughInEscrow = veDoughInEscrow.plus(schedule.amount.toString());
         }
+
+        if (now >= moment(moment.unix(schedule.timestamp.toString())).unix()) {
+          claimableDoughInEscrow = claimableDoughInEscrow.plus(schedule.amount.toString());
+        }        
       });     
     } catch(error) {
       console.error(error);
@@ -136,6 +143,7 @@
 </Modal>
 
 <StakedModal bind:this={stakedModal} />
+
 <ClaimEdoughModal
   bind:this={claimModal}
   {rewardEscrowContract}
@@ -147,6 +155,22 @@
 
   <div class="bg-lightgreen rounded-xl text-black pt-8 pb-2 md:py-8 px-2 md:px-6">
     <div class="font-huge text-center">Farm Positions</div>
+
+    <div class="flex flex-row">
+      <div
+        class="flex items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 ml-2 w-full"
+      >
+        <div class="flex items-center mr-2 text-little md:text-xs">
+          <img class="" width="40px" height="40px" src={images.eDough} alt="dough" />
+        </div>
+        <div class="flex flex-col justify-around w-full text-little md:text-base">
+          <span class="font-thin opacity-80">Balance Escrowed</span>
+          <span class="font-bold leading-6"
+            >{formatFiat(toNum(doughInEscrow), ',', '.', '') || 0} eDOUGH</span
+          >
+        </div>
+      </div>
+    </div>     
 
     <div class="flex">
       <div
@@ -172,7 +196,7 @@
           <span class="font-bold leading-6">{escrowEntries.claimed || 0}</span>
         </div>
       </div>
-    </div>
+    </div>   
 
     <div class="flex flex-row">
       <div
@@ -184,11 +208,11 @@
         <div class="flex flex-col justify-around w-full text-little md:text-base">
           <span class="font-thin opacity-80">Get DOUGH</span>
           <span class="font-bold leading-6"
-            >{formatFiat(toNum(doughInEscrow), ',', '.', '') || 0} DOUGH</span
+            >{formatFiat(toNum(claimableDoughInEscrow), ',', '.', '') || 0} DOUGH</span
           >
         </div>
 
-        {#if !doughInEscrow.eq(0)}
+        {#if !claimableDoughInEscrow.eq(0)}
           <button
             disabled={isClaiming}
             class="flex items-center bg-black rounded-xl pointer px-4 py-2 text-white text-little md:text-xs"
