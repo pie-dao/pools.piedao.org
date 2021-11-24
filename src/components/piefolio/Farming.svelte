@@ -47,8 +47,6 @@
         });
       }
     }
-
-    return mappedAccountSchedule;
   }
 
   async function fetchRewardEscrowData() {
@@ -251,7 +249,7 @@
         <div
           class="flex text-center items-center rounded md:rounded-xl bg-white p-2 md:p-4 mt-4 ml-1 ml-2 w-full"
         >
-          <div class="overflow-y-scroll h-100 w-full">
+          <div class="overflow-y-scroll max-h-100 w-full">
             <table class="w-full overflow-x-scroll md:min-w-400px">
               <thead>
                 <tr>
