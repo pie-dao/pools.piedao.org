@@ -183,7 +183,7 @@
   
 </script>
 
-<Modal title="Vest in veDOUGH" backgroundColor="#f3f3f3" bind:this={modal}>
+<Modal title="Get veDOUGH" backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
     <InfoModal description_key={modal_content_key} />
   </span>
@@ -225,7 +225,7 @@
           <img class="" width="40px" height="40px" src={images.doughtoken} alt="dough" />
         </div>
         <div class="flex flex-col justify-around w-full text-little md:text-base">
-          <span class="font-thin opacity-80">Vest in DOUGH</span>
+          <span class="font-thin opacity-80">Get DOUGH</span>
           <span class="font-bold leading-6">{formatFiat(toNum(doughInEscrow), ',', '.', '') || 0} DOUGH</span>
         </div>
     
@@ -249,7 +249,7 @@
           </div>
           <div class="flex flex-col justify-around w-full text-little md:text-base">
             <div class="font-thin text-left flex items-center">
-              <span class="float-left">Vest in veDOUGH</span>
+              <span class="float-left">Get veDOUGH</span>
               <img
                 on:click={() => modal.open()}
                 class="token-icon w-18px h-18px pl-4px pointer"
@@ -279,14 +279,8 @@
             </button>
           {/if}          
         </div>
-
-        <div class="flex flex-row w-full">
-          <button
-            on:click={() => addToken()}
-            class="text-center pointer mx-auto object-bottom mt-4 font-thin text-little md:text-xs"
-          >
-            🦊 Add veDOUGH to MetaMask
-          </button>  
+      <div class="flex flex-row w-full text-center justify-center pt-5">
+        <a href={`#/dough-staking-campaign`} class="font-bold pink leading-6 text-center">💰 Earn Governance Rewards 💰 </a>
       </div>
       </div>      
     </div>
@@ -299,8 +293,8 @@
               <thead>
                 <tr>
                   <th class="sticky_table_header gray_border p-2 border-r-2 w-1/5 text-left">Amount</th>
-                  <th class="sticky_table_header gray_border p-2 border-r-2 w-2/5 text-left">Vest in DOUGH</th>
-                  <th class="sticky_table_header gray_border p-2 w-2/5 text-left">Vest in veDOUGH</th>
+                  <th class="sticky_table_header gray_border p-2 border-r-2 w-2/5 text-left">Get DOUGH</th>
+                  <th class="sticky_table_header gray_border p-2 w-2/5 text-left">💰 Get veDOUGH</th>
                 </tr>
               </thead>
               <tbody>
@@ -314,7 +308,7 @@
                     {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).unix()}
                       <td class="gray_border p-2 font-thin border-r-2 min-w-2/5 w-2/5 text-left">
                         <img class="float-left mr-1 mt-1 hidden md:block" width="20px" height="20px" src={images.doughtoken} alt="token name" />
-                        <span class="w-90px">Can Claim</span>
+                        <span class="w-90px">Ready</span>
                       </td>
                     {:else}
                       <td class="gray_border p-2 border-r-2 min-w-2/5 w-2/5 font-thin text-left">
@@ -326,7 +320,7 @@
                     {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()}
                       <td class="gray_border p-2 text-left">
                         <img class="float-left mr-1 mt-1 hidden md:block" width="20px" height="20px" src={images.gem_stone} alt="token name" />
-                        <span class="w-90px">Can Stake</span>
+                        <span class="w-90px">Stake & Earn</span>
                       </td>
                     {:else}
                       <td class="gray_border p-2 font-thin text-left">
