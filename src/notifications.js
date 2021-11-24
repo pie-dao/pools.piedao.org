@@ -15,6 +15,7 @@ if(env.customRPC.enabled) {
   const provider = new ethers.providers.JsonRpcProvider(env.customRPC.url);
   // for eavery block update we receive from the custom RPC...
   provider.on("block", async(blockNumber) => {
+    try {
     // we retrieve the block infos...
     let block = await provider.getBlockWithTransactions(blockNumber);
     // we get the emitters froms store writables...
@@ -22,19 +23,19 @@ if(env.customRPC.enabled) {
     // for each transaction in the current block...
     block.transactions.forEach(async(transaction) => {
       // we search for a match in the emitersArray...
-      let tnx = emittersArray.find(el => el.hash == transaction);
+      let tnx = emittersArray.find(el => el.hash == transaction.hash);
       // if a transaction was stored into our emitersArray...
       if(tnx) {
         // we fetch the transaction receipt, and check the status...
-        let tnxReceipt = await provider.getTransactionReceipt(transaction);
-        // if status = 1 it means success, then we can trigger the event for it...
-        if(tnxReceipt.status == 1) {
-          tnx.emitter.emit('txConfirmed');
-        }
+        let tnxReceipt = await provider.getTransactionReceipt(transaction.hash);
+        tnx.emitter.emit(tnxReceipt);
       }
     });
 
-    console.log("block event", block, blockNumber, emittersArray);
+    console.log("block event", block.transactions, blockNumber, emittersArray);      
+    } catch(error) {
+      console.log("block event: error", error);
+    }
   });
 }
 
