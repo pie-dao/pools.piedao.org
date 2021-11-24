@@ -305,7 +305,7 @@
                     {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).unix()}
                       <td class="text-center gray_border p-2 border-r-2 min-w-2/5 w-2/5 text-left">
                         <img class="float-left mr-1 hidden md:block" width="20px" height="20px" src={images.calendar} alt="token name" />
-                        <span class="w-90px">Claim now</span>
+                        <span class="w-90px">Can Claim</span>
                       </td>
                     {:else}
                       <td class="text-center gray_border p-2 border-r-2 min-w-2/5 w-2/5 font-thin text-left">
@@ -316,7 +316,7 @@
                     {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()}
                       <td class="gray_border p-2 text-right flex items-center justify-end">
                         <img class="mr-1 hidden md:block" width="20px" height="20px" src={images.gem_stone} alt="token name" />
-                        <span class="w-90px">Stake now</span>
+                        <span class="w-90px">Can Stake</span>
                       </td>
                     {:else}
                       <td class="gray_border p-2 font-thin text-right flex items-center justify-end">
