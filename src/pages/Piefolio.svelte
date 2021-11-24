@@ -158,9 +158,11 @@
     </div>
     <div class="flex flex-col w-38pc">
       <StakingSummary />
-      <Farming
-        pools={userPools}
-      />
+      <span class="mt-2 mb-1">
+        <Farming
+          pools={userPools}
+        />
+      </span>
       <span class="mt-2 mb-1"><Banner /></span>
       <span class="mt-1"><Oven /></span>
       <!-- <span class="mt-1 mb-1"><Farming /></span> -->
@@ -177,9 +179,11 @@
   <div class="flex flex-col mb-7">
     <StakingSummary />
   </div>
-  <Farming
-    pools={userPools}
-  />
+  <span class="-mt-20px mb-7">
+    <Farming
+      pools={userPools}
+    />
+  </span>
   <span class="-mt-20px mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>
   <!-- <span class="-mt-20px mb-2"><Farming /></span> -->
