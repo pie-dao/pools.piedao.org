@@ -950,6 +950,12 @@ img.oven-illustration {
   border-color: #e4e4e4;
 }
 
+.sticky_table_header {
+  background: white;
+  position: sticky;
+  top: 0; /* Don't forget this, required for the stickiness */
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
+}
 
 .spl table td, .spl table th {
   border-color: #edf2f7;
