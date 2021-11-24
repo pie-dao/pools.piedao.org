@@ -1,7 +1,6 @@
 <script>
 	import orderBy from 'lodash/orderBy';
   import BigNumber from 'bignumber.js';
-  import io from 'socket.io-client';
   import get from 'lodash/get';
   import find from 'lodash/find';
   import filter from 'lodash/filter';
@@ -18,23 +17,14 @@
 
   import {
     getTokenImage,
-    formatFiat,
   } from "../components/helpers.js";
-
-  import {
-    dataObj,
-    initialize
-  } from '../helpers/staking.js';
 
   import Holdings from "../components/piefolio/Holdings.svelte";
   import Allocation from "../components/piefolio/Allocation.svelte";
   import Oven from "../components/piefolio/Oven.svelte";
   import Governance from "../components/piefolio/Governance.svelte";
-  import Farming from "../components/piefolio/Farming.svelte";
   import Banner from "../components/piefolio/Banner.svelte";
-  import Exchange from "../components/piefolio/Exchange.svelte";
 
-  $: data = dataObj;
   $: portfolioUSD = 0;
 
   $: pies = poolsConfig.available.map(address => {
@@ -60,19 +50,8 @@
         portfolioUSD = 0;
         await fetchOnchainData();
         await fetchTokenList($eth.address);
-        await initStakingSummary();
       })()
     }
-  }
-
-  async function initStakingSummary() {
-    initialize($eth)
-      .then((updated_data) => {
-        data = updated_data;
-      })
-      .catch((error) => {
-        console.error(error);
-      });    
   }
 
   async function fetchOnchainData() {
@@ -148,7 +127,7 @@
       <span class="mt-2 mb-2"><Allocation totalVal={portfolioUSD} tokenList={tokens}/></span>
     </div>
     <div class="flex flex-col w-38pc">
-      <StakingSummary {data} eth={$eth} />
+      <StakingSummary />
       <span class="mt-2 mb-1"><Banner /></span>
       <span class="mt-1"><Oven /></span>
       <!-- <span class="mt-1 mb-1"><Farming /></span> -->
@@ -163,7 +142,7 @@
   <span class="flex flex-col mb-2"><Holdings totalVal={portfolioUSD} tokenList={featured} /></span>
   <span class="flex flex-col mb-2 h-100pc"><Allocation totalVal={portfolioUSD} tokenList={tokens} /></span>
   <div class="flex flex-col mb-7">
-    <StakingSummary {data} eth={$eth} />
+    <StakingSummary />
   </div>
   <span class="-mt-20px mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>

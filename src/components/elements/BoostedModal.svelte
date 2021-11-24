@@ -6,11 +6,10 @@
   import confetti from '../Confetti.js';
   import { toNum, calculateVeDough, AVG_SECONDS_MONTH } from '../../helpers/staking.js';
   import { environment } from '../../stores/eth/connection.js';
-  import { BoostedModalIsOpen } from '../../stores/eth/writables.js';
 
   let bindedModal;
 
-  let modalLock = {
+  $: modalLock = {
     gained: 0,
     oldAmount: 0,
     newAmount: 0,
@@ -33,10 +32,9 @@
   const button = document.querySelector('#confetti');
 
   export const showModalLock = (lock) => {
-    modalLock.newAmount = Number(formatFiat(toNum(lock.amount), ',', '.', ''));
-    modalLock.oldAmount = Number(
-      formatFiat(calculateVeDough(lock.amount, lock.lockDuration / AVG_SECONDS_MONTH), ',', '.', ''),
-    );
+    modalLock.newAmount = Number(toNum(lock.amount));
+    modalLock.oldAmount = Number(calculateVeDough(lock.amount, lock.lockDuration / AVG_SECONDS_MONTH));
+    
     modalLock.animatedAmount = modalLock.oldAmount;
     modalLock.gained = (modalLock.newAmount / modalLock.oldAmount).toFixed(0);
 
@@ -48,16 +46,12 @@
         if (modalLock.animatedAmount < modalLock.newAmount) {
           modalLock.animatedAmount++;
         } else {
-          modalLock.animatedAmount = Number(formatFiat(modalLock.newAmount, ',', '.', ''));
+          modalLock.animatedAmount = Number(modalLock.newAmount);
           clearInterval(interval);
         }
       }, 10);
     }, 500);
   };
-
-  const modalChanged = (event) => {
-    $BoostedModalIsOpen = event.detail.data.isOpen;
-  }
 
   const addToken = () => {
     ethereum.sendAsync(
@@ -93,13 +87,13 @@
 
 <div id="confetti" class="hidden md:block" />
 
-<Modal title={`You gained ${modalLock.gained}X`} backgroundColor="white" bind:this={bindedModal} modalIsOpen={$BoostedModalIsOpen} on:modalChanged={modalChanged}>
+<Modal title={`You gained ${modalLock.gained}X`} backgroundColor="white" bind:this={bindedModal}>
   <div slot="content" class="font-thin text-center hidescrollbar">
     <p class="pb-2 font-24px">more rewards and voting power!</p>
 
     <div class="flex mt-4 mb-6 mx-12 rounded-20px bg-lightgrey p-16px">
       <div class="w-1/2 text-right font-bold font-24px mr-1">
-        {modalLock.animatedAmount.toFixed(2)}
+        {formatFiat(modalLock.animatedAmount.toFixed(2), ',', '.', '')}
       </div>
       <div class="w-1/2 text-left font-24px ml-1">veDOUGH</div>
     </div>

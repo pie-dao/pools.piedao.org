@@ -119,6 +119,7 @@
       composition={composition}
       method={modalOption.method} 
       poolAction={modalOption.poolAction}
+      modal={modal}
     />
     <!-- <SingleAssetModal /> -->
   </span>

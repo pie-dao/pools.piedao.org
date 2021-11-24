@@ -44,6 +44,7 @@
 
   window.B = BigNumber;
 
+  export let modal;
   export let pie;
   export let composition;
   export let poolAction;
@@ -68,6 +69,9 @@
   let ethNeededSingleEntry = { val: 0, label:'-'};
   let amountsRequired = {};
   let isLoading;
+  let primaryActionText = approach === 'add' 
+    ? `${$_('general.add')} ${$_('general.liquidity')}` 
+    : $_('general.withdraw');
 
   $: pieTokens = fetchPieTokens($balances);
 
@@ -315,16 +319,40 @@
     }
   };
 
-  const primaryAction = () => {
-    if(type === 'single') {
-      mintFromRecipe();
-      return;
-    }
-    
-    if (approach === "add") {
-      mint();
-    } else {
-      withdraw();
+  const primaryAction = async() => {
+    let primaryActionTextBakup = primaryActionText;
+    primaryActionText = "Loading";
+
+    let interval = setInterval(() => {
+      let occurrences = primaryActionText.split('.').length - 1;
+
+      if (occurrences < 3) {
+        primaryActionText += '.';
+      } else {
+        primaryActionText = 'Loading';
+      }
+    }, 1000);
+
+    try {
+      if(type === 'single') {
+        await mintFromRecipe();
+        return;
+      }
+      
+      if (approach === "add") {
+        await mint();
+      } else {
+        await withdraw();
+      }
+
+      primaryActionText = 'Done!';
+
+      setTimeout(() => {
+        modal.close();
+      }, 2500);
+    } catch(error) {
+      primaryActionText = primaryActionTextBakup;
+      clearInterval(interval);
     }
   }
 
@@ -586,11 +614,11 @@
     <center>
       {#if approach === 'add'}
         <button disabled={!areTokensEnoughBool && type === 'multi'} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
-            {$_('general.add')} {$_('general.liquidity')}
+            {primaryActionText}
         </button>
       {:else}
         <button disabled={withdrawDisabled} class="btn m-0 mt-4 rounded-8px px-56px py-15px" on:click={() => primaryAction()}>
-            {$_('general.withdraw')}
+            {primaryActionText}
         </button>
       {/if}
     </center>

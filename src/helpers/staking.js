@@ -17,26 +17,9 @@ import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import { AverageSecondsMonth, veDoughSubgraphUrl, environment } from '../stores/eth/connection.js';
 import displayNotification from '../notifications';
 import EpochJson from '../config/rewards/distribution.json';
-import { stakingDataInterval, fetchStakingDataLock } from '../stores/eth/writables.js';
+import { stakingDataInterval, stakingData } from '../stores/eth/writables.js';
 import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js'; 
-
-/* eslint-disable import/no-mutable-exports */
-export let dataObj = {
-  address: null,
-  totalDoughStaked: BigNumber(0),
-  veTokenTotalSupply: BigNumber(0),
-  accountAverageDuration: 0,
-  accountVotingPower: 0,
-  accountVeTokenBalance: BigNumber(0),
-  accountTokenBalance: BigNumber(0),
-  accountWithdrawableRewards: BigNumber(0),
-  accountWithdrawnRewards: BigNumber(0),
-  accountDepositTokenBalance: BigNumber(0),
-  accountLocks: [],
-  rewards: [],
-  votes: null,
-  proposals: null
-};
+import { get } from 'svelte/store';
 
 export let sharesTimeLock = false;
 export let veDOUGH = false;
@@ -44,8 +27,8 @@ export let merkleTreeDistributor = false;
 export const minLockAmount = 1;
 export const AVG_SECONDS_MONTH = AverageSecondsMonth;
 let ETH = null;
-
-/* eslint-enable import/no-mutable-exports */
+let _stakingData = get(stakingData);
+let observer = null;
 
 // in a very next future, this function will fetch directly from backend...
 export const getParticipations = () => EpochJson.claims;
@@ -63,19 +46,12 @@ export const canRestake = (lockedAt) => {
 export const observable = new Observable((subscriber) => {
   let interval = null;
 
-  stakingDataInterval.subscribe((intervalRange) => {
-    interval = setInterval(async () => {
-      fetchStakingDataLock.subscribe(async (isLocked) => {
-        const updatedData = await fetchStakingData(ETH);
+  let intervalRange = get(stakingDataInterval);
 
-        // updating the stakingData just when needed...
-        if ((JSON.stringify(dataObj) !== JSON.stringify(updatedData)) && !isLocked) {
-          dataObj = updatedData;
-          subscriber.next(dataObj);
-        }
-      });
-    }, intervalRange);
-  });
+  interval = setInterval(async () => {
+    await fetchStakingData(ETH);
+    subscriber.next(_stakingData);
+  }, intervalRange);  
 
   // clearing interval, when unsubscribe action happens...
   return () => {
@@ -210,13 +186,21 @@ export function initContracts(eth) {
 
 export function initialize(eth) {
   ETH = eth;
+
   /* eslint-disable no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
     try {
       initContracts(eth);
 
-      dataObj = await fetchStakingData(eth);
-      resolve(dataObj);
+      _stakingData = await fetchStakingData(eth);
+
+      if(observer) {
+        observer.unsubscribe();
+      }
+
+      observer = observable.subscribe({}); 
+
+      resolve(_stakingData);
     } catch (error) {
       displayNotification({
         message: error.message,
@@ -373,6 +357,7 @@ export async function fetchStakingDataGraph(address) {
           timestamp: true,
           amount: true,
           type: true,
+          rewardToken: true
         },
         globalStats: {
           __args: {
@@ -413,11 +398,13 @@ export const fetchStakingData = async (eth) => {
   } catch (error) {
     // using onchain as fallback...
     staker = await sharesTimeLock.getStakingData(eth.address);
-    rewards = dataObj.rewards.length > 0 ? dataObj.rewards : [];
+    rewards = [];
   }
 
-  dataObj.totalDoughStaked = response.globalStats[0].totalDoughStaked;
-  dataObj.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
+  if(response.globalStats.length) {
+    _stakingData.totalDoughStaked = response.globalStats[0].totalDoughStaked;
+    _stakingData.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
+  }
 
   if (staker !== undefined) {
     let leaf = retrieveLeaf(eth.address);
@@ -429,15 +416,22 @@ export const fetchStakingData = async (eth) => {
 
     Object.keys(staker).forEach((key) => {
       if (key !== 'accountLocks') {
-        if(key == 'accountWithdrawableRewards') {
-          dataObj[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
-        } else {
-          dataObj[key] = new BigNumber(staker[key].toString());
+        switch(key) {
+          case 'accountWithdrawableRewards':
+            // _stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
+            _stakingData[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
+            break;
+          case 'accountWithdrawnRewards':
+            _stakingData[key] = new BigNumber(toNum(staker[key]));
+            break;
+          default:
+            _stakingData[key] = new BigNumber(staker[key].toString());
+            break;
         }
       } else {
         const locks = [];
-        dataObj.accountAverageDuration = 0;
-        dataObj.accountTokenBalance = new BigNumber('0');
+        _stakingData.accountAverageDuration = 0;
+        _stakingData.accountTokenBalance = new BigNumber('0');
         let locksCounter = 0;
 
         staker[key].forEach((lock, index) => {
@@ -448,9 +442,9 @@ export const fetchStakingData = async (eth) => {
             // and we create a new 36-months-duration one)
             if (lock.boostedPointer === '') {
               locksCounter += 1;
-              dataObj.accountTokenBalance = dataObj.accountTokenBalance
+              _stakingData.accountTokenBalance = _stakingData.accountTokenBalance
                 .plus(new BigNumber(lock.amount.toString()));
-              dataObj.accountAverageDuration += Number(lock.lockDuration);
+              _stakingData.accountAverageDuration += Number(lock.lockDuration);
             }
 
             locks.push({
@@ -468,39 +462,43 @@ export const fetchStakingData = async (eth) => {
           }
         });
 
-        dataObj.accountAverageDuration = dataObj.accountAverageDuration
-          ? Math.floor((dataObj.accountAverageDuration / locksCounter) / AVG_SECONDS_MONTH)
+        _stakingData.accountAverageDuration = _stakingData.accountAverageDuration
+          ? Math.floor((_stakingData.accountAverageDuration / locksCounter) / AVG_SECONDS_MONTH)
           : 0;
 
         locks.sort((lockA, lockB) => lockB.lockedAt - lockA.lockedAt);
 
-        dataObj[key] = locks;
+        _stakingData[key] = locks;
       }
     });
   }
 
-  const votingPower = dataObj.accountVeTokenBalance && dataObj.veTokenTotalSupply
-    ? ((dataObj.accountVeTokenBalance.times(100)).div(dataObj.veTokenTotalSupply)).toFixed(2)
+  const votingPower = _stakingData.accountVeTokenBalance && _stakingData.veTokenTotalSupply
+    ? ((_stakingData.accountVeTokenBalance.times(100)).div(_stakingData.veTokenTotalSupply)).toFixed(2)
     : 0;
 
-  dataObj.accountVotingPower = Number(votingPower);
+  _stakingData.accountVotingPower = Number(votingPower);
 
-  dataObj.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
+  _stakingData.rewards = rewards.sort((rewardA, rewardB) => rewardB.timestamp - rewardA.timestamp);
 
   // retrieving the votes in the last month for a given address...
-  dataObj.votes = await fetchLastMonthVoteForVoter(eth.address);
+  _stakingData.votes = await fetchLastMonthVoteForVoter(eth.address);
   
   // retrieving the oldest active proposal from piedao.eth space after the 18/10/2021...
-  dataObj.proposals = await fetchLastSnapshots(1, 'active', 'asc', moment("2021-10-18").unix());
+  _stakingData.proposals = await fetchLastSnapshots(1, 'active', 'asc', moment("2021-10-18").unix());
   // and if there is at least one active proposal after the 18/10/2021, we add the
   // block infos into that object, so we can easily get the timestamp or any other related info
-  if(dataObj.proposals[0]) {
-    dataObj.proposals[0].block = await eth.provider.getBlock(Number(dataObj.proposals[0].snapshot));
+  if(_stakingData.proposals[0]) {
+    _stakingData.proposals[0].block = await eth.provider.getBlock(Number(_stakingData.proposals[0].snapshot));
   }
 
-  dataObj.address = eth.address;
-  console.log('fetchStakingData', dataObj);
-  return dataObj;
+  _stakingData.address = eth.address;
+  _stakingData.hasLoaded = true;
+  
+  stakingData.set(_stakingData);
+  console.log('fetchStakingData', _stakingData);
+  
+  return _stakingData;
 };
 
 export function boostToMax(id, eth) {
@@ -525,10 +523,10 @@ export function boostToMax(id, eth) {
 
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
-            dataObj = await fetchStakingData(eth);
+            _stakingData = await fetchStakingData(eth);
             subscription.unsubscribe();
 
-            resolve(dataObj);
+            resolve(_stakingData);
           },
         });
       });
@@ -566,10 +564,10 @@ export async function unstakeDOUGH(id, lockAmount, eth) {
 
         const subscription = subject('blockNumber').subscribe({
           next: async () => {
-            dataObj = await fetchStakingData(eth);
+            _stakingData = await fetchStakingData(eth);
             subscription.unsubscribe();
 
-            resolve(dataObj);
+            resolve(_stakingData);
           },
         });
       });
@@ -595,6 +593,10 @@ export async function unstakeDOUGH(id, lockAmount, eth) {
 export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
   /* eslint-disable  no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
+    if (!sharesTimeLock) {
+      initContracts(eth);
+    }
+
     const error = safeFlow(stakeAmount, stakeDuration, receiver, eth);
 
     if (error) {
@@ -626,8 +628,8 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
             });
 
             subscription.unsubscribe();
-            dataObj = await fetchStakingData(eth);
-            resolve(dataObj);
+            _stakingData = await fetchStakingData(eth);
+            resolve(_stakingData);
           },
         });
       });
@@ -647,6 +649,10 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
 export async function claim(eth) {
   /* eslint-disable  no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
+    if (!merkleTreeDistributor) {
+      initContracts(eth);
+    }
+
     const proof = prepareProofs(eth);
     console.log('proof', proof);
 
@@ -677,8 +683,8 @@ export async function claim(eth) {
   
               subscription.unsubscribe();
   
-              dataObj = await fetchStakingData(eth);
-              resolve(dataObj);
+              _stakingData = await fetchStakingData(eth);
+              resolve(_stakingData);
             },
           });
         });        
@@ -730,8 +736,8 @@ export function approveToken(eth) {
     try {
       // resetting the approve to zero, before initiating a new approval...
       if (
-        !dataObj.accountDepositTokenAllowance.isEqualTo(0)
-        && !dataObj.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
+        !_stakingData.accountDepositTokenAllowance.isEqualTo(0)
+        && !_stakingData.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
       ) {
         await approve(
           smartcontracts[environment].dough,
@@ -744,8 +750,8 @@ export function approveToken(eth) {
         smartcontracts[environment].doughStaking, { gasLimit: 100000 },
       );
 
-      dataObj.accountDepositTokenAllowance = ethers.constants.MaxUint256;
-      resolve(dataObj);
+      _stakingData.accountDepositTokenAllowance = ethers.constants.MaxUint256;
+      resolve(_stakingData);
     } catch (error) {
       displayNotification({
         autoDismiss: 15000,

@@ -4,13 +4,23 @@
   import { formatFiat } from '../../components/helpers.js';
   import { toNum } from '../../helpers/staking.js';
   import { etherscanUrl } from '../../stores/eth/connection.js';
+  import { stakingData } from '../../stores/eth/writables.js';
+  import { eth } from '../../stores/eth.js';
   import Modal from '../../components/elements/Modal.svelte';
-  let modalinfo;
+  import smartcontracts from '../../config/smartcontracts.json';
 
-  export let isLoading;
-  export let data;
-  export let eth;
-  export let itemsNumber = data.rewards.length;
+  export let itemsNumber;
+
+  let modalinfo;
+  let isLoading = true;
+
+  $: if($stakingData && $stakingData.hasLoaded) {
+    if(!itemsNumber) {
+      itemsNumber = $stakingData.rewards.length;
+    }
+
+    isLoading = false;
+  }  
 </script>
 
 <Modal title="Slashed Rewards" backgroundColor="#f3f3f3" bind:this={modalinfo}>
@@ -25,14 +35,14 @@
   </span>
 </Modal>
 
-{#if eth.address}
+{#if $eth.address}
 <div class="flex flex-col items-center w-full pb-6 bg-lightyellow rounded-16 mt-6">
   <div class="font-huge text-center mt-6">Claimed Rewards</div>
   {#if isLoading}
     Loading...
   {:else}        
-    {#if data.rewards && data.rewards.length > 0}
-      {#each data.rewards.slice(0, itemsNumber) as reward}
+    {#if $stakingData.rewards && $stakingData.rewards.length > 0}
+      {#each $stakingData.rewards.slice(0, itemsNumber) as reward}
         {#if reward.type != 'distributed'}
           <!-- <a
             href={"#/staking_reward_breakdown/" + reward.timestamp * 1000}
@@ -59,11 +69,21 @@
             <div class="flex nowrap items-center justify-between p-1">
               <span class="sc-iybRtq gjVeBU">
                 <div class="font-24px">{formatFiat(toNum(reward.amount), ',', '.', '')}</div>
-                <img
-                  class="h-auto w-24px mx-5px"
-                  src={images.rewardsPie}
-                  alt="rewardspie token"
-                />
+                {#if reward.rewardToken == smartcontracts.reward}
+                  <img
+                    class="h-auto w-24px mx-5px"
+                    src={images.rewardsPie}
+                    alt="SLICE token"
+                  />
+                  SLICE
+                {:else}
+                  <img
+                    class="h-auto w-24px mx-5px"
+                    src={images.wkpi}
+                    alt="wDOUGH-kpi token"
+                  />
+                  wDOUGH-kpi                
+                {/if}
               </span>
               <div 
               on:click={() => {
@@ -86,7 +106,7 @@
     {/if}
   {/if}
 
-  {#if data.rewards.length > itemsNumber}
+  {#if $stakingData.rewards.length > itemsNumber}
   <a class="pt-6" href="#/staking_rewards"> See all rewards </a>
 {/if}
 </div>

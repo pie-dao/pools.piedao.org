@@ -17,19 +17,22 @@
 
   $: if($eth.provider && isLoading) {
     isLoading = false;
+    updateStats();
+  }
 
+  function updateStats() {
     fetchStakingStats($eth.provider, 1).then(response => {
-        $stakingStats = response;
-        console.log("fetchStakingStats", $stakingStats);
+      $stakingStats = response;
+      console.log("fetchStakingStats", $stakingStats);
 
-        formattedTotalDough = formatBigMoneyAmount(toNum($stakingStats.totalDough), ',', '');
-        stakedPercent = ((toNum($stakingStats.totalStakedDough) * 100) / toNum($stakingStats.totalDough));
-        quorumPercent = 100; 
+      formattedTotalDough = formatBigMoneyAmount(toNum($stakingStats.totalDough), ',', '');
+      stakedPercent = ((toNum($stakingStats.totalStakedDough) * 100) / toNum($stakingStats.totalDough));
+      quorumPercent = 100; 
 
-        plotBars = true;  
-      }).catch(error => {
-        console.error(error);
-      });  
+      plotBars = true;  
+    }).catch(error => {
+      console.error(error);
+    });    
   }
 
   function handleLoadingButtonClick() {
@@ -117,9 +120,9 @@
       <div class="flex items-center p-1">
         <span class=" flex items-center ">
           <img class="h-auto w-24px" src={images.locked_with_key} alt="dough token" />
-          <div class="flex flex-col md:flex-row ml-2">
+          <div class="flex flex-col md:flex-row ml-2 text-left">
           <div class="flex intems-center font-thin whitespace-nowrap">Average Time Lock</div>
-          <div class="font-20px whitespace-nowrap md:ml-2">{$stakingStats.averageTimeLock} Months</div>
+          <div class="font-20px whitespace-nowrap md:ml-2 text-left">{$stakingStats.averageTimeLock} Months</div>
         </div>
         </span>    
       </div>
