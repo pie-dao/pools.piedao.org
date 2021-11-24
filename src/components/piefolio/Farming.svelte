@@ -52,9 +52,8 @@
   }
 
   async function fetchRewardEscrowData() {
-    console.log('going to update UI');
-    const address = '0x5ce583b0431794f65ee97fbd6fffacf2adad344c';
-    // const address = $eth.address;
+    // const address = '0x5ce583b0431794f65ee97fbd6fffacf2adad344c';
+    const address = $eth.address;
 
     if (!address) {
       return;
