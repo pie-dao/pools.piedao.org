@@ -87,7 +87,7 @@
           modalStake.animatedAmount = modalStake.amount;
           clearInterval(interval);
         }
-      }, 1);
+      }, 0.1);
     }, 500);    
   }
 

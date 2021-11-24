@@ -11,6 +11,7 @@
   import displayNotification from '../../notifications.js';
   import Modal from '../../components/elements/Modal.svelte';
   import InfoModal from '../../components/modals/infoModal.svelte';
+  import StakedModal from '../../components/elements/StakedModal.svelte';
   import moment from 'moment';
   import BigNumber from "bignumber.js";
 
@@ -19,6 +20,7 @@
   let veDoughInEscrow = BigNumber(0);
   let escrowEntries = "n/a";
   let accountSchedule = [];
+  let stakedModal = null;
 
   export let pools;
 
@@ -96,6 +98,7 @@
 
             isStaking = false;
             fetchRewardEscrowData();
+            stakedModal.showModal(toNum(veDoughInEscrow), "36");
           },
         });
       });      
@@ -185,6 +188,8 @@
     <InfoModal description_key={modal_content_key} />
   </span>
 </Modal>
+
+<StakedModal bind:this={stakedModal} />
 
 <span class="-mt-20px">
   <!-- <a class="" href="#/farms" target="_blank"><img width="20px" height="20px" class="ml-auto relative top-40px right-20px" src={images.extLink} alt="external link icon" /></a> -->
