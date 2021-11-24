@@ -47,40 +47,46 @@
         });
       }
     }
+
+    return mappedAccountSchedule;
   }
 
   async function fetchRewardEscrowData() {
-    // const address = '0x5ce583b0431794f65ee97fbd6fffacf2adad344c';
-    const address = $eth.address;
+    try {
+      const address = '0x5ce583b0431794f65ee97fbd6fffacf2adad344c';
+      // const address = $eth.address;
 
-    if (!address) {
-      return;
-    }
-
-    const { provider, signer } = get(eth);
-    rewardEscrowContract = new ethers.Contract(
-      smartcontracts.eDOUGH,
-      rewardEscrowABI,
-      signer || provider,
-    );
-
-    doughInEscrow = await rewardEscrowContract.totalEscrowedAccountBalance(address);
-    accountSchedule = mapAccountSchedule(await rewardEscrowContract.checkAccountSchedule(address));
-
-    let vestingEntries = (await rewardEscrowContract.numVestingEntries(address)).toString();
-    escrowEntries = {
-      vesting: accountSchedule.length,
-      claimed: vestingEntries - accountSchedule.length,
-    };
-
-    let now = moment().unix();
-    veDoughInEscrow = BigNumber(0);
-
-    accountSchedule.forEach((schedule) => {
-      if (now >= moment(moment.unix(schedule.timestamp.toString())).subtract(26, 'week').unix()) {
-        veDoughInEscrow = veDoughInEscrow.plus(schedule.amount.toString());
+      if (!address) {
+        return;
       }
-    });
+
+      const { provider, signer } = get(eth);
+      rewardEscrowContract = new ethers.Contract(
+        smartcontracts.eDOUGH,
+        rewardEscrowABI,
+        signer || provider,
+      );
+
+      doughInEscrow = await rewardEscrowContract.totalEscrowedAccountBalance(address);
+      accountSchedule = mapAccountSchedule(await rewardEscrowContract.checkAccountSchedule(address));
+
+      let vestingEntries = (await rewardEscrowContract.numVestingEntries(address)).toString();
+      escrowEntries = {
+        vesting: accountSchedule.length,
+        claimed: vestingEntries - accountSchedule.length,
+      };
+
+      let now = moment().unix();
+      veDoughInEscrow = BigNumber(0);
+
+      accountSchedule.forEach((schedule) => {
+        if (now >= moment(moment.unix(schedule.timestamp.toString())).subtract(26, 'week').unix()) {
+          veDoughInEscrow = veDoughInEscrow.plus(schedule.amount.toString());
+        }
+      });     
+    } catch(error) {
+      console.error(error);
+    }
   }
 
   async function stake() {

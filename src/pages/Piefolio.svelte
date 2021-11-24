@@ -8,6 +8,7 @@
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools, eth } from '../stores/eth.js';
   import StakingSummary from '../components/staking/Summary.svelte';
+  import Farming from '../components/piefolio/Farming.svelte';
 
   import {
     fetchBalances,
@@ -26,6 +27,7 @@
   import Banner from "../components/piefolio/Banner.svelte";
 
   $: portfolioUSD = 0;
+  let userPools = [];
 
   $: pies = poolsConfig.available.map(address => {
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
@@ -53,6 +55,11 @@
       })()
     }
   }
+
+  $: if($eth.address || $eth.currentBlockNumber) {
+    $eth.address || !$eth.signer
+    getPoolsUser()
+  };
 
   async function fetchOnchainData() {
     // Fetch balances, allowance and decimals
@@ -117,6 +124,29 @@
     tokens = orderBy(filtered, ['usdValue'], ['desc']);
   }
 
+  const getPoolsUser = async () => {
+      const { provider, signer } = get(eth);
+      const stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI,  signer || provider);
+      let pools = await stakingContract.getPools($eth.address);
+      const res = [];
+      
+      let poolId = 0;
+      for (const p of pools) {
+        if(p.userDeposited.gt(0)) {
+          res.push({
+            id: poolId,
+            userDeposited: Number(formatEther(p.userDeposited)).toFixed(4),
+            totalDeposited: Number(formatEther(p.totalDeposited)).toFixed(4),
+            userUnclaimed: Number(formatEther(p.userUnclaimed)).toFixed(4),
+            ...stakingPools[poolId]
+          })
+        }
+        poolId++;
+      }
+
+      userPools = res;
+  }
+
 </script>
 
 
@@ -128,6 +158,9 @@
     </div>
     <div class="flex flex-col w-38pc">
       <StakingSummary />
+      <Farming
+        pools={userPools}
+      />
       <span class="mt-2 mb-1"><Banner /></span>
       <span class="mt-1"><Oven /></span>
       <!-- <span class="mt-1 mb-1"><Farming /></span> -->
@@ -144,6 +177,9 @@
   <div class="flex flex-col mb-7">
     <StakingSummary />
   </div>
+  <Farming
+    pools={userPools}
+  />
   <span class="-mt-20px mb-2"><Oven /></span>
   <span class="-mt-20px mb-2"><Governance /></span>
   <!-- <span class="-mt-20px mb-2"><Farming /></span> -->
