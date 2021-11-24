@@ -208,7 +208,7 @@
           <!-- <img class="" width="40px" height="40px" src={images.doughtoken} alt="token name" /> -->
         </div>
         <div class="flex flex-col justify-around text-little md:text-xs">
-          <span class="font-thin opacity-80">Claimed Entries</span>
+          <span class="font-thin opacity-80">Claimed/Staked Entries</span>
           <span class="font-bold leading-6">{escrowEntries.claimed || 0 }</span>
       </div>
       </div>
@@ -294,36 +294,42 @@
               <thead>
                 <tr>
                   <th class="sticky_table_header gray_border p-2 border-r-2 w-1/5 text-left">Amount</th>
-                  <th class="sticky_table_header gray_border p-2 border-r-2 w-2/5 text-center">Vest in DOUGH</th>
-                  <th class="sticky_table_header gray_border p-2 w-2/5 text-right">Vest in veDOUGH</th>
+                  <th class="sticky_table_header gray_border p-2 border-r-2 w-2/5 text-left">Vest in DOUGH</th>
+                  <th class="sticky_table_header gray_border p-2 w-2/5 text-left">Vest in veDOUGH</th>
                 </tr>
               </thead>
               <tbody>
                 {#each accountSchedule as schedule}
                   <tr class="gray_border border-t-2 w-full">
-                    <td class="gray_border p-2 border-r-2 min-w-1/5 w-1/5 text-left">{formatFiat(toNum(schedule.amount), ',', '.', '')}</td>
+                    
+                    <td class="gray_border p-2 border-r-2 min-w-1/5 w-1/5 text-left">
+                      {formatFiat(toNum(schedule.amount), ',', '.', '')}
+                    </td>
+
                     {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).unix()}
-                      <td class="text-center gray_border p-2 border-r-2 min-w-2/5 w-2/5 text-left">
-                        <img class="float-left mr-1 hidden md:block" width="20px" height="20px" src={images.calendar} alt="token name" />
+                      <td class="gray_border p-2 font-thin border-r-2 min-w-2/5 w-2/5 text-left">
+                        <img class="float-left mr-1 mt-1 hidden md:block" width="20px" height="20px" src={images.doughtoken} alt="token name" />
                         <span class="w-90px">Can Claim</span>
                       </td>
                     {:else}
-                      <td class="text-center gray_border p-2 border-r-2 min-w-2/5 w-2/5 font-thin text-left">
-                        <img class="float-left mr-1 hidden md:block" width="20px" height="20px" src={images.calendar} alt="token name" />
+                      <td class="gray_border p-2 border-r-2 min-w-2/5 w-2/5 font-thin text-left">
+                        <img class="float-left mr-1 mt-1 hidden md:block" width="20px" height="20px" src={images.calendar} alt="token name" />
                         <span class="w-90px">{(moment(moment.unix(schedule.timestamp.toString()))).format('DD/MM/YY')}</span>
                       </td>                    
                     {/if}
+
                     {#if moment().unix() >= (moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').unix()}
-                      <td class="gray_border p-2 text-right flex items-center justify-end">
-                        <img class="mr-1 hidden md:block" width="20px" height="20px" src={images.gem_stone} alt="token name" />
+                      <td class="gray_border p-2 text-left">
+                        <img class="float-left mr-1 mt-1 hidden md:block" width="20px" height="20px" src={images.gem_stone} alt="token name" />
                         <span class="w-90px">Can Stake</span>
                       </td>
                     {:else}
-                      <td class="gray_border p-2 font-thin text-right flex items-center justify-end">
-                        <img class=" mr-1 hidden md:block" width="20px" height="20px" src={images.calendar} alt="token name" />
+                      <td class="gray_border p-2 font-thin text-left">
+                        <img class="float-left mr-1 mt-1 hidden md:block" width="20px" height="20px" src={images.calendar} alt="token name" />
                         <span class="w-90px">{(moment(moment.unix(schedule.timestamp.toString()))).subtract(26, 'week').format('DD/MM/YY')}</span>
                       </td>                
                     {/if}
+
                   </tr>
                 {/each}
               </tbody>
