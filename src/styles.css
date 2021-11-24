@@ -52,6 +52,9 @@ button:focus {
   padding: 10px;
 }
 
+.pink {
+  color: #fc02a7;
+}
 
 .input-invalid {
   border: solid 1px #f40a50 !important;
