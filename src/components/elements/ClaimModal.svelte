@@ -46,7 +46,7 @@
     rewardNAV = _stakingData.accountWithdrawableRewards.times(rewardPie.nav);
 
     if (!_stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
-      claimModalTitle = "Pie day is best day";
+      claimModalTitle = "Pie day is the best day";
     } else {
       claimModalTitle = "You can't claim yet";
     }
