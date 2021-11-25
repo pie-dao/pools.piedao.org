@@ -206,7 +206,7 @@
           <img class="" width="40px" height="40px" src={images.doughtoken} alt="dough" />
         </div>
         <div class="flex flex-col justify-around w-full text-little md:text-base">
-          <span class="font-thin opacity-80">Get Vested DOUGH</span>
+          <span class="font-thin opacity-80">Claim Vested DOUGH</span>
           <span class="font-bold leading-6"
             >{formatFiat(toNum(claimableDoughInEscrow), ',', '.', '') || 0} DOUGH</span
           >
@@ -234,7 +234,7 @@
           </div>
           <div class="flex flex-col justify-around w-full text-little md:text-base">
             <div class="font-thin text-left flex items-center">
-              <span class="float-left">Bridge Eligible veDOUGH</span>
+              <span class="float-left">Bridge to veDOUGH</span>
               <img
                 on:click={() => modal.open()}
                 class="token-icon w-18px h-18px pl-4px pointer"
