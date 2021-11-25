@@ -54,9 +54,9 @@
 
   async function fetchRewardEscrowData() {
     try {
-      // const address = '0x5ce583b0431794f65ee97fbd6fffacf2adad344c';
+      const address = '0x5ce583b0431794f65ee97fbd6fffacf2adad344c';
       // const address = '0xc96265c36F6D77747f9c259946a1eF55FcE946b7';
-      const address = $eth.address;
+      // const address = $eth.address;
 
       if (!address) {
         return;
@@ -132,7 +132,7 @@
   }
 
   async function claim() {
-    claimModal.showModal(doughInEscrow);
+    claimModal.showModal(claimableDoughInEscrow);
   }
 </script>
 
