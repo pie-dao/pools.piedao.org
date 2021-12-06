@@ -40,7 +40,7 @@
     </div>
     <br/>
     <div class="font-thin">
-      <b style="color: #ED1EA0">The full PLAY Metaverse Index prospectus is <u><a target="_blank" href="https://gateway.pinata.cloud/ipfs/QmVoACenV8XqAzYg9zyN4Q4cC5tAtiKE5y6WMiJsGnAgqt">here</a></u></b>, covering:
+      <b style="color: #ED1EA0">The full PLAY Metaverse Index prospectus is <u><a target="_blank" href="https://gateway.pinata.cloud/ipfs/QmVoACenV8XqAzYg9zyN4Q4cC5tAtiKE5y6WMiJsGnAgqt">here</a>, covering:</u></b>
       <ul>
         <li>1. Eligibility criteria for inclusion in PLAY</li>
         <li>2. Methodology for asset allocation</li>
@@ -59,7 +59,7 @@
         <li>2. <b>Max allocation of 30% for single large cap holding</b>, to limit the predominance of a single large cap holding</li>
         <li>3. <b>Max cumulative allocation of 60% for the top 3 large cap holdings</b>, to eventually prevent the excessive skewness of the Pie toward large caps tokens</li>
         <li>4. <b>Max allocation per underlying asset is capped</b> to limit the slippage occurring when buying the assets on L1 DEXes</li>
-        <li>5. Weighting in the <b>momentum of the asset Market Cap over the past 30 days.</b></li>
+        <li>5. <b>Weighting in the momentum of the asset Market Cap</b> over the past 30 days</li>
       </ul>       
     </div>   
 
