@@ -58,7 +58,7 @@
         <li>1. <b>Minimum allocation of 2% for each underlying asset.</b> Introduced  to ensure minimum slippage when minting at scale</li>
         <li>2. <b>Max allocation of 30% for single large cap holding</b>, to limit the predominance of a single large cap holding</li>
         <li>3. <b>Max cumulative allocation of 60% for the top 3 large cap holdings</b>, to eventually prevent the excessive skewness of the Pie toward large caps tokens</li>
-        <li>4. <b>Max allocation per underlying asset is capped</b> to limit the slippage occurring when buying the assets on L1 DEXes</b></li>
+        <li>4. <b>Max allocation per underlying asset is capped</b> to limit the slippage occurring when buying the assets on L1 DEXes</li>
         <li>5. Weighting in the <b>momentum of the asset Market Cap over the past 30 days.</b></li>
       </ul>       
     </div>   
