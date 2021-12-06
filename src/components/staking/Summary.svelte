@@ -55,9 +55,10 @@
               votingClass = "text-red";
               voteKeyword = "cannot_votes";
             } else {
-              let proposal = get($stakingData.proposals, 0);
-              try {
-                if(oldestValidLock && proposal.block.timestamp < Number(oldestValidLock.lockedAt)) {
+              let proposalTimestamp = get($stakingData, 'proposals[0].block.timestamp', false);
+
+              if(proposalTimestamp) {
+                if(oldestValidLock && proposalTimestamp < Number(oldestValidLock.lockedAt)) {
                   votingImage = "warning";
                   votingInfos = "You can't vote just yet";
                   votingClass = "text-red";
@@ -67,12 +68,12 @@
                   votingInfos = "You need to vote";
                   votingClass = "text-yellow";
                   voteKeyword = "need_to_vote";
-                }                
-              } catch(error) {
+                } 
+              } else {
                 votingImage = "warning";
-                  votingInfos = "Snapshot error";
-                  votingClass = "text-red";
-                  voteKeyword = "snapshot_error";                
+                votingInfos = "Snapshot error";
+                votingClass = "text-red";
+                voteKeyword = "snapshot_error";   
               }
             }
           }
