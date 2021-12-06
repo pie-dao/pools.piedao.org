@@ -46,7 +46,7 @@
               }
             }).reverse();
             // and getting the oldest one, by reversing the DESC order...
-            oldestValidLock = get(oldestValidLock, 0);            
+            oldestValidLock = get(oldestValidLock, 0);           
             // finally checking if the user can vote on snapshot, or if the
             // proposal is older than his oldest lock...
             if($stakingData.proposals.length == 0) {
@@ -55,16 +55,25 @@
               votingClass = "text-red";
               voteKeyword = "cannot_votes";
             } else {
-              if(oldestValidLock && $stakingData.proposals[0].block.timestamp < Number(oldestValidLock.lockedAt)) {
-                votingImage = "warning";
-                votingInfos = "You can't vote just yet";
-                votingClass = "text-red";
-                voteKeyword = "cannot_votes";
+              let proposalTimestamp = get($stakingData, 'proposals[0].block.timestamp', false);
+
+              if(proposalTimestamp) {
+                if(oldestValidLock && proposalTimestamp < Number(oldestValidLock.lockedAt)) {
+                  votingImage = "warning";
+                  votingInfos = "You can't vote just yet";
+                  votingClass = "text-red";
+                  voteKeyword = "cannot_votes";
+                } else {
+                  votingImage = "warning";
+                  votingInfos = "You need to vote";
+                  votingClass = "text-yellow";
+                  voteKeyword = "need_to_vote";
+                } 
               } else {
                 votingImage = "warning";
-                votingInfos = "You need to vote";
-                votingClass = "text-yellow";
-                voteKeyword = "need_to_vote";
+                votingInfos = "Snapshot error";
+                votingClass = "text-red";
+                voteKeyword = "snapshot_error";   
               }
             }
           }
