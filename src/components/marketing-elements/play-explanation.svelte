@@ -55,7 +55,7 @@
     <div class="font-thin">
       The resulting % allocation is further adjusted through the following criteria:
       <ul>
-        <li>1. <b>Minimum allocation of 2% for each underlying asset.</b></li>
+        <li>1. <b>Minimum allocation of 2% for each underlying asset</b></li>
         <li>2. <b>Max allocation of 30% for single large cap holding</b>, to limit the predominance of a single large cap holding</li>
         <li>3. <b>Max cumulative allocation of 60% for the top 3 large cap holdings</b>, to eventually prevent the excessive skewness of the Pie toward large caps tokens</li>
         <li>4. <b>Max allocation per underlying asset is capped</b> to limit the slippage occurring when buying the assets on L1 DEXes</li>
