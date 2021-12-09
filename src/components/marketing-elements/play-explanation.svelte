@@ -40,7 +40,7 @@
     </div>
     <br/>
     <div class="font-thin">
-      <b style="color: #ED1EA0">The full PLAY Metaverse Index prospectus is <u><a target="_blank" href="https://gateway.pinata.cloud/ipfs/QmVoACenV8XqAzYg9zyN4Q4cC5tAtiKE5y6WMiJsGnAgqt">here</a></u>, covering:</b>
+      <b style="color: #ED1EA0">The full PLAY Metaverse Index prospectus is <u><a target="_blank" href="https://gateway.pinata.cloud/ipfs/QmcNBx57qyjsuENaTZunsG7C12PN8i9t9BKjzaWzGSaBVK">here</a></u>, covering:</b>
       <ul>
         <li>1. Eligibility criteria for inclusion in PLAY</li>
         <li>2. Methodology for asset allocation</li>
