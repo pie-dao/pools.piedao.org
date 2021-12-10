@@ -474,7 +474,7 @@ export const fetchStakingData = async (eth) => {
   }
 
   const votingPower = _stakingData.accountVeTokenBalance && _stakingData.veTokenTotalSupply
-    ? ((_stakingData.accountVeTokenBalance.times(100)).div(_stakingData.veTokenTotalSupply)).toFixed(2)
+    ? ((_stakingData.accountVeTokenBalance.times(100)).div(_stakingData.veTokenTotalSupply)).toFixed(3)
     : 0;
 
   _stakingData.accountVotingPower = Number(votingPower);
