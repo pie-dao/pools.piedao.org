@@ -254,7 +254,7 @@
             alt="" data-aos="fade-up" data-aos-delay="50"/>  
           </div>
           <div class="flex flex-row w-full text-center items-center md:pl-12 md:pr-12 md:pt-4">
-            Stake DOUGH by October 31st 2021 and claim kDOUGH
+            Stake DOUGH by October 31st 2021 and claim wDough-kpi
           </div>
         </div>
         <div class="flex flex-col w-full md:w-1/3 justify-center m-2">
@@ -272,7 +272,7 @@
             alt="" data-aos="fade-up" data-aos-delay="50"/>  
           </div>
           <div class="flex flex-row w-full text-center items-center md:pl-12 md:pr-12 md:pt-4">
-            Use your kDOUGH to redeem the veDOUGH payout
+            Use your wDough-kpi to redeem the veDOUGH payout
           </div>
         </div>                
       </div> 
