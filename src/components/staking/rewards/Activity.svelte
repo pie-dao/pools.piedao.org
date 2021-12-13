@@ -22,8 +22,6 @@
 
       currentAccount = epoch.merkleTree.claims[currentAccountIndex];
 
-      console.log("here founded", currentAccount);
-
       if(currentAccount) {
         currentAccount.participant = epoch.participants.find(
           (participant) => participant.address.toLowerCase() == $eth.address.toLowerCase()
@@ -34,10 +32,8 @@
         votingPower = accountVeTokenBalance.times(100).div(veTokenTotalSupply).toFixed(2);
 
         accountWithdrawnRewards = new BigNumber(currentAccount.metaData.staker.accountWithdrawnRewards);
-        accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.usd);        
+        accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.nav);        
       }
-
-      console.log("account has changed, currentAccount is now", currentAccount);
     }
   }
 </script>
@@ -72,7 +68,7 @@
             </div>
             <div class="flex flex-col items-right">
               <div class="">
-                {underlying.amount}
+                {formatFiat(toNum(underlying.amount), ',', '.', '')}
               </div>
             </div>
           </div>
