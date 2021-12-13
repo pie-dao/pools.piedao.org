@@ -11,6 +11,7 @@
   import Farming from '../components/piefolio/Farming.svelte';
   import smartcontracts from '../config/smartcontracts.json';
   import Experipie from '../classes/Experipie.js';
+  import displayNotification from "../notifications.js";
 
   import {
     fetchBalances,
@@ -100,7 +101,7 @@
     });
 
     let change24H = slice24Change / 100;
-    return {current_price: Pie.nav, change: change24H};
+    return {current_price: Pie.nav.toFixed(2), change: change24H};
   };
 
   async function fetchOnchainData() {
@@ -108,33 +109,36 @@
     try {
       let slice = pies.find(pie => pie.address.toLowerCase() == smartcontracts.reward.toLowerCase());
       slice.market_data = await initSlice();
+
+      // Fetch balances, allowance and decimals
+      let res = await fetchBalances(
+        [
+          {
+            address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+            symbol: 'ETH',
+            icon: getTokenImage('eth')
+          },
+          ...pies
+        ],
+        $eth.address,
+        $eth.provider
+      )
+
+      featured = orderBy(res.slice(1).map(t => {
+        const usdValue = t.market_data ? t.balance.number * t.market_data.current_price : 0;
+        portfolioUSD += usdValue;
+        return {
+          ...t,
+          usdValue
+        }
+      }), ['usdValue'], ['desc']);      
     } catch(error) {
-      console.log("slice", error);
+      displayNotification({
+        autoDismiss: 5000,
+        message: `Error while fetching assets and balances`,
+        type: "error",
+      });
     }
-
-    console.log("slice", pies);
-    // Fetch balances, allowance and decimals
-    let res = await fetchBalances(
-      [
-        {
-          address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-          symbol: 'ETH',
-          icon: getTokenImage('eth')
-        },
-        ...pies
-      ],
-      $eth.address,
-      $eth.provider
-    )
-
-    featured = orderBy(res.slice(1).map(t => {
-      const usdValue = t.market_data ? t.balance.number * t.market_data.current_price : 0;
-      portfolioUSD += usdValue;
-      return {
-        ...t,
-        usdValue
-      }
-    }), ['usdValue'], ['desc']);
   }
 
   async function fetchTokenList(address) {
