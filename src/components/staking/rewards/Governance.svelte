@@ -2,21 +2,24 @@
   import { formatFiat } from '../../../components/helpers.js';
   import { toNum, AVG_SECONDS_MONTH} from '../../../helpers/staking.js';
   import images from '../../../config/images.json';
-  import epochsJSON from '../../../config/epochs.json';
 
-  export let timestamp;
-  let report;
-  let totalVeDoughVoted;
+  export let epoch;
   let participationRatio;
+  let totalVeDoughScore = 0;
 
-  // TODO: this should be changed, fetch the epochs from backend
-  report = epochsJSON.epochs.find(epoch => epoch.startDate <= timestamp && epoch.endDate >= timestamp);
-  
-  totalVeDoughVoted = report.participants.reduce((previousValue, currentValue) => {
-    return {score: previousValue.score + currentValue.score};
+  epoch.participants.forEach(participant => {
+    if(participant.votes.length > 0) {
+      let participantScoreTotal = 0;
+
+      participant.votes.forEach(vote => {
+        participantScoreTotal += vote.score;
+      });
+
+      totalVeDoughScore += participantScoreTotal / participant.votes.length;
+    }
   });
 
-  participationRatio = ((totalVeDoughVoted.score * 100) / toNum(report.stakingStats.veTokenTotalSupply)).toFixed(2);
+  participationRatio = ((totalVeDoughScore * 100) / toNum(epoch.stakingStats.veTokenTotalSupply)).toFixed(2);
 </script>
 
 <div class="flex flex-col items-center w-full md:w-1/2 p-1px bg-lightgrey rounded-16 m-10px">
@@ -29,7 +32,7 @@
       </div>
       <div class="flex flex-col items-right">
         <div class="">
-          {formatFiat(toNum(report.stakingStats.veTokenTotalSupply), ',', '.', '')}
+          {formatFiat(toNum(epoch.stakingStats.veTokenTotalSupply), ',', '.', '')}
         </div>        
       </div>
     </div>
@@ -40,7 +43,7 @@
       </div>
       <div class="flex flex-col items-right">
         <div class="">
-          {Math.floor(report.stakingStats.averageTimeLock / AVG_SECONDS_MONTH)}
+          {Math.floor(epoch.stakingStats.averageTimeLock / AVG_SECONDS_MONTH)}
         </div>        
       </div>
     </div>  
@@ -51,7 +54,7 @@
       </div>
       <div class="flex flex-col items-right">
         <div class="">
-          {report.proposals.length}
+          {epoch.proposals.length}
         </div>        
       </div>
     </div>  
@@ -73,7 +76,7 @@
       </div>
       <div class="flex flex-col items-right">
         <div class="">
-          {formatFiat(totalVeDoughVoted.score, ',', '.', '')}
+          {formatFiat(totalVeDoughScore, ',', '.', '')}
         </div>        
       </div>
     </div> 

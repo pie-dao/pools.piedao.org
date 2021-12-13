@@ -42,16 +42,15 @@
   {:else}        
     {#if $stakingData.rewards && $stakingData.rewards.length > 0}
       {#each $stakingData.rewards.slice(0, itemsNumber) as reward}
-        {#if reward.type != 'distributed'}
-          <!-- <a
-            href={"#/staking_reward_breakdown/" + reward.timestamp * 1000}
-            target="_blank"
+        {#if reward.type != 'distributed' && reward.rewardToken == smartcontracts.reward}
+          <a
+            href={"#/staking_reward_breakdown/" + reward.windowIndex}
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px"
-          > -->
-          <a 
+          >
+          <!-- <a 
             target="_blank"
             href="https://etherscan.io/tx/{reward.id}" 
-            class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px">
+            class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px"> -->
             <div class="flex items-center justify-between">
               <div class="flex nowrap intems-center p-1 font-thin">
                 {new Date(reward.timestamp * 1000).toDateString()}

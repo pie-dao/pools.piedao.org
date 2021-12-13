@@ -7,8 +7,8 @@
   import moment from 'moment';
 
   // TODO: this should be changed, fetch the epochs from backend
-  let epoch = epochsJSON.epochs.find(epoch => epoch.startDate <= $currentRoute.params.timestamp && epoch.endDate >= $currentRoute.params.timestamp);
-  let date = moment(new Date(epoch.startDate));
+  let epoch = epochsJSON.epochs.find(epoch => epoch.merkleTree.windowIndex == $currentRoute.params.windowIndex);
+  let date = moment(new Date(epoch.startDate * 1000));
 </script>
 
 <div class="flex w-100pc py-20px flex flex-col items-center">
@@ -25,8 +25,8 @@
     </div>
   </div>
 
-  <StakingRewardActivity timestamp={$currentRoute.params.timestamp} /> 
-  <StakingRewardGovernance timestamp={$currentRoute.params.timestamp} /> 
-  <StakingRewardRevenues timestamp={$currentRoute.params.timestamp} /> 
+  <StakingRewardActivity epoch={epoch} /> 
+  <StakingRewardGovernance epoch={epoch} /> 
+  <StakingRewardRevenues windowIndex={epoch.merkleTree.windowIndex} /> 
   </div>
 </div>

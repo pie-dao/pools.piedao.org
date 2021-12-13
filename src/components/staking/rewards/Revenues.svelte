@@ -3,9 +3,8 @@
   import { formatFiat } from '../../../components/helpers.js';
   import images from '../../../config/images.json';
 
-  export let timestamp;
-  let revenue = revenuesJSON.revenues.find(revenue => revenue.startDate <= timestamp && revenue.endDate >= timestamp);
-  console.log(revenue);
+  export let windowIndex;
+  let revenue = revenuesJSON.revenues.find(revenue => revenue.windowIndex <= windowIndex);
 </script>
 
 <div class="flex flex-col items-center w-full md:w-1/2 p-1px bg-lightgrey rounded-16 m-10px">
