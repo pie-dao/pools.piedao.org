@@ -9,6 +9,9 @@
   import { pools, eth } from '../stores/eth.js';
   import StakingSummary from '../components/staking/Summary.svelte';
   import Farming from '../components/piefolio/Farming.svelte';
+  import smartcontracts from '../config/smartcontracts.json';
+  import Experipie from '../classes/Experipie.js';
+  import displayNotification from "../notifications.js";
 
   import {
     fetchBalances,
@@ -29,22 +32,22 @@
   $: portfolioUSD = 0;
   let userPools = [];
 
-  $: pies = poolsConfig.available.map(address => {
+  $: pies = poolsConfig.available.map(address => {    
     let change = get($piesMarketDataStore, `${address}.market_data.price_change_percentage_24h`, 0)
     return {
       ...poolsConfig[address],
       address,
       icon: getTokenImage(address),
+      market_data: get($piesMarketDataStore, `${address}.market_data`),
       change: change ? change : 0,
-      nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0,
+      nav: $pools[`${address}-nav`] ? $pools[`${address}-nav`] : 0
     };
   }) || [];
   let currentAddress = null;
-
   $: featured = [];
   $: tokens = [];
 
-  $: if($eth.address) {
+  $: if($eth.address && $eth.provider) {
     if(currentAddress != $eth.address) {
       currentAddress = $eth.address;
 
@@ -61,29 +64,81 @@
     getPoolsUser()
   };
 
-  async function fetchOnchainData() {
-    // Fetch balances, allowance and decimals
-    let res = await fetchBalances(
-      [
-        {
-          address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-          symbol: 'ETH',
-          icon: getTokenImage('eth')
-        },
-        ...pies
-      ],
-      $eth.address,
-      $eth.provider
-    )
+  const initSlice = async () => {
+    let composition = [];
 
-    featured = orderBy(res.slice(1).map(t => {
-      const usdValue = t.market_data ? t.balance.number * t.market_data.current_price : 0;
-      portfolioUSD += usdValue;
-      return {
-        ...t,
-        usdValue
-      }
-    }), ['usdValue'], ['desc']);
+    let Pie = new Experipie(smartcontracts.reward, $eth.provider);
+    await Pie.initialize($piesMarketDataStore);
+    
+    for (const el of Pie.composition) {
+      let address = el.address.toLowerCase();
+
+      let tokenInfo = find(
+        poolsConfig[smartcontracts.reward].composition,
+        (o) => address === o.address.toLowerCase(),
+      );
+
+      composition.push({
+          ...tokenInfo,
+          balance: el.balance,
+          price: el.price,
+          productive: false,
+          percentage: el.percentage,
+          address: address
+        });
+    }
+
+    let slice24Change = 0;
+
+    composition.forEach(asset => {
+      let change24 = get(
+        $piesMarketDataStore,
+        `${asset.address}.market_data.price_change_percentage_24h`,
+        '-',
+      );
+
+      slice24Change += asset.percentage * change24;
+    });
+
+    let change24H = slice24Change / 100;
+    return {current_price: Pie.nav.toFixed(2), change: change24H};
+  };
+
+  async function fetchOnchainData() {
+    // updating slice price/change values...
+    try {
+      let slice = pies.find(pie => pie.address.toLowerCase() == smartcontracts.reward.toLowerCase());
+      slice.market_data = await initSlice();
+
+      // Fetch balances, allowance and decimals
+      let res = await fetchBalances(
+        [
+          {
+            address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+            symbol: 'ETH',
+            icon: getTokenImage('eth')
+          },
+          ...pies
+        ],
+        $eth.address,
+        $eth.provider
+      )
+
+      featured = orderBy(res.slice(1).map(t => {
+        const usdValue = t.market_data ? t.balance.number * t.market_data.current_price : 0;
+        portfolioUSD += usdValue;
+        return {
+          ...t,
+          usdValue
+        }
+      }), ['usdValue'], ['desc']);      
+    } catch(error) {
+      displayNotification({
+        autoDismiss: 5000,
+        message: `Error while fetching assets and balances`,
+        type: "error",
+      });
+    }
   }
 
   async function fetchTokenList(address) {
