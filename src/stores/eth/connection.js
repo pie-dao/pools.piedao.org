@@ -88,7 +88,7 @@ export const registerConnection = async (newWeb3) => {
   const ens = await provider.lookupAddress(address);
 
   eth.set({
-    address: '0x0810C422E4abD05c752618B403d26cf60bB50B5C',
+    address,
     ens,
     currentBlockNumber,
     icon,
