@@ -386,6 +386,7 @@ export const fetchStakingData = async (eth) => {
   // this is a fallback in case the graph is not working...
   try {
     // using graph...
+    console.log("using address", eth.address);
     response = await fetchStakingDataGraph(eth.address);
 
     if (response.stakers.length) {

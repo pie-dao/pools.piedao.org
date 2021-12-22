@@ -29,7 +29,7 @@
         
         let accountVeTokenBalance = new BigNumber(currentAccount.metaData.staker.accountVeTokenBalance);
         let veTokenTotalSupply = new BigNumber(epoch.stakingStats.veTokenTotalSupply);
-        votingPower = accountVeTokenBalance.times(100).div(veTokenTotalSupply).toFixed(2);
+        votingPower = accountVeTokenBalance.times(100).div(veTokenTotalSupply).toFixed(3);
 
         accountWithdrawnRewards = new BigNumber(currentAccount.metaData.staker.accountWithdrawnRewards);
         accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.nav);        
