@@ -32,7 +32,8 @@
         votingPower = accountVeTokenBalance.times(100).div(veTokenTotalSupply).toFixed(3);
 
         accountWithdrawnRewards = new BigNumber(currentAccount.metaData.staker.accountWithdrawnRewards);
-        accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.nav);        
+        accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.nav);    
+        console.log(currentAccount.metaData.staker, epoch.slice.nav);    
       }
     }
   }
