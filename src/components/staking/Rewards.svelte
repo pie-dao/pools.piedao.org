@@ -44,7 +44,7 @@
       {#each $stakingData.rewards.slice(0, itemsNumber) as reward}
         {#if reward.type != 'distributed' && reward.rewardToken == smartcontracts.reward}
           <a
-            href={"#/staking_reward_breakdown/" + reward.windowIndex}
+            href={`#/staking_reward_breakdown/${reward.windowIndex}/${reward.amount}`}
             class="flex flex-col nowrap w-92pc mx-4pc mt-6 swap-from rounded-20px bg-white p-16px"
           >
           <!-- <a 

@@ -6,6 +6,7 @@
   import BigNumber from 'bignumber.js';
 
   export let epoch;
+  export let rewardsAmount;
   let currentAddress;
   let currentAccount;
   let votingPower;
@@ -31,7 +32,7 @@
         let veTokenTotalSupply = new BigNumber(epoch.stakingStats.veTokenTotalSupply);
         votingPower = accountVeTokenBalance.times(100).div(veTokenTotalSupply).toFixed(3);
 
-        accountWithdrawnRewards = new BigNumber(currentAccount.metaData.staker.accountWithdrawnRewards);
+        accountWithdrawnRewards = new BigNumber(rewardsAmount);
         accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.nav);    
         console.log(currentAccount.metaData.staker, epoch.slice.nav);    
       }
