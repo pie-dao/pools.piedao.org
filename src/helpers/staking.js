@@ -710,7 +710,7 @@ export async function claim(eth) {
 
 export function retrieveLeaf(address) {
   const participations = getParticipations();
-  return participations[ethers.utils.getAddress(address.toLowerCase())];
+  return participations[address.toLowerCase()];
 }
 
 export function prepareProofs(eth) {
