@@ -13,13 +13,15 @@ import { resetContractCache } from './contracts.js';
 import env from '../../config/env.json';
 // whenever networkId == 1, we expect to be no production/mainnet environment,
 // otherwhise, we setup a rinkeby proider as defaultProvider...
-export const defaultProvider = env.blocknative.networkId === 1
-  ? new ethers.providers.InfuraProvider(
-    'homestead', 
-    'e106b2b27c0f4941be1f2c183a20b3ea', // production key
-    // '1ec103a49691457aa6dff30aa8ab73d0' // testing key
-  )
-  : new ethers.providers.JsonRpcProvider('https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5');
+// export const defaultProvider = env.blocknative.networkId === 1
+//   ? new ethers.providers.InfuraProvider(
+//     'homestead',
+//     'e106b2b27c0f4941be1f2c183a20b3ea', // production key
+//     // '1ec103a49691457aa6dff30aa8ab73d0' // testing key
+//   )
+//   : new ethers.providers.JsonRpcProvider('https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5');
+
+export const defaultProvider = new ethers.providers.JsonRpcProvider('http://localhost:8545');
 
 defaultProvider.on('block', updateCurrentBlock);
 
@@ -85,11 +87,11 @@ export const registerConnection = async (newWeb3) => {
     icon = '';
   }
 
-  const ens = await provider.lookupAddress(address);
+  /* const ens = await provider.lookupAddress(address); */
 
   eth.set({
     address,
-    ens,
+    /* ens, */
     currentBlockNumber,
     icon,
     network,
