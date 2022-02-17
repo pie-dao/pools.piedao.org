@@ -422,24 +422,15 @@
         maxlength="79"
         spellcheck="false"
       />
-      <button
-        class="swap-button"
-        on:click={() => {
-          targetModal = 'buy';
-          tokenSelectModalOpen = true;
-        }}
-      >
-        <span class="sc-iybRtq gjVeBU">
+      <button class="cursor-default swap-button">
+        <span class="sc-iybRtq gjVeBU cursor-default">
           <img
             class="h-auto w-24px mr-5px"
             alt={buyToken ? `${buyToken.symbol} logo` : ''}
             src={buyToken ? buyToken.icon : ''}
           />
-          <span class="sc-kXeGPI jeVIZw token-symbol-container"
+          <span class="sc-kXeGPI jeVIZw token-symbol-container cursor-default"
             >{buyToken ? buyToken.symbol : ''}</span
-          >
-          <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"
-            ><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff" /></svg
           >
         </span>
       </button>
