@@ -137,7 +137,6 @@
       return component;
     }),
   );
-  $: console.log(composition);
 
   $: pieTokens = fetchPieTokens($balances);
 

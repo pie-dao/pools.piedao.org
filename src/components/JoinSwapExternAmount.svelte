@@ -5,6 +5,7 @@
   import BigNumber from 'bignumber.js';
   import { onMount, onDestroy } from 'svelte';
   import orderBy from 'lodash/orderBy';
+  import { ethers } from 'ethers';
   import find from 'lodash/find';
 
   import poolsConfig from '../config/pools.json';
@@ -13,7 +14,7 @@
   import Modal from '../components/elements/Modal.svelte';
   import ReviewQuoteModal from '../components/modals/ReviewQuoteModal.svelte';
   import displayNotification from '../notifications';
-  import { ethers } from 'ethers';
+  import { currentRoute } from '../stores/routes.js';
 
   import { subject, approveMax, connectWeb3, eth } from '../stores/eth.js';
 
@@ -22,29 +23,12 @@
   import { getTokenImage } from '../components/helpers';
 
   export let listed = [];
+  let tokenList = [];
 
   export let buyTokenAddress;
   export let buyTokenSymbol;
 
   const ZeroEx = '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
-  //   $: listed = [
-  //     {
-  //       address: token1Address,
-  //       symbol: 'ETH',
-  //       icon: getTokenImage(token1Address),
-  //     },
-  //     {
-  //       address: token2Address,
-  //       symbol: 'DOUGH',
-  //       icon: getTokenImage(tokenAddress),
-  //     },
-  //     {
-  //       address: token3Address,
-  //       symbol: 'DAI',
-  //       icon: getTokenImage('token3Address),
-  //     },
-  //   ];
-
   let modal;
   let modalOption = {
     title: 'Review Quote',
@@ -55,7 +39,7 @@
   let targetModal = 'sell';
   let timeout;
 
-  $: defaultTokenSell = usefulArray[0];
+  $: defaultTokenSell = tokenList[0];
 
   let defaultTokenBuy = {
     address: buyTokenAddress,
@@ -81,7 +65,7 @@
         if (token === sellToken) {
           return;
         }
-        buyToken = current.route.params.address;
+        buyToken = $currentRoute.params.address;
       }
       fetchQuote();
     }
@@ -100,11 +84,7 @@
   let contract;
 
   $: if ($eth?.signer) {
-    contract = new ethers.Contract(
-      '0x8d1ce361eb68e9e05573443c407d4a3bed23b033',
-      smartPoolAbi,
-      $eth.signer,
-    );
+    contract = new ethers.Contract($currentRoute.params.address, smartPoolAbi, $eth.signer);
   }
 
   $: sellToken = defaultTokenSell;
@@ -114,24 +94,12 @@
   $: frozeQuote = null;
   $: needAllowance = false;
   $: initialized = {
-    onMount: false,
     onChainData: false,
   };
   $: isLoading = false;
-  $: allowances = {};
-  $: balances = {};
   $: error = null;
   $: showSlippageSettings = false;
   $: balanceError = false;
-
-  $: if ($eth.address) {
-    if (!initialized.onChainData && !isLoading) {
-      isLoading = true;
-      //   fetchOnchainData();
-      initialized.onChainData = true;
-      isLoading = false;
-    }
-  }
 
   onDestroy(() => {
     clearTimeout(timeout);
@@ -139,26 +107,8 @@
   });
 
   onMount(async () => {
-    isLoading = true;
-    console.log('onMount');
-
-    if ($eth.address) {
-      //   await fetchOnchainData();
-      initialized.onChainData = true;
-    }
     await fetchQuote();
-    initialized.onMount = true;
-    isLoading = false;
   });
-
-  //   function showBalanceError() {
-  //     if (!balances[sellToken.address]) return;
-  //     const weiAmount = amount.bn.toFixed(0);
-  //     const shouldShowError = balances[sellToken.address].bn.isGreaterThanOrEqualTo(weiAmount)
-  //       ? false
-  //       : true;
-  //     return shouldShowError;
-  //   }
 
   function needApproval(allowance) {
     if (!$eth.address || !$eth.signer) return false;
@@ -180,7 +130,6 @@
 
     await approveMax(sellToken.address, ZeroEx);
     needAllowance = false;
-    // await fetchOnchainData();
   }
 
   function onAmountChange() {
@@ -189,36 +138,12 @@
     fetchQuote();
   }
 
-  //   async function fetchOnchainData() {
-  //     // Fetch balances, allowance and decimals
-  //     listed = await fetchBalances(listed, $eth.address, $eth.provider);
-
-  //     if (sellToken) {
-  //       sellToken = find(listed, ['address', sellToken.address], defaultTokenSell);
-  //     } else {
-  //       sellToken = defaultTokenSell;
-  //     }
-
-  //     if (buyToken) {
-  //       buyToken = find(listed, ['address', buyToken.address], defaultTokenBuy);
-  //     } else {
-  //       buyToken = defaultTokenBuy;
-  //     }
-
-  //     listed.forEach((token) => {
-  //       allowances[token.address] = token.allowance;
-  //     });
-
-  //     listed.forEach((token) => {
-  //       balances[token.address] = token.balance;
-  //     });
-  //   }
-
-  async function fetchQuote(selfRefresh = false, freeze = false) {
+  const fetchQuote = async (selfRefresh = false, freeze = false) => {
     if (!amount.label || amount.label === 0 || amount.label === '' || isLoading === true) {
       Timer.stop();
       return;
     }
+    isLoading = true;
 
     quote = {};
 
@@ -235,9 +160,11 @@
     if (freeze) {
       frozeQuote = quote;
     }
-  }
+  };
 
-  $: usefulArray = (() => {
+  // This block will set up the token data that this component will use.
+  // all changes to tokenList should happen in this block.
+  $: {
     const newListed = [];
     for (const token of listed) {
       newListed.push({
@@ -247,8 +174,18 @@
       });
     }
 
-    return newListed;
-  })();
+    if (newListed.length > 0 && $eth.address) {
+      fetchBalances(newListed, $eth.address, $eth.provider).then((balances) => {
+        balances.forEach((token) => {
+          const tokenIdx = newListed.findIndex((t) => t.address === token.address);
+          newListed[tokenIdx].balance = token.balance;
+          newListed[tokenIdx].allowance = token.allowance;
+        });
+
+        tokenList = newListed;
+      });
+    }
+  }
 
   async function swap() {
     if (!quote) {
@@ -288,7 +225,6 @@
             message: `${amount.label.toFixed(2)} ${sellToken.symbol} swapped successfully`,
             type: 'success',
           });
-          //   fetchOnchainData();
           amount = defaultAmount;
           dismiss();
           subscription.unsubscribe();
@@ -305,7 +241,7 @@
 </script>
 
 <TokenSelectModal
-  tokens={$eth.address ? orderBy(usefulArray, ['balance.number'], ['desc']) : usefulArray}
+  tokens={$eth.address ? orderBy(tokenList, ['balance.number'], ['desc']) : tokenList}
   open={tokenSelectModalOpen}
   callback={tokenSelectCallback}
 />
@@ -330,15 +266,15 @@
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">From</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
-        {#if balances[sellToken.address]}
+        {#if sellToken && tokenList[sellToken.address]?.balance}
           <div
             on:click={() => {
-              amount.label = balances[sellToken.address].number;
-              amount.bn = balances[sellToken.address].bn;
+              amount.label = tokenList[sellToken.address].balance.number;
+              amount.bn = tokenList[sellToken.address].balance.bn;
               fetchQuote();
             }}
           >
-            Max balance: {balances[sellToken.address].label}
+            Max balance: {tokenList[sellToken.address].balance.label}
           </div>
         {/if}
       </div>
