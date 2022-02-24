@@ -56,23 +56,13 @@
     </div>
 
     <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
-      <a class="" target="_blank" href={`https://www.piedao.org/#/lp-legacy-farm`}>
-      <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards4.png) no-repeat center center; background-size: cover!important;">
-        <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">Farming</span></div>
-      </div>
-      <div class="text-left font-bold text-lg px-6 leading-7 mb-4">PieDAO Farming opportunities</div>
-      <div class="text-justify font-thin h-120px text-ellipsis overflow-hidden px-6 leading-6 mb-4">
-        We’re incentivizing liquidity for our products with 150k of DOUGH available to earn each week and as much as 150% APR. Check out our farms to see the latest opportunities.      </a>
-    </div>
-
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
       <a class="" target="_blank" href={`https://medium.com/piedao/announcing-pievaults-19e2fa4c734e`}>
       <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://miro.medium.com/max/1400/1*KABX967U0nJRoD3y5JLF4g.png) no-repeat center center; background-size: cover!important;">
         <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">Vaults</span></div>
       </div>
       <div class="text-left font-bold text-lg px-6 leading-7 mb-4">What are PieVaults?</div>
       <div class="text-justify font-thin h-120px text-ellipsis overflow-hidden px-6 leading-6 mb-4">
-        PieVaults are the DAO’s latest product range, unlocking active yield-generating strategies for each underlying asset in the index. Lending, native staking, and meta-governance are all possible. Yearn Ecosystem Pie ( $YPIE) is the first PieVault, giving complete exposure to the Yearn Finance ecosystem.      </a>
+        PieVaults are the DAO’s latest product range, unlocking active yield-generating strategies for each underlying asset in the index. Lending, native staking, and meta-governance are all possible. Yearn Ecosystem Pie ($YPIE) is the first PieVault, giving complete exposure to the Yearn Finance ecosystem.</a>
     </div>
 
 
