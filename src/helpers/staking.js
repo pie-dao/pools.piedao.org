@@ -11,6 +11,7 @@ import sharesTimeLockABI from '../abis/sharesTimeLock.json';
 import veDoughABI from '../abis/veDoughABI.json';
 import DoughABI from '../abis/DoughABI.json';
 import MerkleTreeDistributorABI from '../abis/MerkleTreeDistributorABI.json';
+import ERC20 from '../abis/erc20ABI.json';
 import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
@@ -645,6 +646,50 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
       });
 
       reject(err);
+    }
+  });
+  /* eslint-enable  no-async-promise-executor */
+}
+
+export async function compound(eth, slice) {
+  /* eslint-disable  no-async-promise-executor */
+  return new Promise(async (resolve, reject) => {
+    let contract = new ethers.Contract(
+      smartcontracts.reward,
+      ERC20,
+      eth.signer || eth.provider,
+    );
+
+    let treasury = "0x3bCF3Db69897125Aa61496Fc8a8B55A5e3f245d5";
+    let sliceAmount = ethers.utils.parseUnits(slice, 18);
+
+    try {
+      const { emitter } = displayNotification(
+        await contract.transfer(treasury, sliceAmount)
+      );
+
+      emitter.on('txConfirmed', async () => {
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: 'Slice Compounded!',
+              type: 'success',
+            });
+
+            subscription.unsubscribe();
+            resolve(true);
+          },
+        });
+      }); 
+    } catch (error) {
+      displayNotification({
+        autoDismiss: 15000,
+        message: 'Sorry, an error occurred while compounding your rewards. Please try again later.',
+        type: 'error',
+      });
+
+      reject(error);
     }
   });
   /* eslint-enable  no-async-promise-executor */

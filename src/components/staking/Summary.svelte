@@ -12,6 +12,7 @@
     import { eth } from '../../stores/eth.js';
     import isEmpty from 'lodash/isEmpty';
     import get from 'lodash/get';
+    import { compound } from '../../helpers/staking.js';
     
     let claimModal;
     let compoundModal;
@@ -22,6 +23,8 @@
     let modal_content_key;
     let voteKeyword;
     let isLoading = true;
+    let isCompounding = false;
+    let buttonText = "Compound now!";
     
     $: if($stakingData && !isEmpty($stakingData) && $stakingData.address) {
         isLoading = false;
@@ -117,7 +120,33 @@
             }
         },
         );
-    };   
+    }; 
+    
+    async function compoundSlice() {
+      isCompounding = true;
+      buttonText = 'Compounding';
+
+      let interval = setInterval(() => {
+        let occurrences = buttonText.split('.').length - 1;
+
+        if (occurrences < 3) {
+          buttonText += '.';
+        } else {
+          buttonText = 'Compounding';
+        }
+      }, 1000);
+
+      compound($eth, $stakingData.accountWithdrawableRewards.toString()).then(response => {
+          clearInterval(interval);
+          buttonText = "Compounded!";
+          isCompounding = false;
+        }).catch(error => {
+          clearInterval(interval);
+          buttonText = "Compound now!";
+          console.error(error);
+          isCompounding = false;
+        });
+    }
 </script>
 
 <Modal title=" " backgroundColor="#f3f3f3" bind:this={modal}>
@@ -128,19 +157,28 @@
 
 <Modal title="Compound today" backgroundColor="#f3f3f3" bind:this={compoundModal}>
     <div slot="content" class="font-thin">
-        <h3 class="text-lg mt-4">What is compounding?</h3>
-        Compounding is the process where SLICE are credited in the form of veDOUGH and added to an existing balance.
-        The option for compounding is offered for limited time, it's designed to allow veDOUGH holder to accumulate more voting power while at the same time make the treasury grow faster.
-
-        <h3 class="text-lg mt-4">How does it work?</h3>
-        By clickling the button below, you will send your accumalated SLICE to the PieDAO Treasury.
-        On the 21th of the month, your veDOUGH will be credited to your account. The SLICE/DOUGH conversion rate is based on average DOUGH price and SLICE NAV.
-        <strong>The DAO will send additional veDOUGH as a lump sum to cover the gas spent on the 2 transactions to claim and send the SLICE.</strong> 
-
-        <button class="pointer btn clear stake-button text-base rounded-20px py-5px px-22px mt-6">
-            Compound now!
-        </button>
-
+      <div class="flex flex-col content-center align-center items-center justify-center">
+        <div class="w-full flex-row text-center">
+          <h3 class="text-lg mt-4">What is compounding?</h3>
+          Compounding is the process where SLICE are credited in the form of veDOUGH and added to an existing balance.
+          The option for compounding is offered for limited time, it's designed to allow veDOUGH holder to accumulate more voting power while at the same time make the treasury grow faster.
+  
+          <h3 class="text-lg mt-4">How does it work?</h3>
+          By clickling the button below, you will send your accumalated SLICE to the PieDAO Treasury.
+          On the 21th of the month, your veDOUGH will be credited to your account. The SLICE/DOUGH conversion rate is based on average DOUGH price and SLICE NAV.
+          <strong>The DAO will send additional veDOUGH as a lump sum to cover the gas spent on the 2 transactions to claim and send the SLICE.</strong> 
+        </div>
+        <div class="w-full flex flex-row content-center align-center items-center justify-center">
+          <button
+          class="mt-4 pointer btn flex rounded-16"
+          on:click={() => {
+            compoundSlice();
+          }}          
+          >
+          {buttonText}
+          </button>
+        </div>
+      </div>       
     </div>
 </Modal>
 <ClaimModal bind:this={claimModal}/>
@@ -209,7 +247,7 @@
     </div>
     {#if $eth.address && toNum($stakingData.accountWithdrawableRewards) >= 0}
     <button 
-        disabled={isLoading}
+        disabled={isLoading || $stakingData.accountWithdrawableRewards.eq(0)}
         class="flex items-center bg-pink rounded-xl pointer px-4 py-2 text-white mr-4"
         on:click={() => compoundModal.open()}
     > Compound</button>
