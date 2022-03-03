@@ -679,7 +679,8 @@ export async function compound(eth, slice) {
             });
 
             subscription.unsubscribe();
-            resolve(true);
+            _stakingData = await fetchStakingData(eth);
+            resolve(_stakingData);
           },
         });
       }); 
