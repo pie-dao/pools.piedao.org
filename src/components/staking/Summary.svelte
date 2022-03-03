@@ -29,9 +29,6 @@
     
     $: if($stakingData && !isEmpty($stakingData) && $stakingData.address) {
         isLoading = false;
-
-        // TODO: remove me before go live.
-        $stakingData.accountWithdrawableRewards = new BigNumber(10000000000000000000);
         
         if($stakingData.votes) {
             if($stakingData.votes.length) {

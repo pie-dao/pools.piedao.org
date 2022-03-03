@@ -419,7 +419,6 @@ export const fetchStakingData = async (eth) => {
       if (key !== 'accountLocks') {
         switch(key) {
           case 'accountWithdrawableRewards':
-            // _stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
             _stakingData[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
             break;
           case 'accountWithdrawnRewards':
@@ -500,6 +499,8 @@ export const fetchStakingData = async (eth) => {
   _stakingData.address = eth.address;
   _stakingData.hasLoaded = true;
   
+  // TODO: remove me before go live.
+  _stakingData.accountWithdrawableRewards = new BigNumber(10000000000000000000);
   stakingData.set(_stakingData);
   console.log('fetchStakingData', _stakingData);
   
