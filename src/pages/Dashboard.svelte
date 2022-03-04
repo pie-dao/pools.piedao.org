@@ -77,7 +77,7 @@
 <Meta 
   metadata={{
     title: "PieDAO Products Page, DEFI index and yield aggregators",
-    description: "An overview of the PieDAO's products, including Pies and PieVaults DEFI index. BCP, DEFI++, DEFI+L, DEFI+S, BTC++, USD++.",
+    description: "An overview of the PieDAO's products, including Pies and PieVaults DEFI index. BCP, DEFI++, DEFI+L, DEFI+S, BTC++.",
   }}
 />
 
