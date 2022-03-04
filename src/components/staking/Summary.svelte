@@ -160,13 +160,17 @@
     <div slot="content" class="font-thin">
       <div class="flex flex-col content-center align-center items-center justify-center">
         <div class="w-full flex-row text-center">
-          <h3 class="text-lg mt-4">What is compounding?</h3>
-          Compounding is the process where SLICE are credited in the form of veDOUGH and added to an existing balance.
-          The option for compounding is offered for limited time, it's designed to allow veDOUGH holder to accumulate more voting power while at the same time make the treasury grow faster.
+          <h3 class="text-lg mt-4">What is compounding SLICE?</h3>
+          Compounding is the process in which SLICE rewards are redeemed for veDOUGH. 
+          It allows participants to accumulate extra voting power while growing the treasury. 
+          The option to compound SLICE is currently offered for a limited time.
   
           <h3 class="text-lg mt-4">How does it work?</h3>
-          By clickling the button below, you will send your accumalated SLICE to the PieDAO Treasury.
-          On the 21th of the month, your veDOUGH will be credited to your account. The SLICE/DOUGH conversion rate is based on average DOUGH price and SLICE NAV.
+          You will send your SLICE to the PieDAO Treasury by clicking the button below. 
+          We will then deposit veDOUGH into your account two weeks after the distribution date (Always on a Wednesday). 
+          The SLICE/DOUGH conversion rate is based on the average DOUGH price and SLICE NAV. 
+          We will include extra veDOUGH to cover the gas fees paid when claiming and sending your SLICE.
+          <br/><br/>
           <strong>The DAO will send additional veDOUGH as a lump sum to cover the gas spent on the 2 transactions to claim and send the SLICE.</strong> 
         </div>
         <div class="w-full flex flex-row content-center align-center items-center justify-center">
