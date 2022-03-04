@@ -236,8 +236,8 @@
         </div>
     {/if}
 </div>
-<div class="flex nowrap items-center p-1">
-    <div class="flex-1">
+<div class="flex flex-col md:flex-row nowrap items-center p-1">
+    <div class="flex w-full flex-row">
         <span class="sc-iybRtq gjVeBU">
             {#if isLoading && $eth.address}
             <div class="mr-2">Loading...</div>
@@ -251,20 +251,22 @@
         </span>
     </div>
     {#if $eth.address && toNum($stakingData.accountWithdrawableRewards) >= 0}
-    <button 
-        disabled={isLoading || $stakingData.accountWithdrawableRewards.eq(0)}
-        class="flex items-center bg-pink rounded-xl pointer px-4 py-2 text-white mr-4"
-        on:click={() => compoundModal.open()}
-    > Compound</button>
-    <button 
-    disabled={isLoading}
-    class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
-    on:click={() => {
-        if($eth.address) {
-            claimModal.showModal($stakingData);
-        }
-    }}
-    > Claim</button>
+    <div class="flex w-full flex-row pt-4 md:pt-0">
+      <button 
+          disabled={isLoading || $stakingData.accountWithdrawableRewards.eq(0)}
+          class="flex items-center bg-pink rounded-xl pointer px-4 py-2 text-white mr-4"
+          on:click={() => compoundModal.open()}
+      > Compound</button>
+      <button 
+      disabled={isLoading}
+      class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
+      on:click={() => {
+          if($eth.address) {
+              claimModal.showModal($stakingData);
+          }
+      }}
+      > Claim</button>
+    </div>
     {/if}
 </div>
 </div>
