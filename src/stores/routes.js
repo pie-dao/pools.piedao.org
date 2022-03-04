@@ -157,13 +157,6 @@ const formatRoute = (route) => {
       return { page: Simulator, params: { simulation } };
     case 'simulator-stats':
       return { page: SimulatorStats };
-    case 'lp-legacy-farm':
-      referral = _route[1] || null;
-
-      if (referral) {
-        window.localStorage.setItem('referral', referral);
-      }
-      return { page: LPStaking, params: { referral } };
     case 'staking':
       return _route[1] ? { page: StakingPageSingle, params: _route } : { page: Staking };
     case 'staking-charts':

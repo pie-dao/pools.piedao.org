@@ -6,7 +6,6 @@
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
     
     
@@ -18,7 +17,6 @@
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
-    "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
@@ -106,71 +104,6 @@
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
   },
-  "0x9a48bd0ec040ea4f1d3147c025cd4076a2e71e3e": {
-    "symbol": "USD++",
-    "isExperipie": true,
-    "useMintOverBuy": true,
-    "buyButton": true,
-    "name": "USD Index Pie",
-    "useRecipe": false,
-    "swapEnabled": false,
-    "streamingFees": "0",
-    "swapFees": "0",
-    "tradingViewFormula": "(0.4722*KRAKEN:USDCUSD+0.2042*KRAKEN:DAIUSD+0.2858*BITTREX:TUSDUSD+0.0378*KUCOIN:SUSDUSDT)",
-    "mapDynamicTradingViewFormula": {
-      "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48": "KRAKEN:USDCUSD",
-      "0x6B175474E89094C44Da98b954EedeAC495271d0F": "KRAKEN:DAIUSD",
-      "0x0000000000085d4780B73119b644AE5ecd22b376": "BITTREX:TUSDUSD",
-      "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51": "KUCOIN:SUSDUSDT"
-    },
-    "composition": [
-      {
-        "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-        "percentage": 47.22,
-        "decimals": 6,
-        "color": "#58a4fc",
-        "symbol": "USDC",
-        "coingeckoId": "usd-coin",
-        "coingeckoImageId": 6319
-      },
-      {
-        "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-        "percentage": 20.42,
-        "color": "#fd6761",
-        "symbol": "DAI",
-        "coingeckoId": "dai",
-        "coingeckoImageId": 9956
-      },
-      {
-        "address": "0x0000000000085d4780B73119b644AE5ecd22b376",
-        "percentage": 28.58,
-        "color": "#6beab1",
-        "symbol": "TUSD",
-        "coingeckoId": "true-usd",
-        "coingeckoImageId": 3449
-      },
-      {
-        "address": "0x57Ab1ec28D129707052df4dF418D58a2D46d5f51",
-        "percentage": 3.78,
-        "color": "#c4ccce",
-        "symbol": "sUSD",
-        "coingeckoId": "nusd",
-        "coingeckoImageId": 5013
-      }
-    ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md",
-    "landingLinks": [
-      {
-        "label": "Tutorial: How to Mint USD++",
-        "url": "https://medium.com/piedao/how-to-mint-usd-70501ad3db4e?source=collection_home---6------0-----------------------"
-      },
-      {
-        "label": "Latest rebalance proposal",
-        "url": "https://forum.piedao.org/t/usd-v2-the-stablecoin-basket/116/6?u=alexintosh"
-      }
-    ]
-  },
-
 
   "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": {
     "symbol": "DXY",
