@@ -499,8 +499,6 @@ export const fetchStakingData = async (eth) => {
   _stakingData.address = eth.address;
   _stakingData.hasLoaded = true;
   
-  // TODO: remove me before go live.
-  _stakingData.accountWithdrawableRewards = new BigNumber(10000000000000000000);
   stakingData.set(_stakingData);
   console.log('fetchStakingData', _stakingData);
   
@@ -757,7 +755,7 @@ export async function claim(eth) {
 
 export function retrieveLeaf(address) {
   const participations = getParticipations();
-  return participations[address.toLowerCase()];
+  return participations[ethers.utils.getAddress(address.toLowerCase())];
 }
 
 export function prepareProofs(eth) {
