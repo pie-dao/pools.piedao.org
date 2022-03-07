@@ -137,7 +137,7 @@
         }
       }, 1000);
 
-      compound($eth, $stakingData.accountWithdrawableRewards.toString()).then(response => {
+      compound($eth).then(response => {
           clearInterval(interval);
           buttonText = "Compounded!";
           isCompounding = false;

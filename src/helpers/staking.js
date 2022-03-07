@@ -650,19 +650,23 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
   /* eslint-enable  no-async-promise-executor */
 }
 
-export async function compound(eth, slice) {
+export async function compound(eth) {
   /* eslint-disable  no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
-    let contract = new ethers.Contract(
-      smartcontracts.reward,
-      ERC20,
-      eth.signer || eth.provider,
-    );
-
-    let treasury = "0x3bCF3Db69897125Aa61496Fc8a8B55A5e3f245d5";
-    let sliceAmount = ethers.utils.parseUnits(slice, 18);
-
     try {
+      await claim(eth);
+
+      let contract = new ethers.Contract(
+        smartcontracts.reward,
+        ERC20,
+        eth.signer || eth.provider,
+      );
+  
+      let leaf = retrieveLeaf(eth.address);
+  
+      let treasury = "0x3bCF3Db69897125Aa61496Fc8a8B55A5e3f245d5";
+      let sliceAmount = ethers.BigNumber.from(leaf.amount);
+
       const { emitter } = displayNotification(
         await contract.transfer(treasury, sliceAmount)
       );
@@ -703,7 +707,6 @@ export async function claim(eth) {
     }
 
     const proof = prepareProofs(eth);
-    console.log('proof', proof);
 
     try {
       const leaf = retrieveLeaf(eth.address);
