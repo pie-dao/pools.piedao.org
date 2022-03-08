@@ -666,7 +666,7 @@ export async function compound(eth) {
   
       let treasury = "0x3bCF3Db69897125Aa61496Fc8a8B55A5e3f245d5";
       let sliceAmount = ethers.BigNumber.from(leaf.amount);
-
+      
       const { emitter } = displayNotification(
         await contract.transfer(treasury, sliceAmount)
       );
@@ -719,7 +719,7 @@ export async function claim(eth) {
           account: ethers.utils.getAddress(eth.address.toLowerCase()),
           merkleProof: leaf.proof
         };
-  
+
         const { emitter } = displayNotification(
           await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
         );
