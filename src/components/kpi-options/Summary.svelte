@@ -9,6 +9,7 @@
   import BigNumber from 'bignumber.js';
   import { ethers } from 'ethers';
   import MerkleTreeDistributorABI from '../../abis/MerkleTreeDistributorABI.json';
+  import wKpiABI from '../../abis/wKpiABI.json';
   import WkpiJson from '../../config/rewards/wkpi.json';
   import get from 'lodash/get';
 
@@ -40,10 +41,10 @@
     isLoading = true;
     
     merkleTreeDistributor = new ethers.Contract(
-    smartcontracts.merkleTreeDistributor,
-    MerkleTreeDistributorABI,
-    $eth.signer || $eth.provider,
-  );
+      smartcontracts.merkleTreeDistributor,
+      MerkleTreeDistributorABI,
+      $eth.signer || $eth.provider,
+    );
 
     let claimAddress = get(WkpiJson.claims, $eth.address);
 
@@ -188,6 +189,45 @@
       });
     }
   }
+
+  export async function redeem() {
+    try {
+      let wKpiContract = new ethers.Contract(
+        smartcontracts.wkpi,
+        wKpiABI,
+        $eth.signer || $eth.provider,
+      );
+  
+      const { emitter } = displayNotification(
+        await wKpiContract.settleAndStake(ethers.BigNumber.from(10), 7)
+      );
+
+      emitter.on('txConfirmed', async () => {
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: 'WKPI-DOUGH has been redeemed!',
+              type: 'success',
+            });
+
+            subscription.unsubscribe();
+            
+            // update the kpiOptionsData object...
+            init();
+          },
+        });
+      }); 
+    } catch (error) {
+      console.error(error);
+
+      displayNotification({
+        autoDismiss: 15000,
+        message: error.data.message,
+        type: 'error',
+      });
+    }
+  }
 </script>
 
 <div class="flex flex-col items-center w-full p-1px bg-lightgrey rounded-16">
@@ -239,8 +279,8 @@
     <div class="flex items-center justify-between">
       <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Your Estimated Payout</div>
     </div>
-    <div class="flex nowrap items-center md:items-left p-1">
-      <div class="flex-1">
+    <div class="flex flex-col md:flex-row nowrap items-center md:items-left p-1">
+      <div class="flex flex-col md:flex-row w-full md:w-1/3">
         <span class="flex-col md:flex-row sc-iybRtq gjVeBU">
           {#if isLoading && $eth.address}
             <div class="md:mr-2">Loading...</div>
@@ -252,27 +292,31 @@
           <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
           <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
         </span>
-      </div>
+      </div>     
     </div>
   </div>
 
   {#if $eth.address}
-    {#if !kpiOptionsData.claimableKpiOptions.eq(0)}
       <div class="flow flow-col">
-        <button 
+        {#if !kpiOptionsData.claimableKpiOptions.eq(0)}
+          <button 
+          disabled={isLoading}
+          class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
+          on:click={() => {
+            claim()
+          }}
+        >Claim</button>
+      {/if}
+      {#if !kpiOptionsData.estimatedKpiOptions.eq(0)}
+      <button
         disabled={isLoading}
         class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
         on:click={() => {
-          claim()
+          redeem()
         }}
-      >Claim</button> 
-      <!-- <a
-        href="https://claim.umaproject.org/"
-        target="_blank"
-        class="pointer btn stake-button rounded-20px py-21px px-30px mt-6"
-      >Redeem</a>  -->
-      </div>      
-    {/if}
+      >Redeem</button>
+  {/if}
+      </div>
   {:else}
     <button
       on:click={() => connectWeb3()}

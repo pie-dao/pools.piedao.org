@@ -11,6 +11,7 @@ import sharesTimeLockABI from '../abis/sharesTimeLock.json';
 import veDoughABI from '../abis/veDoughABI.json';
 import DoughABI from '../abis/DoughABI.json';
 import MerkleTreeDistributorABI from '../abis/MerkleTreeDistributorABI.json';
+import ERC20 from '../abis/erc20ABI.json';
 import smartcontracts from '../config/smartcontracts.json';
 import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
@@ -418,7 +419,6 @@ export const fetchStakingData = async (eth) => {
       if (key !== 'accountLocks') {
         switch(key) {
           case 'accountWithdrawableRewards':
-            // _stakingData.accountWithdrawableRewards = new BigNumber(123000000000000000000);
             _stakingData[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
             break;
           case 'accountWithdrawnRewards':
@@ -650,6 +650,55 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
   /* eslint-enable  no-async-promise-executor */
 }
 
+export async function compound(eth) {
+  /* eslint-disable  no-async-promise-executor */
+  return new Promise(async (resolve, reject) => {
+    try {
+      await claim(eth);
+
+      let contract = new ethers.Contract(
+        smartcontracts.reward,
+        ERC20,
+        eth.signer || eth.provider,
+      );
+  
+      let leaf = retrieveLeaf(eth.address);
+  
+      let treasury = "0x3bCF3Db69897125Aa61496Fc8a8B55A5e3f245d5";
+      let sliceAmount = ethers.BigNumber.from(leaf.amount);
+      
+      const { emitter } = displayNotification(
+        await contract.transfer(treasury, sliceAmount)
+      );
+
+      emitter.on('txConfirmed', async () => {
+        const subscription = subject('blockNumber').subscribe({
+          next: async () => {
+            displayNotification({
+              autoDismiss: 15000,
+              message: 'Slice Compounded!',
+              type: 'success',
+            });
+
+            subscription.unsubscribe();
+            _stakingData = await fetchStakingData(eth);
+            resolve(_stakingData);
+          },
+        });
+      }); 
+    } catch (error) {
+      displayNotification({
+        autoDismiss: 15000,
+        message: 'Sorry, an error occurred while compounding your rewards. Please try again later.',
+        type: 'error',
+      });
+
+      reject(error);
+    }
+  });
+  /* eslint-enable  no-async-promise-executor */
+}
+
 export async function claim(eth) {
   /* eslint-disable  no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
@@ -658,7 +707,6 @@ export async function claim(eth) {
     }
 
     const proof = prepareProofs(eth);
-    console.log('proof', proof);
 
     try {
       const leaf = retrieveLeaf(eth.address);
@@ -671,7 +719,7 @@ export async function claim(eth) {
           account: ethers.utils.getAddress(eth.address.toLowerCase()),
           merkleProof: leaf.proof
         };
-  
+
         const { emitter } = displayNotification(
           await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
         );
@@ -710,7 +758,7 @@ export async function claim(eth) {
 
 export function retrieveLeaf(address) {
   const participations = getParticipations();
-  return participations[address.toLowerCase()];
+  return participations[ethers.utils.getAddress(address.toLowerCase())];
 }
 
 export function prepareProofs(eth) {
