@@ -303,7 +303,14 @@
                     }
                   }, 1000);
 
-                  approveToken($eth)
+                  let shouldResetAllowance = false;
+                  if(stakeAmount.bn.isGreaterThan($allowances[allowanceKey]) && $allowances[allowanceKey] > 0) {
+                    shouldResetAllowance = true;
+                  }
+
+                  console.log('shouldResetAllowance', shouldResetAllowance)
+
+                  approveToken($eth, shouldResetAllowance)
                     .then((updated_data) => {
                       console.log('updated_data', updated_data);
                       clearInterval(interval);

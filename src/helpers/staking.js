@@ -773,7 +773,7 @@ export function prepareProofs(eth) {
   /* eslint-enable consistent-return */
 }
 
-export function approveToken(eth) {
+export function approveToken(eth, shouldReset = false) {
   /* eslint-disable  no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
     if (!eth.address || !eth.signer) {
@@ -785,11 +785,9 @@ export function approveToken(eth) {
     }
 
     try {
-      // resetting the approve to zero, before initiating a new approval...
-      if (
-        !_stakingData.accountDepositTokenAllowance.isEqualTo(0)
-        && !_stakingData.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
-      ) {
+      console.log('shouldReset', shouldReset)
+      if (shouldReset) {
+        // resetting the approve to zero, before initiating a new approval...
         await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
       }
 
