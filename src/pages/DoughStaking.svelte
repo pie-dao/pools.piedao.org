@@ -1,5 +1,5 @@
 <script>
-  import { eth, connectWeb3, balances, allowances, balanceKey, functionKey } from '../stores/eth.js';
+  import { eth, connectWeb3, balances, allowances, balanceKey, getAllowanceKey } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
   import images from '../config/images.json';
   import { formatToken, subscribeToBalance, subscribeToAllowance } from '../components/helpers.js';
@@ -46,10 +46,11 @@
 
   $: if ($eth.address) {
     subscribeToBalance(smartcontracts.dough, $eth.address);
-    subscribeToAllowance(smartcontracts.dough, $eth.address, smartcontracts.stakingPools);
+    subscribeToAllowance(smartcontracts.dough, $eth.address, smartcontracts.doughStaking);
 
     keyDoughBalance = balanceKey(smartcontracts.dough, $eth.address);
-    allowanceKey = functionKey(smartcontracts.stakingPools, 'allowance', [$eth.address, smartcontracts.dough]);
+    allowanceKey = getAllowanceKey(smartcontracts.dough, smartcontracts.doughStaking, $eth.address);
+    console.log('allowances', $allowances);
 
     // if address is first setup, or is changed...
     if (currentAddress !== $eth.address) {
@@ -275,6 +276,9 @@
         </div>
 
         {#if $eth.address}
+        {allowanceKey}
+        {$allowances[allowanceKey]}
+
           {#if getDoughBalance.eq(0)}
             <button disabled class="btn clear stake-button rounded-20px py-15px px-22px mx-4pc mt-4"
               >You don't own tokens
@@ -287,6 +291,7 @@
                 >Insufficient Balance</button
               >
             {:else if stakeAmount.bn.isGreaterThan($allowances[allowanceKey])}
+              
               <button
                 disabled={isStaking || isApproving}
                 on:click={() => {
@@ -341,7 +346,7 @@
                   stakeDOUGH(stakeAmount.bn, stakeDuration, receiver, $eth)
                     .then((updated_data) => {
                       console.log('staked', updated_data);
-                      
+
                       try {
                         stakedModal.showModal(stakeAmount.label, stakeDuration);
                       } catch (e) {
