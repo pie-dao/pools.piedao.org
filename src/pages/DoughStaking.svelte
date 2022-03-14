@@ -32,7 +32,6 @@
       ? BigNumber($balances[keyDoughBalance].toString())
       : BigNumber(0);
 
-      console.log('$stakingData.', $stakingData)
     return $stakingData.accountDepositTokenBalance;
   })();
   let stakeAmount = {
@@ -50,7 +49,6 @@
 
     keyDoughBalance = balanceKey(smartcontracts.dough, $eth.address);
     allowanceKey = getAllowanceKey(smartcontracts.dough, smartcontracts.doughStaking, $eth.address);
-    console.log('allowances', $allowances);
 
     // if address is first setup, or is changed...
     if (currentAddress !== $eth.address) {
@@ -276,9 +274,6 @@
         </div>
 
         {#if $eth.address}
-        {allowanceKey}
-        {$allowances[allowanceKey]}
-
           {#if getDoughBalance.eq(0)}
             <button disabled class="btn clear stake-button rounded-20px py-15px px-22px mx-4pc mt-4"
               >You don't own tokens

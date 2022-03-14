@@ -24,7 +24,7 @@ import { get } from 'svelte/store';
 export let sharesTimeLock = false;
 export let veDOUGH = false;
 export let merkleTreeDistributor = false;
-export const minLockAmount = 1;
+export const minLockAmount = 0;
 export const AVG_SECONDS_MONTH = 2628000;
 
 let ETH = null;
@@ -126,22 +126,18 @@ export function safeFlow(stakeAmount, stakeDuration, receiver, eth) {
   }
 
   if (!sharesTimeLock) {
-    displayNotification({ message: Errors.NOT_INITIALIZED.message, type: 'hint' });
     return Errors.NOT_INITIALIZED;
   }
 
   if (stakeAmount < minLockAmount) {
-    displayNotification({ message: 'Deposit amount too small', type: 'hint' });
-    return Errors.NOT_CONNECTED;
+    return Errors.TOO_SMALL;
   }
 
   if (!stakeDuration) {
-    displayNotification({ message: Errors.WRONG_DURATION.message, type: 'hint' });
     return Errors.WRONG_DURATION;
   }
 
   if (!isAddress(receiver)) {
-    displayNotification({ message: Errors.NOT_VALID_ADDRESS.message, type: 'hint' });
     return Errors.NOT_VALID_ADDRESS;
   }
 
@@ -613,6 +609,7 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
       });
 
       reject(error);
+      return;
     }
 
     try {

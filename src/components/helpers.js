@@ -498,8 +498,7 @@ export const subscribeToAllowance = async (token, address, spender) => {
   allowanceSubscriptions.add(key);
 
   const tokenContract = await contract({ address: token });
-
-  console.log('ARGS', ...args);
+  
   const trackable = tokenContract.functions.allowance(...args);
   const observable = await trackable.track();
   const decimals = await tokenContract.decimals();
@@ -507,8 +506,6 @@ export const subscribeToAllowance = async (token, address, spender) => {
   observable.subscribe({
     next: async (updatedAllowance) => {
       const updates = {};
-      console.log('updatedAllowance', updatedAllowance);
-      
       updates[key] = BigNumber(updatedAllowance).dividedBy(10 ** decimals);
       const existingAllowance = get(allowances)[key];
       if (!updates[key].isEqualTo(existingAllowance)) {
