@@ -93,6 +93,7 @@
     veDOUGH = calculateVeDough(toBN(stakeAmount.bn.toString()), stakeDuration);
     veDOUGH = formatToken(veDOUGH, '.', 4);
   }
+
 </script>
 
 <StakedModal bind:this={stakedModal} />
@@ -304,7 +305,7 @@
                   }, 1000);
 
                   let shouldResetAllowance = false;
-                  if(stakeAmount.bn.isGreaterThan($allowances[allowanceKey]) && $allowances[allowanceKey] > 0) {
+                  if(stakeAmount.bn.isGreaterThan($allowances[allowanceKey]) && $allowances[allowanceKey].isGreaterThan(0)) {
                     shouldResetAllowance = true;
                   }
 
