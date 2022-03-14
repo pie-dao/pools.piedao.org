@@ -46,7 +46,7 @@
 
   $: if ($eth.address) {
     subscribeToBalance(smartcontracts.dough, $eth.address);
-    subscribeToAllowance(smartcontracts.stakingPools, $eth.address, smartcontracts.dough);
+    subscribeToAllowance(smartcontracts.dough, $eth.address, smartcontracts.stakingPools);
 
     keyDoughBalance = balanceKey(smartcontracts.dough, $eth.address);
     allowanceKey = functionKey(smartcontracts.stakingPools, 'allowance', [$eth.address, smartcontracts.dough]);
@@ -305,7 +305,7 @@
 
                   approveToken($eth)
                     .then((updated_data) => {
-                      console.log('approved', updated_data);
+                      console.log('updated_data', updated_data);
                       clearInterval(interval);
                       approveButtonText = 'Approve';
                       isApproving = false;
@@ -341,7 +341,12 @@
                   stakeDOUGH(stakeAmount.bn, stakeDuration, receiver, $eth)
                     .then((updated_data) => {
                       console.log('staked', updated_data);
-                      stakedModal.showModal(stakeAmount.label, stakeDuration);
+                      
+                      try {
+                        stakedModal.showModal(stakeAmount.label, stakeDuration);
+                      } catch (e) {
+                        console.log('Modal failed', e);
+                      }
 
                       clearInterval(interval);
                       stakeButtonText = 'Success! 🥳';

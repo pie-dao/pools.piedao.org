@@ -199,8 +199,9 @@ export function initialize(eth) {
         observer.unsubscribe();
       }
 
-      observer = observable.subscribe({}); 
+      observer = observable.subscribe({});
 
+      console.log('Start _stakingData', _stakingData);
       resolve(_stakingData);
     } catch (error) {
       displayNotification({
@@ -208,6 +209,7 @@ export function initialize(eth) {
         type: 'error',
       });
 
+      console.log('error', error);
       reject(error);
     }
   });
