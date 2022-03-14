@@ -1,8 +1,8 @@
 <script>
-  import { eth, connectWeb3, balances, balanceKey } from '../stores/eth.js';
+  import { eth, connectWeb3, balances, allowances, balanceKey, functionKey } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
   import images from '../config/images.json';
-  import { formatToken, subscribeToBalance } from '../components/helpers.js';
+  import { formatToken, subscribeToBalance, subscribeToAllowance } from '../components/helpers.js';
   import { onDestroy } from 'svelte';
   import smartcontracts from '../config/smartcontracts.json';
   import displayNotification from '../notifications';
@@ -17,18 +17,22 @@
   import StakedModal from '../components/elements/StakedModal.svelte';
 
   let veDOUGH = 0;
+  let allowanceKey;
 
   $: stakeButtonText = 'Stake DOUGH';
   $: isStaking = false;
   $: approveButtonText = 'Approve';
   $: isApproving = false;
   $: keyDoughBalance = false;
+
   $: getDoughBalance = (() => {
     if (!keyDoughBalance) return BigNumber(0);
     // saving the real-time value of dough amount into $stakingData object, so we can use it in other components/modals...
     $stakingData.accountDepositTokenBalance = $balances[keyDoughBalance]
       ? BigNumber($balances[keyDoughBalance].toString())
       : BigNumber(0);
+
+      console.log('$stakingData.', $stakingData)
     return $stakingData.accountDepositTokenBalance;
   })();
   let stakeAmount = {
@@ -42,7 +46,10 @@
 
   $: if ($eth.address) {
     subscribeToBalance(smartcontracts.dough, $eth.address);
+    subscribeToAllowance(smartcontracts.stakingPools, $eth.address, smartcontracts.dough);
+
     keyDoughBalance = balanceKey(smartcontracts.dough, $eth.address);
+    allowanceKey = functionKey(smartcontracts.stakingPools, 'allowance', [$eth.address, smartcontracts.dough]);
 
     // if address is first setup, or is changed...
     if (currentAddress !== $eth.address) {
@@ -279,7 +286,7 @@
                 class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                 >Insufficient Balance</button
               >
-            {:else if stakeAmount.bn.isGreaterThan($stakingData.accountDepositTokenAllowance)}
+            {:else if stakeAmount.bn.isGreaterThan($allowances[allowanceKey])}
               <button
                 disabled={isStaking || isApproving}
                 on:click={() => {
