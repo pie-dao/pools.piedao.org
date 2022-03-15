@@ -24,7 +24,7 @@ import { get } from 'svelte/store';
 export let sharesTimeLock = false;
 export let veDOUGH = false;
 export let merkleTreeDistributor = false;
-export const minLockAmount = 1;
+export const minLockAmount = 0;
 export const AVG_SECONDS_MONTH = 2628000;
 
 let ETH = null;
@@ -126,22 +126,18 @@ export function safeFlow(stakeAmount, stakeDuration, receiver, eth) {
   }
 
   if (!sharesTimeLock) {
-    displayNotification({ message: Errors.NOT_INITIALIZED.message, type: 'hint' });
     return Errors.NOT_INITIALIZED;
   }
 
   if (stakeAmount < minLockAmount) {
-    displayNotification({ message: 'Deposit amount too small', type: 'hint' });
-    return Errors.NOT_CONNECTED;
+    return Errors.TOO_SMALL;
   }
 
   if (!stakeDuration) {
-    displayNotification({ message: Errors.WRONG_DURATION.message, type: 'hint' });
     return Errors.WRONG_DURATION;
   }
 
   if (!isAddress(receiver)) {
-    displayNotification({ message: Errors.NOT_VALID_ADDRESS.message, type: 'hint' });
     return Errors.NOT_VALID_ADDRESS;
   }
 
@@ -199,8 +195,9 @@ export function initialize(eth) {
         observer.unsubscribe();
       }
 
-      observer = observable.subscribe({}); 
+      observer = observable.subscribe({});
 
+      console.log('Start _stakingData', _stakingData);
       resolve(_stakingData);
     } catch (error) {
       displayNotification({
@@ -208,6 +205,7 @@ export function initialize(eth) {
         type: 'error',
       });
 
+      console.log('error', error);
       reject(error);
     }
   });
@@ -611,6 +609,7 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
       });
 
       reject(error);
+      return;
     }
 
     try {
@@ -774,7 +773,7 @@ export function prepareProofs(eth) {
   /* eslint-enable consistent-return */
 }
 
-export function approveToken(eth) {
+export function approveToken(eth, shouldReset = false) {
   /* eslint-disable  no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
     if (!eth.address || !eth.signer) {
@@ -786,11 +785,9 @@ export function approveToken(eth) {
     }
 
     try {
-      // resetting the approve to zero, before initiating a new approval...
-      if (
-        !_stakingData.accountDepositTokenAllowance.isEqualTo(0)
-        && !_stakingData.accountDepositTokenAllowance.isEqualTo(ethers.constants.MaxUint256)
-      ) {
+      console.log('shouldReset', shouldReset)
+      if (shouldReset) {
+        // resetting the approve to zero, before initiating a new approval...
         await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);
       }
 

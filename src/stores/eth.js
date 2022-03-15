@@ -17,7 +17,7 @@ import { subject } from './eth/observables.js';
 import { trackEthBalance } from './eth/lifecycle.js';
 
 export { allowances, balances, eth, pools } from './eth/writables.js';
-export { balanceKey, functionKey } from './eth/keys.js';
+export { balanceKey, functionKey, getAllowanceKey } from './eth/keys.js';
 export { bumpLifecycle } from './eth/lifecycle.js';
 export { subject } from './eth/observables.js';
 
