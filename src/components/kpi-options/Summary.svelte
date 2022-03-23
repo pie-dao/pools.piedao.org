@@ -142,7 +142,7 @@
         }}>{isLoading ? 'Loading...' : hasClaimableOptions ? 'Claim' : 'Nothing to Claim'}</button
       >
       <button
-        disabled={false && (isLoading || !hasWkpiInWallet)}
+        disabled={isLoading || !hasWkpiInWallet}
         class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
         on:click={() => {
           stakedModal.open();
