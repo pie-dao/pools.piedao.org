@@ -1,4 +1,6 @@
 import { ethers } from 'ethers';
+import get from 'lodash/get';
+import BigNumber from 'bignumber.js';
 
 import { subject } from '../../stores/eth.js';
 import { fetchStakingStats, toNum } from '../../helpers/staking';
@@ -9,11 +11,60 @@ import smartcontracts from '../../config/smartcontracts.json';
 import WkpiJson from '../../config/rewards/wkpi.json';
 import wKpiABI from '../../abis/wKpiABI.json';
 import MerkleTreeDistributorABI from '../../abis/MerkleTreeDistributorABI.json';
-import { Interface } from '@ethersproject/abi';
-import abi from '@pie-dao/abis/src/abis/pieSmartPool';
 
+export const getMerkleTreeDistributorContract = ($eth) => new ethers.Contract(
+    smartcontracts.merkleTreeDistributor,
+    MerkleTreeDistributorABI,
+    $eth.signer || $eth.provider,
+);
 
-export const addToken = () => {
+export const getWkpiContract = ($eth) => new ethers.Contract(
+    smartcontracts.wkpi,
+    wKpiABI,
+    $eth.signer || $eth.provider,
+);
+
+export const getWkpiBalance = async ($eth) => {
+    try {
+        // move to multicall instantiation
+        const wKpiContract = getWkpiContract($eth);
+        const wKpiBalance = await wKpiContract.balanceOf($eth.address);
+        // return BigNumber(wKpiBalance);
+        return BigNumber('165400000000000000000');
+    } catch (err) {
+        console.warn('Error getting wKPI balance', err);
+    }
+}
+
+export const setWkpiData = async ($eth, kpiOptionsData, merkleTreeDistributor) => {
+    let isClaimed = false;
+
+    kpiOptionsData.wkpiBalance = await getWkpiBalance($eth);
+
+    let claimAddress = get(WkpiJson.claims, $eth.address);
+
+    if (claimAddress) {
+        isClaimed = await merkleTreeDistributor['isClaimed(uint256,uint256)'](
+            ethers.BigNumber.from(claimAddress.windowIndex),
+            ethers.BigNumber.from(claimAddress.accountIndex),
+        );
+    }
+
+    if (claimAddress && !isClaimed) {
+        kpiOptionsData.claimableKpiOptions = BigNumber(claimAddress.amount);
+    } else {
+        kpiOptionsData.claimableKpiOptions = BigNumber(0);
+    }
+
+    if (claimAddress) {
+        kpiOptionsData.estimatedKpiOptions = await calculateKpiOptions(
+            BigNumber(claimAddress.amount),
+            $eth.provider,
+        );
+    }
+}
+
+export const addKPIToken = () => {
     ethereum.sendAsync(
         {
             method: 'wallet_watchAsset',
@@ -28,7 +79,7 @@ export const addToken = () => {
             },
             id: Math.round(Math.random() * 100000),
         },
-        (err, added) => {
+        (_, added) => {
             if (added) {
                 displayNotification({
                     message: 'The wDOUGH-KPI token has been added to your Metamask!',
@@ -44,11 +95,6 @@ export const addToken = () => {
     );
 };
 
-
-/**
- * Conversion 1: wDOUGH-KPI -> DOUGH
- * Conversion 2: DOUGH -> veDOUGH
- */
 
 // call with $eth.provider
 export async function calculateKpiOptions(claimableKpiOptions, provider) {
@@ -77,7 +123,6 @@ export async function calculateKpiOptions(claimableKpiOptions, provider) {
 // call with $eth.address
 export function retrieveLeaf(address) {
     const participations = WkpiJson.claims;
-    return participations['0x0056D1fd2ca3c0F3A7B6ed6CDd1F1F104B4BF9A9'];
     return participations[ethers.utils.getAddress(address.toLowerCase())];
 }
 
@@ -104,11 +149,9 @@ export async function merkleTreeClaim(params) {
         $eth.signer || $eth.provider,
     );
     const account = ethers.utils.getAddress($eth.address.toLowerCase());
-    console.debug('here')
     await merkleTreeDistributor[
         "claim((uint256,uint256,uint256,address,bytes32[]))"
     ]({ account, ...rest });
-    console.debug('there')
 }
 
 export async function claim($eth, init) {
@@ -128,7 +171,6 @@ export async function claim($eth, init) {
             console.debug({ emitter });
 
             emitter.on('txConfirmed', async () => {
-                console.debug('CONFIRMED')
                 const subscription = subject('blockNumber').subscribe({
                     next: async () => {
                         displayNotification({
@@ -195,7 +237,7 @@ export async function redeem($eth, init, qty, months) {
 
         displayNotification({
             autoDismiss: 15000,
-            message: error.data.message,
+            message: error.data?.message ?? 'There was a problem staking your tokens',
             type: 'error',
         });
     }

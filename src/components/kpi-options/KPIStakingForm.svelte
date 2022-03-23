@@ -1,43 +1,24 @@
 <script>
-  import { eth, connectWeb3, balanceKey, balances } from '../../stores/eth.js';
+  import { eth, connectWeb3 } from '../../stores/eth.js';
   import { _ } from 'svelte-i18n';
   import images from '../../config/images.json';
-  import { formatToken, subscribeToBalance } from '../helpers.js';
-  import smartcontracts from '../../config/smartcontracts.json';
-  import { stakingDataIntervalRunning, stakingData } from '../../stores/eth/writables.js';
+  import { formatToken } from '../helpers.js';
   import BigNumber from 'bignumber.js';
-  import {
-    toBN,
-    approveToken,
-    fetchStakingStats,
-    toNum,
-    calculateVeDough,
-  } from '../../helpers/staking.js';
+  import { toBN, toNum, calculateVeDough } from '../../helpers/staking.js';
   import { onMount } from 'svelte';
   import * as kpiUtils from './kpiUtils';
 
   export let wkpi = BigNumber(0);
-  export let veDOUGH = 0;
+  export let stakingStats;
 
-  let stakedDough = 0;
-
-  onMount(async () => {
-    // fetching updated staking stats...
-    try {
-      const stakingStats = await fetchStakingStats($eth.provider, 1);
-      setMaximumStakingQuantity();
-      // taking the stakedDough amount from stats...
-      stakedDough = toNum(stakingStats.totalStakedDough);
-    } catch (err) {
-      console.warn('Could not fetch staking data');
-    }
-  });
+  export let init = () => {
+    console.warn('Called uninitialsed init function');
+  };
 
   $: stakeButtonText = 'Stake wDOUGH-KPI';
   $: isStaking = false;
-  $: approveButtonText = 'Approve';
   $: isApproving = false;
-  $: keyWkpiBalance = false;
+  $: veDOUGH = BigNumber(0);
 
   let stakeAmount = {
     label: '',
@@ -45,34 +26,19 @@
   };
   let stakeDuration = 36;
   let receiver;
-  let currentAddress = null;
   let stakedModal;
 
-  $: if ($eth.address) {
-    subscribeToBalance(smartcontracts.wkpi, $eth.address);
-    keyWkpiBalance = balanceKey(smartcontracts.wkpi, $eth.address);
-
-    // if address is first setup, or is changed...
-    if (currentAddress !== $eth.address) {
-      currentAddress = $eth.address;
-      receiver = $eth.address;
-      $stakingDataIntervalRunning = true;
-    }
-  }
+  onMount(() => {
+    setMaximumStakingQuantity();
+  });
 
   function setMaximumStakingQuantity() {
     stakeAmount.bn = wkpi;
     stakeAmount.label = toNum(wkpi, 4);
-    optionsToVeDough(stakeAmount.bn);
+    stakeToVeDough(stakeAmount.bn);
   }
 
-  function optionsToVeDough(claimableKpiOptions) {
-    /**
-     * We approximate veDOUGH based on how much the user has in their options pool.
-     * @dev some todos:
-     *  @todo: the stakedDOUGH variable is fetched on mount
-     *      We need to await it being pulled before the component will render
-     */
+  function stakeToVeDough(options) {
     const doughPayouts = [
       { threshold: 15000000, value: 0.5 },
       { threshold: 10000000, value: 0.2 },
@@ -80,12 +46,11 @@
     ];
 
     const payout = doughPayouts.find(
-      (_payout) => Number(stakedDough.toString()) >= _payout.threshold,
+      (_payout) => toNum(stakingStats.totalStakedDough) >= _payout.threshold,
     );
-    const kpiReward = claimableKpiOptions.times(payout?.value ?? 0);
+    const kpiReward = options.times(payout?.value ?? 0);
 
     const adjustedKpiRewards = calculateVeDough(kpiReward, stakeDuration);
-
     veDOUGH = toBN(adjustedKpiRewards);
   }
 </script>
@@ -104,11 +69,7 @@
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Amount to Stake</div>
         <div class="font-thin" style="display: inline; cursor: pointer;">
-          <div
-            on:click={() => {
-              setMaximumStakingQuantity();
-            }}
-          >
+          <div on:click={() => setMaximumStakingQuantity()}>
             Balance: {toNum(wkpi, 4)} wDOUGH-KPI
           </div>
         </div>
@@ -136,7 +97,7 @@
             // dev: watch for rounding errors, maybe bind to bn
             const _stakeAmount = toBN(stakeAmount.label);
             stakeAmount.bn = _stakeAmount;
-            optionsToVeDough(stakeAmount.bn);
+            stakeToVeDough(stakeAmount.bn);
           }}
         />
         <span class="sc-iybRtq gjVeBU">
@@ -176,14 +137,14 @@
             if (stakeDuration > 36) {
               stakeDuration = 36;
             }
-            optionsToVeDough(stakeAmount.bn);
+            stakeToVeDough(stakeAmount.bn);
           }}
         />
         <button
           disabled={isStaking || isApproving}
           on:click={() => {
             stakeDuration = 36;
-            optionsToVeDough(stakeAmount.bn);
+            stakeToVeDough(stakeAmount.bn);
           }}
           class="pointer flex items-center stakinggradient shake"
         >
@@ -283,7 +244,7 @@
                       label: '',
                       bn: BigNumber(0),
                     };
-                    optionsToVeDough(stakeAmount.bn);
+                    stakeToVeDough(stakeAmount.bn);
                   }, 5000);
                 })
                 .catch((error) => {
@@ -325,7 +286,5 @@
     >
       Add veDOUGH to MetaMask 🦊
     </button>
-    <!-- END STAKING FORM -->
   </div>
 </div>
-<!-- END STAKING FORM -->

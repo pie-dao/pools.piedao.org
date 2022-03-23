@@ -1,26 +1,22 @@
 <script>
   import { _ } from 'svelte-i18n';
+  import { onMount } from 'svelte';
   import { formatFiat } from '../../components/helpers.js';
-  import { toNum } from '../../helpers/staking.js';
+  import { toNum, fetchStakingStats } from '../../helpers/staking.js';
   import images from '../../config/images.json';
-  import smartcontracts from '../../config/smartcontracts.json';
   import { eth, connectWeb3 } from '../../stores/eth.js';
   import BigNumber from 'bignumber.js';
-  import { ethers } from 'ethers';
-  import MerkleTreeDistributorABI from '../../abis/MerkleTreeDistributorABI.json';
-  import wKpiABI from '../../abis/wKpiABI.json';
   import WkpiJson from '../../config/rewards/wkpi.json';
-  import get from 'lodash/get';
   import Modal from '../elements/Modal.svelte';
   import StakingForm from './KPIStakingForm.svelte';
   import * as kpiUtils from './kpiUtils';
 
   let merkleTreeDistributor;
-
-  let isLoadingTotal = true;
-  let isLoading = true;
   let currentAddress;
   let stakedModal;
+  let stakingStats;
+  let isLoadingTotal = true;
+  let isLoading = true;
 
   $: kpiOptionsData = {
     totalDistributedRewards: BigNumber(0),
@@ -44,54 +40,18 @@
   $: hasClaimableOptions = !kpiOptionsData.claimableKpiOptions.eq(0);
   $: hasWkpiInWallet = !kpiOptionsData.wkpiBalance.eq(0);
 
+  onMount(async () => {
+    try {
+      stakingStats = await fetchStakingStats($eth.provider, 1);
+    } catch (err) {
+      console.warn('Could not fetch staking data');
+    }
+  });
+
   async function init() {
     isLoading = true;
-
-    merkleTreeDistributor = new ethers.Contract(
-      smartcontracts.merkleTreeDistributor,
-      MerkleTreeDistributorABI,
-      $eth.signer || $eth.provider,
-    );
-
-    let claimAddress = get(WkpiJson.claims, $eth.address);
-
-    let isClaimed = false;
-
-    let wKpiContract = new ethers.Contract(
-      smartcontracts.wkpi,
-      wKpiABI,
-      $eth.signer || $eth.provider,
-    );
-
-    try {
-      // move to multicall instantiation
-      const wKpiBalance = await wKpiContract.balanceOf($eth.address);
-      // kpiOptionsData.wkpiBalance = wKpiBalance;
-      kpiOptionsData.wkpiBalance = BigNumber('165400000000000000000');
-      console.debug({ kpiOptionsData }, kpiOptionsData.wkpiBalance.eq(0));
-    } catch (err) {
-      console.warn('Error getting wKPI balance', err);
-    }
-
-    if (claimAddress) {
-      isClaimed = await merkleTreeDistributor['isClaimed(uint256,uint256)'](
-        ethers.BigNumber.from(claimAddress.windowIndex),
-        ethers.BigNumber.from(claimAddress.accountIndex),
-      );
-    }
-
-    if (claimAddress && !isClaimed) {
-      kpiOptionsData.claimableKpiOptions = BigNumber(claimAddress.amount);
-    } else {
-      kpiOptionsData.claimableKpiOptions = BigNumber(0);
-    }
-
-    if (claimAddress) {
-      kpiOptionsData.estimatedKpiOptions = await kpiUtils.calculateKpiOptions(
-        BigNumber(claimAddress.amount),
-        $eth.provider,
-      );
-    }
+    merkleTreeDistributor = kpiUtils.getMerkleTreeDistributorContract($eth);
+    await kpiUtils.setWkpiData($eth, kpiOptionsData, merkleTreeDistributor);
     isLoading = false;
   }
 </script>
@@ -175,18 +135,18 @@
   {#if $eth.address}
     <div class="flow flow-col">
       <button
-        disabled={false && (isLoading || !hasClaimableOptions)}
+        disabled={isLoading || !hasClaimableOptions}
         class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
         on:click={() => {
           kpiUtils.claim($eth, init);
-        }}>{hasClaimableOptions ? 'Claim' : 'Nothing to Claim'}</button
+        }}>{isLoading ? 'Loading...' : hasClaimableOptions ? 'Claim' : 'Nothing to Claim'}</button
       >
       <button
-        disabled={isLoading || !hasWkpiInWallet}
+        disabled={false && (isLoading || !hasWkpiInWallet)}
         class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
         on:click={() => {
           stakedModal.open();
-        }}>{hasWkpiInWallet ? 'Stake' : 'No wKPI Tokens'}</button
+        }}>{isLoading ? 'Loading...' : hasWkpiInWallet ? 'Stake' : 'No wKPI Tokens'}</button
       >
     </div>
   {:else}
@@ -197,13 +157,13 @@
     >
   {/if}
   <button
-    on:click={() => kpiUtils.addToken()}
+    on:click={() => kpiUtils.addKPIToken()}
     class="text-center pointer mx-auto object-bottom mb-4 mt-4 font-thin"
   >
     🦊 Add wDOUGH-KPI to MetaMask
   </button>
 
   <Modal backgroundColor="white" bind:this={stakedModal}>
-    <StakingForm slot="content" wkpi={kpiOptionsData.wkpiBalance} />
+    <StakingForm slot="content" wkpi={kpiOptionsData.wkpiBalance} {init} {stakingStats} />
   </Modal>
 </div>
