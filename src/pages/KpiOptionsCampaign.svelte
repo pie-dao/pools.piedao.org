@@ -58,7 +58,7 @@
       data-aos="fade-up"
       data-aos-delay="200"
     >
-      If 15M DOUGH are staked<br />by March 30th, 2022
+      If 15M DOUGH are staked<br />by March 31st, 2022
     </div>
   </div>
 </div>
@@ -417,9 +417,9 @@
   <div class="flex flex-col items-center w-full max-w-1100px pb-12 px-0 md:px-10">
     <div class="text-base text-center">
       <p class="my-4">
-        If we managed to hit the milestone of over 20% DOUGH staked in under a week by the efforts
-        of a handful of individuals, can you imagine where we can get by coordinated efforts for
-        several-thousand people community? Sky is the limit.
+        We managed to hit our initial milestone of over 20% DOUGH staked in under a WEEK, with only
+        a handful of individuals. Imagine where we can get to with the coordinated efforts of a
+        several-thousand-strong community? The sky is the limit.
       </p>
       <img class="h-150px inline mb-4" src={images.astronaut} alt="hourglass_rounded" />
     </div>
