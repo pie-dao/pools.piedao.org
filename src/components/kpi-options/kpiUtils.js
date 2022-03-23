@@ -29,8 +29,8 @@ export const getWkpiBalance = async ($eth) => {
         // move to multicall instantiation
         const wKpiContract = getWkpiContract($eth);
         const wKpiBalance = await wKpiContract.balanceOf($eth.address);
-        // return BigNumber(wKpiBalance);
-        return BigNumber('165400000000000000000');
+        return BigNumber(wKpiBalance);
+        // return BigNumber('165400000000000000000');
     } catch (err) {
         console.warn('Error getting wKPI balance', err);
     }
