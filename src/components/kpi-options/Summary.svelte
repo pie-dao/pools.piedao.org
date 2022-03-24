@@ -37,14 +37,14 @@
     }
   }
 
-  $: hasClaimableOptions = !kpiOptionsData.claimableKpiOptions.eq(0);
-  $: hasWkpiInWallet = !kpiOptionsData.wkpiBalance.eq(0);
-
   onMount(async () => {
     try {
+      isLoading = true;
       stakingStats = await fetchStakingStats($eth.provider, 1);
     } catch (err) {
       console.warn('Could not fetch staking data');
+    } finally {
+      isLoading = false;
     }
   });
 
@@ -111,7 +111,9 @@
 
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Your Estimated Payout</div>
+      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">
+        Your Estimated Payout (36m Stake)
+      </div>
     </div>
     <div class="flex flex-col md:flex-row nowrap items-center md:items-left p-1">
       <div class="flex flex-col md:flex-row w-full md:w-1/3">
@@ -132,21 +134,52 @@
     </div>
   </div>
 
+  <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
+    <div class="flex items-center justify-between">
+      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Your wDOUGH-KPI Balance</div>
+    </div>
+    <div class="flex flex-col md:flex-row nowrap items-center md:items-left p-1">
+      <div class="flex flex-col md:flex-row w-full md:w-1/3">
+        <span class="flex-col md:flex-row sc-iybRtq gjVeBU">
+          {#if isLoading && $eth.address}
+            <div class="md:mr-2">Loading...</div>
+          {:else}
+            <div class="font-24px">
+              {$eth.address ? formatFiat(toNum(kpiOptionsData.wkpiBalance), ',', '.', '') : 0}
+            </div>
+          {/if}
+          <img class="h-auto w-24px mx-5px" src={images.wkpi} alt="dough token" />
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">wDOUGH-KPI</span>
+        </span>
+      </div>
+    </div>
+  </div>
+
   {#if $eth.address}
     <div class="flow flow-col">
       <button
-        disabled={isLoading || !hasClaimableOptions}
+        disabled={isLoading || kpiOptionsData?.claimableKpiOptions.eq(0)}
         class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
         on:click={() => {
           kpiUtils.claim($eth, init);
-        }}>{isLoading ? 'Loading...' : hasClaimableOptions ? 'Claim' : 'Nothing to Claim'}</button
+        }}
+        >{isLoading
+          ? 'Loading...'
+          : !kpiOptionsData?.claimableKpiOptions.eq(0)
+          ? 'Claim'
+          : 'Nothing to Claim'}</button
       >
       <button
-        disabled={isLoading || !hasWkpiInWallet}
+        disabled={isLoading || kpiOptionsData?.wkpiBalance.eq(0) || !stakingStats?.totalStakedDough}
         class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
         on:click={() => {
           stakedModal.open();
-        }}>{isLoading ? 'Loading...' : hasWkpiInWallet ? 'Stake' : 'No wKPI Tokens'}</button
+        }}
+        >{isLoading || !stakingStats?.totalStakedDough
+          ? 'Loading...'
+          : !kpiOptionsData?.wkpiBalance.eq(0)
+          ? 'Stake'
+          : 'No wKPI Tokens'}</button
       >
     </div>
   {:else}

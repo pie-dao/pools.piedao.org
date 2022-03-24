@@ -215,7 +215,7 @@
           >
         {:else if stakeDuration && stakeDuration > 5 && stakeDuration < 37}
           <button
-            disabled={!receiver || isStaking || isApproving}
+            disabled={isStaking || isApproving}
             on:click={() => {
               stakeButtonText = 'Staking';
               isStaking = true;
@@ -228,6 +228,7 @@
                   stakeButtonText = 'Staking';
                 }
               }, 1000);
+              console.debug({ stakeDuration });
               kpiUtils
                 .redeem($eth, init, stakeAmount.bn.toFixed(), stakeDuration)
                 .then((updated_data) => {

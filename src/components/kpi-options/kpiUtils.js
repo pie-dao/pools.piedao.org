@@ -29,8 +29,7 @@ export const getWkpiBalance = async ($eth) => {
         // move to multicall instantiation
         const wKpiContract = getWkpiContract($eth);
         const wKpiBalance = await wKpiContract.balanceOf($eth.address);
-        return BigNumber(wKpiBalance);
-        // return BigNumber('165400000000000000000');
+        return BigNumber(wKpiBalance.toString());
     } catch (err) {
         console.warn('Error getting wKPI balance', err);
     }
@@ -154,21 +153,22 @@ export async function merkleTreeClaim(params) {
     ]({ account, ...rest });
 }
 
-export async function claim($eth, init) {
+export async function claim($eth, onSuccess) {
     const proof = prepareProofs($eth.address);
+    const merkleTreeDistributor = getMerkleTreeDistributorContract($eth);
     try {
+
         if (proof.leaf) {
             const params = {
                 windowIndex: proof.leaf.windowIndex,
                 amount: ethers.BigNumber.from(proof.leaf.amount),
                 accountIndex: proof.leaf.accountIndex,
-                merkleProof: proof.leaf.proof,
-                $eth
-            }
+                account: ethers.utils.getAddress($eth.address.toLowerCase()),
+                merkleProof: proof.leaf.proof
+            };
             const { emitter } = displayNotification(
-                await merkleTreeClaim(params),
+                await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
             );
-            console.debug({ emitter });
 
             emitter.on('txConfirmed', async () => {
                 const subscription = subject('blockNumber').subscribe({
@@ -180,9 +180,8 @@ export async function claim($eth, init) {
                         });
 
                         subscription.unsubscribe();
-
                         // update the kpiOptionsData object...
-                        init();
+                        onSuccess();
                     },
                 });
             });
@@ -195,7 +194,6 @@ export async function claim($eth, init) {
         }
     } catch (error) {
         console.error(error);
-
         displayNotification({
             autoDismiss: 15000,
             message: error.data?.message ?? 'An error ocurred while trying to claim your options',
@@ -204,7 +202,7 @@ export async function claim($eth, init) {
     }
 }
 
-export async function redeem($eth, init, qty, months) {
+export async function redeem($eth, onSuccess, qty, months) {
     try {
         let wKpiContract = new ethers.Contract(
             smartcontracts.wkpi,
@@ -213,7 +211,10 @@ export async function redeem($eth, init, qty, months) {
         );
 
         const { emitter } = displayNotification(
-            await wKpiContract.settleAndStake(qty, months),
+            await wKpiContract.settleAndStake(
+                ethers.BigNumber.from(qty),
+                months
+            ),
         );
 
         emitter.on('txConfirmed', async () => {
@@ -224,17 +225,14 @@ export async function redeem($eth, init, qty, months) {
                         message: 'WKPI-DOUGH has been redeemed!',
                         type: 'success',
                     });
-
                     subscription.unsubscribe();
-
                     // update the kpiOptionsData object...
-                    init();
+                    onSuccess();
                 },
             });
         });
     } catch (error) {
         console.error(error);
-
         displayNotification({
             autoDismiss: 15000,
             message: error.data?.message ?? 'There was a problem staking your tokens',
