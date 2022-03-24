@@ -111,9 +111,7 @@
 
   <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">
-        Your Estimated Payout (36m Stake)
-      </div>
+      <div class="flex-1 md:flex nowrap intems-center p-1 font-thin">Your Estimated Payout</div>
     </div>
     <div class="flex flex-col md:flex-row nowrap items-center md:items-left p-1">
       <div class="flex flex-col md:flex-row w-full md:w-1/3">
@@ -128,7 +126,7 @@
             </div>
           {/if}
           <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
-          <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
+          <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH | 36 months staked</span>
         </span>
       </div>
     </div>
