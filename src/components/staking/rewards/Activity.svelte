@@ -3,12 +3,11 @@
   import { formatFiat } from '../../../components/helpers.js';
   import { toNum } from '../../../helpers/staking.js';
   import images from '../../../config/images.json';
-  import epochsJSON from '../../../config/epochs.json';
   import BigNumber from 'bignumber.js';
 
-  export let timestamp;
+  export let epoch;
+  export let rewardsAmount;
   let currentAddress;
-  let epoch;
   let currentAccount;
   let votingPower;
   let accountWithdrawnRewards;
@@ -18,27 +17,25 @@
     if (currentAddress !== $eth.address) {
       currentAddress = $eth.address;
 
-      // TODO: this should be changed, fetch the epochs from backend
-      epoch = epochsJSON.epochs.find(
-        (epoch) => epoch.startDate <= timestamp && epoch.endDate >= timestamp,
+      let currentAccountIndex = Object.keys(epoch.merkleTree.claims).find((address) =>
+        address.toLowerCase() == $eth.address.toLowerCase()
       );
 
-      currentAccount = epoch.merkleTree.leafs.find((leaf) => leaf.staker.id == $eth.address);
+      currentAccount = epoch.merkleTree.claims[currentAccountIndex];
 
       if(currentAccount) {
         currentAccount.participant = epoch.participants.find(
-          (participant) => participant.address == $eth.address,
+          (participant) => participant.address.toLowerCase() == $eth.address.toLowerCase()
         );  
         
-        let accountVeTokenBalance = new BigNumber(currentAccount.staker.accountVeTokenBalance);
+        let accountVeTokenBalance = new BigNumber(currentAccount.metaData.staker.accountVeTokenBalance);
         let veTokenTotalSupply = new BigNumber(epoch.stakingStats.veTokenTotalSupply);
-        votingPower = accountVeTokenBalance.times(100).div(veTokenTotalSupply).toFixed(2);
+        votingPower = accountVeTokenBalance.times(100).div(veTokenTotalSupply).toFixed(3);
 
-        accountWithdrawnRewards = new BigNumber(currentAccount.staker.accountWithdrawnRewards);
-        accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.usd);        
+        accountWithdrawnRewards = new BigNumber(rewardsAmount);
+        accountWithdrawnRewards = accountWithdrawnRewards.times(epoch.slice.nav);    
+        console.log(currentAccount.metaData.staker, epoch.slice.nav);    
       }
-
-      console.log("account has changed, currentAccount is now", currentAccount);
     }
   }
 </script>
@@ -73,7 +70,7 @@
             </div>
             <div class="flex flex-col items-right">
               <div class="">
-                {underlying.amount}
+                {formatFiat(toNum(underlying.amount), ',', '.', '')}
               </div>
             </div>
           </div>
@@ -87,7 +84,7 @@
           </div>
           <div class="flex flex-col items-right">
             <div class="">
-              {formatFiat(toNum(currentAccount.staker.accountVeTokenBalance), ',', '.', '')}
+              {formatFiat(toNum(currentAccount.metaData.staker.accountVeTokenBalance), ',', '.', '')}
             </div>
           </div>
         </div>
