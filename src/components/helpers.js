@@ -498,6 +498,7 @@ export const subscribeToAllowance = async (token, address, spender) => {
   allowanceSubscriptions.add(key);
 
   const tokenContract = await contract({ address: token });
+  
   const trackable = tokenContract.functions.allowance(...args);
   const observable = await trackable.track();
   const decimals = await tokenContract.decimals();

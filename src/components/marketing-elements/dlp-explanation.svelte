@@ -43,7 +43,7 @@
       <br/><br/>
       PieVaults allow for interaction with smart-contracts, allowing the assets to be used productively across DeFi and generate passive income.
       <br/><br/>
-      Just like other PieVaults YPIE, PLAY and USD++, DeFi+L will enable meta-governance, with DOUGH holders able to vote using the underlying assets in their respective protocol decisions.
+      Just like other PieVaults YPIE and PLAY, DeFi+L will enable meta-governance, with DOUGH holders able to vote using the underlying assets in their respective protocol decisions.
       <br/><br/>
       It’s also possible to stake DEFI+L in our DEFI+L / ETH pool. Users are able to provide liquidity in return for a steady stream of DOUGH. This pool enables an efficient market for other users to easily swap in and out of the DEFI+L token.
   </div>

@@ -217,7 +217,7 @@
               </div>
             </div>
             <div class="text-center font-thin w-100pc mt-4 hover:opacity-60">
-              <a href="#/lp-legacy-farm">Cannot find your pool? <strong>Go to old farms!</strong></a>
+              <a href="https://legacy.piedao.org/#/lp-legacy-farm">Cannot find your pool? <strong>Go to old farms!</strong></a>
             </div>
             <div class="text-center font-thin w-100pc mt-4 hover:opacity-60">
               <a href="https://vfat.tools/piedao/" target="_blank">Looking for APR? <strong>Go to 👨‍🌾 vfat.tools!</strong></a>

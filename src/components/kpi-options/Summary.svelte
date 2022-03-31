@@ -129,7 +129,7 @@
           <img class="h-auto w-24px mx-5px" src={images.veDough} alt="dough token" />
           <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH | 36 months staked</span>
         </span>
-      </div>
+      </div>     
     </div>
   </div>
 

@@ -1,8 +1,8 @@
 <script>
-  import { eth, connectWeb3, balances, balanceKey } from '../stores/eth.js';
+  import { eth, connectWeb3, balances, allowances, balanceKey, getAllowanceKey } from '../stores/eth.js';
   import { _ } from 'svelte-i18n';
   import images from '../config/images.json';
-  import { formatToken, subscribeToBalance } from '../components/helpers.js';
+  import { formatToken, subscribeToBalance, subscribeToAllowance } from '../components/helpers.js';
   import { onDestroy } from 'svelte';
   import smartcontracts from '../config/smartcontracts.json';
   import displayNotification from '../notifications';
@@ -17,18 +17,21 @@
   import StakedModal from '../components/elements/StakedModal.svelte';
 
   let veDOUGH = 0;
+  let allowanceKey;
 
   $: stakeButtonText = 'Stake DOUGH';
   $: isStaking = false;
   $: approveButtonText = 'Approve';
   $: isApproving = false;
   $: keyDoughBalance = false;
+
   $: getDoughBalance = (() => {
     if (!keyDoughBalance) return BigNumber(0);
     // saving the real-time value of dough amount into $stakingData object, so we can use it in other components/modals...
     $stakingData.accountDepositTokenBalance = $balances[keyDoughBalance]
       ? BigNumber($balances[keyDoughBalance].toString())
       : BigNumber(0);
+
     return $stakingData.accountDepositTokenBalance;
   })();
   let stakeAmount = {
@@ -42,7 +45,10 @@
 
   $: if ($eth.address) {
     subscribeToBalance(smartcontracts.dough, $eth.address);
+    subscribeToAllowance(smartcontracts.dough, $eth.address, smartcontracts.doughStaking);
+
     keyDoughBalance = balanceKey(smartcontracts.dough, $eth.address);
+    allowanceKey = getAllowanceKey(smartcontracts.dough, smartcontracts.doughStaking, $eth.address);
 
     // if address is first setup, or is changed...
     if (currentAddress !== $eth.address) {
@@ -87,6 +93,7 @@
     veDOUGH = calculateVeDough(toBN(stakeAmount.bn.toString()), stakeDuration);
     veDOUGH = formatToken(veDOUGH, '.', 4);
   }
+
 </script>
 
 <StakedModal bind:this={stakedModal} />
@@ -279,7 +286,8 @@
                 class="btn clear stake-button rounded-20px py-15px px-22px mt-6 border-white"
                 >Insufficient Balance</button
               >
-            {:else if stakeAmount.bn.isGreaterThan($stakingData.accountDepositTokenAllowance)}
+            {:else if stakeAmount.bn.isGreaterThan($allowances[allowanceKey])}
+              
               <button
                 disabled={isStaking || isApproving}
                 on:click={() => {
@@ -296,9 +304,16 @@
                     }
                   }, 1000);
 
-                  approveToken($eth)
+                  let shouldResetAllowance = false;
+                  if(stakeAmount.bn.isGreaterThan($allowances[allowanceKey]) && $allowances[allowanceKey].isGreaterThan(0)) {
+                    shouldResetAllowance = true;
+                  }
+
+                  console.log('shouldResetAllowance', shouldResetAllowance)
+
+                  approveToken($eth, shouldResetAllowance)
                     .then((updated_data) => {
-                      console.log('approved', updated_data);
+                      console.log('updated_data', updated_data);
                       clearInterval(interval);
                       approveButtonText = 'Approve';
                       isApproving = false;
@@ -334,7 +349,12 @@
                   stakeDOUGH(stakeAmount.bn, stakeDuration, receiver, $eth)
                     .then((updated_data) => {
                       console.log('staked', updated_data);
-                      stakedModal.showModal(stakeAmount.label, stakeDuration);
+
+                      try {
+                        stakedModal.showModal(stakeAmount.label, stakeDuration);
+                      } catch (e) {
+                        console.log('Modal failed', e);
+                      }
 
                       clearInterval(interval);
                       stakeButtonText = 'Success! 🥳';

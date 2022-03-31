@@ -40,6 +40,7 @@ export const stakingData = writable({
   accountWithdrawableRewards: BigNumber(0),
   accountWithdrawnRewards: BigNumber(0),
   accountDepositTokenBalance: BigNumber(0),
+  accountDepositTokenAllowance: BigNumber(0),
   accountLocks: [],
   rewards: [],
   votes: null,

@@ -18,3 +18,8 @@ export const functionKey = (contractAddress, functionName, functionArgs, overrid
   validateIsPOJO(overrides);
   return btoa(JSON.stringify([contractAddress, functionName, functionArgs, overrides]));
 };
+
+export const getAllowanceKey = (token, spender, address) => {
+  const args = [address, spender];
+  return functionKey(token, 'allowance', args);
+};
