@@ -10,6 +10,7 @@
   import Modal from '../elements/Modal.svelte';
   import StakingForm from './KPIStakingForm.svelte';
   import * as kpiUtils from './kpiUtils';
+  import { isApril3rd } from './timelock'
 
   let merkleTreeDistributor;
   let currentAddress;
@@ -151,8 +152,7 @@
         </span>
       </div>
     </div>
-  </div>
-
+  </div>  
   {#if $eth.address}
     <div class="flow flow-col">
       <button
@@ -167,18 +167,22 @@
           ? 'Claim'
           : 'Nothing to Claim'}</button
       >
+      {#if isApril3rd()}
       <button
         disabled={isLoading || kpiOptionsData?.wkpiBalance.eq(0) || !stakingStats?.totalStakedDough}
         class="pointer btn stake-button rounded-20px py-15px px-22px mt-6"
         on:click={() => {
           stakedModal.open();
         }}
-        >{isLoading || !stakingStats?.totalStakedDough
-          ? 'Loading...'
-          : !kpiOptionsData?.wkpiBalance.eq(0)
-          ? 'Stake'
-          : 'No wKPI Tokens'}</button
+        >{
+            (isLoading || !stakingStats?.totalStakedDough)
+            ? 'Loading...'
+            : !kpiOptionsData?.wkpiBalance.eq(0)
+            ? 'Stake'
+            : 'No wKPI Tokens'
+          }</button
       >
+      {/if}
     </div>
   {:else}
     <button
@@ -197,4 +201,5 @@
   <Modal backgroundColor="white" bind:this={stakedModal}>
     <StakingForm slot="content" wkpi={kpiOptionsData.wkpiBalance} {init} {stakingStats} />
   </Modal>
+
 </div>
