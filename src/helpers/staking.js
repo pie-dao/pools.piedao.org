@@ -497,8 +497,6 @@ export const fetchStakingData = async (eth) => {
   _stakingData.address = eth.address;
   _stakingData.hasLoaded = true;
   
-  // TODO: remove me before go live.
-  _stakingData.accountWithdrawableRewards = new BigNumber(10000000000000000000);
   stakingData.set(_stakingData);
   console.log('fetchStakingData', _stakingData);
   
