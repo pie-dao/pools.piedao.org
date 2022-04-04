@@ -57,7 +57,7 @@
     >
       Congratulations!<br />
       <br/>Everyone that staked DOUGH during October 2021 is eligible.
-      <br/>Redeem the KPI options distributed in November starting on April 3, 2022.
+      <br/>Redeem the KPI options distributed in November starting on April 5, 2022.
       <br/>Check your balance below and claim your veDOUGH!
     </div>
   </div>
