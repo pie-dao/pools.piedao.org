@@ -4,11 +4,12 @@
   import images from '../../config/images.json';
   import { formatToken } from '../helpers.js';
   import BigNumber from 'bignumber.js';
-  import { toBN, toNum, calculateVeDough } from '../../helpers/staking.js';
+  import { toBN, toNum, calculateVeDough, fetchStakingStats } from '../../helpers/staking.js';
   import { onMount } from 'svelte';
   import * as kpiUtils from './kpiUtils';
+  import StakedModal from '../../components/elements/StakedModal.svelte';
 
-  export let wkpi = BigNumber(0);
+  export let wkpi
   export let stakingStats;
 
   export let init = () => {
@@ -27,6 +28,7 @@
   let stakeDuration = 36;
   let receiver;
   let stakedModal;
+  let successModal;
 
   onMount(() => {
     setMaximumStakingQuantity();
@@ -54,6 +56,9 @@
     veDOUGH = toBN(adjustedKpiRewards);
   }
 </script>
+
+<StakedModal bind:this={successModal} />
+
 
 <!-- STAKING FORM -->
 <div class="flex flex-col w-full m-0">
@@ -94,7 +99,6 @@
             stakeAmount.label = formatToken(stakeAmount.label, '.', 18);
           }}
           on:keyup={async () => {
-            // dev: watch for rounding errors, maybe bind to bn
             const _stakeAmount = toBN(stakeAmount.label);
             stakeAmount.bn = _stakeAmount;
             stakeToVeDough(stakeAmount.bn);
@@ -162,7 +166,7 @@
 
     <div
       style="display:none"
-      class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from border rounded-20px border-grey p-16px mt-4"
+      class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from border rounded-20px border-grey p-16px"
     >
       <div class="flex items-center justify-between">
         <div class="flex nowrap intems-center p-1 font-thin">Receiver</div>
@@ -228,25 +232,24 @@
                   stakeButtonText = 'Staking';
                 }
               }, 1000);
-              console.debug({ stakeDuration });
               kpiUtils
                 .redeem($eth, init, stakeAmount.bn.toFixed(), stakeDuration)
                 .then((updated_data) => {
                   console.log('staked', updated_data);
-                  stakedModal.showModal(stakeAmount.label, stakeDuration);
 
+                  if (updated_data) wkpi = wkpi.minus(BigNumber(stakeAmount.bn))
                   clearInterval(interval);
-                  stakeButtonText = 'Success! 🥳';
 
                   setTimeout(() => {
                     stakeButtonText = 'Stake wDOUGH-KPI';
                     isStaking = false;
                     stakeAmount = {
-                      label: '',
+                      label: '0',
                       bn: BigNumber(0),
                     };
                     stakeToVeDough(stakeAmount.bn);
                   }, 5000);
+
                 })
                 .catch((error) => {
                   console.error(error);
