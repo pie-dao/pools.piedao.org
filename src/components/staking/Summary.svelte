@@ -137,7 +137,7 @@
         }
       }, 1000);
 
-      compound($eth).then(response => {
+      compound($eth, $stakingData.accountWithdrawableRewards.toString()).then(response => {
           clearInterval(interval);
           buttonText = "Compounded!";
           isCompounding = false;
@@ -225,17 +225,17 @@
         </div>
     </div>
     <div class="flex flex-col nowrap w-92pc mx-4pc mt-4 swap-from rounded-20px bg-white p-16px">
-    <div class="flex items-left md:items-center justify-between flex-col md:flex-row">
-      <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
-      {#if $eth.address}
+    <div class="flex items-center justify-between">
+        <div class="flex nowrap intems-center p-1 font-thin">Claimable Rewards</div>
+        {#if $eth.address}
         <div on:click={() => openModal('staking.claim.vote.' + voteKeyword)} class={"flex nowrap intems-center p-1 pointer text-xs " + votingClass}>
             {#if votingInfos}
                 <img class="summary-icon" src={images[votingImage]} alt=""/>
             {/if}
             <span>{votingInfos}</span>
         </div>
-      {/if}
-    </div>
+    {/if}
+</div>
 <div class="flex flex-col md:flex-row nowrap items-center p-1">
     <div class="flex w-full flex-row">
         <span class="sc-iybRtq gjVeBU">

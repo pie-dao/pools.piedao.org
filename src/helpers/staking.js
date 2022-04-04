@@ -497,6 +497,8 @@ export const fetchStakingData = async (eth) => {
   _stakingData.address = eth.address;
   _stakingData.hasLoaded = true;
   
+  // TODO: remove me before go live.
+  _stakingData.accountWithdrawableRewards = new BigNumber(10000000000000000000);
   stakingData.set(_stakingData);
   console.log('fetchStakingData', _stakingData);
   
@@ -649,23 +651,19 @@ export function stakeDOUGH(stakeAmount, stakeDuration, receiver, eth) {
   /* eslint-enable  no-async-promise-executor */
 }
 
-export async function compound(eth) {
+export async function compound(eth, slice) {
   /* eslint-disable  no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
-    try {
-      await claim(eth);
+    let contract = new ethers.Contract(
+      smartcontracts.reward,
+      ERC20,
+      eth.signer || eth.provider,
+    );
 
-      let contract = new ethers.Contract(
-        smartcontracts.reward,
-        ERC20,
-        eth.signer || eth.provider,
-      );
-  
-      let leaf = retrieveLeaf(eth.address);
-  
-      let treasury = "0x3bCF3Db69897125Aa61496Fc8a8B55A5e3f245d5";
-      let sliceAmount = ethers.BigNumber.from(leaf.amount);
-      
+    let treasury = "0x3bCF3Db69897125Aa61496Fc8a8B55A5e3f245d5";
+    let sliceAmount = ethers.utils.parseUnits(slice, 18);
+
+    try {
       const { emitter } = displayNotification(
         await contract.transfer(treasury, sliceAmount)
       );
