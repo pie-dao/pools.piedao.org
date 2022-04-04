@@ -222,7 +222,7 @@ export async function redeem($eth, onSuccess, qty, months) {
                 next: async () => {
                     displayNotification({
                         autoDismiss: 15000,
-                        message: 'WKPI-DOUGH has been redeemed!',
+                        message: 'wKPI-DOUGH has been redeemed for veDOUGH!',
                         type: 'success',
                     });
                     subscription.unsubscribe();
@@ -231,6 +231,7 @@ export async function redeem($eth, onSuccess, qty, months) {
                 },
             });
         });
+        return qty
     } catch (error) {
         console.error(error);
         displayNotification({
