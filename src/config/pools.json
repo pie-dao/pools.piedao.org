@@ -5,7 +5,6 @@
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-    "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
     
     
@@ -16,7 +15,6 @@
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-    "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
@@ -53,54 +51,6 @@
       {"symbol":"AUDIO","coingeckoId":"audius","address":"0x18aaa7115705e8be94bffebde57af9bfc265b998", "coingeckoImageId": ""},
       {"symbol":"GALA","coingeckoId":"gala","address":"0x15D4c048F83bd7e37d49eA4C83a07267Ec4203dA", "coingeckoImageId": "", "decimals": 8},
       {"symbol":"YGG","coingeckoId":"yield-guild-games","address":"0x25f8087ead173b73d6e8b84329989a8eea16cf73", "coingeckoImageId": ""}
-    ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
-  },
-  "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd": {
-    "symbol": "BTC++",
-    "isExperipie": false,
-    "name": "Bitcoin Index Pie",
-    "useMintOverBuy": true,
-    "buyButton": true,
-    "useRecipe": false,
-    "swapEnabled": false,
-    "swapFees": "0.2",
-    "streamingFees": "0",
-    "coingeckoId": "piedao-btc",
-    "composition": [
-      {
-        "address": "0x3212b29E33587A00FB1C83346f5dBFA69A458923",
-        "buyLink": "https://tokenlon.im",
-        "color": "#58a4fc",
-        "percentage": 25,
-        "symbol": "imBTC",
-        "coingeckoId": "the-tokenized-bitcoin",
-        "coingeckoImageId": 10702
-      },
-      {
-        "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
-        "color": "#fd6761",
-        "percentage": 25,
-        "symbol": "WBTC",
-        "coingeckoId": "wrapped-bitcoin",
-        "coingeckoImageId": 7598
-      },
-      {
-        "address": "0x5228a22e72ccC52d415EcFd199F99D0665E7733b",
-        "color": "#6beab1",
-        "percentage": 25,
-        "symbol": "pBTC",
-        "coingeckoId": "ptokens-btc",
-        "coingeckoImageId": 10805
-      },
-      {
-        "address": "0xfE18be6b3Bd88A2D2A7f928d00292E7a9963CfC6",
-        "color": "#c4ccce",
-        "percentage": 25,
-        "symbol": "sBTC",
-        "coingeckoId": "sbtc",
-        "coingeckoImageId": 8838
-      }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
   },

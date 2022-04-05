@@ -30,8 +30,6 @@ let pies = [
   '0x78f225869c08d478c34e5f645d07a87d3fe8eb78',
   // DEFI++
   '0x8D1ce361eb68e9E05573443C407D4A3Bed23B033',
-  // BTC++
-  '0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd',
   // BCP
   '0xe4f726adc8e89c6a6017f01eada77865db22da14',
   '0x17525e4f4af59fbc29551bc4ece6ab60ed49ce31',
