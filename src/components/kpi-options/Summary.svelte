@@ -199,7 +199,7 @@
   </button>
 
   <Modal backgroundColor="white" bind:this={stakedModal}>
-    <StakingForm slot="content" wkpi={kpiOptionsData.wkpiBalance} {init} {stakingStats} />
+    <StakingForm slot="content" bind:wkpi={kpiOptionsData.wkpiBalance} {init} {stakingStats} />
   </Modal>
 
 </div>
