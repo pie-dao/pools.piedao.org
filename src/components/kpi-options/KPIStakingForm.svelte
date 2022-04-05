@@ -41,17 +41,7 @@
   }
 
   function stakeToVeDough(options) {
-    const doughPayouts = [
-      { threshold: 15000000, value: 0.5 },
-      { threshold: 10000000, value: 0.2 },
-      { threshold: 7500000, value: 0.1 },
-    ];
-
-    const payout = doughPayouts.find(
-      (_payout) => toNum(stakingStats.totalStakedDough) >= _payout.threshold,
-    );
-    const kpiReward = options.times(payout?.value ?? 0);
-
+    const kpiReward = options.times(0.2);
     const adjustedKpiRewards = calculateVeDough(kpiReward, stakeDuration);
     veDOUGH = toBN(adjustedKpiRewards);
   }
