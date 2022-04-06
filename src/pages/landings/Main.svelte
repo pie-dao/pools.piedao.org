@@ -274,7 +274,6 @@
     {/each}
 
     {#each pies as pie}
-      {#if pie.address !== '0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd'}
         <div
           class="min-w-80pc md:min-w-30pc md:w-30pc md:mx-3 mr-4 my-2 md:my-3 rounded-xl flex pointer scale cardbordergradient"
         >
@@ -316,7 +315,6 @@
             </div></a
           >
         </div>
-      {/if}
     {/each}
 
     <div class="block inline-block md:hidden" style="margin-right:2rem!important;">&nbsp;</div>
