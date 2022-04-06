@@ -57,8 +57,7 @@ export const setWkpiData = async ($eth, kpiOptionsData, merkleTreeDistributor) =
 
     if (claimAddress) {
         kpiOptionsData.estimatedKpiOptions = await calculateKpiOptions(
-            BigNumber(claimAddress.amount),
-            $eth.provider,
+            BigNumber(claimAddress.amount)
         );
     }
 }
@@ -95,26 +94,8 @@ export const addKPIToken = () => {
 };
 
 
-// call with $eth.provider
-export async function calculateKpiOptions(claimableKpiOptions, provider) {
-    const doughPayouts = [
-        { threshold: 15000000, value: 0.5 },
-        { threshold: 10000000, value: 0.2 },
-        { threshold: 7500000, value: 0.1 },
-    ];
-
-    // fetching updated staking stats...
-    const stakingStats = await fetchStakingStats(provider, 1);
-    // taking the stakedDough amount from stats...
-    const stakedDough = toNum(stakingStats.totalStakedDough);
-    // finding the payout by its threshold...
-    const payout = doughPayouts.find(
-        (_payout) => Number(stakedDough.toString()) >= _payout.threshold,
-    );
-    // finally multiplying the claimableKpiOptions by the payout value...
-    const kpiReward = claimableKpiOptions.times(payout.value);
-    // and returning the calculated kpiReward for current address...
-
+export async function calculateKpiOptions(claimableKpiOptions) {
+    const kpiReward = claimableKpiOptions.times(0.2);
     // this assumes a 36m commitment
     return kpiReward;
 }
@@ -222,7 +203,7 @@ export async function redeem($eth, onSuccess, qty, months) {
                 next: async () => {
                     displayNotification({
                         autoDismiss: 15000,
-                        message: 'WKPI-DOUGH has been redeemed!',
+                        message: 'WKPI-DOUGH has been redeemed for veDOUGH!',
                         type: 'success',
                     });
                     subscription.unsubscribe();
@@ -231,6 +212,7 @@ export async function redeem($eth, onSuccess, qty, months) {
                 },
             });
         });
+        return qty
     } catch (error) {
         console.error(error);
         displayNotification({
