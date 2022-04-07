@@ -7,8 +7,6 @@
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x0327112423f3a68efdf1fcf402f6c5cb9f7c33fd",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
-    
-    
   ],
   "selectable": [
     "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4",
@@ -37,7 +35,7 @@
     "isExperipie": true,
     "name": "Metaverse NFT Index",
     "description": "Complete exposure to the Metaverse and NFTs. In collab with NFTX",
-    "useMintOverBuy": true,
+    "useMintOverBuy": false,
     "buyButton": true,
     "useRecipe": true,
     "swapEnabled": false,
