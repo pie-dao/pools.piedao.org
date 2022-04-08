@@ -23,6 +23,7 @@
 
     const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
 
+
     $: marketPrice = get($piesMarketDataStore, `${buyToken.address.toLowerCase()}.market_data.current_price`, 0);
 
     $: price = parseFloat(get($piesMarketDataStore, `${sellToken.address}.market_data.current_price`, 0))

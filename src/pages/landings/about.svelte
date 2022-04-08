@@ -1,9 +1,3 @@
-<script>
-  import images from "../../config/images.json";
-  import SectionImageRight from "../../components/elements/SectionImageRight.svelte"
-  import SectionImageLeft from "../../components/elements/SectionImageLeft.svelte"
-</script>
-
 <section class="mt-5 px-4 text-center">
   <div class="w-full max-w-2xl mx-auto">
     <h2 class="text-xl mt-2 mb-6 leading-tight font-heading">Tokenized ETFs governed by a DAO</h2>
@@ -35,7 +29,7 @@
     <div class="font-thin mt-4">
         Indices are baskets of tokens allowing a user to easily gain exposure to a broad range of assets with just one transaction. Alongside convenience our DeFi index offerings provide risk-minimised exposure to the rapidly expanding decentralized finance ecosystem. Holding a diverse basket of assets reduces your exposure to any single underperforming token and minimises the damage of potential black swan events.
         <br/><br/>
-        We don’t just provide DeFi products. Our BTC and USD indices contain multiple different tokens, enabling users to gain safe exposure to these assets without relying on any one service provider. Holders of these pies will experience minimal loss in the event that any one token loses its peg.
+        We don’t just provide DeFi products. Our indices contain multiple different tokens, enabling users to gain safe exposure to these assets without relying on any one service provider. Holders of these pies will experience minimal loss in the event that any one token loses its peg.
         <br/><br/>
         As well as safety, there are also huge opportunities for those who chose to get involved. Many of our pies can be staked, a process where holders provide liquidity in exchange for a steady stream of rewards.
     </div>
