@@ -18,6 +18,7 @@
     export let sellToken;
     export let buyToken;
     export let close;
+    export let includeMarket = true;
 
     let frozeQuoteCopy = {...frozeQuote};
 
@@ -72,11 +73,11 @@
         </div>
         
         <div class="flex w-100pc p-4 rounded mt-1 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
+            {#if includeMarket}    
             <div class="flex items-center w-100pc justify-between">
                 <div class="flex nowrap intems-center p-1 font-thin">Price You Pay:</div>
                 <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-bold" style="display: inline;">1 {buyToken.symbol} @ {buyPrice.toFixed(6)} {sellToken.symbol} (${usdBuyPrice})</div>
             </div>
-
             <div class="flex items-center w-100pc justify-between">
                 <div class="flex nowrap intems-center p-1 font-thin">CoinGecko Price:</div>
                 <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-bold" style="display: inline;">${marketPrice}</div>
@@ -86,6 +87,7 @@
                 <div class="flex nowrap intems-center p-1 font-thin">Guaranteed Price:</div>
                 <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} @ {parseFloat(frozeQuoteCopy.guaranteedPrice).toFixed(6)} {buyToken.symbol}</div>
             </div>
+            {/if}
 
             {#if spread > 10}
                 <div class="flex items-center w-100pc justify-between">

@@ -33,10 +33,12 @@
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import TooltipButton from '../components/elements/TooltipButton.svelte';
+  import Swap from '../components/JoinSwapExternAmount.svelte';
 
   export let params;
 
   let modalinfo;
+  let swapModal;
   let modal;
   let modalOption = {
     method: 'single',
@@ -160,23 +162,23 @@
     return formatFiat($pools[token + '-nav'] ? $pools[token + '-nav'] : '');
   })();
 
-  $: getSpread = (() => {
-    let nav = parseFloat($pools[token + '-nav']);
-    let price = parseFloat(tokenPrice);
+  // $: getSpread = (() => {
+  //   let nav = parseFloat($pools[token + '-nav']);
+  //   let price = parseFloat(tokenPrice);
 
-    if (!nav || !price) {
-      return {
-        label: 'Spread',
-        number: `n/a`,
-      };
-    }
+  //   if (!nav || !price) {
+  //     return {
+  //       label: 'Spread',
+  //       number: `n/a`,
+  //     };
+  //   }
 
-    let spread = ((price - nav) / price) * 100;
-    return {
-      label: spread > 0 ? 'Premium' : 'Discount',
-      number: `${spread.toFixed(2)}%`,
-    };
-  })();
+  //   let spread = ((price - nav) / price) * 100;
+  //   return {
+  //     label: spread > 0 ? 'Premium' : 'Discount',
+  //     number: `${spread.toFixed(2)}%`,
+  //   };
+  // })();
 
   $: getSpread = (() => {
     let nav = parseFloat($pools[token + '-nav']);
@@ -206,6 +208,10 @@
       initialized = true;
       tradingViewWidgetComponent.initWidget(options);
     }
+  };
+
+  const getListed = () => {
+    return orderBy(composition, ['percentage'], ['desc']);
   };
 </script>
 
@@ -306,8 +312,12 @@
                     role="menuitem">Redeem</a
                   >
                   {#if farmingPieObj}
-                    <a href="#/staking/{farmingPieObj.slug}" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farm</a>
-                  {/if}                  
+                    <a
+                      href="#/staking/{farmingPieObj.slug}"
+                      class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                      role="menuitem">Farm</a
+                    >
+                  {/if}
                 </div>
               </div>
             </div>
@@ -605,12 +615,30 @@
     </div>
   {/if}
 
+  <section>
+    <button 
+      class="stake-button mt-10px rounded-20px p-15px w-100pc"
+      on:click={() => { swapModal.open() }}>
+      Swap DEFI+S/L to DEFI++
+    </button>
+    <Modal title={'Confirm Swap'} backgroundColor="#f3f3f3" bind:this={swapModal}>
+      <span class="w-full" slot="content">
+        <Swap
+        listed={getListed()}
+        buyTokenAddress={$currentRoute.params.address}
+        buyTokenSymbol={symbol}
+      />
+      </span>
+    </Modal>
+  </section>
+
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row md:flex-wrap">
     <div class="p-0 mt-2 flexgrow min-w-230px md:mr-10px">
       <Farming token={$currentRoute.params.address} />
     </div>
     <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
-      <Etherscan token={$currentRoute.params.address} />
+      <!--This component might crash the entire site if etherscan is ever down.-->
+      <!--<Etherscan token={$currentRoute.params.address} />-->
     </div>
 
     <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
@@ -768,7 +796,11 @@
               role="menuitem">Redeem</a
             >
             {#if farmingPieObj}
-              <a href="#/staking/{farmingPieObj.slug}" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farm</a>
+              <a
+                href="#/staking/{farmingPieObj.slug}"
+                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                role="menuitem">Farm</a
+              >
             {/if}
           </div>
         </div>
