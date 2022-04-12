@@ -50,10 +50,7 @@
 
   // computed props
   $: defaultTokenSell = tokenList[0];
-  $: if ($eth?.signer) {
-    contract = new ethers.Contract($currentRoute.params.address, smartPoolAbi, $eth.signer);
-  }
-  $: sellToken = defaultTokenSell;
+  $: sellToken = sellToken ? sellToken : defaultTokenSell;
   $: buyToken = defaultTokenBuy;
   $: amount = defaultAmount;
   $: receivedAmount = 0;
@@ -62,8 +59,14 @@
   $: isLoading = false;
   $: error = null;
   $: showSlippageSettings = false;
-  $: balanceError = false;
-    // This block will set up the token data that this component will use.
+  $: balanceError = (sellToken && amount && sellToken?.balance && amount.label > sellToken.balance.label);
+  
+  // watchers
+  $: if ($eth?.signer) {
+    contract = new ethers.Contract($currentRoute.params.address, smartPoolAbi, $eth.signer);
+  }
+  
+  // This block will set up the token data that this component will use.
   // all changes to tokenList should happen in this block.
   $: {
     const newListed = [];
@@ -79,7 +82,6 @@
       fetchBalances(newListed, $eth.address, $eth.provider, contract.address).then((balances) => {
         balances.forEach((token) => {
           const tokenIdx = newListed.findIndex((t) => t.address === token.address);
-          console.debug({ token })
           newListed[tokenIdx].balance = token.balance;
           newListed[tokenIdx].allowance = token.allowance;
         });
@@ -87,7 +89,12 @@
         tokenList = newListed;
       });
     }
-  }
+  };
+
+  $: {
+    // constrain form inputs to > 0
+    if (amount && amount.label < 0) amount.label = 0;
+  };
 
   // methods
   const tokenSelectCallback = (token) => {
@@ -111,7 +118,6 @@
   function needApproval(allowance) {
     if (!$eth.address || !$eth.signer) return false;
     if (allowance.isEqualTo(0)) return true;
-    console.debug({ allowance, amount })
     if (allowance.isGreaterThanOrEqualTo(amount.bn)) return false;
   }
 
@@ -184,7 +190,7 @@
     needAllowance = needApproval(sellToken.allowance);
 
     try {
-      const [_quote, single] = await Promise.all([
+      const [fullQuote, perUnit] = await Promise.all([
         contract.calcPoolOutGivenSingleIn(
           sellToken.address,
           ethers.BigNumber.from(amount.bn.toFixed(0))
@@ -197,14 +203,13 @@
 
       quote = {
         sellAmount: amount.bn,
-        buyAmount: _quote.toString(),
-        value: single.toString(),
-        label: ethers.utils.formatEther(single),
-        guaranteedPrice: ethers.utils.formatEther(single),
-        buyPrice: single.toString(),
+        buyAmount: fullQuote.toString(),
+        value: perUnit.toString(),
+        label: ethers.utils.formatEther(perUnit),
+        guaranteedPrice: ethers.utils.formatEther(perUnit),
+        buyPrice: perUnit.toString(),
       };
 
-      isLoading = false;
       receivedAmount = toNum(quote.buyAmount)
       Timer.start();
 
@@ -217,6 +222,8 @@
         message: err.message,
         type: 'error',
       })
+    } finally {
+      isLoading = false;
     }
   };
 
@@ -239,8 +246,8 @@
         await contract.joinswapExternAmountIn(
           sellToken.address,
           quote.buyAmount,
-          // need to fetch this dynamically
-          0,
+          // need to fetch this dynamically, currently hardcoded to zero
+          slippage,
         ),
       );
 
@@ -277,7 +284,7 @@
     }
   }
 
-  // hooks
+  // lifecycles
   onDestroy(() => {
     clearTimeout(timeout);
     Timer.stop();
@@ -315,17 +322,22 @@
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">From</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
-        {#if sellToken && tokenList[sellToken.address]?.balance}
-          <div
-            on:click={() => {
-              amount.label = tokenList[sellToken.address].balance.number;
-              amount.bn = tokenList[sellToken.address].balance.bn;
+          <button
+          on:click={() => {
+              const token = tokenList.find(t => t.address === sellToken.address);
+              if (!token) return displayNotification({
+                message: 'Error selecting token',
+                type: 'err',
+                autoDismiss: 15_000
+              });
+
+              amount.bn = token.balance.bn;
+              amount.label = token.balance.number;
               fetchQuote();
-            }}
+          }}
           >
-            Max balance: {tokenList[sellToken.address].balance.label}
-          </div>
-        {/if}
+            Balance: {sellToken?.balance?.label ?? 0}
+        </button>
       </div>
     </div>
     <div class="flex nowrap items-center p-1">
@@ -346,7 +358,6 @@
         placeholder="0.0"
         minlength="1"
         maxlength="79"
-        max="100_000"
         spellcheck="false"
       />
       <button
@@ -478,8 +489,11 @@
     </button>
   {:else if needAllowance}
     <button
+      disabled={error || isLoading}
       on:click={approveToken}
-      class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Approve</button
+      class="btn clear stake-button disabled:text-gray-200 disabled:border-grey-200 mt-10px rounded-20px p-15px w-100pc">
+        { isLoading ? 'Fetching Quote...' : 'Approve'}
+      </button
     >
   {:else}
     <button
@@ -491,7 +505,7 @@
       disabled={error || isLoading || balanceError || amount.label <= 0}
       class="stake-button mt-10px rounded-20px p-15px w-100pc"
     >
-      Review Order
+      { balanceError ? 'Insufficient Balance' : isLoading ? 'Fetching Quote...' :  'Review Order' }
     </button>
   {/if}
 </div>
