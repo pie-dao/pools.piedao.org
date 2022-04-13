@@ -16,6 +16,7 @@
   import { subject, approveMax, connectWeb3, eth, allowances   } from '../stores/eth.js';
   import { fetchBalances } from '../helpers/multicall';
   import { getTokenImage } from '../components/helpers';
+import erc20 from '@pie-dao/abis/src/abis/erc20';
 
   // props
   export let listed = [];
@@ -32,7 +33,7 @@
     pieAddress: null,
     ovenAddress: null,
   };
-  let slippage = 0;
+  let slippage = 3;
   let quote = null;
   let targetModal = 'sell';
   let defaultTokenBuy = {
@@ -53,13 +54,14 @@
   $: sellToken = sellToken ? sellToken : defaultTokenSell;
   $: buyToken = defaultTokenBuy;
   $: amount = defaultAmount;
+  $: amountWithSlippage = { bn: BigNumber(0), label: '0'};
   $: receivedAmount = 0;
   $: frozeQuote = null;
   $: needAllowance = false;
   $: isLoading = false;
   $: error = null;
   $: showSlippageSettings = false;
-  $: balanceError = (sellToken && amount && sellToken?.balance && amount.label > sellToken.balance.label);
+  $: balanceError = (sellToken && amount && sellToken?.balance && amount.bn.isGreaterThan(sellToken.balance.bn));
   
   // watchers
   $: if ($eth?.signer) {
@@ -69,7 +71,14 @@
   // This block will set up the token data that this component will use.
   // all changes to tokenList should happen in this block.
   $: {
-    const newListed = [];
+    const newListed = [
+      // fetchBalances expects ETH as first arg
+      {
+        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        symbol: 'ETH',
+        icon: getTokenImage('eth')
+      }    
+    ];
     for (const token of listed) {
       newListed.push({
         address: token.address,
@@ -79,14 +88,21 @@
     }
 
     if (newListed.length > 0 && $eth.address) {
-      fetchBalances(newListed, $eth.address, $eth.provider, contract.address).then((balances) => {
+      fetchBalances(
+          newListed, 
+          $eth.address,
+          $eth.provider,
+          contract.address,
+        ).then((balances) => {
         balances.forEach((token) => {
+
           const tokenIdx = newListed.findIndex((t) => t.address === token.address);
           newListed[tokenIdx].balance = token.balance;
           newListed[tokenIdx].allowance = token.allowance;
         });
 
-        tokenList = newListed;
+        // remove eth as not revelant
+        tokenList = newListed.filter(item => item.symbol !== 'ETH');
       });
     }
   };
@@ -123,7 +139,18 @@
 
   function changeSlippage(value) {
     slippage = value;
-    showSlippageSettings = false;
+    const slipPc = 1 + slippage/100;
+    amountWithSlippage = {
+      bn: BigNumber(quote.buyAmount).dividedToIntegerBy(slipPc),
+      label: parseFloat(quote.buyLabel / slipPc).toString(),
+    };
+
+    quote = {
+      ...quote,
+      guaranteedPrice: BigNumber(quote.buyPrice).dividedToIntegerBy(slipPc),
+      guaranteedLabel: parseFloat(quote.label) / slipPc,
+    };
+
   }
 
   async function approveToken() {
@@ -185,7 +212,6 @@
       return;
     }
     isLoading = true;
-    quote = {};
 
     needAllowance = needApproval(sellToken.allowance);
 
@@ -202,13 +228,19 @@
       ]);
 
       quote = {
+        ...quote,
         sellAmount: amount.bn,
+        sellLabel: amount.label,
         buyAmount: fullQuote.toString(),
+        buyLabel: ethers.utils.formatEther(fullQuote),
+        buyPrice: perUnit.toString(),
         value: perUnit.toString(),
         label: ethers.utils.formatEther(perUnit),
-        guaranteedPrice: ethers.utils.formatEther(perUnit),
-        buyPrice: perUnit.toString(),
       };
+
+      if (slippage) {
+        changeSlippage(slippage)
+      }
 
       receivedAmount = toNum(quote.buyAmount)
       Timer.start();
@@ -228,6 +260,7 @@
   };
 
   async function swap() {
+    
     try {
       if (!quote || Object.entries(quote).length === 0) {
         error = 'You need a quote first.';
@@ -239,15 +272,17 @@
         connectWeb3();
         return;
       }
-
+      isLoading = true;
       modal.close();
 
+      console.debug({
+        sellToken, amount: amount.bn.toString(), amountWithSlippage: amountWithSlippage.bn.toString()
+      })
       const { emitter } = displayNotification(
         await contract.joinswapExternAmountIn(
           sellToken.address,
-          quote.buyAmount,
-          // need to fetch this dynamically, currently hardcoded to zero
-          slippage,
+          amount.bn.toString(),
+          amountWithSlippage.bn.toString()
         ),
       );
 
@@ -282,7 +317,19 @@
         type: 'error'
       })
     }
-  }
+  };
+
+  const setMaxTokenValue = () => {
+    const token = tokenList.find(t => t.address === sellToken.address);
+    if (!token) return displayNotification({
+      message: 'Error selecting token',
+      type: 'err',
+      autoDismiss: 15_000
+    });
+
+    amount.bn = token.balance.bn;
+    amount.label = token.balance.number;
+  };
 
   // lifecycles
   onDestroy(() => {
@@ -324,15 +371,7 @@
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
           <button
           on:click={() => {
-              const token = tokenList.find(t => t.address === sellToken.address);
-              if (!token) return displayNotification({
-                message: 'Error selecting token',
-                type: 'err',
-                autoDismiss: 15_000
-              });
-
-              amount.bn = token.balance.bn;
-              amount.label = token.balance.number;
+              setMaxTokenValue();
               fetchQuote();
           }}
           >
@@ -443,45 +482,46 @@
     </div>
   {/if}
 
-  {#if quote}
+  {#if quote && Object.entries(quote).length > 0}
     <div class="flex items-center w-100pc pt-16px px-16px justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Price:</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">
-        1 {sellToken.symbol} @ {parseFloat(quote.label).toFixed(6)}
+        1 {sellToken.symbol} @ {parseFloat(String(quote.label) ?? '0.0').toFixed(6)}
         {buyToken.symbol}
       </div>
     </div>
-  {/if}
-  <div class="flex items-center w-100pc px-16px justify-between mt-5px">
+    <div class="flex items-center w-100pc px-16px justify-between">
+      <div class="flex nowrap intems-center p-1 font-thin">Minimum Price:</div>
+      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} @ {parseFloat(quote.guaranteedLabel).toFixed(6)} {buyToken.symbol}</div>
+    </div>
+    <div class="flex items-center w-100pc px-16px justify-between">
+      <div class="flex nowrap intems-center p-1 font-thin">Minimum Amount:</div>
+      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{parseFloat(amountWithSlippage.label).toFixed(6)} {buyToken.symbol}</div>
+    </div>        
+  <div 
+    on:click={() => showSlippageSettings = !showSlippageSettings}
+    class="cursor-pointer flex items-center w-100pc px-16px justify-between mt-5px">
     <div class="flex nowrap intems-center p-1 font-thin">Max Slippage:</div>
-    <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
-      {#if showSlippageSettings}
-        <button
-          on:click={() => changeSlippage(1)}
-          class:selected={slippage === 1}
-          class="slippageBtn rounded-10px p-2px w-1.5">1%</button
-        >
-        <button
-          on:click={() => changeSlippage(3)}
-          class:selected={slippage === 3}
-          class="slippageBtn rounded-10px p-2px w-1.5">3%</button
-        >
-        <button
-          on:click={() => changeSlippage(5)}
-          class:selected={slippage === 5}
-          class="slippageBtn rounded-10px p-2px w-1.5">5%</button
-        >
+    <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin">
+      {#if true}
+      <section>
+        {#each [1, 3, 5] as slippagePercentage}
+          <button
+            on:click={() => changeSlippage(slippagePercentage)}
+            class:selected={slippage === slippagePercentage}
+            class="slippageBtn px-2 transition-colors delay-75">{slippagePercentage + '%'}</button
+          >
+        {/each}
+      </section>
       {:else}
-        <div
-          on:click={() => {
-            showSlippageSettings = true;
-          }}
-        >
+        <p class="font-bold">
           {slippage}%
-        </div>
+        </p>
       {/if}
     </div>
   </div>
+  {/if}
+
 
   {#if error}
     <button disabled={true} class="stake-button error rounded-20px mt-10px p-15px w-100pc">
@@ -492,7 +532,7 @@
       disabled={error || isLoading}
       on:click={approveToken}
       class="btn clear stake-button disabled:text-gray-200 disabled:border-grey-200 mt-10px rounded-20px p-15px w-100pc">
-        { isLoading ? 'Fetching Quote...' : 'Approve'}
+        { isLoading ? 'Loading...' : 'Approve'}
       </button
     >
   {:else}
@@ -505,7 +545,7 @@
       disabled={error || isLoading || balanceError || amount.label <= 0}
       class="stake-button mt-10px rounded-20px p-15px w-100pc"
     >
-      { balanceError ? 'Insufficient Balance' : isLoading ? 'Fetching Quote...' :  'Review Order' }
+      { balanceError ? 'Insufficient Balance' : isLoading ? 'Loading...' :  'Review Order' }
     </button>
   {/if}
 </div>

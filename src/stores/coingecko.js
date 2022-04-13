@@ -76,12 +76,14 @@ export class CoinGecko {
   }
 
   static async fetchAssetPrices() {
-    let idQueryString = 'piedao-dough-v2%2Cweth%2Cethereum%2C';
+    let idQueryString = 'piedao-dough-v2%2Cweth%2Cethereum%2Cdai%2C';
 
     const idToSymbolMap = {
       'piedao-dough-v2': { address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D' },
       weth: { address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2' },
+      dai: { address: '0x6b175474e89094c44da98b954eedeac495271d0f' },
       ethereum: { address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' },
+      'metaverse-nft-index': '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4',
     };
 
     poolsConfig.available.forEach((pieAddress) => {

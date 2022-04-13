@@ -165,7 +165,6 @@
 
   function changeSlippage(value) {
     api.slippage  = value;
-    showSlippageSettings = false;
     fetchQuote();
   }
 
@@ -422,17 +421,19 @@
       </div>
       
     {/if}
-    <div class="flex items-center w-100pc px-16px justify-between mt-5px">
+    <div class="flex items-center w-100pc px-16px justify-between mt-5px cursor-pointer"
+      on:click={() => showSlippageSettings = !showSlippageSettings}
+    >
       <div class="flex nowrap intems-center p-1 font-thin">Max Slippage:</div>
-      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
+      <div class="flex font-thin">
         {#if showSlippageSettings }
-          <button on:click={() => changeSlippage(1)} class:selected={api.slippage === 1} class="slippageBtn rounded-10px p-2px w-1.5">1%</button>
-          <button on:click={() => changeSlippage(3)} class:selected={api.slippage === 3} class="slippageBtn rounded-10px p-2px w-1.5">3%</button>
-          <button on:click={() => changeSlippage(5)} class:selected={api.slippage === 5} class="slippageBtn rounded-10px p-2px w-1.5">5%</button>
+          <button on:click={() => changeSlippage(1)} class:selected={api.slippage === 1} class="slippageBtn rounded-10px p-2px ">1%</button>
+          <button on:click={() => changeSlippage(3)} class:selected={api.slippage === 3} class="slippageBtn rounded-10px p-2px ">3%</button>
+          <button on:click={() => changeSlippage(5)} class:selected={api.slippage === 5} class="slippageBtn rounded-10px p-2px ">5%</button>
         {:else}
-          <div on:click={() => {
-            showSlippageSettings = true;
-          }}>{api.slippage}%</div>
+          <div 
+          class="slippageBtn selected cursor-pointer"
+          >{api.slippage}%</div>
         {/if}
       </div>
     </div>
