@@ -498,7 +498,6 @@ export const fetchStakingData = async (eth) => {
   _stakingData.hasLoaded = true;
   
   stakingData.set(_stakingData);
-  // console.log('fetchStakingData', _stakingData);
   
   return _stakingData;
 };
