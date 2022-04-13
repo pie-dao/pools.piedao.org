@@ -62,7 +62,9 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
   $: error = null;
   $: showSlippageSettings = false;
   $: balanceError = (sellToken && amount && sellToken?.balance && amount.bn.isGreaterThan(sellToken.balance.bn));
+  $: tokensLoaded = tokenList.length > 0;
   
+  $: console.debug({ tokenList })
   // watchers
   $: if ($eth?.signer) {
     contract = new ethers.Contract($currentRoute.params.address, smartPoolAbi, $eth.signer);
@@ -149,8 +151,9 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
       ...quote,
       guaranteedPrice: BigNumber(quote.buyPrice).dividedToIntegerBy(slipPc),
       guaranteedLabel: parseFloat(quote.label) / slipPc,
+      amountWithSlippageLabel: amountWithSlippage.label,
+      amountWithSlippageBn: amountWithSlippage.bn,
     };
-
   }
 
   async function approveToken() {
@@ -341,7 +344,6 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
     await fetchQuote();
   });
 </script>
-
 <TokenSelectModal
   tokens={$eth.address ? orderBy(tokenList, ['balance.number'], ['desc']) : tokenList}
   open={tokenSelectModalOpen}
@@ -407,17 +409,21 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
         }}
       >
         <span class="sc-iybRtq gjVeBU">
+          {#if tokensLoaded}
           <img
             class="h-auto w-24px mr-5px"
-            alt={sellToken ? `${sellToken.symbol} logo` : ''}
+            alt={sellToken ? `${sellToken.symbol} logo` : 'loading tokens'}
             src={sellToken ? sellToken.icon : ''}
           />
+          {/if}
           <span class="sc-kXeGPI jeVIZw token-symbol-container"
-            >{sellToken ? sellToken.symbol : ''}</span
+            >{sellToken ? sellToken.symbol : 'Loading...'}</span
           >
+          {#if tokensLoaded}
           <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"
             ><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff" /></svg
           >
+        {/if}
         </span>
       </button>
     </div>

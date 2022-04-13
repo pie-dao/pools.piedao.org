@@ -34,7 +34,7 @@
     class="flex flex-col w-100pc h-100pc max-h-100pc content-stretch justify-center items-center overflow-hidden"
   >
     <div
-      class="token-select-container overflow-y-scroll bg-white w-96pc max-h-80pc md:w-60pc lg:w-40pc rounded-12px"
+      class="token-select-container overflow-y-auto bg-white w-96pc max-h-80pc md:w-60pc lg:w-40pc rounded-12px"
       use:clickOutside
       on:click_outside={() => callback()}
     >

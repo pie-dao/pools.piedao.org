@@ -70,6 +70,17 @@
                     <div class="font-bold text-base"> {toNum(frozeQuoteCopy.buyAmount)} {buyToken.symbol} </div>
                 </div>
             </div>
+
+            {#if frozeQuote.amountWithSlippageLabel}
+            <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
+                <div class="flex flex-col items-start">
+                    <div class="font-thin text-base">
+                        Minimum
+                    </div>
+                    <div class="font-bold text-base"> {parseFloat(frozeQuoteCopy.amountWithSlippageLabel).toFixed(6)} {buyToken.symbol} </div>
+                </div>
+            </div>
+            {/if}
             
         </div>
         
@@ -83,12 +94,12 @@
                 <div class="flex nowrap intems-center p-1 font-thin">CoinGecko Price:</div>
                 <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-bold" style="display: inline;">${marketPrice}</div>
             </div>            
-
             <div class="flex items-center w-100pc justify-between">
                 <div class="flex nowrap intems-center p-1 font-thin">Guaranteed Price:</div>
                 <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} @ {parseFloat(frozeQuoteCopy.guaranteedPrice).toFixed(6)} {buyToken.symbol}</div>
             </div>
             {/if}
+
 
             {#if spread > 10}
                 <div class="flex items-center w-100pc justify-between">
