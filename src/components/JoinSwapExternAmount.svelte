@@ -13,10 +13,9 @@
   import ReviewQuoteModal from '../components/modals/ReviewQuoteModal.svelte';
   import displayNotification from '../notifications';
   import { currentRoute } from '../stores/routes.js';
-  import { subject, approveMax, connectWeb3, eth, allowances   } from '../stores/eth.js';
+  import { subject, approveMax, connectWeb3, eth } from '../stores/eth.js';
   import { fetchBalances } from '../helpers/multicall';
   import { getTokenImage } from '../components/helpers';
-import erc20 from '@pie-dao/abis/src/abis/erc20';
 
   // props
   export let listed = [];
@@ -50,8 +49,8 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
   };
 
   // computed props
-  $: defaultTokenSell = tokenList[0];
-  $: sellToken = sellToken ? sellToken : defaultTokenSell;
+  $: defaultSellToken = tokenList[0];
+  $: sellToken = sellToken ? sellToken : defaultSellToken;
   $: buyToken = defaultTokenBuy;
   $: amount = defaultAmount;
   $: amountWithSlippage = { bn: BigNumber(0), label: '0'};
@@ -59,28 +58,30 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
   $: frozeQuote = null;
   $: needAllowance = false;
   $: isLoading = false;
+  $: isFetchingQuote = false;
   $: error = null;
   $: showSlippageSettings = false;
   $: balanceError = (sellToken && amount && sellToken?.balance && amount.bn.isGreaterThan(sellToken.balance.bn));
   $: tokensLoaded = tokenList.length > 0;
   
-  $: console.debug({ tokenList })
+  
   // watchers
   $: if ($eth?.signer) {
     contract = new ethers.Contract($currentRoute.params.address, smartPoolAbi, $eth.signer);
   }
-  
+
   // This block will set up the token data that this component will use.
   // all changes to tokenList should happen in this block.
   $: {
     const newListed = [
-      // fetchBalances expects ETH as first arg
+      // fetchBalances expects ETH as first token
       {
         address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
         symbol: 'ETH',
         icon: getTokenImage('eth')
-      }    
+      },    
     ];
+
     for (const token of listed) {
       newListed.push({
         address: token.address,
@@ -101,14 +102,21 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
           const tokenIdx = newListed.findIndex((t) => t.address === token.address);
           newListed[tokenIdx].balance = token.balance;
           newListed[tokenIdx].allowance = token.allowance;
+          checkUpdateAllowance(token)
         });
-
         // remove eth as not revelant
         tokenList = newListed.filter(item => item.symbol !== 'ETH');
       });
     }
   };
 
+  // update the selltoken approval when data comes in
+  const checkUpdateAllowance = (token) => {
+    if (sellToken?.allowance && token.address === sellToken.address) {
+      needAllowance = needApproval(token.allowance);
+    }
+  }
+  
   $: {
     // constrain form inputs to > 0
     if (amount && amount.label < 0) amount.label = 0;
@@ -157,6 +165,7 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
   }
 
   async function approveToken() {
+
     if (!$eth.address || !$eth.signer) {
       displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
       connectWeb3();
@@ -164,40 +173,9 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
     }
 
     isLoading = true;
-
     try {
-      const { emitter } = displayNotification(
-        await approveMax(sellToken.address, smartcontracts.defi_pp)
-      );
-
-      emitter.on('txConfirmed', () => {
-        const { dismiss } = displayNotification({
-          message: 'Confirming...',
-          type: 'pending',
-        });
-
-        const subscription = subject('blockNumber').subscribe({
-          next: () => {
-            displayNotification({
-              autoDismiss: 15000,
-              message: 'Approved successfully',
-              type: 'success',
-            });
-            amount = defaultAmount;
-            dismiss();
-            subscription.unsubscribe();
-          }
-        });
-
-        needAllowance = false; 
-      
-      });
-
-    } catch (err) {
-      displayNotification({
-        message: err,
-        type: 'error'
-      })
+      await approveMax(sellToken.address, smartcontracts.defi_pp);
+      needAllowance = false;
     } finally {
       isLoading = false;
     }
@@ -209,12 +187,14 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
     fetchQuote();
   }
 
+
   const fetchQuote = async (selfRefresh = false, freeze = false) => {
-    if (!amount.label || amount.label === 0 || amount.label === '' || isLoading === true) {
+    if (!amount.label || isLoading || isFetchingQuote) {
       Timer.stop();
       return;
     }
     isLoading = true;
+    isFetchingQuote = true;
 
     needAllowance = needApproval(sellToken.allowance);
 
@@ -259,8 +239,18 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
       })
     } finally {
       isLoading = false;
+      isFetchingQuote = false
     }
   };
+
+  const reduceSellTokenBalance = () => {
+    if (amount.bn.isGreaterThan(sellToken.balance.bn)) return;
+    sellToken.balance = {
+      bn: sellToken.balance.bn.minus(amount.bn),
+      label: String(parseFloat(sellToken.balance.label) - parseFloat(amount.label)),
+      number: sellToken.balance.number - parseFloat(amount.label)
+    }
+  }
 
   async function swap() {
     
@@ -276,17 +266,15 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
         return;
       }
       isLoading = true;
-      modal.close();
 
-      console.debug({
-        sellToken, amount: amount.bn.toString(), amountWithSlippage: amountWithSlippage.bn.toString()
-      })
+      const tx = await contract.joinswapExternAmountIn(
+        sellToken.address,
+        amount.bn.toString(),
+        amountWithSlippage.bn.toString()
+      )
+
       const { emitter } = displayNotification(
-        await contract.joinswapExternAmountIn(
-          sellToken.address,
-          amount.bn.toString(),
-          amountWithSlippage.bn.toString()
-        ),
+        tx
       );
 
       emitter.on('txConfirmed', ({ hash }) => {
@@ -302,7 +290,10 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
               message: `${amount.label.toFixed(2)} ${sellToken.symbol} swapped successfully`,
               type: 'success',
             });
+            reduceSellTokenBalance();
+
             amount = defaultAmount;
+
             dismiss();
             subscription.unsubscribe();
           },
@@ -319,6 +310,8 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
         message: error ? error : err.message,
         type: 'error'
       })
+    } finally {
+      isLoading = false;
     }
   };
 
@@ -326,7 +319,7 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
     const token = tokenList.find(t => t.address === sellToken.address);
     if (!token) return displayNotification({
       message: 'Error selecting token',
-      type: 'err',
+      type: 'error',
       autoDismiss: 15_000
     });
 
@@ -444,6 +437,9 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
     >
   </div>
 
+
+  <button on:click = {() => reduceSellTokenBalance()}>CLuck</button>
+
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">To (estimated)</div>
@@ -479,7 +475,7 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
     </div>
   </div>
 
-  {#if isLoading}
+  {#if isFetchingQuote}
     <div class="flex items-center w-100pc px-16px justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Status:</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">
@@ -530,13 +526,13 @@ import erc20 from '@pie-dao/abis/src/abis/erc20';
 
 
   {#if error}
-    <button disabled={true} class="stake-button error rounded-20px mt-10px p-15px w-100pc">
+    <button disabled class="stake-button error rounded-20px mt-10px p-15px w-100pc">
       {error}
     </button>
   {:else if needAllowance}
     <button
       disabled={error || isLoading}
-      on:click={approveToken}
+      on:click={() => approveToken().then(() => needApproval = false)}
       class="btn clear stake-button disabled:text-gray-200 disabled:border-grey-200 mt-10px rounded-20px p-15px w-100pc">
         { isLoading ? 'Loading...' : 'Approve'}
       </button
