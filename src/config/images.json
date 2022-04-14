@@ -179,5 +179,6 @@
   "farmerbenefitcampaign": "  https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/285/farmer_1f9d1-200d-1f33e.png",
   "warning": "https://github.com/pie-dao/brand/blob/master/misc/warning.png?raw=true",
   "check-mark-button": "https://github.com/pie-dao/brand/blob/master/misc/check-mark-button.png?raw=true",
-  "hourglass-pending": "https://github.com/pie-dao/brand/blob/master/misc/hourglass.png?raw=true"
+  "hourglass-pending": "https://github.com/pie-dao/brand/blob/master/misc/hourglass.png?raw=true",
+  "defi_pp_merge": "images/defi_product_merge.png"
 }

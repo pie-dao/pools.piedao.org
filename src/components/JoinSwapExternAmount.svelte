@@ -277,6 +277,10 @@
         tx
       );
 
+      reduceSellTokenBalance();
+      amount = defaultAmount;
+      modal.close();
+
       emitter.on('txConfirmed', ({ hash }) => {
         const { dismiss } = displayNotification({
           message: 'Confirming...',
@@ -290,9 +294,7 @@
               message: `${amount.label.toFixed(2)} ${sellToken.symbol} swapped successfully`,
               type: 'success',
             });
-            reduceSellTokenBalance();
 
-            amount = defaultAmount;
 
             dismiss();
             subscription.unsubscribe();
@@ -312,6 +314,7 @@
       })
     } finally {
       isLoading = false;
+      if (modal.modalIsOpen()) modal.close();
     }
   };
 

@@ -34,6 +34,8 @@
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import TooltipButton from '../components/elements/TooltipButton.svelte';
   import Swap from '../components/JoinSwapExternAmount.svelte';
+  import Merge from '../components/defiProductMerge.svelte';
+
 
   export let params;
 
@@ -198,6 +200,8 @@
       number: `${+spreadPercentage.toFixed(2)}%`,
     };
   })();
+
+  $: console.debug({ swapModal })
 
   const renderWidget = async () => {
     const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
@@ -616,20 +620,7 @@
   {/if}
 
   <section>
-    <button 
-      class="stake-button mt-10px rounded-20px p-15px w-100pc"
-      on:click={() => { swapModal.open() }}>
-      Swap DEFI+S/L to DEFI++
-    </button>
-    <Modal title={'Confirm Swap'} backgroundColor="#f3f3f3" bind:this={swapModal}>
-      <span class="w-full" slot="content">
-        <Swap
-        listed={getListed()}
-        buyTokenAddress={$currentRoute.params.address}
-        buyTokenSymbol={symbol}
-      />
-      </span>
-    </Modal>
+    <Merge />
   </section>
 
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row md:flex-wrap">
