@@ -437,9 +437,6 @@
     >
   </div>
 
-
-  <button on:click = {() => reduceSellTokenBalance()}>CLuck</button>
-
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">To (estimated)</div>
