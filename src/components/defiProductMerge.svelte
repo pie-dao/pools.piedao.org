@@ -2,15 +2,13 @@
     import images from '../config/images.json'
     import smartcontracts from '../config/smartcontracts.json'
     import flattenDeep from 'lodash/flattenDeep';
-    import orderBy from 'lodash/orderBy';
     import Modal from '../components/elements/Modal.svelte';
     import Swap from '../components/JoinSwapExternAmount.svelte';
     import { pools } from '../stores/eth.js'
+    import { currentRoute } from '../stores/routes.js';
 
     let swapModal;
     let pieOfPies;
-
-    $: console.debug({ swapModal })
 
     $: composition = flattenDeep(
         $pools[smartcontracts.defi_pp.toLowerCase()].map((component) => {
@@ -22,7 +20,9 @@
         }),
     );
 
-    $: listed = orderBy(composition, ['percentage'], ['desc']);
+    $: addr = $currentRoute?.params?.address;
+    $: isDefiPage = composition.find(c => c.address === addr);
+    $: listed = isDefiPage ? composition.filter(c => c.address === addr) : composition;
     
 </script>
 

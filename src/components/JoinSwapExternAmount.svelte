@@ -12,7 +12,6 @@
   import Modal from '../components/elements/Modal.svelte';
   import ReviewQuoteModal from '../components/modals/ReviewQuoteModal.svelte';
   import displayNotification from '../notifications';
-  import { currentRoute } from '../stores/routes.js';
   import { subject, approveMax, connectWeb3, eth } from '../stores/eth.js';
   import { fetchBalances } from '../helpers/multicall';
   import { getTokenImage } from '../components/helpers';
@@ -67,7 +66,7 @@
   
   // watchers
   $: if ($eth?.signer) {
-    contract = new ethers.Contract($currentRoute.params.address, smartPoolAbi, $eth.signer);
+    contract = new ethers.Contract(buyTokenAddress, smartPoolAbi, $eth.signer);
   }
 
   // This block will set up the token data that this component will use.
@@ -129,7 +128,7 @@
     if (targetModal === 'sell' && token !== buyToken) {
       sellToken = token;
     } else if (targetModal === 'buy' && token !== sellToken) {
-      buyToken = $currentRoute.params.address;
+      buyToken = buyTokenAddress;
     };
     fetchQuote();
   };

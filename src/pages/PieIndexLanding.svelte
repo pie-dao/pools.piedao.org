@@ -6,13 +6,11 @@
   import flattenDeep from 'lodash/flattenDeep';
   import orderBy from 'lodash/orderBy';
   import { currentRoute } from '../stores/routes.js';
-  import Etherscan from '../components/Etherscan.svelte';
   import Farming from '../components/Farming.svelte';
   import Quantstamp from '../components/Quantstamp.svelte';
   import LiquidityModal from '../components/modals/LiquidityModal.svelte';
   import AddMetamaskBanner from '../components/AddMetamaskBanner.svelte';
   import CoinGeckoBanner from '../components/CoinGeckoBanner.svelte';
-  import SpreadBanner from '../components/SpreadBanner.svelte';
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import ovens from '../config/ovensConf.js';
@@ -33,14 +31,12 @@
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import TooltipButton from '../components/elements/TooltipButton.svelte';
-  import Swap from '../components/JoinSwapExternAmount.svelte';
   import Merge from '../components/defiProductMerge.svelte';
 
 
   export let params;
 
   let modalinfo;
-  let swapModal;
   let modal;
   let modalOption = {
     method: 'single',
@@ -201,8 +197,6 @@
     };
   })();
 
-  $: console.debug({ swapModal })
-
   const renderWidget = async () => {
     const formula = await buildFormulaNative(token, bPoolAddress, $pools, $balances);
     if (formula === '') return;
@@ -243,7 +237,13 @@
     <LiquidityModal {token} method={modalOption.method} poolAction={modalOption.poolAction} />
   </span>
 </Modal>
+
+
+
 <div class="content flex flex-col spl">
+  <section id="defi-single-token-merge" class="mb-8 mx-1">
+    <Merge />
+  </section>
   <div class="flex w-full items-center justify-between">
     <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
       <div class="flex flex-row items-center">
@@ -447,6 +447,8 @@
     </div>
   </div>
 
+
+
   {#if poolsConfig[token].coingeckoId}
     <PriceChartArea coingeckoId={poolsConfig[token].coingeckoId} />
     <div class="w-100pc px-2 text-sm font-thin text-left">*Prices from CoinGecko</div>
@@ -618,10 +620,6 @@
       </ul>
     </div>
   {/if}
-
-  <section>
-    <Merge />
-  </section>
 
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row md:flex-wrap">
     <div class="p-0 mt-2 flexgrow min-w-230px md:mr-10px">

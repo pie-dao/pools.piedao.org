@@ -40,6 +40,7 @@
   import Experipie, { getNormalizedNumber } from '../classes/Experipie.js';
   import cToken from '../classes/CToken.js';
   import sushiData from '@sushiswap/sushi-data';
+  import Merge from '../components/defiProductMerge.svelte';
 
   export let params;
 
@@ -367,6 +368,9 @@
 </Modal>
 
 <div class="content flex flex-col spl">
+  <section id="defi-single-token-merge" class="mb-8 mx-1">
+    <Merge />
+  </section>
   
   <div class="flex w-full items-center justify-between">
     <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
