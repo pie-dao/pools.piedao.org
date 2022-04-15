@@ -1,13 +1,8 @@
 <script>    
-	import { CoinGecko } from './../../stores/coingecko.js';
     import BigNumber from "bignumber.js";
     import get from 'lodash/get';
     import { quoteRefreshSeconds } from '../../classes/Timer';
     import { piesMarketDataStore } from '../../stores/coingecko';
-    import { pools } from "../../stores/eth.js";
-    import {
-        toFixed
-    } from "../../components/helpers.js";
     
     
     export let quote;
@@ -41,16 +36,17 @@
 
 
 <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:px-4 lg:pb-4">
+    <div class="flex justify-center font-thin mb-2">
     {#if isLoading}
-        Finalizing Quote..
-    {:else}
-        <div class="flex justify-center font-thin mb-2">
-            {#if frozeQuote}
-                Quote expires in {$quoteRefreshSeconds} seconds.
-            {:else}
-                Quote expired.
-            {/if}
-        </div>
+        <p>Finalizing...</p>
+    {:else if includeMarket}
+        {#if frozeQuote}
+            <p>Quote expires in {$quoteRefreshSeconds} seconds.</p>
+        {:else}
+            <p>Quote expired.</p>
+        {/if}
+    {/if}
+    </div>
         
         <div class="flex w-100pc bg-lightgrey-2 p-4 rounded mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
             <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
@@ -116,5 +112,5 @@
                 fetchQuote(false, true);
             }} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Refresh Quote</button>
         {/if}
-    {/if}
+    <!-- {/if} -->
 </div>
