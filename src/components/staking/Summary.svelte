@@ -25,7 +25,7 @@
     let voteKeyword;
     let isLoading = true;
     let isCompounding = false;
-    let buttonText = "Compound now!";
+    let buttonText = "Compound Now";
     let sliceInWallet = new BigNumber(0);
     let sliceAmount = new BigNumber(0);
     let stakeMax = false;
@@ -36,7 +36,6 @@
     
     $: if($stakingData && !isEmpty($stakingData) && $stakingData.address) {
         isLoading = false;
-
         if($stakingData.votes) {
             if($stakingData.votes.length) {
                 votingImage = "check-mark-button";
@@ -97,16 +96,23 @@
     $: (async () => {
         if ($eth.address)  {
             await subscribeToBalance(smartcontracts.reward, $eth.address, true);
-            calculateSlice();
         }
     })();
 
+
+
+    $: if($eth.address && $stakingData && $balances) {
+        sliceCalc();
+    }
+
     // Calculate all the slices that belong to address, both from claimable rewards & from user's wallet
-    function calculateSlice() {
-        if(!$eth.address && $balances) return;
+    function sliceCalc() {
         const key = balanceKey(smartcontracts.reward, $eth.address);
+        if(!$balances[key]) return;
+
         sliceInWallet = $balances[key].multipliedBy(10 ** 18);
         const sliceReward = $stakingData.accountWithdrawableRewards;
+
         if (sliceInWallet && sliceInWallet.gt(0) && sliceReward.gt(0)) {
             sliceAmount = sliceInWallet.plus(sliceReward);
             return;
@@ -158,7 +164,12 @@
     }; 
 
     function onAmountChange() {
-        compoundAmount.bn = new BigNumber(compoundAmount.label);
+        compoundAmount.bn = new BigNumber(compoundAmount.label).multipliedBy(10**18);
+        if (compoundAmount.bn.gt(sliceInWallet)) {
+            buttonText = "Claim & Compound"
+        } else {
+            buttonText = "Compound Now"
+        }
     }
 
     async function compoundSlice() {
@@ -206,7 +217,7 @@
             <div class="flex w-full items-center space-between">
                 <div class="flex flex-row w-full gap-x-4">
                     <div class="flex flex-col nowrap w-full mt-6 swap-from rounded-20px bg-white p-16px">
-                        <h3 class="font-bold text-left">Rewards</h3>
+                        <h3 class="font-bold text-left">Claimable Rewards</h3>
                         <div class="flex items-center justify-between">
                             <span class="font-24px font-bold">{$eth.address && formatFiat(toNum($stakingData.accountWithdrawableRewards), '', '.', '') }</span>
                             <div class="flex">
@@ -231,7 +242,7 @@
             <div class="flex flex-col nowrap w-full mt-4 border rounded-20px border-grey p-16px" class:input-invalid={compoundAmount.bn.gt(sliceAmount)}>
                 <div class="flex justify-between">
                     <div class="flex nowrap items-center p-1 font-thin">Amount to Compound</div>
-                    <label class="flex items-center justify-center">
+                    <label class="flex items-center justify-center font-bold">
                         <input type="checkbox" class="toggle-input text-pink w-4 h-4 mr-2 focus:ring-pink focus:ring-opacity-25 border border-gray-300 rounded" bind:checked={stakeMax} on:change={() => {
                             if (stakeMax) {
                                 compoundAmount.bn = sliceAmount;
@@ -241,27 +252,32 @@
                                 compoundAmount.label = '';
                             }
                         }} />
-                        Stake All my SLICEs
+                        Stake all my SLICEs
                     </label>
                 </div>
                 <div class="flex justify-between items-center gap-x-3">
                     <input class="swap-input-from" style="background-color: #f3f3f3" on:focus={() => {compoundAmount.label = compoundAmount.label === 0 ? '' : compoundAmount.label}} on:keyup={onAmountChange} bind:value={compoundAmount.label} inputmode="decimal" title="Token Amount" autocomplete="off" autocorrect="off" type="number" pattern="^[0-9]*[.]?[0-9]*$" placeholder="0.0" minlength="1" maxlength="79" spellcheck="false">
-                    <img class="h-auto w-24px mr-5px" src={images.rewardsPie} alt="slice token" />
-                    <span class="token-symbol-container font-bold">SLICE</span>
+                    <div class="flex">
+                        <img class="h-auto w-24px mr-5px" src={images.rewardsPie} alt="slice token" />
+                        <span class="sc-kXeGPI jeVIZw token-symbol-container font-bold">SLICE</span>
+                    </div>
                 </div>
             </div>
         <div class="w-full flex flex-col content-center align-center items-center justify-center">
           <button
-          class="mt-4 pointer btn flex rounded-16"
+          class="flex items-center bg-pink rounded-xl pointer px-4 py-2 my-4 text-white"
+          disabled={compoundAmount.bn.gt(sliceAmount)}
+          class:opacity-50={compoundAmount.bn.gt(sliceAmount)}
+          class:cursor-not-allowed={compoundAmount.bn.gt(sliceAmount)}
           on:click={() => {
             compoundSlice();
-          }}          
+          }}
           >
           {buttonText}
           </button>
-          <div class="mt-4">
+          <div class="mt-2">
             <p class="text-sm italic">The SLICE/DOUGH conversion rate is based on the average DOUGH price and SLICE NAV.</p>
-              <strong>The DAO will send additional veDOUGH as a lump sum to cover the gas spent on the 2 transactions to claim and send the SLICE.</strong> 
+            <strong>The DAO will send additional veDOUGH as a lump sum to cover the gas spent on the 2 transactions to claim and send the SLICE.</strong> 
           </div>
         </div>
       </div>       
