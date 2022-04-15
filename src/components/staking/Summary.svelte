@@ -1,7 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { formatFiat  } from '../../components/helpers.js';
-    import debounce from "lodash/debounce";
+    import { formatFiat } from '../../components/helpers.js';
     import images from '../../config/images.json';
     import smartcontracts from '../../config/smartcontracts.json';
     import Modal from '../../components/elements/Modal.svelte';
@@ -229,7 +228,7 @@
                 </div>
             </div>
             {/if}
-            <div class="flex flex-col nowrap w-full mt-4 border rounded-20px border-grey p-16px" class:input-invalid={compoundAmount.bn.isGreaterThan(sliceAmount)}>
+            <div class="flex flex-col nowrap w-full mt-4 border rounded-20px border-grey p-16px" class:input-invalid={compoundAmount.bn.gt(sliceAmount)}>
                 <div class="flex justify-between">
                     <div class="flex nowrap items-center p-1 font-thin">Amount to Compound</div>
                     <label class="flex items-center justify-center">
