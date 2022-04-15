@@ -67,7 +67,7 @@
                 </div>
             </div>
 
-            {#if frozeQuote.amountWithSlippageLabel}
+            {#if !includeMarket && frozeQuote?.amountWithSlippageLabel}
             <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
                 <div class="flex flex-col items-start">
                     <div class="font-thin text-base">
