@@ -1,9 +1,8 @@
 <script>
-  import { Timeout } from './../classes/Timer.js';
   import { _ } from 'svelte-i18n';
   import debounce from 'lodash/debounce';
   import BigNumber from 'bignumber.js';
-  import { onMount, onDestroy } from 'svelte';
+  import { onMount } from 'svelte';
   import orderBy from 'lodash/orderBy';
   import { ethers } from 'ethers';
   import smartcontracts from '../config/smartcontracts.json';
@@ -25,7 +24,6 @@
   let tokenList = [];
   let modal;
   let contract;
-  let timeout;
   let modalOption = {
     title: 'Review Quote',
     pieAddress: null,
@@ -109,6 +107,12 @@
     }
   };
 
+  function needApproval(allowance) {
+    if (!$eth.address || !$eth.signer) return false;
+    if (allowance.isEqualTo(0)) return true;
+    if (allowance.isGreaterThanOrEqualTo(amount.bn)) return false;
+  }
+
   // update the selltoken approval when data comes in
   const checkUpdateAllowance = (token) => {
     if (sellToken?.allowance && token.address === sellToken.address) {
@@ -132,18 +136,8 @@
     };
     fetchQuote();
   };
-
-  const Timer = new Timeout(30000, () => {
-    fetchQuote(true, true);
-  });
-
+  
   const toNum = (num) => new BigNumber(num.toString()).dividedBy(10 ** 18).toFixed(6);
-
-  function needApproval(allowance) {
-    if (!$eth.address || !$eth.signer) return false;
-    if (allowance.isEqualTo(0)) return true;
-    if (allowance.isGreaterThanOrEqualTo(amount.bn)) return false;
-  }
 
   function changeSlippage(value) {
     slippage = value;
@@ -188,7 +182,6 @@
 
   const fetchQuote = async (selfRefresh = false, freeze = false) => {
     if (!amount.label || isLoading || isFetchingQuote) {
-      Timer.stop();
       return;
     }
     isLoading = true;
@@ -224,7 +217,6 @@
       }
 
       receivedAmount = toNum(quote.buyAmount)
-      Timer.start();
 
       if (freeze) {
         frozeQuote = quote;
@@ -328,12 +320,7 @@
     amount.label = token.balance.number;
   };
 
-  // lifecycles
-  onDestroy(() => {
-    clearTimeout(timeout);
-    Timer.stop();
-  });
-
+  // lifecylces
   onMount(async () => {
     await fetchQuote();
   });
@@ -530,7 +517,7 @@
   {:else if needAllowance}
     <button
       disabled={error || isLoading}
-      on:click={() => approveToken().then(() => needApproval = false)}
+      on:click={() => approveToken().then(() => needAllowance = false)}
       class="btn clear stake-button disabled:text-gray-200 disabled:border-grey-200 mt-10px rounded-20px p-15px w-100pc">
         { isLoading ? 'Loading...' : 'Approve'}
       </button

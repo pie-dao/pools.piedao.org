@@ -1,13 +1,8 @@
 <script>    
-	import { CoinGecko } from './../../stores/coingecko.js';
     import BigNumber from "bignumber.js";
     import get from 'lodash/get';
     import { quoteRefreshSeconds } from '../../classes/Timer';
     import { piesMarketDataStore } from '../../stores/coingecko';
-    import { pools } from "../../stores/eth.js";
-    import {
-        toFixed
-    } from "../../components/helpers.js";
     
     
     export let quote;
@@ -41,6 +36,7 @@
 
 
 <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:px-4 lg:pb-4">
+    <div class="flex justify-center font-thin mb-2">
     {#if isLoading}
         Sign transaction on Metamask
 
@@ -103,7 +99,7 @@
                 </div>
             </div>
 
-            {#if frozeQuote.amountWithSlippageLabel}
+            {#if !includeMarket && frozeQuote?.amountWithSlippageLabel}
             <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
                 <div class="flex flex-col items-start">
                     <div class="font-thin text-base">
@@ -148,5 +144,5 @@
                 fetchQuote(false, true);
             }} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Refresh Quote</button>
         {/if}
-    {/if}
+    <!-- {/if} -->
 </div>
