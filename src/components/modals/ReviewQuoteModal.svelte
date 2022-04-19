@@ -42,7 +42,39 @@
 
 <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:px-4 lg:pb-4">
     {#if isLoading}
-        Finalizing Quote..
+        Sign transaction on Metamask
+
+        <div class="flex w-100pc bg-lightgrey-2 p-4 rounded mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
+            <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
+                <div class="flex flex-col items-start">
+                    <div class="font-thin text-base">
+                        Your Pay
+                    </div>
+                    <div class="font-bold text-base">{toNum(frozeQuoteCopy.sellAmount)} {sellToken.symbol}</div>
+                </div>
+            </div>
+            
+            <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
+                <div class="flex flex-col items-start">
+                    <div class="font-thin text-base">
+                        You Receive
+                    </div>
+                    <div class="font-bold text-base"> {toNum(frozeQuoteCopy.buyAmount)} {buyToken.symbol} </div>
+                </div>
+            </div>
+
+            {#if frozeQuote.amountWithSlippageLabel}
+            <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
+                <div class="flex flex-col items-start">
+                    <div class="font-thin text-base">
+                        Minimum
+                    </div>
+                    <div class="font-bold text-base"> {parseFloat(frozeQuoteCopy.amountWithSlippageLabel).toFixed(6)} {buyToken.symbol} </div>
+                </div>
+            </div>
+            {/if}
+            
+        </div>
     {:else}
         <div class="flex justify-center font-thin mb-2">
             {#if frozeQuote}

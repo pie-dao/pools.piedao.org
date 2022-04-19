@@ -134,8 +134,7 @@
   };
 
   const Timer = new Timeout(30000, () => {
-    frozeQuote = null;
-    fetchQuote(true);
+    fetchQuote(true, true);
   });
 
   const toNum = (num) => new BigNumber(num.toString()).dividedBy(10 ** 18).toFixed(6);
@@ -497,7 +496,7 @@
     </div>
     <div class="flex items-center w-100pc px-16px justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Minimum Amount:</div>
-      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{parseFloat(amountWithSlippage.label).toFixed(6)} {buyToken.symbol}</div>
+      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{amountWithSlippage && amountWithSlippage.label ? parseFloat(amountWithSlippage.label).toFixed(6) : 0} {buyToken.symbol}</div>
     </div>        
   <div 
     on:click={() => showSlippageSettings = !showSlippageSettings}
