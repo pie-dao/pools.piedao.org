@@ -11,7 +11,7 @@
     import { eth, balances, balanceKey } from '../../stores/eth.js';
     import isEmpty from 'lodash/isEmpty';
     import get from 'lodash/get';
-    import { subscribeToBalance, formatToken } from "../helpers"
+    import { subscribeToBalance, amountFormatter } from "../helpers"
     import { compound, toNum } from '../../helpers/staking.js';
     import BigNumber from "bignumber.js";
     
@@ -120,10 +120,12 @@
 
         if (sliceInWallet && sliceInWallet.gt(0)) {
             sliceAmount = sliceInWallet;
+            return;
         }
 
         if (sliceReward && sliceReward.gt(0)) {
             sliceAmount = sliceReward;
+            return;
         }
     }
     
@@ -193,7 +195,7 @@
           isCompounding = false;
         }).catch(error => {
           clearInterval(interval);
-          buttonText = "Compound now!";
+          buttonText = "Compound now";
           console.error(error);
           isCompounding = false;
         });
@@ -219,7 +221,7 @@
                     <div class="flex flex-col nowrap w-full mt-6 swap-from rounded-20px bg-white p-16px">
                         <h3 class="font-bold text-left">Claimable Rewards</h3>
                         <div class="flex items-center justify-between">
-                            <span class="font-24px font-bold">{$eth.address && formatFiat(toNum($stakingData.accountWithdrawableRewards), '', '.', '') }</span>
+                            <span class="font-24px font-bold">{$eth.address && amountFormatter({ amount: $stakingData.accountWithdrawableRewards.dividedBy(10**18), displayDecimals: 4 })}</span>
                             <div class="flex">
                                 <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
                                 <span class="sc-kXeGPI jeVIZw token-symbol-container font-bold">SLICE</span>
@@ -229,7 +231,7 @@
                     <div class="flex flex-col nowrap w-full  mt-6 swap-from rounded-20px bg-white p-16px">
                         <h3 class="text-left font-bold">Wallet</h3>
                         <div class="flex items-center justify-between">
-                            <span class="font-24px font-bold">{$eth.address && formatToken(sliceInWallet.dividedBy(10**18), '.', 4)}</span>
+                            <span class="font-24px font-bold">{$eth.address && amountFormatter({ amount: sliceInWallet.dividedBy(10**18), displayDecimals: 4 })}</span>
                             <div class="flex">
                                 <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
                                 <span class="sc-kXeGPI jeVIZw token-symbol-container font-bold">SLICE</span>
