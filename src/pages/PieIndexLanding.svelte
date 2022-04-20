@@ -32,11 +32,12 @@
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import TooltipButton from '../components/elements/TooltipButton.svelte';
   import Merge from '../components/SingleAssetEntryExit.svelte';
-
+  import smartcontracts from '../config/smartcontracts.json'
 
   export let params;
 
   let modalinfo;
+  let openSwapModal;
   let modal;
   let modalOption = {
     method: 'single',
@@ -242,7 +243,9 @@
 
 <div class="content flex flex-col spl">
   <section id="defi-single-token-merge" class="mb-8 mx-1">
-    <Merge />
+    <Merge 
+      buyTokenAddress={smartcontracts.defi_pp}
+    />
   </section>
   <div class="flex w-full items-center justify-between">
     <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
@@ -619,6 +622,21 @@
         {/each}
       </ul>
     </div>
+  {/if}
+
+  {#if $currentRoute?.params?.address?.toLowerCase() === smartcontracts.bcp.toLowerCase()}
+  <section id="defi-single-token-merge" class="mb-8 mx-1">
+    <Merge 
+      bind:openTrigger={openSwapModal}
+      buyTokenAddress={smartcontracts.bcp}
+    >
+        <button class="text-white text-lg rounded-sm py-2 px-5 bg-pink 
+          hover:bg-white hover:text-pink transition-all delay-100 border-pink
+          "
+          on:click={() => openSwapModal()}
+          >SWAP BCP</button>
+    </Merge>
+  </section>
   {/if}
 
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row md:flex-wrap">

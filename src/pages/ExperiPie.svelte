@@ -13,12 +13,7 @@
   import TooltipButton from '../components/elements/TooltipButton.svelte';
   import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
   import stakingPools from '../config/stakingPools.json';
-
-  import SingleAssetModal from "../components/modals/SingleAssetModal.svelte"; 
-
-  import SnapshotBanner from "../components/SnapshotBanner.svelte";
   import AddMetamaskBanner from "../components/AddMetamaskBanner.svelte";
-  import PoolDescription from "../components/PoolDescription.svelte";
   import Modal from '../components/elements/Modal.svelte';
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
@@ -32,14 +27,13 @@
 
   import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
   import Change from '../components/Change.svelte'
-  import Apy from '../components/Apy.svelte'
   import StrategyInUse from '../components/StrategyInUse.svelte'
   import ModalBig from '../components/elements/ModalBig.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
-  import Snapshot from '../components/Snapshot.svelte';
   import Experipie, { getNormalizedNumber } from '../classes/Experipie.js';
   import cToken from '../classes/CToken.js';
   import sushiData from '@sushiswap/sushi-data';
+  import smartcontracts from '../config/smartcontracts.json'
   import Merge from '../components/SingleAssetEntryExit.svelte';
 
   export let params;
@@ -369,7 +363,9 @@
 
 <div class="content flex flex-col spl">
   <section id="defi-single-token-merge" class="mb-8 mx-1">
-    <Merge />
+    <Merge 
+      buyTokenAddress={smartcontracts.defi_pp}
+      />
   </section>
   
   <div class="flex w-full items-center justify-between">

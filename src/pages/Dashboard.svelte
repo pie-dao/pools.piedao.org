@@ -5,7 +5,7 @@
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
   import Meta from '../components/elements/meta.svelte';
-  import images from '../config/images.json'
+  import smartcontracts from '../config/smartcontracts.json'
   import Merge from '../components/SingleAssetEntryExit.svelte'
 
   import {
@@ -94,7 +94,9 @@
     </span>
   </Modal>
 
-  <Merge />
+  <Merge 
+    buyTokenAddress={smartcontracts.defi_pp}
+  />
 
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
