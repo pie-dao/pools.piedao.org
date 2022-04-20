@@ -17,8 +17,14 @@
 
     let frozeQuoteCopy = {...frozeQuote};
 
-    const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
+    $: decimals = {
+        sell: sellToken?.decimals ?? 18,
+        buy: buyToken?.decimals ?? 18,
+    };
 
+    const toNum = (num, decimals) => (BigNumber(num.toString()).dividedBy(10 ** decimals)).toFixed(6);
+    const toNumBuy = (num) => toNum(num, decimals.buy);
+    const toNumSell = (num) => toNum(num, decimals.sell);
 
     $: marketPrice = get($piesMarketDataStore, `${buyToken.address.toLowerCase()}.market_data.current_price`, 0);
 
@@ -38,39 +44,7 @@
 <div class="liquidity-container flex-col justify-items-center bg-grey-243 rounded-4px lg:px-4 lg:pb-4">
     <div class="flex justify-center font-thin mb-2">
     {#if isLoading}
-        Sign transaction on Metamask
-
-        <div class="flex w-100pc bg-lightgrey-2 p-4 rounded mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
-            <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
-                <div class="flex flex-col items-start">
-                    <div class="font-thin text-base">
-                        Your Pay
-                    </div>
-                    <div class="font-bold text-base">{toNum(frozeQuoteCopy.sellAmount)} {sellToken.symbol}</div>
-                </div>
-            </div>
-            
-            <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
-                <div class="flex flex-col items-start">
-                    <div class="font-thin text-base">
-                        You Receive
-                    </div>
-                    <div class="font-bold text-base"> {toNum(frozeQuoteCopy.buyAmount)} {buyToken.symbol} </div>
-                </div>
-            </div>
-
-            {#if frozeQuote.amountWithSlippageLabel}
-            <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
-                <div class="flex flex-col items-start">
-                    <div class="font-thin text-base">
-                        Minimum
-                    </div>
-                    <div class="font-bold text-base"> {parseFloat(frozeQuoteCopy.amountWithSlippageLabel).toFixed(6)} {buyToken.symbol} </div>
-                </div>
-            </div>
-            {/if}
-            
-        </div>
+        <p>Sign transaction on Metamask...</p>
     {:else}
         <div class="flex justify-center font-thin mb-2">
             {#if frozeQuote}
@@ -85,9 +59,9 @@
             <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
                 <div class="flex flex-col items-start">
                     <div class="font-thin text-base">
-                        Your Pay
+                        You Pay
                     </div>
-                    <div class="font-bold text-base">{toNum(frozeQuoteCopy.sellAmount)} {sellToken.symbol}</div>
+                    <div class="font-bold text-base">{toNumSell(frozeQuoteCopy.sellAmount)} {sellToken.symbol}</div>
                 </div>
             </div>
             
@@ -96,7 +70,7 @@
                     <div class="font-thin text-base">
                         You Receive
                     </div>
-                    <div class="font-bold text-base"> {toNum(frozeQuoteCopy.buyAmount)} {buyToken.symbol} </div>
+                    <div class="font-bold text-base"> {toNumBuy(frozeQuoteCopy.buyAmount)} {buyToken.symbol} </div>
                 </div>
             </div>
 

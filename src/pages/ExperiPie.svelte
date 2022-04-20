@@ -40,7 +40,7 @@
   import Experipie, { getNormalizedNumber } from '../classes/Experipie.js';
   import cToken from '../classes/CToken.js';
   import sushiData from '@sushiswap/sushi-data';
-  import Merge from '../components/defiProductMerge.svelte';
+  import Merge from '../components/SingleAssetEntryExit.svelte';
 
   export let params;
 

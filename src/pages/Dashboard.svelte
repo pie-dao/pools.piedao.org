@@ -6,7 +6,7 @@
   import { pools } from '../stores/eth.js';
   import Meta from '../components/elements/meta.svelte';
   import images from '../config/images.json'
-  import Merge from '../components/defiProductMerge.svelte'
+  import Merge from '../components/SingleAssetEntryExit.svelte'
 
   import {
     getTokenImage,

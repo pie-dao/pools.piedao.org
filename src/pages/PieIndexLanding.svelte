@@ -31,7 +31,7 @@
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import TooltipButton from '../components/elements/TooltipButton.svelte';
-  import Merge from '../components/defiProductMerge.svelte';
+  import Merge from '../components/SingleAssetEntryExit.svelte';
 
 
   export let params;

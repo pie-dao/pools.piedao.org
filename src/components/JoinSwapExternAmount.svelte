@@ -5,7 +5,6 @@
   import { onMount } from 'svelte';
   import orderBy from 'lodash/orderBy';
   import { ethers } from 'ethers';
-  import smartcontracts from '../config/smartcontracts.json';
   import smartPoolAbi from '../abis/smartPoolV2.json';
   import TokenSelectModal from '../components/modals/TokenSelectModal.svelte';
   import Modal from '../components/elements/Modal.svelte';
@@ -49,7 +48,7 @@
   $: defaultSellToken = tokenList[0];
   $: sellToken = sellToken ? sellToken : defaultSellToken;
   $: buyToken = defaultTokenBuy;
-  $: amount = defaultAmount;
+  $: sellAmount = defaultAmount;
   $: amountWithSlippage = { bn: BigNumber(0), label: '0'};
   $: receivedAmount = 0;
   $: frozeQuote = null;
@@ -58,10 +57,10 @@
   $: isFetchingQuote = false;
   $: error = null;
   $: showSlippageSettings = false;
-  $: balanceError = (sellToken && amount && sellToken?.balance && amount.bn.isGreaterThan(sellToken.balance.bn));
+  $: balanceError = (sellToken && sellAmount && sellToken?.balance && sellAmount.bn.isGreaterThan(sellToken.balance.bn));
   $: tokensLoaded = tokenList.length > 0;
-  
-  
+  $: sellTokenDecimals = sellToken?.decimals ?? 18;
+
   // watchers
   $: if ($eth?.signer) {
     contract = new ethers.Contract(buyTokenAddress, smartPoolAbi, $eth.signer);
@@ -99,8 +98,10 @@
           const tokenIdx = newListed.findIndex((t) => t.address === token.address);
           newListed[tokenIdx].balance = token.balance;
           newListed[tokenIdx].allowance = token.allowance;
+          newListed[tokenIdx].decimals = token.decimals;
           checkUpdateAllowance(token)
         });
+
         // remove eth as not revelant
         tokenList = newListed.filter(item => item.symbol !== 'ETH');
       });
@@ -110,7 +111,7 @@
   function needApproval(allowance) {
     if (!$eth.address || !$eth.signer) return false;
     if (allowance.isEqualTo(0)) return true;
-    if (allowance.isGreaterThanOrEqualTo(amount.bn)) return false;
+    if (allowance.isGreaterThanOrEqualTo(sellAmount.bn)) return false;
   }
 
   // update the selltoken approval when data comes in
@@ -122,7 +123,7 @@
   
   $: {
     // constrain form inputs to > 0
-    if (amount && amount.label < 0) amount.label = 0;
+    if (sellAmount && sellAmount.label < 0) sellAmount.label = 0;
   };
 
   // methods
@@ -137,7 +138,14 @@
     fetchQuote();
   };
   
-  const toNum = (num) => new BigNumber(num.toString()).dividedBy(10 ** 18).toFixed(6);
+  const toNum = (num) => {
+    const bn = new BigNumber(num.toString());
+    const result = bn.dividedBy(10 ** 18).toFixed(6);
+    return result
+  }
+
+//    at Modal.get modalIsOpen [as modalIsOpen] (Modal.svelte.js:376:9)
+
 
   function changeSlippage(value) {
     slippage = value;
@@ -166,7 +174,7 @@
 
     isLoading = true;
     try {
-      await approveMax(sellToken.address, smartcontracts.defi_pp);
+      await approveMax(sellToken.address, buyTokenAddress);
       needAllowance = false;
     } finally {
       isLoading = false;
@@ -174,14 +182,13 @@
   }
 
   function onAmountChange() {
-    const decimals = sellToken.decimals || 18;
-    amount.bn = new BigNumber(amount.label).multipliedBy(10 ** decimals);
+    sellAmount.bn = new BigNumber(sellAmount.label).multipliedBy(10 ** sellTokenDecimals);
     fetchQuote();
   }
 
 
   const fetchQuote = async (selfRefresh = false, freeze = false) => {
-    if (!amount.label || isLoading || isFetchingQuote) {
+    if (!sellAmount.label || isLoading || isFetchingQuote) {
       return;
     }
     isLoading = true;
@@ -193,18 +200,18 @@
       const [fullQuote, perUnit] = await Promise.all([
         contract.calcPoolOutGivenSingleIn(
           sellToken.address,
-          ethers.BigNumber.from(amount.bn.toFixed(0))
+          ethers.BigNumber.from(sellAmount.bn.toFixed(0))
         ),
         contract.calcPoolOutGivenSingleIn(
           sellToken.address,
-          ethers.utils.parseEther('1.0')
+          ethers.utils.parseUnits('1.0', sellTokenDecimals)
         )
       ]);
 
       quote = {
         ...quote,
-        sellAmount: amount.bn,
-        sellLabel: amount.label,
+        sellAmount: sellAmount.bn,
+        sellLabel: sellAmount.label,
         buyAmount: fullQuote.toString(),
         buyLabel: ethers.utils.formatEther(fullQuote),
         buyPrice: perUnit.toString(),
@@ -234,9 +241,9 @@
   };
 
   const reduceSellTokenBalance = () => {
-    if (amount.bn.isGreaterThan(sellToken.balance.bn)) return;
+    if (sellAmount.bn.isGreaterThan(sellToken.balance.bn)) return;
 
-    const parsedAmount = parseFloat(amount.label);
+    const parsedAmount = parseFloat(sellAmount.label);
     const parsedBalance = parseFloat(sellToken.balance.label);
 
     // rounding errors can lead to negative labels
@@ -244,7 +251,7 @@
     const number = Math.max(0, sellToken.balance.number - parsedAmount);
 
     sellToken.balance = {
-      bn: sellToken.balance.bn.minus(amount.bn),
+      bn: sellToken.balance.bn.minus(sellAmount.bn),
       label,
       number
     }
@@ -265,9 +272,12 @@
       }
       isLoading = true;
 
+      // avoid scientific notation
+      BigNumber.set({ EXPONENTIAL_AT: 99 });
+
       const tx = await contract.joinswapExternAmountIn(
         sellToken.address,
-        amount.bn.toString(),
+        sellAmount.bn.toString(),
         amountWithSlippage.bn.toString()
       )
 
@@ -276,7 +286,7 @@
       );
 
       reduceSellTokenBalance();
-      amount = defaultAmount;
+      sellAmount = defaultAmount;
       modal.close();
 
       emitter.on('txConfirmed', ({ hash }) => {
@@ -289,7 +299,7 @@
           next: () => {
             displayNotification({
               autoDismiss: 15000,
-              message: `${amount.label.toFixed(2)} ${sellToken.symbol} swapped successfully`,
+              message: `${sellAmount.label.toFixed(2)} ${sellToken.symbol} swapped successfully`,
               type: 'success',
             });
 
@@ -324,8 +334,8 @@
       autoDismiss: 15_000
     });
 
-    amount.bn = token.balance.bn;
-    amount.label = token.balance.number;
+    sellAmount.bn = token.balance.bn;
+    sellAmount.label = token.balance.number;
   };
 
   // lifecylces
@@ -375,10 +385,10 @@
         class:error={balanceError}
         class="swap-input-from"
         on:focus={() => {
-          amount.label = amount.label === 0 ? '' : amount.label;
+          sellAmount.label = sellAmount.label === 0 ? '' : sellAmount.label;
         }}
         on:keyup={debounce(onAmountChange, 1000, { leading: false, trailing: true })}
-        bind:value={amount.label}
+        bind:value={sellAmount.label}
         inputmode="decimal"
         title="Token Amount"
         autocomplete="off"
@@ -537,7 +547,7 @@
         frozeQuote = quote;
         modal.open();
       }}
-      disabled={error || isLoading || balanceError || amount.label <= 0}
+      disabled={error || isLoading || balanceError || sellAmount.label <= 0}
       class="stake-button mt-10px rounded-20px p-15px w-100pc"
     >
       { balanceError ? 'Insufficient Balance' : isLoading ? 'Loading...' :  'Review Order' }
