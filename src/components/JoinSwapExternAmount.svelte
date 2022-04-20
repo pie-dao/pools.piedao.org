@@ -235,10 +235,18 @@
 
   const reduceSellTokenBalance = () => {
     if (amount.bn.isGreaterThan(sellToken.balance.bn)) return;
+
+    const parsedAmount = parseFloat(amount.label);
+    const parsedBalance = parseFloat(sellToken.balance.label);
+
+    // rounding errors can lead to negative labels
+    const label = Math.max(0, parsedBalance - parsedAmount).toString();
+    const number = Math.max(0, sellToken.balance.number - parsedAmount);
+
     sellToken.balance = {
       bn: sellToken.balance.bn.minus(amount.bn),
-      label: String(parseFloat(sellToken.balance.label) - parseFloat(amount.label)),
-      number: sellToken.balance.number - parseFloat(amount.label)
+      label,
+      number
     }
   }
 
