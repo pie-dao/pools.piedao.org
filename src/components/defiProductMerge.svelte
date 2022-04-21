@@ -22,7 +22,11 @@
 </script>
 
 <img src={images.defi_pp_merge} alt="defi single asset exchange"
-    class="cursor-pointer"
+    class="hidden md:block cursor-pointer"
+    on:click={() => { swapModal.open() }}
+/>
+<img src={images.defi_pp_merge_mobile} alt="defi single asset exchange"
+    class="block md:hidden cursor-pointer"
     on:click={() => { swapModal.open() }}
 />
 <Modal title={'Merge Tokens'} backgroundColor="#f3f3f3" bind:this={swapModal}>
