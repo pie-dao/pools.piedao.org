@@ -16,8 +16,12 @@
 <section>
     <slot>
         <img src={images.defi_pp_merge} alt="defi single asset exchange"
-            class="cursor-pointer"
-            on:click={openTrigger}
+            class="hidden md:block cursor-pointer"
+            on:click={() => { openTrigger() }}
+        />
+        <img src={images.defi_pp_merge_mobile} alt="defi single asset exchange"
+            class="block md:hidden cursor-pointer"
+            on:click={() => { openTrigger() }}
         />
     </slot>
     <Modal title={'Swap Tokens'} backgroundColor="#f3f3f3" bind:this={swapModal}>
