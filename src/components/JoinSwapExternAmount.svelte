@@ -42,6 +42,7 @@
   const defaultAmount = {
     bn: new BigNumber(0),
     label: 0,
+    decimals: 18
   };
 
   // computed props
@@ -59,7 +60,7 @@
   $: showSlippageSettings = false;
   $: balanceError = (sellToken && sellAmount && sellToken?.balance && sellAmount.bn.isGreaterThan(sellToken.balance.bn));
   $: tokensLoaded = tokenList.length > 0;
-  $: sellTokenDecimals = sellToken?.decimals ?? 18;
+  $: sellTokenDecimals = sellToken?.decimals;
 
   // watchers
   $: if ($eth?.signer) {
@@ -146,7 +147,6 @@
 
 //    at Modal.get modalIsOpen [as modalIsOpen] (Modal.svelte.js:376:9)
 
-
   function changeSlippage(value) {
     slippage = value;
     const slipPc = 1 + slippage/100;
@@ -164,13 +164,16 @@
     };
   }
 
-  async function approveToken() {
-
+  function checkWalletConnection() {
     if (!$eth.address || !$eth.signer) {
       displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
       connectWeb3();
       return;
     }
+  }
+
+  async function approveToken() {
+    checkWalletConnection();
 
     isLoading = true;
     try {
@@ -185,7 +188,6 @@
     sellAmount.bn = new BigNumber(sellAmount.label).multipliedBy(10 ** sellTokenDecimals);
     fetchQuote();
   }
-
 
   const fetchQuote = async (selfRefresh = false, freeze = false) => {
     if (!sellAmount.label || isLoading || isFetchingQuote) {
@@ -265,11 +267,8 @@
         return;
       }
 
-      if (!$eth.address || !$eth.signer) {
-        displayNotification({ message: $_('piedao.please.connect.wallet'), type: 'hint' });
-        connectWeb3();
-        return;
-      }
+      checkWalletConnection();
+
       isLoading = true;
 
       // avoid scientific notation
@@ -302,7 +301,6 @@
               message: `${sellAmount.label.toFixed(2)} ${sellToken.symbol} swapped successfully`,
               type: 'success',
             });
-
 
             dismiss();
             subscription.unsubscribe();
@@ -547,7 +545,7 @@
         frozeQuote = quote;
         modal.open();
       }}
-      disabled={error || isLoading || balanceError || sellAmount.label <= 0}
+      disabled={error || isLoading || balanceError || sellAmount.label === 0}
       class="stake-button mt-10px rounded-20px p-15px w-100pc"
     >
       { balanceError ? 'Insufficient Balance' : isLoading ? 'Loading...' :  'Review Order' }

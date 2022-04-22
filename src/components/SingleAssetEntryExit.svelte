@@ -6,7 +6,10 @@
     import { pools } from '../stores/eth.js'
 
     export let buyTokenAddress;
+
+    // Bind to parent function to create a custom activator
     export let openTrigger = () => swapModal.open();
+
     let swapModal;
 
     $: listed = $pools[buyTokenAddress.toLowerCase()];
@@ -25,12 +28,12 @@
         />
     </slot>
     <Modal title={'Swap Tokens'} backgroundColor="#f3f3f3" bind:this={swapModal}>
-        <span class="w-full" slot="content">
-        <Swap
-            {listed}
-            {buyTokenAddress}
-            buyTokenSymbol={symbol}
-        />
-        </span>
+        <div class="w-full" slot="content">
+            <Swap
+                {listed}
+                {buyTokenAddress}
+                buyTokenSymbol={symbol}
+            />
+        </div>
     </Modal>
 </section>

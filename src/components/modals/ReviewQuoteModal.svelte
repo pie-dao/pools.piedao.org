@@ -45,7 +45,7 @@
     <div class="flex justify-center font-thin mb-2">
     {#if isLoading}
         <p>Sign transaction on Metamask...</p>
-    {:else}
+    {:else if includeMarket}
         <div class="flex justify-center font-thin mb-2">
             {#if frozeQuote}
                 Quote expires in {$quoteRefreshSeconds} seconds.
