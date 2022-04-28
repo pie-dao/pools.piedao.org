@@ -6,13 +6,11 @@
   import flattenDeep from 'lodash/flattenDeep';
   import orderBy from 'lodash/orderBy';
   import { currentRoute } from '../stores/routes.js';
-  import Etherscan from '../components/Etherscan.svelte';
   import Farming from '../components/Farming.svelte';
   import Quantstamp from '../components/Quantstamp.svelte';
   import LiquidityModal from '../components/modals/LiquidityModal.svelte';
   import AddMetamaskBanner from '../components/AddMetamaskBanner.svelte';
   import CoinGeckoBanner from '../components/CoinGeckoBanner.svelte';
-  import SpreadBanner from '../components/SpreadBanner.svelte';
   import images from '../config/images.json';
   import poolsConfig from '../config/pools.json';
   import ovens from '../config/ovensConf.js';
@@ -33,6 +31,8 @@
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import TooltipButton from '../components/elements/TooltipButton.svelte';
+  import Merge from '../components/defiProductMerge.svelte';
+
 
   export let params;
 
@@ -160,23 +160,23 @@
     return formatFiat($pools[token + '-nav'] ? $pools[token + '-nav'] : '');
   })();
 
-  $: getSpread = (() => {
-    let nav = parseFloat($pools[token + '-nav']);
-    let price = parseFloat(tokenPrice);
+  // $: getSpread = (() => {
+  //   let nav = parseFloat($pools[token + '-nav']);
+  //   let price = parseFloat(tokenPrice);
 
-    if (!nav || !price) {
-      return {
-        label: 'Spread',
-        number: `n/a`,
-      };
-    }
+  //   if (!nav || !price) {
+  //     return {
+  //       label: 'Spread',
+  //       number: `n/a`,
+  //     };
+  //   }
 
-    let spread = ((price - nav) / price) * 100;
-    return {
-      label: spread > 0 ? 'Premium' : 'Discount',
-      number: `${spread.toFixed(2)}%`,
-    };
-  })();
+  //   let spread = ((price - nav) / price) * 100;
+  //   return {
+  //     label: spread > 0 ? 'Premium' : 'Discount',
+  //     number: `${spread.toFixed(2)}%`,
+  //   };
+  // })();
 
   $: getSpread = (() => {
     let nav = parseFloat($pools[token + '-nav']);
@@ -207,6 +207,10 @@
       tradingViewWidgetComponent.initWidget(options);
     }
   };
+
+  const getListed = () => {
+    return orderBy(composition, ['percentage'], ['desc']);
+  };
 </script>
 
 <!-- <SpreadBanner /> -->
@@ -233,7 +237,13 @@
     <LiquidityModal {token} method={modalOption.method} poolAction={modalOption.poolAction} />
   </span>
 </Modal>
+
+
+
 <div class="content flex flex-col spl">
+  <section id="defi-single-token-merge" class="mb-8 mx-1">
+    <Merge />
+  </section>
   <div class="flex w-full items-center justify-between">
     <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
       <div class="flex flex-row items-center">
@@ -306,8 +316,12 @@
                     role="menuitem">Redeem</a
                   >
                   {#if farmingPieObj}
-                    <a href="#/staking/{farmingPieObj.slug}" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farm</a>
-                  {/if}                  
+                    <a
+                      href="#/staking/{farmingPieObj.slug}"
+                      class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                      role="menuitem">Farm</a
+                    >
+                  {/if}
                 </div>
               </div>
             </div>
@@ -432,6 +446,8 @@
       </div>
     </div>
   </div>
+
+
 
   {#if poolsConfig[token].coingeckoId}
     <PriceChartArea coingeckoId={poolsConfig[token].coingeckoId} />
@@ -610,7 +626,8 @@
       <Farming token={$currentRoute.params.address} />
     </div>
     <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
-      <Etherscan token={$currentRoute.params.address} />
+      <!--This component might crash the entire site if etherscan is ever down.-->
+      <!--<Etherscan token={$currentRoute.params.address} />-->
     </div>
 
     <div class="p-0 mt-2 flexgrow	min-w-230px md:mr-10px">
@@ -768,7 +785,11 @@
               role="menuitem">Redeem</a
             >
             {#if farmingPieObj}
-              <a href="#/staking/{farmingPieObj.slug}" class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900" role="menuitem">Farm</a>
+              <a
+                href="#/staking/{farmingPieObj.slug}"
+                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                role="menuitem">Farm</a
+              >
             {/if}
           </div>
         </div>

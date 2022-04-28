@@ -4,8 +4,9 @@
   import poolsConfig from "../config/pools.json";
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
-  import ProductBox from '../components/elements/product-box.svelte';
   import Meta from '../components/elements/meta.svelte';
+  import images from '../config/images.json'
+  import Merge from '../components/defiProductMerge.svelte'
 
   import {
     getTokenImage,
@@ -93,11 +94,7 @@
     </span>
   </Modal>
 
-  <a class="h-100pc" target="_blank" href="/#/dough-staking-campaign">
-    <img class="inline hidden md:block" src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner-Small.jpg?raw=true" alt="We are hiring banner" />
-    <img class="inline block md:hidden" src="https://github.com/pie-dao/brand/blob/master/misc/Homepage-Banner-Small.jpg?raw=true" alt="We are hiring banner" />
-
-  </a>
+  <Merge />
 
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">

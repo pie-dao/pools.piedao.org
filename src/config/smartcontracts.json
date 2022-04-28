@@ -12,5 +12,8 @@
     "reward": "0x1083d743a1e53805a95249fef7310d75029f7cd6",
     "merkleTreeDistributor": "0xbaB795479bfF02c6ef52a10a54a95a42A1afa456",
     "kpi_options": "0xdfD82bF0e1CEEC9740B9004A0921a5DE61D3557E",
-    "wkpi": "0xC67C620074440C15683acE78c1EfA38A4569969b"
+    "wkpi": "0xC67C620074440C15683acE78c1EfA38A4569969b",
+    "defi_pp": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+    "defi_ps": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
+    "defi_pl": "0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
 }
