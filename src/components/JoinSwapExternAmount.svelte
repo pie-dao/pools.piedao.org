@@ -61,22 +61,65 @@
   $: balanceError = (sellToken && sellAmount && sellToken?.balance && sellAmount.bn.isGreaterThan(sellToken.balance.bn));
   $: tokensLoaded = tokenList.length > 0;
   $: sellTokenDecimals = sellToken?.decimals;
+  $: entry = true;
+
+  const invertSellToken = (selected) => {
+    entry = !entry;
+
+    console.debug({ entry })
+
+    const cacheBuyToken = buyToken;
+    // buy token is the bottom
+    buyToken = sellToken;
+
+    // sell token 
+    sellToken = cacheBuyToken;
+  };
+
+  $: console.debug({ buyToken, sellToken })
 
   // watchers
   $: if ($eth?.signer) {
     contract = new ethers.Contract(buyTokenAddress, smartPoolAbi, $eth.signer);
   }
 
+  $: if (sellToken && sellToken.address && $eth.address && !sellToken.balance) {
+    const items = [
+      ETH,
+      {
+        address: sellToken.address,
+        symbol: sellToken.symbol,
+        icon: getTokenImage(sellToken.address)
+      }
+    ];
+    fetchBalances(
+        items, 
+        $eth.address,
+        $eth.provider,
+        contract.address,
+      ).then((balances) => {
+      balances.forEach((token, idx) => {
+        if (idx > 0) {
+          console.debug({ token })
+          sellToken = token;       
+          checkUpdateAllowance(token)
+        }
+      });
+    });    
+  }
+
+  const ETH = {
+    address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    symbol: 'ETH',
+    icon: getTokenImage('eth')
+  };
+
   // This block will set up the token data that this component will use.
   // all changes to tokenList should happen in this block.
   $: {
     const newListed = [
       // fetchBalances expects ETH as first token
-      {
-        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-        symbol: 'ETH',
-        icon: getTokenImage('eth')
-      },    
+      ETH,
     ];
 
     for (const token of listed) {
@@ -95,7 +138,6 @@
           contract.address,
         ).then((balances) => {
         balances.forEach((token) => {
-
           const tokenIdx = newListed.findIndex((t) => t.address === token.address);
           newListed[tokenIdx].balance = token.balance;
           newListed[tokenIdx].allowance = token.allowance;
@@ -104,7 +146,7 @@
         });
 
         // remove eth as not revelant
-        tokenList = newListed.filter(item => item.symbol !== 'ETH');
+        tokenList = newListed.filter(item => item.symbol !=='ETH');
       });
     }
   };
@@ -134,7 +176,7 @@
     if (targetModal === 'sell' && token !== buyToken) {
       sellToken = token;
     } else if (targetModal === 'buy' && token !== sellToken) {
-      buyToken = buyTokenAddress;
+      buyToken = token;
     };
     fetchQuote();
   };
@@ -145,7 +187,10 @@
     return result
   }
 
-//    at Modal.get modalIsOpen [as modalIsOpen] (Modal.svelte.js:376:9)
+
+  // function changeMaxInputToken(slippage) {
+    
+  // }
 
   function changeSlippage(value) {
     slippage = value;
@@ -176,8 +221,10 @@
     checkWalletConnection();
 
     isLoading = true;
+
+    const spender = entry ? buyToken.address : contract.address;
     try {
-      await approveMax(sellToken.address, buyTokenAddress);
+      await approveMax(sellToken.address, spender);
       needAllowance = false;
     } finally {
       isLoading = false;
@@ -189,6 +236,33 @@
     fetchQuote();
   }
 
+  const assetEntryQuotes = async () => {
+    return await Promise.all([
+        contract.calcPoolOutGivenSingleIn(
+          sellToken.address,
+          ethers.BigNumber.from(sellAmount.bn.toFixed(0))
+        ),
+        contract.calcPoolOutGivenSingleIn(
+          sellToken.address,
+          ethers.utils.parseUnits('1.0', sellTokenDecimals)
+        )
+    ]);
+  };
+
+  const assetExitQuotes = async () => {
+    console.debug('calling exit', { sellToken, contract })
+    return await Promise.all([
+        contract.calcSingleOutGivenPoolIn(
+          buyToken.address,
+          ethers.BigNumber.from(sellAmount.bn.toFixed(0))
+        ),
+        contract.calcSingleOutGivenPoolIn(
+          buyToken.address,
+          ethers.utils.parseUnits('1.0', sellTokenDecimals)
+        )
+    ]);
+  };
+
   const fetchQuote = async (selfRefresh = false, freeze = false) => {
     if (!sellAmount.label || isLoading || isFetchingQuote) {
       return;
@@ -199,17 +273,7 @@
     needAllowance = needApproval(sellToken.allowance);
 
     try {
-      const [fullQuote, perUnit] = await Promise.all([
-        contract.calcPoolOutGivenSingleIn(
-          sellToken.address,
-          ethers.BigNumber.from(sellAmount.bn.toFixed(0))
-        ),
-        contract.calcPoolOutGivenSingleIn(
-          sellToken.address,
-          ethers.utils.parseUnits('1.0', sellTokenDecimals)
-        )
-      ]);
-
+      const [fullQuote, perUnit] = entry ? await assetEntryQuotes() : await assetExitQuotes();
       quote = {
         ...quote,
         sellAmount: sellAmount.bn,
@@ -259,6 +323,23 @@
     }
   }
 
+  const entrySwap = async () => {
+    return await contract.joinswapExternAmountIn(
+      sellToken.address,
+      sellAmount.bn.toString(),
+      amountWithSlippage.bn.toString()
+    );    
+  };
+
+  const exitSwap = async () => {
+    console.debug({ buyToken, quote, sellToken, contract, sellAmount })
+    return await contract.exitswapExternAmountOut(
+      buyToken.address,
+      sellToken.balance.bn.toString(),
+      sellToken.balance.bn.toString()
+    );
+  };
+
   async function swap() {
     
     try {
@@ -274,11 +355,7 @@
       // avoid scientific notation
       BigNumber.set({ EXPONENTIAL_AT: 99 });
 
-      const tx = await contract.joinswapExternAmountIn(
-        sellToken.address,
-        sellAmount.bn.toString(),
-        amountWithSlippage.bn.toString()
-      )
+      const tx = entry ? await entrySwap() : await exitSwap();
 
       const { emitter } = displayNotification(
         tx
@@ -325,16 +402,10 @@
   };
 
   const setMaxTokenValue = () => {
-    const token = tokenList.find(t => t.address === sellToken.address);
-    if (!token) return displayNotification({
-      message: 'Error selecting token',
-      type: 'error',
-      autoDismiss: 15_000
-    });
-
-    sellAmount.bn = token.balance.bn;
-    sellAmount.label = token.balance.number;
+    sellAmount.bn = sellToken.balance.bn;
+    sellAmount.label = sellToken.balance.number;
   };
+
 
   // lifecylces
   onMount(async () => {
@@ -366,7 +437,7 @@
 <div class="swap-container flex flex-col items-center bg-lightgrey">
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">From</div>
+      <div class="flex nowrap intems-center p-1 font-thin">From:{!entry ? ' (estimated)' : ''}</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
           <button
           on:click={() => {
@@ -400,6 +471,7 @@
       />
       <button
         class="swap-button"
+        disabled={!entry}
         on:click={() => {
           targetModal = 'sell';
           tokenSelectModalOpen = true;
@@ -416,17 +488,20 @@
           <span class="sc-kXeGPI jeVIZw token-symbol-container"
             >{sellToken ? sellToken.symbol : 'Loading...'}</span
           >
-          {#if tokensLoaded}
+          {#if entry && tokensLoaded}
           <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"
             ><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff" /></svg
           >
-        {/if}
+          {/if}
         </span>
       </button>
     </div>
   </div>
 
-  <div class="my-20px">
+  <div 
+    class={`my-20px transform ${entry ? 'rotate-0' : 'rotate-180'} transition-transform delay-75`}
+    on:click={() => invertSellToken()}
+    >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -437,13 +512,14 @@
       stroke-width="2"
       stroke-linecap="round"
       stroke-linejoin="round"
-      ><line x1="12" y1="5" x2="12" y2="19" /><polyline points="19 12 12 19 5 12" /></svg
-    >
+      ><line x1="12" y1="5" x2="12" y2="19" /><polyline 
+      points="19 12 12 19 5 12" /></svg
+    >   
   </div>
 
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">To (estimated)</div>
+      <div class="flex nowrap intems-center p-1 font-thin">To{entry ? ' (estimated)' : ''}</div>
     </div>
     <div class="flex nowrap items-center p-1">
       <input
@@ -461,18 +537,32 @@
         maxlength="79"
         spellcheck="false"
       />
-      <button class="cursor-default swap-button">
-        <span class="sc-iybRtq gjVeBU cursor-default">
+      <button
+        class="swap-button"
+        disabled={entry}
+        on:click={() => {
+          targetModal = 'buy';
+          tokenSelectModalOpen = true;
+        }}
+      >
+        <span class="sc-iybRtq gjVeBU">
+          {#if tokensLoaded}
           <img
             class="h-auto w-24px mr-5px"
             alt={buyToken ? `${buyToken.symbol} logo` : ''}
             src={buyToken ? buyToken.icon : ''}
           />
-          <span class="sc-kXeGPI jeVIZw token-symbol-container cursor-default"
+          {/if}
+          <span class="sc-kXeGPI jeVIZw token-symbol-container"
             >{buyToken ? buyToken.symbol : ''}</span
           >
+          {#if !entry && tokensLoaded}
+          <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"
+            ><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff" /></svg
+          >
+          {/if}
         </span>
-      </button>
+      </button>      
     </div>
   </div>
 
@@ -498,13 +588,14 @@
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} @ {parseFloat(quote.guaranteedLabel).toFixed(6)} {buyToken.symbol}</div>
     </div>
     <div class="flex items-center w-100pc px-16px justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">Minimum Amount:</div>
-      <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{amountWithSlippage && amountWithSlippage.label ? parseFloat(amountWithSlippage.label).toFixed(6) : 0} {buyToken.symbol}</div>
+      <div class="flex nowrap intems-center p-1 font-thin">{entry ? 'Minimum Amount' : 'Maximum Cost'}:</div>
+      1145 BCP
+      <!-- <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{amountWithSlippage && amountWithSlippage.label ? parseFloat(amountWithSlippage.label).toFixed(6) : 0} {buyToken.symbol}</div> -->
     </div>        
   <div 
     on:click={() => showSlippageSettings = !showSlippageSettings}
     class="cursor-pointer flex items-center w-100pc px-16px justify-between mt-5px">
-    <div class="flex nowrap intems-center p-1 font-thin">Max Slippage:</div>
+    <div class="flex nowrap intems-center p-1 font-thin">Max { entry ? 'Slippage' : 'Premium'}:</div>
     <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin">
       {#if true}
       <section>
