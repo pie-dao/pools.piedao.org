@@ -33,7 +33,7 @@ export const close = () => {
              on:mousedown_outside={close}>
             <div class="flex">
              {#if title}
-                <h2 class="pl-50px text-center text-lg xl:text-xl w-100pc">{title}</h2>
+                <h2 class="md:pl-50px text-center text-lg xl:text-xl w-100pc">{title}</h2>
             {/if}
             <button on:click={close} class="w-30px h-30px self-center">
                 <img src={images.closebutton} alt="closebutton" />
