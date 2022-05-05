@@ -14,6 +14,7 @@
     import { subscribeToBalance, amountFormatter } from "../helpers"
     import { compound, toNum } from '../../helpers/staking.js';
     import BigNumber from "bignumber.js";
+    import sliceDoughData from "../../config/slice-dough.json";
     
     let claimModal;
     let compoundModal;
@@ -29,6 +30,7 @@
     let sliceInWallet = new BigNumber(0);
     let sliceAmount = new BigNumber(0);
     let stakeMax = false;
+    let sliceDoughRate = sliceDoughData[0]["SLICE/DOUGH 3days avg"];
     let compoundAmount = {
         label: '',
         bn: new BigNumber(0),
@@ -221,20 +223,20 @@
                     <div class="flex flex-col nowrap w-full mt-6 swap-from rounded-20px bg-white p-16px">
                         <h3 class="font-bold text-left">Claimable Rewards</h3>
                         <div class="flex items-center justify-between">
-                            <span class="font-24px font-bold">{$eth.address && amountFormatter({ amount: $stakingData.accountWithdrawableRewards.dividedBy(10**18), displayDecimals: 4 })}</span>
-                            <div class="flex">
+                            <span class="text-sm lg:text-md font-bold">{$eth.address && amountFormatter({ amount: $stakingData.accountWithdrawableRewards.dividedBy(10**18), displayDecimals: 4 })}</span>
+                            <div class="flex items-center">
                                 <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
-                                <span class="sc-kXeGPI jeVIZw token-symbol-container font-bold">SLICE</span>
+                                <span class="sc-kXeGPI jeVIZw token-symbol-container font-bold text-sm lg:text-md">SLICE</span>
                             </div>
                         </div>
                     </div>
                     <div class="flex flex-col nowrap w-full  mt-6 swap-from rounded-20px bg-white p-16px">
                         <h3 class="text-left font-bold">Wallet</h3>
                         <div class="flex items-center justify-between">
-                            <span class="font-24px font-bold">{$eth.address && amountFormatter({ amount: sliceInWallet.dividedBy(10**18), displayDecimals: 4 })}</span>
-                            <div class="flex">
+                            <span class="text-sm lg:text-md font-bold">{$eth.address && amountFormatter({ amount: sliceInWallet.dividedBy(10**18), displayDecimals: 4 })}</span>
+                            <div class="flex items-center">
                                 <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
-                                <span class="sc-kXeGPI jeVIZw token-symbol-container font-bold">SLICE</span>
+                                <span class="sc-kXeGPI jeVIZw token-symbol-container font-bold text-sm lg:text-md">SLICE</span>
                             </div>
                         </div>
                     </div>
@@ -278,11 +280,11 @@
           {buttonText}
           </button>
           <div class="mt-2">
-            <p class="text-sm italic">The SLICE/DOUGH conversion rate is based on the average DOUGH price and SLICE NAV.</p>
+            <p class="text-sm italic">The conversion rate during the latest distribution was: {sliceDoughRate} SLICE/DOUGH.</p>
             <strong>The DAO will send additional veDOUGH as a lump sum to cover the gas spent on the 2 transactions to claim and send the SLICE.</strong> 
           </div>
         </div>
-      </div>       
+      </div>
     </div>
 </Modal>
 <ClaimModal bind:this={claimModal}/>
@@ -355,7 +357,7 @@
           disabled={isLoading || sliceAmount.eq(0)}
           class="flex items-center bg-pink rounded-xl pointer px-4 py-2 text-white mr-4"
           on:click={() => compoundModal.open()}
-      > Compound</button>
+      >Compound</button>
       <button 
       disabled={isLoading}
       class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
