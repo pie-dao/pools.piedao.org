@@ -169,6 +169,7 @@
     });
 
     const filtered = filter(allTokens, (t) => {
+      if(!t.info || !t.name) return false;
       if(t.info.holdersCount === 0) return false;
       if(t.name.includes('www') || t.name.includes('WWW')) return false;
       if(find(featured, (o) => o.address.toLowerCase() === t.info.address.toLowerCase())) return false;

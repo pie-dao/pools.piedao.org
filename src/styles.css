@@ -89,12 +89,12 @@ input[type=number] {
 
 .slippageBtn{
   background: white;
-  color: #fc02a7;
+  color: black;
 }
 
 .slippageBtn.selected{
   font-weight: bold;
-  color:black;
+  color:#fc02a7;
 }
 
 /* purgecss start ignore */
