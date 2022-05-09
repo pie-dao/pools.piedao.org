@@ -20,6 +20,7 @@
   export let buyTokenSymbol;
 
   // data
+  let entry = true;
   let tokenList = [];
   let modal;
   let contract;
@@ -96,7 +97,7 @@
         ).then((balances) => {
         balances.forEach((token) => {
 
-          const tokenIdx = newListed.findIndex((t) => t.address === token.address);
+          const tokenIdx = newListed.findIndex(t => t.address === token.address);
           newListed[tokenIdx].balance = token.balance;
           newListed[tokenIdx].allowance = token.allowance;
           newListed[tokenIdx].decimals = token.decimals;
@@ -128,13 +129,21 @@
   };
 
   // methods
+  const switchBuySell = () => {
+    entry = !entry;
+    const buyTokenCache = buyToken;
+    buyToken = sellToken;
+    sellToken = buyTokenCache;
+  };
+
+
   const tokenSelectCallback = (token) => {
     tokenSelectModalOpen = false;
     if (!token) return;
-    if (targetModal === 'sell' && token !== buyToken) {
+    if (entry && token !== buyToken) {
       sellToken = token;
-    } else if (targetModal === 'buy' && token !== sellToken) {
-      buyToken = buyTokenAddress;
+    } else if (!entry && token !== sellToken) {
+      buyToken = token;
     };
     fetchQuote();
   };
@@ -189,6 +198,32 @@
     fetchQuote();
   }
 
+  const fetchQuoteEntry = async () => {
+    await Promise.all([
+        contract.calcPoolOutGivenSingleIn(
+          sellToken.address,
+          ethers.BigNumber.from(sellAmount.bn.toFixed(0))
+        ),
+        contract.calcPoolOutGivenSingleIn(
+          sellToken.address,
+          ethers.utils.parseUnits('1.0', sellTokenDecimals)
+        )
+    ])
+  };
+
+  const fetchQuoteExit = async () => {
+    await Promise.all([
+      contract.calcSingleOutGivenPoolIn(
+        sellToken.address,
+        ethers.BigNumber.from(sellAmount.bn.toFixed(0)),
+      ),
+      contract.calcSingleOutGivenPoolIn(
+          sellToken.address,
+          ethers.utils.parseUnits('1.0', sellTokenDecimals),
+      ),
+    ])
+  };  
+
   const fetchQuote = async (selfRefresh = false, freeze = false) => {
     if (!sellAmount.label || isLoading || isFetchingQuote) {
       return;
@@ -199,16 +234,7 @@
     needAllowance = needApproval(sellToken.allowance);
 
     try {
-      const [fullQuote, perUnit] = await Promise.all([
-        contract.calcPoolOutGivenSingleIn(
-          sellToken.address,
-          ethers.BigNumber.from(sellAmount.bn.toFixed(0))
-        ),
-        contract.calcPoolOutGivenSingleIn(
-          sellToken.address,
-          ethers.utils.parseUnits('1.0', sellTokenDecimals)
-        )
-      ]);
+      const [fullQuote, perUnit] = entry ? await fetchQuoteEntry() : await fetchQuoteExit();
 
       quote = {
         ...quote,
@@ -259,6 +285,22 @@
     }
   }
 
+  const singleAssetEntry = async () => {
+    return await contract.joinswapExternAmountIn(
+        sellToken.address,
+        sellAmount.bn.toString(),
+        amountWithSlippage.bn.toString()
+    );
+  }
+
+  const singleAssetExit = async () => {
+    return await contract.exitswapExternAmountOut(
+      sellToken.address,
+      sellAmount.bn.toString(),
+      sellAmount.bn.toString());
+  
+  }
+
   async function swap() {
     
     try {
@@ -274,11 +316,7 @@
       // avoid scientific notation
       BigNumber.set({ EXPONENTIAL_AT: 99 });
 
-      const tx = await contract.joinswapExternAmountIn(
-        sellToken.address,
-        sellAmount.bn.toString(),
-        amountWithSlippage.bn.toString()
-      )
+      const tx = entry ? await singleAssetEntry() : await singleAssetExit();
 
       const { emitter } = displayNotification(
         tx
@@ -365,9 +403,20 @@
 
 <div class="swap-container flex flex-col items-center bg-lightgrey">
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
-    <button>FLIP THE SWITCH!</button>
+    <div class="flex w-full justify-center">
+      <button
+        class="mx-1 {entry ? 'font-primary' : 'text-grey'}" 
+        on:click={switchBuySell}
+        disabled={entry}
+        >Enter</button>
+      <button
+        class="mx-1 {!entry ? 'font-primary' : 'text-grey'}"
+        on:click={switchBuySell}
+        disabled={!entry}
+        >Exit</button>
+    </div>
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">From</div>
+      <div class="flex nowrap intems-center p-1 font-thin">From{!entry ? ' (estimated)' : ''}:</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
           <button
           on:click={() => {
@@ -401,6 +450,7 @@
       />
       <button
         class="swap-button"
+        disabled={!entry}
         on:click={() => {
           targetModal = 'sell';
           tokenSelectModalOpen = true;
@@ -417,7 +467,7 @@
           <span class="sc-kXeGPI jeVIZw token-symbol-container"
             >{sellToken ? sellToken.symbol : 'Loading...'}</span
           >
-          {#if tokensLoaded}
+          {#if entry && tokensLoaded}
           <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"
             ><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff" /></svg
           >
@@ -444,7 +494,7 @@
 
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">To (estimated)</div>
+      <div class="flex nowrap intems-center p-1 font-thin">To {entry ? ' (estimated)': ''}</div>
     </div>
     <div class="flex nowrap items-center p-1">
       <input
@@ -462,18 +512,32 @@
         maxlength="79"
         spellcheck="false"
       />
-      <button class="cursor-default swap-button">
-        <span class="sc-iybRtq gjVeBU cursor-default">
-          <img
-            class="h-auto w-24px mr-5px"
-            alt={buyToken ? `${buyToken.symbol} logo` : ''}
-            src={buyToken ? buyToken.icon : ''}
-          />
-          <span class="sc-kXeGPI jeVIZw token-symbol-container cursor-default"
-            >{buyToken ? buyToken.symbol : ''}</span
-          >
-        </span>
-      </button>
+      <button
+      class="swap-button"
+      disabled={entry}
+      on:click={() => {
+        targetModal = 'sell';
+        tokenSelectModalOpen = true;
+      }}
+    >
+      <span class="sc-iybRtq gjVeBU">
+        {#if tokensLoaded}
+        <img
+          class="h-auto w-24px mr-5px"
+          alt={buyToken ? `${buyToken.symbol} logo` : ''}
+          src={buyToken ? buyToken.icon : ''}
+        />
+        {/if}
+        <span class="sc-kXeGPI jeVIZw token-symbol-container"
+          >{buyToken ? buyToken.symbol : ''}</span
+        >
+        {#if !entry && tokensLoaded}
+        <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"
+          ><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff" /></svg
+        >
+      {/if}
+      </span>
+    </button>
     </div>
   </div>
 
