@@ -68,17 +68,17 @@
     contract = new ethers.Contract(buyTokenAddress, smartPoolAbi, $eth.signer);
   }
 
+  const ethereum = {
+    address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    symbol: 'ETH',
+    icon: getTokenImage('eth')
+  };   
+
   // This block will set up the token data that this component will use.
   // all changes to tokenList should happen in this block.
   $: {
-    const newListed = [
-      // fetchBalances expects ETH as first token
-      {
-        address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-        symbol: 'ETH',
-        icon: getTokenImage('eth')
-      },    
-    ];
+    // fetchBalances expects ETH as first token
+    const newListed = [ethereum];
 
     for (const token of listed) {
       newListed.push({
@@ -109,6 +109,33 @@
       });
     }
   };
+
+  $: { console.debug({ buyToken })}
+
+  $: {
+    if (sellToken && $eth && !sellToken.balance) {
+      const getTokens = [ethereum, sellToken];
+      fetchBalances(
+            getTokens, 
+            $eth.address,
+            $eth.provider,
+            contract.address,
+        ).then((balances) => {
+          balances.forEach((token, idx) => {
+            if (idx === 0) return;
+            sellToken.balance = token.balance;
+            sellToken.allowance = token.allowance;
+            sellToken.decimals = token.decimals;
+            checkUpdateAllowance(token);
+          }
+        );
+      })
+    }
+  }
+
+  $: {
+    console.debug({ sellToken, buyToken })
+  }
 
   function needApproval(allowance) {
     if (!$eth.address || !$eth.signer) return false;
@@ -199,7 +226,7 @@
   }
 
   const fetchQuoteEntry = async () => {
-    await Promise.all([
+    return await Promise.all([
         contract.calcPoolOutGivenSingleIn(
           sellToken.address,
           ethers.BigNumber.from(sellAmount.bn.toFixed(0))
@@ -212,30 +239,32 @@
   };
 
   const fetchQuoteExit = async () => {
-    await Promise.all([
+    return await Promise.all([
       contract.calcSingleOutGivenPoolIn(
-        sellToken.address,
+        buyToken.address,
         ethers.BigNumber.from(sellAmount.bn.toFixed(0)),
       ),
       contract.calcSingleOutGivenPoolIn(
-          sellToken.address,
-          ethers.utils.parseUnits('1.0', sellTokenDecimals),
+        buyToken.address,
+        ethers.utils.parseUnits('1.0', sellTokenDecimals),
       ),
     ])
   };  
 
   const fetchQuote = async (selfRefresh = false, freeze = false) => {
-    if (!sellAmount.label || isLoading || isFetchingQuote) {
-      return;
-    }
+    if (!sellAmount.label || isLoading || isFetchingQuote) return;
     isLoading = true;
     isFetchingQuote = true;
+
+    // avoid scientific notation
+    BigNumber.set({ EXPONENTIAL_AT: 99 });
 
     needAllowance = needApproval(sellToken.allowance);
 
     try {
       const [fullQuote, perUnit] = entry ? await fetchQuoteEntry() : await fetchQuoteExit();
 
+      // console.debug({ full: fullQuote.toString(), perUnit: perUnit.toString() })
       quote = {
         ...quote,
         sellAmount: sellAmount.bn,
@@ -294,15 +323,17 @@
   }
 
   const singleAssetExit = async () => {
+    const poolAmountIn = ethers.BigNumber.from(sellAmount.bn.toString()).mul(110).div(100).toString();
+    const tokenAmountOut = quote.buyAmount;
+    console.debug({ poolAmountIn, tokenAmountOut })
     return await contract.exitswapExternAmountOut(
-      sellToken.address,
-      sellAmount.bn.toString(),
-      sellAmount.bn.toString());
-  
+      buyToken.address,
+      tokenAmountOut,
+      poolAmountIn
+    );
   }
 
   async function swap() {
-    
     try {
       if (!quote || Object.entries(quote).length === 0) {
         error = 'You need a quote first.';
@@ -363,15 +394,15 @@
   };
 
   const setMaxTokenValue = () => {
-    const token = tokenList.find(t => t.address === sellToken.address);
-    if (!token) return displayNotification({
-      message: 'Error selecting token',
-      type: 'error',
-      autoDismiss: 15_000
-    });
+    // const token = tokenList.find(t => t.address === sellToken.address);
+    // if (!token) return displayNotification({
+      // message: 'Error selecting token',
+      // type: 'error',
+      // autoDismiss: 15_000
+    // });
 
-    sellAmount.bn = token.balance.bn;
-    sellAmount.label = token.balance.number;
+    sellAmount.bn = sellToken.balance.bn;
+    sellAmount.label = sellToken.balance.number;
   };
 
   // lifecylces
@@ -494,7 +525,7 @@
 
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">To {entry ? ' (estimated)': ''}</div>
+      <div class="flex nowrap intems-center p-1 font-thin">To {entry ? ' (estimated)': ''}:</div>
     </div>
     <div class="flex nowrap items-center p-1">
       <input
