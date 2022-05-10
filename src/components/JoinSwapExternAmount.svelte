@@ -52,6 +52,7 @@
   $: buyToken = defaultTokenBuy;
   $: sellAmount = defaultAmount;
   $: amountWithSlippage = { bn: BigNumber(0), label: '0'};
+  $: amountWithPremium = { bn: BigNumber(0), label: '0'};
   $: receivedAmount = 0;
   $: frozeQuote = null;
   $: needAllowance = false;
@@ -59,13 +60,28 @@
   $: isFetchingQuote = false;
   $: error = null;
   $: showSlippageSettings = false;
-  $: balanceError = (sellToken && sellAmount && sellToken?.balance && sellAmount.bn.isGreaterThan(sellToken.balance.bn));
+  $: balanceError = sellTokenHasBalanceError(sellToken, sellAmount);
   $: tokensLoaded = tokenList.length > 0;
   $: sellTokenDecimals = sellToken?.decimals;
 
   // watchers
   $: if ($eth?.signer) {
     contract = new ethers.Contract(buyTokenAddress, smartPoolAbi, $eth.signer);
+  }
+
+  const sellTokenHasBalanceError = (_sellToken, _sellAmount) => {
+    // missing data will throw error
+    if (!_sellToken || !_sellAmount) return true;
+    if (entry) {
+      // when entering, we can just take the full balance
+      if (!_sellToken.balance) return true;
+      if (_sellAmount.bn.isGreaterThan(_sellToken.balance.bn)) return true;
+    } else {
+      // when exiting, we need additional room for slippage in the opposite direction
+      if (!_sellToken.balanceWithPremium) return true;
+      if (_sellAmount.bn.isGreaterThan(_sellToken.balanceWithPremium.bn)) return true;
+    }
+    return false;
   }
 
   const ethereum = {
@@ -110,8 +126,6 @@
     }
   };
 
-  $: { console.debug({ buyToken })}
-
   $: {
     if (sellToken && $eth && !sellToken.balance) {
       const getTokens = [ethereum, sellToken];
@@ -126,15 +140,12 @@
             sellToken.balance = token.balance;
             sellToken.allowance = token.allowance;
             sellToken.decimals = token.decimals;
+            updateSellBalance();
             checkUpdateAllowance(token);
           }
         );
       })
     }
-  }
-
-  $: {
-    console.debug({ sellToken, buyToken })
   }
 
   function needApproval(allowance) {
@@ -163,7 +174,6 @@
     sellToken = buyTokenCache;
   };
 
-
   const tokenSelectCallback = (token) => {
     tokenSelectModalOpen = false;
     if (!token) return;
@@ -175,29 +185,53 @@
     fetchQuote();
   };
   
-  const toNum = (num) => {
+  const toNum = (num, decimals = 18) => {
     const bn = new BigNumber(num.toString());
-    const result = bn.dividedBy(10 ** 18).toFixed(6);
+    const result = bn.dividedBy(10 ** decimals).toFixed(6);
     return result
-  }
+  };
 
-//    at Modal.get modalIsOpen [as modalIsOpen] (Modal.svelte.js:376:9)
-
-  function changeSlippage(value) {
-    slippage = value;
-    const slipPc = 1 + slippage/100;
+  function getQuoteWithSlippage(baseQuote, slipPc) {    
     amountWithSlippage = {
       bn: BigNumber(quote.buyAmount).dividedToIntegerBy(slipPc),
       label: parseFloat(quote.buyLabel / slipPc).toString(),
     };
-
     quote = {
-      ...quote,
-      guaranteedPrice: BigNumber(quote.buyPrice).dividedToIntegerBy(slipPc),
-      guaranteedLabel: parseFloat(quote.label) / slipPc,
+      ...baseQuote,
       amountWithSlippageLabel: amountWithSlippage.label,
       amountWithSlippageBn: amountWithSlippage.bn,
     };
+  }
+
+  function getQuoteWithPremium(baseQuote, slipPc) {
+    amountWithPremium = {
+      bn: sellAmount.bn.multipliedBy(slipPc),
+      label: sellAmount.label * slipPc 
+    };
+    quote = {
+      ...baseQuote,
+      amountWithPremiumLabel: amountWithPremium.label,
+      amountWithPremiumBn: amountWithPremium.bn,
+    };
+  }
+
+
+  function changeSlippage(value) {
+    // sets the component slippage
+    slippage = value;
+    const slipPc = 1 + slippage/100;
+    const baseQuote = {
+      ...quote,
+      guaranteedPrice: BigNumber(quote.buyPrice).dividedToIntegerBy(slipPc),
+      guaranteedLabel: parseFloat(quote.label) / slipPc,
+    };
+
+    if (entry) {
+      getQuoteWithSlippage(baseQuote, slipPc);
+    } else {
+      updateSellBalance();
+      getQuoteWithPremium(baseQuote, slipPc);
+    }
   }
 
   function checkWalletConnection() {
@@ -210,7 +244,6 @@
 
   async function approveToken() {
     checkWalletConnection();
-
     isLoading = true;
     try {
       await approveMax(sellToken.address, buyTokenAddress);
@@ -221,7 +254,7 @@
   }
 
   function onAmountChange() {
-    sellAmount.bn = new BigNumber(sellAmount.label).multipliedBy(10 ** sellTokenDecimals);
+    sellAmount.bn = new BigNumber(sellAmount.label).multipliedBy(10 ** sellTokenDecimals)
     fetchQuote();
   }
 
@@ -258,33 +291,26 @@
 
     // avoid scientific notation
     BigNumber.set({ EXPONENTIAL_AT: 99 });
-
     needAllowance = needApproval(sellToken.allowance);
 
     try {
       const [fullQuote, perUnit] = entry ? await fetchQuoteEntry() : await fetchQuoteExit();
 
-      // console.debug({ full: fullQuote.toString(), perUnit: perUnit.toString() })
       quote = {
         ...quote,
         sellAmount: sellAmount.bn,
         sellLabel: sellAmount.label,
         buyAmount: fullQuote.toString(),
-        buyLabel: ethers.utils.formatEther(fullQuote),
+        buyLabel: ethers.utils.formatUnits(fullQuote, buyToken.decimals ?? 18),
         buyPrice: perUnit.toString(),
         value: perUnit.toString(),
-        label: ethers.utils.formatEther(perUnit),
+        label: ethers.utils.formatUnits(perUnit, buyToken.decimals ?? 18),
       };
 
-      if (slippage) {
-        changeSlippage(slippage)
-      }
+      if (slippage) changeSlippage(slippage);
+      receivedAmount = toNum(quote.buyAmount, buyToken.decimals ?? 18);
+      if (freeze) frozeQuote = quote;
 
-      receivedAmount = toNum(quote.buyAmount)
-
-      if (freeze) {
-        frozeQuote = quote;
-      }
     } catch (err) {
       displayNotification({
         autoDismiss: 15000,
@@ -323,9 +349,16 @@
   }
 
   const singleAssetExit = async () => {
-    const poolAmountIn = ethers.BigNumber.from(sellAmount.bn.toString()).mul(110).div(100).toString();
+    const poolAmountIn = sellAmount.bn
+      .multipliedBy(1 + slippage/100)
+      .decimalPlaces(0)
+      .toString();
     const tokenAmountOut = quote.buyAmount;
-    console.debug({ poolAmountIn, tokenAmountOut })
+
+    console.debug({
+      poolAmountIn,
+      tokenAmountOut
+    })
     return await contract.exitswapExternAmountOut(
       buyToken.address,
       tokenAmountOut,
@@ -348,10 +381,7 @@
       BigNumber.set({ EXPONENTIAL_AT: 99 });
 
       const tx = entry ? await singleAssetEntry() : await singleAssetExit();
-
-      const { emitter } = displayNotification(
-        tx
-      );
+      const { emitter } = displayNotification(tx);
 
       reduceSellTokenBalance();
       sellAmount = defaultAmount;
@@ -393,22 +423,33 @@
     }
   };
 
-  const setMaxTokenValue = () => {
-    // const token = tokenList.find(t => t.address === sellToken.address);
-    // if (!token) return displayNotification({
-      // message: 'Error selecting token',
-      // type: 'error',
-      // autoDismiss: 15_000
-    // });
+  const updateSellBalance = () => {
+    // reduce balance by %age premium
+    if (!entry && sellToken && sellToken.balance) {
+      const slip = 1 + slippage / 100;
+      sellToken.balanceWithPremium = {
+        bn: sellToken.balance.bn.dividedToIntegerBy(slip),
+        label: sellToken.balance.label / slip
+      }
+    }
+  }
 
-    sellAmount.bn = sellToken.balance.bn;
-    sellAmount.label = sellToken.balance.number;
+  const setMaxTokenValue = () => {
+    const useWithPremium = !entry && sellToken.balanceWithPremium;
+    sellAmount.bn = useWithPremium 
+      ? sellToken.balanceWithPremium.bn
+      : sellToken.balance.bn;
+    sellAmount.label = useWithPremium
+      ? parseFloat(sellToken.balanceWithPremium.label).toFixed(6)
+      : sellToken.balance.number.toFixed(6);
+
   };
 
-  // lifecylces
+  // lifecycle hooks
   onMount(async () => {
     await fetchQuote();
   });
+
 </script>
 <TokenSelectModal
   tokens={$eth.address ? orderBy(tokenList, ['balance.number'], ['desc']) : tokenList}
@@ -455,7 +496,7 @@
               fetchQuote();
           }}
           >
-            Balance: {sellToken?.balance?.label ?? 0}
+            Available: {entry ? `${sellToken?.balance?.label ?? 0}` : `${parseFloat(sellToken?.balanceWithPremium?.label).toFixed(2) ?? 0}`}
         </button>
       </div>
     </div>
@@ -525,13 +566,12 @@
 
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">To {entry ? ' (estimated)': ''}:</div>
+      <div class="flex nowrap intems-center p-1 font-thin">To{entry ? ' (estimated)': ''}:</div>
     </div>
     <div class="flex nowrap items-center p-1">
       <input
         class="swap-input-from"
         bind:value={receivedAmount}
-        disabled
         inputmode="decimal"
         title="Token Amount"
         autocomplete="off"
@@ -593,14 +633,16 @@
       <div class="flex nowrap intems-center p-1 font-thin">Minimum Price:</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">1 {sellToken.symbol} @ {parseFloat(quote.guaranteedLabel).toFixed(6)} {buyToken.symbol}</div>
     </div>
+    {#if entry}
     <div class="flex items-center w-100pc px-16px justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Minimum Amount:</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{amountWithSlippage && amountWithSlippage.label ? parseFloat(amountWithSlippage.label).toFixed(6) : 0} {buyToken.symbol}</div>
-    </div>        
+    </div>     
+    {/if}   
   <div 
     on:click={() => showSlippageSettings = !showSlippageSettings}
     class="cursor-pointer flex items-center w-100pc px-16px justify-between mt-5px">
-    <div class="flex nowrap intems-center p-1 font-thin">Max Slippage:</div>
+    <div class="flex nowrap intems-center p-1 font-thin">Max {entry ? 'Slippage' : 'Premium'}:</div>
     <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin">
       {#if true}
       <section>

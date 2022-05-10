@@ -6,7 +6,6 @@
     import { pools } from '../stores/eth.js'
 
     export let buyTokenAddress;
-
     // Bind to parent function to create a custom activator
     export let openTrigger = () => swapModal.open();
 
