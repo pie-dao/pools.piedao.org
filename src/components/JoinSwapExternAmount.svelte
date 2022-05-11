@@ -368,6 +368,8 @@
   }
 
   async function swap() {
+    // fix issues with BN casting scientific notation
+    BigNumber.set({ EXPONENTIAL_AT: 99 });
     try {
       if (!quote || Object.entries(quote).length === 0) {
         error = 'You need a quote first.';

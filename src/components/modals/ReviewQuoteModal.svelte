@@ -50,7 +50,7 @@
                 Quote expired.
             {/if}
         </div>
-        {/if}
+    {/if}
     </div>        
         <div class="flex w-100pc bg-lightgrey-2 p-4 rounded mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
             <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
