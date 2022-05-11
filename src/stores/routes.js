@@ -98,8 +98,6 @@ const formatRoute = (route) => {
   // changeUrl(route);
 
   switch (_route[0] || 'root') {
-    case 'support':
-      return { page: Redirect, params: { label: 'support page!', to: 'https://piedao.atlassian.net/servicedesk/customer/portals' } };
     case 'about':
       return { page: About };
     case 'dxp-defi-index':
@@ -112,14 +110,14 @@ const formatRoute = (route) => {
       address = (_route[1] || '0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5').toLowerCase();
       return { page: Experipie, params: { address } };
     case 'slice':
-      return { page: Slice };      
+      return { page: Slice };
     case 'pie':
       address = (_route[1] || '').toLowerCase();
       return { page: PiePageSwitch, params: { address } };
     case 'dough-staking-campaign':
       return { page: DoughStakingCampaign };
     case 'kpi-options-campaign':
-      return { page: KpiOptionsCampaign };      
+      return { page: KpiOptionsCampaign };
     case 'dough':
       return { page: Dough };
     case 'learn':
@@ -146,13 +144,13 @@ const formatRoute = (route) => {
       return { page: StakingRewards };
     case 'staking_reward_breakdown':
       /* eslint-disable no-case-declarations */
-      const timestamp = (_route[1] || '');
-      /* eslint-enable no-case-declarations */      
+      const timestamp = _route[1] || '';
+      /* eslint-enable no-case-declarations */
       return { page: StakingRewardBreakdown, params: { timestamp } };
     case 'simulator':
     case 'staking-simulator':
       /* eslint-disable no-case-declarations */
-      const simulation = (_route[1] || '');
+      const simulation = _route[1] || '';
       /* eslint-enable no-case-declarations */
       return { page: Simulator, params: { simulation } };
     case 'simulator-stats':

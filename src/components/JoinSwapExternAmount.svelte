@@ -18,6 +18,7 @@
   export let listed = [];
   export let buyTokenAddress;
   export let buyTokenSymbol;
+  export let allowExit;
 
   // data
   let entry = true;
@@ -475,6 +476,7 @@
 
 <div class="swap-container flex flex-col items-center bg-lightgrey">
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
+    {#if allowExit}
     <div class="flex w-full justify-center">
       <button
         class="mx-1 {entry ? 'font-primary' : 'text-grey'}" 
@@ -487,6 +489,7 @@
         disabled={!entry}
         >Exit</button>
     </div>
+    {/if}
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">From{!entry ? ' (estimated)' : ''}:</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
