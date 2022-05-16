@@ -3,16 +3,12 @@
     "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4",
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
-    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
   ],
   "selectable": [
     "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4",
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
-    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
@@ -392,10 +388,11 @@
     "symbol": "DEFI++",
     "description": "The most diversified DEFI index on the market. Both large and small market caps.",
     "isExperipie": false,
-    "name": "DeFi Index Pie ",
+    "name": "DeFi Index Pie",
     "useRecipe": true,
     "streamingFees": "0",
     "useMintOverBuy": true,
+    "disableSwitch": true,
     "buyButton": true,
     "swapEnabled": true,
     "coingeckoId": "piedao-defi",
@@ -405,18 +402,19 @@
         "symbol": "DEFI+S",
         "address": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
         "color": "#58a4fc",
+        "coingeckoImageId": 12701,
         "coingeckoId": "piedao-defi-small-cap",
         "percentage": 30,
-        "isPie": true
+        "isPie": false
       },
       {
         "symbol": "DEFI+L",
         "address": "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
         "color": "#6beab1",
         "coingeckoId": "piedao-defi-large-cap",
-        "coingeckoImageId": 1,
+        "coingeckoImageId": 12731,
         "percentage": 70,
-        "isPie": true
+        "isPie": false
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"

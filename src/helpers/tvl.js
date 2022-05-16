@@ -24,10 +24,6 @@ async function returnDecimals(address) {
 }
 
 let pies = [
-  // DEFI+S
-  '0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c',
-  // DEFI+L
-  '0x78f225869c08d478c34e5f645d07a87d3fe8eb78',
   // DEFI++
   '0x8D1ce361eb68e9E05573443C407D4A3Bed23B033',
   // BCP
@@ -64,54 +60,6 @@ const stakingPools = {
       '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
       // DOUGH
       '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
-    ],
-  },
-  // DEFI+S/ETH (OLD)
-  '0x220f25C2105a65425913FE0CF38e7699E3992B97': {
-    lpType: 'balancer',
-    // LP token (BPT)
-    lp: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
-    // Address in which the underlyings are deposited
-    lpUnderlyingsAddress: '0x35333CF3Db8e334384EC6D2ea446DA6e445701dF',
-    underlyings: [
-      // WETH
-      '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-    ],
-  },
-  // DEFI+L/ETH (OLD)
-  '0xc1a116cb2d354503f9ec5cb436a3b213f377631d': {
-    lpType: 'balancer',
-    // LP token (BPT)
-    lp: '0xa795600590a7da0057469049ab8f1284baed977e',
-    // Address in which the underlyings are deposited
-    lpUnderlyingsAddress: '0xa795600590a7da0057469049ab8f1284baed977e',
-    underlyings: [
-      // WETH
-      '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-    ],
-  },
-  // DEFI+S/ETH
-  '0xFcBB61bcd4909bf4AF708F15AAaa905E0978cAfc': {
-    lpType: 'balancer',
-    // LP token (BPT)
-    lp: '0x35333cf3db8e334384ec6d2ea446da6e445701df',
-    // Address in which the underlyings are deposited
-    lpUnderlyingsAddress: '0x35333cf3db8e334384ec6d2ea446da6e445701df',
-    underlyings: [
-      // WETH
-      '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-    ],
-  },
-  // DEFI+L/ETH
-  '0xb8E59ce1359d80E4834228eDd6a3F560e7534438': {
-    lpType: 'balancer',
-    // LP token (BPT)
-    lp: '0xa795600590a7da0057469049ab8f1284baed977e',
-    // Address in which the underlyings are deposited
-    lpUnderlyingsAddress: '0xa795600590a7da0057469049ab8f1284baed977e',
-    underlyings: [
-      // WETH
-      '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
     ],
   },
 };

@@ -396,7 +396,7 @@
 
 <div class="liquidity-container bg-grey-243 rounded-4px p-4 w-100pc md:p-6 ">
 
-    {#if approach === 'add'}
+    {#if approach === 'add' && !poolsConfig[token].disableSwitch}
     <div class="row flex font-thin">
       <div class="flex-auto text-right">{$_('general.single')} {$_('general.asset')}</div>
       <div class="switch mx-4" on:click={() => {

@@ -32,7 +32,7 @@ metadata={{
         <br/><br/>
         As a community we decided that the true balanced crypto portfolio would evenly spread exposure across these three asset groups. BCP is therefore composed of an even 33.33% distribution between BTC, ETH, and DEFI++.
         <br/><br/>
-        DEFI++ is our most diversified DEFI index, a 70/30 balance of our large market cap (DEFI+L) and small cap market cap (DEFI+S) DEFI products. Both these products follow a weight-based methodology, with higher allocation given to larger market cap assets. This is done in order to maximise the scalability of the pies, without the low liquidity of low cap (but high potential) assets becoming a bottleneck.
+        DEFI++ is our most diversified DEFI index, following a weight-based methodology, with higher allocation given to larger market cap assets. This is done in order to maximise the scalability of the pies, without the low liquidity of low cap (but high potential) assets becoming a bottleneck.
     </div>
 
     
