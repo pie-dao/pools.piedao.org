@@ -6,7 +6,7 @@
     import { pools } from '../stores/eth.js'
 
     export let buyTokenAddress;
-
+    export let allowExit = false;
     // Bind to parent function to create a custom activator
     export let openTrigger = () => swapModal.open();
 
@@ -20,11 +20,11 @@
     <slot>
         <img src={images.defi_pp_merge} alt="defi single asset exchange"
             class="hidden md:block cursor-pointer"
-            on:click={() => { openTrigger() }}
+            on:click={openTrigger}
         />
         <img src={images.defi_pp_merge_mobile} alt="defi single asset exchange"
             class="block md:hidden cursor-pointer"
-            on:click={() => { openTrigger() }}
+            on:click={openTrigger}
         />
     </slot>
     <Modal title={'Swap Tokens'} backgroundColor="#f3f3f3" bind:this={swapModal}>
@@ -33,6 +33,7 @@
                 {listed}
                 {buyTokenAddress}
                 buyTokenSymbol={symbol}
+                {allowExit}
             />
         </div>
     </Modal>

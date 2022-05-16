@@ -624,11 +624,15 @@
     </div>
   {/if}
 
+  
+  
+  <!-- Commented this code, to show a button to open the BCP modal. It can be safely deleted but is useful for checking functionality.   -->
   {#if $currentRoute?.params?.address?.toLowerCase() === smartcontracts.bcp.toLowerCase()}
   <section id="defi-single-token-merge" class="mb-8 mx-1">
     <Merge 
       bind:openTrigger={openSwapModal}
       buyTokenAddress={smartcontracts.bcp}
+      allowExit={true}
     >
         <button class="text-white text-lg rounded-sm py-2 px-5 bg-pink 
           hover:bg-white hover:text-pink transition-all delay-100 border-pink

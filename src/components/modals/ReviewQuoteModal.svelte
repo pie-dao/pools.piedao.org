@@ -3,16 +3,13 @@
     import get from 'lodash/get';
     import { quoteRefreshSeconds } from '../../classes/Timer';
     import { piesMarketDataStore } from '../../stores/coingecko';
-    
-    
-    export let quote;
+        
     export let frozeQuote;
     export let confirm;
     export let fetchQuote;
     export let isLoading;
     export let sellToken;
     export let buyToken;
-    export let close;
     export let includeMarket = true;
 
     let frozeQuoteCopy = {...frozeQuote};
@@ -53,7 +50,7 @@
                 Quote expired.
             {/if}
         </div>
-        {/if}
+    {/if}
     </div>        
         <div class="flex w-100pc bg-lightgrey-2 p-4 rounded mt-8 flex-col text-black text-center text-xs md:text-xs lg:text-base justify-around">
             <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
@@ -64,6 +61,17 @@
                     <div class="font-bold text-base">{toNumSell(frozeQuoteCopy.sellAmount)} {sellToken.symbol}</div>
                 </div>
             </div>
+
+            {#if !includeMarket && frozeQuote?.amountWithPremiumLabel && !frozeQuote?.amountWithSlippageLabel}
+            <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
+                <div class="flex flex-col items-start">
+                    <div class="font-thin text-base">
+                        Max Price
+                    </div>
+                    <div class="font-bold text-base"> {parseFloat(frozeQuoteCopy.amountWithPremiumLabel).toFixed(6)} {sellToken.symbol} </div>
+                </div>
+            </div>
+            {/if}            
             
             <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
                 <div class="flex flex-col items-start">
@@ -74,7 +82,7 @@
                 </div>
             </div>
 
-            {#if !includeMarket && frozeQuote?.amountWithSlippageLabel}
+            {#if !includeMarket && frozeQuote?.amountWithSlippageLabel && !frozeQuote?.amountWithPremiumLabel}
             <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
                 <div class="flex flex-col items-start">
                     <div class="font-thin text-base">
