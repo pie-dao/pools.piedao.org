@@ -97,7 +97,7 @@
   metadata={{
     title: 'PieDAO, the asset allocation DAO governing tokenized ETF products.',
     description:
-      'An overview of the PieDAO mission and core products, including BCP, DEFI+L and DEFI++ DEFI index. ',
+      'An overview of the PieDAO mission and core products, including BCP, PLAY and DEFI++ index.',
     image: images.defimadesimple,
     imageAlt: 'Investors examine spreadsheets and DEFI index opportunities',
   }}

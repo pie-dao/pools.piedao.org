@@ -6,7 +6,7 @@
 <Meta 
     metadata={{
         title: "DEFI++ - PieDAO, the most diversified DEFI index on the market",
-        description: "Overview of DEFI++, the most diversified DEFI index on the market. A balance of DEFI+L and DEFI+S. Breakdown of the underlying assets, LINK, YFI, AAVE, UNI, UMA, SNX, REN, COMP, MKR, LRC, BAL, PNT, MLN. A breakdown of the motivation behind the product, performance, operations and methodology.",
+        description: "Overview of DEFI++, the most diversified DEFI index on the market. Breakdown of the underlying assets, LINK, YFI, AAVE, UNI, UMA, SNX, REN, COMP, MKR, LRC, BAL, PNT, MLN. A breakdown of the motivation behind the product, performance, operations and methodology.",
         image: images.defipp_social,
         imageAlt: "DEFI++ logo, the most diversified DEFI index on the market"
     }}
@@ -17,7 +17,7 @@
     Over the last year Decentralized Finance has exploded, with many new financial tools built on Ethereum.
     DEFI Index Pie is the most diversified DeFi index on the market, aiming to provide the broadest possible exposure to this rapidly growing industry.  
     <br/><br/>
-    To achieve this we included both large and small market cap projects, with a focus on market leaders and innovators. The pie is a 70/30 weighted balance of our DLP and DSP indices. 
+    To achieve this we included both large and small market cap projects, with a focus on market leaders and innovators. 
     </div>
 
     <h1 class="mt-4">Objective:</h1>

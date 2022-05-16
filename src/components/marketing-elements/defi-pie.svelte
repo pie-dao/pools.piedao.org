@@ -18,5 +18,5 @@
           Get Started
         </button>
       </a>
-      <a href="defipies" class="font-bold text-sm mt-20px mb-50px">Learn about DeFi+ Pies ></a>
+      <a href="defipies" class="font-bold text-sm mt-20px mb-50px">Learn about DeFi++></a>
 </div>

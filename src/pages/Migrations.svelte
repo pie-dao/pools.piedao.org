@@ -34,26 +34,6 @@
         },
       ]
     },
-    {
-      symbol: "DEFI+S/DAI",
-      address: "0x7aefaf3ea1b465dd01561b0548c9fd969e3f76ba",
-      type: 'UniswapV2',
-      balance: '0',
-      containing: [
-        {
-          symbol: "DEFI+S",
-          address: "0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C",
-          balance: '0',
-          icon: getTokenImage('0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c')
-        },
-        {
-          symbol: "DAI",
-          address: "0x6b175474e89094c44da98b954eedeac495271d0f",
-          balance: '0',
-          icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
-        },
-      ]
-    },
   ];
 </script>
 

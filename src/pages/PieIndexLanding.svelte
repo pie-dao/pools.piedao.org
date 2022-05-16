@@ -31,8 +31,6 @@
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import TooltipButton from '../components/elements/TooltipButton.svelte';
-  import Merge from '../components/defiProductMerge.svelte';
-
 
   export let params;
 
@@ -241,9 +239,6 @@
 
 
 <div class="content flex flex-col spl">
-  <section id="defi-single-token-merge" class="mb-8 mx-1">
-    <Merge />
-  </section>
   <div class="flex w-full items-center justify-between">
     <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
       <div class="flex flex-row items-center">

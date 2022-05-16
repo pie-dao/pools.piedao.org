@@ -110,28 +110,6 @@
         DEFI++ is the product for people looking for diversified exposure to DeFi assets. It includes both DeFi blue chips and small cap coins.
       </a>
     </div>
-
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
-      <a class="" target="_blank" href={`https://docs.piedao.org/pies/what-is-a-pie/pies/pievaults/defi+l`}>
-      <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BL.svg) no-repeat center center; background-size: cover!important;">
-        <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">DEFI+L</span></div>
-      </div>
-      <div class="text-left font-bold text-lg px-6 leading-7 mb-4">Learn about DEFI+L</div>
-      <div class="text-justify font-thin h-120px text-ellipsis overflow-hidden px-6 leading-6 mb-4">
-        Blue chips only. DEFI+L represents DeFi’s biggest and best. Like all our pies DEFI+L actively rebalances, constantly locking in profits as market prices fluctuate.      </a>
-    </div>
-
-    <div class="flex flex-col w-100pc thinborder hover:border-pink md:w-31pc md:min-w-280px  h-420px bg-white rounded my-2 mx-2 md:my-1pc md:mx-1pc">
-      <a class="" target="_blank" href={`https://medium.com/piedao/announcing-defi-s-67ed53367364`}>
-      <div class="w-100pc min-w-100pc h-200px flex items-start justify-end mb-4 rounded" style="background: url(https://miro.medium.com/max/1400/1*m6QRyhTSsF-C99QF2VSAAg.png) no-repeat center center; background-size: cover!important;">
-        <div class="text-right mt-4 mr-4"><span class="text-xs font-bold text-white bg-black roundedxs px-2 py-1">DEFI+S</span></div>
-      </div>
-      <div class="text-left font-bold text-lg px-6 leading-7 mb-4">Learn about DEFI+S</div>
-      <div class="text-justify font-thin h-120px text-ellipsis overflow-hidden px-6 leading-6 mb-4">
-        Don’t sleep on the underdog. DEFI+S gives exposure to lower marketcap projects that have incredible potential for future growth.
-      </a>
-    </div>
-    
   </div>
 
 

@@ -5,8 +5,6 @@
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
   import Meta from '../components/elements/meta.svelte';
-  import images from '../config/images.json'
-  import Merge from '../components/defiProductMerge.svelte'
 
   import {
     getTokenImage,
@@ -78,7 +76,7 @@
 <Meta 
   metadata={{
     title: "PieDAO Products Page, DEFI index and yield aggregators",
-    description: "An overview of the PieDAO's products, including Pies and PieVaults DEFI index. BCP, DEFI++, DEFI+L, DEFI+S.",
+    description: "An overview of the PieDAO's products, including Pies and PieVaults, such as BCP & DEFI++.",
   }}
 />
 
@@ -94,9 +92,6 @@
     </span>
   </Modal>
 
-  <Merge />
-
-  <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
 
   {#if piVaults.length }

@@ -32,15 +32,12 @@
 
   import PriceChartArea from '../components/charts/piePriceAreaChart.svelte'
   import Change from '../components/Change.svelte'
-  import Apy from '../components/Apy.svelte'
   import StrategyInUse from '../components/StrategyInUse.svelte'
   import ModalBig from '../components/elements/ModalBig.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
-  import Snapshot from '../components/Snapshot.svelte';
   import Experipie, { getNormalizedNumber } from '../classes/Experipie.js';
   import cToken from '../classes/CToken.js';
   import sushiData from '@sushiswap/sushi-data';
-  import Merge from '../components/defiProductMerge.svelte';
 
   export let params;
 
@@ -368,12 +365,9 @@
 </Modal>
 
 <div class="content flex flex-col spl">
-  <section id="defi-single-token-merge" class="mb-8 mx-1">
-    <Merge />
-  </section>
-  
   <div class="flex w-full items-center justify-between">
     <div class="flex flex-row content-between justify-between items-center flex-wrap w-full">
+
       <div class="flex flex-row items-center">
         <img class="h-80px inline" src={tokenLogo} alt={symbol} />
         <div class="mx-3 flex flex-col">
@@ -382,7 +376,6 @@
           {#if tokenPrice}
             <div class="flex items-center mincontent"><div class="text-xl leading-none font-thin whitespace-nowrap mincontent">{formatFiat(tokenPrice)} </div><span class="text-base whitespace-nowrap font-black mincontent ml-2"><Change showLabel={true} value={change24H} /></span></div>
           {/if}
-          
         </div>
       </div>
 
