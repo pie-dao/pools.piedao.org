@@ -652,17 +652,15 @@
       }}
     >
       <span class="sc-iybRtq gjVeBU">
-        {#if tokensLoaded}
         <img
           class="h-auto w-24px mr-5px"
-          alt={buyToken ? `${buyToken.symbol} logo` : ''}
+          alt={buyToken ? `${buyToken.symbol} logo` : 'Loading Tokens'}
           src={buyToken ? buyToken.icon : ''}
         />
         <span class="sc-kXeGPI jeVIZw token-symbol-container"
-        >{buyToken ? buyToken.symbol : ''}</span
+        >{buyToken ? buyToken.symbol : 'Loading...'}</span
         >
-        {/if}
-        {#if !entry && tokensLoaded}
+        {#if !entry}
         <svg width="20" height="10" viewBox="0 0 12 7" fill="none" class="sc-iQtOjA kPBzbj ml-1"
           ><path d="M0.97168 1L6.20532 6L11.439 1" stroke="#ffffff" /></svg
         >
@@ -721,15 +719,15 @@
       {/if}
     </div>
   </div>
-  {#if !entry}
-  <div class="my-2 hidden md:flex items-center w-100pc px-18px justify-between">
-    <p class="font-thin italic">
-      Please note, when converting from a Pie back to underlying tokens, you will need to reserve a certain percentage of tokens in case a premium is required, beyond the quoted price.
-      This is why 'available' is less than your full balance.
-      You can adjust this premium using the settings above.
-    </p>
-  </div>
-  {/if}
+    {#if !entry}
+    <div class="my-2 hidden md:flex items-center w-100pc px-18px justify-between">
+      <p class="font-thin italic">
+        Please note, when converting from a Pie back to underlying tokens, you will need to reserve a certain percentage of tokens in case a premium is required, beyond the quoted price.
+        This is why 'available' is less than your full balance.
+        You can adjust this premium using the settings above.
+      </p>
+    </div>
+    {/if}
   {/if}
 
 

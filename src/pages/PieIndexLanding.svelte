@@ -332,23 +332,7 @@
           {/if}
         </div>
 
-        {#if $currentRoute?.params?.address?.toLowerCase() === smartcontracts.bcp.toLowerCase()}
-          <Merge 
-            bind:openTrigger={openSwapModal}
-            buyTokenAddress={smartcontracts.bcp}
-            allowExit={true}
-          >
-              <button 
-              class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 md:mr-2 hover:opacity-80"              
-              on:click={() => openSwapModal()}
-                >
-                <div class="">
-                  <div class="text-base font-bold leading-5">Swap BCP</div>
-                  <div class="text-xs font-thin">Convert to DEFI, WETH, WBTC</div>
-                </div>
-              </button>
-          </Merge>
-        {/if}
+
 
         {#if isBakingPie(params.address)}
           <button
@@ -364,16 +348,34 @@
           </button>
         {/if}
 
-        <button
-          class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80"
-          onclick="location.href='#/swap'"
-        >
-          <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
-          <div class="">
-            <div class="text-base font-bold leading-5">Buy & Sell</div>
-            <div class="text-sm font-thin">Instant swap</div>
-          </div>
-        </button>
+        {#if $currentRoute?.params?.address?.toLowerCase() === smartcontracts.bcp.toLowerCase()}
+          <Merge 
+            bind:openTrigger={openSwapModal}
+            buyTokenAddress={smartcontracts.bcp}
+            allowExit={true}
+          >
+              <button 
+              class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 md:mr-2 hover:opacity-80"              
+              on:click={() => openSwapModal()}
+                >
+                <div class="">
+                  <div class="text-base font-bold leading-5">Buy & Sell</div>
+                  <div class="text-xs font-thin">Instant Swap</div>
+                </div>
+              </button>
+          </Merge>
+        {:else}
+          <button
+              class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80"
+              onclick="location.href='#/swap'"
+            >
+            <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
+            <div class="">
+              <div class="text-base font-bold leading-5">Buy & Sell</div>
+              <div class="text-sm font-thin">Instant swap</div>
+            </div>
+          </button>
+        {/if}
       </div>
     </div>
   </div>
