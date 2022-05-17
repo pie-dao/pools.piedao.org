@@ -65,13 +65,12 @@
   $: balanceError = sellTokenHasBalanceError(sellToken, sellAmount);
   $: tokensLoaded = tokenList.length > 0;
   $: sellTokenDecimals = sellToken?.decimals;
-  // buy default, the buy token is also capable of exit
+  // assume the initial 'buy' token is also capable of exit
   $: exitToken = allowExit ? defaultTokenBuy : null;
-  $: entry = buyToken ? buyToken.address === defaultTokenBuy.address : true;
+  $: entry = allowExit ? (buyToken ? buyToken.address === defaultTokenBuy.address : false) : true;
   $: buyTokenList = entry ? [defaultTokenBuy] : tokenList.filter(t => t.address !== exitToken.address);
+  $: available = entry ? `${sellToken?.balance?.label ?? 0}` : `${parseFloat(sellToken?.balanceWithPremium?.label).toFixed(2) ?? 0}`;
 
-
-  $: (console.debug({ entry, exitToken, sellToken }))
   // watchers
   $: if ($eth?.signer) {
     contract = new ethers.Contract(buyTokenAddress, smartPoolAbi, $eth.signer);
@@ -164,9 +163,7 @@
 
   function needApproval(allowance) {
     if (!$eth.address || !$eth.signer) return false;
-
-    console.debug({ allowance })
-    if (allowance.isEqualTo(0)) return true;
+    if (!allowance || allowance.isEqualTo(0)) return true;
     if (allowance.isGreaterThanOrEqualTo(sellAmount.bn)) return false;
   }
 
@@ -198,7 +195,7 @@
         else buyToken = tokenList[0];
       };
 
-      // finally set the sell token
+      // finally set the sell token and add balance based on premium
       sellToken = token;
 
       // success allows outer function to proceed
@@ -238,7 +235,7 @@
     if (!change) return;
 
     sellAmount = defaultAmount;
-
+    updateSellBalance();
     fetchQuote();
   };
   
@@ -318,7 +315,6 @@
   }
 
   const fetchQuoteEntry = async () => {
-    console.debug('Entry', { sellToken, buyToken, contract, amt: sellAmount.bn.toFixed(0) })
     return await Promise.all([
         contract.calcPoolOutGivenSingleIn(
           sellToken.address,
@@ -332,7 +328,6 @@
   };
 
   const fetchQuoteExit = async () => {
-    console.debug('Exit', { sellToken, buyToken, contract, amt: sellAmount.bn.toFixed(0) })
     return await Promise.all([
       contract.calcSingleOutGivenPoolIn(
         buyToken.address,
@@ -353,10 +348,10 @@
     // avoid scientific notation
     BigNumber.set({ EXPONENTIAL_AT: 99 });
 
-    console.debug('quote', { entry, sellToken, buyToken })
+    // race condition means we need to force an update here
+    entry = sellToken.address === exitToken.address ? false : true;
 
     needAllowance = needApproval(sellToken.allowance);
-
 
     try {
       const [fullQuote, perUnit] = entry ? await fetchQuoteEntry() : await fetchQuoteExit();
@@ -377,6 +372,12 @@
       if (freeze) frozeQuote = quote;
 
     } catch (err) {
+      // error when trying to fetch quote that is too large (eg 1000 WBTC) reset the quote forcing a UI re-prompt
+      if (err?.data?.message === 'VM Exception while processing transaction: revert ERR_BPOW_BASE_TOO_HIGH') {
+        sellAmount = defaultAmount;
+        quote = null;
+        return;
+      };
       displayNotification({
         autoDismiss: 15000,
         message: err.message,
@@ -487,7 +488,7 @@
 
   const updateSellBalance = () => {
     // reduce balance by %age premium
-    if (!entry && sellToken && sellToken.balance) {
+    if (sellToken && sellToken.balance) {
       const slip = 1 + slippage / 100;
       sellToken.balanceWithPremium = {
         bn: sellToken.balance.bn.dividedToIntegerBy(slip),
@@ -542,7 +543,7 @@
   </span>
 </Modal>
 
-<div class="swap-container flex flex-col items-center bg-lightgrey">
+<div class="swap-container flex flex-col items-center bg-lightgrey max-h-100pc">
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">From{!entry ? ' (estimated)' : ''}:</div>
@@ -553,7 +554,7 @@
               fetchQuote();
           }}
           >
-            Available: {entry ? `${sellToken?.balance?.label ?? 0}` : `${parseFloat(sellToken?.balanceWithPremium?.label).toFixed(2) ?? 0}`}
+            Available: {available}
         </button>
       </div>
     </div>
@@ -696,7 +697,7 @@
     <div class="flex items-center w-100pc px-16px justify-between">
       <div class="flex nowrap intems-center p-1 font-thin">Minimum Amount:</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline;">{amountWithSlippage && amountWithSlippage.label ? parseFloat(amountWithSlippage.label).toFixed(6) : 0} {buyToken.symbol}</div>
-    </div>     
+    </div>
     {/if}   
   <div 
     on:click={() => showSlippageSettings = !showSlippageSettings}
@@ -720,6 +721,15 @@
       {/if}
     </div>
   </div>
+  {#if !entry}
+  <div class="my-2 hidden md:flex items-center w-100pc px-18px justify-between">
+    <p class="font-thin italic">
+      Please note, when converting from a Pie back to underlying tokens, you will need to reserve a certain percentage of tokens in case a premium is required, beyond the quoted price.
+      This is why 'available' is less than your full balance.
+      You can adjust this premium using the settings above.
+    </p>
+  </div>
+  {/if}
   {/if}
 
 

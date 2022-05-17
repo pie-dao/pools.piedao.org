@@ -38,6 +38,7 @@
 
   let modalinfo;
   let openSwapModal;
+  let openSwapModalMobile;
   let modal;
   let modalOption = {
     method: 'single',
@@ -330,6 +331,24 @@
             </div>
           {/if}
         </div>
+
+        {#if $currentRoute?.params?.address?.toLowerCase() === smartcontracts.bcp.toLowerCase()}
+          <Merge 
+            bind:openTrigger={openSwapModal}
+            buyTokenAddress={smartcontracts.bcp}
+            allowExit={true}
+          >
+              <button 
+              class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 md:mr-2 hover:opacity-80"              
+              on:click={() => openSwapModal()}
+                >
+                <div class="">
+                  <div class="text-base font-bold leading-5">Swap BCP</div>
+                  <div class="text-xs font-thin">Convert to DEFI, WETH, WBTC</div>
+                </div>
+              </button>
+          </Merge>
+        {/if}
 
         {#if isBakingPie(params.address)}
           <button
@@ -624,25 +643,6 @@
     </div>
   {/if}
 
-  
-  
-  <!-- Commented this code, to show a button to open the BCP modal. It can be safely deleted but is useful for checking functionality.   -->
-  {#if $currentRoute?.params?.address?.toLowerCase() === smartcontracts.bcp.toLowerCase()}
-  <section id="defi-single-token-merge" class="mb-8 mx-1">
-    <Merge 
-      bind:openTrigger={openSwapModal}
-      buyTokenAddress={smartcontracts.bcp}
-      allowExit={true}
-    >
-        <button class="text-white text-lg rounded-sm py-2 px-5 bg-pink 
-          hover:bg-white hover:text-pink transition-all delay-100 border-pink
-          "
-          on:click={() => openSwapModal()}
-          >SWAP BCP</button>
-    </Merge>
-  </section>
-  {/if}
-
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row md:flex-wrap">
     <div class="p-0 mt-2 flexgrow min-w-230px md:mr-10px">
       <Farming token={$currentRoute.params.address} />
@@ -806,6 +806,7 @@
               class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
               role="menuitem">Redeem</a
             >
+            <!-- svelte-ignore a11y-missing-attribute -->
             {#if farmingPieObj}
               <a
                 href="#/staking/{farmingPieObj.slug}"
@@ -831,6 +832,23 @@
     </div>
   </button>
 
+  {#if $currentRoute?.params?.address?.toLowerCase() === smartcontracts.bcp.toLowerCase()}
+  <Merge 
+    bind:openTrigger={openSwapModalMobile}
+    buyTokenAddress={smartcontracts.bcp}
+    allowExit={true}
+  >
+      <button 
+      class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc"              
+      on:click={() => openSwapModalMobile()}
+        >
+        <div class="">
+          <div class="text-base font-bold leading-5">Buy & Sell</div>
+          <div class="text-xs font-thin">Instant swap</div>
+        </div>
+      </button>
+  </Merge>
+  {:else}
   <button
     class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc"
     onclick="location.href='#/swap'"
@@ -841,4 +859,5 @@
       <div class="text-sm font-thin">Instant swap</div>
     </div>
   </button>
+  {/if}  
 </div>
