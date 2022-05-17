@@ -392,7 +392,6 @@
     "useRecipe": true,
     "streamingFees": "0",
     "useMintOverBuy": true,
-    "disableSwitch": true,
     "buyButton": true,
     "swapEnabled": true,
     "coingeckoId": "piedao-defi",
@@ -405,7 +404,7 @@
         "coingeckoImageId": 12701,
         "coingeckoId": "piedao-defi-small-cap",
         "percentage": 30,
-        "isPie": false
+        "isPie": true
       },
       {
         "symbol": "DEFI+L",
@@ -414,7 +413,7 @@
         "coingeckoId": "piedao-defi-large-cap",
         "coingeckoImageId": 12731,
         "percentage": 70,
-        "isPie": false
+        "isPie": true
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
