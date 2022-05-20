@@ -32,7 +32,6 @@
   };
   let slippage = 3;
   let quote = null;
-  let targetModal = 'sell';
   let defaultTokenBuy = {
     address: buyTokenAddress,
     symbol: buyTokenSymbol,
@@ -54,7 +53,6 @@
   $: buyToken = defaultTokenBuy;
   $: sellAmount = defaultAmount;
   $: amountWithSlippage = { bn: BigNumber(0), label: '0'};
-  $: amountWithPremium = { bn: BigNumber(0), label: '0'};
   $: receivedAmount = 0;
   $: frozeQuote = null;
   $: needAllowance = false;
@@ -64,52 +62,46 @@
   $: showSlippageSettings = false;
   $: balanceError = sellTokenHasBalanceError(sellToken, sellAmount);
   $: tokensLoaded = tokenList.length > 0;
-  $: sellTokenDecimals = sellToken?.decimals;
   // assume the initial 'buy' token is also capable of exit
   $: exitToken = allowExit ? defaultTokenBuy : null;
   $: entry = allowExit ? (buyToken ? buyToken.address === defaultTokenBuy.address : false) : true;
   $: buyTokenList = entry ? [defaultTokenBuy] : tokenList.filter(t => t.address !== exitToken.address);
-  $: available = entry ? `${sellToken?.balance?.label ?? 0}` : `${parseFloat(sellToken?.balanceWithPremium?.label).toFixed(2) ?? 0}`;
+  $: available = `${sellToken?.balance?.label ?? 0}`;
+  $: sellTokenDecimals = sellToken?.decimals ?? (sellToken?.symbol === 'WBTC' ? 8 : 18);
 
   // watchers
-  $: if ($eth?.signer) {
-    contract = new ethers.Contract(buyTokenAddress, smartPoolAbi, $eth.signer);
-  }
+  $: if ($eth) {
+    contract = new ethers.Contract(buyTokenAddress, smartPoolAbi, $eth?.signer ?? $eth.provider);
+  }; 
 
-  const sellTokenHasBalanceError = (_sellToken, _sellAmount) => {
+  const sellTokenHasBalanceError = (token, amount) => {
     // missing data will throw error
-    if (!_sellToken || !_sellAmount) return true;
-    if (entry) {
-      // when entering, we can just take the full balance
-      if (!_sellToken.balance) return true;
-      if (_sellAmount.bn.isGreaterThan(_sellToken.balance.bn)) return true;
-    } else {
-      // when exiting, we need additional room for slippage in the opposite direction
-      if (!_sellToken.balanceWithPremium) return true;
-      if (_sellAmount.bn.isGreaterThan(_sellToken.balanceWithPremium.bn)) return true;
-    }
+    if (!token || !amount) return true;
+    if (!token.balance) return true;
+    if (amount.bn.isGreaterThan(token.balance.bn)) return true;
     return false;
-  }
+  };
 
   const ethereum = {
     address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
     symbol: 'ETH',
     icon: getTokenImage('eth')
-  };   
+  };
+
+  const createTokenList = list => list.map(token => ({
+    address: token.address,
+    symbol: token.symbol,
+    icon: getTokenImage(token.address),
+  }))
 
   // This block will set up the token data that this component will use.
   // all changes to tokenList should happen in this block.
   $: {
     // fetchBalances expects ETH as first token
-    const newListed = [ethereum];
-    
-    for (const token of listed) {
-      newListed.push({
-        address: token.address,
-        symbol: token.symbol,
-        icon: getTokenImage(token.address),
-      });
-    };
+    const newListed = [
+      ethereum,
+      ...createTokenList(listed),
+    ];
 
     if (exitToken) newListed.push({
       address: exitToken.address,
@@ -135,12 +127,16 @@
 
         // remove eth as not revelant
         tokenList = newListed.filter(item => item.symbol !=='ETH');
-      });
+      }) 
+
+      // ensures the token list is fetched even if the wallet is not connected
+    } else if (!$eth.address) {
+        tokenList = createTokenList(listed);
     }
   };
 
   $: {
-    if (sellToken && $eth && !sellToken.balance) {
+    if (sellToken && $eth.address && !sellToken.balance) {
       const getTokens = [ethereum, sellToken];
       fetchBalances(
             getTokens, 
@@ -153,7 +149,6 @@
             sellToken.balance = token.balance;
             sellToken.allowance = token.allowance;
             sellToken.decimals = token.decimals;
-            updateSellBalance();
             checkUpdateAllowance(token);
           }
         );
@@ -235,7 +230,6 @@
     if (!change) return;
 
     sellAmount = defaultAmount;
-    updateSellBalance();
     fetchQuote();
   };
   
@@ -257,19 +251,6 @@
     };
   }
 
-  function getQuoteWithPremium(baseQuote, slipPc) {
-    amountWithPremium = {
-      bn: sellAmount.bn.multipliedBy(slipPc),
-      label: sellAmount.label * slipPc 
-    };
-    quote = {
-      ...baseQuote,
-      amountWithPremiumLabel: amountWithPremium.label,
-      amountWithPremiumBn: amountWithPremium.bn,
-    };
-  }
-
-
   function changeSlippage(value) {
     // sets the component slippage
     slippage = value;
@@ -280,12 +261,7 @@
       guaranteedLabel: parseFloat(quote.label) / slipPc,
     };
 
-    if (entry) {
-      getQuoteWithSlippage(baseQuote, slipPc);
-    } else {
-      updateSellBalance();
-      getQuoteWithPremium(baseQuote, slipPc);
-    }
+    getQuoteWithSlippage(baseQuote, slipPc);
   }
 
   function checkWalletConnection() {
@@ -328,6 +304,7 @@
   };
 
   const fetchQuoteExit = async () => {
+    console.debug({ sellAmount, buyToken, sellTokenDecimals, sellToken })
     return await Promise.all([
       contract.calcSingleOutGivenPoolIn(
         buyToken.address,
@@ -368,14 +345,21 @@
       };
 
       if (slippage) changeSlippage(slippage);
+      
       receivedAmount = toNum(quote.buyAmount, buyToken.decimals ?? 18);
+      
       if (freeze) frozeQuote = quote;
 
     } catch (err) {
       // error when trying to fetch quote that is too large (eg 1000 WBTC) reset the quote forcing a UI re-prompt
-      if (err?.data?.message === 'VM Exception while processing transaction: revert ERR_BPOW_BASE_TOO_HIGH') {
+      if (JSON.stringify(err).includes('ERR_BPOW_BASE_TOO_HIGH') ) {
         sellAmount = defaultAmount;
         quote = null;
+        displayNotification({
+          autoDismiss: 15000,
+          message: 'Could not get a quote - try reducing the amount of tokens for sale.',
+          type: 'error',
+      })        
         return;
       };
       displayNotification({
@@ -408,22 +392,18 @@
 
   const singleAssetEntry = async () => {
     return await contract.joinswapExternAmountIn(
-        sellToken.address,
-        sellAmount.bn.toString(),
-        amountWithSlippage.bn.toString()
+      sellToken.address,
+      sellAmount.bn.toString(),
+      amountWithSlippage.bn.toString()
     );
   }
 
   const singleAssetExit = async () => {
-    const poolAmountIn = sellAmount.bn
-      .multipliedBy(1 + slippage/100)
-      .decimalPlaces(0)
-      .toString();
-    const tokenAmountOut = quote.buyAmount;
-    return await contract.exitswapExternAmountOut(
+    const quantity = sellAmount.bn.toString();
+    return await contract.exitswapPoolAmountIn(
       buyToken.address,
-      tokenAmountOut,
-      poolAmountIn
+      quantity,
+      amountWithSlippage.bn.toString()
     );
   }
 
@@ -486,17 +466,6 @@
     }
   };
 
-  const updateSellBalance = () => {
-    // reduce balance by %age premium
-    if (sellToken && sellToken.balance) {
-      const slip = 1 + slippage / 100;
-      sellToken.balanceWithPremium = {
-        bn: sellToken.balance.bn.dividedToIntegerBy(slip),
-        label: sellToken.balance.label / slip
-      }
-    }
-  }
-
   const setMaxTokenValue = () => {
     const useWithPremium = !entry && sellToken.balanceWithPremium;
     sellAmount.bn = useWithPremium 
@@ -546,9 +515,10 @@
 <div class="swap-container flex flex-col items-center bg-lightgrey max-h-100pc">
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">From{!entry ? ' (estimated)' : ''}:</div>
+      <div class="flex nowrap intems-center p-1 font-thin">From:</div>
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
           <button
+          disabled={!$eth.address}
           on:click={() => {
               setMaxTokenValue();
               fetchQuote();
@@ -581,7 +551,6 @@
       <button
         class="swap-button"
         on:click={() => {
-          targetModal = 'sell';
           tokenSelectModalInOpen = true;
         }}
       >
@@ -626,13 +595,14 @@
 
   <div class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-16px">
     <div class="flex items-center justify-between">
-      <div class="flex nowrap intems-center p-1 font-thin">To{entry ? ' (estimated)': ''}:</div>
+      <div class="flex nowrap intems-center p-1 font-thin">To (estimated):</div>
     </div>
     <div class="flex nowrap items-center p-1">
       <input
         class="swap-input-from"
         bind:value={receivedAmount}
         inputmode="decimal"
+        disabled
         title="Token Amount"
         autocomplete="off"
         autocorrect="off"
@@ -647,7 +617,6 @@
       class="swap-button"
       disabled={entry}
       on:click={() => {
-        targetModal = 'sell';
         tokenSelectModalOutOpen = true;
       }}
     >
@@ -700,7 +669,7 @@
   <div 
     on:click={() => showSlippageSettings = !showSlippageSettings}
     class="cursor-pointer flex items-center w-100pc px-16px justify-between mt-5px">
-    <div class="flex nowrap intems-center p-1 font-thin">Max {entry ? 'Slippage' : 'Premium'}:</div>
+    <div class="flex nowrap intems-center p-1 font-thin">Max Slippage</div>
     <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin">
       {#if true}
       <section>
@@ -719,15 +688,6 @@
       {/if}
     </div>
   </div>
-    {#if !entry}
-    <div class="my-2 hidden md:flex items-center w-100pc px-18px justify-between">
-      <p class="font-thin italic">
-        Please note, when converting from a Pie back to underlying tokens, you will need to reserve a certain percentage of tokens in case a premium is required, beyond the quoted price.
-        This is why 'available' is less than your full balance.
-        You can adjust this premium using the settings above.
-      </p>
-    </div>
-    {/if}
   {/if}
 
 
