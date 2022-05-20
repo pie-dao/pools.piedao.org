@@ -68,6 +68,8 @@
   $: buyTokenList = entry ? [defaultTokenBuy] : tokenList.filter(t => t.address !== exitToken.address);
   $: available = `${sellToken?.balance?.label ?? 0}`;
   $: sellTokenDecimals = sellToken?.decimals ?? (sellToken?.symbol === 'WBTC' ? 8 : 18);
+  $: buyTokenDecimals = buyToken?.decimals ?? (buyToken?.symbol === 'WBTC' ? 8 : 18);
+
 
   // watchers
   $: if ($eth) {
@@ -128,10 +130,13 @@
         // remove eth as not revelant
         tokenList = newListed.filter(item => item.symbol !=='ETH');
       }) 
-
+      
       // ensures the token list is fetched even if the wallet is not connected
     } else if (!$eth.address) {
-        tokenList = createTokenList(listed);
+      tokenList = [
+        ...createTokenList(listed),
+        exitToken,
+      ];
     }
   };
 
@@ -211,10 +216,8 @@
         // else find another token
         else sellToken = tokenList.find(t => t.address !== token.address);
       }
-
       // finally set the buy token
       buyToken = token;
-
       // success allows outer function to proceed
       return true;
   }
@@ -338,21 +341,21 @@
         sellAmount: sellAmount.bn,
         sellLabel: sellAmount.label,
         buyAmount: fullQuote.toString(),
-        buyLabel: ethers.utils.formatUnits(fullQuote, buyToken.decimals ?? 18),
+        buyLabel: ethers.utils.formatUnits(fullQuote, buyTokenDecimals ?? 18),
         buyPrice: perUnit.toString(),
         value: perUnit.toString(),
-        label: ethers.utils.formatUnits(perUnit, buyToken.decimals ?? 18),
+        label: ethers.utils.formatUnits(perUnit, buyTokenDecimals ?? 18),
       };
 
       if (slippage) changeSlippage(slippage);
       
-      receivedAmount = toNum(quote.buyAmount, buyToken.decimals ?? 18);
+      receivedAmount = toNum(quote.buyAmount, buyTokenDecimals ?? 18);
       
       if (freeze) frozeQuote = quote;
 
     } catch (err) {
       // error when trying to fetch quote that is too large (eg 1000 WBTC) reset the quote forcing a UI re-prompt
-      if (JSON.stringify(err).includes('ERR_BPOW_BASE_TOO_HIGH') ) {
+      if (JSON.stringify(err).includes('ERR_BPOW_BASE_TOO_HIGH') || JSON.stringify(err).includes('ERR_SUB_UNDERFLOW') ) {
         sellAmount = defaultAmount;
         quote = null;
         displayNotification({
