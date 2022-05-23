@@ -130,7 +130,7 @@
       if (component.isPie) {
         if (!pieOfPies) pieOfPies = [];
         pieOfPies.push(component);
-        // return getInternalWeights(component, component.percentage);
+        //return getInternalWeights(component, component.percentage);
       }
       return component;
     }),

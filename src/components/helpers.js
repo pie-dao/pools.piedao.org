@@ -87,6 +87,7 @@ const updatePoolWeight = async (poolAddress) => {
 
   const marketData = get(piesMarketDataStore);
 
+  console.log('composition', composition);
   composition.forEach(({ address }) => {
     const key = balanceKey(address, bPoolAddress);
     poolCurrentBalances[address] = allCurrentBalances[key];
@@ -96,6 +97,8 @@ const updatePoolWeight = async (poolAddress) => {
     (sum, value) => sum.plus(value),
     BigNumber(0),
   );
+
+  console.log('poolCurrentBalances', poolCurrentBalances);
 
   const totalUSD = Object.keys(poolCurrentBalances).reduce((sum, token) => {
     let price;
