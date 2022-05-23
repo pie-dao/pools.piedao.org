@@ -58,6 +58,7 @@
   $: needAllowance = false;
   $: isLoading = false;
   $: isFetchingQuote = false;
+  $: isConfirmingTx = false;
   $: error = null;
   $: showSlippageSettings = false;
   $: balanceError = sellTokenHasBalanceError(sellToken, sellAmount);
@@ -283,6 +284,7 @@
     try {
       await approveMax(sellToken.address, spender);
       needAllowance = false;
+      sellToken.allowance = ethers.constants.MaxUint256;
     } finally {
       isLoading = false;
     }
@@ -307,7 +309,6 @@
   };
 
   const fetchQuoteExit = async () => {
-    console.debug({ sellAmount, buyToken, sellTokenDecimals, sellToken })
     return await Promise.all([
       contract.calcSingleOutGivenPoolIn(
         buyToken.address,
@@ -432,7 +433,7 @@
       reduceSellTokenBalance();
       sellAmount = defaultAmount;
       modal.close();
-
+      isConfirmingTx = true;
       emitter.on('txConfirmed', () => {
         const { dismiss } = displayNotification({
           message: 'Confirming...',
@@ -446,7 +447,7 @@
               message: `${sellAmount.label.toFixed(2)} ${sellToken.symbol} swapped successfully`,
               type: 'success',
             });
-
+            isConfirmingTx = false;
             dismiss();
             subscription.unsubscribe();
           },
@@ -469,22 +470,18 @@
     }
   };
 
-  const setMaxTokenValue = () => {
-    const useWithPremium = !entry && sellToken.balanceWithPremium;
-    sellAmount.bn = useWithPremium 
-      ? sellToken.balanceWithPremium.bn
-      : sellToken.balance.bn;
-    sellAmount.label = useWithPremium
-      ? parseFloat(sellToken.balanceWithPremium.label).toFixed(6)
-      : sellToken.balance.number.toFixed(6);
+  const setMax = () => {
+    setMaxTokenValue();
+    fetchQuote();
+  };
 
+  const setMaxTokenValue = () => {
+    sellAmount.bn = sellToken.balance.bn;
+    sellAmount.label = sellToken.balance.number.toFixed(6);
   };
 
   // lifecycle hooks
-  onMount(async () => {
-    await fetchQuote();
-
-  });
+  onMount(async () => await fetchQuote());
 
 </script>
 <TokenSelectModal
@@ -522,10 +519,7 @@
       <div class="sc-kkGfuU hyvXgi css-1qqnh8x font-thin" style="display: inline; cursor: pointer;">
           <button
           disabled={!$eth.address}
-          on:click={() => {
-              setMaxTokenValue();
-              fetchQuote();
-          }}
+          on:click={setMax}
           >
             Available: {available}
         </button>
@@ -713,10 +707,18 @@
         frozeQuote = quote;
         modal.open();
       }}
-      disabled={error || isLoading || balanceError || sellAmount.label === 0}
+      disabled={error || isLoading || balanceError || sellAmount.label === 0 || isConfirmingTx}
       class="stake-button mt-10px rounded-20px p-15px w-100pc"
     >
-      { balanceError ? 'Insufficient Balance' : isLoading ? 'Loading...' :  'Review Order' }
+      { 
+        balanceError
+          ? 'Insufficient Balance'
+          : isLoading
+            ? 'Loading...'
+            : isConfirmingTx
+              ? 'Swap In Progress...'
+              : 'Review Order'
+      }
     </button>
   {/if}
 </div>
