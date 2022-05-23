@@ -346,7 +346,12 @@
       primaryActionText = 'Done!';
 
       setTimeout(() => {
-        modal.close();
+        try {
+          modal.close();
+        } catch(e) {
+          
+        }
+        
       }, 2500);
     } catch(error) {
       primaryActionText = primaryActionTextBakup;

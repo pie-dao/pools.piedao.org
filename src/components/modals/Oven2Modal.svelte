@@ -299,7 +299,7 @@
     <Modal title="Oven V.2" backgroundColor="#f3f3f3" bind:this="{modalinfo}">
       <span slot="content" class="p-4 font-thin">
         <strong>Expanding range</strong><br/>
-        With Oven V2, all the other pies are getting added, including DEFI+S, DEFI+L, USD++, and more upcoming Pies.<br/><br/>
+        With Oven V2, all the other pies are getting added.<br/><br/>
 
         <strong>Small fees</strong><br/>
         With Oven V2, while sharing the cost of the gas, we ask users to chip in in the cost of the baking round with a small fee that is paid according to the deposit size.<br/>

@@ -6,11 +6,8 @@
 
   import { _ } from "svelte-i18n";
   import { ethers } from "ethers";
-  import { pieSmartPool } from "@pie-dao/abis";
   import { get } from 'svelte/store';
   import smartcontracts from '../config/smartcontracts.json';
-  import images from "../config/images.json";
-  import poolsConfig from "../config/pools.json";
   import uniswapLpZapABI from '../config/uniswapLpZapABI.json';
 
   import displayNotification from "../notifications.js";
@@ -113,26 +110,6 @@
           address: "0x0000000000000000000000000000000000000000",
           balance: '0',
           icon: getTokenImage('eth')
-        },
-      ]
-    },
-    {
-      symbol: "DEFI+S/DAI",
-      address: "0x7aefaf3ea1b465dd01561b0548c9fd969e3f76ba",
-      type: 'UniswapV2',
-      balance: '0',
-      containing: [
-        {
-          symbol: "DEFI+S",
-          address: "0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C",
-          balance: '0',
-          icon: getTokenImage('0xaD6A626aE2B43DCb1B39430Ce496d2FA0365BA9C')
-        },
-        {
-          symbol: "DAI",
-          address: "0x6b175474e89094c44da98b954eedeac495271d0f",
-          balance: '0',
-          icon: getTokenImage('0x6b175474e89094c44da98b954eedeac495271d0f')
         },
       ]
     },

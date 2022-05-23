@@ -3,16 +3,12 @@
     "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4",
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
-    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
   ],
   "selectable": [
     "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4",
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
-    "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
-    "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
   ],
   "default": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
@@ -52,114 +48,60 @@
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
   },
-
-  "0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5": {
-    "symbol": "DXY",
-    "name": "DeFi Index Yield",
-    "useMintOverBuy": true,
+  "0xe4f726adc8e89c6a6017f01eada77865db22da14": {
+    "symbol": "BCP",
+    "isExperipie": false,
+    "coingeckoId": "piedao-balanced-crypto-pie",
+    "name": "Balanced Crypto Pie",
+    "description": "Balanced Crypto Pie. An even split between BTC, ETH, and the best of DEFI.",
+    "useRecipe": true,
+    "useMintOverBuy": false,
     "buyButton": true,
+    "swapEnabled": true,
+    "streamingFees": "0.46",
+    "swapFees": "1",
+    "composition": [
+        {
+            "symbol": "WBTC",
+            "decimals": 8,
+            "coingeckoId": "wrapped-bitcoin",
+            "coingeckoImageId": 7598,
+            "color": "#F4AC36",
+            "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
+            "percentage": 33.33
+        },
+        {
+            "symbol": "WETH",
+            "decimals": 18,
+            "color": "#0171F5",
+            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+            "percentage": 33.33,
+            "coingeckoId": "weth",
+            "coingeckoImageId": 279
+        },
+        {
+            "symbol": "DEFI++",
+            "decimals": 18,
+            "color": "#FD1782",
+            "address": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
+            "percentage": 33.34,
+            "isPie": true
+        }
+    ],
+    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
+  },
+  "0x8d1ce361eb68e9e05573443c407d4a3bed23b033": {
+    "symbol": "DEFI++",
+    "description": "The most diversified DEFI index on the market. Both large and small market caps.",
+    "isExperipie": true,
+    "name": "DeFi Index Pie",
     "useRecipe": true,
     "streamingFees": "0",
-    "isExperipie": true,
-    "swapFees": "0.1",
-    "swapEnabled": false,
-    "composition": [
-      {
-        "symbol": "COMP",
-        "decimals": 18,
-        "color": "#01D395",
-        "coingeckoId": "compound-governance-token",
-        "address": "0xc00e94Cb662C3520282E6f5717214004A7f26888",
-        "coingeckoImageId": 10775,
-        "percentage": 10.74
-      },
-      {
-        "symbol": "Aave",
-        "color": "#AE56A0",
-        "coingeckoImageId": 1365,
-        "coingeckoId": "aave",
-        "address": "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9",
-        "decimals": 18,
-        "percentage": 16.19
-      },
-      {
-        "symbol": "UNI",
-        "color": "#FD1782",
-        "coingeckoImageId": 12504,
-        "coingeckoId": "uniswap",
-        "address": "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
-        "decimals": 18,
-        "percentage": 13.19
-      },
-      {
-        "symbol": "LINK",
-        "coingeckoId": "chainlink",
-        "coingeckoImageId": 877,
-        "color": "#c4ccce",
-        "decimals": 18,
-        "address": "0x514910771AF9Ca656af840dff83E8264EcF986CA",
-        "percentage": 18.82
-      },
-      {
-        "symbol": "MKR",
-        "address": "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2",
-        "color": "#F4AC36",
-        "coingeckoImageId": 1364,
-        "coingeckoId": "maker",
-        "decimals": 18,
-        "percentage": 10.06
-      },
-      {
-        "symbol": "SNX",
-        "color": "#080221",
-        "coingeckoImageId": 3406,
-        "address": "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F",
-        "percentage": 12.65,
-        "coingeckoId": "havven",
-        "decimals": 18
-      },
-      {
-        "symbol": "YFI",
-        "color": "#0171F5",
-        "coingeckoImageId": 11849,
-        "coingeckoId": "yearn-finance",
-        "address": "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e",
-        "percentage": 18.35,
-        "decimals": 18
-      },
-      {
-        "symbol": "SUSHI",
-        "color": "#0171F5",
-        "coingeckoImageId": 12271,
-        "coingeckoId": "sushi",
-        "address": "0x6b3595068778dd592e39a122f4f5a5cf09c90fe2",
-        "percentage": 18.35,
-        "decimals": 18
-      }
-    ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
-  },
-  "0x78f225869c08d478c34e5f645d07a87d3fe8eb78": {
-    "symbol": "DEFI+L",
-    "name": "DeFi Large Cap",
-    "description": "Large market cap projects. A premium selection of blue chip only tokens.",
-    "isExperipie": true,
+    "useMintOverBuy": true,
     "buyButton": true,
-    "mapDynamicTradingViewFormula": {
-      "0xc00e94Cb662C3520282E6f5717214004A7f26888": "KRAKEN:COMPUSD",
-      "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": "GEMINI:AAVEUSD",
-      "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": "COINBASE:UNIUSD",
-      "0x514910771AF9Ca656af840dff83E8264EcF986CA": "KRAKEN:LINKUSD",
-      "0x9f8F72aA9304c8B593d555F12eF6589cC3A579A2": "COINBASE:MKRUSD",
-      "0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F": "KRAKEN:SNXUSD",
-      "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e": "COINBASE:YFIUSD"
-    },
-    "tradingViewFormula": "0.000944414144968332KRAKEN:COMPUSD+0.00322590157401873GEMINI:AAVEUSD+0.0436834437086093COINBASE:UNIUSD+0.0201081196581197KRAKEN:LINKUSD+0.000186657761947165COINBASE:MKRUSD+0.0327670984455959KRAKEN:SNXUSD+0.00000988602128292323*COINBASE:YFIUSD",
-    "useRecipe": true,
-    "coingeckoId": "piedao-defi-large-cap",
-    "swapFees": "0.1",
-    "streamingFees": "0.7",
     "swapEnabled": false,
+    "coingeckoId": "piedao-defi",
+    "swapFees": "1",
     "composition": [
       {
         "symbol": "SUSHI",
@@ -232,62 +174,7 @@
         "address": "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e",
         "percentage": 18.35,
         "decimals": 18
-      }
-    ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
-  },
-  "0xb167f67353f71ca8b47d713878d69e8264a15ac0": {
-    "symbol": "TDEFI+S",
-    "isExperipie": false,
-    "composition": [
-      {
-        "symbol": "BAL",
-        "color": "#58a4fc",
-        "address": "0xba100000625a3754423978a60c9317c58a424e3D",
-        "percentage": 12.75
       },
-      {
-        "symbol": "LRC",
-        "color": "#fd6761",
-        "address": "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD",
-        "percentage": 27.25
-      },
-      {
-        "symbol": "REN",
-        "color": "#6beab1",
-        "address": "0x408e41876cCCDC0F92210600ef50372656052a38",
-        "percentage": 30
-      },
-      {
-        "symbol": "UMA",
-        "color": "#c4ccce",
-        "address": "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828",
-        "percentage": 30
-      }
-    ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
-  },
-  "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": {
-    "symbol": "DEFI+S",
-    "isExperipie": false,
-    "name": "DeFi Small Cap",
-    "description": "Lower market cap projects that have incredible potential for growth.",
-    "useRecipe": true,
-    "swapEnabled": false,
-    "coingeckoId": "piedao-defi-small-cap",
-    "bPool": "0x94743cfaa3fdc62e9693572314b5ee377eba5d11",
-    "swapFees": "0",
-    "streamingFees": "0.7",
-    "mapDynamicTradingViewFormula": {
-      "0xba100000625a3754423978a60c9317c58a424e3D": "FTX:BALUSD",
-      "0xBBbbCA6A901c926F240b89EacB641d8Aec7AEafD": "BINANCE:LRCUSD",
-      "0x408e41876cCCDC0F92210600ef50372656052a38": "BINANCE:RENUSD",
-      "0x04Fa0d235C4abf4BcF4787aF4CF447DE572eF828": "POLONIEX:UMAUSDT",
-      "0x89Ab32156e46F46D02ade3FEcbe5Fc4243B9AAeD": "BINANCE:PNTUSD",
-      "0xec67005c4E498Ec7f55E092bd1d35cbC47C91892": "KRAKEN:MLNUSD"
-    },
-    "tradingViewFormula": "0.014596375542431261*FTX:BALUSD+2.054022092615757*BINANCE:LRCUSD+1.7220962538152524*BINANCE:RENUSD+0.07306242503723467*POLONIEX:UMAUSDT+0.12718946536236797*BINANCE:PNTUSD+0.0015105607305932233*KRAKEN:MLNUSD",
-    "composition": [
       {
         "symbol": "BAL",
         "color": "#58a4fc",
@@ -335,88 +222,6 @@
         "percentage": 3.21,
         "coingeckoId": "melon",
         "coingeckoImageId": 605
-      }
-      
-    ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md",
-    "landingLinks": [
-      {
-        "label": "Read more on Medium",
-        "url": "https://medium.com/piedao/announcing-defi-s-67ed53367364"
-      }
-    ]
-  },
-  "0xe4f726adc8e89c6a6017f01eada77865db22da14": {
-    "symbol": "BCP",
-    "isExperipie": false,
-    "coingeckoId": "piedao-balanced-crypto-pie",
-    "name": "Balanced Crypto Pie",
-    "description": "Balanced Crypto Pie. An even split between BTC, ETH, and the best of DEFI.",
-    "useRecipe": true,
-    "useMintOverBuy": false,
-    "buyButton": true,
-    "swapEnabled": true,
-    "streamingFees": "0.46",
-    "swapFees": "1",
-    "composition": [
-        {
-            "symbol": "WBTC",
-            "decimals": 8,
-            "coingeckoId": "wrapped-bitcoin",
-            "coingeckoImageId": 7598,
-            "color": "#F4AC36",
-            "address": "0x2260fac5e5542a773aa44fbcfedf7c193bc2c599",
-            "percentage": 33.33
-        },
-        {
-            "symbol": "WETH",
-            "decimals": 18,
-            "color": "#0171F5",
-            "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-            "percentage": 33.33,
-            "coingeckoId": "weth",
-            "coingeckoImageId": 279
-        },
-        {
-            "symbol": "DEFI++",
-            "decimals": 18,
-            "color": "#FD1782",
-            "address": "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
-            "percentage": 33.34,
-            "isPie": true
-        }
-    ],
-    "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
-  },
-  "0x8d1ce361eb68e9e05573443c407d4a3bed23b033": {
-    "symbol": "DEFI++",
-    "description": "The most diversified DEFI index on the market. Both large and small market caps.",
-    "isExperipie": false,
-    "name": "DeFi Index Pie ",
-    "useRecipe": true,
-    "streamingFees": "0",
-    "useMintOverBuy": true,
-    "buyButton": true,
-    "swapEnabled": true,
-    "coingeckoId": "piedao-defi",
-    "swapFees": "1",
-    "composition": [
-      {
-        "symbol": "DEFI+S",
-        "address": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c",
-        "color": "#58a4fc",
-        "coingeckoId": "piedao-defi-small-cap",
-        "percentage": 30,
-        "isPie": true
-      },
-      {
-        "symbol": "DEFI+L",
-        "address": "0x78f225869c08d478c34e5f645d07a87d3fe8eb78",
-        "color": "#6beab1",
-        "coingeckoId": "piedao-defi-large-cap",
-        "coingeckoImageId": 1,
-        "percentage": 70,
-        "isPie": true
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/usd%2B%2B.md"
