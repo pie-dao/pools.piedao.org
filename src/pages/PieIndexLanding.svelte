@@ -31,6 +31,8 @@
   import Modal from '../components/elements/Modal.svelte';
   import PieExplanation from '../components/marketing-elements/pie-explanation-switch.svelte';
   import TooltipButton from '../components/elements/TooltipButton.svelte';
+  import Merge from '../components/SingleAssetEntryExit.svelte';
+  import smartcontracts from '../config/smartcontracts.json'
 
   export let params;
 
