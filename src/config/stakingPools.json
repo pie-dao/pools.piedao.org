@@ -57,44 +57,6 @@
         ]
     },
     {
-        "id": "3",
-        "slug": "defis-eth-balancer",
-        "name": "DEFI+S/ETH",
-        "stakingToken": "0x35333CF3Db8e334384EC6D2ea446DA6e445701dF",
-        "stakingTokenSymbol": "BPT",
-        "stakingTokenName": "DEFI+S/ETH Balancer LP",
-        "lpLink": "https://pools.balancer.exchange/#/pool/0x35333CF3Db8e334384EC6D2ea446DA6e445701dF/",
-        "type": "balancer",
-        "rewardsPaused": false,
-        "containing": [
-            {
-              "address": "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c"
-            },
-            {
-              "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-            }
-        ]
-    },
-    {
-        "id": "4",
-        "slug": "defil-eth-balancer",
-        "name": "DEFI+L/ETH",
-        "stakingToken": "0xa795600590a7da0057469049ab8f1284baed977e",
-        "stakingTokenSymbol": "BPT",
-        "stakingTokenName": "DEFI+L/ETH Balancer LP",
-        "lpLink": "https://pools.balancer.exchange/#/pool/0xa795600590a7da0057469049ab8f1284baed977e/",
-        "type": "balancer",
-        "rewardsPaused": false,
-        "containing": [
-            {
-              "address": "0x78f225869c08d478c34e5f645d07a87d3fe8eb78"
-            },
-            {
-              "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-            }
-        ]
-    },
-    {
         "id": "5",
         "slug": "bcp",
         "name": "BCP",

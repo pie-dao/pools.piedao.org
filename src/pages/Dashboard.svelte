@@ -5,8 +5,6 @@
   import { piesMarketDataStore } from '../stores/coingecko.js';
   import { pools } from '../stores/eth.js';
   import Meta from '../components/elements/meta.svelte';
-  import smartcontracts from '../config/smartcontracts.json'
-  import Merge from '../components/SingleAssetEntryExit.svelte'
 
   import {
     getTokenImage,
@@ -78,7 +76,7 @@
 <Meta 
   metadata={{
     title: "PieDAO Products Page, DEFI index and yield aggregators",
-    description: "An overview of the PieDAO's products, including Pies and PieVaults DEFI index. BCP, DEFI++, DEFI+L, DEFI+S.",
+    description: "An overview of the PieDAO's products, including Pies and PieVaults DEFI index. BCP, DEFI++ and PLAY.",
   }}
 />
 
@@ -94,17 +92,13 @@
     </span>
   </Modal>
 
-  <Merge 
-    buyTokenAddress={smartcontracts.defi_pp}
-  />
-
   <!-- <img alt="ready to diversify?" src={images.amazingrewards} /> -->
   <div class="w-99pc m-4">
 
   {#if piVaults.length }
     <div class="mt-0 mb-4 md:my-4 lg:my-6">
-      <h1 class="text-lg">🆕 Pie Vaults</h1>
-      <p class="font-thin">Yield Bearing & Meta-Governance Enabled</p>
+      <h1 class="text-lg">🥧 Products</h1>
+      <p class="font-thin">An Entire Portfolio in a Single Token. Yield Bearing & Meta-Governance Enabled</p>
     </div>
 
     <div class="flex flex-col justify-around w-100pc content-center lg:flex-row hidden md:flex lg:flex">
@@ -166,80 +160,7 @@
               
             </tr>
           {/each}
-        </tbody>
-      </table>
-      <!-- {#each piVaults as pie}
-        <ProductBox 
-          class=""
-          link={`#/pie/${pie.address}`}
-          image={pie.icon}
-          title={pie.symbol}
-          description={pie.name}
-        />
-      {/each} -->
-    </div>
-
-    <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
-      {#each piVaults as pie}
-      <a class="mx-4 thinborderbottom" href={`#/pie/${pie.address}`}>
-        <div class="flex items-center w-100pc py-4">
-              <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
-            <div class="flex flex-col justify-around max-w-55pc">
-              <span class="text-lg leading-6">{pie.symbol}</span>
-              <span class="text-sm font-thin opacity-40" >{pie.description ? pie.description : "Another great porfolio"}</span>
-              <!-- <span class="text-sm font-thin opacity-40" >{pie.totalLiquidity}</span> -->
-
-            </div>
-            <div class="text-right flex flex-col justify-end items-end ml-auto">
-              <span class="">{pie.price}</span>
-              <Change value={pie.change} class="text-right"/>
-            </div>
-        </div>
-      </a>
-      {/each}
-    </div>
-
-  {/if}
-
-  <div class="mt-10 mb-4 md:mb-0 lg:mb-0">
-    <h1 class="text-lg">🥧 Explore Pies</h1>
-    <p class="font-thin">An Entire Portfolio in a Single Token</p>
-  </div>
-
-
-  <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
-    {#each pies as pie}
-    <a class="mx-4 thinborderbottom" href={`#/pie/${pie.address}`}>
-      <div class="flex items-center w-100pc py-4">
-            <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
-          <div class="flex flex-col justify-around">
-            <span class="text-lg leading-6">{pie.symbol}</span>
-            <span class="text-sm font-thin opacity-40" >{pie.totalLiquidity}</span>
-          </div>
-          <div class="text-right flex flex-col justify-end items-end ml-auto">
-            <span class="">{getNav(pie.address)}</span>
-            <Change value={pie.change} class="text-right"/>
-          </div>
-      </div>
-    </a>
-    {/each}
-  </div>
-
-
-  <div class="w-99pc hidden md:block lg:block mt-6">
-    <table class="breakdown-table table-auto w-full">
-      <thead>
-        <tr>
-          <th class="font-thin border-b-2 px-4 py-2 text-left">Index</th>
-          <th class="font-thin border-b-2 px-4 py-2">Assets</th>
-          <!-- <th class="font-thin border-b-2 px-4 py-2">Market Cap</th> -->
-          <th class="font-thin border-b-2 px-4 py-2 text-left">24H Change</th>
-          <th class="font-thin border-b-2 px-4 py-2">Current Price</th>
-          <th class="font-thin border-b-2 px-4 py-2">Buy</th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each pies as pie}
+          {#each pies as pie}
           <tr class="row-highlight">
             <td class="pointer border border-gray-800 px-2 py-2 text-left min-w-140px" on:click={() => window.location.hash = `#/pie/${pie.address}`}>
               <a class="flex items-center px-2 py-2" href={`#/pie/${pie.address}`}>
@@ -290,9 +211,66 @@
             
           </tr>
         {/each}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+      <!-- {#each piVaults as pie}
+        <ProductBox 
+          class=""
+          link={`#/pie/${pie.address}`}
+          image={pie.icon}
+          title={pie.symbol}
+          description={pie.name}
+        />
+      {/each} -->
+    </div>
+
+    <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
+      {#each piVaults as pie}
+      <a class="mx-4 thinborderbottom" href={`#/pie/${pie.address}`}>
+        <div class="flex items-center w-100pc py-4">
+              <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
+            <div class="flex flex-col justify-around max-w-55pc">
+              <span class="text-lg leading-6">{pie.symbol}</span>
+              <span class="text-sm font-thin opacity-40" >{pie.description ? pie.description : "Another great porfolio"}</span>
+              <!-- <span class="text-sm font-thin opacity-40" >{pie.totalLiquidity}</span> -->
+
+            </div>
+            <div class="text-right flex flex-col justify-end items-end ml-auto">
+              <span class="">{pie.price}</span>
+              <Change value={pie.change} class="text-right"/>
+            </div>
+        </div>
+      </a>
+      {/each}
+    </div>
+
+  {/if}
+
+  <!-- <div class="mt-10 mb-4 md:mb-0 lg:mb-0">
+    <h1 class="text-lg">🥧 Explore Pies</h1>
+    <p class="font-thin">An Entire Portfolio in a Single Token</p>
+  </div> -->
+
+
+  <div class="w-full block md:hidden lg:hidden flex flex-col bg-lightgrey rounded">
+    {#each pies as pie}
+    <a class="mx-4 thinborderbottom" href={`#/pie/${pie.address}`}>
+      <div class="flex items-center w-100pc py-4">
+            <img width="50px" height="50px" class="mr-4" src={pie.icon} alt={pie.symbol} />
+          <div class="flex flex-col justify-around">
+            <span class="text-lg leading-6">{pie.symbol}</span>
+            <span class="text-sm font-thin opacity-40" >{pie.totalLiquidity}</span>
+          </div>
+          <div class="text-right flex flex-col justify-end items-end ml-auto">
+            <span class="">{getNav(pie.address)}</span>
+            <Change value={pie.change} class="text-right"/>
+          </div>
+      </div>
+    </a>
+    {/each}
   </div>
+
+
 
     <!-- <div class="mt-20 mb-0">
       <h1 class="text-lg">👨‍🌾 Honest worker? Explore Pie Farming Opportunities</h1>
