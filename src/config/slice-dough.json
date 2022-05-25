@@ -1,5 +1,38 @@
 [
   {
+    "DATE": "05/25/2022",
+    "SLICE/DOUGH 3days avg": "2,465340",
+    "SLICE/DOUGH": "2,490292364",
+    "SLICE supply": "556.957,07",
+    "SLICE value": "$134.177,02",
+    "PLAY in SLICE": "120.880,20",
+    "PLAY NAV": "$1,110000",
+    "SLICE NAV": "$0,240911",
+    "DOUGH": "$0,096740"
+  },
+  {
+    "DATE": "05/24/2022",
+    "SLICE/DOUGH 3days avg": "",
+    "SLICE/DOUGH": "2,411520353",
+    "SLICE supply": "556.957,07",
+    "SLICE value": "$134.177,02",
+    "PLAY in SLICE": "120.880,20",
+    "PLAY NAV": "$1,110000",
+    "SLICE NAV": "$0,240911",
+    "DOUGH": "$0,099900"
+  },
+  {
+    "DATE": "05/23/2022",
+    "SLICE/DOUGH 3days avg": "",
+    "SLICE/DOUGH": "2,494206648",
+    "SLICE supply": "556.957,07",
+    "SLICE value": "$140.221,03",
+    "PLAY in SLICE": "120.880,20",
+    "PLAY NAV": "$1,160000",
+    "SLICE NAV": "$0,251763",
+    "DOUGH": "$0,100939"
+  },
+  {
     "DATE": "04/27/2022",
     "SLICE/DOUGH 3days avg": "2,712390",
     "SLICE/DOUGH": "2,565652293",
