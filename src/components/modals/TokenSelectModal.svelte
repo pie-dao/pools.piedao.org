@@ -2,7 +2,6 @@
   import images from '../../config/images.json';
 
   export let callback;
-  export let balances;
   export let tokens;
   export let open;
   /** Dispatch event on click outside of node */

@@ -3,22 +3,25 @@
     import get from 'lodash/get';
     import { quoteRefreshSeconds } from '../../classes/Timer';
     import { piesMarketDataStore } from '../../stores/coingecko';
-    
-    
-    export let quote;
+        
     export let frozeQuote;
     export let confirm;
     export let fetchQuote;
     export let isLoading;
     export let sellToken;
     export let buyToken;
-    export let close;
     export let includeMarket = true;
 
     let frozeQuoteCopy = {...frozeQuote};
 
-    const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
+    $: decimals = {
+        sell: sellToken?.decimals ?? 18,
+        buy: buyToken?.decimals ?? 18,
+    };
 
+    const toNum = (num, decimals) => (BigNumber(num.toString()).dividedBy(10 ** decimals)).toFixed(6);
+    const toNumBuy = (num) => toNum(num, decimals.buy);
+    const toNumSell = (num) => toNum(num, decimals.sell);
 
     $: marketPrice = get($piesMarketDataStore, `${buyToken.address.toLowerCase()}.market_data.current_price`, 0);
 
@@ -53,22 +56,33 @@
             <div class="flex w-100pc justify-between items-center py-2 px-4  bg-white rounded">
                 <div class="flex flex-col items-start">
                     <div class="font-thin text-base">
-                        Your Pay
+                        You Pay
                     </div>
-                    <div class="font-bold text-base">{toNum(frozeQuoteCopy.sellAmount)} {sellToken.symbol}</div>
+                    <div class="font-bold text-base">{toNumSell(frozeQuoteCopy.sellAmount)} {sellToken.symbol}</div>
                 </div>
             </div>
+
+            {#if !includeMarket && frozeQuote?.amountWithPremiumLabel && !frozeQuote?.amountWithSlippageLabel}
+            <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
+                <div class="flex flex-col items-start">
+                    <div class="font-thin text-base">
+                        Max Price
+                    </div>
+                    <div class="font-bold text-base"> {parseFloat(frozeQuoteCopy.amountWithPremiumLabel).toFixed(6)} {sellToken.symbol} </div>
+                </div>
+            </div>
+            {/if}            
             
             <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
                 <div class="flex flex-col items-start">
                     <div class="font-thin text-base">
                         You Receive
                     </div>
-                    <div class="font-bold text-base"> {toNum(frozeQuoteCopy.buyAmount)} {buyToken.symbol} </div>
+                    <div class="font-bold text-base"> {toNumBuy(frozeQuoteCopy.buyAmount)} {buyToken.symbol} </div>
                 </div>
             </div>
 
-            {#if !includeMarket && frozeQuote?.amountWithSlippageLabel}
+            {#if !includeMarket && frozeQuote?.amountWithSlippageLabel && !frozeQuote?.amountWithPremiumLabel}
             <div class="flex w-100pc justify-between items-center py-2 px-4 mt-2 bg-white rounded">
                 <div class="flex flex-col items-start">
                     <div class="font-thin text-base">

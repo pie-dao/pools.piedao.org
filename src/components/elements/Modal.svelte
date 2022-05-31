@@ -28,7 +28,9 @@ export const close = () => {
 {#if modalIsOpen}
     <div class="genericmodal flex justify-center items-center">
         <div style={ backgroundColor ? `background-color: ${backgroundColor} !important` : "#fff"} 
-             class="flex flex-col justify-start modalcontent w-100pc min-h-100pc p-4 overflow-x-hidden overflow-y-auto lg:max-w-600px lg:min-w-30pc lg:max-h-70pc lg:min-h-25pc" 
+             class="flex flex-col justify-start modalcontent 
+                w-100pc p-4 overflow-x-hidden overflow-y-auto 
+                lg:max-w-600px lg:max-h-70pc " 
              use:mousedownOutside 
              on:mousedown_outside={close}>
             <div class="flex">
