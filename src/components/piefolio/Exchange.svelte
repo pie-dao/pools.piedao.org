@@ -47,12 +47,7 @@
       address: '0x6b175474e89094c44da98b954eedeac495271d0f',
       symbol: 'DAI',
       icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
-    },
-    {
-      address: '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4',
-      symbol: 'PLAY',
-      icon: getTokenImage('0x33e18a092a93ff21ad04746c7da12e35d34dc7c4')
-    },
+    }
   ];
 
   let modal;
@@ -73,9 +68,9 @@
   }
 
   let defaultTokenBuy = {
-    address: '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4',
-    symbol: 'PLAY',
-    icon: getTokenImage('0x33e18a092a93ff21ad04746c7da12e35d34dc7c4')
+    address: '0xe4f726adc8e89c6a6017f01eada77865db22da14',
+    symbol: 'BCP',
+    icon: getTokenImage('0xe4f726adc8e89c6a6017f01eada77865db22da14')
   };
 
   const defaultAmount = {

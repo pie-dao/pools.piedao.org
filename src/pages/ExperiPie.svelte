@@ -91,6 +91,7 @@
 
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: name = (poolsConfig[token] || {}).name;
+  $: buyUrl = (poolsConfig[token] || {}).buyUrl;
   $: tokenLogo = images.logos[token];
   $: change24H = get(
     $piesMarketDataStore,
@@ -330,6 +331,8 @@
     return result.cToken
   }
 
+  const buyToken = () => buyUrl ? window.open(buyUrl, '_blank') : location.href = "#/swap";
+
 </script>
 
 <!-- <SnapshotBanner /> -->
@@ -421,7 +424,7 @@
           </button>
         {/if}
 
-        <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" onclick="location.href='#/swap'">
+        <button class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80" on:click={buyToken}>
           <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
           <div class="">
             <div class="text-base font-bold leading-5">Buy & Sell</div>
@@ -747,7 +750,7 @@
   {/if}
 
 
-  <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc" onclick="location.href='#/swap'">
+  <button class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc" on:click={buyToken}>
     <!-- <div class="mr-10px"><img class="h-50px inline" src={images.exchangeemoji} alt={symbol} /></div> -->
     <div class="">
       <div class="text-base font-bold leading-5">Buy & Sell</div>

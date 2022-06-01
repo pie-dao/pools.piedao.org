@@ -149,7 +149,7 @@
                         </button>
                       </a>
                   {:else}
-                    <a href={`#/swap`}>
+                    <a href={pie.buyUrl ? pie.buyUrl : `#/swap`} target={pie.buyUrl ? "_blank" : "_self"}>
                       <button class="table-btn highlight-box min-w-70px">
                         {pie.symbol}
                       </button>

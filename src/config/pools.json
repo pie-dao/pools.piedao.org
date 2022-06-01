@@ -31,6 +31,7 @@
     "description": "Complete exposure to the Metaverse and NFTs. In collab with NFTX",
     "useMintOverBuy": false,
     "buyButton": true,
+    "buyUrl": "https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0x33e18a092a93ff21aD04746c7Da12e35D34DC7C4",
     "useRecipe": true,
     "swapEnabled": false,
     "swapFees": "0.2",
