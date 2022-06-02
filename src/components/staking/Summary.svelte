@@ -364,7 +364,7 @@
     {/if}
 </div>
 <div class="flex flex-col md:flex-row nowrap items-center p-1 justify-between">
-    <div class="flex w-full flex-row">
+    <div class="flex flex-row">
         <div class="sc-iybRtq gjVeBU">
             {#if isLoading && $eth.address}
             <div class="mr-2">Loading...</div>
@@ -378,7 +378,7 @@
         </div>
     </div>
     {#if $eth.address && sliceAmount.gt(0)}
-    <div class="flex w-full flex-row pt-4 md:pt-0 space-x-2">
+    <div class="flex flex-row pt-4 md:pt-0 space-x-2">
         <button 
             disabled={isLoading || sliceAmount.eq(0)}
             class="flex items-center bg-pink rounded-xl pointer px-4 py-2 text-white"
