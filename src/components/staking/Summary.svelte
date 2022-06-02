@@ -224,7 +224,7 @@
     <div slot="content" class="font-thin">
       <div class="flex flex-col content-center align-center items-center justify-center">
         <div class="w-full flex-row text-center">
-            <p>You will send your SLICE to the PieDAO Treasury and then deposit veDOUGH into your account two weeks after the distribution date{nextCompoundWindow ? `: ${nextCompoundWindow}.` : "."}</p>
+            <p>You will send SLICE to PieDAO&apos;s Treasury and receive veDOUGH in exchange 2 weeks after rewards distribution. {nextCompoundWindow ? `(Next compound: ${nextCompoundWindow})` : ""}</p>
             {#if isLoading && $eth.address}
                 <div class="mr-2">Loading...</div>
             {:else}
