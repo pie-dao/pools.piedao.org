@@ -396,7 +396,7 @@
     </div>
     {/if}
 </div>
-{#if isNotarizing}
+{#if isNotarizing && $eth.address}
     <div class="w-full flex mt-4">
         <div class="rounded gradientbglightblue p-4">
             <div class="flex">
