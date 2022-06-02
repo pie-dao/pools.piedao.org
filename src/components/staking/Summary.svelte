@@ -210,7 +210,7 @@
         const res = await fetch("https://raw.githubusercontent.com/pie-dao/shared-metadata/main/slice-rate.json");
         const data = await res.json();
         nextRate = data.nextRate;
-        nextCompoundWindow = new Date(data.nextCompoundWindow).toLocaleDateString();
+        nextCompoundWindow = data.nextCompoundWindow;
     })
 </script>
 
