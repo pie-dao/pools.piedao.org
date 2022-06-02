@@ -374,24 +374,6 @@
   <div class="block md:hidden">
     <img class="w-100% inline mb-4" src={images.doughconomics} alt="dough economics diagram" />
   </div>
-
-  <a class="hidden md:block mt-8" href="#/kpi-options-campaign">
-    <LottiePlayer
-    src="https://assets7.lottiefiles.com/private_files/lf30_wvaae9to.json"
-    autoplay="{true}"
-    loop="{true}"
-    controls="{false}"
-    renderer="svg"
-    background="white"
-    height=""
-    width="100%"
-    controlsLayout="{controlsLayout}"
-    />
-  </a>
-
-  <a class="block mt-4 md:hidden" href="#/kpi-options-campaign">
-    <img class="w-100% inline mb-4" src={images.kpi_options} alt="kpi options" />
-  </a>
 </div>
 
 <Newsletter />
