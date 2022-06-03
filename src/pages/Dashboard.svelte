@@ -142,20 +142,12 @@
               </td>
               <td class="border px-4 ml-8 py-2 font-thin text-center">
                 {#if pie.buyButton}
-                  {#if pie.useMintOverBuy}
-                      <a href={`#/pie/${pie.address}`}>
-                        <button class="table-btn highlight-box min-w-70px">
-                          {pie.symbol}
-                        </button>
-                      </a>
-                  {:else}
                     <a href={pie.buyUrl ? pie.buyUrl : `#/swap`} target={pie.buyUrl ? "_blank" : "_self"}>
                       <button class="table-btn highlight-box min-w-70px">
                         {pie.symbol}
                       </button>
                     </a>
                   {/if}
-                {/if}
               </td>
               
             </tr>

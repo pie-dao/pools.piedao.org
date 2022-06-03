@@ -1,5 +1,6 @@
 {
   "available": [
+    "0x33e18a092a93ff21ad04746c7da12e35d34dc7c4",
     "0xe4f726adc8e89c6a6017f01eada77865db22da14",
     "0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "0x1083d743a1e53805a95249fef7310d75029f7cd6"
@@ -33,8 +34,9 @@
     "isExperipie": true,
     "name": "Metaverse NFT Index",
     "description": "Complete exposure to the Metaverse and NFTs. In collab with NFTX",
-    "useMintOverBuy": false,
+    "useMintOverBuy": true,
     "buyButton": true,
+    "buyUrl": "https://app.sushi.com/swap?inputCurrency=ETH&outputCurrency=0x33e18a092a93ff21aD04746c7Da12e35D34DC7C4",
     "useRecipe": true,
     "swapEnabled": false,
     "swapFees": "0.2",
