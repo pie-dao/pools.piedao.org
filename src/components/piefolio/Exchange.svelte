@@ -108,7 +108,7 @@
   });
   const api = new ApiOx();
 
-  const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
+  const toNum = (num, decimals = 18) => (BigNumber(num.toString()).dividedBy(10 ** decimals)).toFixed(6);
 
   $: sellToken = defaultTokenSell;
   $: buyToken = defaultTokenBuy;
@@ -312,7 +312,7 @@
       return;
     }
     quote = res;
-    receivedAmount = toNum(quote.buyAmount);
+    receivedAmount = toNum(quote.buyAmount, buyToken.decimals);
     isLoading = false;
 
     Timer.start();
