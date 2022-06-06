@@ -43,9 +43,9 @@
       icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
     },
     {
-      address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-      symbol: 'DAI',
-      icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
+      address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+      symbol: 'USDC',
+      icon: getTokenImage('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48')
     }
   ];
 
