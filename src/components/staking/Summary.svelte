@@ -16,6 +16,8 @@
     import { compound, toNum } from '../../helpers/staking.js';
     import BigNumber from "bignumber.js";
     import sliceDoughData from "../../config/slice-dough.json";
+    import { getMerkleTreeDistributorContract } from "../kpi-options/kpiUtils";
+    import { BigNumber as BigNumberEthers, constants } from "ethers"
     
     let claimModal;
     let compoundModal;
@@ -38,6 +40,7 @@
     };
     let nextRate;
     let nextCompoundWindow;
+    let isNotarizing;
     
     $: if($stakingData && !isEmpty($stakingData) && $stakingData.address) {
         isLoading = false;
@@ -104,7 +107,9 @@
         }
     })();
 
-
+    $: if($eth.provider) {
+        checkNotarization();
+    }
 
     $: if($eth.address && $stakingData && $balances) {
         sliceCalc();
@@ -204,6 +209,14 @@
           console.error(error);
           isCompounding = false;
         });
+    }
+
+    const checkNotarization = async () => {
+        const merkleTreeDistributorContract = getMerkleTreeDistributorContract($eth);
+        const nextCreatedIndex = await merkleTreeDistributorContract.nextCreatedIndex();
+        const currentWindowIndex = nextCreatedIndex.sub(BigNumberEthers.from(1))
+        const currentWindow = await merkleTreeDistributorContract.merkleWindows(currentWindowIndex);
+        isNotarizing = currentWindow.merkleRoot !== constants.AddressZero;
     }
 
     onMount(async () => {
@@ -349,9 +362,9 @@
         </div>
     {/if}
 </div>
-<div class="flex flex-col md:flex-row nowrap items-center p-1">
-    <div class="flex w-full flex-row">
-        <span class="sc-iybRtq gjVeBU">
+<div class="flex flex-col md:flex-row nowrap items-center p-1 justify-between">
+    <div class="flex flex-row">
+        <div class="sc-iybRtq gjVeBU">
             {#if isLoading && $eth.address}
             <div class="mr-2">Loading...</div>
             {:else}          
@@ -361,27 +374,47 @@
             {/if}
             <img class="h-auto w-24px mx-5px" src={images.rewardsPie} alt="dough token" />
             <span class="sc-kXeGPI jeVIZw token-symbol-container">SLICE</span>
-        </span>
+        </div>
     </div>
     {#if $eth.address && sliceAmount.gt(0)}
-    <div class="flex w-full flex-row pt-4 md:pt-0">
-      <button 
-          disabled={isLoading || sliceAmount.eq(0)}
-          class="flex items-center bg-pink rounded-xl pointer px-4 py-2 text-white mr-4"
-          on:click={() => compoundModal.open()}
-      >Compound</button>
-      <button 
-      disabled={isLoading}
-      class="flex items-center bg-black rounded-xl -mr-2 pointer px-4 py-2 text-white"
-      on:click={() => {
-          if($eth.address) {
-              claimModal.showModal($stakingData);
-          }
-      }}
-      > Claim</button>
+    <div class="flex flex-row pt-4 md:pt-0 space-x-2">
+        <button 
+            disabled={isLoading || sliceAmount.eq(0)}
+            class="flex items-center bg-pink rounded-xl pointer px-4 py-2 text-white"
+            on:click={() => compoundModal.open()}
+        >Compound</button>
+            <button 
+                disabled={isLoading || isNotarizing}
+                class="flex items-center bg-black rounded-xl pointer px-4 py-2 text-white claim-button"
+                on:click={() => {
+                    if($eth.address) {
+                        claimModal.showModal($stakingData);
+                    }
+                }}
+            >Claim</button>
     </div>
     {/if}
 </div>
+{#if isNotarizing && $eth.address}
+    <div class="w-full flex mt-4">
+        <div class="rounded gradientbglightblue p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3 flex-1 md:flex md:justify-between">
+                    <p class="text-sm text-blue-700">Claiming rewards is not allowed during distribution notarization.
+                    </p>
+                <p class="mt-3 text-sm md:mt-0 md:ml-6">
+                    <a href="https://snapshot.org/#/piedao.eth" class="whitespace-nowrap font-medium text-blue" target="_blank" rel="norefferer noopener">Snapshot <span aria-hidden="true">&rarr;</span></a>
+                </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{/if}
 </div>
 <div class="w-full flex px-4 md:px-6">
     <div class="w-1/2 flex flex-col flex-shrink mr-2 mt-4 mb-6 rounded-20px bg-white p-16px"
@@ -423,10 +456,10 @@
 </div>
 </div>    
 </div> 
-<button
-on:click={() => addToken()}
-class="text-center pointer mx-auto object-bottom mb-4 font-thin"
->
-🦊 Add SLICE to MetaMask
-</button> 
+    <button
+    on:click={() => addToken()}
+    class="text-center pointer mx-auto object-bottom mb-4 font-thin"
+    >
+    🦊 Add SLICE to MetaMask
+    </button> 
 </div>
