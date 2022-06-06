@@ -41,7 +41,6 @@
     let nextRate;
     let nextCompoundWindow;
     let isNotarizing;
-    let snapshotAddress;
     
     $: if($stakingData && !isEmpty($stakingData) && $stakingData.address) {
         isLoading = false;
@@ -218,7 +217,6 @@
         const currentWindowIndex = nextCreatedIndex.sub(BigNumberEthers.from(1))
         const currentWindow = await merkleTreeDistributorContract.merkleWindows(currentWindowIndex);
         isNotarizing = currentWindow.merkleRoot !== constants.AddressZero;
-        snapshotAddress = currentWindow.ipfsHash;
     }
 
     onMount(async () => {
@@ -410,7 +408,7 @@
                     <p class="text-sm text-blue-700">Claiming rewards is not allowed during distribution notarization.
                     </p>
                 <p class="mt-3 text-sm md:mt-0 md:ml-6">
-                    <a href={`https://ipfs.io/ipfs/${snapshotAddress}`} class="whitespace-nowrap font-medium text-blue" target="_blank" rel="norefferer noopener">Snapshot <span aria-hidden="true">&rarr;</span></a>
+                    <a href="https://snapshot.org/#/piedao.eth" class="whitespace-nowrap font-medium text-blue" target="_blank" rel="norefferer noopener">Snapshot <span aria-hidden="true">&rarr;</span></a>
                 </p>
                 </div>
             </div>
