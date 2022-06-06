@@ -17,7 +17,7 @@
     import BigNumber from "bignumber.js";
     import sliceDoughData from "../../config/slice-dough.json";
     import { getMerkleTreeDistributorContract } from "../kpi-options/kpiUtils";
-    import { BigNumber as BigNumberEthers } from "ethers"
+    import { BigNumber as BigNumberEthers, constants } from "ethers"
     
     let claimModal;
     let compoundModal;
@@ -41,7 +41,6 @@
     let nextRate;
     let nextCompoundWindow;
     let isNotarizing;
-    let ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
     let snapshotAddress;
     
     $: if($stakingData && !isEmpty($stakingData) && $stakingData.address) {
@@ -218,7 +217,7 @@
         const nextCreatedIndex = await merkleTreeDistributorContract.nextCreatedIndex();
         const currentWindowIndex = nextCreatedIndex.sub(BigNumberEthers.from(1))
         const currentWindow = await merkleTreeDistributorContract.merkleWindows(currentWindowIndex);
-        isNotarizing = currentWindow.merkleRoot !== ZERO_ADDRESS;
+        isNotarizing = currentWindow.merkleRoot !== constants.AddressZero;
         snapshotAddress = currentWindow.ipfsHash;
     }
 
@@ -226,7 +225,7 @@
         const res = await fetch("https://raw.githubusercontent.com/pie-dao/shared-metadata/main/slice-rate.json");
         const data = await res.json();
         nextRate = data.nextRate;
-        nextCompoundWindow = new Date(data.nextCompoundWindow).toLocaleDateString();
+        nextCompoundWindow = data.nextCompoundWindow;
     })
 </script>
 
@@ -240,7 +239,7 @@
     <div slot="content" class="font-thin">
       <div class="flex flex-col content-center align-center items-center justify-center">
         <div class="w-full flex-row text-center">
-            <p>You will send your SLICE to the PieDAO Treasury and then deposit veDOUGH into your account two weeks after the distribution date.</p>
+            <p>You will send SLICE to PieDAO&apos;s Treasury and receive veDOUGH in exchange 2 weeks after rewards distribution. {nextCompoundWindow ? `(Next compound: ${nextCompoundWindow})` : ""}</p>
             {#if isLoading && $eth.address}
                 <div class="mr-2">Loading...</div>
             {:else}
@@ -306,7 +305,9 @@
           {buttonText}
           </button>
           <div class="mt-2">
-            <p class="text-sm italic">The conversion rate during the latest distribution was: {sliceDoughRate} SLICE/DOUGH.</p>
+            {#if nextRate}
+                <p class="text-sm italic">The conversion rate during the latest distribution was: {nextRate} SLICE/DOUGH.</p>
+            {/if}
             <strong>The DAO will send additional veDOUGH as a lump sum to cover the gas spent on the 2 transactions to claim and send the SLICE.</strong> 
           </div>
         </div>

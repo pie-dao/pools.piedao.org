@@ -176,7 +176,7 @@
       <Proposals proposals={$stakingData.proposals} />
     {:else}
       <div class="text-center mx-auto w-auto rounded-xl pointer mt-4 mb-4 w-200px" style="border: 1px solid #FFAC32;">
-        <a href="https://snapshot.org/#/piedao" target="_blank">Snapshot/PieDAO ⚡</a>
+        <a href="https://snapshot.org/#/piedao.eth" target="_blank">Snapshot/PieDAO ⚡</a>
       </div>
     {/if}
     
