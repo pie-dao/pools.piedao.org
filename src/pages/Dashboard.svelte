@@ -145,7 +145,7 @@
                   {#if pie.useMintOverBuy}
                       <a href={`#/pie/${pie.address}`}>
                         <button class="table-btn highlight-box min-w-70px">
-                          {pie.symbol}
+                          {pie.symbol} + 2e3qroq3ro
                         </button>
                       </a>
                   {:else}
@@ -194,12 +194,20 @@
             </td>
             <td class="border px-4 ml-8 py-2 font-thin text-center">
               {#if pie.useMintOverBuy}
-                <button on:click={() => {
-                  modalOption.token = pie.address;
-                  modal.open();
-                }} class="table-btn highlight-box min-w-70px">
-                  {pie.symbol}
-                </button>
+                {#if pie.useEntryExit}
+                  <a href={`#/pie/${pie.address}`}>
+                    <button class="table-btn highlight-box min-w-70px">
+                      {pie.symbol}
+                    </button>
+                  </a>
+                {:else}
+                  <button on:click={() => {
+                    modalOption.token = pie.address;
+                    modal.open();
+                  }} class="table-btn highlight-box min-w-70px">
+                    {pie.symbol}
+                  </button>
+                {/if}
               {:else}
                 <a href={`#/swap`}>
                   <button class="table-btn highlight-box min-w-70px">

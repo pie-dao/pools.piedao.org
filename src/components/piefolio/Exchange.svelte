@@ -73,11 +73,11 @@
   }
 
   let defaultTokenBuy = {
-    address: '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4',
-    symbol: 'PLAY',
-    icon: getTokenImage('0x33e18a092a93ff21ad04746c7da12e35d34dc7c4')
+    address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
+    symbol: 'DOUGH',
+    icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
   };
-
+  
   const defaultAmount = {
     bn: new BigNumber(0),
     label: 0

@@ -67,9 +67,9 @@
   }
 
   let defaultTokenBuy = {
-    address: '0xe4f726adc8e89c6a6017f01eada77865db22da14',
-    symbol: 'BCP',
-    icon: getTokenImage('0xe4f726adc8e89c6a6017f01eada77865db22da14')
+    address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
+    symbol: 'DOUGH',
+    icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
   };
 
   const defaultAmount = {
