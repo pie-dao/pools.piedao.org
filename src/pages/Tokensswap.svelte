@@ -43,9 +43,9 @@
       icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
     },
     {
-      address: '0x6b175474e89094c44da98b954eedeac495271d0f',
-      symbol: 'DAI',
-      icon: getTokenImage('0x6B175474E89094C44Da98b954EedeAC495271d0F')
+      address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+      symbol: 'USDC',
+      icon: getTokenImage('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48')
     }
   ];
 
@@ -67,9 +67,9 @@
   }
 
   let defaultTokenBuy = {
-    address: '0xe4f726adc8e89c6a6017f01eada77865db22da14',
-    symbol: 'BCP',
-    icon: getTokenImage('0xe4f726adc8e89c6a6017f01eada77865db22da14')
+    address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
+    symbol: 'DOUGH',
+    icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
   };
 
   const defaultAmount = {
@@ -102,7 +102,7 @@
   });
   const api = new ApiOx();
 
-  const toNum = (num) => (BigNumber(num.toString()).dividedBy(10 ** 18)).toFixed(6);
+  const toNum = (num, decimals = 18) => (BigNumber(num.toString()).dividedBy(10 ** decimals)).toFixed(6);
 
   $: sellToken = defaultTokenSell;
   $: buyToken = defaultTokenBuy;
@@ -300,7 +300,7 @@
       return;
     }
     quote = res;
-    receivedAmount = toNum(quote.buyAmount);
+    receivedAmount = toNum(quote.buyAmount, buyToken.decimals);
     isLoading = false;
 
     Timer.start();
