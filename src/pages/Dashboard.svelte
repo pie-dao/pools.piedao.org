@@ -145,7 +145,7 @@
                   {#if pie.useMintOverBuy}
                       <a href={pie.buyUrl ? pie.buyUrl :`#/pie/${pie.address}`} target={pie.buyUrl ? "_blank" : "_self"}>
                         <button class="table-btn highlight-box min-w-70px">
-                          {pie.symbol} + 2e3qroq3ro
+                          {pie.symbol}
                         </button>
                       </a>
                   {:else}
