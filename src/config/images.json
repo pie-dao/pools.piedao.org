@@ -181,5 +181,6 @@
   "check-mark-button": "https://github.com/pie-dao/brand/blob/master/misc/check-mark-button.png?raw=true",
   "hourglass-pending": "https://github.com/pie-dao/brand/blob/master/misc/hourglass.png?raw=true",
   "defi_pp_merge": "images/defi_product_merge.png",
-  "defi_pp_merge_mobile": "images/defi_product_merge_mobile.png"
+  "defi_pp_merge_mobile": "images/defi_product_merge_mobile.png",
+  "how_to_governance": "images/how-to-governance.png"
 }

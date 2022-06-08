@@ -15,6 +15,23 @@
   import StakingSummary from '../components/staking/Summary.svelte';
   import StakingStats from '../components/staking/Stats.svelte';
   import StakedModal from '../components/elements/StakedModal.svelte';
+  import { fade } from 'svelte/transition'
+  import HowTo from '../components/HowToGovernance.svelte';
+  import HowToVideo from '../components/HowToGovernanceVideo.svelte';
+
+  const views = [HowTo, HowToVideo]
+  let viewportComponent = null
+  let currentView = 0
+
+  function toggleView() {
+    currentView = currentView == 0 ? 1 : 0
+  }
+
+  function updateViewportComponent() {
+    viewportComponent = views[currentView]
+  }
+
+  updateViewportComponent();
 
   let veDOUGH = 0;
   let allowanceKey;
@@ -102,6 +119,12 @@
 <div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
 
 <div class="flex w-100pc pt-0 pb-20px flex flex-col items-center">
+
+  {#if viewportComponent == views[currentView]}
+  <div class="w-full flex flex-col lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6" id="viewport" on:click={toggleView} on:outroend={updateViewportComponent} transition:fade>
+    <svelte:component this={viewportComponent}></svelte:component>
+  </div>
+  {/if}
   <StakingStats showLoader={true} />
   <div
     class="w-full flex flex-col-reverse lg:flex-row items-start px-4 md:max-w-700px lg:px-4 lg:max-w-1280px"
