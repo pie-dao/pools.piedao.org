@@ -17,7 +17,8 @@
     import BigNumber from "bignumber.js";
     import sliceDoughData from "../../config/slice-dough.json";
     import { getMerkleTreeDistributorContract } from "../kpi-options/kpiUtils";
-    import { BigNumber as BigNumberEthers, constants } from "ethers"
+    import { BigNumber as BigNumberEthers, constants } from "ethers";
+    import env from "../../config/env.json";
     
     let claimModal;
     let compoundModal;
@@ -384,7 +385,7 @@
             on:click={() => compoundModal.open()}
         >Compound</button>
             <button 
-                disabled={isLoading || isNotarizing}
+                disabled={isLoading || (isNotarizing && !env.customRPC.enabled)}
                 class="flex items-center bg-black rounded-xl pointer px-4 py-2 text-white claim-button"
                 on:click={() => {
                     if($eth.address) {
