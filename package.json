@@ -17,6 +17,7 @@
     "@ethersproject/strings": "^5.0.5",
     "@ethersproject/units": "^5.0.3",
     "@lottiefiles/svelte-lottie-player": "^0.2.0",
+    "@microsoft/fetch-event-source": "^2.0.1",
     "@okrad/svelte-progressbar": "^1.11.2",
     "@pie-dao/abis": "^1.0.0",
     "@pie-dao/eth-tailwind": "^1.0.0",
