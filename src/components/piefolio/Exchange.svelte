@@ -1,6 +1,6 @@
 <script>
   import images from "../../config/images.json";
-  import { Timeout, quoteRefreshSeconds } from '../../classes/Timer.js';
+  import { Timeout } from '../../classes/Timer.js';
   import { _ } from "svelte-i18n";
   import debounce from "lodash/debounce";
   import BigNumber from "bignumber.js";
@@ -32,28 +32,34 @@
   } from "../../components/helpers";
 
   const ZeroEx = '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
-  $: listed = [
+  const baseListed = [
     {
       address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       symbol: 'ETH',
-      icon: getTokenImage('eth')
+      icon: getTokenImage('eth'),
+      decimals: 18
     },
     {
       address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
       symbol: 'DOUGH',
-      icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
+      icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D'),
+      decimals: 18
     },
     {
       address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
       symbol: 'USDC',
-      icon: getTokenImage('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48')
+      icon: getTokenImage('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'),
+      decimals: 6
     },
     {
       address: '0x33e18a092a93ff21ad04746c7da12e35d34dc7c4',
       symbol: 'PLAY',
-      icon: getTokenImage('0x33e18a092a93ff21ad04746c7da12e35d34dc7c4')
+      icon: getTokenImage('0x33e18a092a93ff21ad04746c7da12e35d34dc7c4'),
+      decimals: 18
     },
   ];
+
+  $: listed = baseListed;
 
   let modal;
   let modalOption = {
@@ -65,19 +71,9 @@
   let targetModal = 'sell';
   let timeout;
   
+  let defaultTokenSell = baseListed.find(l => l.symbol === 'ETH');
+  let defaultTokenBuy = baseListed.find(l => l.symbol === 'DOUGH');
 
-  let defaultTokenSell = {
-    address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    symbol: 'ETH',
-    icon: getTokenImage('eth')
-  }
-
-  let defaultTokenBuy = {
-    address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
-    symbol: 'DOUGH',
-    icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
-  };
-  
   const defaultAmount = {
     bn: new BigNumber(0),
     label: 0
@@ -144,7 +140,6 @@
 
   onMount(async () => {
     isLoading = true;
-    console.log('onMount')
     setupListedToken();
 
     if($eth.address) {
