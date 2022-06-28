@@ -14,14 +14,15 @@ export async function fetchTreasuryBalance() {
       `${zapperApiUrl}/balances?addresses%5B%5D=${treasury}&api_key=${zapperApiKey}`,
       {
         onmessage({ event, data }) {
-          if (event === 'totals') {
-            const { netTotal } = JSON.parse(data);
-            treasuryBalance = parseFloat(netTotal);
+          if (event === 'balance') {
+            const { app } = JSON.parse(data);
+            if (app && app.meta) {
+              treasuryBalance += parseFloat(app.meta.total);
+            }
           }
         },
       },
     );
-
     return treasuryBalance;
   } catch (e) {
     console.error('ERROR on zapper', e);
