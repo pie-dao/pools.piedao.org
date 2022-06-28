@@ -31,23 +31,30 @@
   } from "../components/helpers";
 
   const ZeroEx = '0xdef1c0ded9bec7f1a1670819833240f027b25eff';
-  $: listed = [
+
+  // will return undefined in first render if assigned to reactive variable
+  const baseListed = [
     {
       address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
       symbol: 'ETH',
-      icon: getTokenImage('eth')
+      icon: getTokenImage('eth'),
+      decimals: 18
     },
     {
       address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
       symbol: 'DOUGH',
-      icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
+      icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D'),
+      decimals: 18
     },
     {
       address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
       symbol: 'USDC',
-      icon: getTokenImage('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48')
+      icon: getTokenImage('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'),
+      decimals: 6
     }
   ];
+
+  $: listed = baseListed;
 
   let modal;
   let modalOption = {
@@ -59,18 +66,8 @@
   let targetModal = 'sell';
   let timeout;
   
-
-  let defaultTokenSell = {
-    address: '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-    symbol: 'ETH',
-    icon: getTokenImage('eth')
-  }
-
-  let defaultTokenBuy = {
-    address: '0xad32A8e6220741182940c5aBF610bDE99E737b2D',
-    symbol: 'DOUGH',
-    icon: getTokenImage('0xad32A8e6220741182940c5aBF610bDE99E737b2D')
-  };
+  let defaultTokenSell = baseListed.find(l => l.symbol === 'ETH');
+  let defaultTokenBuy = baseListed.find(l => l.symbol === 'DOUGH');
 
   const defaultAmount = {
     bn: new BigNumber(0),
@@ -138,7 +135,6 @@
 
   onMount(async () => {
     isLoading = true;
-    console.log('onMount')
     setupListedToken();
 
     if($eth.address) {

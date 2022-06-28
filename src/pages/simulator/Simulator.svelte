@@ -548,7 +548,7 @@
         >
           <div class="w-full md:w-2/3">
             <div class="font-thin md:text-xs mb-8 text-left">
-              <span class="float-left">Rewards Distrubutions</span>
+              <span class="float-left">Rewards Distributions</span>
               <img
                 on:click={() => openModal('simulator.rewards.distribution')}
                 class="token-icon w-18px h-18px pl-4px"
@@ -574,7 +574,7 @@
             </div>
             <div class="w-full">
               <div class="font-bold mb-2 text-xs md:text-base py-1px text-left align-left rounded">
-                used to cover costs
+                Used to cover costs
                 <button style="background-color: #67BDF0;" class="ml-4 oven-withdraw-button"
                   >15%</button
                 >
