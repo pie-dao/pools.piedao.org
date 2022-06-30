@@ -261,8 +261,6 @@
     } else {
       loadSimulation();
     }
-
-    loadingModal.close();
   });
 
   // retrieving default outputs object...

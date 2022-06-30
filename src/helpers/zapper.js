@@ -15,9 +15,12 @@ export async function fetchTreasuryBalance() {
       {
         onmessage({ event, data }) {
           if (event === 'balance') {
-            const { app } = JSON.parse(data);
-            if (app && app.meta) {
+            const { app, appId, totals } = JSON.parse(data);
+            if (app && app.meta && app.meta.total) {
               treasuryBalance += parseFloat(app.meta.total);
+            } else if (appId === 'tokens' && totals && totals.balanceUSD) {
+              const tokenTotal = totals.reduce((n, { balanceUSD }) => n + balanceUSD, 0);
+              treasuryBalance += tokenTotal;
             }
           }
         },
