@@ -14,14 +14,18 @@ export async function fetchTreasuryBalance() {
       `${zapperApiUrl}/balances?addresses%5B%5D=${treasury}&api_key=${zapperApiKey}`,
       {
         onmessage({ event, data }) {
-          if (event === 'totals') {
-            const { netTotal } = JSON.parse(data);
-            treasuryBalance = parseFloat(netTotal);
+          if (event === 'balance') {
+            const { app, appId, totals } = JSON.parse(data);
+            if (app && app.meta && app.meta.total) {
+              treasuryBalance += parseFloat(app.meta.total);
+            } else if (appId === 'tokens' && totals) {
+              const tokenTotal = totals.reduce((n, { balanceUSD }) => n + balanceUSD, 0);
+              treasuryBalance += tokenTotal;
+            }
           }
         },
       },
     );
-
     return treasuryBalance;
   } catch (e) {
     console.error('ERROR on zapper', e);
