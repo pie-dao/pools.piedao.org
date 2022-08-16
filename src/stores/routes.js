@@ -198,7 +198,7 @@ window.addEventListener('hashchange', () => {
   const newRoute = deriveRoute();
   const trackPath = `/${newRoute.join('/')}`;
 
-  if (window.location.origin !== 'http://localhost:8080') {
+  if (window.location.origin !== 'http://localhost:8080' && window.gtag) {
     window.gtag('event', 'page_view', {
       page_path: trackPath,
     });
@@ -207,6 +207,7 @@ window.addEventListener('hashchange', () => {
       page_path: trackPath,
     });
   }
+
   currentRoute.set({ ...formatRoute(newRoute) });
   window.scrollTo({
     top: 0,

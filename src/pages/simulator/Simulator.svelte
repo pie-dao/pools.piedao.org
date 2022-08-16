@@ -20,96 +20,6 @@
   import Tab3 from './charts/Tab3.svelte';
   import Tabs from './charts/Tabs.svelte';
 
-  import firebase from 'firebase';
-  import firebase_env from '../../config/firebase.json';
-
-  function getPermalink() {
-    saveSimulation();
-
-    /*
-    if(permalink_url) {
-      updateSimulation();
-    } else {
-      saveSimulation();
-    }
-    */
-  }
-
-  function saveSimulation() {
-    firebase
-      .firestore()
-      .collection('staking_simulations')
-      .add({ inputs: inputs, rewards: rewards, name: simulation.name, author: simulation.author })
-      .then((response) => {
-        simulationChanged = false;
-
-        let baseUrl = '';
-
-        if ($currentRoute.params.simulation) {
-          baseUrl = window.location.href.replace($currentRoute.params.simulation, '');
-        } else {
-          baseUrl = window.location + '/';
-        }
-
-        permalink_url = baseUrl + response.id;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
-  /*
-  function updateSimulation() {
-    firebase.firestore().collection('staking_simulations')
-      .doc($currentRoute.params.simulation)
-      .set({inputs: inputs, rewards: rewards, name: simulation.name, author: simulation.author})
-      .then(() => {
-        simulationChanged = false;
-    }).catch(error => {
-      console.error(error);
-    }); 
-  }
-  */
-
-  function loadSimulation() {
-    firebase
-      .firestore()
-      .collection('staking_simulations')
-      .doc($currentRoute.params.simulation)
-      .get()
-      .then((response) => {
-        if (response.exists) {
-          permalink_url = window.location;
-          let data = response.data();
-
-          inputs = data.inputs;
-          rewards = data.rewards;
-          simulation.name = data.name;
-          simulation.author = data.author;
-
-          simulation = simulation;
-          inputs = inputs;
-          rewards = rewards;
-
-          calculate();
-        } else {
-          history.replaceState(
-            {},
-            document.title,
-            window.location.href.replace($currentRoute.params.simulation, ''),
-          );
-
-          displayNotification({
-            message: 'Sorry, this simulation does not exist on our database.',
-            type: 'error',
-          });
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }
-
   function updateSimulator(event) {
     rewards = event.detail.rewards;
     inputs.stakedVeDough = formatFiat(event.detail.stakedVeDough, ',', '.', '');
@@ -286,21 +196,12 @@
     'info',
   ];
 
-  // firebase variables...
-  let firebase_app = null;
   let permalink_url = null;
   let simulationChanged = false;
   let simulation = {
     name: '',
     author: '',
   };
-
-  // initialize firebase app instance...
-  if (!firebase.apps.length) {
-    firebase_app = firebase.initializeApp(firebase_env);
-  } else {
-    firebase_app = firebase.app();
-  }
 
   const config = {
     angle: 180,
@@ -906,77 +807,7 @@
           <Tabs {tabs} {projections} />
         {/key}
       </div>
-      <!-- PERMALINK SECTION -->
-      <div class="flex flex-row gap-2 mb-2">
-        <div
-          class="w-92pc mx-4 md:w-full md:mx-0 bg-lightgrey rounded text-black mb-2 p-8 flex flex-col"
-        >
-          <div class="w-full flex flex-col md:flex-row">
-            <div class="w-full md:w-1/2 md:mr-4">
-              <div class="w-full font-thin text-left md:text-xs mb-4">
-                <span class="float-left">Name Yourself</span>
-              </div>
-              <div
-                class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8"
-              >
-                <div class="w-full flex nowrap items-center">
-                  <input
-                    class="w-full swap-input-from"
-                    inputmode="text"
-                    autocomplete="off"
-                    autocorrect="off"
-                    type="string"
-                    spellcheck="false"
-                    placeholder={simulation.author}
-                    bind:value={simulation.author}
-                    on:keyup={(permalink_url = null)}
-                  />
-                </div>
-              </div>
-            </div>
-            <div class="w-full md:w-1/2 md:ml-4">
-              <div class="w-full font-thin text-left md:text-xs mb-4">
-                <span class="float-left">Name Your Simulation</span>
-              </div>
-              <div
-                class="flex flex-col nowrap w-100pc swap-from border rounded-20px border-grey p-14px bg-white mb-8 md:mt-8"
-              >
-                <div class="w-full flex nowrap items-center">
-                  <input
-                    class="w-full swap-input-from"
-                    inputmode="text"
-                    autocomplete="off"
-                    autocorrect="off"
-                    type="string"
-                    spellcheck="false"
-                    placeholder={simulation.name}
-                    bind:value={simulation.name}
-                    on:keyup={(permalink_url = null)}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="flex flex-col md:flex-row items-center">
-            <button
-              on:click={() => getPermalink()}
-              class="w-full btnbig text-white rounded-8px p-15px"
-            >
-              {#if permalink_url}
-                {#if simulationChanged}
-                  Save your simulation, get a permalink!
-                {:else}
-                  <a target="_blank" href={permalink_url}>
-                    Your Simulation link is: {permalink_url}
-                  </a>
-                {/if}
-              {:else}
-                Save your simulation, get a permalink!
-              {/if}
-            </button>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 </div>
