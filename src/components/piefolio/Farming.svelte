@@ -386,7 +386,7 @@
               <span class="text-xs font-thin opacity-80">Staked</span>
               <span class="text-xs font-thin opacity-80">Rewards</span>
             </div>
-            <div class="flex flex-col justify-around text-right ml-auto font-thin">
+            <div class="flex flex-col justify-around text-right ml-auto mt-auto font-thin">
               <!-- <span><span class="bg-darkpurple font-bold text-white px-5px py-1px roundedxs text-xs">55.30% APY</span></span> -->
               <span class="text-xs font-thin opacity-80"
                 >{stakingPool.userDeposited} {stakingPool.stakingTokenSymbol}</span

@@ -197,7 +197,6 @@ export function initialize(eth) {
 
       observer = observable.subscribe({});
 
-      console.log('Start _stakingData', _stakingData);
       resolve(_stakingData);
     } catch (error) {
       displayNotification({
