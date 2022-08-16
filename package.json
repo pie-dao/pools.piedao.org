@@ -26,7 +26,7 @@
     "@snowpack/plugin-postcss": "^1.1.0",
     "@sushiswap/sushi-data": "^0.0.9",
     "@tailwindcss/ui": "^0.7.2",
-    "@walletconnect/web3-provider": "^1.6.6",
+    "@walletconnect/web3-provider": "^1.8.0",
     "animate.css": "^4.1.0",
     "aos": "^3.0.0-beta.6",
     "authereum": "^0.0.4-beta.164",
