@@ -5,6 +5,7 @@ import pools from '../config/pools.json';
 import NotFound from '../pages/NotFound.svelte';
 import Pool from '../pages/Pool.svelte';
 import Main from '../pages/landings/Main.svelte';
+import Marketing from '../pages/landings/Marketing.svelte';
 import Tokensswap from '../pages/Tokensswap.svelte';
 import Migration from '../pages/Migrations.svelte';
 import Dough from '../pages/Dough.svelte';
@@ -98,17 +99,10 @@ const formatRoute = (route) => {
   // changeUrl(route);
 
   switch (_route[0] || 'root') {
-    case 'about':
-      return { page: About };
-    case 'dxp-defi-index':
-      return { page: DefiPie };
-    case 'markets':
-      return { page: Markets };
+    case 'marketing':
+      return { page: Marketing };
     case 'pies':
       return { page: Dashboard };
-    case 'exp':
-      address = (_route[1] || '0x992e9f1d29e2fdb57a9e09a78e122fafe3720cc5').toLowerCase();
-      return { page: Experipie, params: { address } };
     case 'slice':
       return { page: Slice };
     case 'pie':
@@ -116,37 +110,10 @@ const formatRoute = (route) => {
       return { page: PiePageSwitch, params: { address } };
     case 'dough-staking-campaign':
       return { page: DoughStakingCampaign };
-    case 'kpi-options-campaign':
-      return { page: KpiOptionsCampaign };
-    case 'dough':
-      return { page: Dough };
     case 'learn':
       return { page: Learn };
     case 'integrations':
       return { page: Integrations };
-    case 'swap':
-      return { page: Tokensswap };
-    case 'migrate':
-      return { page: Migration, params: { address } };
-    case 'oven':
-      return { page: Oven };
-    case 'piefolio':
-      return { page: Piefolio };
-    case 'farms':
-      return { page: LPStakingV2 };
-    case 'farm':
-      return { page: Farm };
-    case 'dough-staking':
-      return { page: DoughStaking };
-    case 'staking_positions':
-      return { page: StakingPositions };
-    case 'staking_rewards':
-      return { page: StakingRewards };
-    case 'staking_reward_breakdown':
-      /* eslint-disable no-case-declarations */
-      const timestamp = _route[1] || '';
-      /* eslint-enable no-case-declarations */
-      return { page: StakingRewardBreakdown, params: { timestamp } };
     case 'simulator':
     case 'staking-simulator':
       /* eslint-disable no-case-declarations */
@@ -155,38 +122,13 @@ const formatRoute = (route) => {
       return { page: Simulator, params: { simulation } };
     case 'simulator-stats':
       return { page: SimulatorStats };
-    case 'staking':
-      return _route[1] ? { page: StakingPageSingle, params: _route } : { page: Staking };
     case 'staking-charts':
       return { page: StakingCharts };
-    case 'pools':
-      address = (_route[1] || '').toLowerCase();
-      poolAction = (_route[2] || 'add').toLowerCase();
-      method = (_route[3] || 'single').toLowerCase();
-
-      if (pools.available.includes(address)) {
-        return { page: Pool, params: { address, poolAction, method } };
-      }
-      break;
-    /*
-    case 'oven':
-      address = (route[1] || '').toLowerCase();
-      poolAction = (route[2] || 'add').toLowerCase();
-      method = (route[3] || 'single').toLowerCase();
-
-      if (pools.available.includes(address)) {
-        return { page: Oven, params: { address, poolAction, method } };
-      }
-
-      break;
-*/
     case 'root':
       return defaultRouteObj;
     default:
       return notFound;
   }
-
-  return notFound;
 };
 
 const route = deriveRoute();
