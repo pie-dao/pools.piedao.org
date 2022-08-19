@@ -182,21 +182,6 @@
 <div class="flex flex-col items-center text-center mt-4 md:mt-20 mx-4 md:mx-8">
   <div class="flex flex-wrap justify-around w-full max-w-1240px bg-lightgrey rounded pb-12 px-10">
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
-      <img class="h-50px inline mb-4" src={images.hourglass} alt="hourglass" /><span
-        >Long term<br />alignment</span
-      >
-    </div>
-    <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
-      <img class="h-50px inline mb-4" src={images.gem} alt="gem" /><span
-        >Rewarded<br />commitment</span
-      >
-    </div>
-    <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
-      <img class="h-50px inline mb-4" src={images.pirateflag} alt="pirate flag" /><span
-        >Treasury revenues<br />distribution</span
-      >
-    </div>
-    <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
       <img class="h-50px inline mb-4" src={images.womanlaptop} alt="woman laptop" /><span
         >The future of work<br />is DAO</span
       >

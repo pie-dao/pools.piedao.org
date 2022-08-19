@@ -249,13 +249,6 @@
       matters and get compensated for your work every month.
     </div>
 
-    <button
-      onclick="location.href='/#/dough-staking';"
-      class="btnbig mt-0 text-white rounded-8px p-15px"
-    >
-      Stake DOUGH
-    </button>
-
     <div class="flex flex-col items-center text-center mt-12 md:mt-20">
       <img class="w-300px -mb-50px z-50" src={images.d_top} alt="dollar-in" />
       <div class="w-full max-w-1200px">
@@ -389,15 +382,6 @@
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-20">
   <div class="w-full max-w-1240px"><StakingStats /></div>
-</div>
-
-<div class="w-full flex justify-center">
-  <button
-    onclick="location.href='/#/dough-staking';"
-    class="btnbig mt-8 text-white rounded-8px p-15px"
-  >
-    Stake DOUGH
-  </button>
 </div>
 
 <div class="flex flex-col items-center text-center mt-4 md:mt-10">

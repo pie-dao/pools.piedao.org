@@ -654,7 +654,6 @@
     <div class="p-0 mt-2 md:w-1/3 md:mr-10px">
       <MixBytes token={$currentRoute.params.address} />
     </div>
-    <div class="p-0 mt-2 md:w-1/3 md:mr-10px" />
     {#if poolsConfig[token].coingeckoId}
       <div class="p-0 mt-2 flexgrow	min-w-230px">
         <CoinGeckoBanner pie={poolsConfig[token]} />

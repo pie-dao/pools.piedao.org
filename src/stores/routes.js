@@ -37,7 +37,7 @@ import Simulator from '../pages/simulator/Simulator.svelte';
 import SimulatorStats from '../pages/simulator/Stats.svelte';
 
 export const defaultRouteObj = {
-  page: Main,
+  page: Marketing,
   params: {
     address: pools.default,
   },
