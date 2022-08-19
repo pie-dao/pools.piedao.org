@@ -1,6 +1,6 @@
 <script>
   import ModalBig from '../components/elements/ModalBig.svelte';
-  import LiquidityModal from "../components/modals/ExperiPieLiquidityModal.svelte";
+  import LiquidityModal from '../components/modals/ExperiPieLiquidityModal.svelte';
   import { _ } from 'svelte-i18n';
   import find from 'lodash/find';
   import get from 'lodash/get';
@@ -32,10 +32,10 @@
 
   let modal;
   let modalOption = {
-    method: "single",
-    poolAction: "add",
-    title: "Add Liquidity"
-  }
+    method: 'single',
+    poolAction: 'add',
+    title: 'Add Liquidity',
+  };
 
   $: symbol = (poolsConfig[token] || {}).symbol;
   $: name = (poolsConfig[token] || {}).name;
@@ -52,7 +52,13 @@
     defiSDK: false,
   };
 
-  $: if(!isEmpty($piesMarketDataStore) && $eth.provider && $eth.address && !loadings.init && !initialized) {
+  $: if (
+    !isEmpty($piesMarketDataStore) &&
+    $eth.provider &&
+    $eth.address &&
+    !loadings.init &&
+    !initialized
+  ) {
     loadings.init = true;
     subscribeToBalance(token, $eth.address, true);
     initialize();
@@ -64,9 +70,9 @@
     Pie = new Experipie(token, $eth.provider);
     await Pie.initialize($piesMarketDataStore);
 
-    console.log("initialize", $piesMarketDataStore);
-    console.log("PIE", Pie);
-    
+    console.log('initialize', $piesMarketDataStore);
+    console.log('PIE', Pie);
+
     for (const el of Pie.composition) {
       let address = el.address.toLowerCase();
 
@@ -76,13 +82,13 @@
       );
 
       res.push({
-          ...tokenInfo,
-          balance: el.balance,
-          price: el.price,
-          productive: false,
-          percentage: el.percentage,
-          address: address
-        });
+        ...tokenInfo,
+        balance: el.balance,
+        price: el.price,
+        productive: false,
+        percentage: el.percentage,
+        address: address,
+      });
     }
 
     composition = res;
@@ -90,7 +96,7 @@
 
     let slice24Change = 0;
 
-    composition.forEach(asset => {
+    composition.forEach((asset) => {
       let change24 = get(
         $piesMarketDataStore,
         `${asset.address}.market_data.price_change_percentage_24h`,
@@ -107,19 +113,19 @@
     return initialized;
   };
 
-  $: if(!isEmpty($piesMarketDataStore)) {
+  $: if (!isEmpty($piesMarketDataStore)) {
     initialize();
   }
 </script>
 
-<ModalBig title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">
+<ModalBig title={modalOption.title} backgroundColor="#f3f3f3" bind:this={modal}>
   <span slot="content">
-    <LiquidityModal 
+    <LiquidityModal
       pie={Pie}
-      composition={composition}
-      method={modalOption.method} 
+      {composition}
+      method={modalOption.method}
       poolAction={modalOption.poolAction}
-      modal={modal}
+      {modal}
     />
     <!-- <SingleAssetModal /> -->
   </span>
@@ -144,36 +150,6 @@
             </div>
           {/if}
         </div>
-      </div>
-
-      <div
-        class="flex items-center flex-row-reverse flex-grow justify-between md:justify-start mt-2 mb-1 md:mt-0 md:mb-0 mr-0 hidden md:flex"
-      >
-        <button
-          class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 mr-2 md:mr-2 hover:opacity-80"
-          on:click={() => {
-            modalOption.method = "multi";
-            modalOption.poolAction = "withdraw";
-            modalOption.title = "Redeem";
-            modal.open();
-          }}
-        >
-          <div class="">
-            <div class="text-base font-bold leading-5">Redeem SLICE</div>
-            <div class="text-sm font-thin">Redeem underlying assets</div>
-          </div>
-        </button>
-
-        <button
-          class="flex min-w-45pc md:w-10pc md:min-w-210px items-center btnbig text-white text-left py-2 px-3 md:mr-2 hover:opacity-80"
-          onclick="location.href='#/dough-staking'"
-        >
-          <div class="">
-            <div class="text-base font-bold leading-5">Stake DOUGH</div>
-            <div class="text-sm font-thin block md:hidden">Stake and earn SLICE</div>
-            <div class="text-sm font-thin hidden md:block">Stake and earn SLICE</div>
-          </div>
-        </button>
       </div>
     </div>
   </div>
@@ -236,7 +212,7 @@
             <th class="font-thin border-b-2 px-4 py-2 text-left">Allocation</th>
             <th class="font-thin border-b-2 px-4 py-2">Price</th>
             <th class="font-thin border-b-2 px-4 py-2">24H Change</th>
-            <th class="font-thin border-b-2 px-4 py-2"></th>
+            <th class="font-thin border-b-2 px-4 py-2" />
           </tr>
         </thead>
         <tbody>
@@ -298,24 +274,24 @@
 
               <td class="border text-center px-4 py-2">
                 {#if pooledToken.isPie}
-                <a
-                  href=''
-                  on:click={() => {
-                    initialized = false;
-                    window.location.hash = `#/pie/${pooledToken.address}`;
-                    window.location.reload();
-                  }}
-                >
-                  <button class="table-btn highlight-box min-w-70px"> Visit </button>
-                </a>
-              {:else}
-                <img
-                  class="w-30 spark greyoutImage mx-0"
-                  alt="Sparkline"
-                  src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline"
-                  style="margin: auto;"
-                />
-              {/if}
+                  <a
+                    href=""
+                    on:click={() => {
+                      initialized = false;
+                      window.location.hash = `#/pie/${pooledToken.address}`;
+                      window.location.reload();
+                    }}
+                  >
+                    <button class="table-btn highlight-box min-w-70px"> Visit </button>
+                  </a>
+                {:else}
+                  <img
+                    class="w-30 spark greyoutImage mx-0"
+                    alt="Sparkline"
+                    src="https://www.coingecko.com/coins/{pooledToken.coingeckoImageId}/sparkline"
+                    style="margin: auto;"
+                  />
+                {/if}
               </td>
             </tr>
           {/each}
@@ -339,19 +315,14 @@
   {/if}
 
   <div class="flex flex-col w-full mt-2 md:mt-8 md:justify-between md:flex-row">
-    <div class="p-0 mt-2 md:w-1/4 md:mr-10px">
-      <Farming {token} />
-    </div>
-    <div class="p-0 mt-2 md:w-1/4 md:mr-10px">
+    <div class="p-0 mt-2 md:w-1/3 md:mr-10px">
       <Etherscan {token} />
     </div>
 
-    <div class="p-0 mt-2 md:w-1/4 md:mr-10px">
+    <div class="p-0 mt-2 md:w-1/3 md:mr-10px">
       <MixBytes {token} />
     </div>
-    <div class="p-0 mt-2 md:w-1/4 md:mr-10px">
-      <AddMetamaskBanner pie={poolsConfig[token]} pieAddress={token} />
-    </div>
+    <div class="p-0 mt-2 md:w-1/3 md:mr-10px" />
   </div>
 </div>
 
@@ -366,9 +337,9 @@
   <button
     class="flex min-w-46pc items-center btnbig text-white text-left py-2 px-3 ml-1pc mr-1pc"
     on:click={() => {
-      modalOption.method = "multi";
-      modalOption.poolAction = "withdraw";
-      modalOption.title = "Redeem";
+      modalOption.method = 'multi';
+      modalOption.poolAction = 'withdraw';
+      modalOption.title = 'Redeem';
       modal.open();
     }}
   >

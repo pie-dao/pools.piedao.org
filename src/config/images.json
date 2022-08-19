@@ -182,5 +182,8 @@
   "hourglass-pending": "https://github.com/pie-dao/brand/blob/master/misc/hourglass.png?raw=true",
   "defi_pp_merge": "images/defi_product_merge.png",
   "defi_pp_merge_mobile": "images/defi_product_merge_mobile.png",
-  "how_to_governance": "images/how-to-governance.png"
+  "how_to_governance": "images/how-to-governance.png",
+  "finger_point": "images/finger_point.png",
+  "sparkle": "images/sparkle.png",
+  "background_marketing": "images/background_marketing.png"
 }

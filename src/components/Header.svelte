@@ -70,7 +70,7 @@
 
 <svelte:window on:click={outsideClicks} />
 
-<div class="header-container">
+<div class="header-container relative z-50">
   <div class="left piedaologoheader">
     <a href="#/">
       <img
@@ -84,17 +84,6 @@
   </div>
   <div class="block left ml-5px text-grey-200 text-sm opacity-20 cursor-pie">(beta)</div>
   <div class="right">
-    <div class="hidden md:block">
-      <TVL />
-      <a
-        href="#/dough-staking"
-        class="hidden lg:block md:px-4 py-2 text-sm leading-5 font-bold text-pink hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 whitespace-nowrap"
-        role="menuitem"
-      >
-        🥩 Stake DOUGH
-      </a>
-    </div>
-
     <div class="relative inline-block text-left hidden md:block">
       <div use:clickOutside on:click_outside={closeDropdown1}>
         <span class="shadow-sm">
@@ -139,48 +128,13 @@
                 class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
                 role="menuitem">🥧 Indices <span class="font-thin">(PIEs)</span></a
               >
-              <a
-                href="#/swap"
-                on:click={toggleDropdow}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">🔀 Exchange</a
-              >
-              <a
-                href="#/oven"
-                on:click={toggleDropdow}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">⏲️ Ovens <span class="font-thin">(Buy Gas Free)</span></a
-              >
-              <a
-                href="#/farms"
-                on:click={toggleDropdow}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">🚜 Farms + DOUGHpamine</a
-              >
-              <a
-                href="#/piefolio"
-                on:click={toggleDropdow}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">👛 Piefolio</a
-              >
-            </div>
-            <div class="borderDiveder" />
-            <div class="py-1">
-              <a
-                href="#/dough"
-                on:click={toggleDropdow}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem"
-              >
-                🟣 Token
-              </a>
             </div>
           </div>
         </div>
       {/if}
     </div>
 
-    <div class="relative inline-block text-left hidden md:block">
+    <div class="relative text-left hidden md:block">
       <div use:clickOutside on:click_outside={closeDropdown2}>
         <span class="shadow-sm">
           <button
@@ -219,22 +173,10 @@
           >
             <div class="py-1 roundedl">
               <a
-                href="#/dough-staking"
-                on:click={toggleDropdow2}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">🙋 Dough Staking</a
-              >
-              <a
                 href="#/staking-simulator"
                 on:click={toggleDropdow2}
                 class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
                 role="menuitem">📟 Staking Simulator</a
-              >
-              <a
-                href="#/kpi-options-campaign"
-                on:click={toggleDropdow2}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">📈 UMA KPI Options</a
               >
               <a
                 href="http://forum.piedao.org/"
@@ -272,7 +214,7 @@
 
     <div class="relative inline-block text-left block md:hidden focus:outline-none">
       <div>
-        <span class="">
+        <span>
           <button class="hamburger" type="button" on:click={toggleMobileMenu}>
             <img src={images.icons.hamburger} alt="hamburger icon" class="w-min-20px" />
           </button>
@@ -288,12 +230,6 @@
             aria-orientation="vertical"
             aria-labelledby="options-menu"
           >
-            <a
-              href="#/dough-staking"
-              class="block px-4 py-2 text-sm leading-5 text-pink font-bold hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900 whitespace-nowrap"
-              role="menuitem">🥩 Stake DOUGH</a
-            >
-            <div class="thinborderbottom mb-2" />
             <div
               class="inline-flex roundedl w-full px-4 pt-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150 text-left font-bold"
             >
@@ -306,36 +242,6 @@
                 class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
                 role="menuitem">🥧 Indices <span class="font-thin">(PIEs)</span></a
               >
-              <a
-                href="#/swap"
-                on:click={toggleMobileMenu}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">🔀 Exchange</a
-              >
-              <a
-                href="#/oven"
-                on:click={toggleMobileMenu}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">⏲️ Ovens <span class="font-thin">(Buy Gas Free)</span></a
-              >
-              <a
-                href="#/farms"
-                on:click={toggleMobileMenu}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">🚜 Farms + DOUGHpamine</a
-              >
-              <a
-                href="#/piefolio"
-                on:click={toggleMobileMenu}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">👛 Piefolio</a
-              >
-              <a
-                href="#/dough"
-                on:click={toggleMobileMenu}
-                class="block px-4 py-2 mb-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">🟣 Token</a
-              >
             </div>
             <div class="thinborderbottom" />
             <div
@@ -345,22 +251,10 @@
             </div>
             <div class="">
               <a
-                href="#/dough-staking"
-                on:click={toggleMobileMenu}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">🙋 Dough Staking</a
-              >
-              <a
                 href="#/staking-simulator"
                 on:click={toggleMobileMenu}
                 class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
                 role="menuitem">📟 Staking Simulator</a
-              >
-              <a
-                href="#/kpi-options-campaign"
-                on:click={toggleMobileMenu}
-                class="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                role="menuitem">📈 UMA KPI Options</a
               >
               <a
                 href="http://forum.piedao.org/"
@@ -405,31 +299,10 @@
                 role="menuitem">📚 Learn</a
               >
             </div>
-            <div class="thinborderbottom" />
-            <div class="flex justify-center py-2">
-              <Web3Button />
-            </div>
-            {#if $eth.address}
-              <div class="flex justify-center py-2">
-                <button
-                  on:click={disconnect}
-                  class="block px-4 py-2 mb-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                  role="menuitem">Logout</button
-                >
-              </div>
-            {/if}
           </div>
         </div>
       {/if}
     </div>
-
-    <a
-      class="pl-3 ml-4 text-sm leading-5 font-medium text-gray-700 hidden md:block"
-      href="#/dough"
-      rel="noopener noreferrer"
-    >
-      Token
-    </a>
 
     <a
       class="pl-3 ml-4 -mr-2 text-sm leading-5 font-medium text-gray-700 hidden lg:block"
@@ -438,19 +311,5 @@
     >
       Learn
     </a>
-
-    <div class="hidden md:block">
-      <Web3Button />
-    </div>
-
-    {#if $eth.address}
-      <button
-        class="pl-3 ml-3px text-sm leading-5 font-medium text-gray-700 hidden md:block"
-        on:click={disconnect}
-        rel="noopener noreferrer"
-      >
-        Logout
-      </button>
-    {/if}
   </div>
 </div>

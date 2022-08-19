@@ -3,15 +3,12 @@
   import Simulator from '../../classes/farming_simulator/Simulator.js';
   import { formatBigMoneyAmount } from '../../components/helpers.js';
   import images from '../../config/images.json';
-  import displayNotification from '../../notifications';
-  import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
   import { formatFiat } from '../../components/helpers.js';
   import { currentRoute } from '../../stores/routes.js';
   import InfoModal from '../../components/modals/infoModal.svelte';
   import StakingStats from '../../components/staking/Stats.svelte';
   import StakingCommitmentModal from '../../components/modals/stakingCommitmentModal.svelte';
   import Modal from '../../components/elements/Modal.svelte';
-  import confetti from '../../components/Confetti.js';
   import { fetchStakingStats, toNum } from '../../helpers/staking.js';
   import { eth } from '../../stores/eth.js';
 
@@ -153,24 +150,16 @@
     markets = response;
     let stakingStats = await fetchStakingStats($eth.provider, 1);
     estimated_dough_value = toNum(stakingStats.totalStakedDough);
+    let stakedVeDough = 0;
 
-    if (!$currentRoute.params.simulation) {
-      let stakedVeDough = 0;
+    rewards.forEach((reward) => {
+      let stakedDoughPercentage = estimated_dough_value * (reward.percentage / 100);
+      stakedVeDough += simulator.calculator.calculateVeDough(stakedDoughPercentage, reward.months);
+    });
 
-      rewards.forEach((reward) => {
-        let stakedDoughPercentage = estimated_dough_value * (reward.percentage / 100);
-        stakedVeDough += simulator.calculator.calculateVeDough(
-          stakedDoughPercentage,
-          reward.months,
-        );
-      });
+    inputs.stakedVeDough = formatFiat(stakedVeDough, ',', '.', '');
 
-      inputs.stakedVeDough = formatFiat(stakedVeDough, ',', '.', '');
-
-      calculate(false);
-    } else {
-      loadSimulation();
-    }
+    calculate(false);
   });
 
   // retrieving default outputs object...
@@ -180,44 +169,12 @@
   // List of tab items with labels, values and assigned components
   let tabs = [];
 
-  // lottie...
-  let controlsLayout = [
-    'previousFrame',
-    'playpause',
-    'stop',
-    'nextFrame',
-    'progress',
-    'frame',
-    'loop',
-    'spacer',
-    'background',
-    'snapshot',
-    'zoom',
-    'info',
-  ];
-
   let permalink_url = null;
   let simulationChanged = false;
   let simulation = {
     name: '',
     author: '',
   };
-
-  const config = {
-    angle: 180,
-    spread: 360,
-    startVelocity: 40,
-    elementCount: 40,
-    dragFriction: 0.12,
-    duration: 8000,
-    stagger: 3,
-    width: '30px',
-    height: '56px',
-    colors: ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a'],
-  };
-
-  const button = document.querySelector('#confetti');
-  confetti(button, config);
 </script>
 
 <Modal backgroundColor="#f3f3f3" bind:this={modal}>
@@ -237,171 +194,31 @@
   </span>
 </Modal>
 
-<div id="confetti" class="hidden md:block" />
-
-<div class="flex flex-col items-center text-center mt-8">
-  <div class="w-full flex flex-col items-center px-4 md:px-8 max-w-1200px">
-    <img class="w-400px" src={images.voting_hands} alt="governance mining" />
-    <div class="font-hero font-hero-sim">Get paid for<br />Governing</div>
-    <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
-    <div class="text-l md:text-lg font-thin mx-4 md:mx-10pc mt-4 md:mt-8 mb-8">
-      A complete redesign of the governance system with token holders in mind: vote on key DAO
-      matters and get compensated for your work every month.
-    </div>
-
-    <button
-      onclick="location.href='/#/dough-staking';"
-      class="btnbig mt-0 text-white rounded-8px p-15px"
+<div class="flex flex-col items-center text-center mt-4 md:mt-20 mx-4 md:mx-8">
+  <div class="w-full max-w-1240px">
+    <div
+      class="bg-melanzana min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12"
     >
-      Stake DOUGH
-    </button>
-
-    <div class="flex flex-col items-center text-center mt-12 md:mt-20">
-      <img class="w-300px -mb-50px z-50" src={images.d_top} alt="dollar-in" />
-      <div class="w-full max-w-1200px">
-        <div class="bg-peppermint rounded py-20 px-12">
-          <div class="font-bold text-xl leading-12">We stand by our products</div>
-          <div class="flex flex-col md:flex-row text-justify font-thin mt-4">
-            <div class="md:w-1/2 md:mr-4">
-              Our products do what they say on the tin: diversify your portfolio and make you money.
-              That is why we propose to actively manage our own
-            </div>
-            <div class="md:w-1/2 md:ml-4 mt-4 md:mt-0">
-              treasury, generating more revenue from liquidity pools across Balancer, Uniswap,
-              Curve, and Sushiswap.
-            </div>
-          </div>
+      <img class="w-180px h-180px md:mr-12" src={images.costumeparty} alt="members" />
+      <div class="font-thin">
+        <div class="font-bold text-l md:text-xl text-center md:text-left mt-4 md:mt-0">
+          Anyone Can Become A Governance Member
+        </div>
+        <div class="text-justify mt-4 md:mt-0">
+          Governing PieDAO is about commitment and genuine passion for the mission - not the size of
+          your wallet to cover the gas fees for votes.
         </div>
       </div>
-      <img class="w-300px -mt-50px z-50" src={images.d_bottom} alt="dollar-out" />
-    </div>
-
-    <div class="flex flex-col items-center text-center mt-8">
-      <div class="w-full flex flex-col items-center px-8 max-w-1200px">
-        <img class="w-600px" src={images.intro_gov_mining} alt="governance mining" />
-        <div class="text-xl font-bold mt-4 mb-4">Introducing</div>
-        <div class="font-hero font-hero-sim">Governance<br />Mining</div>
-        <!-- <a href="#/placeholder" data-aos="fade-up" data-aos-delay="500"><button class="btnbig text-white m-0 my-8 rounded-8px p-15px min-w-200px w-100pc lg:w-200px lg:min-w-200px">Earn up to 45% APY</button></a> -->
-        <div class="text-l md:text-lg font-thin text-justify mx-4 md:mx-10pc mt-8 mb-8">
-          We believe that DAO profits should go to those who put in the hard work of driving this
-          wealth creation machine forward: <strong>active governance members.</strong>
-          <br /><br />Should PIP-60 pass the community vote, only staked DOUGH (veDOUGH) will be
-          used for governance votes. This means no free-riding, no swaying votes for short-term
-          gain, and true long-term alignment for the future of PieDAO.
-        </div>
-      </div>
-    </div>
-
-    <div class="flex flex-col items-center text-center mt-6 md:mt-20">
-      <div class="w-full max-w-1200px">
-        <div
-          class="bg-melanzanafritta min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12"
-        >
-          <img
-            class="w-180px h-180px md:mr-12"
-            src={images.newblack}
-            alt="vedough is the new black"
-          />
-          <div class="font-thin">
-            <div class="font-bold text-l md:text-xl text-center md:text-left mt-4 md:mt-0">
-              veDOUGH Is The New Black
-            </div>
-            <div class="text-justify mt-4 md:mt-0">
-              Any DOUGH holder can choose to stake. The selected staking period and token amount
-              will determine a user’s voting power and share of DAO profits. This completely
-              transforms DOUGH value accrual, creating a buy and hold pressure as a source of cash
-              flows.
-              <br /><br />Active veDOUGH holders will get 60% (!) of DAO profits, while 25% will be
-              used to compound the treasury and 15% will be allocated to development costs.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="w-full flex flex-col items-center text-center mt-4 md:mt-20">
-      <div class="w-full max-w-1200px flex flex-col md:flex-row">
-        <div class="md:mr-4 flex flex-col items-center border-grey rounded p-12">
-          <img
-            class="w-180px h-180px"
-            src={images.ecosystem_friendly}
-            alt="vedough is the new black"
-          />
-          <div class="text-l md:text-xl md:leading-12 mt-4">
-            Synergistic To The<br class="hidden md:block" />DeFi Ecosystem
-          </div>
-          <div class="font-base font-thin text-justify mt-4">
-            PieDAO lies at the heart of the DeFi ecosystem, and we want it to thrive. This is why we
-            will not be selling our farmed tokens for other assets to distribute to DOUGH holders -
-            we will distribute what we farm, all nicely packed together in our special RewardsPie.
-          </div>
-        </div>
-        <div class="mt-4 md:mt-0 md:ml-4 flex flex-col items-center border-grey rounded p-12">
-          <img class="w-180px h-180px" src={images.duck} alt="vedough is the new black" />
-          <div class="text-l md:text-xl md:leading-12 mt-4">
-            Who calls the<br class="hidden md:block" />Shots?
-          </div>
-          <div class="font-base font-thin text-justify mt-4">
-            A specially designated Treasury Committee is being formed, whose main tasks will be
-            ensuring sufficiently diversified allocation of assets, determining farming strategies
-            to establish consistent returns to token holders, and bringing the DAO to
-            self-sustainability.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex flex-col items-center text-center mt-4 md:mt-20">
-      <div class="w-full max-w-1200px">
-        <div
-          class="bg-melanzana min-h-300px flex flex-col md:flex-row items-center text-white rounded py-12 px-12"
-        >
-          <img class="w-180px h-180px md:mr-12" src={images.costumeparty} alt="members" />
-          <div class="font-thin">
-            <div class="font-bold text-l md:text-xl text-center md:text-left mt-4 md:mt-0">
-              Anyone Can Become A Governance Member
-            </div>
-            <div class="text-justify mt-4 md:mt-0">
-              Governing PieDAO is about commitment and genuine passion for the mission - not the
-              size of your wallet to cover the gas fees for votes.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="font-huge mt-12 hidden md:block">How it works</div>
-    <div class="hidden md:block">
-      <LottiePlayer
-        src="https://assets10.lottiefiles.com/private_files/lf30_wksf88hl.json"
-        autoplay={true}
-        loop={true}
-        controls={false}
-        renderer="svg"
-        background="white"
-        height=""
-        width="100%"
-        {controlsLayout}
-      />
     </div>
   </div>
 </div>
 
-<div class="flex flex-col items-center text-center mt-4 md:mt-20">
+<div class="flex flex-col items-center text-center mt-4 md:mt-20 mx-4 md:mx-8">
   <div class="w-full max-w-1240px"><StakingStats /></div>
 </div>
 
-<div class="w-full flex justify-center">
-  <button
-    onclick="location.href='/#/dough-staking';"
-    class="btnbig mt-8 text-white rounded-8px p-15px"
-  >
-    Stake DOUGH
-  </button>
-</div>
-
-<div class="flex flex-col items-center text-center mt-4 md:mt-10">
-  <div class="w-full max-w-1200px h-100pc">
+<div class="flex flex-col items-center text-center mt-4 md:mt-20 mx-4 md:mx-8">
+  <div class="w-full max-w-1240px h-100pc">
     <div class="font-huge">Rewards Simulator</div>
     <div class="text-base font-thin mx-4 md:mx-20pc mb-8">
       Tweak the parameters. We built these tools so you can play being rich until you finally buy
@@ -410,7 +227,7 @@
 
     {#if isLoading}
       <div
-        class="flex justify-center items-center max-w-1200px w-100pc mt-20"
+        class="flex justify-center items-center max-w-1240px w-100pc mt-20"
         style="position:absolute;"
       >
         <div class="bg-transparent flex flex-col justify-center z-40">
