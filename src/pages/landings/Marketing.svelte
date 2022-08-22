@@ -12,7 +12,7 @@
   import AuditedBy from '../../components/AuditedBy.svelte';
   import Newsletter from '../../components/Newsletter.svelte';
   import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
-  import { farming } from '../../stores/eth/writables.js';
+  import { farming, stakingStats } from '../../stores/eth/writables.js';
   import { getTokenImage, formatFiat } from '../../components/helpers.js';
   import { fade } from 'svelte/transition';
   import HowTo from '../../components/HowToGovernance.svelte';
@@ -193,7 +193,7 @@
     </div>
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12">
       <img class="h-50px inline mb-4" src={images.finger_point} alt="finger point" /><span
-        >Over 480<br />stakeholders</span
+        >Over {Math.floor($stakingStats.totalHolders / 10) * 10}<br />stakeholders</span
       >
     </div>
     <div class="min-w-150px flex flex-col items-center leading-5 mt-12">

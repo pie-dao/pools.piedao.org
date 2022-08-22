@@ -153,6 +153,7 @@
     "streamingFees": "0",
     "useMintOverBuy": false,
     "buyButton": true,
+    "buyUrl": "https://app.balancer.fi/#/trade/ether/0x8d1ce361eb68e9e05573443c407d4a3bed23b033",
     "swapEnabled": false,
     "coingeckoId": "piedao-defi",
     "swapFees": "1",
