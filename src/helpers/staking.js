@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { _ } from 'svelte-i18n';
+import axios from 'axios';
 /* eslint-enable no-unused-vars */
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
@@ -31,8 +32,20 @@ let ETH = null;
 let _stakingData = get(stakingData);
 let observer = null;
 
-// in a very next future, this function will fetch directly from backend...
-export const getParticipations = () => EpochJson.claims;
+export const getParticipations = () => {
+  let participations = [];
+  axios
+    .get(
+      'https://raw.githubusercontent.com/pie-dao/pie-reporter/epoch/2022-8/reports/latest/merkle-tree.json',
+    )
+    .then((res) => {
+      participations = res.data.claims;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+  return participations;
+};
 
 export const canRestake = (lockedAt) => {
   const start = lockedAt * 1000;
