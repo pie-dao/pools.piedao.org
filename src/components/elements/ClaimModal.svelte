@@ -54,7 +54,7 @@
     claimModal.open();
   };
 
-  function claimRewards() {
+  async function claimRewards() {
     buttonText = "Claiming";
 
     let interval = setInterval(() => {
@@ -67,7 +67,7 @@
       }
     }, 1000);
 
-    claim($eth).then(updated_data => {
+    await claim($eth).then(updated_data => {
       clearInterval(interval);
       buttonText = "Claimed";
       hasClaimed = true;
@@ -100,7 +100,7 @@
 
       <button
       disabled={hasClaimed}
-      on:click={() => {claimRewards()}}
+      on:click={async () => {await claimRewards()}}
       class="pointer flex items-center stakinggradient"
       style="border-radius: 15px !important;"
       >
