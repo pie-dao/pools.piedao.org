@@ -217,8 +217,7 @@
         const nextCreatedIndex = await merkleTreeDistributorContract.nextCreatedIndex();
         const currentWindowIndex = nextCreatedIndex.sub(BigNumberEthers.from(1))
         const currentWindow = await merkleTreeDistributorContract.merkleWindows(currentWindowIndex);
-        isNotarizing = currentWindow.merkleRoot !== constants.AddressZero;
-
+        isNotarizing = currentWindow.merkleRoot === constants.AddressZero;
     }
 
     onMount(async () => {

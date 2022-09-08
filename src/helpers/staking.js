@@ -32,9 +32,9 @@ let ETH = null;
 let _stakingData = get(stakingData);
 let observer = null;
 
-export const getParticipations = () => {
+export const getParticipations = async () => {
   let participations = [];
-  axios
+  await axios
     .get(
       'https://raw.githubusercontent.com/pie-dao/pie-reporter/main/reports/latest/merkle-tree.json',
     )
@@ -418,7 +418,7 @@ export const fetchStakingData = async (eth) => {
   }
 
   if (staker !== undefined) {
-    let leaf = retrieveLeaf(eth.address);
+    let leaf = await retrieveLeaf(eth.address);
 
     let isClaimed = leaf ? await merkleTreeDistributor["isClaimed(uint256,uint256)"](
       ethers.BigNumber.from(leaf.windowIndex), 
@@ -711,9 +711,9 @@ export async function claim(eth) {
     const proof = prepareProofs(eth);
 
     try {
-      const leaf = retrieveLeaf(eth.address);
+      const leaf = await retrieveLeaf(eth.address);
 
-      if(leaf) {
+      if (leaf) {
         const params = {
           windowIndex: leaf.windowIndex,
           amount: ethers.BigNumber.from(leaf.amount),
@@ -758,8 +758,8 @@ export async function claim(eth) {
   /* eslint-enable  no-async-promise-executor */
 }
 
-export function retrieveLeaf(address) {
-  const participations = getParticipations();
+export async function retrieveLeaf(address) {
+  const participations = await getParticipations();
   return participations[ethers.utils.getAddress(address.toLowerCase())];
 }
 
