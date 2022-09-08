@@ -3,7 +3,7 @@
   import { get } from "svelte/store";
   import { ethers } from "ethers";
   import { formatEther } from '@ethersproject/units';
-
+  import find from 'lodash/find';
 	import { getTokenImage } from './../components/helpers.js';
 
   import stakingPools from '../config/stakingPools.json';
@@ -38,15 +38,16 @@
       
       let poolId = 0;
       for (const p of pools) {
-        if(p.userDeposited.gt(0)) {
-          res.push({
-            id: poolId,
-            userDeposited: Number(formatEther(p.userDeposited)).toFixed(4),
-            totalDeposited: Number(formatEther(p.totalDeposited)).toFixed(4),
-            userUnclaimed: Number(formatEther(p.userUnclaimed)).toFixed(4),
-            ...stakingPools[poolId]
-          })
-        }
+      if (p.userDeposited.gt(0)) {
+        const userPool = {
+          ...find(stakingPools, (p) => p.id === poolId.toString()),
+          id: poolId,
+          userDeposited: Number(formatEther(p.userDeposited)).toFixed(4),
+          totalDeposited: Number(formatEther(p.totalDeposited)).toFixed(4),
+          userUnclaimed: Number(formatEther(p.userUnclaimed)).toFixed(4),
+        };
+        res.push(userPool);
+      }
         poolId++;
       }
 
