@@ -711,9 +711,9 @@ export async function claim(eth) {
     const proof = prepareProofs(eth);
 
     try {
-      const leaf = retrieveLeaf(eth.address);
+      const leaf = await retrieveLeaf(eth.address);
 
-      if(leaf) {
+      if (leaf) {
         const params = {
           windowIndex: leaf.windowIndex,
           amount: ethers.BigNumber.from(leaf.amount),
@@ -760,7 +760,6 @@ export async function claim(eth) {
 
 export async function retrieveLeaf(address) {
   const participations = await getParticipations();
-
   return participations[ethers.utils.getAddress(address.toLowerCase())];
 }
 
