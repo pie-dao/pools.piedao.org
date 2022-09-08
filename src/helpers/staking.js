@@ -36,7 +36,7 @@ export const getParticipations = () => {
   let participations = [];
   axios
     .get(
-      'https://raw.githubusercontent.com/pie-dao/pie-reporter/epoch/2022-8/reports/latest/merkle-tree.json',
+      'https://raw.githubusercontent.com/pie-dao/pie-reporter/main/reports/latest/merkle-tree.json',
     )
     .then((res) => {
       participations = res.data.claims;
