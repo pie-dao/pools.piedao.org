@@ -472,22 +472,6 @@ metadata={{
                 </div>
               </div>
             </div>
-
-            {#if data.userTokenBalance.eq(0)}
-              <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">You don't have any {stakingPool.name} {stakingPool.stakingTokenSymbol} tokens available to stake</button>  
-            {:else}
-              {#if stakeAmount }
-                {#if parseEther(stakeAmount.toString()).gt(data.userTokenBalance)}
-                  <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Balance too low</button>
-                {:else if parseEther(stakeAmount.toString()).gt(data.userTokenApproval)}
-                  <button on:click={approve} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Approve</button>
-                {:else}
-                  <button on:click={stake} class="btn clear stake-button mt-10px rounded-20px p-15px w-100pcborder-white">Stake</button>
-                {/if}
-              {:else}
-                <button disabled class="btn clear stake-button mt-10px rounded-20px p-15px w-100pc">Enter an amount</button>  
-              {/if}
-            {/if}
             
             
           </span>
