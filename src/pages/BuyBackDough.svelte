@@ -511,9 +511,8 @@
         </div>
       </div>
       <button
-        class:error={isLoading}
         on:click={burn}
-        disabled={isLoading || burnAmount.label === 0 || burnAmount.label === '' || !$eth.address}
+        disabled={burnAmount.label === 0 || burnAmount.label === '' || !$eth.address}
         class="stake-button rounded-20px p-15px w-100pc mt-auto"
       >
         Burn your DOUGH

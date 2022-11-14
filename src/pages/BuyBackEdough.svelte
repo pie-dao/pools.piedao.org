@@ -436,9 +436,8 @@
         </div>
       </div>
       <button
-        class:error={error || isLoading}
         on:click={burn}
-        disabled={error || isLoading || amount.label === 0 || !$eth.address}
+        disabled={amount.label === '' || amount.label === 0 || !$eth.address}
         class="stake-button rounded-20px p-15px w-100pc mt-auto"
       >
         Burn your eDOUGH
