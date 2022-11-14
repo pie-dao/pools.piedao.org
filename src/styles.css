@@ -2534,3 +2534,77 @@ button.svelte-1nn74u2 {
 .checklist li:before {
   content: '✓';
 }
+
+.text-transparent {
+  color: transparent;
+}
+
+.cardboardergradient {
+  border: double 1px transparent;
+  border-radius: 1.6rem;
+  background-image: linear-gradient(white, white),
+    radial-gradient(circle at top left, #ff8932, #a50bce, #1fa6e0, #47d482);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+
+.swap-button-migration {
+  -webkit-box-align: center;
+  align-items: center;
+  height: 2.2rem;
+  font-size: 20px;
+  font-weight: 500;
+  background-color: rgb(33, 36, 41);
+  color: rgb(255, 255, 255);
+  border-radius: 12px;
+  box-shadow: none;
+  outline: none;
+  user-select: none;
+  border: none;
+  padding: 0px 0.5rem;
+  cursor: default;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+.rainbow {
+  position: relative;
+  z-index: 0;
+  border-radius: 28px;
+  overflow: hidden;
+  min-height: 360px;
+  padding: 2rem;
+}
+
+.rainbow::before {
+  content: '';
+  position: absolute;
+  z-index: -2;
+  left: -50%;
+  top: -50%;
+  width: 200%;
+  height: 200%;
+  background-color: #399953;
+  background-repeat: no-repeat;
+  background-size: 50% 50%, 50% 50%;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  background-image: linear-gradient(#ff8932, #ff8932), linear-gradient(#a50bce, #a50bce),
+    linear-gradient(#1fa6e0, #1fa6e0), linear-gradient(#47d482, #47d482);
+  animation: rotate 4s linear infinite;
+}
+
+.rainbow::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  left: 3px;
+  top: 3px;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  background: white;
+  border-radius: 25px;
+}

@@ -30,7 +30,7 @@
     "0x880873a96ce38c7fd39dc714592902b069bde048": "https://i.imgur.com/m7FKG5u.png",
     "0xad6a626ae2b43dcb1b39430ce496d2fa0365ba9c": "https://raw.githubusercontent.com/pie-dao/brand/8c7134faa86baafd1e65aad95c51dac3f4b650f8/PIE%20Tokens/DeFi%2B%2BS.svg",
     "0x24d1917c1ae6c085e6b68b6c1a41b8f9de5bd441": "https://i.imgur.com/m7FKG5u.png",
-    "0xad32A8e6220741182940c5aBF610bDE99E737b2D": "https://raw.githubusercontent.com/pie-dao/brand/master/DOUGH%20Token/DOUGH2v.png",
+    "0xad32A8e6220741182940c5aBF610bDE99E737b2D": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/eDOUGH.png",
     "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984": "https://assets.coingecko.com/coins/images/12504/small/uniswap-uni.png?1600306604",
     "0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9": "https://assets.coingecko.com/coins/images/12645/small/AAVE.png?1601374110",
     "0x0bc529c00c6401aef6d220be8c6ea1667f6ad93e": "https://assets.coingecko.com/coins/images/11849/small/yfi-192x192.png?1598325330",
@@ -55,7 +55,8 @@
     "0x767fe9edc9e0df98e07454847909b5e959d7ca0e": "https://assets.coingecko.com/coins/images/14468/small/ILV.JPG?1617182121",
     "0x18aaa7115705e8be94bffebde57af9bfc265b998": "https://assets.coingecko.com/coins/images/12913/small/AudiusCoinLogo_2x.png?1603425727",
     "0x15d4c048f83bd7e37d49ea4c83a07267ec4203da": "https://assets.coingecko.com/coins/images/12493/small/GALA-COINGECKO.png?1600233435",
-    "0xbbc2ae13b23d715c30720f079fcd9b4a74093505": "https://assets.coingecko.com/coins/images/14238/small/ethernity_logo.png?1615189750"
+    "0xbbc2ae13b23d715c30720f079fcd9b4a74093505": "https://assets.coingecko.com/coins/images/14238/small/ethernity_logo.png?1615189750",
+    "0xE6136F2e90EeEA7280AE5a0a8e6F48Fb222AF945": "https://raw.githubusercontent.com/pie-dao/brand/fa037b10556371316c43ea0f0939fd35897f8443/DOUGH%20Token/veDOUGH.svg"
   },
   "amazingrewards": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/amazingrewards2.png",
   "votenow": "https://raw.githubusercontent.com/pie-dao/brand/master/misc/votenow.png",

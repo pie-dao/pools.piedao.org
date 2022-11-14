@@ -36,7 +36,7 @@ const allowanceSubscriptions = new Set();
 const balanceSubscriptions = new Set();
 
 export const getTokenImage = (tokenAddress) => {
-  if(tokenAddress) {
+  if (tokenAddress) {
     if (images.logos[tokenAddress]) {
       return images.logos[tokenAddress];
     } else if (images.logos[tokenAddress.toLowerCase()]) {
@@ -87,7 +87,6 @@ const updatePoolWeight = async (poolAddress) => {
 
   const marketData = get(piesMarketDataStore);
 
-  console.log('composition', composition);
   composition.forEach(({ address }) => {
     const key = balanceKey(address, bPoolAddress);
     poolCurrentBalances[address] = allCurrentBalances[key];
@@ -97,8 +96,6 @@ const updatePoolWeight = async (poolAddress) => {
     (sum, value) => sum.plus(value),
     BigNumber(0),
   );
-
-  console.log('poolCurrentBalances', poolCurrentBalances);
 
   const totalUSD = Object.keys(poolCurrentBalances).reduce((sum, token) => {
     let price;
@@ -171,14 +168,14 @@ export const formatToken = (value, decimal = '.', toFixed = 2) => {
 
   try {
     let values = value.toString().replace(/^-/, '').split('.');
-    
-    if(values.length < 2) {
+
+    if (values.length < 2) {
       values = value.toString().replace(/^-/, '').split(',');
     }
 
     const dollars = parseInt(values[0]);
-    const cents = values[1] ? values[1].slice(0, toFixed) : "00";
-    
+    const cents = values[1] ? values[1].slice(0, toFixed) : '00';
+
     return `${dollars}${cents ? decimal + cents : ''}`;
   } catch (e) {
     console.error(e);
@@ -187,13 +184,13 @@ export const formatToken = (value, decimal = '.', toFixed = 2) => {
 };
 
 export const formatBigMoneyAmount = (amount, separator = ',', fiat = '$') => {
-  var units = ["M","B","T","Q"];
-  var unit = Math.floor((amount / 1.0e+1).toFixed(0).toString().length);
-  var r = unit%3;
-  var x =  Math.abs(Number(amount))/Number('1.0e+'+(unit-r)).toFixed(2);
-  var final_unit = units[Math.floor(unit / 3) - 2] ? units[Math.floor(unit / 3) - 2] : "";
-	var left = Math.floor(x).toString();
-  var right = x.toFixed(2).split(".")[1];  
+  var units = ['M', 'B', 'T', 'Q'];
+  var unit = Math.floor((amount / 1.0e1).toFixed(0).toString().length);
+  var r = unit % 3;
+  var x = Math.abs(Number(amount)) / Number('1.0e+' + (unit - r)).toFixed(2);
+  var final_unit = units[Math.floor(unit / 3) - 2] ? units[Math.floor(unit / 3) - 2] : '';
+  var left = Math.floor(x).toString();
+  var right = x.toFixed(2).split('.')[1];
   return fiat + ' ' + left + separator + right + ' ' + final_unit;
 };
 
@@ -501,7 +498,7 @@ export const subscribeToAllowance = async (token, address, spender) => {
   allowanceSubscriptions.add(key);
 
   const tokenContract = await contract({ address: token });
-  
+
   const trackable = tokenContract.functions.allowance(...args);
   const observable = await trackable.track();
   const decimals = await tokenContract.decimals();
