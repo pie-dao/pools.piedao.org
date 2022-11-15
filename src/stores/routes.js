@@ -30,10 +30,13 @@ import StakingPositions from '../pages/StakingPositions.svelte';
 import StakingRewards from '../pages/StakingRewards.svelte';
 import StakingRewardBreakdown from '../pages/StakingRewardBreakdown.svelte';
 import StakingCharts from '../pages/charts/StakingCharts.svelte';
-import Redirect from '../pages/Redirect.svelte';
 import Farm from '../pages/Farm.svelte';
 import Simulator from '../pages/simulator/Simulator.svelte';
 import SimulatorStats from '../pages/simulator/Stats.svelte';
+import MigrationPage from '../pages/MigrationPage.svelte';
+import BuyBackDough from '../pages/BuyBackDough.svelte';
+import BuyBackEdough from '../pages/BuyBackEdough.svelte';
+import eDoughToVeDough from '../pages/eDoughToVeDough.svelte';
 
 export const defaultRouteObj = {
   page: Main,
@@ -138,6 +141,14 @@ const formatRoute = (route) => {
       return { page: Farm };
     case 'dough-staking':
       return { page: DoughStaking };
+    case 'buyback':
+      return { page: MigrationPage };
+    case 'buyback-dough':
+      return { page: BuyBackDough };
+    case 'buyback-edough':
+      return { page: BuyBackEdough };
+    case 'edough-to-vedough':
+      return { page: eDoughToVeDough };
     case 'staking_positions':
       return { page: StakingPositions };
     case 'staking_rewards':

@@ -1,0 +1,25 @@
+{
+  "tokenBuyBack": [
+    {
+      "title": "DOUGH buyback",
+      "image": "images/migration/doughtousdc.png",
+      "description": "We offer a fixed USDC price for your DOUGH bags. We'll take good care of them.",
+      "link": "buyback-dough",
+      "button": "Sell DOUGH"
+    },
+    {
+      "title": "eDOUGH buyback",
+      "image": "images/migration/edoughtousdc.png",
+      "description": "We offer a fixed USDC price for your eDOUGH tokens. No vesting limitations.",
+      "link": "buyback-edough",
+      "button": "Sell eDOUGH"
+    },
+    {
+      "title": "eDOUGH for veDOUGH",
+      "image": "images/migration/edoughtovedough.png",
+      "description": "Has your eDOUGH been vesting for more than 6 months? If so, you can bridge it to veDough",
+      "link": "edough-to-vedough",
+      "button": "Bridge eDOUGH"
+    }
+  ]
+}

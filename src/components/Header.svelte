@@ -10,6 +10,7 @@
   import { clearChachedProvider } from '../stores/eth.js';
   import Web3Button from './Web3Button.svelte';
   import TVL from './Tvl.svelte';
+  import MigrationBanner from './MigrationBanner.svelte';
 
   let mobileMenuVisible = false;
   let dropdownOpen = false;
@@ -69,7 +70,7 @@
 </script>
 
 <svelte:window on:click={outsideClicks} />
-
+<MigrationBanner />
 <div class="header-container">
   <div class="left piedaologoheader">
     <a href="#/">
