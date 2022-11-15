@@ -20,23 +20,20 @@
             </svg>
           </span>
           <div class="flex flex-wrap">
-            <p class="ml-3 font-medium text-white">
-              <span class="inline">Ready to migrate!?</span>
-            </p>
             <p class="ml-3 font-thin text-white">
               <span class="inline"
-                >Meanwhile, we'll be offering buyback options for LPs, Dough, and eDough holders.
-                Want to participate?</span
+                >We'll be offering buyback options for <span class="font-bold">DOUGH</span> and
+                <span class="font-bold">eDOUGH</span> holders. Want to participate?</span
               >
             </p>
           </div>
         </div>
         <div class="order-3 mt-2 w-full flex-shrink-0 sm:order-2 sm:mt-0 sm:w-auto">
           <a
-            href="#/migration"
+            href="#/buyback"
             class="flex flex-row items-center w-full sm:w-fit justify-center rounded-md px-4 py-2 text-sm font-medium table-btn highlight-box "
           >
-            <span>Migrate Now</span>
+            <span>Join the buyback</span>
           </a>
         </div>
       </div>

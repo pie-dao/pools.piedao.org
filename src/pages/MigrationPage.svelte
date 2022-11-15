@@ -8,7 +8,7 @@
     <h1
       class="text-xl font-bold inline bg-gradient-to-r from-[#ed1ea0] via-[#6c5dfe] to-[#ed1ea0] bg-clip-text tracking-tight text-transparent leading-12"
     >
-      About the Migration
+      About the BuyBack
     </h1>
     <div class="mt-6 space-y-6 font-display text-sm tracking-tight">
       <p>

@@ -108,11 +108,15 @@
   async function fetchBuyBack() {
     const pricePerDough = await buyBackContract.price();
     if ($eth.address) {
-      const { total } = await rewardEscrowContract.getAvailableForBuyBack($eth.address);
-      amount.label = toNum(total, 18);
-      amount.bn = total;
-      avaliableToBuy = toNum(total, 18);
-      receivedAmount = await estimateBuyback(amount.bn);
+      try {
+        const { total } = await rewardEscrowContract.getAvailableForBuyBack($eth.address);
+        amount.label = toNum(total, 18);
+        amount.bn = total;
+        avaliableToBuy = toNum(total, 18);
+        receivedAmount = await estimateBuyback(amount.bn);
+      } catch (e) {
+        console.error(e);
+      }
     }
     const tokenOut = await buyBackContract.tokenOut();
     const tokenContract = new ethers.Contract(tokenOut, erc20Abi, $eth.signer || $eth.provider);

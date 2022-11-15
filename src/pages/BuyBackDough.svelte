@@ -130,13 +130,17 @@
 
   async function fetchBuyBack() {
     const pricePerDough = await buyBackContract.price();
-    const maxAvailableToBuy = await buyBackContract.maxAvailableToBuy();
+    try {
+      const maxAvailableToBuy = await buyBackContract.maxAvailableToBuy();
+      avaliableToBuy = toNum(maxAvailableToBuy, 18);
+    } catch (e) {
+      console.error(e);
+    }
     const tokenOut = await buyBackContract.tokenOut();
     const tokenContract = new ethers.Contract(tokenOut, erc20Abi, $eth.signer || $eth.provider);
     const usdcBalance = await tokenContract.balanceOf(contracts.buyBackDough);
     poolUSDC = toNum(usdcBalance, 6);
     tokenPrice = toNum(pricePerDough.value, 6);
-    avaliableToBuy = toNum(maxAvailableToBuy, 18);
   }
 
   async function fetchOnchainData() {
