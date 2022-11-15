@@ -12,6 +12,7 @@
   import erc20Abi from '../abis/erc20ABI.json';
   import DoughABI from '../abis/DoughABI.json';
   import contracts from '../config/smartcontracts.json';
+  import { formatFiat } from '../components/helpers.js';
 
   const baseListed = [
     {
@@ -48,6 +49,13 @@
     BigNumber(num.toString())
       .dividedBy(10 ** decimals)
       .toFixed(2);
+
+  const toNumFixed = (num, decimals = 18) =>
+    Number(
+      BigNumber(num.toString())
+        .dividedBy(10 ** decimals)
+        .toFixed(4),
+    );
 
   $: sellToken = defaultTokenSell;
   $: buyToken = defaultTokenBuy;
@@ -140,7 +148,7 @@
     const tokenContract = new ethers.Contract(tokenOut, erc20Abi, $eth.signer || $eth.provider);
     const usdcBalance = await tokenContract.balanceOf(contracts.buyBackDough);
     poolUSDC = toNum(usdcBalance, 6);
-    tokenPrice = toNum(pricePerDough.value, 6);
+    tokenPrice = toNumFixed(pricePerDough.value, 6);
   }
 
   async function fetchOnchainData() {
@@ -279,7 +287,9 @@
             <span classy="text-base leading-6">Budget balance</span>
           </div>
           <div>
-            <span class="font-thin text-lg mb-1 opacity-70">{poolUSDC} USDC</span>
+            <span class="font-thin text-lg mb-1 opacity-70"
+              >{formatFiat(poolUSDC, ',', '.', '')} USDC</span
+            >
           </div>
         </div>
       </div>
@@ -299,7 +309,9 @@
             <span classy="text-base leading-6">Max you can sell</span>
           </div>
           <div>
-            <span class="font-thin text-lg mb-1 opacity-70">{avaliableToBuy} DOUGH</span>
+            <span class="font-thin text-lg mb-1 opacity-70"
+              >{formatFiat(avaliableToBuy, ',', '.', '')} DOUGH</span
+            >
           </div>
         </div>
       </div>

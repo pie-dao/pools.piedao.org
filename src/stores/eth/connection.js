@@ -13,9 +13,14 @@ import { resetContractCache } from './contracts.js';
 import env from '../../config/env.json';
 // whenever networkId == 1, we expect to be no production/mainnet environment,
 // otherwhise, we setup a rinkeby proider as defaultProvider...
-export const defaultProvider = env.blocknative.networkId === 1
-  ? new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/eth')
-  : new ethers.providers.JsonRpcProvider('https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5');
+export const defaultProvider =
+  env.blocknative.networkId === 1
+    ? new ethers.providers.JsonRpcProvider(
+        'https://rpc.tenderly.co/fork/2e339046-220e-46c7-82cd-1b0a6f0f2050',
+      )
+    : new ethers.providers.JsonRpcProvider(
+        'https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5',
+      );
 
 defaultProvider.on('block', updateCurrentBlock);
 
