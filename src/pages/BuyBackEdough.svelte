@@ -270,7 +270,7 @@
           </div>
           <div>
             <span class="font-thin text-lg mb-1 opacity-70"
-              >{formatFiat(poolUSDC, ',', '.', '')} USDC</span
+              >{formatFiat(poolUSDC, ',', '.', '', 3)} USDC</span
             >
           </div>
         </div>

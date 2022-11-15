@@ -146,10 +146,10 @@ const updatePoolWeight = async (poolAddress) => {
   pools.set({ ...get(pools), ...updates });
 };
 
-export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$') => {
+export const formatFiat = (value, separator = ',', decimal = '.', fiat = '$', numDecimals=2) => {
   if (!value) return 'n/a';
   try {
-    const values = parseFloat(value).toFixed(2).toString().replace(/^-/, '').split('.');
+    const values = parseFloat(value).toFixed(numDecimals).toString().replace(/^-/, '').split('.');
     const dollars = values[0];
     const cents = values[1];
     const groups = /(\d)(?=(\d{3})+\b)/g;
