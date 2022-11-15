@@ -12,6 +12,7 @@
   import erc20Abi from '../abis/erc20ABI.json';
   import contracts from '../config/smartcontracts.json';
   import LightFarming from '../components/piefolio/LightFarming.svelte';
+  import { formatFiat, formatToken } from '../components/helpers.js';
 
   const baseListed = [
     {
@@ -51,6 +52,13 @@
         .toFixed(2),
     );
 
+  const toNumFixed = (num, decimals = 18) =>
+    Number(
+      BigNumber(num.toString())
+        .dividedBy(10 ** decimals)
+        .toFixed(4),
+    );
+
   $: sellToken = defaultTokenSell;
   $: buyToken = defaultTokenBuy;
   $: amount = defaultAmount;
@@ -65,7 +73,7 @@
   $: balances = {};
   $: error = null;
   $: balanceError = false;
-  $: avaliableToBuy = 0;
+  $: availableToBuy = 0;
   $: tokenPrice = 0;
   $: poolUSDC = 0;
 
@@ -112,17 +120,18 @@
         const { total } = await rewardEscrowContract.getAvailableForBuyBack($eth.address);
         amount.label = toNum(total, 18);
         amount.bn = total;
-        avaliableToBuy = toNum(total, 18);
         receivedAmount = await estimateBuyback(amount.bn);
       } catch (e) {
         console.error(e);
       }
     }
+    const totalCanSell = await buyBackContract.maxAvailableToBuy();
     const tokenOut = await buyBackContract.tokenOut();
     const tokenContract = new ethers.Contract(tokenOut, erc20Abi, $eth.signer || $eth.provider);
     const usdcBalance = await tokenContract.balanceOf(contracts.buyBackEdough);
     poolUSDC = toNum(usdcBalance, 6);
-    tokenPrice = toNum(pricePerDough.value, 6);
+    tokenPrice = toNumFixed(pricePerDough.value, 6);
+    availableToBuy = toNum(totalCanSell, 18);
   }
 
   async function fetchOnchainData() {
@@ -258,7 +267,9 @@
             <span classy="text-base leading-6">Budget balance</span>
           </div>
           <div>
-            <span class="font-thin text-lg mb-1 opacity-70">{poolUSDC} USDC</span>
+            <span class="font-thin text-lg mb-1 opacity-70"
+              >{formatFiat(poolUSDC, ',', '.', '')} USDC</span
+            >
           </div>
         </div>
       </div>
@@ -278,7 +289,9 @@
             <span classy="text-base leading-6">Max you can sell</span>
           </div>
           <div>
-            <span class="font-thin text-lg mb-1 opacity-70">{avaliableToBuy} eDOUGH</span>
+            <span class="font-thin text-lg mb-1 opacity-70"
+              >{formatFiat(availableToBuy, ',', '.', '')} eDOUGH</span
+            >
           </div>
         </div>
       </div>
