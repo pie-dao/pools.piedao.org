@@ -288,7 +288,7 @@
       <div class="w-full rounded-xl flex cardbordergradient">
         <div class="px-6 py-4 flex flex-col">
           <div class="flex flex-col w-full">
-            <span classy="text-base leading-6">Max you can sell</span>
+            <span classy="text-base leading-6">Budget allowance</span>
           </div>
           <div>
             <span class="font-thin text-lg mb-1 opacity-70"
