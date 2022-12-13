@@ -269,15 +269,17 @@
     </h1>
     <div class="mt-6 space-y-6 font-display text-sm tracking-tight">
       <p>
-        As per the PieDAO to Auxo migration, the Treasury Committee has determined a fixed price per
-        epoch (2 weeks duration) in order for Dough holders to sell their tokens for stablecoins,
-        being USDC the token of choice. If you want more information,
-        <a
+        The buyback program allows Dough holders to sell their Dough for USDC directly to the DAO at
+        zero slippage. Buyback price (displayed below) will be equal to the 3day TWAP and will be
+        updated every 4th day. Each epoch's buyback budget is streamed to the contract utilising
+        llamapay.io and made available for buyback every 24 hours. Epochs last for two weeks. For
+        more information regarding the program, <a
           class="text-pink"
-          href="https://forum.piedao.org/t/dough-edough-buyback-program/1421"
+          href="https://forum.piedao.org/t/dough-edough-buyback-program/1421/5"
           target="_blank"
           rel="noopener noreferrer">click here</a
-        >. Below you will be able to check the pool's status and execute the swap if wanted.
+        >. The interface below will display the current buyback price, the budget available at the
+        moment and the resulting maximum Dough one can sell to the contract
       </p>
     </div>
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-20">
@@ -306,7 +308,7 @@
       <div class="w-full rounded-xl flex cardbordergradient">
         <div class="px-6 py-4 flex flex-col">
           <div class="flex flex-col w-full">
-            <span classy="text-base leading-6">Max you can sell</span>
+            <span classy="text-base leading-6">Budget allowance</span>
           </div>
           <div>
             <span class="font-thin text-lg mb-1 opacity-70"
