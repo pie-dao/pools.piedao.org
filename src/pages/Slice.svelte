@@ -60,7 +60,6 @@
 
   const initialize = async () => {
     let res = [];
-
     Pie = new Experipie(token, $eth.provider);
     await Pie.initialize($piesMarketDataStore);
 
@@ -107,9 +106,17 @@
     return initialized;
   };
 
-  $: if(!isEmpty($piesMarketDataStore)) {
-    initialize();
+
+  $: {
+    if(!isEmpty($piesMarketDataStore)) {
+      initialize();
+    } else {
+      alert("Coingecko API's are not responding, the page will not show price informations.")
+      initialize();
+    }
+      
   }
+
 </script>
 
 <ModalBig title={modalOption.title} backgroundColor="#f3f3f3" bind:this="{modal}">

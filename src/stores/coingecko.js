@@ -120,11 +120,13 @@ export class CoinGecko {
 
     store.update((currentState) => {
       const newState = { ...currentState };
-      prices.forEach((coin) => {
-        idToSymbolMap[coin.id].market_data = coin;
-        newState[idToSymbolMap[coin.id].address] = idToSymbolMap[coin.id];
-        newState[idToSymbolMap[coin.id].address.toLowerCase()] = idToSymbolMap[coin.id];
-      });
+      if (prices.length > 0) {
+        prices.forEach((coin) => {
+          idToSymbolMap[coin.id].market_data = coin;
+          newState[idToSymbolMap[coin.id].address] = idToSymbolMap[coin.id];
+          newState[idToSymbolMap[coin.id].address.toLowerCase()] = idToSymbolMap[coin.id];
+        });
+      }
       return newState;
     });
 

@@ -23,6 +23,7 @@ class Experipie {
     this.defiSdk = new ethers.Contract(DeFiSdkAddress, defiSdkABI, provider);
     this.composition = [];
     this.map = {};
+    this.nav = 0;
   }
 
   dump() {
