@@ -91,21 +91,25 @@
   };
 
   window.addEventListener('price-update', async function (e) {
-    const promises = incentivizedPools.map( async pool => {
-        if( pool.type === 'UniswapV2') {
-            return await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-        }
-        else if( pool.type === 'Balancer') {
-            return await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
-        }
-        else {
-            return Promise.resolve();
-        }
-    });
+    try{
+      const promises = incentivizedPools.map( async pool => {
+          if( pool.type === 'UniswapV2') {
+              return await calculateAPRUniswap(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+          }
+          else if( pool.type === 'Balancer') {
+              return await calculateAPRBalancer(pool.addressUniPoll, pool.addressTokenToStake, null, null, pool.containing[0].address, pool.containing[1].address);
+          }
+          else {
+              return Promise.resolve();
+          }
+      });
 
-    await Promise.all(promises);
-    stakedLiquidity = await calcStakedLiquidity();
-    //console.log('stakedLiquidity', stakedLiquidity);
+      await Promise.all(promises);
+      stakedLiquidity = await calcStakedLiquidity();
+    } catch(e) {
+      stakedLiquidity = 0;
+    }
+    
   }, false);
 
   onMount( async () => {

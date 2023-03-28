@@ -43,7 +43,7 @@
       _staker.participation = 1;
     }
 
-    rewardNAV = _stakingData.accountWithdrawableRewards.times(rewardPie.nav);
+    rewardNAV = _stakingData.accountWithdrawableRewards.times(rewardPie && rewardPie.nav ? rewardPie.nav : 0);
 
     if (!_stakingData.accountWithdrawableRewards.eq(0) && _staker.participation == 1) {
       claimModalTitle = "Pie day is the best day";
@@ -94,9 +94,11 @@
       <p class="pt-2 font-24px"><b>
         {formatFiat(toNum(_stakingData.accountWithdrawableRewards), ',', '.', '')} SLICE
       </b></p>
+      {#if rewardNAV > 0 }
       <p class="mb-4">
         {formatFiat(toNum(rewardNAV), ',', '.', '$')} (Net Asset Value)
       </p>
+      {/if}
 
       <button
       disabled={hasClaimed}
