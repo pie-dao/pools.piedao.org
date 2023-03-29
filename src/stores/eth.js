@@ -26,7 +26,7 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
-      rpc: 'https://rpc.ankr.com/eth',
+      infuraId: '41bedacc2caa49c5b56aaf0c0ee51d04',
     },
   },
   injected: {

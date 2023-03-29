@@ -16,7 +16,7 @@ import env from '../../config/env.json';
 export const defaultProvider =
   env.blocknative.networkId === 1
     ? new ethers.providers.JsonRpcProvider(
-        'https://rpc.ankr.com/eth',
+        'https://mainnet.infura.io/v3/41bedacc2caa49c5b56aaf0c0ee51d04',
       )
     : new ethers.providers.JsonRpcProvider(
         'https://eth-rinkeby.alchemyapi.io/v2/xFSk4OZFkMNAlp1Pa2f3V-7kdifh5_p5',
