@@ -27,8 +27,7 @@ const providerOptions = {
     package: WalletConnectProvider, // required
     options: {
       infuraId: 
-        'e106b2b27c0f4941be1f2c183a20b3ea', // production key
-        // '1ec103a49691457aa6dff30aa8ab73d0', // testing key 
+        '388aca2cc29d4c2686543b806b5a63c5', // production key
     },
   },
   injected: {
