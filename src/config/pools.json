@@ -31,6 +31,12 @@
         "coingeckoId": "piedao-balanced-crypto-pie",
         "address": "0xe4f726adc8e89c6a6017f01eada77865db22da14",
         "coingeckoImageId": "13560"
+      },
+      {
+        "symbol": "WETH",
+        "coingeckoId": "weth",
+        "address": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+        "coingeckoImageId": 279
       }
     ],
     "docs": "https://raw.githubusercontent.com/pie-dao/docs/master/current-pies/btc%2B%2B.md"
