@@ -181,8 +181,7 @@
   }
 
   const getPoolsUser = async () => {
-      const { provider, signer } = get(eth);
-      const stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI,  signer || provider);
+      const stakingContract = new ethers.Contract(smartcontracts.stakingPools, stakingPoolsABI,  $eth.signer || $eth.provider);
       let pools = await stakingContract.getPools($eth.address);
       const res = [];
       
