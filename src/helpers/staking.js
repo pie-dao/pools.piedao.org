@@ -237,6 +237,20 @@ export async function getLastLockForAddress(eth) {
   }
 }
 
+export async function getEmergencyUnlock(eth) {
+  try {
+    if (!sharesTimeLock) {
+      initContracts(eth);
+    }
+
+    const emergencyUnlock = await sharesTimeLock.emergencyUnlockTriggered();
+
+    return emergencyUnlock;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function calculateDoughTotalSupply(provider) {
   try {
     const dough = new ethers.Contract(
