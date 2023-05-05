@@ -15,29 +15,32 @@
     didLockExpired,
     unstakeDOUGH,
     AVG_SECONDS_MONTH,
-    canRestake
+    canRestake,
+    getEmergencyUnlock,
   } from '../../helpers/staking.js';
   import { justBoosted, timestampBoosted, stakingData } from '../../stores/eth/writables';
   import { eth } from '../../stores/eth.js';
-  
+
   export let scrollToTop;
   export let itemsNumber;
-  
+
   let isLoading = true;
   let boostedModal;
   let unlockModal;
+  let isEmergencyUnlock;
 
-  $: if($stakingData && $stakingData.hasLoaded) {
-    if(!itemsNumber) {
+  $: if ($stakingData && $stakingData.hasLoaded) {
+    if (!itemsNumber) {
       itemsNumber = $stakingData.accountLocks.length;
     }
-
     isLoading = false;
   }
+
+  $: (async () => (isEmergencyUnlock = await getEmergencyUnlock()))();
 </script>
 
-<BoostedModal bind:this={boostedModal}/>
-<UnlockModal bind:this={unlockModal}/>
+<BoostedModal bind:this={boostedModal} />
+<UnlockModal bind:this={unlockModal} />
 
 {#if $eth.address}
   <div class="flex flex-col items-center w-full pb-6 bg-lightblu rounded-16 mt-6">
@@ -111,9 +114,10 @@
 
                         boostToMax(lock.lockId, $eth)
                           .then((updated_data) => {
-                            $timestampBoosted[updated_data.accountLocks[0].lockId] = boostingTimestamp;
-
-                            if(scrollToTop) {
+                            $timestampBoosted[
+                              updated_data.accountLocks[0].lockId
+                            ] = boostingTimestamp;
+                            if (scrollToTop) {
                               animateScroll.scrollToTop();
                             }
 
@@ -146,7 +150,9 @@
                     </button>
                   {/if}
                 {:else}
-                  <div class="flex items-center cardbordergradient mt-2 ml-15pc md:ml-0 md:-mr-2 opacity-30">
+                  <div
+                    class="flex items-center cardbordergradient mt-2 ml-15pc md:ml-0 md:-mr-2 opacity-30"
+                  >
                     <div class="flex items-center p-2">
                       <div class="mr-8px">Restake 3 years</div>
                       <img
@@ -167,12 +173,12 @@
                 </div>
                 <div class="flex items-center">
                   {#if !lock.withdrawn && !lock.ejected}
-                    {#if didLockExpired(lock)}
+                    {#if didLockExpired(lock) || isEmergencyUnlock}
                       <div
                         on:click={() => {
                           unstakeDOUGH(lock.lockId, toNum(lock.amount), $eth)
                             .then((updated_data) => {
-                              console.log("unstaked", updated_data);
+                              console.log('unstaked', updated_data);
                             })
                             .catch((error) => {
                               console.error(error.message);
@@ -183,11 +189,12 @@
                         <span>Unstake</span>
                       </div>
                     {:else}
-                      <div 
-                      on:click={() => {
-                        unlockModal.showModalUnock(lock, $stakingData.accountWithdrawnRewards);
-                      }}
-                      class="mt-2 flex justify-end opacity-30 pointer">
+                      <div
+                        on:click={() => {
+                          unlockModal.showModalUnock(lock, $stakingData.accountWithdrawnRewards);
+                        }}
+                        class="mt-2 flex justify-end opacity-30 pointer"
+                      >
                         <span>Unstake</span>
                       </div>
                     {/if}
@@ -199,7 +206,9 @@
         {/if}
       {/each}
     {:else}
-      <span class="text-s text-center mx-8">You haven't staked anything yet, what are you waiting for?</span>
+      <span class="text-s text-center mx-8"
+        >You haven't staked anything yet, what are you waiting for?</span
+      >
     {/if}
 
     {#if $stakingData.accountLocks.length > itemsNumber}
