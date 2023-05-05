@@ -127,7 +127,7 @@
   {/if}
   <StakingStats showLoader={true} />
   <div
-    class="w-full flex flex-col lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6"
+    class="w-full flex flex-col items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6"
   >
       <!-- SUMMARY -->
       <StakingSummary />
