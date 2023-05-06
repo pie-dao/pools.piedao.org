@@ -244,10 +244,10 @@ export async function getEmergencyUnlock(eth) {
     }
 
     const emergencyUnlock = await sharesTimeLock.emergencyUnlockTriggered();
-
     return emergencyUnlock;
   } catch (error) {
-    return error;
+    console.error(error);
+    return false;
   }
 }
 
