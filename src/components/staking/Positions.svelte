@@ -100,7 +100,6 @@
                     <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                   </div>
                 </div>
-                
               </div>
 
               <div class="flex items-center justify-between">
