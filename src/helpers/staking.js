@@ -19,7 +19,7 @@ import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import EpochJson from '../config/rewards/distribution.json';
 import { stakingDataInterval, stakingData } from '../stores/eth/writables.js';
-import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js'; 
+import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js';
 import { get } from 'svelte/store';
 
 export let sharesTimeLock = false;
@@ -65,7 +65,7 @@ export const observable = new Observable((subscriber) => {
   interval = setInterval(async () => {
     await fetchStakingData(ETH);
     subscriber.next(_stakingData);
-  }, intervalRange);  
+  }, intervalRange);
 
   // clearing interval, when unsubscribe action happens...
   return () => {
@@ -73,9 +73,10 @@ export const observable = new Observable((subscriber) => {
   };
 });
 
-export const toNum = (num, toFixed = 2) => BigNumber(num.toString())
-  .dividedBy(10 ** 18)
-  .toFixed(toFixed);
+export const toNum = (num, toFixed = 2) =>
+  BigNumber(num.toString())
+    .dividedBy(10 ** 18)
+    .toFixed(toFixed);
 
 export const toBN = (num) => BigNumber(num.toString()).multipliedBy(10 ** 18);
 
@@ -164,14 +165,13 @@ export function didLockExpired(lock) {
 }
 
 export function calculateVeDough(stakedDough, commitment) {
-  if(!Number.isNaN(Number(stakedDough.toString())) && commitment) {
+  if (!Number.isNaN(Number(stakedDough.toString())) && commitment) {
     const k = 56.0268900276223;
     const commitmentMultiplier = (commitment / k) * Math.log10(commitment);
     return toNum(stakedDough * commitmentMultiplier, 4);
   } else {
-    return 0;    
+    return 0;
   }
-
 }
 
 export function initContracts(eth) {
@@ -181,11 +181,7 @@ export function initContracts(eth) {
     eth.signer || eth.provider,
   );
 
-  veDOUGH = new ethers.Contract(
-    smartcontracts.veDOUGH,
-    veDoughABI,
-    eth.signer || eth.provider,
-  );
+  veDOUGH = new ethers.Contract(smartcontracts.veDOUGH, veDoughABI, eth.signer || eth.provider);
 
   merkleTreeDistributor = new ethers.Contract(
     smartcontracts.merkleTreeDistributor,
@@ -204,7 +200,7 @@ export function initialize(eth) {
 
       _stakingData = await fetchStakingData(eth);
 
-      if(observer) {
+      if (observer) {
         observer.unsubscribe();
       }
 
@@ -244,20 +240,16 @@ export async function getEmergencyUnlock(eth) {
     }
 
     const emergencyUnlock = await sharesTimeLock.emergencyUnlockTriggered();
-
     return emergencyUnlock;
   } catch (error) {
-    return error;
+    console.error(error);
+    return false;
   }
 }
 
 export async function calculateDoughTotalSupply(provider) {
   try {
-    const dough = new ethers.Contract(
-      smartcontracts.dough,
-      DoughABI,
-      provider,
-    );
+    const dough = new ethers.Contract(smartcontracts.dough, DoughABI, provider);
 
     const totalSupply = await dough.totalSupply();
 
@@ -283,7 +275,9 @@ export async function fetchAllStakingStats() {
       stats = stats.concat(response.globalStats);
       /* eslint-disable no-await-in-loop */
       response = await fetchStakingStats(
-        null, 1000, response.globalStats[response.globalStats.length - 1].id,
+        null,
+        1000,
+        response.globalStats[response.globalStats.length - 1].id,
       );
       /* eslint-enable no-await-in-loop */
     }
@@ -336,14 +330,21 @@ export async function fetchStakingStats(provider, limit, fromId) {
       graphQuery,
     );
 
-    return provider ? {
-      totalHolders: response.stakersTrackers.length ? response.stakersTrackers[0].counter : 0,
-      averageTimeLock: response.globalStats.length
-        ? Math.floor(Number(response.globalStats[0].averageTimeLock) / AVG_SECONDS_MONTH) : 0,
-      totalStakedDough: response.globalStats.length ? response.globalStats[0].totalDoughStaked : 0,
-      totalVeDough: response.globalStats.length ? response.globalStats[0].veTokenTotalSupply : 0,
-      totalDough: totalSupply,
-    } : response;
+    return provider
+      ? {
+          totalHolders: response.stakersTrackers.length ? response.stakersTrackers[0].counter : 0,
+          averageTimeLock: response.globalStats.length
+            ? Math.floor(Number(response.globalStats[0].averageTimeLock) / AVG_SECONDS_MONTH)
+            : 0,
+          totalStakedDough: response.globalStats.length
+            ? response.globalStats[0].totalDoughStaked
+            : 0,
+          totalVeDough: response.globalStats.length
+            ? response.globalStats[0].veTokenTotalSupply
+            : 0,
+          totalDough: totalSupply,
+        }
+      : response;
   } catch (error) {
     throw new Error(`fetchStakingStats: ${error.message}`);
   }
@@ -382,7 +383,7 @@ export async function fetchStakingDataGraph(address) {
           timestamp: true,
           amount: true,
           type: true,
-          rewardToken: true
+          rewardToken: true,
         },
         globalStats: {
           __args: {
@@ -426,7 +427,7 @@ export const fetchStakingData = async (eth) => {
     rewards = [];
   }
 
-  if(response.globalStats.length) {
+  if (response.globalStats.length) {
     _stakingData.totalDoughStaked = response.globalStats[0].totalDoughStaked;
     _stakingData.veTokenTotalSupply = response.globalStats[0].veTokenTotalSupply;
   }
@@ -434,16 +435,18 @@ export const fetchStakingData = async (eth) => {
   if (staker !== undefined) {
     let leaf = await retrieveLeaf(eth.address);
 
-    let isClaimed = leaf ? await merkleTreeDistributor["isClaimed(uint256,uint256)"](
-      ethers.BigNumber.from(leaf.windowIndex), 
-      ethers.BigNumber.from(leaf.accountIndex))
+    let isClaimed = leaf
+      ? await merkleTreeDistributor['isClaimed(uint256,uint256)'](
+          ethers.BigNumber.from(leaf.windowIndex),
+          ethers.BigNumber.from(leaf.accountIndex),
+        )
       : false;
 
     Object.keys(staker).forEach((key) => {
       if (key !== 'accountLocks') {
-        switch(key) {
+        switch (key) {
           case 'accountWithdrawableRewards':
-            _stakingData[key] = leaf && !isClaimed? new BigNumber(leaf.amount) : new BigNumber(0);
+            _stakingData[key] = leaf && !isClaimed ? new BigNumber(leaf.amount) : new BigNumber(0);
             break;
           case 'accountWithdrawnRewards':
             _stakingData[key] = new BigNumber(toNum(staker[key]));
@@ -466,8 +469,9 @@ export const fetchStakingData = async (eth) => {
             // and we create a new 36-months-duration one)
             if (lock.boostedPointer === '') {
               locksCounter += 1;
-              _stakingData.accountTokenBalance = _stakingData.accountTokenBalance
-                .plus(new BigNumber(lock.amount.toString()));
+              _stakingData.accountTokenBalance = _stakingData.accountTokenBalance.plus(
+                new BigNumber(lock.amount.toString()),
+              );
               _stakingData.accountAverageDuration += Number(lock.lockDuration);
             }
 
@@ -487,7 +491,7 @@ export const fetchStakingData = async (eth) => {
         });
 
         _stakingData.accountAverageDuration = _stakingData.accountAverageDuration
-          ? Math.floor((_stakingData.accountAverageDuration / locksCounter) / AVG_SECONDS_MONTH)
+          ? Math.floor(_stakingData.accountAverageDuration / locksCounter / AVG_SECONDS_MONTH)
           : 0;
 
         locks.sort((lockA, lockB) => lockB.lockedAt - lockA.lockedAt);
@@ -497,9 +501,13 @@ export const fetchStakingData = async (eth) => {
     });
   }
 
-  const votingPower = _stakingData.accountVeTokenBalance && _stakingData.veTokenTotalSupply
-    ? ((_stakingData.accountVeTokenBalance.times(100)).div(_stakingData.veTokenTotalSupply)).toFixed(3)
-    : 0;
+  const votingPower =
+    _stakingData.accountVeTokenBalance && _stakingData.veTokenTotalSupply
+      ? _stakingData.accountVeTokenBalance
+          .times(100)
+          .div(_stakingData.veTokenTotalSupply)
+          .toFixed(3)
+      : 0;
 
   _stakingData.accountVotingPower = Number(votingPower);
 
@@ -508,23 +516,30 @@ export const fetchStakingData = async (eth) => {
   try {
     // retrieving the votes in the last month for a given address...
     _stakingData.votes = await fetchLastMonthVoteForVoter(eth.address);
-    
+
     // retrieving the oldest active proposal from piedao.eth space after the 18/10/2021...
-    _stakingData.proposals = await fetchLastSnapshots(1, 'active', 'asc', moment("2021-10-18").unix());
+    _stakingData.proposals = await fetchLastSnapshots(
+      1,
+      'active',
+      'asc',
+      moment('2021-10-18').unix(),
+    );
     // and if there is at least one active proposal after the 18/10/2021, we add the
     // block infos into that object, so we can easily get the timestamp or any other related info
-    if(_stakingData.proposals[0]) {
-      _stakingData.proposals[0].block = await eth.provider.getBlock(Number(_stakingData.proposals[0].snapshot));
-    }    
-  } catch(error) {
+    if (_stakingData.proposals[0]) {
+      _stakingData.proposals[0].block = await eth.provider.getBlock(
+        Number(_stakingData.proposals[0].snapshot),
+      );
+    }
+  } catch (error) {
     console.error('staking - snapshot error', error);
   }
 
   _stakingData.address = eth.address;
   _stakingData.hasLoaded = true;
-  
+
   stakingData.set(_stakingData);
-  
+
   return _stakingData;
 };
 
@@ -733,13 +748,13 @@ export async function claim(eth) {
           amount: ethers.BigNumber.from(leaf.amount),
           accountIndex: leaf.accountIndex,
           account: ethers.utils.getAddress(eth.address.toLowerCase()),
-          merkleProof: leaf.proof
+          merkleProof: leaf.proof,
         };
 
         const { emitter } = displayNotification(
-          await merkleTreeDistributor["claim((uint256,uint256,uint256,address,bytes32[]))"](params)
+          await merkleTreeDistributor['claim((uint256,uint256,uint256,address,bytes32[]))'](params),
         );
-  
+
         emitter.on('txConfirmed', async () => {
           const subscription = subject('blockNumber').subscribe({
             next: async () => {
@@ -748,16 +763,16 @@ export async function claim(eth) {
                 message: 'Pay day baby!',
                 type: 'success',
               });
-  
+
               subscription.unsubscribe();
-  
+
               _stakingData = await fetchStakingData(eth);
               resolve(_stakingData);
             },
           });
-        });        
+        });
       } else {
-        reject("cannot claim, address not valid in merkleTree");
+        reject('cannot claim, address not valid in merkleTree');
       }
     } catch (error) {
       displayNotification({
@@ -802,7 +817,7 @@ export function approveToken(eth, shouldReset = false) {
     }
 
     try {
-      console.log('shouldReset', shouldReset)
+      console.log('shouldReset', shouldReset);
       if (shouldReset) {
         // resetting the approve to zero, before initiating a new approval...
         await approve(smartcontracts.dough, smartcontracts.doughStaking, 0);

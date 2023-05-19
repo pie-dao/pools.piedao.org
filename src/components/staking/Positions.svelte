@@ -10,12 +10,10 @@
     calculateStakingEnds,
     calculateStakingStarts,
     calculateVeDough,
-    boostToMax,
     getLockStatus,
     didLockExpired,
     unstakeDOUGH,
     AVG_SECONDS_MONTH,
-    canRestake,
     getEmergencyUnlock,
   } from '../../helpers/staking.js';
   import { justBoosted, timestampBoosted, stakingData } from '../../stores/eth/writables';
@@ -27,7 +25,7 @@
   let isLoading = true;
   let boostedModal;
   let unlockModal;
-  let isEmergencyUnlock;
+  let isEmergencyUnlock = false;
 
   $: if ($stakingData && $stakingData.hasLoaded) {
     if (!itemsNumber) {
@@ -36,7 +34,8 @@
     isLoading = false;
   }
 
-  $: (async () => (isEmergencyUnlock = await getEmergencyUnlock()))();
+  $: if ($eth.address || $eth.signer)
+    (async () => (isEmergencyUnlock = await getEmergencyUnlock()))();
 </script>
 
 <BoostedModal bind:this={boostedModal} />
@@ -101,68 +100,6 @@
                     <span class="sc-kXeGPI jeVIZw token-symbol-container">veDOUGH</span>
                   </div>
                 </div>
-                {#if (!lock.boosted && canRestake(lock.lockedAt)) || (lock.boosted && canRestake(lock.lockedAt))}
-                  {#if !lock.ejected && !lock.withdrawn}
-                    <button
-                      disabled={$justBoosted[lock.lockId]}
-                      on:click={() => {
-                        // marking the lock as justBoosted...
-                        $justBoosted[lock.lockId] = true;
-
-                        // saving the timestampBoosted for further uses...
-                        let boostingTimestamp = Math.floor(Number(Date.now()) / 1000);
-
-                        boostToMax(lock.lockId, $eth)
-                          .then((updated_data) => {
-                            $timestampBoosted[
-                              updated_data.accountLocks[0].lockId
-                            ] = boostingTimestamp;
-                            if (scrollToTop) {
-                              animateScroll.scrollToTop();
-                            }
-
-                            boostedModal.showModalLock(lock);
-
-                            setTimeout(() => {
-                              $timestampBoosted[$stakingData.accountLocks[0].lockId] = null;
-                              $justBoosted[lock.lockId] = false;
-                            }, 15000);
-                          })
-                          .catch((error) => {
-                            $justBoosted[lock.lockId] = false;
-                            console.error(error);
-                          });
-                      }}
-                      class="flex items-center cardbordergradient -mr-2 pointer mt-2 ml-15pc md:ml-0"
-                    >
-                      <div class="flex items-center p-2">
-                        {#if $justBoosted[lock.lockId]}
-                          <div class="mr-8px">Loading...</div>
-                        {:else}
-                          <div class="mr-8px">Restake 3 years</div>
-                        {/if}
-                        <img
-                          class="w-30px h-30px"
-                          src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
-                          alt="ETH"
-                        />
-                      </div>
-                    </button>
-                  {/if}
-                {:else}
-                  <div
-                    class="flex items-center cardbordergradient mt-2 ml-15pc md:ml-0 md:-mr-2 opacity-30"
-                  >
-                    <div class="flex items-center p-2">
-                      <div class="mr-8px">Restake 3 years</div>
-                      <img
-                        class="w-30px h-30px"
-                        src="https://raw.githubusercontent.com/pie-dao/brand/master/PIE%20Tokens/RewardPie.png"
-                        alt="ETH"
-                      />
-                    </div>
-                  </div>
-                {/if}
               </div>
 
               <div class="flex items-center justify-between">
