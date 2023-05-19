@@ -25,7 +25,7 @@
   let isLoading = true;
   let boostedModal;
   let unlockModal;
-  let isEmergencyUnlock = false;
+  let isEmergencyUnlock = true;
 
   $: if ($stakingData && $stakingData.hasLoaded) {
     if (!itemsNumber) {
@@ -33,9 +33,6 @@
     }
     isLoading = false;
   }
-
-  $: if ($eth.address || $eth.signer)
-    (async () => (isEmergencyUnlock = await getEmergencyUnlock()))();
 </script>
 
 <BoostedModal bind:this={boostedModal} />
@@ -109,10 +106,9 @@
                   </div>
                 </div>
                 <div class="flex items-center">
-                  {#if !lock.withdrawn && !lock.ejected}
-                    {#if didLockExpired(lock) || isEmergencyUnlock}
                       <div
                         on:click={() => {
+                          console.log('data', lock.lockId, lock.amount)
                           unstakeDOUGH(lock.lockId, toNum(lock.amount), $eth)
                             .then((updated_data) => {
                               console.log('unstaked', updated_data);
@@ -123,19 +119,8 @@
                         }}
                         class="mt-2 flex justify-end pointer"
                       >
-                        <span>Unstake</span>
+                        <span>Unstake now</span>
                       </div>
-                    {:else}
-                      <div
-                        on:click={() => {
-                          unlockModal.showModalUnock(lock, $stakingData.accountWithdrawnRewards);
-                        }}
-                        class="mt-2 flex justify-end opacity-30 pointer"
-                      >
-                        <span>Unstake</span>
-                      </div>
-                    {/if}
-                  {/if}
                 </div>
               </div>
             </div>
