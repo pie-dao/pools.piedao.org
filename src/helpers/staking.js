@@ -572,16 +572,19 @@ export function boostToMax(id, eth) {
 export async function unstakeDOUGH(id, lockAmount, eth) {
   /* eslint-disable no-async-promise-executor */
   return new Promise(async (resolve, reject) => {
+    console.log(1);
     if (!sharesTimeLock) {
       initContracts(eth);
     }
 
-    try {
-      const response = await sharesTimeLock.withdraw(id);
+    console.log(2);
 
-      const { emitter } = displayNotification({
-        hash: response.hash,
-      });
+    try {
+      console.log(sharesTimeLock);
+      const response = await sharesTimeLock.withdraw(id);
+      console.log(4);
+
+      const { emitter } = displayNotification(await sharesTimeLock.withdraw(id));
 
       emitter.on('txConfirmed', async () => {
         displayNotification({
@@ -599,6 +602,7 @@ export async function unstakeDOUGH(id, lockAmount, eth) {
         });
       });
     } catch (error) {
+      console.log('error', error);
       if (error.message.includes('lock not expired')) {
         displayNotification({
           message: "can't unstake, lock not expired.",
