@@ -119,7 +119,7 @@
                         }}
                         class="mt-2 flex justify-end pointer"
                       >
-                        <span>Unstake kajsdbhfjkdas</span>
+                        <span>Unstake now</span>
                       </div>
                 </div>
               </div>
