@@ -115,27 +115,18 @@
 
 <StakedModal bind:this={stakedModal} />
 
-<div class="font-huge text-center">Dough Staking</div>
-<div class="font-thin text-lg text-center mt-10px">Get paid for Governing the DAO</div>
+<div class="font-huge text-center">Withdraw-only</div>
+<div class="font-thin text-lg text-center mt-10px">The DAO has migrated to Auxo, staking no longer available.</div>
 
 <div class="flex w-full pt-0 pb-20px flex flex-col items-center">
+  <div class="w-full flex flex-col items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6">
 
-  {#if viewportComponent == views[currentView]}
-  <div class="w-full flex flex-col lg:flex-row items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6" id="viewport" on:click={toggleView} on:outroend={updateViewportComponent} transition:fade>
-    <svelte:component this={viewportComponent}></svelte:component>
-  </div>
-  {/if}
-  <StakingStats showLoader={true} />
-  <div
-    class="w-full flex flex-col items-center px-4 md:max-w-700px lg:px-4 lg:max-w-1280px p-6"
-  >
-      <!-- SUMMARY -->
-      <StakingSummary />
-      <!-- END SUMMARY -->
-
+      
       <!-- YOUR STAKING -->
       <StakingPositions itemsNumber="3" scrollToTop={false} />
       <!-- END YOUR STAKING -->
+
+      <StakingSummary />
 
       <!-- PAST REWARDS -->
       <StakingRewards itemsNumber="3" />

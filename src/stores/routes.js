@@ -142,7 +142,6 @@ const formatRoute = (route) => {
     case 'dough-staking':
       return { page: DoughStaking };
     case 'buyback':
-      return { page: MigrationPage };
     case 'buyback-dough':
       return { page: BuyBackDough };
     case 'buyback-edough':
