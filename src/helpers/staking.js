@@ -18,8 +18,8 @@ import { subgraphRequest } from './subgraph.js';
 import { subject, approve, approveMax, connectWeb3 } from '../stores/eth.js';
 import displayNotification from '../notifications';
 import EpochJson from '../config/rewards/distribution.json';
-import { stakingDataInterval, stakingData } from '../stores/eth/writables.js';
-import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js';
+import { stakingDataInterval, stakingData, locks } from '../stores/eth/writables.js';
+import { fetchLastMonthVoteForVoter, fetchLastSnapshots } from './snapshopt.js'; 
 import { get } from 'svelte/store';
 
 export let sharesTimeLock = false;
@@ -29,6 +29,7 @@ export const minLockAmount = 0;
 export const AVG_SECONDS_MONTH = 2628000;
 
 let ETH = null;
+let LOCKS = get(locks);
 let _stakingData = get(stakingData);
 let observer = null;
 
@@ -220,6 +221,21 @@ export function initialize(eth) {
   /* eslint-enable no-async-promise-executor */
 }
 
+export async function getLocks(eth) {
+  try {
+    if (!sharesTimeLock) {
+      initContracts(eth);
+    }
+
+    
+    const locks = await sharesTimeLock.getLocks(eth.address);
+    console.log('locks', eth.address, locks);
+    return locks;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function getLastLockForAddress(eth) {
   try {
     if (!sharesTimeLock) {
@@ -227,6 +243,7 @@ export async function getLastLockForAddress(eth) {
     }
 
     const totalLocks = await sharesTimeLock.getLocksOfLength(eth.address);
+    console.log('totalLocks', totalLocks);
     return totalLocks - 1;
   } catch (error) {
     return error;

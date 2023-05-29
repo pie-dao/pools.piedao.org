@@ -70,7 +70,7 @@
 </script>
 
 <svelte:window on:click={outsideClicks} />
-<MigrationBanner />
+<!-- <MigrationBanner /> -->
 <div class="header-container">
   <div class="left piedaologoheader">
     <a href="#/">
