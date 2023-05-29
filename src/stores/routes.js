@@ -141,13 +141,13 @@ const formatRoute = (route) => {
       return { page: Farm };
     case 'dough-staking':
       return { page: DoughStaking };
-    case 'buyback':
-    case 'buyback-dough':
-      return { page: BuyBackDough };
-    case 'buyback-edough':
-      return { page: BuyBackEdough };
-    case 'edough-to-vedough':
-      return { page: eDoughToVeDough };
+    // case 'buyback':
+    // case 'buyback-dough':
+    //   return { page: BuyBackDough };
+    // case 'buyback-edough':
+    //   return { page: BuyBackEdough };
+    // case 'edough-to-vedough':
+    //   return { page: eDoughToVeDough };
     case 'staking_positions':
       return { page: StakingPositions };
     case 'staking_rewards':
