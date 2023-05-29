@@ -22,8 +22,7 @@
           <div class="flex flex-wrap">
             <p class="ml-3 font-thin text-white">
               <span class="inline"
-                >We'll be offering buyback options for <span class="font-bold">DOUGH</span> and
-                <span class="font-bold">eDOUGH</span> holders. Want to participate?</span
+                >We'll are offering buyback options for <span class="font-bold">DOUGH</span> holders. Want to participate?</span
               >
             </p>
           </div>

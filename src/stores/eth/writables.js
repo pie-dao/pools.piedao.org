@@ -47,6 +47,8 @@ export const stakingData = writable({
   proposals: null
 });
 
+export const locks = writable({});
+
 export const justBoosted = writable({});
 export const timestampBoosted = writable({});
 export const emitters = writable([]);

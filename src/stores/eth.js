@@ -26,7 +26,7 @@ const providerOptions = {
   walletconnect: {
     package: WalletConnectProvider, // required
     options: {
-      rpc: 'https://rpc.ankr.com/eth',
+      rpc: 'https://ethereum.publicnode.com',
     },
   },
   injected: {
